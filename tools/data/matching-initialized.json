@@ -1,0 +1,1512 @@
+{
+  "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
+  "initialized_data_bytes": 95547,
+  "bss_initialized_coverage": 0,
+  "final_linked_placement_verified": false,
+  "complete_original_modules": 0,
+  "spans": [
+    {
+      "kind": "nearby-force floating constants",
+      "object": "forcecon.obj",
+      "object_sha256": "9282ddb2da6c01606f0a528491efe42b809ee833f0f21b37f02d611f31159875",
+      "bytes": 16,
+      "raw_offset": "0x9b6f8",
+      "ds_offset": "0xf8"
+    },
+    {
+      "kind": "cache CONST",
+      "object": "cacheunt.obj",
+      "object_sha256": "2894ff582313b7d4ba82d83a796692003050e8fbed4b03b901e21d370c2024fc",
+      "bytes": 387,
+      "raw_offset": "0x9cd48"
+    },
+    {
+      "kind": "cache DATA",
+      "object": "cacheunt.obj",
+      "object_sha256": "2894ff582313b7d4ba82d83a796692003050e8fbed4b03b901e21d370c2024fc",
+      "bytes": 281,
+      "raw_offset": "0xaf1c0"
+    },
+    {
+      "symbol": "_syncstate",
+      "ds_offset": "0x13cdc",
+      "raw_offset": "0xaf2dc",
+      "bytes": 1,
+      "kind": "network scalar",
+      "object": "netdefs.obj",
+      "object_sha256": "3dd5a52caaf5ab311f012df62121f334035b2b11f5f89332bc7557bbf55a50db"
+    },
+    {
+      "symbol": "_hangup",
+      "ds_offset": "0x13cdd",
+      "raw_offset": "0xaf2dd",
+      "bytes": 1,
+      "kind": "network scalar",
+      "object": "netdefs.obj",
+      "object_sha256": "3dd5a52caaf5ab311f012df62121f334035b2b11f5f89332bc7557bbf55a50db"
+    },
+    {
+      "symbol": "_multioption",
+      "ds_offset": "0x13cde",
+      "raw_offset": "0xaf2de",
+      "bytes": 1,
+      "kind": "network scalar",
+      "object": "netdefs.obj",
+      "object_sha256": "3dd5a52caaf5ab311f012df62121f334035b2b11f5f89332bc7557bbf55a50db"
+    },
+    {
+      "symbol": "_comrateoption",
+      "ds_offset": "0x13cdf",
+      "raw_offset": "0xaf2df",
+      "bytes": 1,
+      "kind": "network scalar",
+      "object": "netdefs.obj",
+      "object_sha256": "3dd5a52caaf5ab311f012df62121f334035b2b11f5f89332bc7557bbf55a50db"
+    },
+    {
+      "symbol": "_numplayers",
+      "ds_offset": "0x13ce0",
+      "raw_offset": "0xaf2e0",
+      "bytes": 2,
+      "kind": "network scalar",
+      "object": "netdefs.obj",
+      "object_sha256": "3dd5a52caaf5ab311f012df62121f334035b2b11f5f89332bc7557bbf55a50db"
+    },
+    {
+      "symbol": "_myconnectindex",
+      "ds_offset": "0x13ce2",
+      "raw_offset": "0xaf2e2",
+      "bytes": 2,
+      "kind": "network scalar",
+      "object": "netdefs.obj",
+      "object_sha256": "3dd5a52caaf5ab311f012df62121f334035b2b11f5f89332bc7557bbf55a50db"
+    },
+    {
+      "symbol": "_socket",
+      "ds_offset": "0x13e64",
+      "raw_offset": "0xaf464",
+      "bytes": 2,
+      "kind": "network scalar",
+      "object": "netdefs.obj",
+      "object_sha256": "3dd5a52caaf5ab311f012df62121f334035b2b11f5f89332bc7557bbf55a50db"
+    },
+    {
+      "kind": "real-mode handler stored in DATA",
+      "binary": "realcom.bin",
+      "payload_sha256": "700602f10743ba381e82210b9e159ce4931365a1a4b961ca3f5f3cb07926031e",
+      "bytes": 384,
+      "raw_offset": "0xaf2e4",
+      "ds_offset": "0x13ce4"
+    },
+    {
+      "kind": "startup strings",
+      "object": "maintext.obj",
+      "object_sha256": "4ab5924a8f1e0c54a0d62ef0a154a2d3ddacb685e6cb6e92de7433c2532450e4",
+      "bytes": 82,
+      "raw_offset": "0x9b604",
+      "ds_offset": "0x4"
+    },
+    {
+      "kind": "animation defaults",
+      "object": "animdefs.obj",
+      "object_sha256": "ba36b925011e1dee9f67c3ec4d1297a11a8d6120f100d112a5e688bf34ffae86",
+      "bytes": 13,
+      "raw_offset": "0xae384",
+      "ds_offset": "0x12d84"
+    },
+    {
+      "kind": "mouse sensitivity defaults",
+      "object": "mousedef.obj",
+      "object_sha256": "ff6265ffd0789074537b33a49e67c7f06964d2d4f53854c545bd766959d5a47f",
+      "bytes": 8,
+      "raw_offset": "0xaf081",
+      "ds_offset": "0x13a81"
+    },
+    {
+      "kind": "level modification and status strings",
+      "binary": "level_modification_strings.bin",
+      "bytes": 160,
+      "payload_sha256": "30476e31a9a5492367f4ef57713becebaac40e85c19af55b0a2fc8a2a437a63c",
+      "raw_offset": "0x9b658",
+      "ds_offset": "0x58"
+    },
+    {
+      "kind": "save game file and status strings",
+      "binary": "save_game_strings.bin",
+      "bytes": 63,
+      "payload_sha256": "34c5922d01ae9274c6f5f2c358c5e23356fb7e606514d84bc0d05b2571ffccca",
+      "raw_offset": "0x9bbdc",
+      "ds_offset": "0x5dc"
+    },
+    {
+      "kind": "save slot menu strings",
+      "binary": "save_slot_menu_strings.bin",
+      "bytes": 107,
+      "payload_sha256": "bb177122f8708e8d14ff109bd2ecff88014155a95fe6ac9e752187f2c4f38b48",
+      "raw_offset": "0x9c319",
+      "ds_offset": "0xd19"
+    },
+    {
+      "kind": "game timer diagnostics",
+      "binary": "game_timer_messages.bin",
+      "bytes": 184,
+      "payload_sha256": "1ca88c309e3ecc34324e867164c114bf0d62329626ff8f50a07801b25b9eb18b",
+      "raw_offset": "0x9bc1c",
+      "ds_offset": "0x61c"
+    },
+    {
+      "kind": "game audio configuration and diagnostics",
+      "binary": "game_audio_strings.bin",
+      "bytes": 624,
+      "payload_sha256": "2ac470d4ef80493ab439e479a17462be2e9762512b6ee6b16573b0460ec77579",
+      "raw_offset": "0x9bcd4",
+      "ds_offset": "0x6d4"
+    },
+    {
+      "kind": "configuration digit and Boolean strings",
+      "binary": "configuration_strings.bin",
+      "bytes": 28,
+      "payload_sha256": "d4ec9b838b27e5272feeea1a71ad5bc5989b5129cf6aeff4b53fed16268bd260",
+      "raw_offset": "0x9bf44",
+      "ds_offset": "0x944"
+    },
+    {
+      "kind": "video settings filename",
+      "binary": "video_settings_filename.bin",
+      "bytes": 10,
+      "payload_sha256": "598b557e1aa3e241fd7a35195891f3c120e11fc37fe552814c6617c3c52a2b5e",
+      "raw_offset": "0x9bfc1",
+      "ds_offset": "0x9c1"
+    },
+    {
+      "kind": "video menu and command-line help",
+      "binary": "video_menu_strings.bin",
+      "bytes": 303,
+      "payload_sha256": "782cb127c1e6b33124729f4c33da52a779c9f3873ac254dcd67e667520a3431e",
+      "raw_offset": "0x9c051",
+      "ds_offset": "0xa51"
+    },
+    {
+      "kind": "CD audio status messages",
+      "binary": "cd_audio_messages.bin",
+      "bytes": 58,
+      "payload_sha256": "bae82aec3216a223999f17b56af3e2ef76d4b2d9374b8b44b480619a3be32240",
+      "raw_offset": "0x9c180",
+      "ds_offset": "0xb80"
+    },
+    {
+      "kind": "text archive filename and diagnostics",
+      "binary": "text_archive_strings.bin",
+      "bytes": 74,
+      "payload_sha256": "34879bdf26024767c64e47d7389555ac04ae66a12fb1a8e841dcb62db6449431",
+      "raw_offset": "0x9c1bc",
+      "ds_offset": "0xbbc"
+    },
+    {
+      "kind": "game configuration filename",
+      "binary": "game_configuration_filename.bin",
+      "bytes": 11,
+      "payload_sha256": "10299025e91e69392d633db9e6d79cfc190b84930bac7ff594978798d106f5d1",
+      "raw_offset": "0x9c2e4",
+      "ds_offset": "0xce4"
+    },
+    {
+      "kind": "game tile archive and allocation diagnostic",
+      "binary": "game_subsystem_strings.bin",
+      "bytes": 42,
+      "payload_sha256": "ebad126b1f1ffe7f38d5989dd4191ae8f5225bced6c72ab8a1f87cf37c3323b2",
+      "raw_offset": "0x9c91c",
+      "ds_offset": "0x131c"
+    },
+    {
+      "kind": "crusher runtime diagnostics",
+      "binary": "crusher_runtime_strings.bin",
+      "bytes": 564,
+      "payload_sha256": "57a851c91f7efeaf781707627bbbbf993d342bf6afed595229fafb4b9f4b7c12",
+      "raw_offset": "0x9ca5c",
+      "ds_offset": "0x145c"
+    },
+    {
+      "kind": "crusher sprite diagnostics",
+      "binary": "crushed_sprite_strings.bin",
+      "bytes": 55,
+      "payload_sha256": "742a2bf0ba6638356bed9e00eddd110767163908a00f262fb4524059564e0ed9",
+      "raw_offset": "0x9cd10",
+      "ds_offset": "0x1710"
+    },
+    {
+      "kind": "network startup diagnostics",
+      "binary": "network_startup_messages.bin",
+      "bytes": 81,
+      "payload_sha256": "a18612a5f7cb54c368f1a8f0cdcab188a616309ed6eed76dce35deab633b02f9",
+      "raw_offset": "0x9cecc",
+      "ds_offset": "0x18cc"
+    },
+    {
+      "kind": "VESA signatures and diagnostics",
+      "binary": "vesa_mode_messages.bin",
+      "bytes": 79,
+      "payload_sha256": "cde39e02926d16a1329042d58e3f2f411ae9f79d5918b92ad786c8fbf2ee7211",
+      "raw_offset": "0x9cfe2",
+      "ds_offset": "0x19e2"
+    },
+    {
+      "kind": "engine signature and video mode strings",
+      "binary": "video_mode_strings.bin",
+      "bytes": 200,
+      "payload_sha256": "fda3ae3e3e94db77481a1850fc06c8025fac0a08566520a759a180c47270fdb6",
+      "raw_offset": "0x9d031",
+      "ds_offset": "0x1a31"
+    },
+    {
+      "kind": "engine frame rate format",
+      "binary": "frame_rate_format.bin",
+      "bytes": 29,
+      "payload_sha256": "a40454555386a93c082eb22908869998514a5a566d6e1f48f18f0d44cb17a579",
+      "raw_offset": "0x9d1df",
+      "ds_offset": "0x1bdf"
+    },
+    {
+      "kind": "audio driver and timer defaults",
+      "binary": "audio_timer_defaults.bin",
+      "bytes": 448,
+      "payload_sha256": "aa30b0781b80f26b97a9afbdd6855eb9a74ef93f26f7f2a93783ce1553e30256",
+      "raw_offset": "0xb1c50",
+      "ds_offset": "0x16650"
+    },
+    {
+      "kind": "audio detector initial state",
+      "binary": "audio_detector_state.bin",
+      "bytes": 500,
+      "payload_sha256": "e6304a473c65ecd0ccffbd2f5925a8f51c44b11f59b66cfcc055e4bb911b8fa0",
+      "raw_offset": "0xb1e10",
+      "ds_offset": "0x16810"
+    },
+    {
+      "kind": "audio driver exchange and mixer state",
+      "binary": "audio_mixer_state.bin",
+      "bytes": 324,
+      "payload_sha256": "b9a4f5827a6e94b0f133cbb42a4bf55895a3aa67a436216c5fa2f6be241d6daa",
+      "raw_offset": "0xb210c",
+      "ds_offset": "0x16b0c"
+    },
+    {
+      "kind": "runtime static stream defaults",
+      "binary": "static_stream_defaults.bin",
+      "bytes": 527,
+      "payload_sha256": "e27f2c87980d0707547cef6834a40e9da8e33a5e7100c7f9bbc9328482252e9c",
+      "raw_offset": "0xaf84e",
+      "ds_offset": "0x1424e"
+    },
+    {
+      "kind": "real-mode IPX callback stored in DATA",
+      "binary": "ipx_receive_callback.bin",
+      "bytes": 384,
+      "payload_sha256": "42d5e40d73f3c5c4bc3f3276673ca7acd1e9103874109587e8eadd4d4a518ffd",
+      "raw_offset": "0xaf466",
+      "ds_offset": "0x13e66"
+    },
+    {
+      "kind": "Build video and capture defaults",
+      "binary": "video_state_defaults.bin",
+      "bytes": 446,
+      "payload_sha256": "e2c90bf4a1228387931c4eca12d0f9712f3e1cd4ad586b105f08587205533f1d",
+      "raw_offset": "0xaf5e6",
+      "ds_offset": "0x13fe6"
+    },
+    {
+      "kind": "keyboard binding defaults",
+      "binary": "key_binding_defaults.bin",
+      "bytes": 58,
+      "payload_sha256": "4c58f572aa188c05a537e2e2d98408b1f597cbfacc989745110042f7c9f84415",
+      "raw_offset": "0xaec1c",
+      "ds_offset": "0x1361c"
+    },
+    {
+      "kind": "input and audio pan defaults",
+      "binary": "audio_pan_defaults.bin",
+      "bytes": 200,
+      "payload_sha256": "537475dec80bdff5ca7d29aeb7c38a6e319d52aef3998dfcc2734defc997eb83",
+      "raw_offset": "0xae228",
+      "ds_offset": "0x12c28"
+    },
+    {
+      "kind": "runtime heap defaults",
+      "binary": "runtime_heap_defaults.bin",
+      "bytes": 10,
+      "payload_sha256": "4eada413225fc6b30e4c6c391337bb002fd3e26d457db3bf34f65569223b70c4",
+      "raw_offset": "0xb2a92",
+      "ds_offset": "0x17492"
+    },
+    {
+      "kind": "runtime x87 emulator state",
+      "binary": "fpu_emulator_defaults.bin",
+      "bytes": 128,
+      "payload_sha256": "38723a2e5e8a17aa7950dc008209944e898f69a7bd10a23c839d341e935fd5ca",
+      "raw_offset": "0xb2a10",
+      "ds_offset": "0x17410"
+    },
+    {
+      "kind": "graphics font descriptor defaults",
+      "binary": "graphics_font_descriptor_defaults.bin",
+      "bytes": 14,
+      "payload_sha256": "e7ecebbc590bc88b3761fa6cd03d749f87463dabb67021a5c6768c25ec68b3f2",
+      "raw_offset": "0xb414e",
+      "ds_offset": "0x18b4e"
+    },
+    {
+      "kind": "HMI status messages",
+      "binary": "hmi_status_messages.bin",
+      "bytes": 566,
+      "payload_sha256": "359d0fe2f332cc6d24c67faa7f2e6dbfae39b34f51e304bc4c915696ab999a05",
+      "raw_offset": "0x9d24a",
+      "ds_offset": "0x1c4a"
+    },
+    {
+      "kind": "HMI driver modes and selectors",
+      "binary": "hmi_driver_tables.bin",
+      "bytes": 32,
+      "payload_sha256": "69ceaca60b007a3563d2304cdc3974f6a8ce9666a1dd98eb93545a8430cbc1e5",
+      "raw_offset": "0xb2064",
+      "ds_offset": "0x16a64"
+    },
+    {
+      "kind": "engine video allocation diagnostics",
+      "binary": "video_allocation_messages.bin",
+      "bytes": 220,
+      "payload_sha256": "ffd722ebe0424122e3c885d05a9c2bebf1a178aa770d254826b1fe52e60d9fbb",
+      "raw_offset": "0x9d0f9",
+      "ds_offset": "0x1af9"
+    },
+    {
+      "kind": "DPMI video memory diagnostics",
+      "binary": "dpmi_video_messages.bin",
+      "bytes": 158,
+      "payload_sha256": "e24c5c6d9c8514b2243c6ebb3cf1dcdf986a1d4b5a8492fd4b153f5d51462029",
+      "raw_offset": "0x9cf44",
+      "ds_offset": "0x1944"
+    },
+    {
+      "kind": "gameplay board modification extension",
+      "binary": "gameplay_mod_extension.bin",
+      "bytes": 5,
+      "payload_sha256": "e9dc497619dbba4e113ee4a6c6fac83bc9c027aab844e5d4b1df5f0863709362",
+      "raw_offset": "0x9b8d0",
+      "ds_offset": "0x2d0"
+    },
+    {
+      "kind": "fatal error newline",
+      "binary": "fate_error_newline.bin",
+      "bytes": 2,
+      "payload_sha256": "102b51b9765a56a3e899f7cf0ee38e5251f9c503b357b330a49183eb7b155604",
+      "raw_offset": "0x9ba0c",
+      "ds_offset": "0x40c"
+    },
+    {
+      "kind": "game shutdown message",
+      "binary": "fate_game_over_message.bin",
+      "bytes": 17,
+      "payload_sha256": "f295a1ef4dd0bfa612d2bd4fd391b95cb6f0206dd69439aa2dfe6081b4c9859c",
+      "raw_offset": "0x9c948",
+      "ds_offset": "0x1348"
+    },
+    {
+      "kind": "game subsystem flags",
+      "binary": "fate_shutdown_flags.bin",
+      "bytes": 8,
+      "payload_sha256": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+      "raw_offset": "0xaf1a8",
+      "ds_offset": "0x13ba8"
+    },
+    {
+      "kind": "numbered board extension and diagnostics",
+      "binary": "numbered_board_messages.bin",
+      "bytes": 69,
+      "payload_sha256": "939e2912c8b3d2ce6bc944e06352d81e05a70f9e390eb37818efd08ca6b00495",
+      "raw_offset": "0x9ba84",
+      "ds_offset": "0x484"
+    },
+    {
+      "kind": "board preparation diagnostics",
+      "binary": "board_setup_messages.bin",
+      "bytes": 53,
+      "payload_sha256": "3baa42445c84a4f841e276ae4cd835be22f6eb36092e2a0d76172531d3d1a396",
+      "raw_offset": "0x9bacc",
+      "ds_offset": "0x4cc"
+    },
+    {
+      "kind": "player health messages",
+      "binary": "player_health_messages.bin",
+      "bytes": 24,
+      "payload_sha256": "cd7ffd023599261465cb0e65aecce0eda33415a48c2f0ae243d3e292bb5db821",
+      "raw_offset": "0x9bb1e",
+      "ds_offset": "0x51e"
+    },
+    {
+      "kind": "board loader extensions and diagnostics",
+      "binary": "board_loader_messages.bin",
+      "bytes": 115,
+      "payload_sha256": "7b3edfcd7fe87761c38ec77722aa10185ecd65021d24686c8badfa58c2b3f296",
+      "raw_offset": "0x9ba10",
+      "ds_offset": "0x410"
+    },
+    {
+      "kind": "actor restoration diagnostic",
+      "binary": "restore_actor_message.bin",
+      "bytes": 43,
+      "payload_sha256": "101d41a72f0bb1ad889d18952b5f5cea83a44ce06829fbaaec6a4f2bf9dfe144",
+      "raw_offset": "0x9b9e0",
+      "ds_offset": "0x3e0"
+    },
+    {
+      "kind": "weapon animation tables after shared offset",
+      "binary": "weapon_animation_tables.bin",
+      "bytes": 958,
+      "payload_sha256": "4dfa519eb803f04c84c41ef66b9bac42c37f98c11d1f4e795a9d9df7c71c9a34",
+      "raw_offset": "0xade6a",
+      "ds_offset": "0x1286a"
+    },
+    {
+      "kind": "board script configuration and defaults",
+      "binary": "level_script_defaults.bin",
+      "bytes": 118,
+      "payload_sha256": "7ee557fd0a94494fad7b0442085abd3d5c051af216b7e5e51d5802a919f68a54",
+      "raw_offset": "0xaddf4",
+      "ds_offset": "0x127f4"
+    },
+    {
+      "kind": "navigation and puzzle state defaults",
+      "binary": "navigation_puzzle_defaults.bin",
+      "bytes": 16,
+      "payload_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb",
+      "raw_offset": "0xadde4",
+      "ds_offset": "0x127e4"
+    },
+    {
+      "kind": "board navigation layouts",
+      "binary": "sprite_navigation_data.bin",
+      "bytes": 56008,
+      "payload_sha256": "654d7d15f61ca3004d6c5867ab7ee43a48fb0390e2e5638151681a9192916888",
+      "raw_offset": "0xa031c",
+      "ds_offset": "0x4d1c"
+    },
+    {
+      "kind": "level transition defaults and board names",
+      "binary": "level_name_defaults.bin",
+      "bytes": 561,
+      "payload_sha256": "27bfa3cc9a1d8c0a2607c3d9ad3b66e836cddc3cd1528496e4baaa829b2fdb13",
+      "raw_offset": "0x9d62c",
+      "ds_offset": "0x202c"
+    },
+    {
+      "kind": "inventory, actor waypoints and sprite templates",
+      "binary": "actor_initial_state.bin",
+      "bytes": 2431,
+      "payload_sha256": "98075e53c3e11f2645bd9ca9596817b9b5eb3310115833e570ac8c959abf81b2",
+      "raw_offset": "0x9d85d",
+      "ds_offset": "0x225d"
+    },
+    {
+      "kind": "interaction configuration and defaults",
+      "binary": "interaction_configuration.bin",
+      "bytes": 280,
+      "payload_sha256": "9f5feb3af4cd9fd1a876119e317a71131e038d1cd20c0bac9dbffc9411152353",
+      "raw_offset": "0x9f1ec",
+      "ds_offset": "0x3bec"
+    },
+    {
+      "kind": "interaction defaults and sprite templates",
+      "binary": "interaction_sprite_templates.bin",
+      "bytes": 4112,
+      "payload_sha256": "58bb272ef2f9fca10b258e3098adde00f4e506f649805e6cfaf1ae0b74684f4b",
+      "raw_offset": "0x9e1dc",
+      "ds_offset": "0x2bdc"
+    },
+    {
+      "kind": "terminal records and inventory defaults",
+      "binary": "terminal_and_inventory_defaults.bin",
+      "bytes": 3864,
+      "payload_sha256": "b09c89db678fcc20d7dca0dcc96b215922a5faaa70ddf29a158ae79c990a8cfe",
+      "raw_offset": "0x9f404",
+      "ds_offset": "0x3e04"
+    },
+    {
+      "kind": "key names and action captions",
+      "binary": "key_binding_captions.bin",
+      "bytes": 719,
+      "payload_sha256": "fea625473aa529ccb41f9921a8306c894c24d67679484e3a2572871a52d7e7f6",
+      "raw_offset": "0x9c384",
+      "ds_offset": "0xd84"
+    },
+    {
+      "kind": "main menu captions",
+      "binary": "main_menu_captions.bin",
+      "bytes": 222,
+      "payload_sha256": "e745386653eff332b15a526e32f559102fbb5e9c5d64e85ebfc1651dfe880ffd",
+      "raw_offset": "0x9c206",
+      "ds_offset": "0xc06"
+    },
+    {
+      "kind": "configuration menu captions",
+      "binary": "configuration_menu_captions.bin",
+      "bytes": 713,
+      "payload_sha256": "1f7e1d780d6c1618cf35ed9046d6c7f0c809ce5bc49c7b722b03825d7b4e6cb4",
+      "raw_offset": "0x9c653",
+      "ds_offset": "0x1053"
+    },
+    {
+      "kind": "keyboard scan code to ASCII tables",
+      "binary": "keyboard_ascii_tables.bin",
+      "bytes": 256,
+      "payload_sha256": "2f21303a5320588e3b2e8f9b858b200aef4f3395d667bac5bc863f3dd197a667",
+      "raw_offset": "0x9f304",
+      "ds_offset": "0x3d04"
+    },
+    {
+      "kind": "sprite navigation diagnostics",
+      "binary": "sprite_navigation_messages.bin",
+      "bytes": 103,
+      "payload_sha256": "563d4cfd272c651dcfdedb9a60b5b5ffc98a7f6bede119481933cf5c5875f2de",
+      "raw_offset": "0x9b978",
+      "ds_offset": "0x378"
+    },
+    {
+      "kind": "sprite path diagnostics",
+      "binary": "sprite_path_messages.bin",
+      "bytes": 158,
+      "payload_sha256": "c1303f0781af6db694243af3816ecb27df73c361e4bcef277813e97a32c89252",
+      "raw_offset": "0x9b8d8",
+      "ds_offset": "0x2d8"
+    },
+    {
+      "kind": "level board transition diagnostics",
+      "binary": "level_board_transition_messages.bin",
+      "bytes": 71,
+      "payload_sha256": "56ba72bef28990caabb82f40816f70e7ece305b2032347c8d1d4d504fe1a93ba",
+      "raw_offset": "0x9b888",
+      "ds_offset": "0x288"
+    },
+    {
+      "kind": "teleport terminal diagnostic",
+      "binary": "teleport_terminal_message.bin",
+      "bytes": 29,
+      "payload_sha256": "4768b8ea10536143ebd5904eed50c51f7bc0fa3ebc892c1dada287ebf205ab12",
+      "raw_offset": "0x9b868",
+      "ds_offset": "0x268"
+    },
+    {
+      "kind": "float sprite list overflow diagnostic",
+      "binary": "float_sprites_message.bin",
+      "bytes": 34,
+      "payload_sha256": "bb56f71eea76b6d0e4fd12e7a88b848b4a33b184b28f86bcbfaf5d423fe02e5e",
+      "raw_offset": "0x9b844",
+      "ds_offset": "0x244"
+    },
+    {
+      "kind": "actor projectile list overflow diagnostic",
+      "binary": "actor_projectile_message.bin",
+      "bytes": 33,
+      "payload_sha256": "c57bd447b05442a9f669df5f65bd4a833242de6943460ec931c0ecd339361741",
+      "raw_offset": "0x9b7f8",
+      "ds_offset": "0x1f8"
+    },
+    {
+      "kind": "projectile list overflow diagnostic",
+      "binary": "player_projectile_message.bin",
+      "bytes": 34,
+      "payload_sha256": "db6bea29a558dfa8c333d72f3b7d6bdbcc75ca68aefc13a28cc6604ff1f74753",
+      "raw_offset": "0x9b7d4",
+      "ds_offset": "0x1d4"
+    },
+    {
+      "kind": "sector panning overflow diagnostic",
+      "binary": "sector_panning_message.bin",
+      "bytes": 36,
+      "payload_sha256": "4efa790039736cdfcd560e13662e3ee3f0ba9e1319891929ef1c8e8496d37df0",
+      "raw_offset": "0x9b78c",
+      "ds_offset": "0x18c"
+    },
+    {
+      "kind": "graphics vendor mode numbers",
+      "binary": "graphics_vendor_modes.bin",
+      "bytes": 132,
+      "payload_sha256": "bfc1897092c6742ba92accc5d85f4c9fbe8702b071f182af93dc3a342f32835f",
+      "raw_offset": "0xb2748",
+      "ds_offset": "0x17148"
+    },
+    {
+      "kind": "graphics two-plane color map",
+      "binary": "graphics_two_plane_colors.bin",
+      "bytes": 4,
+      "payload_sha256": "39cf37503ce1b146514b53085280219f1318684878203b3fdf0c390e9e9baa27",
+      "raw_offset": "0xb24c4",
+      "ds_offset": "0x16ec4"
+    },
+    {
+      "kind": "planar graphics logical operation bits",
+      "binary": "graphics_planar_actions.bin",
+      "bytes": 4,
+      "payload_sha256": "eca8ad0413dfda1f26156364fd8b68141717a038385356db9cf9a3d08d6e832c",
+      "raw_offset": "0xb24c0",
+      "ds_offset": "0x16ec0"
+    },
+    {
+      "kind": "Hercules CRT timing registers",
+      "binary": "graphics_hercules_crtc.bin",
+      "bytes": 12,
+      "payload_sha256": "b28b3ad78965be6124749f1226c4a97d7e36a6927f2c8ca3fe2ad9b050e10da9",
+      "raw_offset": "0xb2464",
+      "ds_offset": "0x16e64"
+    },
+    {
+      "kind": "graphics adapter classes and memory sizes",
+      "binary": "graphics_adapter_classes.bin",
+      "bytes": 88,
+      "payload_sha256": "5ca5101e61efe24e016866318c2e9ebeb168c8f072f3d2abb3b95c7ffafc1806",
+      "raw_offset": "0xb231c",
+      "ds_offset": "0x16d1c"
+    },
+    {
+      "kind": "graphics fill pattern defaults",
+      "binary": "graphics_fill_defaults.bin",
+      "bytes": 19,
+      "payload_sha256": "c098e439b92722515cd9ff8953f2e4a4f06eddfd691d0c5480df47171dc9fb52",
+      "raw_offset": "0xb2284",
+      "ds_offset": "0x16c84"
+    },
+    {
+      "kind": "graphics EGA palette tables",
+      "binary": "graphics_ega_palette.bin",
+      "bytes": 68,
+      "payload_sha256": "85e17d96b2100dbe00c4f21d2952296038e0eb47d0206e1640759e3cf26728d0",
+      "raw_offset": "0xb298c",
+      "ds_offset": "0x1738c"
+    },
+    {
+      "kind": "graphics adapter ROM signatures",
+      "binary": "graphics_rom_signatures.bin",
+      "bytes": 27,
+      "payload_sha256": "97bc8315928e3fae2c54f9f01533e131605828575bb50968c3272082482614cc",
+      "raw_offset": "0x9d4fc",
+      "ds_offset": "0x1efc"
+    },
+    {
+      "kind": "graphics adapter mode masks",
+      "binary": "graphics_mode_masks.bin",
+      "bytes": 72,
+      "payload_sha256": "2bf99882291a84b45172ec0b2aa9316e0b0c88157dbe43a1d04e8ca512a5b804",
+      "raw_offset": "0xb4f5c",
+      "ds_offset": "0x1995c"
+    },
+    {
+      "kind": "graphics coordinate defaults",
+      "binary": "graphics_coordinate_defaults.bin",
+      "bytes": 34,
+      "payload_sha256": "06657f8122bd837476c1be8904773eae6d3cd35f706ebdcca1e8f485959cfb05",
+      "raw_offset": "0xb22d5",
+      "ds_offset": "0x16cd5"
+    },
+    {
+      "kind": "HMI detector filename",
+      "binary": "audio_detector_filename.bin",
+      "bytes": 11,
+      "payload_sha256": "e4df65a5350f629c6e91d4520aa852d491e5583c5c04dfc88d225dd03ec42d6a",
+      "raw_offset": "0x9d4f0",
+      "ds_offset": "0x1ef0"
+    },
+    {
+      "kind": "HMI driver filename",
+      "binary": "audio_driver_filename.bin",
+      "bytes": 11,
+      "payload_sha256": "e8859d6aa1567d51dffec8a90f84f58c277a39fdbac2ca4e6d4522070bc4a3a0",
+      "raw_offset": "0x9d480",
+      "ds_offset": "0x1e80"
+    },
+    {
+      "kind": "delimiter bit masks",
+      "binary": "delimiter_bit_masks.bin",
+      "bytes": 8,
+      "payload_sha256": "5ac9831b2e30eb285ef34f8501620f878432d5c04331ad1ae47f977a83ba41a5",
+      "raw_offset": "0x9d624",
+      "ds_offset": "0x2024"
+    },
+    {
+      "kind": "runtime file translation default",
+      "binary": "stdio_mode.bin",
+      "bytes": 4,
+      "payload_sha256": "bf5e8ffa51a9e748985800c1d3d7f1a2a6ae7435136593ca8d9637e3f87c699c",
+      "raw_offset": "0xafa5d",
+      "ds_offset": "0x1445d"
+    },
+    {
+      "kind": "runtime random seed",
+      "binary": "rand_seed.bin",
+      "bytes": 4,
+      "payload_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450",
+      "raw_offset": "0xaf7a4",
+      "ds_offset": "0x141a4"
+    },
+    {
+      "kind": "runtime DOS errno mapping",
+      "binary": "dos_errno_table.bin",
+      "bytes": 20,
+      "payload_sha256": "c5b3f92d8220eb241a64032a663efed95f0b2d23ef126cbd3e22659c7d52f2b0",
+      "raw_offset": "0xb209c",
+      "ds_offset": "0x16a9c"
+    },
+    {
+      "kind": "runtime PATH variable name",
+      "binary": "spawn_path_variable.bin",
+      "bytes": 5,
+      "payload_sha256": "0b71980571e71c06bf232e496876f9d914e66b8faa444e96ccc5ba8d3b757a3b",
+      "raw_offset": "0x9d518",
+      "ds_offset": "0x1f18"
+    },
+    {
+      "kind": "runtime stack selector and overflow message",
+      "binary": "stack_defaults.bin",
+      "bytes": 20,
+      "payload_sha256": "e7922b806af440bb9e16aae436c1d573aea2ee7366c1c7446fd075e2d440fe1a",
+      "raw_offset": "0xb2250",
+      "ds_offset": "0x16c50"
+    },
+    {
+      "kind": "runtime initial x87 control word",
+      "binary": "fpu_default.bin",
+      "bytes": 2,
+      "payload_sha256": "89584a3755980c23302d1c9b012cc9269492040006ece50d2bcc52ac55ff4bd1",
+      "raw_offset": "0xb2a90",
+      "ds_offset": "0x17490"
+    },
+    {
+      "kind": "runtime DPMI vendor name",
+      "binary": "fpu_vendor.bin",
+      "bytes": 16,
+      "payload_sha256": "3b878e8cb01c28066be36cd51b21c44fbebac1a6d8af46b10b6ae56d6100264e",
+      "raw_offset": "0x9d4b0",
+      "ds_offset": "0x1eb0"
+    },
+    {
+      "kind": "runtime shell and spawn strings",
+      "binary": "system_strings.bin",
+      "bytes": 78,
+      "payload_sha256": "8d832ea8ff2a99063a924c371fbb2268166199691288d23d107eb83983c3658e",
+      "raw_offset": "0x9d1fc",
+      "ds_offset": "0x1bfc"
+    },
+    {
+      "kind": "missing floating-point support message",
+      "binary": "float_message.bin",
+      "bytes": 36,
+      "payload_sha256": "f981a7528b9a6ebfb1e3db4c1f10d93840c410dc67ef18d3c52968cdc27550de",
+      "raw_offset": "0x9d48c",
+      "ds_offset": "0x1e8c"
+    },
+    {
+      "kind": "graphics bitmap dispatch defaults",
+      "binary": "graphics_bitmap_defaults.bin",
+      "bytes": 8,
+      "payload_sha256": "47059ef2d9ce2d7234538284b2ffe8e5b5d5a70d31ff37a4648f1113deef3552",
+      "raw_offset": "0xb4fac",
+      "ds_offset": "0x199ac",
+      "le_targets": 2
+    },
+    {
+      "kind": "graphics bank selectors",
+      "binary": "graphics_bank_selectors.bin",
+      "bytes": 48,
+      "payload_sha256": "1008ab4dd24a371234b138d1c67ab35384477a29bd1a9d24d001d35869aab8a5",
+      "raw_offset": "0xb27cc",
+      "ds_offset": "0x171cc",
+      "le_targets": 12
+    },
+    {
+      "kind": "configuration digit string pointer",
+      "binary": "configuration_hex_pointer.bin",
+      "bytes": 4,
+      "payload_sha256": "a1d1a3e07358f7ed1f0652417868c38ca0e6f12c0cccc1789270746fb41d934f",
+      "raw_offset": "0xae2f0",
+      "ds_offset": "0x12cf0",
+      "le_targets": 1
+    },
+    {
+      "kind": "graphics font descriptors",
+      "binary": "graphics_font_descriptors.bin",
+      "bytes": 8,
+      "payload_sha256": "2ef263cdee453facd7758dfaaafa60bf3be77f2fd2fae763600f441c2769e253",
+      "raw_offset": "0xb4146",
+      "ds_offset": "0x18b46",
+      "le_targets": 2
+    },
+    {
+      "kind": "HMI status message pointers",
+      "binary": "hmi_status_pointers.bin",
+      "bytes": 96,
+      "payload_sha256": "331fe8d91ec28163d704994d24ff6e36257415f4be805d1d5927bc058d99f66d",
+      "raw_offset": "0xb2004",
+      "ds_offset": "0x16a04",
+      "le_targets": 24
+    },
+    {
+      "kind": "HMI driver initialization dispatch",
+      "binary": "hmi_driver_close_dispatch.bin",
+      "bytes": 20,
+      "payload_sha256": "c7986890d7860c1b0ce8525134d67f5602ef37f483f2d90b42426a501aeb8689",
+      "raw_offset": "0xb2084",
+      "ds_offset": "0x16a84",
+      "le_targets": 5
+    },
+    {
+      "kind": "crt startup defaults",
+      "binary": "crt_startup_defaults.bin",
+      "bytes": 173,
+      "payload_sha256": "c95b08528e6c4a2503b46dc30843ba376764ed47de8a3e475e9e7808c15edab5",
+      "raw_offset": "0xafa61",
+      "ds_offset": "0x14461",
+      "le_targets": 2
+    },
+    {
+      "kind": "difficulty audio control menus",
+      "binary": "difficulty_audio_control_menus.bin",
+      "bytes": 287,
+      "payload_sha256": "6e239c843e305b208c536218becc4cdb3720f0d2d475038d21ea2b7323726878",
+      "raw_offset": "0xaf089",
+      "ds_offset": "0x13a89",
+      "le_targets": 12
+    },
+    {
+      "kind": "graphics hercules device table",
+      "binary": "graphics_hercules_device_table.bin",
+      "bytes": 80,
+      "payload_sha256": "ca247db71c27847eacb47c5a06453700fbf076cbf28d04361aa3c580aa0ea45d",
+      "raw_offset": "0xb2470",
+      "ds_offset": "0x16e70",
+      "le_targets": 20
+    },
+    {
+      "kind": "graphics cga device tables",
+      "binary": "graphics_cga_device_tables.bin",
+      "bytes": 240,
+      "payload_sha256": "1ecf744dad1ab6c62f56b981ed972a3c74d6848cb86649f766b099b92d7b7fd8",
+      "raw_offset": "0xb2374",
+      "ds_offset": "0x16d74",
+      "le_targets": 44
+    },
+    {
+      "kind": "graphics planar device tables",
+      "binary": "graphics_planar_device_tables.bin",
+      "bytes": 640,
+      "payload_sha256": "1c3a3f5f2d808f5c1138621fec451efc89032ed97a476a5a42fc687e31f35d5a",
+      "raw_offset": "0xb24c8",
+      "ds_offset": "0x16ec8",
+      "le_targets": 160
+    },
+    {
+      "kind": "graphics banked device tables",
+      "binary": "graphics_banked_device_tables.bin",
+      "bytes": 400,
+      "payload_sha256": "58d7a7e5f5c50686d05287325dd9fea1ff063e06310e090c7dbcb18a3b996a61",
+      "raw_offset": "0xb27fc",
+      "ds_offset": "0x171fc",
+      "le_targets": 100
+    },
+    {
+      "kind": "graphics mode device map",
+      "binary": "graphics_mode_device_map.bin",
+      "bytes": 138,
+      "payload_sha256": "de4f4dbcfad1a70bbfc4da86dfce3c4cbeeff6695a736ed28e771434f454de1a",
+      "raw_offset": "0xaf7c4",
+      "ds_offset": "0x141c4",
+      "le_targets": 22
+    },
+    {
+      "kind": "key scan name pointers",
+      "binary": "key_scan_name_pointers.bin",
+      "bytes": 1024,
+      "payload_sha256": "88b0068c5a90f184b850cb30a8ebbe14c35422b339bf269345ec8a3ddbd4bcf6",
+      "raw_offset": "0xae754",
+      "ds_offset": "0x13154",
+      "le_targets": 256
+    },
+    {
+      "kind": "key binding action table",
+      "binary": "key_binding_action_table.bin",
+      "bytes": 200,
+      "payload_sha256": "b447a6e21443fc928fa2bfd2e2bd46a805d9a374bd72fd92b996c444c1bf75bb",
+      "raw_offset": "0xaeb54",
+      "ds_offset": "0x13554",
+      "le_targets": 25
+    },
+    {
+      "kind": "key binding menu records",
+      "binary": "key_binding_menu_records.bin",
+      "bytes": 525,
+      "payload_sha256": "023ac571e27e7a634b29787fcdad633bfba433b5b0227ecb72a5b0f46d35cc35",
+      "raw_offset": "0xaec56",
+      "ds_offset": "0x13656",
+      "le_targets": 25
+    },
+    {
+      "kind": "video configuration defaults",
+      "binary": "video_configuration_defaults.bin",
+      "bytes": 144,
+      "payload_sha256": "62613c464869e3bf64f414a2570a8d9f72167bca0e1c6c6abfcbb887d451609a",
+      "raw_offset": "0xae2f4",
+      "ds_offset": "0x12cf4",
+      "le_targets": 12
+    },
+    {
+      "kind": "main menu records",
+      "binary": "main_menu_records.bin",
+      "bytes": 828,
+      "payload_sha256": "751902ec751a90721b6cc59f6e668537618082ebee6cdac1bdf9e2fba4dcc5a8",
+      "raw_offset": "0xae418",
+      "ds_offset": "0x12e18",
+      "le_targets": 29
+    },
+    {
+      "kind": "options menu records",
+      "binary": "options_menu_records.bin",
+      "bytes": 542,
+      "payload_sha256": "d49a2a5634007be88fe80eb8ef4717b06c888e183b91781ec18d7008e5b88cec",
+      "raw_offset": "0xaee63",
+      "ds_offset": "0x13863",
+      "le_targets": 29
+    },
+    {
+      "kind": "HMI interrupt stack and driver state",
+      "binary": "irq_stack_defaults.bin",
+      "bytes": 8514,
+      "payload_sha256": "9f6c11332e344e0e15e3f971a361646f8a0a381d11a5a5fe857b4d8e6c3d46c1",
+      "raw_offset": "0xafb0e",
+      "ds_offset": "0x1450e",
+      "le_targets": 1
+    },
+    {
+      "kind": "runtime DOS descriptor defaults",
+      "binary": "dos_descriptor_defaults.bin",
+      "bytes": 88,
+      "payload_sha256": "2f405068230422afb6fb201a7b0cf2581dbfdd447fb98b336d0bf6b7fc87173d",
+      "raw_offset": "0xb20b4",
+      "ds_offset": "0x16ab4",
+      "le_targets": 1
+    },
+    {
+      "kind": "runtime exit hooks",
+      "binary": "exit_hooks.bin",
+      "bytes": 12,
+      "payload_sha256": "449c053d2f1543f992056baf4e11505a52b52c9d86fb806782f3ec18d4e3ff9e",
+      "raw_offset": "0xaf7ac",
+      "ds_offset": "0x141ac",
+      "le_targets": 3
+    },
+    {
+      "kind": "runtime floating-point callback defaults",
+      "binary": "float_callbacks.bin",
+      "bytes": 8,
+      "payload_sha256": "eee697fd25068b3c66e71069dde76244654828a7e8c6dd8438806f831ffbe58d",
+      "raw_offset": "0xb29d0",
+      "ds_offset": "0x173d0",
+      "le_targets": 2
+    },
+    {
+      "kind": "runtime spawn callback defaults",
+      "binary": "spawn_defaults.bin",
+      "bytes": 8,
+      "payload_sha256": "d61ae23abde7604b1c1a66e62c57c56ff44fb43c8f590d1854d3492d4938a7fd",
+      "raw_offset": "0xb2a08",
+      "ds_offset": "0x17408",
+      "le_targets": 2
+    },
+    {
+      "kind": "CRT initializer and finalizer records",
+      "binary": "crt_tables.bin",
+      "bytes": 47,
+      "loaded_bytes": 48,
+      "payload_sha256": "085419dd5d94c3429e5d32b3141dfffb7c113774748613f1be2ce37416764a94",
+      "raw_offset": "0xb4fb4",
+      "ds_offset": "0x199b4",
+      "le_targets": 8
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 0,
+      "bytes": 4,
+      "payload_sha256": "f896c3a5f9841b6e1f0a22bd35a6a1bc5efb28aaa23b66301ec8098ce57cf99a",
+      "raw_offset": "0x9b600",
+      "ds_offset": "0x0",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 4,
+      "bytes": 2,
+      "payload_sha256": "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+      "raw_offset": "0x9b656",
+      "ds_offset": "0x56",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 6,
+      "bytes": 132,
+      "payload_sha256": "32c1a1355b9f67d080528caf81b624b007b9552a307943eec82f498e9830fcef",
+      "raw_offset": "0x9b708",
+      "ds_offset": "0x108",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 138,
+      "bytes": 36,
+      "payload_sha256": "d161a88d7850ee491c669cb1320569f5610f92502176205d022b9a384f2222b6",
+      "raw_offset": "0x9b7b0",
+      "ds_offset": "0x1b0",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 174,
+      "bytes": 2,
+      "payload_sha256": "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+      "raw_offset": "0x9b7f6",
+      "ds_offset": "0x1f6",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 176,
+      "bytes": 43,
+      "payload_sha256": "28dfa0228d1423f51559d10d5f8c30bc28ee3c6fdf3bb197b5ccfec0660575e2",
+      "raw_offset": "0x9b819",
+      "ds_offset": "0x219",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 219,
+      "bytes": 2,
+      "payload_sha256": "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+      "raw_offset": "0x9b866",
+      "ds_offset": "0x266",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 221,
+      "bytes": 3,
+      "payload_sha256": "709e80c88487a2411e1ee4dfb9f22a861492d20c4765150c0c794abd70f8147c",
+      "raw_offset": "0x9b885",
+      "ds_offset": "0x285",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 224,
+      "bytes": 1,
+      "payload_sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+      "raw_offset": "0x9b8cf",
+      "ds_offset": "0x2cf",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 225,
+      "bytes": 3,
+      "payload_sha256": "709e80c88487a2411e1ee4dfb9f22a861492d20c4765150c0c794abd70f8147c",
+      "raw_offset": "0x9b8d5",
+      "ds_offset": "0x2d5",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 228,
+      "bytes": 2,
+      "payload_sha256": "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+      "raw_offset": "0x9b976",
+      "ds_offset": "0x376",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 230,
+      "bytes": 1,
+      "payload_sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+      "raw_offset": "0x9b9df",
+      "ds_offset": "0x3df",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 231,
+      "bytes": 1,
+      "payload_sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+      "raw_offset": "0x9ba0b",
+      "ds_offset": "0x40b",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 232,
+      "bytes": 2,
+      "payload_sha256": "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+      "raw_offset": "0x9ba0e",
+      "ds_offset": "0x40e",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 234,
+      "bytes": 1,
+      "payload_sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+      "raw_offset": "0x9ba83",
+      "ds_offset": "0x483",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 235,
+      "bytes": 3,
+      "payload_sha256": "709e80c88487a2411e1ee4dfb9f22a861492d20c4765150c0c794abd70f8147c",
+      "raw_offset": "0x9bac9",
+      "ds_offset": "0x4c9",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 238,
+      "bytes": 29,
+      "payload_sha256": "e4738c927528483ea1cb5fcc61b769be128d3e69023e2dd2f4251572d1aded43",
+      "raw_offset": "0x9bb01",
+      "ds_offset": "0x501",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 267,
+      "bytes": 166,
+      "payload_sha256": "f2fb0f55ceea5e1e8e1e5157b3038a7385b7f660fa02c28e394492c3cc9f2efd",
+      "raw_offset": "0x9bb36",
+      "ds_offset": "0x536",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 433,
+      "bytes": 1,
+      "payload_sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+      "raw_offset": "0x9bc1b",
+      "ds_offset": "0x61b",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 434,
+      "bytes": 97,
+      "payload_sha256": "a16bd42e609ba178531b29fd8f0b451392e6f6352ae933352975331746af53dc",
+      "raw_offset": "0x9bf60",
+      "ds_offset": "0x960",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 531,
+      "bytes": 134,
+      "payload_sha256": "5551aba78c30bd5501a9e643a7e1f4fbe9dd3e3f5d51fa89c3df607004a95e81",
+      "raw_offset": "0x9bfcb",
+      "ds_offset": "0x9cb",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 665,
+      "bytes": 2,
+      "payload_sha256": "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+      "raw_offset": "0x9c1ba",
+      "ds_offset": "0xbba",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 667,
+      "bytes": 42,
+      "payload_sha256": "bc5ad2fcb263c8dd8679037bb1af26ee3b847e46595dcfe4d622b18a5411b87e",
+      "raw_offset": "0x9c2ef",
+      "ds_offset": "0xcef",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 709,
+      "bytes": 2,
+      "payload_sha256": "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+      "raw_offset": "0x9c946",
+      "ds_offset": "0x1346",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 711,
+      "bytes": 259,
+      "payload_sha256": "d3bc5462d66fc7cfb522c6c28def33994888085a40ecd693e902c9b84904ade0",
+      "raw_offset": "0x9c959",
+      "ds_offset": "0x1359",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 970,
+      "bytes": 128,
+      "payload_sha256": "66ca6beb5238a09ecdf261f507b603ab7e924ad7132670a7bbe78c9df745f542",
+      "raw_offset": "0x9cc90",
+      "ds_offset": "0x1690",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1098,
+      "bytes": 1,
+      "payload_sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+      "raw_offset": "0x9cd47",
+      "ds_offset": "0x1747",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1099,
+      "bytes": 1,
+      "payload_sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+      "raw_offset": "0x9cecb",
+      "ds_offset": "0x18cb",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1100,
+      "bytes": 39,
+      "payload_sha256": "fc01b4c88db3636e6fbb53ca46c70e67a2bdcbd30fc57d5063baf2001d6bb05a",
+      "raw_offset": "0x9cf1d",
+      "ds_offset": "0x191d",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1139,
+      "bytes": 10,
+      "payload_sha256": "f307a6e46f4353234962856d22a12cec9c8be8241fca665b8ffc2752671f7b4f",
+      "raw_offset": "0x9d1d5",
+      "ds_offset": "0x1bd5",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1149,
+      "bytes": 1,
+      "payload_sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+      "raw_offset": "0x9d48b",
+      "ds_offset": "0x1e8b",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1150,
+      "bytes": 48,
+      "payload_sha256": "51911dce55bbbd16814ba2856a5057c2c4f5d184d9ed214418fd1e08d08e9ab1",
+      "raw_offset": "0x9d4c0",
+      "ds_offset": "0x1ec0",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1198,
+      "bytes": 1,
+      "payload_sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+      "raw_offset": "0x9d4fb",
+      "ds_offset": "0x1efb",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1199,
+      "bytes": 1,
+      "payload_sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d",
+      "raw_offset": "0x9d517",
+      "ds_offset": "0x1f17",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1200,
+      "bytes": 263,
+      "payload_sha256": "923992461ae4ffe1787c0c62b708eb8f8980bf480c96239c59a78137ed61dbe8",
+      "raw_offset": "0x9d51d",
+      "ds_offset": "0x1f1d",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1463,
+      "bytes": 135,
+      "payload_sha256": "3d8fa9c6c753055c7c429a012104c9912275f46e5285b8200236f222247d51a7",
+      "raw_offset": "0xae391",
+      "ds_offset": "0x12d91",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1598,
+      "bytes": 16,
+      "payload_sha256": "374708fff7719dd5979ec875d56cd2286f6d3cf7ec317a3b25632aab28ec37bb",
+      "raw_offset": "0xaf1b0",
+      "ds_offset": "0x13bb0",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1614,
+      "bytes": 3,
+      "payload_sha256": "709e80c88487a2411e1ee4dfb9f22a861492d20c4765150c0c794abd70f8147c",
+      "raw_offset": "0xaf2d9",
+      "ds_offset": "0x13cd9",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1617,
+      "bytes": 4,
+      "payload_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+      "raw_offset": "0xaf7a8",
+      "ds_offset": "0x141a8",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1621,
+      "bytes": 12,
+      "payload_sha256": "15ec7bf0b50732b49f8228e07d24365338f9e3ab994b00af08e5a3bffe55fd8b",
+      "raw_offset": "0xaf7b8",
+      "ds_offset": "0x141b8",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1633,
+      "bytes": 4,
+      "payload_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+      "raw_offset": "0xb2098",
+      "ds_offset": "0x16a98",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1637,
+      "bytes": 4,
+      "payload_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119",
+      "raw_offset": "0xb20b0",
+      "ds_offset": "0x16ab0",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1641,
+      "bytes": 32,
+      "payload_sha256": "8b428cdb1dea0c5aceb3a02f24ce2720630b43a80d4bc2066fd81e911348932d",
+      "raw_offset": "0xb2264",
+      "ds_offset": "0x16c64",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1673,
+      "bytes": 62,
+      "payload_sha256": "4587cf32fee00eb26a6e36eeb01dd4949b9dfbb9dcb26bf3af82d30f132b3684",
+      "raw_offset": "0xb2297",
+      "ds_offset": "0x16c97",
+      "le_targets": 1
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1735,
+      "bytes": 37,
+      "payload_sha256": "156861ad87b5c471f2e32cae13f0cc74bdc89a6285577ccc67f174497495db70",
+      "raw_offset": "0xb22f7",
+      "ds_offset": "0x16cf7",
+      "le_targets": 1
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1772,
+      "bytes": 48,
+      "payload_sha256": "17b0761f87b081d5cf10757ccc89f12be355c70e2e29df288b65b30710dcbcd1",
+      "raw_offset": "0xb29d8",
+      "ds_offset": "0x173d8",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1820,
+      "bytes": 2,
+      "payload_sha256": "96a296d224f285c67bee93c30f8a309157f0daa35dc5b87e410b78630a09cfc7",
+      "raw_offset": "0xb34c2",
+      "ds_offset": "0x17ec2",
+      "le_targets": 0
+    },
+    {
+      "kind": "initialized fields, strings or padding",
+      "binary": "remaining_initialized_data.bin",
+      "binary_offset": 1822,
+      "bytes": 8,
+      "payload_sha256": "af5570f5a1810b7af78caf4bc70a660f0df51e42baf91d4de5b2328de0e83dfc",
+      "raw_offset": "0xb4fa4",
+      "ds_offset": "0x199a4",
+      "le_targets": 0
+    }
+  ]
+}

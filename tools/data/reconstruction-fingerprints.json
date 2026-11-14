@@ -1,0 +1,1865 @@
+{
+  "FATE.EXE": {
+    "bytes": 741347,
+    "sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
+    "new_header": "0x2a50",
+    "signature": "4c45",
+    "strings": [
+      {
+        "offset": "0x371",
+        "text": "WATCOM C Run-Time system code is provided on an \"as is\" basis and is (c) Copyright by WATCOM International Corp. 1988-1993. All rights reserved."
+      },
+      {
+        "offset": "0x85509",
+        "text": "vWATCOM C/C++32 Run-Time system. (c) Copyright by WATCOM International Corp. 1988-1994. All rights reserved."
+      },
+      {
+        "offset": "0x9b78c",
+        "text": " SETFLPAN.C: MAX_FLR_PAN EXCEEDED! "
+      },
+      {
+        "offset": "0x9bca1",
+        "text": "uninittimer() : Failed to uninit SOS timer system!"
+      },
+      {
+        "offset": "0x9bcd4",
+        "text": "hmiset.cfg"
+      },
+      {
+        "offset": "0x9bcdf",
+        "text": "Could not open hmiset.cfg!"
+      },
+      {
+        "offset": "0x9beb4",
+        "text": "Error on sosDIGIStopSample() call!"
+      },
+      {
+        "offset": "0x9bf01",
+        "text": "Error on sosDIGIStopSample() call!"
+      },
+      {
+        "offset": "0x9d053",
+        "text": "!!!! BUILD engine&tools programmed by Ken Silverman of E.G. RI.  (c) Copyright 1995 Ken Silverman.  Summary:  BUILD = Ken. !!!!"
+      },
+      {
+        "offset": "0x9d3da",
+        "text": "HMI*.386 File Open Failure"
+      },
+      {
+        "offset": "0x9d480",
+        "text": "hmidrv.386"
+      },
+      {
+        "offset": "0x9d4b0",
+        "text": "RATIONAL DOS/4G"
+      },
+      {
+        "offset": "0x9d4f0",
+        "text": "hmidet.386"
+      }
+    ],
+    "header": {
+      "cpu_os": 65538,
+      "module_version": 0,
+      "module_flags": 512,
+      "pages": 128,
+      "entry_object": 1,
+      "entry_offset": 327432,
+      "stack_object": 2,
+      "stack_offset": 2663168,
+      "page_size": 4096,
+      "last_page_size": 2531,
+      "fixup_size": 206632,
+      "fixup_checksum": 0,
+      "loader_size": 207201,
+      "loader_checksum": 0,
+      "object_table": 196,
+      "object_count": 2,
+      "page_table": 244,
+      "resident_names": 756,
+      "entry_table": 764,
+      "fixup_page_table": 765,
+      "fixup_records": 1281,
+      "import_modules": 207396,
+      "import_module_count": 0,
+      "import_procedures": 207396,
+      "data_pages": 218624,
+      "nonresident_names": 0,
+      "nonresident_size": 0,
+      "debug_offset": 0,
+      "debug_size": 0,
+      "heap_size": 0
+    },
+    "stub_sha256": "b852ae395b9ad04503fc907ad03fa28ea6a17bf5f6c2be045bf96f7177592699",
+    "objects": [
+      [
+        414639,
+        65536,
+        8197,
+        1,
+        102,
+        0
+      ],
+      [
+        2663168,
+        524288,
+        8195,
+        103,
+        26,
+        0
+      ]
+    ],
+    "data_end": 741347,
+    "trailing_bytes": 0
+  },
+  "EDITART.EXE": {
+    "bytes": 92938,
+    "sha256": "0e11c1c7edf4f265e7db56168322509b8e6ea1c7191c5a3e5994354dbbff78b9",
+    "new_header": "0x2a50",
+    "signature": "4c45",
+    "strings": [
+      {
+        "offset": "0x371",
+        "text": "WATCOM C Run-Time system code is provided on an \"as is\" basis and is (c) Copyright by WATCOM International Corp. 1988-1993. All rights reserved."
+      },
+      {
+        "offset": "0x11df5",
+        "text": "vWATCOM C/C++32 Run-Time system. (c) Copyright by WATCOM International Corp. 1988-1994. All rights reserved."
+      },
+      {
+        "offset": "0x16051",
+        "text": "Wrong art version"
+      },
+      {
+        "offset": "0x16393",
+        "text": "//Be careful when changing this file - it is parsed by Editart and Build."
+      },
+      {
+        "offset": "0x1651a",
+        "text": "Make this the new build palette?"
+      },
+      {
+        "offset": "0x1653b",
+        "text": "Make this the new build palette?"
+      },
+      {
+        "offset": "0x1655c",
+        "text": "Make this the new build palette?"
+      },
+      {
+        "offset": "0x1657d",
+        "text": "Make this the new build palette?"
+      }
+    ],
+    "header": {
+      "cpu_os": 65538,
+      "module_version": 0,
+      "module_flags": 512,
+      "pages": 16,
+      "entry_object": 1,
+      "entry_offset": 44532,
+      "stack_object": 2,
+      "stack_offset": 730768,
+      "page_size": 4096,
+      "last_page_size": 2826,
+      "fixup_size": 17450,
+      "fixup_checksum": 0,
+      "loader_size": 17574,
+      "loader_checksum": 0,
+      "object_table": 196,
+      "object_count": 2,
+      "page_table": 244,
+      "resident_names": 308,
+      "entry_table": 319,
+      "fixup_page_table": 320,
+      "fixup_records": 388,
+      "import_modules": 17769,
+      "import_module_count": 0,
+      "import_procedures": 17769,
+      "data_pages": 28672,
+      "nonresident_names": 0,
+      "nonresident_size": 0,
+      "debug_offset": 0,
+      "debug_size": 0,
+      "heap_size": 0
+    },
+    "stub_sha256": "b852ae395b9ad04503fc907ad03fa28ea6a17bf5f6c2be045bf96f7177592699",
+    "objects": [
+      [
+        60606,
+        65536,
+        8261,
+        1,
+        15,
+        0
+      ],
+      [
+        730768,
+        131072,
+        8259,
+        16,
+        1,
+        0
+      ]
+    ],
+    "data_end": 92938,
+    "trailing_bytes": 0
+  },
+  "SNDSETUP.EXE": {
+    "bytes": 165899,
+    "sha256": "d1c93fc3633a99a1a55721eef1e837cd86786d0ca553bfb14af310bb461d2af0",
+    "new_header": "0x28b8",
+    "signature": "4c45",
+    "strings": [
+      {
+        "offset": "0x273",
+        "text": "WATCOM C Run-Time system code is provided on an \"as is\" basis and is (c) Copyright by WATCOM Systems Inc. 1988-1992. All rights reserved."
+      },
+      {
+        "offset": "0x115f9",
+        "text": "xWATCOM C/C++32 Run-Time system. (c) Copyright by WATCOM International Corp. 1988-1993. All rights reserved."
+      },
+      {
+        "offset": "0x22a6a",
+        "text": "Copyright"
+      },
+      {
+        "offset": "0x230d8",
+        "text": "hmidet.386"
+      },
+      {
+        "offset": "0x230e4",
+        "text": "HMI-MIDISONG061595"
+      },
+      {
+        "offset": "0x23286",
+        "text": "HMI*.386 File Open Failure"
+      },
+      {
+        "offset": "0x2332c",
+        "text": "hmidrv.386"
+      },
+      {
+        "offset": "0x23338",
+        "text": "HMIMDRV.386"
+      },
+      {
+        "offset": "0x281f0",
+        "text": "HMIDIGIP"
+      }
+    ],
+    "header": {
+      "cpu_os": 65538,
+      "module_version": 0,
+      "module_flags": 512,
+      "pages": 32,
+      "entry_object": 1,
+      "entry_offset": 34296,
+      "stack_object": 2,
+      "stack_offset": 34640,
+      "page_size": 4096,
+      "last_page_size": 2059,
+      "fixup_size": 25784,
+      "fixup_checksum": 0,
+      "loader_size": 25970,
+      "loader_checksum": 0,
+      "object_table": 196,
+      "object_count": 2,
+      "page_table": 244,
+      "resident_names": 372,
+      "entry_table": 381,
+      "fixup_page_table": 382,
+      "fixup_records": 514,
+      "import_modules": 26165,
+      "import_module_count": 0,
+      "import_procedures": 26165,
+      "data_pages": 36864,
+      "nonresident_names": 0,
+      "nonresident_size": 0,
+      "debug_offset": 0,
+      "debug_size": 0,
+      "heap_size": 0
+    },
+    "stub_sha256": "07e5121527210a212101d84253200892b61840fc02925c2638753392cc72c9d4",
+    "objects": [
+      [
+        99669,
+        65536,
+        8261,
+        1,
+        25,
+        0
+      ],
+      [
+        34640,
+        196608,
+        8259,
+        26,
+        7,
+        0
+      ]
+    ],
+    "data_end": 165899,
+    "trailing_bytes": 0
+  },
+  "DOS4GW.EXE": {
+    "bytes": 265420,
+    "sha256": "dd9f4f342533f99570475b62e53231a468de2e3d83e4fc31e80c27d3a7d6b49c",
+    "new_header": null,
+    "signature": null,
+    "strings": [
+      {
+        "offset": "0x25c",
+        "text": "DOS/4G  Copyright (C) Rational Systems, Inc. 1987 - 1993"
+      },
+      {
+        "offset": "0x1020",
+        "text": "DOS/16M Protected Mode Run-Time     Version "
+      },
+      {
+        "offset": "0x1d39",
+        "text": "Cannot use extended memory: HIMEM.SYS not version 2"
+      },
+      {
+        "offset": "0x1d6f",
+        "text": "An obsolete version of DOS16M.386 was loaded"
+      },
+      {
+        "offset": "0x1e81c",
+        "text": "MS Run-Time Library - Copyright (c) 1990, Microsoft Corp"
+      },
+      {
+        "offset": "0x1e9cf",
+        "text": "LINEXE: Building Tiled LDT..."
+      },
+      {
+        "offset": "0x1f292",
+        "text": "DOS/4GW"
+      },
+      {
+        "offset": "0x215a7",
+        "text": "RATIONAL DOS/4G"
+      },
+      {
+        "offset": "0x243bc",
+        "text": "MS Run-Time Library - Copyright (c) 1990, Microsoft Corp"
+      },
+      {
+        "offset": "0x30d45",
+        "text": "DOS/4GW"
+      },
+      {
+        "offset": "0x3eb2c",
+        "text": "DOS/4GW Protected Mode Run-time"
+      },
+      {
+        "offset": "0x3eb4c",
+        "text": "Copyright (c) Rational Systems, Inc. 1990-1994"
+      },
+      {
+        "offset": "0x3ec88",
+        "text": "Version"
+      },
+      {
+        "offset": "0x3ee75",
+        "text": "DOS/4GW"
+      },
+      {
+        "offset": "0x3eed8",
+        "text": "%s  Version %s"
+      },
+      {
+        "offset": "0x3ef27",
+        "text": "DOS/4GW may not be renamed or bound"
+      },
+      {
+        "offset": "0x3f0a1",
+        "text": "%s is not a WATCOM program"
+      },
+      {
+        "offset": "0x3f19c",
+        "text": "WATCOM"
+      },
+      {
+        "offset": "0x3f1f9",
+        "text": "DOS/4GW deinitializing"
+      },
+      {
+        "offset": "0x40cb4",
+        "text": "WATCOM patch level .a"
+      }
+    ]
+  },
+  "HMIDET.386": {
+    "bytes": 83774,
+    "sha256": "6a5f9b019586607995609040857eeafc143ce90e83a2d0b3d1ec23bad81ee932",
+    "new_header": null,
+    "signature": null,
+    "strings": [
+      {
+        "offset": "0x66",
+        "text": "HMI Detect Driver For Gravis UltraSound MAX"
+      },
+      {
+        "offset": "0x93",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x5fa",
+        "text": "HMI Detect Driver For Gravis UltraSound MAX"
+      },
+      {
+        "offset": "0x627",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xb8e",
+        "text": "HMI Detect Driver For Gravis UltraSound MAX"
+      },
+      {
+        "offset": "0xbbb",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x1122",
+        "text": "HMI Detect Driver For Gravis UltraSound MAX"
+      },
+      {
+        "offset": "0x114f",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x16b6",
+        "text": "HMI Detect Driver For Gravis UltraSound"
+      },
+      {
+        "offset": "0x16df",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x1b8c",
+        "text": "HMI Detect Driver For Gravis UltraSound"
+      },
+      {
+        "offset": "0x1bb5",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2062",
+        "text": "HMI Detect Driver For Gravis UltraSound"
+      },
+      {
+        "offset": "0x208b",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2538",
+        "text": "HMI Detect Driver For Gravis UltraSound"
+      },
+      {
+        "offset": "0x2561",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2a0e",
+        "text": "   HMI DMA Driver For Soundscape 16 Stereo"
+      },
+      {
+        "offset": "0x2a3a",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2d62",
+        "text": "   HMI DMA Driver For Soundscape 16 Mono"
+      },
+      {
+        "offset": "0x2d8c",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x30b4",
+        "text": "   HMI DMA Driver For Soundscape 8 Stereo"
+      },
+      {
+        "offset": "0x30df",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x3407",
+        "text": "   HMI DMA Driver For Soundscape 8 Mono"
+      },
+      {
+        "offset": "0x3430",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x3758",
+        "text": "   HMI DMA Driver For Microsoft 16 Stereo"
+      },
+      {
+        "offset": "0x3783",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x39fa",
+        "text": "   HMI DMA Driver For Microsoft 16 Mono"
+      },
+      {
+        "offset": "0x3a23",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x3c9a",
+        "text": "   HMI DMA Driver For Microsoft 8 Stereo"
+      },
+      {
+        "offset": "0x3cc4",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x3f3b",
+        "text": "   HMI DMA Driver For Microsoft 8 Mono"
+      },
+      {
+        "offset": "0x3f63",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x41da",
+        "text": "HMI DMA Detect Driver For Pro Audio Spectrum 16 Stereo"
+      },
+      {
+        "offset": "0x4212",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x4412",
+        "text": "HMI DMA Detect Driver For Pro Audio Spectrum 16 Mono"
+      },
+      {
+        "offset": "0x4448",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x4648",
+        "text": " HMI DMA Driver For Pro Audio Spectrum 8 Bit Stereo"
+      },
+      {
+        "offset": "0x467d",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x4887",
+        "text": " HMI DMA Driver For Pro Audio Spectrum 8 Bit Mono"
+      },
+      {
+        "offset": "0x48ba",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x4ace",
+        "text": " HMI Detect Driver For ESS 16 Bit Stereo"
+      },
+      {
+        "offset": "0x4af8",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x4e2b",
+        "text": " HMI Detect Driver For ESS AudioDrive 16 Bit Mono"
+      },
+      {
+        "offset": "0x4e5e",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x5191",
+        "text": " HMI DMA Driver For ESS 8 Bit Stereo"
+      },
+      {
+        "offset": "0x51b7",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x54ea",
+        "text": " HMI Detect Driver For ESS AudioDrive 8 Bit Mono"
+      },
+      {
+        "offset": "0x551c",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x584f",
+        "text": "   HMI DMA Driver For Turtle Beach MultiSound"
+      },
+      {
+        "offset": "0x587e",
+        "text": "Copyright 1995, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x5a03",
+        "text": "   HMI DMA Driver For Turtle Beach MultiSound"
+      },
+      {
+        "offset": "0x5a32",
+        "text": "Copyright 1995, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x5bb7",
+        "text": "   HMI DMA Driver For Turtle Beach MultiSound"
+      },
+      {
+        "offset": "0x5be6",
+        "text": "Copyright 1995, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x5d6b",
+        "text": "   HMI DMA Driver For Turtle Beach MultiSound"
+      },
+      {
+        "offset": "0x5d9a",
+        "text": "Copyright 1995, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x5f1f",
+        "text": "HMI DMA Driver For Adlib Gold 16 Bit Stereo"
+      },
+      {
+        "offset": "0x5f4c",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x6238",
+        "text": "HMI DMA Driver For Adlib Gold 8 Bit Mono"
+      },
+      {
+        "offset": "0x6262",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x654e",
+        "text": "HMI DMA Driver For Adlib Gold 16 Bit Stereo"
+      },
+      {
+        "offset": "0x657b",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x6867",
+        "text": "HMI DMA Driver For Adlib Gold 8 Bit Stereo"
+      },
+      {
+        "offset": "0x6893",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x6b7f",
+        "text": "   HMI DMA Driver For Sound Blaster 16 16 Stereo"
+      },
+      {
+        "offset": "0x6bb1",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x6fe5",
+        "text": "   HMI DMA Driver For Sound Blaster 16 16 Mono"
+      },
+      {
+        "offset": "0x7015",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x7449",
+        "text": "   HMI DMA Driver For Sound Blaster 16 8 Stereo"
+      },
+      {
+        "offset": "0x747a",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x78a8",
+        "text": "   HMI DMA Driver For Sound Blaster 16 8 Mono"
+      },
+      {
+        "offset": "0x78d7",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x7d04",
+        "text": "   HMI DMA Driver For Sound Blaster 8 Stereo"
+      },
+      {
+        "offset": "0x7d32",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x890e",
+        "text": "   HMI DMA Driver For Sound Blaster 8 Stereo"
+      },
+      {
+        "offset": "0x893c",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x964a",
+        "text": "   HMI DMA Driver For Sound Blaster Pro 8 Mono"
+      },
+      {
+        "offset": "0x967a",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xa290",
+        "text": "   HMI DMA Driver For Sound Blaster Pro 8 Mono"
+      },
+      {
+        "offset": "0xa2c0",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xafb6",
+        "text": "   HMI DMA Driver For Sound Blaster 8 Mono"
+      },
+      {
+        "offset": "0xafe2",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xb937",
+        "text": "   HMI DMA Driver For Sound Blaster 8 Mono"
+      },
+      {
+        "offset": "0xb963",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xc2c9",
+        "text": "HMI DMA Driver For RAP10 16 Bit Mono"
+      },
+      {
+        "offset": "0xc2ef",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xc51c",
+        "text": "HMI DMA Driver For RAP10 8 Bit Mono"
+      },
+      {
+        "offset": "0xc541",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xc76e",
+        "text": "   HMI DMA Driver For Wave Jammer 8 Mono"
+      },
+      {
+        "offset": "0xc798",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xc9d0",
+        "text": "   HMI DMA Driver For Wave Jammer 8 Stereo"
+      },
+      {
+        "offset": "0xc9fc",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xcc34",
+        "text": "   HMI DMA Driver For Wave Jammer 16 Mono"
+      },
+      {
+        "offset": "0xcc5f",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xce97",
+        "text": "   HMI DMA Driver For Wave Jammer 16 Stereo"
+      },
+      {
+        "offset": "0xcec4",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xd0fc",
+        "text": "HMI DMA Driver For Tempo 16 Bit Stereo"
+      },
+      {
+        "offset": "0xd124",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xd365",
+        "text": "HMI DMA Driver For Tempo 16 Bit Stereo"
+      },
+      {
+        "offset": "0xd38d",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xd5ce",
+        "text": "HMI DMA Driver For Tempo 16 Bit Stereo"
+      },
+      {
+        "offset": "0xd5f6",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xd837",
+        "text": "HMI DMA Driver For Tempo 16 Bit Stereo"
+      },
+      {
+        "offset": "0xd85f",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xdaa0",
+        "text": "HMI DMA Driver For Tempo 8 Bit Stereo"
+      },
+      {
+        "offset": "0xdac7",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xdd08",
+        "text": "HMI DMA Driver For Tempo 8 Bit Stereo"
+      },
+      {
+        "offset": "0xdd2f",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xdf70",
+        "text": "HMI DMA Driver For Tempo 8 Bit Mono"
+      },
+      {
+        "offset": "0xdf95",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xe1d6",
+        "text": "HMI DMA Driver For Tempo 8 Bit Mono"
+      },
+      {
+        "offset": "0xe1fb",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xe43c",
+        "text": "   HMI DMA Driver For Sound Master II 8 Mono"
+      },
+      {
+        "offset": "0xe46a",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xec36",
+        "text": "   HMI DMA Driver For Sound Master II 8 Mono"
+      },
+      {
+        "offset": "0xec64",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xf661",
+        "text": "   HMI DMA Driver For Soundscape 8 Mono Record"
+      },
+      {
+        "offset": "0xf691",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xf9b9",
+        "text": "   HMI Detect Driver For Soundscape 8 Stereo Record"
+      },
+      {
+        "offset": "0xf9ee",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xfd16",
+        "text": "   HMI Detect Driver For Soundscape 16 Mono Record"
+      },
+      {
+        "offset": "0xfd4a",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x10072",
+        "text": "   HMI Detect Driver For Soundscape 16 Stereo Record"
+      },
+      {
+        "offset": "0x100a8",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x103d0",
+        "text": " HMI Detect Driver For ESS 16 Bit Stereo Record"
+      },
+      {
+        "offset": "0x10401",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x106da",
+        "text": " HMI Detect Driver For ESS AudioDrive 16 Bit Mono Record"
+      },
+      {
+        "offset": "0x10714",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x109ed",
+        "text": " HMI DMA Driver For ESS 8 Bit Stereo"
+      },
+      {
+        "offset": "0x10a13",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x10cec",
+        "text": " HMI Detect Driver For ESS AudioDrive 8 Bit Mono Record"
+      },
+      {
+        "offset": "0x10d25",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x10ffe",
+        "text": "   HMI DMA Driver For Microsoft 8 Mono Record"
+      },
+      {
+        "offset": "0x1102d",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x11292",
+        "text": "HMI DMA Driver For Adlib Gold 8 Bit Mono Record"
+      },
+      {
+        "offset": "0x112c3",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x115b1",
+        "text": " HMI DMA Driver For Pro Audio Spectrum 8 Bit Mono Record"
+      },
+      {
+        "offset": "0x115eb",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x117ef",
+        "text": " HMI DMA Driver For Pro Audio Spectrum 16 Bit Mono Record"
+      },
+      {
+        "offset": "0x1182a",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x11a2e",
+        "text": "HMI DMA Driver For RAP10 16 Bit Mono"
+      },
+      {
+        "offset": "0x11a54",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x11c81",
+        "text": "HMI DMA Driver For RAP10 8 Bit Mono"
+      },
+      {
+        "offset": "0x11ca6",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x11ed3",
+        "text": "HMI DMA Driver For RAP10 8 Bit Mono Record"
+      },
+      {
+        "offset": "0x11eff",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x1208c",
+        "text": "HMI DMA Driver For RAP10 16 Bit Mono Record"
+      },
+      {
+        "offset": "0x120b9",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x12246",
+        "text": "   HMI DMA Driver For Sound Blaster 16 16 Mono Record"
+      },
+      {
+        "offset": "0x1227d",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x126aa",
+        "text": "   HMI DMA Driver For Sound Blaster 16 8 Stereo Record"
+      },
+      {
+        "offset": "0x126e2",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x12b0f",
+        "text": "   HMI DMA Driver For Sound Blaster 16 8 Mono Record"
+      },
+      {
+        "offset": "0x12b45",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x12f72",
+        "text": "   HMI DMA Driver For Sound Blaster 8 Record"
+      },
+      {
+        "offset": "0x12fa0",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x1368f",
+        "text": "   HMI DMA Driver For Sound Blaster 8 Record"
+      },
+      {
+        "offset": "0x136bd",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x13f9f",
+        "text": "   HMI DMA Driver For Sound Master II 8 Mono Record"
+      },
+      {
+        "offset": "0x13fd4",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      }
+    ]
+  },
+  "HMIDRV.386": {
+    "bytes": 317317,
+    "sha256": "348ca810def83a52273fd3ba0987af9208c0a585942e7a542ee99da035d65bcf",
+    "new_header": null,
+    "signature": null,
+    "strings": [
+      {
+        "offset": "0x66",
+        "text": "  HMI DMA Driver For Gravis Ultrasound"
+      },
+      {
+        "offset": "0x8e",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2a4",
+        "text": "Copyright (C) 1994 Advanced Gravis Computer Technology Ltd."
+      },
+      {
+        "offset": "0x181e",
+        "text": "  HMI DMA Driver For Gravis Ultrasound"
+      },
+      {
+        "offset": "0x1846",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x1eb3",
+        "text": "Copyright (C) 1994 Advanced Gravis Computer Technology Ltd."
+      },
+      {
+        "offset": "0x3c80",
+        "text": "  HMI DMA Driver For Gravis Ultrasound"
+      },
+      {
+        "offset": "0x3ca8",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x3ec6",
+        "text": "Copyright (C) 1994 Advanced Gravis Computer Technology Ltd."
+      },
+      {
+        "offset": "0x54aa",
+        "text": "  HMI DMA Driver For Gravis Ultrasound"
+      },
+      {
+        "offset": "0x54d2",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x5b4f",
+        "text": "Copyright (C) 1994 Advanced Gravis Computer Technology Ltd."
+      },
+      {
+        "offset": "0x7afc",
+        "text": "HMI DMA Driver For UltraSound MAX 8 Mono"
+      },
+      {
+        "offset": "0x7b26",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x7d13",
+        "text": "Copyright (C) 1994 Advanced Gravis Computer Technology Ltd."
+      },
+      {
+        "offset": "0x8859",
+        "text": "HMI DMA Driver For UltraSound MAX 8 Stereo"
+      },
+      {
+        "offset": "0x8885",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x8a72",
+        "text": "Copyright (C) 1994 Advanced Gravis Computer Technology Ltd."
+      },
+      {
+        "offset": "0x95c0",
+        "text": "HMI DMA Driver For UltraSound MAX 16 Mono"
+      },
+      {
+        "offset": "0x95eb",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x97d8",
+        "text": "Copyright (C) 1994 Advanced Gravis Computer Technology Ltd."
+      },
+      {
+        "offset": "0xa326",
+        "text": "HMI DMA Driver For UltraSound MAX 16 Stereo"
+      },
+      {
+        "offset": "0xa353",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xa540",
+        "text": "Copyright (C) 1994 Advanced Gravis Computer Technology Ltd."
+      },
+      {
+        "offset": "0xb096",
+        "text": "   HMI DMA Driver For Wave Jammer 8 Mono"
+      },
+      {
+        "offset": "0xb0c0",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xb802",
+        "text": "   HMI DMA Driver For Wave Jammer 8 Stereo"
+      },
+      {
+        "offset": "0xb82e",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xbf92",
+        "text": "   HMI DMA Driver For Wave Jammer 16 Mono"
+      },
+      {
+        "offset": "0xbfbd",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xc70a",
+        "text": "   HMI DMA Driver For Wave Jammer 16 Stereo"
+      },
+      {
+        "offset": "0xc737",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xce86",
+        "text": "HMI DMA Driver For Tempo 16 Bit Stereo"
+      },
+      {
+        "offset": "0xceae",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xd69a",
+        "text": "HMI DMA Driver For Tempo 16 Bit Stereo"
+      },
+      {
+        "offset": "0xd6c2",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xdf9c",
+        "text": "HMI DMA Driver For Tempo 16 Bit Mono"
+      },
+      {
+        "offset": "0xdfc2",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xe7dc",
+        "text": "HMI DMA Driver For Tempo 16 Bit Mono"
+      },
+      {
+        "offset": "0xe802",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xf0de",
+        "text": "HMI DMA Driver For Tempo 8 Bit Stereo"
+      },
+      {
+        "offset": "0xf105",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0xf8ee",
+        "text": "HMI DMA Driver For Tempo 8 Bit Stereo"
+      },
+      {
+        "offset": "0xf915",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x101f0",
+        "text": "HMI DMA Driver For Tempo 8 Bit Mono"
+      },
+      {
+        "offset": "0x10215",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x10a04",
+        "text": "HMI DMA Driver For Tempo 8 Bit Mono"
+      },
+      {
+        "offset": "0x10a29",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x11306",
+        "text": "   HMI DMA Driver For Ensoniq Soundscape 16 Stereo"
+      },
+      {
+        "offset": "0x1133a",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x11bca",
+        "text": "   HMI DMA Driver For Ensoniq Soundscape 16 Mono"
+      },
+      {
+        "offset": "0x11bfc",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x12485",
+        "text": "   HMI DMA Driver For Ensoniq Soundscape 8 Stereo"
+      },
+      {
+        "offset": "0x124b8",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x12d41",
+        "text": "   HMI DMA Driver For Ensoniq Soundscape 8 Mono"
+      },
+      {
+        "offset": "0x12d72",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x135f3",
+        "text": "   HMI DMA Driver For SB16 16 ST"
+      },
+      {
+        "offset": "0x13615",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x13cec",
+        "text": "   HMI DMA Driver For SB16 16 ST"
+      },
+      {
+        "offset": "0x13d0e",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x144ce",
+        "text": "   HMI DMA Driver For SB16 16 Mono"
+      },
+      {
+        "offset": "0x144f2",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x14bc7",
+        "text": "   HMI DMA Driver For SB16 16 Mono"
+      },
+      {
+        "offset": "0x14beb",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x153a9",
+        "text": "   HMI DMA Driver For SB16 8 Stereo"
+      },
+      {
+        "offset": "0x153ce",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x159ce",
+        "text": "   HMI DMA Driver For SB16 8 Stereo"
+      },
+      {
+        "offset": "0x159f3",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x160e0",
+        "text": "   HMI DMA Driver For SB16 8 Mono"
+      },
+      {
+        "offset": "0x16103",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x16705",
+        "text": "   HMI DMA Driver For SB16 8 Mono"
+      },
+      {
+        "offset": "0x16728",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x16e27",
+        "text": "   HMI DMA Driver For Sound Blaster 8 Stereo"
+      },
+      {
+        "offset": "0x16e55",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x174da",
+        "text": "   HMI DMA Driver For SBPRO 8 Stereo"
+      },
+      {
+        "offset": "0x17500",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x17c4c",
+        "text": "   HMI DMA Driver For Sound Blaster Pro 8 Mono"
+      },
+      {
+        "offset": "0x17c7c",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x182eb",
+        "text": "   HMI DMA Driver For Sound Blaster Pro 8 Mono"
+      },
+      {
+        "offset": "0x1831b",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x18a4d",
+        "text": "   HMI DMA Driver For Sound Blaster 8 Mono"
+      },
+      {
+        "offset": "0x18a79",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x19162",
+        "text": "HMI DMA Driver For Sound Blaster 8 Mono WATCOM"
+      },
+      {
+        "offset": "0x19192",
+        "text": "  Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x1995f",
+        "text": "   HMI DMA Driver For ESS 16 Stereo"
+      },
+      {
+        "offset": "0x19984",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x19f99",
+        "text": "   HMI DMA Driver For ESS 16 Mono"
+      },
+      {
+        "offset": "0x19fbc",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x1a5d1",
+        "text": " HMI DMA Driver For ESS AudioDrive 8 Bit Stereo"
+      },
+      {
+        "offset": "0x1a602",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x1abe5",
+        "text": " HMI DMA Driver For ESS AudioDrive 8 Bit Mono"
+      },
+      {
+        "offset": "0x1ac14",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x1b1f7",
+        "text": "   HMI DMA Driver For Sound Master II 8 Mono"
+      },
+      {
+        "offset": "0x1b225",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x1b6bb",
+        "text": "   HMI DMA Driver For Sound Master II 8 Mono"
+      },
+      {
+        "offset": "0x1b6e9",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x1bc41",
+        "text": "   HMI DMA Driver For Turtle Beach MultiSound 8 Mono"
+      },
+      {
+        "offset": "0x1bc77",
+        "text": "Copyright 1995, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x1f2d3",
+        "text": "   HMI DMA Driver For Turtle Beach MultiSound 8 ST  "
+      },
+      {
+        "offset": "0x1f309",
+        "text": "Copyright 1995, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x22969",
+        "text": "   HMI DMA Driver For Turtle Beach MultiSound 16 Mono"
+      },
+      {
+        "offset": "0x229a0",
+        "text": "Copyright 1995, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x25fff",
+        "text": "   HMI DMA Driver For Turtle Beach MultiSound 16 ST"
+      },
+      {
+        "offset": "0x26034",
+        "text": "Copyright 1995, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x29695",
+        "text": " HMI DMA Driver For Pro Audio Spectrum 8 Bit Mono"
+      },
+      {
+        "offset": "0x296c8",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x29bb2",
+        "text": "HMI DMA Driver For Pro Audio Spectrum 16 Mono"
+      },
+      {
+        "offset": "0x29be1",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2a0c2",
+        "text": " HMI DMA Driver For Pro Audio Spectrum 8 Bit Stereo"
+      },
+      {
+        "offset": "0x2a0f7",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2a5f1",
+        "text": "HMI DMA Driver For Pro Audio Spectrum 16 Stereo"
+      },
+      {
+        "offset": "0x2a622",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2ab02",
+        "text": "HMI DMA Driver For Adlib Gold 8 Bit Stereo"
+      },
+      {
+        "offset": "0x2ab2e",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2b1d1",
+        "text": "HMI DMA Driver For Adlib Gold 8 Bit Mono"
+      },
+      {
+        "offset": "0x2b1fb",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2b894",
+        "text": "HMI DMA Driver For Adlib Gold 16 Bit Mono"
+      },
+      {
+        "offset": "0x2b8bf",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2bed7",
+        "text": "HMI DMA Driver For Adlib Gold 16 Bit Stereo"
+      },
+      {
+        "offset": "0x2bf04",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2c5a6",
+        "text": "   HMI DMA Driver For Microsoft 8 Mono"
+      },
+      {
+        "offset": "0x2c5ce",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2ccad",
+        "text": "   HMI DMA Driver For Microsoft 8 Stereo"
+      },
+      {
+        "offset": "0x2ccd7",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2d3cb",
+        "text": "   HMI DMA Driver For Microsoft 16 Mono"
+      },
+      {
+        "offset": "0x2d3f4",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2dae8",
+        "text": "   HMI DMA Driver For Microsoft 16 Stereo"
+      },
+      {
+        "offset": "0x2db13",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2e207",
+        "text": " HMI DMA Driver For Disney Sound Source 8 Bit Mono PC"
+      },
+      {
+        "offset": "0x2e23e",
+        "text": "Copyright 1993, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2e3ce",
+        "text": " HMI DMA Driver For Disney Sound Source 8 Bit Mono Tandy"
+      },
+      {
+        "offset": "0x2e408",
+        "text": "Copyright 1993, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2e598",
+        "text": " HMI DMA Driver For General Port Devices 8 Bit Mono"
+      },
+      {
+        "offset": "0x2e5cd",
+        "text": "Copyright 1993, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2e73b",
+        "text": " HMI DMA Driver For General Port Devices 8 Bit Mono Record"
+      },
+      {
+        "offset": "0x2e777",
+        "text": "Copyright 1993, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2e8e5",
+        "text": "   HMI DMA Driver For SB16 16 Mono Record"
+      },
+      {
+        "offset": "0x2e910",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2f03d",
+        "text": "   HMI DMA Driver For SB16 8 Stereo Record"
+      },
+      {
+        "offset": "0x2f069",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2f745",
+        "text": "   HMI DMA Driver For SB16 8 Mono Record"
+      },
+      {
+        "offset": "0x2f76f",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x2fe77",
+        "text": "   HMI DMA Driver For SB16 8 Mono Record"
+      },
+      {
+        "offset": "0x2fea1",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x30478",
+        "text": "HMI DMA Driver For RAP10 8 Bit Mono"
+      },
+      {
+        "offset": "0x3049d",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x30b8e",
+        "text": "HMI DMA Driver For RAP10 16 Bit Mono"
+      },
+      {
+        "offset": "0x30bb4",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x31340",
+        "text": "HMI DMA Driver For RAP10 8 Bit Mono"
+      },
+      {
+        "offset": "0x31365",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x31a02",
+        "text": "HMI DMA Driver For RAP10 16 Bit Mono"
+      },
+      {
+        "offset": "0x31a28",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x32016",
+        "text": "   HMI DMA Driver For Microsoft 8 Mono Record"
+      },
+      {
+        "offset": "0x32045",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x32752",
+        "text": "     HMI DMA Driver For Yamaha"
+      },
+      {
+        "offset": "0x32772",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x32b15",
+        "text": "   HMI DMA Driver For Internal Speaker 8 Mono"
+      },
+      {
+        "offset": "0x32b44",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x32e55",
+        "text": "   HMI DMA Driver For Sound Blaster 8 Record"
+      },
+      {
+        "offset": "0x32e83",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x334b6",
+        "text": "   HMI DMA Driver For Sound Blaster 8 Record"
+      },
+      {
+        "offset": "0x334e4",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x33c67",
+        "text": "   HMI DMA Driver For Sound Master II 8 Mono Record"
+      },
+      {
+        "offset": "0x33c9c",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x34127",
+        "text": "HMI DMA Driver For Adlib Gold 8 Bit Mono Record"
+      },
+      {
+        "offset": "0x34158",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x34825",
+        "text": " HMI DMA Driver For Pro Audio Spectrum 8 Bit Mono Record"
+      },
+      {
+        "offset": "0x3485f",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x34c60",
+        "text": " HMI DMA Driver For Pro Audio Spectrum 16 Bit Mono Record"
+      },
+      {
+        "offset": "0x34c9b",
+        "text": "Copyright 1992, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x35262",
+        "text": "   HMI DMA Driver For Ensoniq Soundscape 16 Stereo Record"
+      },
+      {
+        "offset": "0x3529d",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x35adb",
+        "text": "   HMI DMA Driver For Ensoniq Soundscape 16 Mono Record"
+      },
+      {
+        "offset": "0x35b14",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x3634b",
+        "text": "   HMI DMA Driver For Ensoniq Soundscape 8 Stereo Record"
+      },
+      {
+        "offset": "0x36385",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x36bbc",
+        "text": "   HMI DMA Driver For Ensoniq Soundscape 8 Mono Record"
+      },
+      {
+        "offset": "0x36bf4",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x3740e",
+        "text": "   HMI DMA Driver For ESS 16 Stereo Record"
+      },
+      {
+        "offset": "0x3743a",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x37a62",
+        "text": "   HMI DMA Driver For ESS 16 Mono Record"
+      },
+      {
+        "offset": "0x37a8c",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x380b1",
+        "text": " HMI DMA Driver For ESS AudioDrive 8 Bit Stereo Record"
+      },
+      {
+        "offset": "0x380e9",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x386f7",
+        "text": " HMI DMA Driver For ESS AudioDrive 8 Bit Mono Record"
+      },
+      {
+        "offset": "0x3872d",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      }
+    ]
+  },
+  "HMIMDRV.386": {
+    "bytes": 117852,
+    "sha256": "a64e69c59f761fe3d23994fd07377564cf229a8656294383e874e0b6e53ac2fc",
+    "new_header": null,
+    "signature": null,
+    "strings": [
+      {
+        "offset": "0x64",
+        "text": "        HMI MIDI Driver For OPL2"
+      },
+      {
+        "offset": "0x86",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x3220",
+        "text": "        HMI MIDI Driver For OPL3"
+      },
+      {
+        "offset": "0x3242",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x6aa0",
+        "text": "        HMI MIDI Driver For AWE32"
+      },
+      {
+        "offset": "0x6ac3",
+        "text": "Copyright 1994, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x13d84",
+        "text": "HMI MIDI Driver For Sound Master II"
+      },
+      {
+        "offset": "0x13da9",
+        "text": "Copyright 1993, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x13fab",
+        "text": "   HMI MIDI Driver For MPU 401"
+      },
+      {
+        "offset": "0x13fcb",
+        "text": "Copyright 1993, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x14280",
+        "text": "   HMI MIDI Driver For MT 32"
+      },
+      {
+        "offset": "0x1429e",
+        "text": "Copyright 1993, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x14548",
+        "text": " HMI MIDI Driver For Gravis UltraSound"
+      },
+      {
+        "offset": "0x14570",
+        "text": "Copyright 1993, Human Machine Interfaces"
+      },
+      {
+        "offset": "0x1c960",
+        "text": "  HMI MIDI Driver For PC Speaker"
+      },
+      {
+        "offset": "0x1c982",
+        "text": "Copyright 1993, Human Machine Interfaces"
+      }
+    ]
+  }
+}

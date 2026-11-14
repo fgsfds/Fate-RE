@@ -1,0 +1,1 @@
+    db ' SETFLPAN.C: MAX_FLR_PAN EXCEEDED! ', 0

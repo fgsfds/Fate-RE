@@ -1,0 +1,9 @@
+                                 Object Hints
+==============================================================================
+
+# FATE.EXE SHA-256 61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f
+# Offsets below are relative to LE object 1 (loaded base 0x10000).
+# 25 consecutive internal-pointer fixups; bounded CS-indexed dispatch at 0x1e818.
+# This is analysis metadata, not reconstructed source or function coverage.
+Object 1:
+1) start = 0000E74CH, end = 0000E7B0H, type = data, mode = dwords, comment = Verified 25-entry dispatch table

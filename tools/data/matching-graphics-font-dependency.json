@@ -1,0 +1,32 @@
+{
+  "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
+  "library": "reference/watcom105-full/LIB386/DOS/GRAPH.LIB",
+  "library_sha256": "95a4c2dd3b078e65f3793e0451b654abadf63ce0d73a5a5c53b9a9f78f087c04",
+  "dependency_data_bytes": 9384,
+  "spans": [
+    {
+      "member": "std",
+      "member_sha256": "5aa1df2c6a3dd3eb052e34c1608c429f4488a580d974921aac5dad1c4346c95d",
+      "payload_sha256": "516e5ae26cdc7631196c00777a04b169fd3f27ccee640b75014dfe2b7997785f",
+      "ds_offset": "0x1749c",
+      "raw_offset": "0xb2a9c",
+      "bytes": 2598
+    },
+    {
+      "member": "font8x8",
+      "member_sha256": "efb60ec9ef6a49cec53ce027d64e55d3b463ed7b0d4b7b928a4fa4b9b68fbe37",
+      "payload_sha256": "b7323c3e0e93baae003b12934a43336f33a7da0bb182b4c743adbd6ce70b3c27",
+      "ds_offset": "0x17ec4",
+      "raw_offset": "0xb34c4",
+      "bytes": 3202
+    },
+    {
+      "member": "hercfont",
+      "member_sha256": "ecfb950862bb0c49424897413f473a991048a8830303862fe184e66e8ea45a0e",
+      "payload_sha256": "657ca6588b6bf729f0ed71a3d3c781a465bd30cdfb11eb5fc7e27594c0717ea1",
+      "ds_offset": "0x18b5c",
+      "raw_offset": "0xb415c",
+      "bytes": 3584
+    }
+  ]
+}

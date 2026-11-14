@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+/work/
+/reference/
+/build/
+*.exe
+*.EXE
+*.obj
+*.OBJ
+*.lib
+*.LIB
+*.zip
+*.7z

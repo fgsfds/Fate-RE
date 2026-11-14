@@ -1,0 +1,4 @@
+BITS 32
+ORG 0x1eb0
+
+    db "RATIONAL DOS/4G", 0

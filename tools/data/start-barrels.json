@@ -1,0 +1,37 @@
+{
+  "map_sha256": "812f8deec1af874af4d71ed7bb21ddc70a3d40a2a3844ffa83713156e1a61b1e",
+  "art_sha256": "be7f38f5a4bb0eeaaa1487f0881a0a0817a70582f60583521ca8ee479ab8aa1c",
+  "fixture": "one initialized barrel at a time, original sector and wall records",
+  "cases": [
+    {
+      "sprite": 47,
+      "sector": 168,
+      "position": [
+        -7296,
+        57280,
+        19766
+      ],
+      "appended": false
+    },
+    {
+      "sprite": 69,
+      "sector": 168,
+      "position": [
+        -2944,
+        56064,
+        19766
+      ],
+      "appended": false
+    },
+    {
+      "sprite": 70,
+      "sector": 168,
+      "position": [
+        -3072,
+        57472,
+        19766
+      ],
+      "appended": false
+    }
+  ]
+}
