@@ -105,10 +105,6 @@ extern void read_camera_height(void);
 extern void read_mirror_sector(void);
 #pragma aux read_mirror_sector = "mov eax, dword ptr [esp + 0x34]" modify exact [eax];
 
-extern void check_mirror_aperture(void);
-#pragma aux check_mirror_aperture = "cmp eax, dword ptr [esi + sector + 4]" "jle preparemirror_finish" \
-    "cmp eax, dword ptr [esi + sector + 8]" "jge preparemirror_finish" modify exact [eax esi];
-
 extern void read_viewport_height_inputs(void);
 #pragma aux read_viewport_height_inputs = "mov eax, [esp + 0x2c]" "mov ebp, [window_top]" modify exact [eax ebx ecx edi];
 
@@ -120,9 +116,6 @@ extern void add_viewport_middle(void);
 
 extern void scale_marker_horizon(void);
 #pragma aux scale_marker_horizon = "sar ebp, 1" "imul ebx" "idiv ecx" "add eax, ebp" modify exact [eax edx];
-
-extern void load_marker_ceiling(void);
-#pragma aux load_marker_ceiling = "mov ecx, dword ptr [esi + sector + 4]" modify exact [ecx];
 
 extern void load_aperture_heights(void);
 #pragma aux load_aperture_heights = "mov ebp, dword ptr [esi + sector + 8]" "mov eax, dword ptr [esp + 4]" modify exact [eax];
@@ -250,7 +243,10 @@ void preparemirror(void)
     in_ax((long)(short)from_ax());
     in_si(from_ax() * 40);
     read_camera_height();
-    check_mirror_aperture();
+    /* The camera height must lie strictly between ceiling and floor. */
+    if ((long)from_ax() <= *(const long *)(sector + from_si() + 4) ||
+        (long)from_ax() >= *(const long *)(sector + from_si() + 8))
+        preparemirror_finish();
     read_viewport_height_inputs();
     in_cx(window_bottom);
     in_bx(window_right);
@@ -260,7 +256,7 @@ void preparemirror(void)
     in_bx(from_bx() - from_di());
     in_cx(320);
     scale_marker_horizon();
-    load_marker_ceiling();
+    in_cx(*(const long *)(sector + from_si() + 4));
     mirror_row = from_ax();
     load_aperture_heights();
     in_cx(from_cx() + from_bp());

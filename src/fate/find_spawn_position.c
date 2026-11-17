@@ -22,16 +22,12 @@ extern long spawn_random_sector(int);
 #pragma aux spawn_random_sector = "imul ebx" "shrd eax,edx,10h" parm [eax] value [eax] modify exact [eax edx];
 extern void save_sector_pick(long);
 #pragma aux save_sector_pick = "mov [esp+20h],eax" parm [eax] modify exact [];
-extern void squash_spawn_hitag(void);
-#pragma aux squash_spawn_hitag = "xor dh,dh" modify exact [edx];
-extern long spawn_slope_flag(void);
-#pragma aux spawn_slope_flag = "xor dh,dh" "and dl,1" "movsx edx,dx" value [edx] modify exact [edx];
+extern void clear_spawn_dx_high_byte(void);
+#pragma aux clear_spawn_dx_high_byte = "xor dh,dh" modify exact [edx];
 extern void add_spawn_x(long);
 #pragma aux add_spawn_x = "add [esp+14h],eax" parm [eax] modify exact [];
 extern void add_spawn_y(long);
 #pragma aux add_spawn_y = "add [esp+10h],eax" parm [eax] modify exact [];
-extern void widen_spawn_max_y(long, long);
-#pragma aux widen_spawn_max_y = "cmp ebp,edx" "jge enough" "mov ebp,edx" "enough:" parm [edx] [ebx] modify exact [];
 extern void measure_spawn_y(void);
 #pragma aux measure_spawn_y = "sub ebp,edi" modify exact [];
 extern short load_spawn_wall_end(void);
@@ -134,6 +130,16 @@ extern void clip_prepare_y(long);
 extern void clip_prepare_x(long);
 #pragma aux clip_prepare_x = "mov [esp+1ch],eax" "lea eax,[esp+24h]" parm [eax] modify exact [eax];
 
+extern unsigned char in_dl(unsigned char);
+#pragma aux in_dl = parm [dl] value [dl] modify exact [];
+extern unsigned char dl_value(void);
+#pragma aux dl_value = value [dl] modify exact [];
+/* EBP retains the running maximum Y across the wall scan. */
+extern void store_spawn_max_y(long);
+#pragma aux store_spawn_max_y = "mov ebp,edx" parm [edx] modify exact [];
+extern void keep_spawn_wall_index(long);
+#pragma aux keep_spawn_wall_index = parm [ebx] modify exact [];
+
 void find_spawn_position(long *, long *, short *);
 #pragma aux find_spawn_position parm [eax] [edx] [ebx] modify exact [eax ebx ecx edx esi edi];
 
@@ -158,13 +164,15 @@ sample_sector:
     if (in_edx(ceiling + 2048) >= floor)
         goto sample_sector;
     in_dx(*(const short *)((const char *)spawn_hitag + eax_value()));
-    squash_spawn_hitag();
+    clear_spawn_dx_high_byte();
     in_ecx(dx_value());
     in_edx(*(const short *)((const char *)spawn_lotag + eax_value()));
     if (edx_value() | ecx_value())
         goto sample_sector;
     in_dx(*(const short *)((const char *)spawn_floor_flags + eax_value()));
-    if (spawn_slope_flag())
+    clear_spawn_dx_high_byte();
+    in_dl(dl_value() & 1);
+    if (in_edx(dx_value()))
         goto sample_sector;
     in_dx(*(const short *)((const char *)spawn_first_wall + eax_value()));
     in_bx(*(const short *)((const char *)spawn_wall_count + eax_value()));
@@ -200,7 +208,10 @@ collect_wall:
     if (edi_value() > coord)
         in_edi(coord);
     offset = in_eax(in_eax(bx_value()) * 32);
-    widen_spawn_max_y(in_edx(*(const long *)((const char *)spawn_wall_y + offset)), ebx_value());
+    coord = in_edx(*(const long *)((const char *)spawn_wall_y + offset));
+    if (ebp_value() < coord)
+        store_spawn_max_y(coord);
+    keep_spawn_wall_index(ebx_value());
     in_ebx(ebx_value() + 1);
 
 check_walls:

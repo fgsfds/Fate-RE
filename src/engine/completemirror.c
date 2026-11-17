@@ -32,6 +32,11 @@ extern long from_ax(void);
 extern void in_ax(long value);
 #pragma aux in_ax = "" parm [eax] modify exact [];
 
+extern void in_al(unsigned char);
+#pragma aux in_al = "" parm [al] modify exact [];
+extern unsigned char from_al(void);
+#pragma aux from_al = value [al] modify exact [];
+
 extern long from_bx(void);
 #pragma aux from_bx = value [ebx] modify exact [];
 
@@ -84,8 +89,6 @@ extern void start_planar_right_scan(void);
 #pragma aux start_planar_right_scan = "mov esi, [esp + 8]" modify exact [esi];
 extern void load_right_plane_column(void);
 #pragma aux load_right_plane_column = "mov edx, [esp + 0xc]" modify exact [edx];
-extern void read_planar_marker_byte(void);
-#pragma aux read_planar_marker_byte = "mov al, [edx]" modify exact [eax];
 extern void retreat_planar_right_bound(void);
 #pragma aux retreat_planar_right_bound = "dec dword ptr [esp + 0xc]" modify exact [];
 
@@ -128,8 +131,6 @@ extern void advance_plane_buffer(void);
 extern void load_planar_write_bounds(void);
 #pragma aux load_planar_write_bounds = "mov ecx, dword ptr [esp + 0xc]" "mov eax, dword ptr [esp + 8]" modify exact [ecx eax];
 
-extern void read_planar_write_bit(void);
-#pragma aux read_planar_write_bit = "mov al, [edx + pow2char]" modify exact [eax edx];
 extern void load_planar_write_row(void);
 #pragma aux load_planar_write_row = "mov edi, [esp + 4]" modify exact [edi eax edx];
 
@@ -236,12 +237,6 @@ extern void copy_linear_row_to_scratch(void);
 extern void load_replicated_pixel_slots(void);
 #pragma aux load_replicated_pixel_slots = "mov eax, [esp + 0xc]" "mov ecx, [esp + 0xc]" modify exact [eax ecx esi];
 
-extern void load_linear_last_visible_pixel(void);
-#pragma aux load_linear_last_visible_pixel = "mov al, byte ptr [eax + mirror_scanline - 1]" modify exact [eax];
-
-extern void replicate_linear_last_visible_pixel(void);
-#pragma aux replicate_linear_last_visible_pixel = "mov byte ptr [ecx + mirror_scanline], al" modify exact [];
-
 extern void reverse_linear_bytes(void);
 #pragma aux reverse_linear_bytes = "shr ecx, 1" "jae local_branch_459" "mov al, byte ptr [esi]" "dec esi" \
     "mov byte ptr [edi], al" "inc edi" "local_branch_459:" "shr ecx, 1" "jae local_branch_46e" \
@@ -292,7 +287,7 @@ void completemirror(void)
         in_dx(from_dx() >> 2);
         in_dx(from_dx() + from_ax());
         in_ax(0);
-        read_planar_marker_byte();
+        in_al(*(const volatile unsigned char *)from_dx());
         if (from_ax() != 255)
             break;
         advance_planar_left_bound();
@@ -315,7 +310,7 @@ void completemirror(void)
         in_dx(from_dx() >> 2);
         in_dx(from_dx() + from_ax());
         in_ax(0);
-        read_planar_marker_byte();
+        in_al(*(const volatile unsigned char *)from_dx());
         if (from_ax() != 255)
             break;
         retreat_planar_right_bound();
@@ -394,7 +389,7 @@ copy_plane_out:
     in_ax(from_ax() - 4);
     in_si(from_si() - from_ax());
     in_dx(from_si() & 3);
-    read_planar_write_bit();
+    in_al(pow2char[from_dx()]);
     in_dx(0x3c5);
     in_ax(from_ax() & 255);
     load_planar_write_row();
@@ -526,9 +521,10 @@ linear_backend:
     load_replicated_pixel_slots();
     in_si((long)mirror_scanline);
     in_di(from_dx() + from_bp());
-    load_linear_last_visible_pixel();
+    in_al(mirror_scanline[from_ax() - 1]);
     in_si(from_si() + from_cx());
-    replicate_linear_last_visible_pixel();
+    /* Duplicate the final visible sample before reversing the row. */
+    mirror_scanline[from_cx()] = from_al();
     in_cx(from_bx());
     reverse_linear_bytes();
     remaining = from_cx();
