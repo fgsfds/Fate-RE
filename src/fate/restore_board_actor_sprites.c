@@ -70,12 +70,6 @@ extern void load_active_restore_template(long, long);
     "mov ax,[edx+ebx*4+restore_template_cstat]" "mov [esp+8],eax" \
     "xor eax,eax" "mov al,[edx+ebx*4+restore_template_yrepeat]" \
     parm [edx] [ebx] modify exact [eax];
-extern void measure_sprite_tile_height(void);
-#pragma aux measure_sprite_tile_height = \
-    "movsx edx,di" "movsx edx,word ptr [edx*2+restored_tile_height]" "imul eax,edx" \
-    "movsx edx,word ptr [esp+4]" "mov ebx,edx" "shl ebx,2" "mov esi,[ecx*4+restored_actor_z_offset]" \
-    "add edx,ebx" "add eax,eax" "shl edx,3" "mov ebx,ecx" "mov edx,[edx+restored_sector_floor]" \
-    modify exact [eax ebx edx esi];
 extern long restore_template_number(void);
 #pragma aux restore_template_number = "movsx edx,byte ptr [esp+14h]" value [edx] modify exact [edx];
 extern int current_sector_in_eax(void);
@@ -163,6 +157,14 @@ extern void hold_restore_ecx(long);
 extern void hold_restore_edi(long);
 #pragma aux hold_restore_edi = parm [edi] modify exact [];
 
+/* The selected tile and sector still use the original unchecked loads. */
+extern void read_active_tile_height(void);
+#pragma aux read_active_tile_height = "movsx edx,di" "movsx edx,word ptr [edx*2+restored_tile_height]" modify exact [edx];
+extern void read_active_sector(void);
+#pragma aux read_active_sector = "movsx edx,word ptr [esp+4]" modify exact [edx];
+extern void read_active_sector_floor(void);
+#pragma aux read_active_sector_floor = "mov edx,[edx+restored_sector_floor]" modify exact [edx];
+
 void restore_board_actor_sprites(void);
 #pragma aux restore_board_actor_sprites modify exact [eax ebx ecx edx esi edi];
 
@@ -217,7 +219,17 @@ next:
         load_active_restore_tile(ebx_value(), edi_value());
         in_ebx(in_ebx(edx_value()) * 8 - edx_value());
         load_active_restore_template(edx_value(), ebx_value());
-        measure_sprite_tile_height();
+        read_active_tile_height();
+        /* Multiply the unsigned repeat by the signed tile height. */
+        in_eax(eax_value() * edx_value());
+        read_active_sector();
+        in_ebx(in_ebx(edx_value()) * 4);
+        in_esi(restored_actor_z_offset[ecx_value()]);
+        in_edx(edx_value() + ebx_value());
+        in_eax(eax_value() * 2);
+        in_edx(edx_value() * 8);
+        in_ebx(ecx_value());
+        read_active_sector_floor();
         in_ebx(ebx_value() * 4);
         in_edx(edx_value() + esi_value());
         in_ebx(ebx_value() - ecx_value());

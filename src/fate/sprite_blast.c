@@ -51,8 +51,8 @@ extern void load_blast_source_y(void);
 #pragma aux load_blast_source_y = "mov ebp,[eax+blast_sprite_y]" modify exact [];
 extern long blast_source_coord(void);
 #pragma aux blast_source_coord = value [ebp] modify exact [];
-extern void keep_low_lotag(void);
-#pragma aux keep_low_lotag = "xor ah,ah" "cwde" modify exact [eax];
+extern void in_ah(unsigned char);
+#pragma aux in_ah = parm [ah] modify exact [];
 
 /* Keep the x87 precision, rounding helper calls, and store order of the impulse. */
 extern void prepare_blast_factors(void);
@@ -67,12 +67,16 @@ extern void calculate_blast_xy(void);
     "fld dword ptr [esp]" "fxch st(1)" "fmul st,st(1)" "call truncate_st0" \
     "fistp dword ptr [esp+4]" "fild dword ptr [esp+16]" "fmulp st(2),st" \
     "fxch st(1)" "fmul st,st(1)" "call truncate_st0" "fistp dword ptr [esp+24]" modify exact [eax];
-extern void store_blast_velocity(void);
-#pragma aux store_blast_velocity = \
+extern void truncate_blast_z(void);
+#pragma aux truncate_blast_z = \
     "fmul dword ptr [blast_vertical_velocity]" "movsx ecx,bx" "imul edx,ecx,44" \
-    "call truncate_st0" "fistp dword ptr [esp+12]" "mov eax,[esp+4]" \
-    "mov [edx+blast_sprite_xvel],ax" "mov eax,[esp+24]" "mov [edx+blast_sprite_yvel],ax" \
-    "mov eax,[esp+12]" "mov [edx+blast_sprite_zvel],ax" modify exact [eax ecx edx];
+    "call truncate_st0" "fistp dword ptr [esp+12]" modify exact [eax ecx edx];
+extern long truncated_blast_x(void);
+#pragma aux truncated_blast_x = "mov eax,[esp+4]" value [eax] modify exact [eax];
+extern long truncated_blast_y(void);
+#pragma aux truncated_blast_y = "mov eax,[esp+24]" value [eax] modify exact [eax];
+extern long truncated_blast_z(void);
+#pragma aux truncated_blast_z = "mov eax,[esp+12]" value [eax] modify exact [eax];
 
 /* Zero-byte bindings preserve the original Watcom register assignments. */
 extern long in_eax(long);
@@ -162,40 +166,42 @@ next_sprite:
     in_ecx(ecx_value() - blast_source_coord());
     x = absolute_long(x);
     store_target_blast_y(ecx_value());
-    if (x >= 1024 || absolute_long(ecx_value()) >= 1024)
-        goto advance;
-    in_ax(*(const short *)((const char *)blast_sprite_lotag + edx_value()));
-    keep_low_lotag();
-    if (eax_value() != 100 && eax_value() != 101)
-        goto check_tile;
-
-    /* Sprite tags 100 and 101 receive the distance-scaled impulse. */
-    x = blast_x();
-    x = in_eax(x * x);
-    y = blast_y_in_edx();
-    y = in_edx(y * y);
-    blast_distance_root(in_eax(x + y));
-    prepare_blast_factors();
-    calculate_blast_xy();
-    store_blast_velocity();
-    start_blast_sequence(in_eax(ecx_value()));
-    in_ax(blast_sprite_actor[ecx_value()]);
-    if (in_eax(ax_value()) != -1) {
-        actor_kind[eax_value()] = 3;
-        repeat = in_al(*((const unsigned char *)blast_sprite_xrepeat + edx_value()));
-        in_ecx(0);
-        repeat = in_al(repeat * 2);
-        *(short *)((char *)blast_sprite_cstat + edx_value()) = cx_value();
-        *((unsigned char *)blast_sprite_xrepeat + edx_value()) = repeat;
+    if (x < 1024 && absolute_long(ecx_value()) < 1024) {
+        in_ax(*(const short *)((const char *)blast_sprite_lotag + edx_value()));
+        in_ah(0);
+        in_eax(ax_value());
+        if (eax_value() == 100 || eax_value() == 101) {
+            /* Sprite tags 100 and 101 receive the distance-scaled impulse. */
+            x = blast_x();
+            x = in_eax(x * x);
+            y = blast_y_in_edx();
+            y = in_edx(y * y);
+            blast_distance_root(in_eax(x + y));
+            prepare_blast_factors();
+            calculate_blast_xy();
+            truncate_blast_z();
+            *(unsigned short *)((char *)blast_sprite_xvel + edx_value()) = truncated_blast_x();
+            *(unsigned short *)((char *)blast_sprite_yvel + edx_value()) = truncated_blast_y();
+            *(unsigned short *)((char *)blast_sprite_zvel + edx_value()) = truncated_blast_z();
+            start_blast_sequence(in_eax(ecx_value()));
+            in_ax(blast_sprite_actor[ecx_value()]);
+            if (in_eax(ax_value()) != -1) {
+                actor_kind[eax_value()] = 3;
+                repeat = in_al(*((const unsigned char *)blast_sprite_xrepeat + edx_value()));
+                in_ecx(0);
+                repeat = in_al(repeat * 2);
+                *(short *)((char *)blast_sprite_cstat + edx_value()) = cx_value();
+                *((unsigned char *)blast_sprite_xrepeat + edx_value()) = repeat;
+            }
+            add_listed_sprite(in_eax(bx_value()));
+        }
+        /* In-range tile 0x154 gets a sequence even without an impulse. */
+        in_eax(bx_value());
+        in_edx(in_edx(eax_value() * 44));
+        in_edx(*(const short *)((const char *)blast_sprite_tile + edx_value()));
+        if (edx_value() == 0x154)
+            start_blast_sequence(eax_value());
     }
-    add_listed_sprite(in_eax(bx_value()));
-check_tile:
-    in_eax(bx_value());
-    in_edx(in_edx(eax_value() * 44));
-    in_edx(*(const short *)((const char *)blast_sprite_tile + edx_value()));
-    if (edx_value() == 0x154)
-        start_blast_sequence(eax_value());
-advance:
     in_ebx(esi_value());
 check_list:
     if (bx_value() >= 0)

@@ -81,14 +81,31 @@ extern void prepare_push_portal(void);
     "mov ebx, [ebp + 00h]" "shl eax, 5h" "mov [esp + 14h], edx" "mov edx, dword ptr [eax + wall]" \
     "sub edx, ebx" "mov eax, dword ptr [eax + wall+4]" "mov [esp + 20h], edx" "mov edx, [ebp + 4h]" \
     "sub eax, edx" "mov [esp + 24h], eax" modify exact [eax ebx edx];
-extern void project_push_portal_origin(void);
-#pragma aux project_push_portal_origin = "mov eax,[edi]" "sub eax,edx" "mov edx, [esp + 24h]" "imul edx, eax" \
-    "mov eax, [esi]" "sub eax, ebx" "mov ebx, [esp + 20h]" "imul eax, ebx" \
-    "add eax, edx" modify exact [eax ebx edx];
+
+/* Register constraints for the nearest-wall projection and angle inputs. */
+extern long proj_eax(void);
+#pragma aux proj_eax = value [eax] modify exact [];
+extern void proj_set_eax(long value);
+#pragma aux proj_set_eax = "" parm [eax] modify exact [];
+extern long proj_ebx(void);
+#pragma aux proj_ebx = value [ebx] modify exact [];
+extern void proj_set_ebx(long value);
+#pragma aux proj_set_ebx = "" parm [ebx] modify exact [];
+extern long proj_edx(void);
+#pragma aux proj_edx = value [edx] modify exact [];
+extern void proj_set_edx(long value);
+#pragma aux proj_set_edx = "" parm [edx] modify exact [];
+extern const long *push_point_x(void);
+#pragma aux push_point_x = value [esi] modify exact [];
+extern const long *push_point_y(void);
+#pragma aux push_point_y = value [edi] modify exact [];
+extern long load_wall_dx(void);
+#pragma aux load_wall_dx = "mov ebx,[esp+20h]" value [ebx] modify exact [ebx];
+extern long load_wall_dy(void);
+#pragma aux load_wall_dy = "mov edx,[esp+24h]" value [edx] modify exact [edx];
+
 extern void select_zero_push_fraction(void);
 #pragma aux select_zero_push_fraction = "mov [esp + 1ch], ecx" modify exact [];
-extern long measure_push_wall_length(void);
-#pragma aux measure_push_wall_length = "imul ebx, ebx" "mov edx, [esp + 24h]" "imul edx, edx" "add ebx, edx" value [ebx] modify exact [ebx edx];
 extern void select_full_push_fraction(void);
 #pragma aux select_full_push_fraction = "mov dword ptr [esp + 1ch], 40000000h" modify exact [];
 extern void select_fractional_wall_point(void);
@@ -120,9 +137,13 @@ extern long push_ceiling_is_parallax(void);
     "movsx edx, dx" value [edx] modify exact [edx];
 extern void prepare_push_ceiling_clearance(void);
 #pragma aux prepare_push_ceiling_clearance = "mov edx, [esp + 54h]" "dec edx" "add eax, edx" "mov edx, [esp + 0ch]" modify exact [eax edx];
-extern void prepare_push_wall_angle(void);
-#pragma aux prepare_push_wall_angle = "movsx eax, word ptr [ebp + 8h]" "mov ecx, [ebp + 4h]" "shl eax, 5h" "mov ebx, [ebp + 00h]" \
-    "mov edx, dword ptr [eax + wall+4]" "mov eax, dword ptr [eax + wall]" "sub edx, ecx" "sub eax, ebx" modify exact [eax ebx ecx edx];
+extern const unsigned char *push_angle_wall(void);
+#pragma aux push_angle_wall = value [ebp] modify exact [];
+extern long push_angle_y(void);
+#pragma aux push_angle_y = value [ecx] modify exact [];
+extern void record_push_angle_y(long y);
+#pragma aux record_push_angle_y = "" parm [ecx] modify exact [];
+
 /* Keep the two sine lookups in the original register order. */
 extern void nudge_x_in_edx(long x);
 #pragma aux nudge_x_in_edx = "" parm [edx] modify exact [];
@@ -199,15 +220,28 @@ sector_scan:
     if (wall_push_blocked())
         goto check_blocking;
     prepare_push_portal();
-    project_push_portal_origin();
+    /* Dot product of the wall vector and the offset from its start. */
+    proj_set_eax(*push_point_y());
+    proj_set_eax((unsigned long)proj_eax() - (unsigned long)proj_edx());
+    proj_set_edx((unsigned long)load_wall_dy() * (unsigned long)proj_eax());
+    proj_set_eax(*push_point_x());
+    proj_set_eax((unsigned long)proj_eax() - (unsigned long)proj_ebx());
+    proj_set_eax((unsigned long)proj_eax() * (unsigned long)load_wall_dx());
+    proj_set_eax((unsigned long)proj_eax() + (unsigned long)proj_edx());
     /* Clamp the nearest point to one of the endpoints or the wall segment. */
     dot = wall_push_dot();
     if (dot <= 0)
         select_zero_push_fraction();
-    else if (wall_push_dot() >= measure_push_wall_length())
-        select_full_push_fraction();
-    else
-        select_fractional_wall_point();
+    else {
+        proj_set_ebx((unsigned long)proj_ebx() * (unsigned long)proj_ebx());
+        proj_set_edx(load_wall_dy());
+        proj_set_edx((unsigned long)proj_edx() * (unsigned long)proj_edx());
+        proj_set_ebx((unsigned long)proj_ebx() + (unsigned long)proj_edx());
+        if (wall_push_dot() >= proj_ebx())
+            select_full_push_fraction();
+        else
+            select_fractional_wall_point();
+    }
 
     /* A nonparallax portal step can block the requested vertical clearance. */
     configure_near_floor_query();
@@ -234,7 +268,15 @@ sector_scan:
 check_blocking:
     if (!wall_push_blocked())
         goto neighbor_scan;
-    prepare_push_wall_angle();
+    /* The point2 wall supplies the opposite endpoint for the wall angle. */
+    proj_set_eax(*(const short *)(push_angle_wall() + 8));
+    record_push_angle_y(*(const long *)(push_angle_wall() + 4));
+    proj_set_eax((unsigned long)proj_eax() << 5);
+    proj_set_ebx(*(const long *)push_angle_wall());
+    proj_set_edx(*(const long *)(wall + proj_eax() + 4));
+    proj_set_eax(*(const long *)(wall + proj_eax()));
+    proj_set_edx((unsigned long)proj_edx() - (unsigned long)push_angle_y());
+    proj_set_eax((unsigned long)proj_eax() - (unsigned long)proj_ebx());
     angle = getangle();
     nudge_x_in_edx((angle + 1024) & 2047);
     nudge_y_in_eax(angle + 512);

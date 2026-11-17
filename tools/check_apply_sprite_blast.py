@@ -161,10 +161,15 @@ def check(executable, obj):
     ]
     target_calls = [('distance_square', 25), ('sequence', 8), ('add', 8), ('sequence', 8),
                     ('distance_square', 1000000), ('sequence', 9), ('add', 9), ('sequence', 12)]
+    y_boundary = ((8, 0, 1023, 0, 0x154, -1), (9, 0, 1024, 101, 0x154, -1),
+                  (10, 0, -1024, 0, 0x154, -1))
     cases = (
         (((), 100, -200, -3), ([], [('damage', -400), ('random',), ('sound', 14, 0, 0, 0)])),
         (((), 0, -1024, 0), ([], [])),
         ((targets, 1024, 0, 0), (target_state, target_calls)),
+        # Inside range the tile alone starts the sequence. Outside either
+        # Y boundary neither the impulse tag nor the tile has an effect.
+        ((y_boundary, 1024, 0, 0), ([(SENTINEL, 0x101, 20, None)] * 3, [('sequence', 8)])),
     )
     for body in (original, relocated):
         for args, expected in cases:
