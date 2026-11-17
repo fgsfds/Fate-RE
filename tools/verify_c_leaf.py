@@ -958,6 +958,16 @@ DATA_OFFSETS.update({
     '_palette_tint_c': 0x173114,
 })
 LEAVES['run_recorded_session_'] = (0x53950, 475)
+LEAVES['synchronize_network_players_'] = (0x590f0, 335)
+DATA_OFFSETS.update({
+    '_sync_player_count': 0x13ce0,
+    '_sync_local_player': 0x13ce2,
+    '_sync_packet': 0x1d92c,
+    '_sync_packet_ready_stage': 0x1d92d,
+    '_sync_peer_ready_stage': 0x20a1c,
+    '_sync_next_player': 0x18fd78,
+    '_sync_first_player': 0x19028a,
+})
 LEAVES['finalize_board_state_'] = (0x59811, 723)
 DATA_OFFSETS.update({
     '_final_player_sprite': 0x62f2c,
@@ -2635,6 +2645,7 @@ FUNCTION_ADDRESSES.update({
     'uninstallbicomhandlers_': 0x43243,
     'send_ready_packet_': 0x424ec,
     'send_packet_': 0x424ec,
+    'receive_packets_': 0x32407,
     'simulate_real_mode_interrupt_': 0x375e9,
     'segread_': 0x63072,
     'dispatch_interrupt_registers_': 0x67096,

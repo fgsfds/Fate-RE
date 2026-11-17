@@ -538,6 +538,7 @@ OBJECT_NAMES['apply_sprite_blast_'] = 'blast'
 OBJECT_NAMES['build_palette_fade_tables_'] = 'fadetab'
 OBJECT_NAMES['update_palette_fade_'] = 'fadeupd'
 OBJECT_NAMES['run_recorded_session_'] = 'playrec'
+OBJECT_NAMES['synchronize_network_players_'] = 'netrsync'
 OBJECT_NAMES['finalize_board_state_'] = 'boardfin'
 OBJECT_NAMES['update_sprite_view_'] = 'sprview'
 OBJECT_NAMES['initialize_board_entry_'] = 'boardent'
@@ -1281,6 +1282,7 @@ GROUPS = {
     'blast': (532, ('apply_sprite_blast_',)),
     'fadeupd': (574, ('update_palette_fade_',)),
     'playrec': (475, ('run_recorded_session_',)),
+    'netrsync': (335, ('synchronize_network_players_',)),
     'boardfin': (723, ('finalize_board_state_',)),
     'sprview': (579, ('update_sprite_view_',)),
     'boardent': (513, (

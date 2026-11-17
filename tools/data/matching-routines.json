@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1121,
-  "unique_code_bytes": 163053,
-  "le_pointers": 8879,
+  "routines": 1122,
+  "unique_code_bytes": 163388,
+  "le_pointers": 8904,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1438,6 +1438,16 @@
       "loaded_address": "0x339b9",
       "bytes": 311,
       "le_pointers": 8
+    },
+    {
+      "symbol": "synchronize_network_players_",
+      "object": "netrsync.obj",
+      "object_sha256": "2dd39136ae369d1c4c00a9a97cbe9d12c561be8c839ec4bf343c21e964278727",
+      "sha256": "a596b7431c4c057e852eda8b303894a15498368a0a1c8a702e0a0bf02ad1aed9",
+      "raw_offset": "0x590f0",
+      "loaded_address": "0x33af0",
+      "bytes": 335,
+      "le_pointers": 25
     },
     {
       "symbol": "finalize_board_state_",

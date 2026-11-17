@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 538,
-  "unique_code_bytes": 251586,
-  "le_pointers": 13670,
+  "routines": 537,
+  "unique_code_bytes": 251251,
+  "le_pointers": 13645,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -1940,18 +1940,6 @@
       "public_entry": "0x34f79",
       "binary_offset": 0,
       "le_pointers": 57
-    },
-    {
-      "symbol": "synchronize_network_players",
-      "source": "src/fate/synchronize_network_players.asm",
-      "binary": "synchronize_network_players.bin",
-      "sha256": "a596b7431c4c057e852eda8b303894a15498368a0a1c8a702e0a0bf02ad1aed9",
-      "bytes": 335,
-      "raw_offset": "0x590f0",
-      "loaded_address": "0x33af0",
-      "public_entry": "0x33af0",
-      "binary_offset": 0,
-      "le_pointers": 25
     },
     {
       "symbol": "checksum_gameplay_state",
