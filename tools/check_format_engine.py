@@ -94,6 +94,7 @@ if __name__ == "__main__":
           args=pack('<IIIII',COUNT,COUNT+4,0x10,COUNT+8,COUNT+12),
           stores=((0,pack('<H',3)+b'\xa5\xa5'),(4,pack('<III',4,5,6))))
     check(memory, b'%08d', b'-0000042', args=pack('<i', -42))
+    check(memory, b'%12.10d', b'  0000000042', args=pack('<i', 42))
     check(memory, b'%*.*d', b'0042    ', args=pack('<iii', -8, 4, 42))
     check(memory, b'%*.*d', b'    42', args=pack('<iii', 6, -1, 42))
     check(memory, b'%#.5X', b'0X00ABC', args=pack('<I', 0xabc))
@@ -107,4 +108,4 @@ if __name__ == "__main__":
     check(memory, b'%.2hf', b'2.00', args=pack('<I', 0x1ffff))
     check(memory, b'%.3hf', b'-1.500', args=pack('<i', -0x18000))
     check(memory, b'%c%?', b'Z?', args=pack('<I', ord('Z')))
-    print('PASS: 24 printf output, conversion, and %n scenarios')
+    print('PASS: 25 printf output, conversion, and %n scenarios')

@@ -15,8 +15,8 @@ extern void position_in_edx(const char *);
 #pragma aux position_in_edx = "" parm [edx] modify exact [];
 extern int integer_in_ecx(int);
 #pragma aux integer_in_ecx = "" parm [ecx] value [ecx] modify exact [];
-extern unsigned char flags_in_dl(unsigned char);
-#pragma aux flags_in_dl = "" parm [dl] value [dl] modify exact [];
+extern unsigned char byte_in_dl(unsigned char);
+#pragma aux byte_in_dl = "" parm [dl] value [dl] modify exact [];
 extern unsigned char flags_in_ch(unsigned char);
 #pragma aux flags_in_ch = "" parm [ch] value [ch] modify exact [];
 extern const char *modifier_end(void);
@@ -48,9 +48,9 @@ extern const int *arguments_in_edx(const int *);
 extern int integer_in_edx(int);
 #pragma aux integer_in_edx = "" parm [edx] value [edx] modify exact [];
 
-/* Keep the zero-then-byte-load sequence used by the original parser. */
-extern int decimal_byte(void);
-#pragma aux decimal_byte = "xor edx,edx" "mov dl,[eax]" value [edx] modify exact [edx];
+/* Read the full register after a zero and low-byte assignment. */
+extern int digit_in_edx(void);
+#pragma aux digit_in_edx = value [edx] modify exact [];
 
 extern int width_in_edi(int);
 #pragma aux width_in_edi = "" parm [edi] value [edi] modify exact [];
@@ -82,7 +82,9 @@ const char *parse_format_specifier(const char *format, const int **args, FormatS
 
     do {
         prefix = integer_in_ecx((int)((unsigned)fields()->width * 10));
-        digit = integer_in_edx(decimal_byte() - '0');
+        integer_in_edx(0);
+        byte_in_dl(*position());
+        digit = integer_in_edx(digit_in_edx() - '0');
         value = integer_in_ecx((int)((unsigned)prefix + digit));
         position_in_eax(position() + 1);
         fields()->width = value;
@@ -133,7 +135,9 @@ check_precision:
         if (ch < '0' || ch > '9')
             break;
         prefix = integer_in_ecx((int)((unsigned)fields()->precision * 10));
-        digit = integer_in_edx(decimal_byte() - '0');
+        integer_in_edx(0);
+        byte_in_dl(*position());
+        digit = integer_in_edx(digit_in_edx() - '0');
         value = integer_in_ecx((int)((unsigned)prefix + digit));
         position_in_eax(position() + 1);
         fields()->precision = value;
@@ -168,7 +172,7 @@ uppercase:
     return position();
 
 long_length:
-    flags = flags_in_dl(fields()->flags | 0x20);
+    flags = byte_in_dl(fields()->flags | 0x20);
     position_in_eax(position() + 1);
     fields()->flags = flags;
     return position();
