@@ -56,6 +56,15 @@ the sort into inline instructions merely to increase the C-object percentage.
 
 ## Other unresolved probes
 
+### Whole palette search frame
+
+Historical plain C with Watcom's `min` intrinsic and `/4r /s /or /bt=dos`
+emits 463 bytes versus 478. Its first mismatch at `+0x6` changes the frame
+allocation, and it retains query components in different registers.
+Making red addressable preserves a PUSH EAX but changes the later bounds
+and register lifetimes. Next recover the original five-slot frame and
+query-value lifetimes together. Scratch: `work/palette-whole-c/`.
+
 ### Network control packet frame and dispatch
 
 With Watcom 10.5 `/4r /s /or /bt=dos`, `ncd1.c` emits 634 bytes versus

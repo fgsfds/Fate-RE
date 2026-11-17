@@ -89,9 +89,8 @@ extern void previous_search_bucket(void);
 extern long search_bucket_neighbor(void);
 #pragma aux search_bucket_neighbor = "mov ebp,[esp+8]" value [ebp] modify exact [];
 
-extern long add_linear_blue_distance(void);
-#pragma aux add_linear_blue_distance = "mov ebp,[esp+10h]" "movzx esi,byte ptr [edx+2]" "add esi,ebp" \
-    "add eax,[esi*4+blue_color_distance]" value [eax] modify exact [eax esi];
+extern void load_linear_blue_offset(void);
+#pragma aux load_linear_blue_offset = "mov ebp,[esp+10h]" modify exact [];
 extern long search_color_index(void);
 #pragma aux search_color_index = value [ebx] modify exact [];
 extern void load_final_color(void);
@@ -216,11 +215,16 @@ check_bucket:;
             load_red_query_offset();
             in_esi(*(const unsigned char *)edx_value());
             in_esi((unsigned long)esi_value() + (unsigned long)ebp_value());
-            in_eax((unsigned long)eax_value() + (unsigned long)red_color_distance[esi_value()]);
-            if (eax_value() < search_best_distance() &&
-                add_linear_blue_distance() < search_best_distance()) {
-                in_ecx(eax_value());
-                save_color_candidate();
+            in_eax((unsigned long)red_color_distance[esi_value()] + (unsigned long)eax_value());
+            if (eax_value() < search_best_distance()) {
+                load_linear_blue_offset();
+                in_esi(*(const unsigned char *)(edx_value() + 2));
+                in_esi((unsigned long)esi_value() + (unsigned long)ebp_value());
+                in_eax((unsigned long)eax_value() + (unsigned long)blue_color_distance[esi_value()]);
+                if (eax_value() < search_best_distance()) {
+                    in_ecx(eax_value());
+                    save_color_candidate();
+                }
             }
         }
         in_ebx((unsigned long)ebx_value() - 1UL);
