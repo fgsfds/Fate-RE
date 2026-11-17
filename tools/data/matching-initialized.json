@@ -484,7 +484,8 @@
     },
     {
       "kind": "board navigation layouts",
-      "binary": "sprite_navigation_data.bin",
+      "object": "navdata.obj",
+      "object_sha256": "5cf43f54aee178134b0b9df3adc12d5be37971b23440f7ae033a24d99b737f25",
       "bytes": 56008,
       "payload_sha256": "654d7d15f61ca3004d6c5867ab7ee43a48fb0390e2e5638151681a9192916888",
       "raw_offset": "0xa031c",

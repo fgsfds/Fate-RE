@@ -15,6 +15,11 @@ class CompilerGroups(unittest.TestCase):
     def test_exact_layout(self):
         verify_group_layout(fixture(), 8, [('a', 0), ('b', 4)])
 
+    def test_exact_shared_body_layout(self):
+        verify_group_layout(fixture(second=0, size=1), 1, [('a', 0), ('b', 0)])
+        with self.assertRaisesRegex(ValueError, 'public'):
+            verify_group_layout(fixture(second=1, size=1), 1, [('a', 0), ('b', 0)])
+
     def test_reject_moved_public(self):
         with self.assertRaisesRegex(ValueError, 'public'):
             verify_group_layout(fixture(second=5), 8, [('a', 0), ('b', 4)])

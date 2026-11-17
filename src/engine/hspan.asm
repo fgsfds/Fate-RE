@@ -23,22 +23,6 @@ BITS 32
 ORG 0x63ff0
 _asm1 equ 0x286aa4
 _asm2 equ 0x286aa8
-fixchain1a equ 0x64344
-fixchain1b equ 0x6434f
-fixchain1m equ 0x64388
-fixchain1t equ 0x644ff
-fixchain1s equ 0x64926
-mfixchain1s equ 0x6499a
-tfixchain1s equ 0x64a22
-fixchain2a equ 0x64639
-fixchain2ma equ 0x6470f
-fixchain2mb equ 0x6479d
-fixchaint2a equ 0x64d86
-fixchaint2b equ 0x64dda
-fixchaint2c equ 0x64e23
-fixchaint2d equ 0x64dbc
-fixchaint2e equ 0x64e4c
-
 sethlinesizes_:
 	mov byte [machxbits1+2], al
 	mov byte [machxbits2+2], al
@@ -77,34 +61,10 @@ sethlinesizes_:
 	ret
 
 ALIGN_XCHG16
-setvlinebpl_:
-	mov dword [fixchain1a+2], eax
-	mov dword [fixchain1b+2], eax
-	mov dword [fixchain1m+2], eax
-	mov dword [fixchain1t+2], eax
-	mov dword [fixchain1s+2], eax
-	mov dword [mfixchain1s+2], eax
-	mov dword [tfixchain1s+2], eax
-	mov dword [fixchain2a+2], eax
-	mov dword [fixchain2ma+2], eax
-	mov dword [fixchain2mb+2], eax
-	mov dword [fixchaint2a+1], eax
-	mov dword [fixchaint2b+2], eax
-	mov dword [fixchaint2c+2], eax
-	mov dword [fixchaint2d+2], eax
-	mov dword [fixchaint2e+2], eax
-	ret
-
+; Reserve the two C routines' places so the remaining NASM slices keep their offsets.
+times 76 db 0                     ; setvlinebpl_
 ALIGN_XCHG16
-setpalookupaddress_:
-	mov dword [pal1+2], eax
-	mov dword [pal2+2], eax
-	mov dword [pal3+2], eax
-	mov dword [pal4+2], eax
-	mov dword [pal5+2], eax
-	mov dword [pal6+2], eax
-	mov dword [pal7+2], eax
-	ret
+times 36 db 0                     ; setpalookupaddress_
 
 ALIGN_XCHG16
 setuphlineasm4_:

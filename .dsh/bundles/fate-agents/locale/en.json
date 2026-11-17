@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Fate restoration agents",
+    "description": "Adds the Fate restoration integrator and five scoped roles. Select Fate restoration in a new session rooted in Fate-RE. Scout/verifier preserve Luna-high routes and need that model enabled; other roles use Sol-high. Windows PowerShell is used for compiler roles. No default preset or restoration state is changed."
+  }
+}

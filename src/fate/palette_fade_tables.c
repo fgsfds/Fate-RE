@@ -1,0 +1,245 @@
+/* Build four tint levels for each primary color. Each level contains 256
+ * RGB triplets. The shared frame preserves the original operand order.
+ */
+extern unsigned char palette_red_fade[], palette_green_fade[], palette_blue_fade[], saved_palette[];
+#define FRAME(type, offset) (*(volatile type *)((char *)&frame_slot + (offset)))
+
+extern long get_eax(void);
+#pragma aux get_eax = "" value [eax] modify exact [];
+extern long put_eax(long);
+#pragma aux put_eax = "" parm [eax] value [eax] modify exact [];
+extern long get_ebx(void);
+#pragma aux get_ebx = "" value [ebx] modify exact [];
+extern long put_ebx(long);
+#pragma aux put_ebx = "" parm [ebx] value [ebx] modify exact [];
+extern long get_ecx(void);
+#pragma aux get_ecx = "" value [ecx] modify exact [];
+extern long put_ecx(long);
+#pragma aux put_ecx = "" parm [ecx] value [ecx] modify exact [];
+extern long get_edx(void);
+#pragma aux get_edx = "" value [edx] modify exact [];
+extern long put_edx(long);
+#pragma aux put_edx = "" parm [edx] value [edx] modify exact [];
+extern long get_esi(void);
+#pragma aux get_esi = "" value [esi] modify exact [];
+extern long put_esi(long);
+#pragma aux put_esi = "" parm [esi] value [esi] modify exact [];
+extern long get_edi(void);
+#pragma aux get_edi = "" value [edi] modify exact [];
+extern long put_edi(long);
+#pragma aux put_edi = "" parm [edi] value [edi] modify exact [];
+extern long get_ebp(void);
+#pragma aux get_ebp = "" value [ebp] modify exact [];
+extern unsigned char get_al(void);
+#pragma aux get_al = "" value [al] modify exact [];
+extern unsigned char put_al(unsigned char);
+#pragma aux put_al = "" parm [al] value [al] modify exact [];
+extern unsigned char get_dl(void);
+#pragma aux get_dl = "" value [dl] modify exact [];
+extern unsigned char put_dl(unsigned char);
+#pragma aux put_dl = "" parm [dl] value [dl] modify exact [];
+
+extern void begin_fade_frame(void);
+#pragma aux begin_fade_frame = "push ebx" "push ecx" "push edx" "push esi" "push edi" "push ebp" "sub esp,14h" modify exact [ecx];
+extern void finish_fade_frame(void);
+#pragma aux finish_fade_frame = "add esp,14h" "pop ebp" "pop edi" "pop esi" "pop edx" "pop ecx" "pop ebx" "ret" aborts modify exact [];
+/* Keep the original signed truncation toward zero when scaling by 1/8. */
+extern void divide_fade_product(void);
+#pragma aux divide_fade_product = "sar edx,31" "shl edx,3" "db 1bh,0c2h" "sar eax,3" modify exact [eax edx];
+extern void point_at_blue_channel(void);
+#pragma aux point_at_blue_channel = "lea ebp, [esi + 2]" modify exact [];
+extern void advance_blue_into_red_table(void);
+#pragma aux advance_blue_into_red_table = "add ebp, edx" modify exact [];
+extern void advance_blue_into_green_table(void);
+#pragma aux advance_blue_into_green_table = "add ebp, [esp + 0xc]" modify exact [ebx];
+extern void point_at_green_channel(void);
+#pragma aux point_at_green_channel = "lea ebp, [esi + 1]" modify exact [];
+extern void advance_green_into_blue_table(void);
+#pragma aux advance_green_into_blue_table = "add ebp, [esp + 8]" modify exact [];
+extern void read_red_channel_in_ebp(void);
+#pragma aux read_red_channel_in_ebp = "movzx ebp, byte ptr [esi + saved_palette]" modify exact [edx];
+
+extern void add_original_channel(void);
+#pragma aux add_original_channel = "add eax,[esp+8]" modify exact [eax];
+extern void apply_blue_table_offset(void);
+#pragma aux apply_blue_table_offset = "add esi,[esp+8]" modify exact [ebx esi];
+void build_palette_fade_tables(long frame_slot);
+#pragma aux build_palette_fade_tables parm routine [] aborts modify exact [eax ebx ecx edx esi edi];
+void build_palette_fade_tables(long frame_slot)
+{
+    begin_fade_frame();
+    put_ecx(0);
+red_step:
+    put_edi(get_ecx() + 0x1);
+    put_ebx(0);
+red_color:
+    put_esi(get_ebx());
+    put_esi(get_esi() << 0x2);
+    put_esi(get_esi() - get_ebx());
+    put_eax(get_esi() + 0x1);
+    FRAME(long, 0x4) = get_eax();
+    put_eax(0);
+    put_al(saved_palette[get_esi()]);
+    FRAME(long, 0x8) = get_eax();
+    put_eax(0x40);
+    put_eax(get_eax() - FRAME(long, 0x8));
+    put_eax(get_eax() * get_edi());
+    put_edx(get_eax());
+    divide_fade_product();
+    add_original_channel();
+    FRAME(unsigned char, 0x10) = get_al();
+    put_eax(get_ecx());
+    put_eax(get_eax() << 0x2);
+    put_eax(get_eax() - get_ecx());
+    point_at_blue_channel();
+    put_eax(get_eax() << 0x8);
+    put_esi(get_esi() + get_eax());
+    FRAME(long, 0x8) = get_eax();
+    put_al(FRAME(unsigned char, 0x10));
+    palette_red_fade[get_esi()] = get_al();
+    put_esi(FRAME(long, 0x4));
+    put_esi(saved_palette[get_esi()]);
+    put_edx(get_esi());
+    put_edx(-get_edx());
+    put_edx(get_edx() * get_edi());
+    put_eax(get_edx());
+    divide_fade_product();
+    put_eax(get_eax() + get_esi());
+    put_esi(FRAME(long, 0x4));
+    put_dl(get_al());
+    put_eax(FRAME(long, 0x8));
+    put_eax(get_eax() + get_esi());
+    put_esi(saved_palette[get_ebp()]);
+    palette_red_fade[get_eax()] = get_dl();
+    put_edx(get_esi());
+    put_edx(-get_edx());
+    put_edx(get_edx() * get_edi());
+    put_eax(get_edx());
+    divide_fade_product();
+    put_edx(FRAME(long, 0x8));
+    advance_blue_into_red_table();
+    put_eax(get_eax() + get_esi());
+    put_ebx(get_ebx() + 1);
+    palette_red_fade[get_ebp()] = get_al();
+    if (get_ebx() < 0x100)
+        goto red_color;
+    put_ecx(get_edi());
+    if (get_edi() < 0x4)
+        goto red_step;
+    put_ecx(get_ecx() ^ get_edi());
+green_step:
+    put_edi(get_ecx() + 0x1);
+    put_ebx(0);
+green_color:
+    put_esi(get_ebx());
+    put_esi(get_esi() << 0x2);
+    put_esi(get_esi() - get_ebx());
+    put_eax(get_esi() + 0x1);
+    FRAME(long, 0x4) = get_eax();
+    put_edx(FRAME(long, 0x4));
+    put_eax(0);
+    put_al(saved_palette[get_edx()]);
+    put_edx(0x40);
+    put_edx(get_edx() - get_eax());
+    put_edx(get_edx() * get_edi());
+    FRAME(long, 0x8) = get_eax();
+    put_eax(get_edx());
+    divide_fade_product();
+    add_original_channel();
+    FRAME(unsigned char, 0x10) = get_al();
+    put_eax(get_ecx());
+    put_eax(get_eax() << 0x2);
+    put_eax(get_eax() - get_ecx());
+    put_eax(get_eax() << 0x8);
+    put_edx(FRAME(long, 0x4));
+    FRAME(long, 0xc) = get_eax();
+    put_eax(get_eax() + get_edx());
+    put_dl(FRAME(unsigned char, 0x10));
+    palette_green_fade[get_eax()] = get_dl();
+    put_eax(0);
+    put_al(saved_palette[get_esi()]);
+    put_edx(get_eax());
+    put_edx(-get_edx());
+    put_edx(get_edx() * get_edi());
+    FRAME(long, 0x8) = get_eax();
+    put_eax(get_edx());
+    divide_fade_product();
+    put_edx(FRAME(long, 0x8));
+    point_at_blue_channel();
+    put_eax(get_eax() + get_edx());
+    put_esi(get_esi() + FRAME(long, 0xc));
+    palette_green_fade[get_esi()] = get_al();
+    put_esi(saved_palette[get_ebp()]);
+    put_edx(get_esi());
+    put_edx(-get_edx());
+    put_edx(get_edx() * get_edi());
+    put_eax(get_edx());
+    divide_fade_product();
+    put_eax(get_eax() + get_esi());
+    advance_blue_into_green_table();
+    put_ebx(get_ebx() + 1);
+    palette_green_fade[get_ebp()] = get_al();
+    if (get_ebx() < 0x100)
+        goto green_color;
+    put_ecx(get_edi());
+    if (get_edi() < 0x4)
+        goto green_step;
+    put_ecx(get_ecx() ^ get_edi());
+blue_step:
+    put_edi(get_ecx() + 0x1);
+    put_ebx(0);
+blue_color:
+    put_esi(get_ebx());
+    put_esi(get_esi() << 0x2);
+    put_esi(get_esi() - get_ebx());
+    point_at_green_channel();
+    put_eax(get_esi() + 0x2);
+    FRAME(long, 0) = get_eax();
+    put_edx(FRAME(long, 0));
+    put_eax(0);
+    put_al(saved_palette[get_edx()]);
+    put_edx(0x40);
+    put_edx(get_edx() - get_eax());
+    put_edx(get_edx() * get_edi());
+    FRAME(long, 0x8) = get_eax();
+    put_eax(get_edx());
+    divide_fade_product();
+    add_original_channel();
+    FRAME(unsigned char, 0x10) = get_al();
+    put_eax(get_ecx());
+    put_eax(get_eax() << 0x2);
+    put_eax(get_eax() - get_ecx());
+    put_eax(get_eax() << 0x8);
+    put_edx(FRAME(long, 0));
+    FRAME(long, 0x8) = get_eax();
+    put_eax(get_eax() + get_edx());
+    put_dl(FRAME(unsigned char, 0x10));
+    palette_blue_fade[get_eax()] = get_dl();
+    put_eax(0);
+    put_al(saved_palette[get_ebp()]);
+    put_edx(get_eax());
+    put_edx(-get_edx());
+    put_edx(get_edx() * get_edi());
+    FRAME(long, 0xc) = get_eax();
+    put_eax(get_edx());
+    divide_fade_product();
+    put_eax(get_eax() + FRAME(long, 0xc));
+    advance_green_into_blue_table();
+    palette_blue_fade[get_ebp()] = get_al();
+    read_red_channel_in_ebp();
+    put_edx(get_ebp());
+    put_edx(-get_edx());
+    put_edx(get_edx() * get_edi());
+    put_eax(get_edx());
+    divide_fade_product();
+    put_eax(get_eax() + get_ebp());
+    apply_blue_table_offset();
+    put_ebx(get_ebx() + 1);
+    palette_blue_fade[get_esi()] = get_al();
+    if (get_ebx() < 0x100)
+        goto blue_color;
+    put_ecx(get_edi());
+    if (get_edi() < 0x4)
+        goto blue_step;
+    finish_fade_frame();
+}

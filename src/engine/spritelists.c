@@ -2,7 +2,9 @@
 // Ken Silverman's official web site: "http://www.advsys.net/ken"
 // See the included license file "BUILDLIC.TXT" for license info.
 // Adapted from pinned historical ENGINE.C; unaccessed fields remain reserved.
-// List bodies remain a negative shared-return-layout experiment.
+// Watcom shares the deletion epilogue with the local insertion helpers.
+// Only deletion code is linked from this object. The exact build binds its
+// jumps to the identical register-restore epilogue shared by the game.
 #pragma pack(push, 1)
 typedef struct {
     char reserved_position[24];

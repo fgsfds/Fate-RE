@@ -18,7 +18,6 @@ cursor_shape equ 0x28923c
 text_window_right equ 0x28923e
 text_window_bottom equ 0x289240
 text_window_left equ 0x289242
-text_window_top equ 0x289244
 
 write_text_window:
     push ecx
@@ -141,124 +140,12 @@ write_text_window:
     pop ecx
     ret
 
-output_text_string:
-    push ebx
-    push ecx
-    push edx
-    push edi
-    mov edx, eax
-    call initialize_graphics_once
-    call hide_graphics_cursor
-    mov edi, edx
-    mov ebx, 1
-    push es
-    mov eax, ds
-    mov es, ax
-    sub ecx, ecx
-    dec ecx
-    xor eax, eax
-    repne scasb
-    not ecx
-    dec ecx
-    pop es
-    movsx ecx, cx
-    mov eax, edx
-    mov edx, ecx
-    call write_text_window
-    call restore_cursor_if_enabled
-    pop edi
-    pop edx
-    pop ecx
-    pop ebx
-    ret
+    times 61 db 0 ; supplied by matching C
 
-output_counted_text:
-    push ebx
-    mov ebx, eax
-    call initialize_graphics_once
-    call hide_graphics_cursor
-    movsx edx, dx
-    mov eax, ebx
-    xor ebx, ebx
-    call write_text_window
-    call restore_cursor_if_enabled
-    pop ebx
-    ret
+    times 32 db 0 ; supplied by matching C
 
-scroll_text_by_rows:
-    push ebx
-    push ecx
-    push edx
-    mov edx, eax
-    test ax, ax
-    jne short .scroll
-    mov word [graphics_error], -4
-    pop edx
-    pop ecx
-    pop ebx
-    ret
-.scroll:
-    call initialize_graphics_once
-    call hide_graphics_cursor
-    test dx, dx
-    jge short .scroll_up
-    mov ecx, 2
-    neg edx
-    jmp short .check_height
-.scroll_up:
-    mov ecx, 1
-.check_height:
-    movsx ebx, word [text_window_bottom]
-    movsx eax, word [text_window_top]
-    sub ebx, eax
-    mov eax, ebx
-    movsx ebx, dx
-    inc eax
-    cmp ebx, eax
-    jl short .apply
-    xor edx, edx
-.apply:
-    movsx edx, dx
-    movsx eax, cx
-    call scroll_text_window
-    call restore_cursor_if_enabled
-    pop edx
-    pop ecx
-    pop ebx
-    ret
+    times 100 db 0 ; supplied by matching C
 
-get_text_cursor_shape:
-    call initialize_graphics_once
-    mov ax, [cursor_shape]
-    ret
+    times 12 db 0 ; supplied by matching C
 
-set_text_cursor_shape:
-    push ebx
-    push ecx
-    push edx
-    push esi
-    mov ecx, eax
-    cmp byte [graphics_active], 0
-    je short .set_shape
-    mov word [graphics_error], -3
-    mov eax, -1
-    pop esi
-    pop edx
-    pop ecx
-    pop ebx
-    ret
-.set_shape:
-    mov si, [cursor_shape]
-    xor ebx, ebx
-    xor edx, edx
-    mov [cursor_shape], ax
-    mov eax, 0x100
-    push bp
-    int 0x10
-    pop bp
-    mov eax, esi
-    pop esi
-    pop edx
-    pop ecx
-    pop ebx
-    ret
+    times 69 db 0 ; supplied by matching C

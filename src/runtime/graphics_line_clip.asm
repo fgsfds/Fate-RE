@@ -3,6 +3,7 @@ BITS 32
 ORG 0x73703
 
 graphics_point_outcode equ 0x736bf
+clamp_point_edge equ 0x738c8
 
 clip_left equ 0x289216
 clip_right equ 0x289218
@@ -10,54 +11,7 @@ clip_top equ 0x28921a
 clip_bottom equ 0x28921c
 
 intersect_clip_edge:
-    push esi
-    push edi
-    enter 0xc, 0
-    mov esi, eax
-    mov edi, edx
-    mov dword [ebp - 4], ecx
-    mov eax, ebx
-    cwde
-    movsx ebx, word [esi]
-    sub eax, ebx
-    cdq
-    xor eax, edx
-    sub eax, edx
-    movsx edx, word [ebp - 4]
-    mov ebx, eax
-    mov ecx, eax
-    movsx eax, word [edi]
-    sub edx, eax
-    lea eax, [edx + edx]
-    mov dword [ebp - 8], eax
-    movsx eax, word [esi]
-    mov dword [ebp - 0xc], eax
-    movsx eax, word [ebp + 0x10]
-    sub eax, dword [ebp - 0xc]
-    cdq
-    xor eax, edx
-    sub eax, edx
-    imul eax, dword [ebp - 8]
-    test eax, eax
-    jle short .round_negative
-    add eax, ebx
-    jmp short .divide
-.round_negative:
-    sub eax, ebx
-.divide:
-    cdq
-    add ecx, ecx
-    idiv ecx
-    mov ebx, eax
-    movsx eax, word [edi]
-    add eax, ebx
-    mov word [edi], ax
-    mov eax, dword [ebp + 0x10]
-    mov word [esi], ax
-    leave
-    pop edi
-    pop esi
-    ret 4
+    times 104 db 0 ; supplied by matching C
 
 clip_graphics_line:
     push esi
@@ -190,77 +144,6 @@ clip_graphics_line:
     pop esi
     ret
 
-clamp_point_edge:
-    test bl, 1
-    je short .bottom
-    mov ax, word [clip_top]
-    mov word [edx], ax
-    ret
-.bottom:
-    test bl, 2
-    je short .right
-    mov ax, word [clip_bottom]
-    mov word [edx], ax
-    ret
-.right:
-    test bl, 4
-    je short .left
-    mov dx, word [clip_right]
-    mov word [eax], dx
-    ret
-.left:
-    test bl, 8
-    je short .done
-    mov dx, word [clip_left]
-    mov word [eax], dx
-.done:
-    ret
+    times 62 db 0    ; clamp_point_edge is placed here from C.
 
-clip_axis_aligned_line:
-    push esi
-    push edi
-    enter 0xc, 0
-    push eax
-    mov esi, edx
-    mov edi, ebx
-    movsx eax, word [eax]
-    movsx edx, word [edx]
-    call graphics_point_outcode
-    mov byte [ebp - 8], al
-    movsx edx, word [ecx]
-    movsx eax, word [ebx]
-.classify_second:
-    call graphics_point_outcode
-    mov byte [ebp - 4], al
-.compare_outcodes:
-    movzx eax, byte [ebp - 8]
-    movzx ebx, byte [ebp - 4]
-    mov dword [ebp - 0xc], eax
-    test ebx, eax
-    jne short .result
-    mov al, byte [ebp - 8]
-    cmp al, byte [ebp - 4]
-    je short .result
-    test al, al
-    jne short .adjust_first
-    mov eax, edi
-    mov edx, ecx
-    call clamp_point_edge
-    movsx edx, word [ecx]
-    movsx eax, word [edi]
-    jmp short .classify_second
-.adjust_first:
-    mov eax, dword [ebp - 0x10]
-    mov ebx, dword [ebp - 0xc]
-    mov edx, esi
-    call clamp_point_edge
-    mov eax, dword [ebp - 0x10]
-    movsx eax, word [eax]
-    movsx edx, word [esi]
-    call graphics_point_outcode
-    mov byte [ebp - 8], al
-    jmp short .compare_outcodes
-.result:
-    movzx ax, byte [ebp - 8]
-    movzx dx, byte [ebp - 4]
-    jmp near clip_graphics_line.return_outcode
+    times 130 db 0 ; supplied by matching C

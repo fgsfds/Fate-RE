@@ -1,0 +1,23 @@
+{
+  "name": "@local/fate-restoration-agents",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Fate-RE restoration presets and role-specific delegation tools for DeepSeek Harness.",
+  "exports": {
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "cordis.patch.yml",
+    "locale",
+    "icon.svg",
+    "README.md",
+    "build-fate-agents.cjs"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

@@ -15,31 +15,7 @@ screen_pixel_shift equ 0x2891f4
 screen_selector equ 0x2891f0
 screen_address equ 0x2891ec
 
-draw_clipped_solid_line:
-    push ebp
-    mov ebp, esp
-    push eax
-    push edx
-    push ebx
-    push ecx
-    lea eax, [ebp - 4]
-    lea edx, [ebp - 8]
-    lea ebx, [ebp - 0xc]
-    lea ecx, [ebp - 0x10]
-    call clip_graphics_line
-    test ax, ax
-    jne short .done
-    push strict dword 0xffff
-    movsx ecx, word [ebp - 0x10]
-    movsx ebx, word [ebp - 0xc]
-    movsx eax, word [drawing_color]
-    movsx edx, word [ebp - 8]
-    push eax
-    movsx eax, word [ebp - 4]
-    call dispatch_device_line
-.done:
-    leave
-    ret
+    times 65 db 0 ; supplied by matching C
 
 draw_clipped_patterned_line:
     push esi

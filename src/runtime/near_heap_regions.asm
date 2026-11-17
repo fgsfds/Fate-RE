@@ -11,38 +11,10 @@ extender_flags equ 0x1449c
 dos_reserve_bytes equ 0x2892dc
 dos_reserve_high_word equ 0x2892de
 
-unlink_near_heap:
-    push ebx
-    push edx
-    mov edx, dword [near_heap_rover]
-    cmp eax, edx
-    jne short .check_head
-    mov edx, dword [edx + 8]
-    mov dword [near_heap_rover], edx
+unlink_near_heap equ 0x65151
+link_and_initialize_heap equ 0x652f1
 
-.check_head:
-    mov ebx, dword [near_heap_head]
-    cmp eax, ebx
-    jne short .load_neighbors
-    mov edx, dword [ebx + 8]
-    mov dword [near_heap_head], edx
-
-.load_neighbors:
-    mov edx, dword [eax + 4]
-    mov eax, dword [eax + 8]
-    test edx, edx
-    je short .update_successor
-    mov dword [edx + 8], eax
-
-.update_successor:
-    test eax, eax
-    je short .return
-    mov dword [eax + 4], edx
-
-.return:
-    pop edx
-    pop ebx
-    ret
+    times 63 db 0    ; unlink_near_heap is supplied by C.
 
 release_empty_heaps:
     push ebx
@@ -204,95 +176,9 @@ resize_dpmi_heap:
     pop ebx
     ret
 
-link_and_initialize_heap:
-    push ebx
-    push edx
-    mov edx, eax
-    mov eax, dword [near_heap_head]
-    xor ebx, ebx
-    jmp short .check_node
+    times 116 db 0   ; link_and_initialize_heap is supplied by C.
 
-.compare_address:
-    cmp edx, eax
-    jb short .set_neighbors
-    mov ebx, eax
-    mov eax, dword [eax + 8]
-
-.check_node:
-    test eax, eax
-    jne short .compare_address
-
-.set_neighbors:
-    mov dword [edx + 4], ebx
-    mov dword [edx + 8], eax
-    test ebx, ebx
-    je short .update_head
-    mov dword [ebx + 8], edx
-    jmp short .update_successor
-
-.update_head:
-    mov dword [near_heap_head], edx
-
-.update_successor:
-    test eax, eax
-    je short .initialize_heap
-    mov dword [eax + 4], edx
-
-.initialize_heap:
-    lea ebx, [edx + 0x20]
-    mov eax, dword [edx]
-    add edx, 0x2c
-    mov dword [edx - 0xc], 0
-    mov dword [edx - 0x1c], 0
-    mov dword [edx - 0x14], 0
-    mov dword [edx - 0x10], 0
-    mov dword [edx - 8], ebx
-    mov dword [edx - 4], ebx
-    sub eax, 0x2c
-    mov dword [edx - 0x20], ebx
-    mov dword [edx], eax
-    mov dword [edx + eax], 0xffffffff
-    mov eax, edx
-    pop edx
-    pop ebx
-    ret
-
-free_space_at_break:
-    push ebx
-    push edx
-    mov edx, dword [near_heap_head]
-    test edx, edx
-    je short .return_zero
-    mov edx, dword [edx + 0x24]
-    mov ebx, dword [edx]
-    add ebx, edx
-    mov ah, byte [extender_type]
-    add ebx, 4
-    cmp ah, 2
-    jb short .compare_limit
-    cmp ah, 8
-    ja short .compare_limit
-    cmp byte [extender_flags], 0
-    jne short .compare_limit
-    xor eax, eax
-    mov eax, ds
-    lsl eax, eax
-    inc eax
-    mov dword [memory_limit], eax
-
-.compare_limit:
-    cmp ebx, dword [memory_limit]
-    jne short .return_zero
-    mov eax, dword [edx]
-    pop edx
-    pop ebx
-    ret
-
-.return_zero:
-    xor eax, eax
-    pop edx
-    pop ebx
-    ret
+    times 78 db 0    ; free_space_at_break is supplied by C.
 
 allocate_dpmi_heap:
     push ebx

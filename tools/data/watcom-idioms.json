@@ -1,0 +1,87 @@
+{
+  "schema": 1,
+  "source_sha256": "83cfa5c431e171fe6ac46e0e846555f299ff75eb50537cfe70f7d5ce0f7eb5e1",
+  "compiler_sha256": "1b97a68f7b8a3efd89b05f64ce99836b1e533f398699305f96dc423254939d6a",
+  "flags": {
+    "id4": "/4r /s /or /bt=dos",
+    "id3": "/3r /s /bt=dos",
+    "idsize": "/4r /s /os /bt=dos"
+  },
+  "variants": {
+    "id4": {
+      "segments": [
+        {"segment": 1, "name": "_TEXT", "cls": "CODE", "bytes": "40c398c325ffff0000c38b4001c33b020f9cc025ff000000c3e80000000001d0c3e9000000005289c2c1e208c1e81809d05ac3"},
+        {"segment": 2, "name": "CONST", "cls": "DATA", "bytes": ""},
+        {"segment": 3, "name": "CONST2", "cls": "DATA", "bytes": ""},
+        {"segment": 4, "name": "_DATA", "cls": "DATA", "bytes": ""},
+        {"segment": 5, "name": "_BSS", "cls": "BSS", "bytes": ""}
+      ],
+      "publics": [
+        [1, 0, "register_increment_"],
+        [1, 2, "signed_word_"],
+        [1, 4, "unsigned_word_"],
+        [1, 10, "packed_value_"],
+        [1, 14, "less_than_memory_"],
+        [1, 19, "low_byte_"],
+        [1, 25, "keep_edx_"],
+        [1, 33, "aborting_wrapper_"],
+        [1, 38, "rotate_idiom_"]
+      ],
+      "externals": ["preserve_other_registers_", "terminal_error_"],
+      "fixups": [
+        {"segment": 1, "offset": 26, "width": 4, "location": 9, "relative": true, "frame": [1, 2], "target": [2, 1], "displacement": 0},
+        {"segment": 1, "offset": 34, "width": 4, "location": 9, "relative": true, "frame": [1, 2], "target": [2, 2], "displacement": 0}
+      ]
+    },
+    "id3": {
+      "segments": [
+        {"segment": 1, "name": "_TEXT", "cls": "CODE", "bytes": "40c398c30fb7c0c30fb6c0c38b4001c33b020f9cc00fb6c0c3e80000000001d0c3e9000000005289c2c1e208c1e81809d05ac3"},
+        {"segment": 2, "name": "CONST", "cls": "DATA", "bytes": ""},
+        {"segment": 3, "name": "CONST2", "cls": "DATA", "bytes": ""},
+        {"segment": 4, "name": "_DATA", "cls": "DATA", "bytes": ""},
+        {"segment": 5, "name": "_BSS", "cls": "BSS", "bytes": ""}
+      ],
+      "publics": [
+        [1, 0, "register_increment_"],
+        [1, 2, "signed_word_"],
+        [1, 4, "unsigned_word_"],
+        [1, 8, "low_byte_"],
+        [1, 12, "packed_value_"],
+        [1, 16, "less_than_memory_"],
+        [1, 25, "keep_edx_"],
+        [1, 33, "aborting_wrapper_"],
+        [1, 38, "rotate_idiom_"]
+      ],
+      "externals": ["preserve_other_registers_", "terminal_error_"],
+      "fixups": [
+        {"segment": 1, "offset": 26, "width": 4, "location": 9, "relative": true, "frame": [1, 2], "target": [2, 1], "displacement": 0},
+        {"segment": 1, "offset": 34, "width": 4, "location": 9, "relative": true, "frame": [1, 2], "target": [2, 2], "displacement": 0}
+      ]
+    },
+    "idsize": {
+      "segments": [
+        {"segment": 1, "name": "_TEXT", "cls": "CODE", "bytes": "40c398c30fb7c0c30fb6c0c38b4001c33b020f9cc00fb6c0c3e80000000001d0c3e9000000005289c2c1e208c1e81809d05ac3"},
+        {"segment": 2, "name": "CONST", "cls": "DATA", "bytes": ""},
+        {"segment": 3, "name": "CONST2", "cls": "DATA", "bytes": ""},
+        {"segment": 4, "name": "_DATA", "cls": "DATA", "bytes": ""},
+        {"segment": 5, "name": "_BSS", "cls": "BSS", "bytes": ""}
+      ],
+      "publics": [
+        [1, 0, "register_increment_"],
+        [1, 2, "signed_word_"],
+        [1, 4, "unsigned_word_"],
+        [1, 8, "low_byte_"],
+        [1, 12, "packed_value_"],
+        [1, 16, "less_than_memory_"],
+        [1, 25, "keep_edx_"],
+        [1, 33, "aborting_wrapper_"],
+        [1, 38, "rotate_idiom_"]
+      ],
+      "externals": ["preserve_other_registers_", "terminal_error_"],
+      "fixups": [
+        {"segment": 1, "offset": 26, "width": 4, "location": 9, "relative": true, "frame": [1, 2], "target": [2, 1], "displacement": 0},
+        {"segment": 1, "offset": 34, "width": 4, "location": 9, "relative": true, "frame": [1, 2], "target": [2, 2], "displacement": 0}
+      ]
+    }
+  }
+}

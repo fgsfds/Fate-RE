@@ -1,0 +1,84 @@
+# Script stem, argument templates, then | dependent object basenames.
+# Full validation runs every entry. Targeted validation uses the dependency list.
+check_start_hook {exe} --output {build}/start-hook.json | startgrp
+check_palette_fade_tables {exe} {build}/fadetab.obj | fadetab
+check_palette_fade_dispatch {exe} {build}/fadeloop.obj | fadeloop
+check_update_palette_fade {exe} {build}/fadeupd.obj | fadeupd
+check_audio_sample_controls {exe} | audctrl
+check_timer_callbacks {exe} | timercb
+check_slope_height {exe} {build}/slphgt.obj | slphgt
+check_projectile_hit {exe} {build}/prjhit.obj | prjhit
+check_update_projectiles {exe} {build}/projup.obj | projup
+check_apply_sprite_blast {exe} {build}/blast.obj | blast
+check_counted_player_effect {exe} {build}/peffspn.obj | peffspn
+check_actor_movement {exe} {build}/actmove.obj | actmove
+check_restore_board_actor_sprites {exe} {build}/boardact.obj | boardact
+check_update_sprite_view {exe} {build}/sprview.obj {asm}/sprite_view.bin | sprview
+check_initialize_board_entry {exe} {build}/boardent.obj {asm}/initialize_board_entry.bin | boardent
+check_format_engine {exe} | prtf fmtconv fmtspc fmtflags radix streamfm numfmt printput
+check_allocate_stream {exe} | alstream
+check_proximity_sprites {exe} {build}/proxupd.obj | proxupd
+check_cansee {exe} {build}/vizporta.obj | vizporta
+check_wallfront {exe} {build}/walfrnt.obj | walfrnt
+check_sector_portal {exe} {build}/sectport.obj | sectport
+check_bunchfront {exe} {build}/bfront.obj | bfront
+check_view_angle_table {exe} {build}/viewang.obj | viewang
+check_prepwall {exe} {build}/prepwall.obj | prepwall
+check_preparemirror {exe} {build}/prepmir.obj | prepmir
+check_complete_mirror {exe} {build}/cmpmir.obj | cmpmir
+check_transmaskwallscan {exe} {build}/transwal.obj | transwal
+check_load_art {exe} {build}/loadart.obj | loadart
+check_pushmove {exe} {build}/pushmove.obj | pushmove
+check_spawn_search {exe} | spsearch
+check_spawn_environment {exe} | spenv
+check_environment_copy {exe} {build}/envcopy.obj | envcopy
+check_spawn_process {exe} | spawnve
+check_sprite_sequence_state {exe} {build}/sprseq.obj | sprseq
+check_clearallviews {exe} {build}/clrviews.obj | clrviews
+check_clearview {exe} {build}/clrview.obj | clrview
+check_hline {exe} {build}/hline.obj | hline
+check_ceilscan_tail {exe} {build}/ceiltail.obj | ceiltail
+check_florscan_tail {exe} {build}/flortail.obj | flortail
+check_florscan_entry {exe} {build}/florentr.obj | florentr
+check_grouscan_entry {exe} {build}/grouentr.obj | grouentr
+check_grouscan_geometry {exe} {build}/grougeom.obj | grougeom
+check_ceilscan_entry {exe} {build}/ceilentr.obj | ceilentr
+check_owallmost {exe} {build}/owallmst.obj | owallmst
+check_keepaway {exe} {build}/keepaway.obj | keepaway
+check_wallmost_clip {exe} {build}/wallclip.obj | wallclip
+check_wallmost_setup {exe} {build}/wallset.obj | wallset
+check_wallmost_entry {exe} {build}/wallmost.obj | wallmost
+check_dos_search_status {exe} {build}/dossstat.obj | dossstat
+check_dos_dta_copy {exe} {build}/dosdta.obj | dosdta
+check_write_stream_descriptor {exe} {build}/dwrite.obj | dwrite
+check_initksqrt {exe} {asm} {build}/c.json {build}/transcol.obj | sqrtinit transcol
+check_copytilepiece_candidate {exe} {build}/tilecopy.obj | tilecopy
+check_crt_arguments {exe} | crtparse
+check_float_integer_conversions {exe} | fltint u32float i32float flttrunc
+check_spawn_fpu_callbacks {exe} | spnfpu
+check_mouse_binding {exe} | mouseact
+check_mouse_button_menu {exe} {build}/mousebtn.obj | mousebtn
+check_string_search {exe} | strfind rtstrchr
+check_board_5_script {exe} {build}/board5.obj | board5
+check_board_7_script {exe} {build}/board7.obj | board7
+check_level_script_dispatch {exe} {build}/brdsp.obj | brdsp
+check_sprite_route_dispatch {exe} {build}/routedsp.obj | routedsp
+check_route_sectors {exe} {build}/routesec.obj | routesec
+check_sector_panning {exe} {build}/sectpan.obj | sectpan
+check_update_level_effects {exe} {build}/crushupd.obj | crushupd
+check_edit_save_slot_name {exe} {build}/savename.obj | savename
+check_run_save_game_menu {exe} {build}/savmenu.obj | savmenu
+check_run_load_game_menu {exe} {build}/loadmenu.obj | loadmenu
+check_run_key_binding_menu {exe} {build}/keybind.obj | keybind
+check_run_menu_loop {exe} {build}/menuloop.obj {asm}/run_menu_loop.bin | menuloop
+check_save_build_map {exe} {build}/savemap.obj | savemap
+check_load_build_map {exe} {build}/loadmap.obj | loadmap
+check_teleport_terminals {exe} {build}/telterm.obj | telterm
+check_resolve_teleport_destination {exe} {build}/telepdst.obj | telepdst
+check_find_spawn_position {exe} {build}/spawnpos.obj | spawnpos
+check_run_recorded_session {exe} {build}/playrec.obj | playrec
+check_rotatesprite {exe} {build}/rotspr.obj | rotspr
+check_draw_screen_text {exe} {build}/scrntxt.obj | scrntxt
+check_menu_text {exe} {build}/menutext.obj | menutext
+check_draw_ega_text {exe} {build}/egatext.obj | egatext
+check_finalize_board_state {exe} {build}/boardfin.obj | boardfin

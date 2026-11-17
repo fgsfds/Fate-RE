@@ -2,19 +2,10 @@
 BITS 32
 ORG 0x60638
 
-open_streams equ 0x2891e0
 set_errno equ 0x6468e
 allocate_buffer equ 0x64932
 qread equ 0x649a9
 fill_buffer equ 0x64a80
-free_stream equ 0x6476c
-getpid equ 0x64b2b
-flush_stream equ 0x64b31
-ftell equ 0x64bf0
-lseek equ 0x615b6
-close_descriptor equ 0x64c20
-free_buffer equ 0x6170a
-remove_file equ 0x64c52
 
 fread_:
     push esi
@@ -216,160 +207,11 @@ fread_:
     pop esi
     ret
 
-fclose_:
-    push ebx
-    push edx
-    mov edx, eax
-    mov eax, dword [open_streams]
+    times 47 db 0    ; fclose is supplied by C.
+    times 21 db 0    ; __shutdown_stream is supplied by C.
 
-.check_open_stream:
-    test eax, eax
-    jne short .compare_stream
-    mov eax, 0xffffffff
-    pop edx
-    pop ebx
-    ret
+    times 12 db 0    ; hex_digit is placed here from C.
 
-.compare_stream:
-    mov ebx, dword [eax + 4]
-    cmp edx, ebx
-    je short .shutdown_matching_stream
-    mov eax, dword [eax]
-    jmp short .check_open_stream
+    times 105 db 0    ; __MkTmpFile is supplied by C.
 
-.shutdown_matching_stream:
-    mov edx, 1
-    mov eax, ebx
-    call __shutdown_stream_
-    pop edx
-    pop ebx
-    ret
-
-__shutdown_stream_:
-    push ebx
-    mov ebx, eax
-    call __doclose_
-    mov edx, eax
-    mov eax, ebx
-    call free_stream
-    mov eax, edx
-    pop ebx
-    ret
-
-hex_digit:
-    add eax, 0x30
-    cmp eax, 0x39
-    jle short .return_digit
-    add eax, 0x27
-
-.return_digit:
-    ret
-
-__MkTmpFile_:
-    push ebx
-    push ecx
-    push esi
-    push edi
-    mov ecx, eax
-    mov edi, edx
-    call getpid
-    mov edx, 4
-    mov ebx, eax
-    mov esi, ecx
-    mov byte [ecx], 0x74
-    add edx, ecx
-
-.write_pid_digit:
-    mov eax, ebx
-    and eax, 0xf
-    call hex_digit
-    mov byte [edx], al
-    dec edx
-    shr ebx, 4
-    cmp edx, esi
-    jne short .write_pid_digit
-    mov eax, edi
-    sar eax, 4
-    and eax, 0xf
-    mov byte [ecx + 5], 0x5f
-    call hex_digit
-    mov byte [ecx + 6], al
-    mov eax, edi
-    and eax, 0xf
-    call hex_digit
-    mov byte [ecx + 8], 0x2e
-    mov byte [ecx + 9], 0x74
-    mov byte [ecx + 0xa], 0x6d
-    mov byte [ecx + 0xb], 0x70
-    mov byte [ecx + 0xc], 0
-    mov byte [ecx + 7], al
-    pop edi
-    pop esi
-    pop ecx
-    pop ebx
-    ret
-
-__doclose_:
-    push ebx
-    push ecx
-    push esi
-    push edi
-    sub esp, 0x10
-    mov ecx, eax
-    mov edi, edx
-    cmp dword [eax + 0xc], 0
-    jne short .close_active_stream
-    mov esi, 0xffffffff
-    jmp short .return_close_status
-
-.close_active_stream:
-    mov ah, byte [eax + 0xd]
-    xor esi, esi
-    test ah, 0x10
-    je short .query_file_position
-    mov eax, ecx
-    call flush_stream
-    mov esi, eax
-
-.query_file_position:
-    mov eax, ecx
-    call ftell
-    mov edx, eax
-    cmp eax, -1
-    je short .check_descriptor_close
-    mov eax, dword [ecx + 0x10]
-    xor ebx, ebx
-    call lseek
-
-.check_descriptor_close:
-    test edi, edi
-    je short .check_buffer_ownership
-    mov eax, dword [ecx + 0x10]
-    call close_descriptor
-    or esi, eax
-
-.check_buffer_ownership:
-    test byte [ecx + 0xc], 8
-    je short .check_temporary_file
-    mov eax, dword [ecx + 8]
-    call free_buffer
-    mov dword [ecx + 8], 0
-
-.check_temporary_file:
-    test byte [ecx + 0xd], 8
-    je short .return_close_status
-    xor edx, edx
-    mov eax, esp
-    mov dl, byte [ecx + 0x19]
-    call __MkTmpFile_
-    mov eax, esp
-    call remove_file
-
-.return_close_status:
-    mov eax, esi
-    add esp, 0x10
-    pop edi
-    pop esi
-    pop ecx
-    pop ebx
-    ret
+    times 137 db 0    ; __doclose is supplied by C.

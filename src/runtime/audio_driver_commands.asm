@@ -415,5 +415,5 @@ get_audio_code_selector:
     mov ax, cs
     ret
 
-audio_helper_region_end:
-    ret
+audio_helper_region_end_c_slot:
+    db 0 ; Byte supplied by timer_vector_noop.c.

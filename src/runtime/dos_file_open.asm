@@ -263,36 +263,4 @@ __set_binary_:
     pop ebx
     ret
 
-lseek_:
-    push ecx
-    push edi
-    sub esp, 4
-    mov ecx, eax
-    mov eax, ebx
-    mov edi, esp
-    mov ebx, ecx
-    mov ah, 0x42
-    mov ecx, edx
-    shr ecx, 0x10
-    int 0x21
-    db 0x66, 0x36 ; Operand-size override precedes SS.
-    mov [edi], eax
-    db 0x66, 0x36 ; Operand-size override precedes SS.
-    mov [edi + 2], edx
-    rcl eax, 1
-    ror eax, 1
-    test eax, eax
-    jge short .read_position
-    and eax, 0xffff
-    call set_dos_errno
-    mov eax, 0xffffffff
-    jmp short .restore_registers
-
-.read_position:
-    mov eax, dword [esp]
-
-.restore_registers:
-    add esp, 4
-    pop edi
-    pop ecx
-    ret
+    times 65 db 0    ; lseek is supplied by C.

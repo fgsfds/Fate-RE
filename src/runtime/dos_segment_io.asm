@@ -3,7 +3,6 @@ BITS 32
 ORG 0x6e666
 
 dos_status equ 0x6e78e
-write_console_and_exit equ 0x60199
 
 read_driver_image:
     push strict dword 0x3f00
@@ -31,6 +30,3 @@ translate_status:
 write_segment_buffer:
     push strict dword 0x4000
     jmp short transfer
-
-console_exit_thunk:
-    jmp near write_console_and_exit

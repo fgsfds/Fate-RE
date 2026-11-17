@@ -346,5 +346,5 @@ chain_original_timer:
 .return_without_chaining:
     ret
 
-timer_vector_noop:
-    ret
+timer_vector_noop_c_slot:
+    db 0 ; Byte supplied by timer_vector_noop.c.

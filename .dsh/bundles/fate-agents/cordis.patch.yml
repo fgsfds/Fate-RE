@@ -1,0 +1,655 @@
+[
+  {
+    "insert": [
+      {
+        "id": "preset-fate-restoration",
+        "name": "@deepseek-ai/dsh-agent-preset",
+        "config": {
+          "id": "fate-restoration",
+          "name": "Fate restoration",
+          "order": 20,
+          "description": "Fate-RE integrator with five model-routed, tool-scoped restoration roles. Installing does not resume restoration.",
+          "plugins": [
+            {
+              "id": "persona",
+              "name": "@deepseek-ai/dsh-persona",
+              "config": {
+                "prefix": "You are the Fate-RE restoration integrator. Read AGENTS.md and load fate-restoration-coordination before restoration work. Installing or testing configuration does not authorize resuming restoration. Use the dedicated tools fate_scout, fate_probe, fate_verify, fate_research, and fate_review for the corresponding project roles. A tool name uses underscores; child preset IDs use hyphens. These tools select independent child presets and fixed source-defined model routes; never substitute a generic subagent with only a role name. Luna routes may be unavailable in the current profile; report a route failure and ask for an authorized route change rather than silently using Sol. Assign explicit disjoint ownership, isolated worktrees or scratch-only probes, unique scratch directories, budgets and evidence requirements. Only maintain five useful workers while restoration is explicitly active and safe. Keep shared builds, registries, inventories, documentation integration and commits centralized. On pause, stop assigning work, tell every active child to stop, and collect their handoffs. No game smoke. Read docs/RESTORATION-AGENTS.md and .dsh/bundles/fate-agents/README.md for usage."
+              }
+            },
+            {
+              "id": "agent-instructions",
+              "name": "@deepseek-ai/dsh-agent-instructions",
+              "config": {
+                "maxBytes": 65536
+              }
+            },
+            {
+              "id": "time-context",
+              "name": "@deepseek-ai/dsh-time-context"
+            },
+            {
+              "id": "skill-filesystem",
+              "name": "@deepseek-ai/dsh-skill-filesystem"
+            },
+            {
+              "id": "tool-skill",
+              "name": "@deepseek-ai/dsh-tool-skill"
+            },
+            {
+              "id": "tool-fs-search",
+              "name": "@deepseek-ai/dsh-tool-fs-search",
+              "config": {
+                "sampleOverCapGlobResults": false
+              }
+            },
+            {
+              "id": "compaction",
+              "name": "cordis:group",
+              "group": true,
+              "isolate": {
+                "compaction": true,
+                "toolResultPruner": true
+              },
+              "config": [
+                {
+                  "id": "compaction-basic",
+                  "name": "@deepseek-ai/dsh-compaction-basic"
+                },
+                {
+                  "id": "command-compact",
+                  "name": "@deepseek-ai/dsh-command-compact"
+                },
+                {
+                  "id": "tool-result-pruner",
+                  "name": "@deepseek-ai/dsh-compaction-tool-result-pruner",
+                  "config": {
+                    "thresholdChars": 8192,
+                    "headChars": 4096,
+                    "tailChars": 1024
+                  }
+                }
+              ]
+            },
+            {
+              "id": "tool-fs",
+              "name": "@deepseek-ai/dsh-tool-fs",
+              "config": {
+                "applyPatch": false
+              }
+            },
+            {
+              "id": "tool-pwsh",
+              "name": "@deepseek-ai/dsh-tool-pwsh"
+            },
+            {
+              "id": "tool-jobs",
+              "name": "@deepseek-ai/dsh-tool-jobs"
+            },
+            {
+              "id": "tool-subagent-control",
+              "name": "@deepseek-ai/dsh-tool-subagent-control",
+              "config": {
+                "interrupt": false
+              }
+            },
+            {
+              "id": "tool-ask-user",
+              "name": "@deepseek-ai/dsh-tool-ask-user"
+            },
+            {
+              "id": "tool-todo",
+              "name": "@deepseek-ai/dsh-tool-todo",
+              "config": {
+                "allowParallelInProgress": true
+              }
+            },
+            {
+              "id": "command-goal",
+              "name": "@deepseek-ai/dsh-command-goal"
+            },
+            {
+              "id": "tool-goal",
+              "name": "@deepseek-ai/dsh-tool-goal"
+            },
+            {
+              "id": "tool-web",
+              "name": "@deepseek-ai/dsh-tool-web",
+              "config": {
+                "fetch": true,
+                "searchTimeoutMs": 60000
+              }
+            },
+            {
+              "id": "delegate-fate-scout",
+              "name": "@deepseek-ai/dsh-tool-subagent",
+              "config": {
+                "provider": "spawn",
+                "toolName": "fate_scout",
+                "agentPreset": "fate-scout",
+                "maxDepth": 1,
+                "modelSelection": false,
+                "modelDiscovery": false,
+                "agentOptions": {
+                  "provider": "openai",
+                  "model": "gpt-6-luna",
+                  "reasoningEffort": "high"
+                }
+              }
+            },
+            {
+              "id": "delegate-fate-probe",
+              "name": "@deepseek-ai/dsh-tool-subagent",
+              "config": {
+                "provider": "spawn",
+                "toolName": "fate_probe",
+                "agentPreset": "fate-probe",
+                "maxDepth": 1,
+                "modelSelection": false,
+                "modelDiscovery": false,
+                "agentOptions": {
+                  "provider": "openai",
+                  "model": "gpt-6.1-sol",
+                  "reasoningEffort": "high"
+                }
+              }
+            },
+            {
+              "id": "delegate-fate-verify",
+              "name": "@deepseek-ai/dsh-tool-subagent",
+              "config": {
+                "provider": "spawn",
+                "toolName": "fate_verify",
+                "agentPreset": "fate-verify",
+                "maxDepth": 1,
+                "modelSelection": false,
+                "modelDiscovery": false,
+                "agentOptions": {
+                  "provider": "openai",
+                  "model": "gpt-6-luna",
+                  "reasoningEffort": "high"
+                }
+              }
+            },
+            {
+              "id": "delegate-fate-research",
+              "name": "@deepseek-ai/dsh-tool-subagent",
+              "config": {
+                "provider": "spawn",
+                "toolName": "fate_research",
+                "agentPreset": "fate-research",
+                "maxDepth": 1,
+                "modelSelection": false,
+                "modelDiscovery": false,
+                "agentOptions": {
+                  "provider": "openai",
+                  "model": "gpt-6.1-sol",
+                  "reasoningEffort": "high"
+                }
+              }
+            },
+            {
+              "id": "delegate-fate-review",
+              "name": "@deepseek-ai/dsh-tool-subagent",
+              "config": {
+                "provider": "spawn",
+                "toolName": "fate_review",
+                "agentPreset": "fate-review",
+                "maxDepth": 1,
+                "modelSelection": false,
+                "modelDiscovery": false,
+                "agentOptions": {
+                  "provider": "openai",
+                  "model": "gpt-6.1-sol",
+                  "reasoningEffort": "high"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "preset-fate-scout",
+        "name": "@deepseek-ai/dsh-agent-preset",
+        "config": {
+          "id": "fate-scout",
+          "name": "Fate scout",
+          "description": "Cheap read-only triage of remaining assembly, historical sources, and previous failed probes",
+          "order": 21,
+          "plugins": [
+            {
+              "id": "persona",
+              "name": "@deepseek-ai/dsh-persona",
+              "config": {
+                "prefix": "You are the Fate-RE restoration scout. Do not implement conversions or start work\nunless the parent assigns a task. Restoration may be paused.\n\nRead AGENTS.md and load fate-restoration-coordination. Use only the supplied\nroutine context and bounded searches in source, inventories, the attempts\ndocument, and the pinned historical-reference documentation. If context is\nmissing, locate the metadata with read/grep; ask the parent to run restore.py\ncontext rather than requesting shell access.\n\nRank a small number of candidates by likely removable instruction bytes,\nC-shaped control flow, evidence quality, previous blockers, and ownership\nconflicts. Existing mixed C/inline objects are valid targets. Distinguish source\nsimilarity from proven compiler equivalence. Do not repeat failed hypotheses.\n\nReturn a compact task card: symbols/object, file and line references, flags,\nexpected spans, existing fixtures, relevant previous result, and one justified\nnext hypothesis. Label unknowns explicitly. Do not claim byte equality or\npercentages from source inspection. Escalate instruction-selection, ABI,\nrelocation, or undefined-behavior questions to fate-research.\n\nDSH adapter: repository paths are relative to the assigned working directory. Load the named skills with the skill tool. This preset intentionally has no child-delegation tools. Configuration or verification of these presets does not authorize restoration. If a required tool is unavailable, report the blocker to the parent; do not bypass the role restrictions."
+              }
+            },
+            {
+              "id": "agent-instructions",
+              "name": "@deepseek-ai/dsh-agent-instructions",
+              "config": {
+                "maxBytes": 65536
+              }
+            },
+            {
+              "id": "time-context",
+              "name": "@deepseek-ai/dsh-time-context"
+            },
+            {
+              "id": "skill-filesystem",
+              "name": "@deepseek-ai/dsh-skill-filesystem"
+            },
+            {
+              "id": "tool-skill",
+              "name": "@deepseek-ai/dsh-tool-skill"
+            },
+            {
+              "id": "tool-fs-search",
+              "name": "@deepseek-ai/dsh-tool-fs-search",
+              "config": {
+                "sampleOverCapGlobResults": false
+              }
+            },
+            {
+              "id": "compaction",
+              "name": "cordis:group",
+              "group": true,
+              "isolate": {
+                "compaction": true,
+                "toolResultPruner": true
+              },
+              "config": [
+                {
+                  "id": "compaction-basic",
+                  "name": "@deepseek-ai/dsh-compaction-basic"
+                },
+                {
+                  "id": "command-compact",
+                  "name": "@deepseek-ai/dsh-command-compact"
+                },
+                {
+                  "id": "tool-result-pruner",
+                  "name": "@deepseek-ai/dsh-compaction-tool-result-pruner",
+                  "config": {
+                    "thresholdChars": 8192,
+                    "headChars": 4096,
+                    "tailChars": 1024
+                  }
+                }
+              ]
+            },
+            {
+              "id": "tool-fs",
+              "name": "@deepseek-ai/dsh-tool-fs",
+              "config": {
+                "write": false,
+                "edit": false,
+                "applyPatch": false
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "preset-fate-probe",
+        "name": "@deepseek-ai/dsh-agent-preset",
+        "config": {
+          "id": "fate-probe",
+          "name": "Fate probe",
+          "description": "Mid-tier execution of bounded, already specified Watcom compiler experiments in isolated scratch space",
+          "order": 22,
+          "plugins": [
+            {
+              "id": "persona",
+              "name": "@deepseek-ai/dsh-persona",
+              "config": {
+                "prefix": "You execute specified Fate-RE compiler probes; you are not the shared-build\nintegrator. Read AGENTS.md and load fate-exact-restoration,\nfate-compiler-research, and fate-restoration-coordination.\n\nRequire an assigned source/object, isolated worktree or scratch-only compiler\nsetup, unique work directory, verified reference, flags, hypothesis, and stop\ncondition. A different work directory alone does not isolate tracked sources.\nIf isolation or the intended experiment is unclear, return that blocker.\n\nImplement only the assigned bounded variant or small matrix. Prefer defined C\nand empty ABI constraints, never new handwritten inline instructions. Preserve\noriginal production assembly until exact span and LE checks succeed. Use pinned,\nwindowless compilation; never run game smoke, install arbitrary dependencies,\nchange compiler flags to disguise a mismatch, or weaken a verifier.\n\nAfter at most three distinct failed variants, return evidence for fate-research\ninstead of inventing more equivalent spellings. Escalate surprising register\nliveness, partial-register semantics, shared-frame control flow, compiler bugs,\nor uncertainty about C validity immediately.\n\nDo not edit shared docs, registries, inventories, or another worker's files;\ndo not run the shared production build, commit, push, or delegate. Save the\nexact candidate, command/flags, source hash, output log, first meaningful\nmismatch, and targeted report in your assigned scratch directory. Report\nwhether tracked sources are stable and whether reports describe the current\ncandidate. Stop promptly when the parent requests a pause.\n\nDSH adapter: repository paths are relative to the assigned working directory. Load the named skills with the skill tool. This preset intentionally has no child-delegation tools. Configuration or verification of these presets does not authorize restoration. If a required tool is unavailable, report the blocker to the parent; do not bypass the role restrictions."
+              }
+            },
+            {
+              "id": "agent-instructions",
+              "name": "@deepseek-ai/dsh-agent-instructions",
+              "config": {
+                "maxBytes": 65536
+              }
+            },
+            {
+              "id": "time-context",
+              "name": "@deepseek-ai/dsh-time-context"
+            },
+            {
+              "id": "skill-filesystem",
+              "name": "@deepseek-ai/dsh-skill-filesystem"
+            },
+            {
+              "id": "tool-skill",
+              "name": "@deepseek-ai/dsh-tool-skill"
+            },
+            {
+              "id": "tool-fs-search",
+              "name": "@deepseek-ai/dsh-tool-fs-search",
+              "config": {
+                "sampleOverCapGlobResults": false
+              }
+            },
+            {
+              "id": "compaction",
+              "name": "cordis:group",
+              "group": true,
+              "isolate": {
+                "compaction": true,
+                "toolResultPruner": true
+              },
+              "config": [
+                {
+                  "id": "compaction-basic",
+                  "name": "@deepseek-ai/dsh-compaction-basic"
+                },
+                {
+                  "id": "command-compact",
+                  "name": "@deepseek-ai/dsh-command-compact"
+                },
+                {
+                  "id": "tool-result-pruner",
+                  "name": "@deepseek-ai/dsh-compaction-tool-result-pruner",
+                  "config": {
+                    "thresholdChars": 8192,
+                    "headChars": 4096,
+                    "tailChars": 1024
+                  }
+                }
+              ]
+            },
+            {
+              "id": "tool-fs",
+              "name": "@deepseek-ai/dsh-tool-fs",
+              "config": {
+                "write": true,
+                "edit": true,
+                "applyPatch": false
+              }
+            },
+            {
+              "id": "tool-pwsh",
+              "name": "@deepseek-ai/dsh-tool-pwsh"
+            },
+            {
+              "id": "tool-jobs",
+              "name": "@deepseek-ai/dsh-tool-jobs"
+            }
+          ]
+        }
+      },
+      {
+        "id": "preset-fate-verify",
+        "name": "@deepseek-ai/dsh-agent-preset",
+        "config": {
+          "id": "fate-verify",
+          "name": "Fate verify",
+          "description": "Cheap mechanical verification of frozen candidates, test logs, image identity, provenance, and marker-attribution arithmetic",
+          "order": 23,
+          "plugins": [
+            {
+              "id": "persona",
+              "name": "@deepseek-ai/dsh-persona",
+              "config": {
+                "prefix": "You verify supplied Fate-RE evidence and run explicitly assigned checks. Read\nAGENTS.md and load fate-exact-restoration and fate-restoration-coordination.\nDo not infer authorization to resume paused restoration.\n\nRequire a frozen candidate/source snapshot, explicit build-directory ownership,\nand the requested scope. Do not modify tracked files through any tool,\nincluding shell commands. Shell use is limited to assigned repository\nverification commands and reading their outputs; do not refresh checked-in\ninventories or run commits/pushes. The parent must explicitly hand off an\nexclusive build directory before you write any build artifacts there.\n\nDefault acceptance is a fresh production exact build, not a hash of an old\nexecutable. Check pinning, provenance, source stability, report mode, actual\nstages, artifact hashes, whole-image size/hash, and optional direct reference\ncomparison. Targeted checks must compare both bytes and LE sites/targets.\nRun fixtures or the full regression suite only when assigned; never game smoke.\n\nFor attribution, use checked marker reports tied to the exact current objects\nand inventory, including required retry reports. Sum compiler-generated,\ninline, standalone assembly, and unattributed bytes against the full CODE\ndenominator. Inline is part of assembly, not assembly-free C. Never turn\nunattributed bytes into a claimed improvement.\n\nReturn commands, exit statuses, decisive output, report paths, and scope\nlimitations. A stale/missing report, changed snapshot, or unexpected mismatch\nis a blocker, not permission to fix code or alter expectations. Escalate\nsemantic or diagnostic ambiguity to fate-review or fate-research.\n\nDSH adapter: repository paths are relative to the assigned working directory. Load the named skills with the skill tool. This preset intentionally has no child-delegation tools. Configuration or verification of these presets does not authorize restoration. If a required tool is unavailable, report the blocker to the parent; do not bypass the role restrictions."
+              }
+            },
+            {
+              "id": "agent-instructions",
+              "name": "@deepseek-ai/dsh-agent-instructions",
+              "config": {
+                "maxBytes": 65536
+              }
+            },
+            {
+              "id": "time-context",
+              "name": "@deepseek-ai/dsh-time-context"
+            },
+            {
+              "id": "skill-filesystem",
+              "name": "@deepseek-ai/dsh-skill-filesystem"
+            },
+            {
+              "id": "tool-skill",
+              "name": "@deepseek-ai/dsh-tool-skill"
+            },
+            {
+              "id": "tool-fs-search",
+              "name": "@deepseek-ai/dsh-tool-fs-search",
+              "config": {
+                "sampleOverCapGlobResults": false
+              }
+            },
+            {
+              "id": "compaction",
+              "name": "cordis:group",
+              "group": true,
+              "isolate": {
+                "compaction": true,
+                "toolResultPruner": true
+              },
+              "config": [
+                {
+                  "id": "compaction-basic",
+                  "name": "@deepseek-ai/dsh-compaction-basic"
+                },
+                {
+                  "id": "command-compact",
+                  "name": "@deepseek-ai/dsh-command-compact"
+                },
+                {
+                  "id": "tool-result-pruner",
+                  "name": "@deepseek-ai/dsh-compaction-tool-result-pruner",
+                  "config": {
+                    "thresholdChars": 8192,
+                    "headChars": 4096,
+                    "tailChars": 1024
+                  }
+                }
+              ]
+            },
+            {
+              "id": "tool-fs",
+              "name": "@deepseek-ai/dsh-tool-fs",
+              "config": {
+                "write": false,
+                "edit": false,
+                "applyPatch": false
+              }
+            },
+            {
+              "id": "tool-pwsh",
+              "name": "@deepseek-ai/dsh-tool-pwsh"
+            },
+            {
+              "id": "tool-jobs",
+              "name": "@deepseek-ai/dsh-tool-jobs"
+            }
+          ]
+        }
+      },
+      {
+        "id": "preset-fate-research",
+        "name": "@deepseek-ai/dsh-agent-preset",
+        "config": {
+          "id": "fate-research",
+          "name": "Fate research",
+          "description": "High-tier research into exact Watcom C code generation, historical algorithms, ABI constraints, and LE relocations",
+          "order": 24,
+          "plugins": [
+            {
+              "id": "persona",
+              "name": "@deepseek-ai/dsh-persona",
+              "config": {
+                "prefix": "You solve difficult exact-C restoration problems for Fate-RE. Read AGENTS.md\nand load fate-exact-restoration, fate-compiler-research, and\nfate-restoration-coordination before experimenting.\n\nRequire explicit disjoint ownership and an isolated worktree or scratch-only\ncompiler setup. Read routine-specific failed attempts before proposing a new\nhypothesis. Use the five documented historical repositories and existing\nWatcom idiom probes as evidence, preserving attribution and licenses.\n\nReconstruct semantics and the original ABI before tuning source shape. Prefer\nordinary defined C over register choreography, and register-only declarations\nover handwritten instructions. Examine partial-register lifetimes, arithmetic\nwidth, signedness, scheduling, caller cleanup, shared frames/returns, switch\ntables, and LE sites/targets. Never replace exact multiword arithmetic with a\nnon-equivalent narrow expression, rely on an unbounded shift, or introduce\nundefined behavior just to recover bytes.\n\nWork from a bounded novel hypothesis, explain the predicted first difference,\nand compile it with pinned flags. Preserve candidates and failures, do not\nbrute-force old matrices, and do not claim partial matches as accepted coverage.\nStop when the assigned time/experiment budget is exhausted or a pause arrives.\n\nOwn only the assigned source and scratch area. The parent owns shared builds,\ninventories, fixture registration, documentation integration, signing, and push.\nYou may propose focused oracle/mutation cases but do not change shared files\nwithout a new assignment. No smoke, commits, pushes, or child delegation.\nReturn a stable exact patch or restore only your unsuccessful changes, plus\nreproducible evidence and unresolved next hypotheses.\n\nDSH adapter: repository paths are relative to the assigned working directory. Load the named skills with the skill tool. This preset intentionally has no child-delegation tools. Configuration or verification of these presets does not authorize restoration. If a required tool is unavailable, report the blocker to the parent; do not bypass the role restrictions."
+              }
+            },
+            {
+              "id": "agent-instructions",
+              "name": "@deepseek-ai/dsh-agent-instructions",
+              "config": {
+                "maxBytes": 65536
+              }
+            },
+            {
+              "id": "time-context",
+              "name": "@deepseek-ai/dsh-time-context"
+            },
+            {
+              "id": "skill-filesystem",
+              "name": "@deepseek-ai/dsh-skill-filesystem"
+            },
+            {
+              "id": "tool-skill",
+              "name": "@deepseek-ai/dsh-tool-skill"
+            },
+            {
+              "id": "tool-fs-search",
+              "name": "@deepseek-ai/dsh-tool-fs-search",
+              "config": {
+                "sampleOverCapGlobResults": false
+              }
+            },
+            {
+              "id": "compaction",
+              "name": "cordis:group",
+              "group": true,
+              "isolate": {
+                "compaction": true,
+                "toolResultPruner": true
+              },
+              "config": [
+                {
+                  "id": "compaction-basic",
+                  "name": "@deepseek-ai/dsh-compaction-basic"
+                },
+                {
+                  "id": "command-compact",
+                  "name": "@deepseek-ai/dsh-command-compact"
+                },
+                {
+                  "id": "tool-result-pruner",
+                  "name": "@deepseek-ai/dsh-compaction-tool-result-pruner",
+                  "config": {
+                    "thresholdChars": 8192,
+                    "headChars": 4096,
+                    "tailChars": 1024
+                  }
+                }
+              ]
+            },
+            {
+              "id": "tool-fs",
+              "name": "@deepseek-ai/dsh-tool-fs",
+              "config": {
+                "write": true,
+                "edit": true,
+                "applyPatch": false
+              }
+            },
+            {
+              "id": "tool-pwsh",
+              "name": "@deepseek-ai/dsh-tool-pwsh"
+            },
+            {
+              "id": "tool-jobs",
+              "name": "@deepseek-ai/dsh-tool-jobs"
+            },
+            {
+              "id": "tool-web",
+              "name": "@deepseek-ai/dsh-tool-web",
+              "config": {
+                "fetch": true,
+                "searchTimeoutMs": 60000
+              }
+            }
+          ]
+        }
+      },
+      {
+        "id": "preset-fate-review",
+        "name": "@deepseek-ai/dsh-agent-preset",
+        "config": {
+          "id": "fate-review",
+          "name": "Fate review",
+          "description": "High-tier independent read-only review of C validity, exactness evidence, shared-frame ABI, and restoration claims",
+          "order": 25,
+          "plugins": [
+            {
+              "id": "persona",
+              "name": "@deepseek-ai/dsh-persona",
+              "config": {
+                "prefix": "You independently review Fate-RE restoration candidates; do not implement them.\nRead AGENTS.md and load fate-exact-restoration, fate-compiler-research, and\nfate-restoration-coordination. Ask for a saved diff/report or inspect the named\nfiles rather than requesting shell access.\n\nPrioritize undefined C behavior, shifts and overflow, pointer/object bounds,\npartial-register poison, signed conversions, stale register getters, empty\nauxiliary side effects, stack accounting, nonreturning continuations, shared\nframes/epilogues, preserved registers, and relocation ownership.\n\nRequire full assigned-span equality, LE sites and targets, a fresh whole\nproduction image, and reproducible provenance. A machine-code match alone does\nnot justify an invalid C expression or a misleading API declaration. Check\nfixtures for independent oracles, meaningful boundary cases, and mutations when\nthey are provided. Flag missing evidence rather than inventing a passing result.\n\nCheck that marker-attribution claims actually remove handwritten instruction\nbytes and retain unknown categories. Confirm failed candidates are not\nintegrated and resolved failures are removed from the attempts document.\n\nReturn findings by severity with exact paths/lines, evidence gaps, and a clear\naccept/block recommendation. Do not commit, push, delegate, run smoke, change\nfiles, or restart research when a pause has been requested.\n\nDSH adapter: repository paths are relative to the assigned working directory. Load the named skills with the skill tool. This preset intentionally has no child-delegation tools. Configuration or verification of these presets does not authorize restoration. If a required tool is unavailable, report the blocker to the parent; do not bypass the role restrictions."
+              }
+            },
+            {
+              "id": "agent-instructions",
+              "name": "@deepseek-ai/dsh-agent-instructions",
+              "config": {
+                "maxBytes": 65536
+              }
+            },
+            {
+              "id": "time-context",
+              "name": "@deepseek-ai/dsh-time-context"
+            },
+            {
+              "id": "skill-filesystem",
+              "name": "@deepseek-ai/dsh-skill-filesystem"
+            },
+            {
+              "id": "tool-skill",
+              "name": "@deepseek-ai/dsh-tool-skill"
+            },
+            {
+              "id": "tool-fs-search",
+              "name": "@deepseek-ai/dsh-tool-fs-search",
+              "config": {
+                "sampleOverCapGlobResults": false
+              }
+            },
+            {
+              "id": "compaction",
+              "name": "cordis:group",
+              "group": true,
+              "isolate": {
+                "compaction": true,
+                "toolResultPruner": true
+              },
+              "config": [
+                {
+                  "id": "compaction-basic",
+                  "name": "@deepseek-ai/dsh-compaction-basic"
+                },
+                {
+                  "id": "command-compact",
+                  "name": "@deepseek-ai/dsh-command-compact"
+                },
+                {
+                  "id": "tool-result-pruner",
+                  "name": "@deepseek-ai/dsh-compaction-tool-result-pruner",
+                  "config": {
+                    "thresholdChars": 8192,
+                    "headChars": 4096,
+                    "tailChars": 1024
+                  }
+                }
+              ]
+            },
+            {
+              "id": "tool-fs",
+              "name": "@deepseek-ai/dsh-tool-fs",
+              "config": {
+                "write": false,
+                "edit": false,
+                "applyPatch": false
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

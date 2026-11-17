@@ -20,7 +20,7 @@ from check_start_hook import image
 from check_move_listed_sprite import map_evidence
 from le_fixups import read_le_fixups
 from verify_assembly_suite import (
-    START_SEQUENCE_POINTERS, COMBINED_SLOPE_POINTERS, HITSCAN_POINTERS,
+    START_SEQUENCE_POINTERS, HITSCAN_POINTERS,
 )
 from verify_c_leaf import (
     bind_leaf_details, verify_leaf_relocations, DATA_OFFSETS, FUNCTION_ADDRESSES,
@@ -35,7 +35,8 @@ def check(exe, objects, binaries, inventory, archive, rand_object, map_path, art
     map_hash = map_evidence(map_path)['sha256']
     sectors, walls, sprites = map_arrays(map_path.read_bytes())
     initializer, tail = init.verified_code(exe,binaries,inventory,
-                                           (objects/'transcol.obj').read_bytes())
+                                           (objects/'transcol.obj').read_bytes(),
+                                           (objects/'sqrtinit.obj').read_bytes())
     pointers = read_le_fixups(exe)['pointers']
     melee_obj = (objects/'melee.obj').read_bytes()
     raw,data,code,_ = melee.bind(melee_obj)
@@ -78,23 +79,22 @@ def check(exe, objects, binaries, inventory, archive, rand_object, map_path, art
             bodies[0x50f15] = bytes(hitscan)
         else:
             bodies[0x50f15] = original_hitscan
-        bodies[0x5272c] = (binaries/'rinter.bin').read_bytes()
-        slope = bytearray((binaries/'slopepair.bin').read_bytes())
-        for site,target in COMBINED_SLOPE_POINTERS.items():
-            struct.pack_into('<I',slope,site,target)
-        bodies[0x5e07a] = bytes(slope)
         for symbol,filename,address,size in (
             ('inside_','inside',0x4c88f,189),('drawline256_','editor16',0x5446b,1123),
+            ('rintersect_','rinterc',0x5272c,246),
+            ('getzsofslope_','slopepr',0x5e07a,301),
         ):
             obj = (objects/(filename+'.obj')).read_bytes()
             raw,refs = bind_leaf_details(obj,symbol,DATA_OFFSETS,address=address,
                                          functions=FUNCTION_ADDRESSES)
             assert len(raw)==size and raw==exe[address+0x25600:address+0x25600+size]
             verify_leaf_relocations(raw,refs,pointers,address)
-            if symbol=='inside_':
+            if symbol in ('inside_', 'getzsofslope_'):
                 bodies[address] = bind_leaf_details(
                     obj,symbol,{k:v+0x80000 for k,v in DATA_OFFSETS.items()},
                     address=address,functions=FUNCTION_ADDRESSES)[0]
+            elif symbol=='rintersect_':
+                bodies[address] = raw
             else:
                 bodies[0x548c8] = raw[0x45d:]
     machine = Uc(UC_ARCH_X86,UC_MODE_32)

@@ -1,0 +1,467 @@
+# Source below src/ (without .c), DOS object basename, optional complete flags.
+# Default: /4r /s /or /bt=dos. Placement/ABI evidence stays in the verifiers.
+# Research candidates are compiled, not automatically accepted into coverage.
+# Board initializer variants are expanded by restoration_build.load_units().
+engine/krand krand
+engine/spriteinsert insert
+engine/clipinsidebox clbox
+engine/clipinsideboxline clipline
+engine/inside inside
+engine/animateoffs animate
+engine/getmousevalues mouse
+engine/lastwall lastwall
+engine/spritewallfront sprfront
+engine/updatesector updsect
+engine/alignslopes slopes
+engine/allocatepermanenttile alloctil
+cache/agecache agecache
+cache/allocache allocach
+cache/initcache initcach
+cache/messages cachemsg
+cache/messages_const cachecon /4r /s /or /bt=dos /dFATE_DOS_SHORT_NAMES
+cache/klseek klseek
+cache/kfilelength kfilelen
+cache/kclose kclose
+engine/pixels pixels
+cache/uninitgroupfile uninitgr
+cache/kopen4load kopen4
+cache/kread kread
+cache/initgroupfile initgr
+cache/reportandexit report
+engine/editor16 editor16 /4r /s /or /bt=dos /dFATE_DOS_SHORT_NAMES
+engine/clippoly4 clippoly
+cache/cacheprefix cacheprf /4r /s /or /bt=dos /dFATE_DOS_SHORT_NAMES
+cache/cachelayout cachelay /4r /s /or /bt=dos /dFATE_DOS_SHORT_NAMES
+cache/cacheunit cacheunt /4r /s /or /bt=dos /dFATE_DOS_SHORT_NAMES
+fate/remove_listed_sprite remove
+fate/add_listed_sprite add
+fate/move_listed_sprite movelist
+engine/stereo stereo
+network/initcrc initcrc
+network/convalloc32 convallo
+network/uninstallbicomhandlers uninstbc
+engine/raytrace raytrace
+engine/clipadd clipadd
+engine/ceilscan ceilscan
+engine/ceilspr ceilspr
+fate/advance_sequences advance
+fate/append_sprite_event event
+fate/start_sequence startseq
+fate/melee_trigger melee
+fate/activate_crush_sector crushact
+fate/crush_dispatch crdisp
+fate/interpolation interp
+fate/interpolation_draw intdraw
+fate/interpolation_restore intrest
+fate/update_audio updaudio
+fate/audio_volume avol
+fate/audio_attenuation audatten
+fate/audio_pan audiopan
+fate/audio_shutdown audshut
+fate/restore_keyboard_interrupt kbdrest
+fate/install_keyboard_interrupt kbdinst
+fate/audio_flags audflags
+fate/disabled_positioned_sound sndstub
+fate/game_error gamerr
+fate/device_state devices
+fate/cd_detect cddetect
+fate/cd_requests cdcmds
+fate/cd_playback cdplay
+fate/cd_pause togglect
+fate/serial_shutdown serstop
+fate/network_join_request joinnet
+fate/discard_board_sprites disboard
+fate/save_board_sprites savboard
+fate/restore_level_modifications levrest
+fate/save_level_modifications levsave
+fate/network_socket ipxsock
+fate/network_initialize initnet /4r /s /bt=dos
+fate/parse_video_mode vidparse
+fate/prompt_video_settings prvset
+fate/sprite_navigation_data navdata
+fate/cd_track_play cdlaunch
+fate/cd_track_info cdinfo
+fate/cd_initialize cdinit
+fate/real_mode_interrupt rmsim
+fate/dpmi_real_mode_interrupt dpmirm
+fate/dpmi_real_mode_far_call dpmifar
+fate/cd_track_navigation cdskip
+fate/dos_memory dosmem
+fate/float_sprite_spawn floatnew
+fate/sprite_collision_move mvspr
+fate/float_sprite_update floupd
+runtime/library_helpers rtleaf
+runtime/random randcrt
+runtime/crt_argument_noop crtnop
+runtime/timer_vector_noop tvnoop
+runtime/discard_stack_check_argument discstk
+runtime/graphics_planar_steps gfxstep
+runtime/graphics_byte_steps gfxbyte
+runtime/dos_runtime_state dosstate
+runtime/integer_abs intabs
+runtime/uppercase_strings rtstr
+runtime/string_format_helpers strmore
+runtime/formatted_output printfmt
+runtime/float_fallback fltfback
+runtime/sprintf_putc printput
+runtime/dos_interrupt_helpers rtirq
+runtime/dos_exit exitwrap
+runtime/dos_descriptor_mode iomode
+runtime/stdio_helpers stdwrap
+runtime/allocate_stream alstream
+runtime/seek_within_buffer bufseek /4r /s /bt=dos
+runtime/atoi rtatoi /4r /s /os /bt=dos
+runtime/string_length rtstrlen /4r /s /or /os /ms /r /bt=dos
+runtime/strstr strfind /3r /s /bt=dos
+runtime/memory_copy rtmemcpy /4r /s /or /ot /ms /r /bt=dos
+runtime/far_memory_copy rtfmemcp /4r /s /or /ot /ms /r /bt=dos
+runtime/dos_path_helpers dospath
+runtime/dos_search_status dossstat
+runtime/dos_dta_copy dosdta
+runtime/dos_stream_write dwrite
+runtime/software_u32_float u32float
+runtime/software_i32_float i32float
+runtime/software_float_truncate flttrunc
+runtime/dos_errno doserrno
+runtime/float_integer_conversions fltint /4r /s /bt=dos
+runtime/parse_command_line crtparse /3r /s /bt=dos
+fate/apply_mouse_button_binding mouseact /3r /s /bt=dos
+runtime/restore_graphics_cursor restcur
+runtime/find_legacy_palette_index oldpal
+runtime/delimiter_map delimmap
+runtime/tokenize rttok
+runtime/find_character rtstrchr
+runtime/fatal_error rootfatl
+runtime/notify_debugger rtdbg /4r /s /or /os /bt=dos
+runtime/allocate_stream_buffer strmbuf
+runtime/refill_stream_buffer rtfillb
+runtime/stdio_read_character rtfgetc
+runtime/stdio_write_character rtfputc
+runtime/initialize_standard_streams rtinitst
+runtime/flush_stream rtflush
+runtime/close_streams_from_index rtclidx /4r /s /bt=dos
+runtime/seek_stream rtfseek
+runtime/open_stdio_stream rtdoopen
+runtime/copy_path_part pathpart /4r /s /or /ms /r /bt=dos
+runtime/bounded_far_strlen farstrln /4r /s /or /ms /r /bt=dos
+runtime/format_numeric numfmt /3r /s /bt=dos
+runtime/signed_division rtdiv /4r /s /or /ms /r /bt=dos
+runtime/spawn_wrappers rtspawn
+runtime/environment_lookup rtgetenv /4r /s /or /ms /r /bt=dos
+runtime/run_dos_system rtsystem /4r /s /bt=dos
+runtime/spawnlp rtspawnl
+runtime/seek_dos_descriptor rtlseek /4r /s /bt=dos
+runtime/call_float_formatter rtfmtfp
+runtime/probe_executable rtexepr /4r /s /or /os /bt=dos
+runtime/prepare_spawn rtprep /4r /s /or /os /bt=dos
+runtime/build_command_tail rtdostl /4r /s /or /os /bt=dos
+runtime/stack_available rtstack
+runtime/c_runtime_main rtcmain
+runtime/format_sprintf fmtsp
+runtime/parse_format_flags fmtflags /4r /s /or /os /bt=dos
+runtime/parse_format_specifier fmtspc /3r /s /bt=dos
+runtime/format_radix radix /3r /s /bt=dos
+runtime/format_stream streamfm /3r /s /bt=dos
+runtime/format_engine prtf /3r /s /bt=dos
+runtime/format_value fmtconv /3r /s /bt=dos
+runtime/spawn_path pathutil /3r /s /bt=dos
+runtime/spawn_search spsearch /3r /s /bt=dos
+runtime/spawn_environment spenv /3r /s /bt=dos
+runtime/spawn_process spawnve /3r /s /bt=dos
+runtime/spawn_fpu_callbacks spnfpu
+runtime/compare_ascii_case rtstric
+runtime/move_memory rtmemmv
+runtime/fill_memory rtmemst
+runtime/open_file rtopen
+runtime/close_file rtclose
+runtime/close_stream_resources rtdocls
+runtime/make_temporary_filename rttmp
+runtime/parse_stdio_mode openflag
+runtime/near_heap_bookkeeping heapul /4r /s /or /os /bt=dos
+runtime/heap_request_rounding heaprnd /4r /s /or /os /bt=dos
+runtime/select_shell_switch rtshell /4r /s /or /os /bt=dos
+runtime/set_text_video_mode txtvmode
+runtime/graphics_mono_detection monodet /4r /s /or /os /bt=dos
+runtime/graphics_planar_drawing plndraw /4r /s /or /os /bt=dos
+runtime/graphics_vga_address vgapix /4r /s /or /os /bt=dos
+runtime/graphics_planar_320 plan320 /4r /s /or /os /bt=dos
+runtime/graphics_dos_buffer gfxdos /4r /s /or /os /bt=dos
+runtime/upload_bios_palette upal /4r /s /or /os /ms /r /bt=dos
+runtime/port_word_io portio
+runtime/dos_runtime_transfers rtthunk
+runtime/dos_interrupt_vectors rtgetvec /4r /s /or /os /bt=dos
+runtime/errno errno
+runtime/error_addresses erraddr
+fate/mouse_scale mouscale
+runtime/graphics_state gfxstate
+runtime/graphics_device gfxdev
+runtime/viewport_bitmap_size vpbits /4r /s /or /os /bt=dos
+runtime/graphics_available gfxavail /4r /s /or /os /bt=dos
+runtime/bitmap_row_bytes bitrow /4r /s /or /os /bt=dos
+runtime/get_text_window gettxtw /4r /s /or /os /bt=dos
+runtime/output_text_string txtstr /4r /s /or /os /ms /bt=dos
+runtime/graphics_aspect gfxasp /4r /s /or /os /bt=dos
+runtime/graphics_clip_helpers gfxclip /4r /s /or /os /bt=dos
+runtime/get_drawing_action drawact /4r /s /or /os /bt=dos
+runtime/graphics_fill_pattern gfxfill /4r /s /or /os /ms /bt=dos
+runtime/get_video_configuration gfxconf /4r /s /or /os /ms /bt=dos
+runtime/set_video_mode vidmode /4r /s /or /os /bt=dos
+runtime/set_standard_text_rows stdrows /4r /s /or /os /ms /r /bt=dos
+runtime/copy_world_bounds wrldbn /4r /s /or /os /ms /bt=dos
+runtime/replace_graphics_palette palrepl /4r /s /or /os /bt=dos
+runtime/coordinate_transforms coordmap /4r /s /or /os /fpc /bt=dos
+runtime/coordinate_pairs coordpr /4r /s /or /os /fpc /bt=dos
+runtime/unmap_coordinate_pair coordun /4r /s /or /os /ms /fpc /bt=dos
+fate/query_vesa_mode vesaq
+fate/show_intro showintr
+fate/draw_intro_screen drawintr
+fate/draw_animated_intro animint
+fate/draw_view_border viewbdf
+fate/draw_status_text sttext
+runtime/print_runtime_message rtprint
+runtime/float_edge_cases fltedge
+runtime/ascii_lowercase asciilow
+fate/exit_callbacks exitcb
+fate/register_exit_callback exitreg
+fate/player_distance plyrdist
+fate/game_timer gametime
+fate/engine_heap engheap
+fate/crush_view crushvw
+fate/check_crushed_player crushply
+fate/check_crushed_sprites crushspr
+fate/crusher_sound crushsnd
+fate/trigger_tagged_crushers crushtag
+fate/dispatch_hit_event hitdisp
+fate/audio_levels audlevel
+fate/palette_adjust paladj
+fate/palette_fade palfade
+fate/palette_fade_start palstart
+fate/run_palette_fade fadeloop /3r /s /bt=dos
+fate/palette_fade_in_entry fadeinen
+engine/frame_timing frmtime
+fate/palette_fade_tables fadetab
+fate/menu_state state
+fate/help_pages helppage
+fate/menu_glyphs menugly
+fate/empty_game_hooks lvlstub
+fate/disabled_menu_hooks menuhook
+fate/sound_stop sndstop
+fate/initialize_sound_slots sndinit
+fate/initialize_game_audio audinit
+fate/pan_sector_registration panreg
+fate/inventory_refresh invref
+fate/command_line_help cmdhelp
+fate/video_text vidtext
+fate/input_snapshot inpsnap
+fate/config_value cfgcopy
+fate/config_open cfgopen
+fate/flatten_sprite flatsp
+fate/config_boolean_write cfgbool
+fate/config_remove cfgrem
+fate/text_selection itemsel
+fate/network_ready netready
+fate/network_shutdown netstop
+fate/vesa_dac dacwidth
+engine/load_palette loadpal
+engine/raster_setup raspatch
+engine/sprite_column_setup sprsetup
+engine/reverse_span_setup revspan
+engine/translucency_mode transmod /4r /s /os /bt=dos
+fate/menu_entries menuinit
+fate/advance_menu_animation menuanim
+fate/update_level_effects crushupd /3r /s /or /bt=dos
+fate/select_vesa_draw_page vesapage
+fate/cache_menu_tiles ctile
+fate/draw_weapon_overlay weapover
+fate/draw_status_banner statusbn
+fate/draw_small_tile_text drawsml
+fate/preload_game_tiles pretiles
+fate/validate_key_binding keyvalid
+fate/run_difficulty_menu diffmenu
+fate/run_help_menu helpmenu /4r /s /bt=dos
+fate/confirm_menu_action cfmact /4r /s /bt=dos
+fate/confirm_reset_key_bindings cfmreset /4r /s /bt=dos
+fate/run_mouse_settings mouseset /4r /s /bt=dos
+fate/run_keyboard_settings keyset /4r /s /bt=dos
+fate/run_settings_menu setmenu /4r /s /bt=dos
+fate/run_audio_menu audmenu /4r /s /bt=dos
+fate/run_control_limits_menu ctlmenu /4r /s /bt=dos
+fate/run_mouse_sensitivity_menu mousesen /4r /s /bt=dos
+fate/run_mouse_button_menu mousebtn
+fate/game_menus gamemenu
+fate/game_config gamecfg
+fate/video_settings_save vidset
+fate/save_preview preview
+fate/read_save_slot_preview readprev
+fate/initialize_game_subsystems gameinit
+fate/initialize_ripple_tables ripinit
+fate/adjust_status_value statadj
+fate/adjust_player_status adjpstat
+fate/initialize_board_sprite_state boardvp
+fate/load_sound_archive sndindex
+fate/config_read cfgread
+fate/config_key cfgkey
+fate/config_section cfgsect
+fate/config_close cfgclose
+fate/append_configuration_section cfgapnd
+fate/load_video_settings vidload
+fate/write_configuration_value cfgvalue
+fate/replace_configuration_value cfgnumb
+fate/append_configuration_integer cfgins
+fate/parse_configuration_integer cfgparse
+fate/text_video textvid
+fate/audio_config audiocfg
+fate/hex_digit hexdigit
+fate/hex_parse hexparse
+fate/crusher_save crushio
+fate/menu_redraw menudraw
+fate/dispatch_presentation dispres
+fate/presentation_group presgrp /4r /s /or /bt=dos /dFATE_DOS_SHORT_NAMES
+fate/animation anim
+fate/advance_animation animstep
+fate/animation_prestep prestep
+fate/animation_defaults animdefs
+fate/mouse_defaults mousedef
+engine/spritechange sprchang
+engine/sprite_position sprpos
+engine/spritelists sprlists
+engine/initspritelists initspr
+engine/loadtables loadtabl
+engine/ksqrt ksqrt
+engine/nsqrt nsqrt
+engine/sectorofwall sectwall
+engine/rebuild_view_angle_table viewang
+engine/setview setview
+engine/cansee vizporta
+engine/pushmove pushmove
+engine/draw_screen_text scrntxt
+engine/draw_ega_text egatext
+engine/rotatesprite rotspr
+engine/initialize_color_lookup palinit
+engine/getclosestcol closestc
+engine/makepalookup palookmk
+engine/set_vga_vertical_timing vgavtime
+engine/loadtile loadtile
+engine/setviewback viewback
+engine/setviewtotile viewtile
+engine/slope_heights slopepr
+engine/setbrightness setbrigh
+engine/rintersect rinterc
+fate/projectile_hit prjhit /3r /s /or /bt=dos
+fate/projectile_update projup /3r /s /or /bt=dos
+fate/actor_movement actmove
+fate/run_key_binding_menu keybind
+runtime/environment_copy envcopy
+fate/sprite_route_dispatch routedsp
+fate/route_sectors routesec
+fate/update_sector_panning sectpan
+fate/proximity_sprites proxupd /4r /s /or /os /bt=dos
+fate/sprite_sequence_state sprseq /3r /s /or /bt=dos
+fate/spawn_counted_player_effect peffspn /3r /s /or /oa /bt=dos
+fate/teleport_terminals telterm /4r /s /bt=dos
+fate/level_script_board_7 board7
+fate/level_script_board_5 board5 /4r /s /or /oa /bt=dos
+fate/save_build_map savemap
+fate/load_build_map loadmap
+fate/level_script_dispatch brdsp
+fate/edit_save_slot_name savename
+fate/run_menu_loop menuloop
+fate/run_save_game_menu savmenu
+fate/run_load_game_menu loadmenu
+engine/slope_height slphgt
+fate/parse_startup_arguments launch
+engine/lintersect linterc
+engine/shutdown_video_engine vidshut
+engine/readpixel16 readpix
+engine/squarerotatetile tilerot
+engine/rotatepoint rotpoint
+engine/initksqrt sqrtinit
+engine/copytilepiece tilecopy
+engine/preparemirror prepmir
+engine/load_art_files loadart
+engine/completemirror cmpmir
+engine/wallmost wallmost
+engine/wallmost_setup wallset
+engine/wallmost_clip wallclip
+engine/owallmost owallmst
+engine/ceilscan_entry ceilentr
+engine/grouscan_geometry grougeom
+engine/grouscan_entry grouentr
+engine/florscan_entry florentr
+engine/florscan_tail flortail
+engine/ceilscan_tail ceiltail
+engine/hline hline
+engine/clearview clrview
+engine/clearallviews clrviews
+engine/prepwall prepwall
+engine/transmaskwallscan transwal
+engine/wallfront walfrnt
+engine/neighbor_height neighz
+engine/keepaway keepaway
+engine/bunchfront bfront
+runtime/audio_output_pcm pcmaudio
+runtime/audio_input_pcm pcminput /4r /s /bt=dos
+runtime/audio_sample_controls audctrl /3r /s /od /bt=dos
+runtime/audio_detector hmindet /3r /s /od /bt=dos
+runtime/audio_backend hmilock /3r /s /od /bt=dos
+runtime/timer_callbacks timercb /3r /s /od /bt=dos
+runtime/audio_driver_init drvinit /3r /s /od /bt=dos
+fate/draw_menu_text menutext
+runtime/audio_detector_scan hmiscan /3r /s /od /bt=dos
+runtime/audio_driver_image hmiimage /3r /s /od /bt=dos
+runtime/audio_driver_buffers hmibuf /3r /s /od /bt=dos
+runtime/audio_dpmi_buffers hmidpmi /3r /s /od /bt=dos
+fate/draw_menu_frame mnuframe
+runtime/audio_workspace hmiwork /3r /s /od /bt=dos
+runtime/audio_driver_control hmictrl /3r /s /od /bt=dos
+runtime/audio_range_markers hmimark
+engine/dragpoint dragpt
+fate/draw_menu_selection_marker mkrdraw
+runtime/dos_interrupt dosint
+runtime/segread segread
+engine/getangle getangle
+fate/presentation_input presinp
+fate/dispatch_timing distime
+fate/dispatcher dispatch
+fate/init_crush_bank crushini
+fate/game_loop gameloop
+fate/is_crush_sector crushchk
+fate/clear_crush_bank crushclr
+fate/init_object_sequences initseq
+fate/select_map selmap
+fate/shutdown shutdown
+fate/frame_prefix frameprf /4r /s /or /bt=dos /dFATE_DOS_SHORT_NAMES
+fate/frame_group framegrp /4r /s /or /bt=dos /dFATE_DOS_SHORT_NAMES
+fate/startup_strings maintext
+fate/main fatemain
+fate/main_cleanup maincln
+fate/startup_group startgrp /4r /s /or /bt=dos /dFATE_DOS_SHORT_NAMES
+fate/nearby_force_constants forcecon
+fate/apply_nearby_force force
+network/installbicomhandlers instbico
+network/getcrc getcrc
+network/comsend comsend
+network/startcom startcom
+network/output_queue_depth outqueue
+network/comhandler comhandl
+network/simulateint simint
+network/defaults netdefs
+network/netinitconnection netinitc
+network/netuninitconnection netuninc
+fate/lookup_type_index type
+engine/transcol transcol
+engine/pallook pallook
+fate/record_lookups reclook
+fate/spawn_template_sprite spawn
+fate/teleport_sprite telepspr
+fate/restore_board_actor_sprites boardact
+fate/sprite_blast blast /3r /s /or /bt=dos
+fate/update_palette_fade fadeupd /3r /s /or /bt=dos
+fate/run_recorded_session playrec /3r /s /or /bt=dos
+fate/sprite_view sprview
+fate/finalize_board_state boardfin /3r /s /or /bt=dos
+fate/initialize_board_entry boardent
+fate/find_spawn_position spawnpos
+fate/resolve_teleport_destination telepdst /3r /s /or /bt=dos
+fate/sectors_share_portal sectport /4r /s /bt=dos
+fate/lookup_record_value lookup

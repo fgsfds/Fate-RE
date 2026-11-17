@@ -2,27 +2,8 @@
 BITS 32
 ORG 0x60322
 
-atexit_hook equ 0x141ac
-int23_exit_hook equ 0x141b0
-fpe_exit_hook equ 0x141b4
-extender_type equ 0x1449a
-runtime_init equ 0x6439c
-runtime_fini equ 0x64521
-startup_exit_jump equ 0x60197
-
-runtime_init_thunk:
-    jmp near runtime_init
-
-runtime_fini_thunk:
-    jmp near runtime_fini
-
-abs_:
-    test eax, eax
-    jge short .return_magnitude
-    neg eax
-
-.return_magnitude:
-    ret
+    times 10 db 0   ; The runtime init and fini thunks are placed here from C.
+    times 7 db 0    ; abs is placed here from C.
 
 strcpy_:
     push ecx
@@ -45,118 +26,19 @@ strcpy_:
     pop ecx
     ret
 
-__null_int23_exit_:
-    ; Default no-op target for the three exit hooks.
-    ret
+    db 0             ; The default exit hook is placed here from C.
 
-exit_:
-    push edx
-    mov edx, eax
-    call dword [atexit_hook]
-    call dword [int23_exit_hook]
-    mov eax, edx
-    call _exit_
-    pop edx
-    ret
+    times 46 db 0    ; exit and _exit are placed here from C.
 
-_exit_:
-    push edx
-    mov edx, eax
-    call dword [int23_exit_hook]
-    call dword [fpe_exit_hook]
-    mov eax, edx
-    jmp near startup_exit_jump
+    times 25 db 0    ; strlen is supplied by C.
 
-strlen_:
-    push ecx
-    push edi
-    mov edi, eax
-    push es
-    mov eax, ds
-    mov es, eax
-    sub ecx, ecx
-    dec ecx
-    xor eax, eax
-    repne scasb
-    not ecx
-    dec ecx
-    pop es
-    mov eax, ecx
-    pop edi
-    pop ecx
-    ret
+    times 14 db 0    ; outp is supplied by C.
 
-outp_:
-    push ebx
-    push ecx
-    mov ebx, eax
-    mov ecx, edx
-    mov edx, eax
-    mov al, cl
-    out dx, al
-    pop ecx
-    pop ebx
-    ret
+    times 52 db 0    ; _dos_getvect is supplied by C.
 
-_dos_getvect_:
-    push ebx
-    push ecx
-    mov ebx, eax
-    mov ah, byte [extender_type]
-    cmp ah, 2
-    jb short .get_vector_dos
-    cmp ah, 8
-    ja short .get_vector_dos
-    mov eax, 0x2502
-    mov cl, bl
-    jmp short .interrupt_get_vector
+    times 2 db 0    ; _disable is placed here from C.
 
-.get_vector_dos:
-    mov eax, ebx
-    and eax, 0xff
-    xor cl, cl
-    or ah, 0x35
-
-.interrupt_get_vector:
-    push es
-    int 0x21
-    mov edx, es
-    pop es
-    mov eax, ebx
-    pop ecx
-    pop ebx
-    ret
-
-_disable_:
-    cli
-    ret
-
-_dos_setvect_:
-    push edx
-    mov edx, ebx
-    mov bl, byte [extender_type]
-    cmp bl, 2
-    jb short .set_vector_dos
-    cmp bl, 8
-    ja short .set_vector_dos
-    push ds
-    mov ds, ecx
-    mov cl, al
-    mov al, 4
-    mov ah, 0x25
-    int 0x21
-    pop ds
-    pop edx
-    ret
-
-.set_vector_dos:
-    push ds
-    mov ds, ecx
-    mov ah, 0x25
-    int 0x21
-    pop ds
-    pop edx
-    ret
+    times 43 db 0    ; _dos_setvect is supplied by C.
 
 _enable_:
     sti
