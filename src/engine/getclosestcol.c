@@ -5,6 +5,22 @@ extern unsigned char palette_bucket_head[], palette[], lookup_palette_end[];
 extern long red_color_distance[], green_color_distance[], blue_color_distance[];
 extern long palette_bucket_next[], palette_neighbor_offsets[];
 
+/* Empty bindings retain the original Watcom register assignments. */
+extern long eax_value(void);
+#pragma aux eax_value = value [eax] modify exact [];
+extern void in_eax(long);
+#pragma aux in_eax = parm [eax] modify exact [];
+extern long ebx_value(void);
+#pragma aux ebx_value = value [ebx] modify exact [];
+extern void in_ebx(long);
+#pragma aux in_ebx = parm [ebx] modify exact [];
+extern long edx_value(void);
+#pragma aux edx_value = value [edx] modify exact [];
+extern void in_edx(long);
+#pragma aux in_edx = parm [edx] modify exact [];
+extern void in_bl(unsigned char);
+#pragma aux in_bl = parm [bl] modify exact [];
+
 extern long finish_color_search(void);
 #pragma aux finish_color_search aborts modify exact [eax];
 /* Preserve the search frame for the shared return. */
@@ -13,9 +29,8 @@ extern void begin_color_search(long red, long green, long blue);
     "push eax" "mov edi,edx" "mov [esp+10h],ebx" "mov edx,eax" "mov eax,edi" \
     parm [eax] [edx] [ebx] modify exact [eax edx edi];
 /* A change of one bucket contributes 64 for R, 8 for G, or 1 for B. */
-extern void compute_query_bucket(void);
-#pragma aux compute_query_bucket = "sar edx,3" "sar eax,3" "shl edx,6" "shl eax,3" "add edx,eax" \
-    "mov eax,ebx" "sar eax,3" "add eax,edx" "add eax,49h" "mov [esp+4],eax" modify exact [eax edx];
+extern void save_query_bucket(void);
+#pragma aux save_query_bucket = "mov [esp+4],eax" modify exact [];
 extern void compute_red_green_bounds(void);
 #pragma aux compute_red_green_bounds = "mov eax,[esp]" "and eax,7" "xor edx,edx" \
     "mov dl,[eax+color_neighbor_order]" "mov eax,edi" "and eax,7" "shl edx,2" \
@@ -46,8 +61,6 @@ extern long search_bucket_bitset(void);
 #pragma aux search_bucket_bitset = value [edx] modify exact [];
 extern long target_search_bucket_bit(void);
 #pragma aux target_search_bucket_bit = value [eax] modify exact [];
-extern void begin_palette_link_search(void);
-#pragma aux begin_palette_link_search = "mov bl,[ebx+palette_bucket_head]" "and ebx,0ffh" modify exact [ebx];
 extern long begin_linked_color(void);
 #pragma aux begin_linked_color = "mov eax,ebx" "shl eax,2" "mov edx,offset palette" "sub eax,ebx" \
     "add edx,eax" "xor eax,eax" "mov al,[edx+1]" "add eax,edi" "mov eax,[eax*4+green_color_distance]" \
@@ -62,8 +75,6 @@ extern long search_best_distance(void);
 #pragma aux search_best_distance = value [ecx] modify exact [];
 extern void remember_color_candidate(void);
 #pragma aux remember_color_candidate = "mov ecx,eax" "mov [esp+0ch],ebx" modify exact [ecx];
-extern long next_palette_link(void);
-#pragma aux next_palette_link = "mov ebx,[ebx*4+palette_bucket_next]" value [ebx] modify exact [ebx];
 extern void previous_search_bucket(void);
 #pragma aux previous_search_bucket = "dec dword ptr [esp+8]" modify exact [];
 extern long search_bucket_neighbor(void);
@@ -80,8 +91,6 @@ extern long begin_linear_color(void);
 extern long add_linear_blue_distance(void);
 #pragma aux add_linear_blue_distance = "mov ebp,[esp+10h]" "movzx esi,byte ptr [edx+2]" "add esi,ebp" \
     "add eax,[esi*4+blue_color_distance]" value [eax] modify exact [eax esi];
-extern void next_linear_color(void);
-#pragma aux next_linear_color = "dec ebx" "sub edx,3" modify exact [ebx edx];
 extern long search_color_index(void);
 #pragma aux search_color_index = value [ebx] modify exact [];
 extern void load_final_color(void);
@@ -93,7 +102,16 @@ long getclosestcol(long red, long green, long blue)
     long distance;
 
     begin_color_search(red, green, blue);
-    compute_query_bucket();
+    in_edx(edx_value() >> 3);
+    in_eax(eax_value() >> 3);
+    in_edx((unsigned long)edx_value() << 6);
+    in_eax((unsigned long)eax_value() << 3);
+    in_edx((unsigned long)edx_value() + (unsigned long)eax_value());
+    in_eax(ebx_value());
+    in_eax(eax_value() >> 3);
+    in_eax((unsigned long)eax_value() + (unsigned long)edx_value());
+    in_eax((unsigned long)eax_value() + 0x49UL);
+    save_query_bucket();
     /* Start with the minimum distance to leave the neighboring buckets. */
     compute_red_green_bounds();
     if (red_boundary_distance() < green_boundary_distance())
@@ -109,14 +127,16 @@ long getclosestcol(long red, long green, long blue)
     do {
         prepare_search_bucket();
         if (search_bucket_bitset() & target_search_bucket_bit()) {
-            begin_palette_link_search();
+            in_bl(palette_bucket_head[ebx_value()]);
+            in_ebx((unsigned long)ebx_value() & 255UL);
             do {
                 /* Stop accumulating as soon as the partial distance cannot win. */
                 if (begin_linked_color() < search_best_distance() &&
                     add_red_distance() < search_best_distance() &&
                     add_linked_blue_distance() < search_best_distance())
                     remember_color_candidate();
-            } while (next_palette_link() >= 0);
+                in_ebx(palette_bucket_next[ebx_value()]);
+            } while (ebx_value() >= 0);
         }
         previous_search_bucket();
 check_bucket:;
@@ -131,7 +151,8 @@ check_bucket:;
             add_red_distance() < search_best_distance() &&
             add_linear_blue_distance() < search_best_distance())
             remember_color_candidate();
-        next_linear_color();
+        in_ebx((unsigned long)ebx_value() - 1UL);
+        in_edx((unsigned long)edx_value() - 3UL);
 check_linear:;
     } while (search_color_index() >= 0);
     load_final_color();

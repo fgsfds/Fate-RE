@@ -24,6 +24,7 @@ check_sector_portal {exe} {build}/sectport.obj | sectport
 check_bunchfront {exe} {build}/bfront.obj | bfront
 check_view_angle_table {exe} {build}/viewang.obj | viewang
 check_prepwall {exe} {build}/prepwall.obj | prepwall
+check_palette_search {exe} {build}/closestc.obj | closestc
 check_preparemirror {exe} {build}/prepmir.obj | prepmir
 check_complete_mirror {exe} {build}/cmpmir.obj | cmpmir
 check_transmaskwallscan {exe} {build}/transwal.obj | transwal
