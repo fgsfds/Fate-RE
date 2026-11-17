@@ -58,13 +58,14 @@ the sort into inline instructions merely to increase the C-object percentage.
 
 ### Network control packet frame and dispatch
 
-With Watcom 10.5 `/4r /s /or /bt=dos`, the whole C draft with corrected
-register-call declarations emits 570 bytes versus 719. The first mismatch
-at `+0x7` reserves eight stack bytes instead of four, then spills EAX and
-holds the packet in EBP instead of EDI. Removing volatile qualifiers emits
-605 bytes with the same frame mismatch. Next bind the incoming length to
-ESI and packet to EDI, then recover the original opcode comparison order.
-Scratch source and objects are in `work/network-control-candidate/`.
+With Watcom 10.5 `/4r /s /or /bt=dos`, the register-bound whole C
+candidate emits 645 bytes versus 719. Incoming length and packet now
+reach ESI and EDI as in the reference, but the frame first differs at
+`+0x7`: twelve local bytes versus four. The opcode also spills to the
+frame and dispatch starts at 0xfd instead of the original 0xfe pivot.
+Next recover the original comparison tree before adding more register
+constraints. Sources and OMF comparisons are under
+`work/network-control-abi-agent/` in the checkout.
 
 ### Counted player effect: ordinary motion-call argument staging
 
