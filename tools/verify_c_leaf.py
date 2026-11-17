@@ -959,6 +959,42 @@ DATA_OFFSETS.update({
 })
 LEAVES['run_recorded_session_'] = (0x53950, 475)
 LEAVES['synchronize_network_players_'] = (0x590f0, 335)
+LEAVES['rotate_network_lead_player_'] = (0x54635, 457)
+DATA_OFFSETS.update({
+    '_rotate_network_enabled': 0x3c98,
+    '_rotate_first_player': 0x19028a,
+    '_rotate_next_player': 0x18fd78,
+    '_rotate_local_player': 0x13ce2,
+    '_rotate_player_input_word': 0x5ac8f,
+    '_rotate_current_a': 0x5ac3c,
+    '_rotate_current_b': 0x5ac3d,
+    '_rotate_current_c': 0x5ac3e,
+    '_rotate_current_word': 0x5ac3f,
+    '_rotate_previous_a': 0x55b6c,
+    '_rotate_previous_b': 0x55b6d,
+    '_rotate_previous_c': 0x55b6e,
+    '_rotate_previous_word': 0x55b6f,
+    '_rotate_local_a': 0x7def9,
+    '_rotate_local_b': 0x7defa,
+    '_rotate_local_c': 0x7defb,
+    '_rotate_local_word': 0x7defc,
+    '_rotate_saved_local_a': 0x7def4,
+    '_rotate_saved_local_b': 0x7def5,
+    '_rotate_saved_local_c': 0x7def6,
+    '_rotate_saved_local_word': 0x7def7,
+    '_rotate_actor_clock': 0x770b8,
+    '_rotate_event_read': 0x3ce4,
+    '_rotate_event_state': 0x3ce0,
+    '_rotate_event_write': 0x3cdc,
+    '_rotate_saved_clock': 0x3cee,
+    '_rotate_last_tick': 0x3cea,
+    '_rotate_lead_text': 0x7aa70,
+    '_rotate_remote_lead_format': 0x5c6,
+    '_rotate_lead_message': 0x7aa70,
+    '_rotate_local_lead_message': 0x5b4,
+    '_rotate_lead_text_length': 0x7f874,
+    '_rotate_text_deadline': 0x7709c,
+})
 DATA_OFFSETS.update({
     '_sync_player_count': 0x13ce0,
     '_sync_local_player': 0x13ce2,

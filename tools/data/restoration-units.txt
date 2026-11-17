@@ -461,6 +461,7 @@ fate/update_palette_fade fadeupd /3r /s /or /bt=dos
 fate/run_recorded_session playrec /3r /s /or /bt=dos
 fate/sprite_view sprview
 fate/synchronize_network_players netrsync
+fate/rotate_network_lead_player netlead
 fate/finalize_board_state boardfin /3r /s /or /bt=dos
 fate/initialize_board_entry boardent
 fate/find_spawn_position spawnpos

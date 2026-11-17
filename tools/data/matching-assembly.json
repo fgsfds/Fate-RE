@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 537,
-  "unique_code_bytes": 251251,
-  "le_pointers": 13645,
+  "routines": 536,
+  "unique_code_bytes": 250794,
+  "le_pointers": 13598,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -2000,18 +2000,6 @@
       "public_entry": "0x309a3",
       "binary_offset": 0,
       "le_pointers": 253
-    },
-    {
-      "symbol": "rotate_network_lead_player",
-      "source": "src/fate/rotate_network_lead_player.asm",
-      "binary": "rotate_network_lead_player.bin",
-      "sha256": "dd67ce0c24d2e3d44b64f9f4b89b6a60212bedb0505b691b9c79c227e9c598e8",
-      "bytes": 457,
-      "raw_offset": "0x54635",
-      "loaded_address": "0x2f035",
-      "public_entry": "0x2f035",
-      "binary_offset": 0,
-      "le_pointers": 47
     },
     {
       "symbol": "keyboard_interrupt",

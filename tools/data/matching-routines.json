@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1122,
-  "unique_code_bytes": 163388,
-  "le_pointers": 8904,
+  "routines": 1123,
+  "unique_code_bytes": 163845,
+  "le_pointers": 8951,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1398,6 +1398,16 @@
       "loaded_address": "0x2efc0",
       "bytes": 117,
       "le_pointers": 8
+    },
+    {
+      "symbol": "rotate_network_lead_player_",
+      "object": "netlead.obj",
+      "object_sha256": "2bfc0fec81f62f903051b0f0f8cfe356d6d7189b7e8abedab12b3b601ca4b8ae",
+      "sha256": "dd67ce0c24d2e3d44b64f9f4b89b6a60212bedb0505b691b9c79c227e9c598e8",
+      "raw_offset": "0x54635",
+      "loaded_address": "0x2f035",
+      "bytes": 457,
+      "le_pointers": 47
     },
     {
       "symbol": "install_keyboard_interrupt_",
