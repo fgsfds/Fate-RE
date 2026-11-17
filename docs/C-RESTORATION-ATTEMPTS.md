@@ -58,14 +58,14 @@ the sort into inline instructions merely to increase the C-object percentage.
 
 ### Network control packet frame and dispatch
 
-With Watcom 10.5 `/4r /s /or /bt=dos`, the register-bound whole C
-candidate emits 645 bytes versus 719. Incoming length and packet now
-reach ESI and EDI as in the reference, but the frame first differs at
-`+0x7`: twelve local bytes versus four. The opcode also spills to the
-frame and dispatch starts at 0xfd instead of the original 0xfe pivot.
-Next recover the original comparison tree before adding more register
-constraints. Sources and OMF comparisons are under
-`work/network-control-abi-agent/` in the checkout.
+With Watcom 10.5 `/4r /s /or /bt=dos`, `ncd1.c` emits 634 bytes versus
+719 and restores the ESI/EDI inputs and 0xfe dispatch pivot. The frame
+still first differs at `+0x7`: eight local bytes versus four. It also
+uses JE where the original uses JBE after the lower-opcode branch.
+Peer-ID decoding is hoisted before the serial/IPX transport test.
+Next keep decoding within each transport arm and preserve its original
+ADD-based byte accumulation. Evidence is under
+`work/network-control-abi-agent/`.
 
 ### Counted player effect: ordinary motion-call argument staging
 

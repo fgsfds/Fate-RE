@@ -57,16 +57,17 @@ extern long active_boundary_distance(void);
 #pragma aux active_boundary_distance = value [edx] modify exact [];
 extern void load_query_blue(void);
 #pragma aux load_query_blue = "mov eax,[esp+10h]" modify exact [eax];
-extern void start_bucket_search(void);
-#pragma aux start_bucket_search = "mov eax,40h" "mov ebp,[esp]" "mov ebx,-1" "sub eax,ebp" \
-    "mov esi,1ah" "mov [esp],eax" "mov eax,40h" "lea ecx,[edx+1]" "sub eax,edi" \
-    "mov edx,[esp+10h]" "mov edi,eax" "mov eax,40h" "mov [esp+0ch],ebx" "sub eax,edx" \
-    "mov [esp+8],esi" "mov [esp+10h],eax" modify exact [eax ebx ecx edx esi edi];
+extern void start_red_frame(void);
+#pragma aux start_red_frame = "mov eax,40h" "mov ebp,[esp]" "mov ebx,-1" modify exact [eax ebx];
+extern void store_red_start_frame(void);
+#pragma aux store_red_start_frame = "mov esi,1ah" "mov [esp],eax" "mov eax,40h" modify exact [eax esi];
+extern void start_blue_frame(void);
+#pragma aux start_blue_frame = "mov edx,[esp+10h]" "mov edi,eax" "mov eax,40h" "mov [esp+0ch],ebx" modify exact [eax edx edi];
+extern void end_start_frame(void);
+#pragma aux end_start_frame = "mov [esp+8],esi" "mov [esp+10h],eax" modify exact [];
 
-extern void prepare_search_bucket(void);
-#pragma aux prepare_search_bucket = "mov edx,[esp+4]" "mov ebx,[ebp*4+palette_neighbor_offsets+4]" \
-    "add ebx,edx" "mov eax,ebx" "sar eax,3" "xor edx,edx" "mov dl,[eax+occupied_palette_buckets]" \
-    "mov eax,ebx" "and eax,7" "mov al,[eax+pow2char]" "and eax,0ffh" modify exact [eax ebx edx];
+extern void load_query_bucket(void);
+#pragma aux load_query_bucket = "mov edx,[esp+4]" modify exact [edx];
 extern long search_bucket_bitset(void);
 #pragma aux search_bucket_bitset = value [edx] modify exact [];
 extern long target_search_bucket_bit(void);
@@ -88,9 +89,6 @@ extern void previous_search_bucket(void);
 extern long search_bucket_neighbor(void);
 #pragma aux search_bucket_neighbor = "mov ebp,[esp+8]" value [ebp] modify exact [];
 
-extern long begin_linear_color(void);
-#pragma aux begin_linear_color = "xor eax,eax" "mov al,[edx+1]" "add eax,edi" \
-    "mov eax,[eax*4+green_color_distance]" value [eax] modify exact [eax];
 extern long add_linear_blue_distance(void);
 #pragma aux add_linear_blue_distance = "mov ebp,[esp+10h]" "movzx esi,byte ptr [edx+2]" "add esi,ebp" \
     "add eax,[esi*4+blue_color_distance]" value [eax] modify exact [eax esi];
@@ -141,11 +139,28 @@ long getclosestcol(long red, long green, long blue)
     distance = esi_value();
     if (active_boundary_distance() >= distance)
         record_boundary_distance(distance);
-    start_bucket_search();
+    start_red_frame();
+    in_eax((unsigned long)eax_value() - (unsigned long)ebp_value());
+    store_red_start_frame();
+    in_ecx((unsigned long)active_boundary_distance() + 1UL);
+    in_eax((unsigned long)eax_value() - (unsigned long)edi_value());
+    start_blue_frame();
+    in_eax((unsigned long)eax_value() - (unsigned long)edx_value());
+    end_start_frame();
 
     goto check_bucket;
     do {
-        prepare_search_bucket();
+        load_query_bucket();
+        in_ebx(palette_neighbor_offsets[ebp_value() + 1]);
+        in_ebx((unsigned long)ebx_value() + (unsigned long)edx_value());
+        in_eax(ebx_value());
+        in_eax(eax_value() >> 3);
+        in_edx(0);
+        in_dl(occupied_palette_buckets[eax_value()]);
+        in_eax(ebx_value());
+        in_eax((unsigned long)eax_value() & 7UL);
+        in_al(pow2char[eax_value()]);
+        in_eax((unsigned long)eax_value() & 255UL);
         if (search_bucket_bitset() & target_search_bucket_bit()) {
             in_bl(palette_bucket_head[ebx_value()]);
             in_ebx((unsigned long)ebx_value() & 255UL);
@@ -193,7 +208,11 @@ check_bucket:;
     in_ebx(255);
     goto check_linear;
     do {
-        if (begin_linear_color() < search_best_distance()) {
+        in_eax(0);
+        in_al(*(const unsigned char *)(edx_value() + 1));
+        in_eax((unsigned long)eax_value() + (unsigned long)edi_value());
+        in_eax(green_color_distance[eax_value()]);
+        if (eax_value() < search_best_distance()) {
             load_red_query_offset();
             in_esi(*(const unsigned char *)edx_value());
             in_esi((unsigned long)esi_value() + (unsigned long)ebp_value());
