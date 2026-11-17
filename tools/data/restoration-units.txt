@@ -122,6 +122,7 @@ runtime/dos_stream_write dwrite
 runtime/software_u32_float u32float
 runtime/software_i32_float i32float
 runtime/software_float_truncate flttrunc
+runtime/software_float_widen fltwiden /4r /s /or /bt=dos
 runtime/dos_errno doserrno
 runtime/float_integer_conversions fltint /4r /s /bt=dos
 runtime/parse_command_line crtparse /3r /s /bt=dos

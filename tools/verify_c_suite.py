@@ -646,6 +646,7 @@ OBJECT_NAMES['truncate_float_'] = 'flttrunc'
 OBJECT_NAMES['truncate_magnitude_'] = 'flttrunc'
 OBJECT_NAMES['truncate_shift_left_'] = 'flttrunc'
 OBJECT_NAMES['truncate_limit_'] = 'flttrunc'
+OBJECT_NAMES['float_to_double_'] = 'fltwiden'
 CLOSE_STREAMS = ('close_nonstandard_streams_', 'close_streams_from_index_')
 OBJECT_NAMES.update(dict.fromkeys(CLOSE_STREAMS, 'rtclidx'))
 OBJECT_NAMES['fseek_'] = 'rtfseek'

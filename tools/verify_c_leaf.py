@@ -1517,6 +1517,7 @@ LEAVES.update({
     'truncate_magnitude_': (0x9950c, 37),
     'truncate_shift_left_': (0x99531, 7),
     'truncate_limit_': (0x99538, 13),
+    'float_to_double_': (0x99584, 86),
     'initialize_standard_streams_': (0x903c6, 120),
     'close_nonstandard_streams_': (0x9044a, 5),
     'close_streams_from_index_': (0x9044f, 82),

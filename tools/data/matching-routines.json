@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1120,
-  "unique_code_bytes": 162967,
+  "routines": 1121,
+  "unique_code_bytes": 163053,
   "le_pointers": 8879,
   "non_routine_code_spans": [
     {
@@ -11137,6 +11137,16 @@
       "raw_offset": "0x99573",
       "loaded_address": "0x73f73",
       "bytes": 17,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "float_to_double_",
+      "object": "fltwiden.obj",
+      "object_sha256": "aae1b329bb3e64fd8c3cce7c4d181af1593cb54d330aa4fbbf7103281a7d9f00",
+      "sha256": "fa77f34324760627f55b3e252b59f86562e73016df61b8fae41f48cf97c4d274",
+      "raw_offset": "0x99584",
+      "loaded_address": "0x73f84",
+      "bytes": 86,
       "le_pointers": 0
     },
     {

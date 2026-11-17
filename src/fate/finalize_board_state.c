@@ -24,10 +24,6 @@ extern void begin_board_finalization(long);
     "sub esp,10h" "mov ebx,eax" parm [eax] modify exact [ebx];
 extern void finish_board_finalization(void);
 #pragma aux finish_board_finalization = "add esp,10h" "pop ebp" "pop edi" "pop esi" "pop edx" "pop ecx" "pop ebx" modify exact [];
-extern unsigned char clear_ah(void);
-#pragma aux clear_ah = "xor ah,ah" value [ah] modify exact [eax];
-extern unsigned char clear_cl(void);
-#pragma aux clear_cl = "xor cl,cl" value [cl] modify exact [ecx];
 extern void mark_initial_sector(void);
 #pragma aux mark_initial_sector = \
     "xor ch,ch" "movsx edx,bx" "mov [final_visibility_dirty],ch" "mov cl,bl" "mov eax,edx" "and cl,7" \
@@ -56,10 +52,6 @@ extern void calculate_wall_mask(void);
 #pragma aux calculate_wall_mask = "mov cl,dl" "mov bl,1" "and cl,7" modify exact [ebx ecx];
 extern unsigned char shift_wall_mask(long);
 #pragma aux shift_wall_mask = "shl bl,cl" parm [eax] value [bl] modify exact [ebx];
-extern void hide_tagged_wall(void);
-#pragma aux hide_tagged_wall = \
-    "mov cl,dl" "mov bl,1" "and cl,7" "mov eax,edx" "shl bl,cl" "sar eax,3" "not bl" \
-    "and [eax+final_walls_visible],bl" modify exact [eax ebx ecx];
 /* Test the saved visibility bits and skip the existing neighbor entry. */
 extern void skip_visible_neighbor(void);
 #pragma aux skip_visible_neighbor = \
@@ -70,9 +62,6 @@ extern void mark_neighbor_visible(void);
 #pragma aux mark_neighbor_visible = \
     "mov cl,bl" "and cl,7" "mov ch,1" "shl ch,cl" "mov cl,ch" \
     "or [eax+final_sectors_visible],cl" modify exact [ecx];
-extern void hide_neighbor(void);
-#pragma aux hide_neighbor = "mov eax,ebx" "mov cl,bl" "mov bl,1" "and cl,7" "shl bl,cl" \
-    "sar eax,3" "not bl" "and [eax+final_sectors_visible],bl" modify exact [eax ebx ecx];
 extern void mark_player_visible(void);
 #pragma aux mark_player_visible = "mov edx,[esp+4]" "mov ch,[eax+final_sprites_visible]" "inc edx" \
     "or ch,bl" "mov [esp+4],edx" "mov [eax+final_sprites_visible],ch" modify exact [ecx edx];
@@ -110,11 +99,25 @@ extern unsigned char bl_value(void);
 
 extern void keep_wall_cursor(long);
 #pragma aux keep_wall_cursor = parm [esi] modify exact [];
+
+/* Keep the visibility masks in the original byte registers. */
+extern unsigned char in_ah(unsigned char);
+#pragma aux in_ah = parm [ah] value [ah] modify exact [];
+extern unsigned char in_cl(unsigned char);
+#pragma aux in_cl = parm [cl] value [cl] modify exact [];
+extern unsigned char in_bl(unsigned char);
+#pragma aux in_bl = parm [bl] value [bl] modify exact [];
+extern unsigned char cl_value(void);
+#pragma aux cl_value = value [cl] modify exact [];
+extern unsigned char dl_value(void);
+#pragma aux dl_value = value [dl] modify exact [];
+
 void finalize_board_state(long);
 #pragma aux finalize_board_state parm [eax] modify exact [eax ebx ecx edx esi edi];
 void finalize_board_state(long sector)
 {
     long row, end_wall;
+    unsigned char bit;
 
     begin_board_finalization(sector);
     if (ax_value() < 0 || ax_value() >= numsectors)
@@ -123,7 +126,7 @@ void finalize_board_state(long sector)
     goto check_clear_sectors;
 clear_sectors:
     in_edx(edx_value() + 1);
-    final_sectors_before[edx_value()] = clear_ah();
+    final_sectors_before[edx_value()] = in_ah(0);
 check_clear_sectors:
     if (edx_value() < 128)
         goto clear_sectors;
@@ -131,7 +134,7 @@ check_clear_sectors:
     goto check_clear_walls;
 clear_walls:
     in_edx(edx_value() + 1);
-    final_walls_before[edx_value()] = clear_cl();
+    final_walls_before[edx_value()] = in_cl(0);
 check_clear_walls:
     if (edx_value() < 1024)
         goto clear_walls;
@@ -139,7 +142,7 @@ check_clear_walls:
     goto check_clear_sprites;
 clear_sprites:
     in_edx(edx_value() + 1);
-    final_sprites_before[edx_value()] = clear_cl();
+    final_sprites_before[edx_value()] = in_cl(0);
 check_clear_sprites:
     if (edx_value() < 512)
         goto clear_sprites;
@@ -190,7 +193,13 @@ visit_wall:
     if (in_eax(*(const short *)((const char *)final_wall_lotag + eax_value())) != 99)
         goto wall_tiles;
 hide_wall:
-    hide_tagged_wall();
+    in_cl(dl_value());
+    in_bl(1);
+    bit = in_cl(cl_value() & 7);
+    in_eax(edx_value());
+    in_bl((unsigned long)bl_value() << bit);
+    in_eax(eax_value() >> 3);
+    final_walls_visible[eax_value()] &= in_bl(~bl_value());
 wall_tiles:
     /* The high overlay bits distinguish a tile from a non-tile value. */
     in_eax(in_eax(edx_value()) * 32);
@@ -227,8 +236,15 @@ wall_neighbor:
 after_neighbor:
     row = read_current_sector_ecx();
     in_eax(in_eax(row) * 4 + row);
-    if (in_eax(final_sector_lotag[eax_value() * 4]) == 99)
-        hide_neighbor();
+    if (in_eax(final_sector_lotag[eax_value() * 4]) == 99) {
+        in_eax(ebx_value());
+        in_cl(bl_value());
+        in_bl(1);
+        bit = in_cl(cl_value() & 7);
+        in_bl((unsigned long)bl_value() << bit);
+        in_eax(eax_value() >> 3);
+        final_sectors_visible[eax_value()] &= in_bl(~bl_value());
+    }
     in_edx(edx_value() + 1);
     in_esi(esi_value() + 32);
 check_walls:

@@ -253,16 +253,6 @@ displacements. Disabling optimization with `/od` produced 61 bytes.
 The 31-byte assembly remains active. A further attempt needs a way to
 preserve both immediate compares while keeping the pair loop in C.
 
-### Software float widening
-
-A C special-case dispatch and subnormal normalization loop with Watcom
-register auxiliaries reached 85 of the reference's 86 bytes with no
-fixups. Watcom added TEST EDX, EDX after clearing the sign bit and chose
-a single conditional branch for zero. It also emitted a separate RET for
-infinity. The original reuses the sign-mask flags and jumps to a shared
-return from both paths. Retain the assembly until those branch and return
-encodings match.
-
 ### Save-slot name editor without two inline updates
 
 An empty Watcom register-binding helper fed from C reproduced the intent
