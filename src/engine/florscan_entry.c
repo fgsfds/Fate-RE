@@ -261,6 +261,10 @@ extern void save_wall_axis_x(void);
 extern void save_wall_axis_y(void);
 #pragma aux save_wall_axis_y = "mov dword ptr [esp + 0xc], ebx" modify exact [];
 
+extern unsigned char from_bl(void);
+#pragma aux from_bl = value [bl] modify exact [];
+extern void in_cl(unsigned char value);
+#pragma aux in_cl = parm [cl] modify exact [];
 extern void in_bl(unsigned char value);
 #pragma aux in_bl = "" parm [bl] modify exact [];
 extern void in_bx_word(unsigned short value);
@@ -271,7 +275,7 @@ extern void skip_scaled_wall_length(void);
 #pragma aux skip_scaled_wall_length = "db 0ebh, 17h" /* marker-rel8 +2,+3 */ modify exact [];
 extern void use_scaled_sqrt_index(void);
 #pragma aux use_scaled_sqrt_index = "db 08dh, 0ch, 05dh, 00h, 00h, 00h, 00h" \
-    "shr eax, cl" "mov cl, bl" modify exact [eax ebx ecx];
+    "shr eax, cl" modify exact [eax ecx];
 extern void shift_scaled_wall_root(void);
 #pragma aux shift_scaled_wall_root = "shl ebx, cl" modify exact [ebx];
 
@@ -307,6 +311,8 @@ void florscan_wall_axes(void)
     in_bx_word(sqrtable[from_ax()]);
     skip_scaled_wall_length();
     use_scaled_sqrt_index();
+    /* Reuse the undoubled exponent to scale the table result. */
+    in_cl(from_bl());
     in_bx(0);
     in_bx_word(sqrtable[from_ax()]);
     shift_scaled_wall_root();
