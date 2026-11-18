@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1133,
-  "unique_code_bytes": 164198,
-  "le_pointers": 8953,
+  "routines": 1140,
+  "unique_code_bytes": 164409,
+  "le_pointers": 8956,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -7328,6 +7328,76 @@
       "loaded_address": "0x65365",
       "bytes": 78,
       "le_pointers": 5
+    },
+    {
+      "symbol": "allocate_dpmi_heap_",
+      "object": "heapall.obj",
+      "object_sha256": "dbfd891ede2a66f62e00f95fd9292850edc87fc44bf4b50949dc38793ec56ca4",
+      "sha256": "3516ab0712f40a89d367c17bba1c1257668a964bcea3f1d3427190128a015fc4",
+      "raw_offset": "0x8a9b3",
+      "loaded_address": "0x653b3",
+      "bytes": 49,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "allocate_dpmi_result_",
+      "object": "heapall.obj",
+      "object_sha256": "dbfd891ede2a66f62e00f95fd9292850edc87fc44bf4b50949dc38793ec56ca4",
+      "sha256": "c9c8aa1654422e26f646d26021fedc34d02053bd290d7d91fd5c811dd3969daa",
+      "raw_offset": "0x8a9e4",
+      "loaded_address": "0x653e4",
+      "bytes": 29,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "allocate_dos_fallback_",
+      "object": "heapall.obj",
+      "object_sha256": "dbfd891ede2a66f62e00f95fd9292850edc87fc44bf4b50949dc38793ec56ca4",
+      "sha256": "b04be0d94c10ede7232fdcc640578faf8e92121bd35c0553bac39b635ef97884",
+      "raw_offset": "0x8aa01",
+      "loaded_address": "0x65401",
+      "bytes": 21,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "allocate_dos_heap_",
+      "object": "heapall.obj",
+      "object_sha256": "dbfd891ede2a66f62e00f95fd9292850edc87fc44bf4b50949dc38793ec56ca4",
+      "sha256": "eb3eb0f4db4a88c246ede73b03f607ab17c90e864c50375156dd18584a554d4f",
+      "raw_offset": "0x8aa16",
+      "loaded_address": "0x65416",
+      "bytes": 101,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "allocate_heap_failure_",
+      "object": "heapall.obj",
+      "object_sha256": "dbfd891ede2a66f62e00f95fd9292850edc87fc44bf4b50949dc38793ec56ca4",
+      "sha256": "8359c8f2ab7af5c7569d43a68ce42c771d8e5c6e1349821ed39c1c0234f3785d",
+      "raw_offset": "0x8aa7b",
+      "loaded_address": "0x6547b",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "discard_heap_request_",
+      "object": "heapall.obj",
+      "object_sha256": "dbfd891ede2a66f62e00f95fd9292850edc87fc44bf4b50949dc38793ec56ca4",
+      "sha256": "268c54fe317c183f03f29b931f4606343f6824184bd185ed1eca129db5729a8d",
+      "raw_offset": "0x8aa7d",
+      "loaded_address": "0x6547d",
+      "bytes": 3,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "heap_release_restore_",
+      "object": "heapall.obj",
+      "object_sha256": "dbfd891ede2a66f62e00f95fd9292850edc87fc44bf4b50949dc38793ec56ca4",
+      "sha256": "2cf27f6ddcd494187645482c8e32915ce469ba9abe28cbdc5cfb5b5cf6862e6b",
+      "raw_offset": "0x8aa80",
+      "loaded_address": "0x65480",
+      "bytes": 6,
+      "le_pointers": 0
     },
     {
       "symbol": "round_heap_request_",
