@@ -182,6 +182,7 @@ runtime/near_heap_bookkeeping heapul /4r /s /or /os /bt=dos
 runtime/near_heap_release heapfree
 runtime/near_heap_resize heaprsz
 runtime/near_heap_allocate heapall
+runtime/near_heap_growth heapgrow
 runtime/heap_request_rounding heaprnd /4r /s /or /os /bt=dos
 runtime/select_shell_switch rtshell /4r /s /or /os /bt=dos
 runtime/set_text_video_mode txtvmode

@@ -15,78 +15,8 @@ extender_subtype equ 0x1449b
 extender_flags equ 0x1449c
 near_heap_head equ 0x141b8
 
-expand_separate_heap:
-    push ebx
-    push ecx
-    push edx
-    push esi
-    push edi
-    push eax
-    cmp dword [runtime_hook], 0
-    jne short .check_limit
-
-.return_zero:
-    xor eax, eax
-    jmp short discard_region_argument
-
-.check_limit:
-    cmp dword [memory_limit], -2
-    je short .return_zero
-    mov eax, esp
-    call round_heap_request
-    test eax, eax
-    je short discard_region_argument
-    cmp byte [extender_type], 1
-    jne short .allocate_dos
-    mov eax, dword [esp]
-    call allocate_dpmi_heap
-    mov ebx, eax
-    mov edx, eax
-    test eax, eax
-    je short .check_block
-    mov eax, dword [eax]
-    mov dword [esp], eax
-    jmp short .check_block
-
-.allocate_dos:
-    mov ebx, dword [esp]
-    mov eax, 0x80004800
-    int 0x21
-    sbb ebx, ebx
-    not ebx
-    and eax, ebx
-    mov ecx, dword [esp]
-    sub ecx, 4
-    mov edx, eax
-    mov dword [esp], ecx
-
-.check_block:
-    test edx, edx
-    je short .return_zero
-    mov eax, dword [esp]
-    mov esi, dword [esp]
-    sub eax, 4
-    cmp eax, esi
-    ja short .return_zero
-    mov dword [esp], eax
-    cmp eax, 0x38
-    jb short .return_zero
-    mov dword [edx], eax
-    mov eax, edx
-    call link_and_initialize_heap
-    mov ebx, eax
-    mov eax, dword [eax]
-    mov dword [esp], eax
-    or al, 1
-    mov dword [ebx], eax
-    mov edi, dword [edx + 0x18]
-    mov dword [edx + 0x14], 0xffffffff
-    inc edi
-    lea eax, [ebx + 4]
-    mov dword [edx + 0x18], edi
-    call free_
-    mov eax, 1
-    jmp near discard_region_argument
+expand_separate_heap equ 0x65486
+    times 175 db 0   ; expand_separate_heap is supplied by C.
 
 expand_dgroup:
     push ebx

@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1140,
-  "unique_code_bytes": 164409,
-  "le_pointers": 8956,
+  "routines": 1145,
+  "unique_code_bytes": 164584,
+  "le_pointers": 8959,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -7397,6 +7397,56 @@
       "raw_offset": "0x8aa80",
       "loaded_address": "0x65480",
       "bytes": 6,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "expand_separate_heap_",
+      "object": "heapgrow.obj",
+      "object_sha256": "cd9abfa865c82289af5e094a674478cb1290f49a60c8a7f5eaf806ebd4eedabd",
+      "sha256": "49a8384a061f2eace30c2e7fd95718808e69efe0145b90925707fcee4ed59591",
+      "raw_offset": "0x8aa86",
+      "loaded_address": "0x65486",
+      "bytes": 15,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "expand_return_zero_",
+      "object": "heapgrow.obj",
+      "object_sha256": "cd9abfa865c82289af5e094a674478cb1290f49a60c8a7f5eaf806ebd4eedabd",
+      "sha256": "b98ac3b7c1bee1c2f742f254c15eea1b9082d46c4fdeed17826fe537a9a36c23",
+      "raw_offset": "0x8aa95",
+      "loaded_address": "0x65495",
+      "bytes": 4,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "expand_check_limit_",
+      "object": "heapgrow.obj",
+      "object_sha256": "cd9abfa865c82289af5e094a674478cb1290f49a60c8a7f5eaf806ebd4eedabd",
+      "sha256": "dde28f0ea294d210c77c0b00d9ad69f419d7b4499fb1c22351562c72a5092f16",
+      "raw_offset": "0x8aa99",
+      "loaded_address": "0x65499",
+      "bytes": 52,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "expand_allocate_dos_",
+      "object": "heapgrow.obj",
+      "object_sha256": "cd9abfa865c82289af5e094a674478cb1290f49a60c8a7f5eaf806ebd4eedabd",
+      "sha256": "5579fc5cfbaeaeca73bff1bc6bdaff181cdfeeb18e97d72ff39322f2ab723537",
+      "raw_offset": "0x8aacd",
+      "loaded_address": "0x654cd",
+      "bytes": 27,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "expand_check_block_",
+      "object": "heapgrow.obj",
+      "object_sha256": "cd9abfa865c82289af5e094a674478cb1290f49a60c8a7f5eaf806ebd4eedabd",
+      "sha256": "bb038f83c26f1f8796f926f729723249136627075dd1d417d81bd1c3c09c6c7f",
+      "raw_offset": "0x8aae8",
+      "loaded_address": "0x654e8",
+      "bytes": 77,
       "le_pointers": 0
     },
     {

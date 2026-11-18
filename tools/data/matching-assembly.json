@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 533,
-  "unique_code_bytes": 250230,
-  "le_pointers": 13593,
+  "routines": 532,
+  "unique_code_bytes": 250055,
+  "le_pointers": 13590,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -2732,18 +2732,6 @@
       "public_entry": "0x663ce",
       "binary_offset": 61,
       "le_pointers": 0
-    },
-    {
-      "symbol": "expand_separate_heap",
-      "source": "src/runtime/near_heap_growth.asm",
-      "binary": "near_heap_growth.bin",
-      "sha256": "05152e492b411b3c2766875b1cacba9c5132a401357db875ed757619edbc20a2",
-      "bytes": 175,
-      "raw_offset": "0x8aa86",
-      "loaded_address": "0x65486",
-      "public_entry": "0x65486",
-      "binary_offset": 0,
-      "le_pointers": 3
     },
     {
       "symbol": "expand_dgroup",

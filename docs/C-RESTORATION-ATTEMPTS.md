@@ -39,6 +39,17 @@ accepted split emits NEG from C but retains TEST/JNS. A further C-only
 probe needs to reproduce the original sign-condition opcode before
 addressing register lifetimes. Scratch: `work/dsh-r6-crusher/`.
 
+### Heap growth marker range
+
+`expand_separate_heap` is byte-exact as five C continuations, but its short
+backward branches (`jb/ja/je` to the early `return_zero`) gain over 20 marker
+bytes of displacement, exceeding the signed rel8 range. `marker-rel8 widen`
+only handles unconditional `jmp`, not conditional `jcc`, so the whole
+`heapgrow.c` fails the diagnostic compile and the 175 bytes stay unattributed.
+The branch spans the whole 22-aux function; there is no marker-friendly
+reordering without changing bytes. A future probe could split the routine into
+smaller marker units, but the production span must remain contiguous.
+
 ## Engine source references
 
 Consult the [pinned Build sources](BUILD-SOURCE-REFERENCES.md) first.
