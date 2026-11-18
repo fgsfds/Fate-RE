@@ -559,6 +559,17 @@ degenerate-wall fixture reaches exponents outside the valid C shift range.
 Masking the count in C added three bytes under Watcom 10.5 `/4r /s /or`.
 The exact source keeps the x86 shift and its hardware-masked count inline.
 
+### Slope wall length exponent branch
+
+Watcom 10.5 `/4r /s /or /bt=dos` emits 64 bytes versus 61 for a signed
+byte comparison and explicit scaled-path subtraction. At `+0x12` it emits
+`CMP BL,44h` and defers `SUB BL,44h` until after the branch, moving the scaled
+table LE site by three bytes. The equivalent unsigned range form
+(`(unsigned char)(byte - 0x44) < 0x3c`) emits 67 bytes and first clobbers
+live AL with `MOV AL,BL` at `+0x12`. Keep the fused `SUB/JGE` inline until
+a defined compiler idiom can reuse the subtraction's flags and keep EAX
+intact. Scratch: `work/dsh-next-slope-branch-recheck/RESULTS.txt`.
+
 ### PCM input sign extension and register-copy encoding
 
 Watcom 10.5 `/4r /s /bt=dos` emits `CWDE` (`98`) for a direct signed

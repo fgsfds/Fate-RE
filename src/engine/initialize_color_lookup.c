@@ -12,8 +12,14 @@ extern void begin_palette_lookup(long red_weight, long green_weight, long blue_w
     parm [eax] [edx] [ebx] modify exact [edx esi edi];
 extern long distance_index(void);
 #pragma aux distance_index = value [edx] modify exact [];
-extern long red_distance_value(void);
-#pragma aux red_distance_value = "mov ebx,[esp]" "imul ebx,edi" value [ebx] modify exact [ebx];
+extern void load_red_weight(void);
+#pragma aux load_red_weight = "mov ebx,[esp]" modify exact [ebx];
+extern unsigned long red_product_input(void);
+#pragma aux red_product_input = value [ebx] modify exact [];
+extern unsigned long squared_distance_value(void);
+#pragma aux squared_distance_value = value [edi] modify exact [];
+extern unsigned long retain_red_product(unsigned long value);
+#pragma aux retain_red_product = "" parm [ebx] value [ebx] modify exact [];
 extern long green_distance_value(void);
 #pragma aux green_distance_value = "mov ecx,edi" "imul ecx,esi" value [ecx] modify exact [ecx];
 extern long blue_distance_value(void);
@@ -73,26 +79,30 @@ extern void advance_palette_bucket(void);
     "sar ebx,3" "mov cl,[edi+pow2char]" "mov ch,[ebx+occupied_palette_buckets]" \
     "sub eax,3" "or ch,cl" "dec edx" "mov [ebx+occupied_palette_buckets],ch" modify exact [eax ebx ecx edx edi];
 
-extern void begin_palette_neighbors(void);
-#pragma aux begin_palette_neighbors = "mov edi,-64" "xor edx,edx" modify exact [edi edx];
-extern void begin_green_neighbors(void);
-#pragma aux begin_green_neighbors = "mov esi,-8" modify exact [esi];
-extern void begin_blue_neighbors(void);
-#pragma aux begin_blue_neighbors = "mov eax,-1" "lea ebx,[edi+esi]" modify exact [eax ebx];
+/* Empty auxiliaries keep the neighbor counters and sum in the original registers. */
+extern void set_blue_neighbor(long);
+#pragma aux set_blue_neighbor = parm [eax] modify exact [];
+extern long red_green_sum(void);
+#pragma aux red_green_sum = value [ebx] modify exact [];
+extern void set_red_green_sum(long);
+#pragma aux set_red_green_sum = parm [ebx] modify exact [];
+extern long neighbor_offset(void);
+#pragma aux neighbor_offset = value [ecx] modify exact [];
+extern long neighbor_slot(void);
+#pragma aux neighbor_slot = value [edx] modify exact [];
+extern void set_neighbor_slot(long);
+#pragma aux set_neighbor_slot = parm [edx] modify exact [];
+extern void set_green_neighbor(long);
+#pragma aux set_green_neighbor = parm [esi] modify exact [];
+extern void set_red_neighbor(long);
+#pragma aux set_red_neighbor = parm [edi] modify exact [];
+
 extern long red_neighbor(void);
 #pragma aux red_neighbor = value [edi] modify exact [];
 extern long green_neighbor(void);
 #pragma aux green_neighbor = value [esi] modify exact [];
 extern long blue_neighbor(void);
 #pragma aux blue_neighbor = value [eax] modify exact [];
-extern long advance_neighbor_index(void);
-#pragma aux advance_neighbor_index = "inc edx" value [edx] modify exact [edx];
-extern long neighbor_offset(void);
-#pragma aux neighbor_offset = "lea ecx,[ebx+eax]" "inc eax" value [ecx] modify exact [eax ecx];
-extern void next_green_neighbor(void);
-#pragma aux next_green_neighbor = "add esi,8" modify exact [esi];
-extern void next_red_neighbor(void);
-#pragma aux next_red_neighbor = "add edi,40h" modify exact [edi];
 extern void keep_last_neighbor_offset(long offset);
 #pragma aux keep_last_neighbor_offset = "" parm [eax] modify exact [];
 extern void keep_center_neighbor_offset(long offset);
@@ -101,6 +111,9 @@ extern long last_neighbor_offset(void);
 #pragma aux last_neighbor_offset = value [eax] modify exact [];
 extern long center_neighbor_offset(void);
 #pragma aux center_neighbor_offset = value [edx] modify exact [];
+/* Retain the original LEA operand encoding for the neighbor sum. */
+extern long neighbor_sum(long, long);
+#pragma aux neighbor_sum = "lea ecx,[ebx+eax]" parm [ebx] [eax] value [ecx] modify exact [ecx];
 extern void finish_palette_lookup(void);
 #pragma aux finish_palette_lookup aborts modify exact [];
 #pragma aux initialize_color_lookup modify exact [eax ebx ecx edx esi edi];
@@ -113,7 +126,9 @@ void initialize_color_lookup(long red_weight, long green_weight, long blue_weigh
     begin_palette_lookup(red_weight, green_weight, blue_weight);
     goto check_distance;
     do {
-        red = red_distance_value();
+        /* Use the low 32 bits of the product, as with the original IMUL. */
+        load_red_weight();
+        red = (long)retain_red_product(red_product_input() * squared_distance_value());
         green = green_distance_value();
         prepare_mirror_distance_index();
         green_color_distance[active_mirror_distance_index()] = green;
@@ -148,23 +163,29 @@ check_bucket:;
     } while (palette_color_index() >= 0);
 
     /* A change of one bucket contributes 64 for R, 8 for G, or 1 for B. */
-    begin_palette_neighbors();
+    set_red_neighbor(-64);
+    set_neighbor_slot(0);
     goto check_red;
     do {
-        begin_green_neighbors();
+        set_green_neighbor(-8);
         goto check_green;
         do {
-            begin_blue_neighbors();
+            set_blue_neighbor(-1);
+            set_red_green_sum(red_neighbor() + green_neighbor());
             goto check_blue;
             do {
-                slot = advance_neighbor_index();
+                set_neighbor_slot(neighbor_slot() + 1);
+                slot = neighbor_slot();
+                /* Keep the sum in ECX across the blue-counter increment. */
+                neighbor_sum(red_green_sum(), blue_neighbor());
+                set_blue_neighbor(blue_neighbor() + 1);
                 palette_neighbor_offsets[slot] = neighbor_offset();
 check_blue:;
             } while (blue_neighbor() <= 1);
-            next_green_neighbor();
+            set_green_neighbor(green_neighbor() + 8);
 check_green:;
         } while (green_neighbor() <= 8);
-        next_red_neighbor();
+        set_red_neighbor(red_neighbor() + 64);
 check_red:;
     } while (red_neighbor() <= 64);
     keep_last_neighbor_offset(palette_neighbor_offsets[27]);
