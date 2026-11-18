@@ -60,6 +60,10 @@ those expectations. Volatile OMF comments, including timestamps, are not compare
 - PCM input uses initialized union storage and empty register bindings for
   partial-register loads under the Watcom/x86 representation. See the open PCM
   probe notes before changing getter clobbers or channel lifetimes.
+- In [wallmost](../src/engine/wallmost.c), a volatile union keeps the original
+  integer store, x87 conversion, and exponent byte read at one scratch address.
+  Without `volatile`, `/4r /s /or /bt=dos` used an ESP temporary, changing both
+  the shared frame and the LE sites.
 
 ## Adding or changing a probe
 

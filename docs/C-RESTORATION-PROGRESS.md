@@ -4,12 +4,12 @@ The latest marker audit covers the full **414,639-byte CODE segment**.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 139,368 | 33.61% |
-| Inline assembly instructions in C objects | 23,314 | 5.62% |
+| Compiler-generated instructions | 139,448 | 33.63% |
+| Inline assembly instructions in C objects | 23,234 | 5.60% |
 | Standalone assembly | 250,794 | 60.48% |
 | Unattributed instructions and non-routine tables | 1,163 | 0.28% |
 
-Known remaining assembly, including inline: **274,108 bytes (66.11%)**.
+Known remaining assembly, including inline: **274,028 bytes (66.09%)**.
 The unattributed category contains 810 instruction bytes in eleven routines
 whose marker comparison is unsupported or changes output, plus 352 jump-table
 bytes and one alignment byte. It must not be silently counted as either
@@ -29,9 +29,12 @@ all 279 bytes and 21 LE relocation sites and targets in its unit still match.
 The ceiling and floor wall-axis routines use the same C register copy,
 moving four more bytes from inline assembly to compiler-generated C. Their
 complete units match 1,741 bytes and 156 LE relocation sites and targets.
+In the two `wallmost` square-root paths, volatile scratch conversion, table
+reads, and register copies move another 80 bytes to compiler-generated C.
+The complete `wallmost` unit matches 646 bytes and 42 LE sites and targets.
 
 The measured build and marker report are under `work/restoration-build/` and
-`work/dsh-goal-r1-scan-audit.json`. The audit reuses the checked distinct-end
+`work/dsh-goal-r2-wallmost-audit.json`. The audit reuses the checked distinct-end
 marker retry for unchanged `flttrunc.obj`.
 The accepted executable is 741,347 bytes with SHA-256
 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.

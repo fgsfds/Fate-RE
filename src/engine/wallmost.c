@@ -4,7 +4,12 @@ extern long camera_x, camera_y, camera_z, view_ray_x, view_ray_y;
 extern unsigned char sector[];
 extern short scan_wall_index[];
 extern unsigned short sqrtable[];
-extern long wallmost_sqrt_scratch;
+/* Keep the integer store and x87 conversion in the original scratch word. */
+extern volatile union {
+    long integer;
+    float real;
+    unsigned char bytes[4];
+} wallmost_sqrt_scratch;
 
 #define AT_BYTE_OFFSET(values, offset) (*(long *)((char *)(values) + (offset)))
 
@@ -164,13 +169,24 @@ extern void save_sector_wall_delta_y(void);
 extern void read_sector_wall_delta_y(void);
 #pragma aux read_sector_wall_delta_y = "mov eax, dword ptr [esp + 0x3c]" modify exact [eax];
 
-/* The table index uses the original no-base LEA encoding for twice the exponent. */
-extern void lookup_unscaled_wall_length(void);
-#pragma aux lookup_unscaled_wall_length = "fild dword ptr [wallmost_sqrt_scratch]" "fstp dword ptr [wallmost_sqrt_scratch]" \
-    "mov bl, byte ptr [wallmost_sqrt_scratch+3]" "sub bl, 0x44" "jge branch_136" "xor ebx, ebx" \
-    "mov bx, word ptr [eax*2 + sqrtable]" "db 0ebh, 17h" /* marker-rel8 0,+1 */ "branch_136:" \
-    "db 08dh, 0ch, 05dh, 00h, 00h, 00h, 00h" "shr eax, cl" "mov cl, bl" "xor ebx, ebx" \
-    "mov bx, word ptr [eax*2 + sqrtable]" "shl ebx, cl" modify exact [eax ebx ecx];
+extern unsigned char from_bl(void);
+#pragma aux from_bl = value [bl] modify exact [];
+extern void in_cl(unsigned char value);
+#pragma aux in_cl = parm [cl] modify exact [];
+extern void in_bl(unsigned char value);
+#pragma aux in_bl = parm [bl] modify exact [];
+extern void in_bx_word(unsigned short value);
+#pragma aux in_bx_word = parm [bx] modify exact [];
+extern void check_wall_length_exponent(void);
+#pragma aux check_wall_length_exponent = "sub bl, 0x44" "db 7dh, 0ch" /* marker-rel8 +2,+2 */ modify exact [ebx];
+extern void skip_scaled_wall_length(void);
+#pragma aux skip_scaled_wall_length = "db 0ebh, 17h" /* marker-rel8 +2,+3 */ modify exact [];
+/* The no-base LEA and the hardware shift keep their original encodings. */
+extern void use_scaled_sqrt_index(void);
+#pragma aux use_scaled_sqrt_index = "db 08dh, 0ch, 05dh, 00h, 00h, 00h, 00h" \
+    "shr eax, cl" modify exact [eax ecx];
+extern void shift_scaled_wall_root(void);
+#pragma aux shift_scaled_wall_root = "shl ebx, cl" modify exact [ebx];
 
 void wallmost_slope_geometry(void);
 #pragma aux wallmost_slope_geometry aborts;
@@ -212,16 +228,20 @@ void wallmost_slope_geometry(void)
     in_ax(from_ax() * from_ax());
     in_dx(from_dx() + from_ax());
     in_ax(from_dx());
-    wallmost_sqrt_scratch = squared_length_from_ax();
-    lookup_unscaled_wall_length();
+    wallmost_sqrt_scratch.integer = squared_length_from_ax();
+    wallmost_sqrt_scratch.real = (float)wallmost_sqrt_scratch.integer;
+    in_bl(wallmost_sqrt_scratch.bytes[3]);
+    check_wall_length_exponent();
+    in_bx(0);
+    in_bx_word(sqrtable[from_ax()]);
+    skip_scaled_wall_length();
+    use_scaled_sqrt_index();
+    /* Reuse the undoubled exponent to scale the table result. */
+    in_cl(from_bl());
+    in_bx(0);
+    in_bx_word(sqrtable[from_ax()]);
+    shift_scaled_wall_root();
 }
-
-extern void lookup_scaled_wall_length(void);
-#pragma aux lookup_scaled_wall_length = "fild dword ptr [wallmost_sqrt_scratch]" "fstp dword ptr [wallmost_sqrt_scratch]" \
-    "mov bl, byte ptr [wallmost_sqrt_scratch+3]" "sub bl, 0x44" "jge branch_17f" "xor ebx, ebx" \
-    "mov bx, word ptr [eax*2 + sqrtable]" "jmp branch_196" "branch_17f:" \
-    "db 08dh, 0ch, 05dh, 00h, 00h, 00h, 00h" "shr eax, cl" "mov cl, bl" "xor ebx, ebx" \
-    "mov bx, word ptr [eax*2 + sqrtable]" "shl ebx, cl" "branch_196:" modify exact [eax ebx ecx];
 
 void wallmost_slope_length(void);
 #pragma aux wallmost_slope_length aborts;
@@ -232,8 +252,19 @@ void wallmost_slope_length(void)
     in_bx((unsigned long)from_bx() >> 10);
     if (from_bx() > 16) {
         in_ax(from_dx());
-        wallmost_sqrt_scratch = squared_length_from_ax();
-        lookup_scaled_wall_length();
+        wallmost_sqrt_scratch.integer = squared_length_from_ax();
+        wallmost_sqrt_scratch.real = (float)wallmost_sqrt_scratch.integer;
+        in_bl(wallmost_sqrt_scratch.bytes[3]);
+        check_wall_length_exponent();
+        in_bx(0);
+        in_bx_word(sqrtable[from_ax()]);
+        skip_scaled_wall_length();
+        use_scaled_sqrt_index();
+        /* Reuse the undoubled exponent to scale the table result. */
+        in_cl(from_bl());
+        in_bx(0);
+        in_bx_word(sqrtable[from_ax()]);
+        shift_scaled_wall_root();
         in_bx((unsigned long)from_bx() >> 10);
         in_cx(from_bx());
     } else {
