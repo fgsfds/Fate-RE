@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 532,
-  "unique_code_bytes": 250055,
+  "routines": 531,
+  "unique_code_bytes": 249954,
   "le_pointers": 13590,
   "non_routine_code_spans": [
     {
@@ -7208,18 +7208,6 @@
       "public_entry": "0x6138c",
       "binary_offset": 0,
       "le_pointers": 2
-    },
-    {
-      "symbol": "__set_binary_",
-      "source": "src/runtime/dos_file_open.asm",
-      "binary": "dos_file_open.bin",
-      "sha256": "4f9309071842ab93502a10c024ed6e371898ec7bde91013b62cdfb7075b4e153",
-      "bytes": 101,
-      "raw_offset": "0x86b51",
-      "loaded_address": "0x61551",
-      "public_entry": "0x61551",
-      "binary_offset": 453,
-      "le_pointers": 0
     },
     {
       "symbol": "__MemAllocator",

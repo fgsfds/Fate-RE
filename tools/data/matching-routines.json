@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1145,
-  "unique_code_bytes": 164584,
+  "routines": 1151,
+  "unique_code_bytes": 164685,
   "le_pointers": 8959,
   "non_routine_code_spans": [
     {
@@ -6057,6 +6057,66 @@
       "raw_offset": "0x86968",
       "loaded_address": "0x61368",
       "bytes": 36,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "__set_binary_",
+      "object": "dosbin.obj",
+      "object_sha256": "eba95d8daa5ffb800df3d0570edfa75ea5875372c3e39f2bc631d81bf704cc21",
+      "sha256": "81831e880ba25d77717b90322ee518dfa28b9012f2d038fec00ae7b504ad07e4",
+      "raw_offset": "0x86b51",
+      "loaded_address": "0x61551",
+      "bytes": 32,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "set_binary_device_get_",
+      "object": "dosbin.obj",
+      "object_sha256": "eba95d8daa5ffb800df3d0570edfa75ea5875372c3e39f2bc631d81bf704cc21",
+      "sha256": "aa0e2a314158a3eaaa7c53287ca8d68c356aeb10103e8f9670f01bfd2ded37fd",
+      "raw_offset": "0x86b71",
+      "loaded_address": "0x61571",
+      "bytes": 19,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "set_binary_dos_error_",
+      "object": "dosbin.obj",
+      "object_sha256": "eba95d8daa5ffb800df3d0570edfa75ea5875372c3e39f2bc631d81bf704cc21",
+      "sha256": "d09685cfdd37033b5bd1dd12f69ae1452352ec1effb93f9c017f761a8088ff87",
+      "raw_offset": "0x86b84",
+      "loaded_address": "0x61584",
+      "bytes": 13,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "set_binary_device_set_",
+      "object": "dosbin.obj",
+      "object_sha256": "eba95d8daa5ffb800df3d0570edfa75ea5875372c3e39f2bc631d81bf704cc21",
+      "sha256": "fe5f4686a3d00dfa0968b3bc23ad23a89bfaad13afc63bfd788fa72a40b50e75",
+      "raw_offset": "0x86b91",
+      "loaded_address": "0x61591",
+      "bytes": 27,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "set_binary_success_",
+      "object": "dosbin.obj",
+      "object_sha256": "eba95d8daa5ffb800df3d0570edfa75ea5875372c3e39f2bc631d81bf704cc21",
+      "sha256": "8359c8f2ab7af5c7569d43a68ce42c771d8e5c6e1349821ed39c1c0234f3785d",
+      "raw_offset": "0x86bac",
+      "loaded_address": "0x615ac",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "set_binary_restore_",
+      "object": "dosbin.obj",
+      "object_sha256": "eba95d8daa5ffb800df3d0570edfa75ea5875372c3e39f2bc631d81bf704cc21",
+      "sha256": "6e2483bff8513a8236feaa4cbbd565ce76891f7feb4efc95b308adef757e9870",
+      "raw_offset": "0x86bae",
+      "loaded_address": "0x615ae",
+      "bytes": 8,
       "le_pointers": 0
     },
     {

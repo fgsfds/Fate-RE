@@ -207,60 +207,7 @@ sopen_:
     pop ebx
     ret
 
-__set_binary_:
-    push ebx
-    push ecx
-    push edx
-    push esi
-    sub esp, 4
-    mov esi, eax
-    call get_io_mode
-    or al, 0x40
-    mov ebx, eax
-    mov eax, esi
-    mov edx, ebx
-    call set_io_mode
-    test bh, 0x20
-    je short .return_success
-    mov ebx, esi
-    mov al, 0
-    mov ah, 0x44
-    int 0x21
-    rcl edx, 1
-    ror edx, 1
-    mov dword [esp], edx
-    test edx, edx
-    jge short .set_device_binary
-
-.report_dos_error:
-    xor eax, eax
-    mov ax, word [esp]
-    call set_dos_errno
-    jmp short .restore_registers
-
-.set_device_binary:
-    mov dl, byte [esp]
-    mov ebx, esi
-    or dl, 0x20
-    mov dh, 0
-    mov al, 1
-    mov ah, 0x44
-    int 0x21
-    rcl edx, 1
-    ror edx, 1
-    mov dword [esp], edx
-    test edx, edx
-    jl short .report_dos_error
-
-.return_success:
-    xor eax, eax
-
-.restore_registers:
-    add esp, 4
-    pop esi
-    pop edx
-    pop ecx
-    pop ebx
-    ret
+__set_binary_ equ 0x61551
+    times 101 db 0   ; __set_binary_ is supplied by C.
 
     times 65 db 0    ; lseek is supplied by C.

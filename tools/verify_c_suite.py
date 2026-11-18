@@ -770,6 +770,11 @@ NEAR_HEAP_GROWTH = (
     'expand_allocate_dos_', 'expand_check_block_',
 )
 OBJECT_NAMES.update(dict.fromkeys(NEAR_HEAP_GROWTH, 'heapgrow'))
+DOS_BINARY_MODE = (
+    '__set_binary_', 'set_binary_device_get_', 'set_binary_dos_error_',
+    'set_binary_device_set_', 'set_binary_success_', 'set_binary_restore_',
+)
+OBJECT_NAMES.update(dict.fromkeys(DOS_BINARY_MODE, 'dosbin'))
 HEAP_REQUEST_ROUTINES = ('round_heap_request_', 'request_more_heap_')
 OBJECT_NAMES.update(dict.fromkeys(HEAP_REQUEST_ROUTINES, 'heaprnd'))
 OBJECT_NAMES['select_shell_switch_'] = 'rtshell'
@@ -928,6 +933,7 @@ GROUPS = {
     'heaprsz': (259, NEAR_HEAP_RESIZE),
     'heapall': (211, NEAR_HEAP_ALLOCATE),
     'heapgrow': (175, NEAR_HEAP_GROWTH),
+    'dosbin': (101, DOS_BINARY_MODE),
     'heaprnd': (122, HEAP_REQUEST_ROUTINES),
     'rtshell': (38, ('select_shell_switch_',)),
     'strmore': (105, STRING_FORMAT_HELPERS),

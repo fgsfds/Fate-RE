@@ -2812,7 +2812,6 @@ ROUTINES = [
     ('read_', 'runtime/dos_read_free.asm', 'dos_read_free.bin', 0x615f7, 275, {}),
     ('free_', 'runtime/dos_read_free.asm', 'dos_read_free.bin', 0x6170a, 94, {0x8: 0x941b8, 0x21: 0x941b8, 0x38: 0x941bc, 0x40: 0x941c0, 0x4d: 0x941c0, 0x55: 0x3091e5}),
     ('sopen_', 'runtime/dos_file_open.asm', 'dos_file_open.bin', 0x6138c, 453, {0xee: 0x96ab0, 0x1a7: 0x9445d}),
-    ('__set_binary_', 'runtime/dos_file_open.asm', 'dos_file_open.bin', 0x61551, 101, {}),
     ('__MemAllocator', 'runtime/memallocator.asm', 'memallocator.bin', 0x64f9e, 168, {}),
     ('__MemFree', 'runtime/memallocator.asm', 'memallocator.bin', 0x65046, 267, {}),
     ('malloc_', 'runtime/near_heap_wrappers.asm', 'near_heap_wrappers.bin', 0x6126d, 227, {0x21: 0x941b8, 0x41: 0x941c0, 0x49: 0x941bc, 0x53: 0x941c0, 0x59: 0x941b8, 0x69: 0x941bc, 0x83: 0x941c0, 0x90: 0x941c0, 0xd0: 0x3091e5}),
@@ -3866,7 +3865,6 @@ GROUP_SLICES = {
     'free_': (275, 369),
 
     'sopen_': (0, 619),
-    '__set_binary_': (453, 619),
 
     '__MemAllocator': (0, 435),
     '__MemFree': (168, 435),
