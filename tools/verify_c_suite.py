@@ -753,6 +753,12 @@ OBJECT_NAMES['__open_flags_'] = 'openflag'
 NEAR_HEAP_BOOKKEEPING = ('unlink_near_heap_', 'free_space_at_break_', 'link_and_initialize_heap_')
 OBJECT_NAMES.update(dict.fromkeys(NEAR_HEAP_BOOKKEEPING, 'heapul'))
 OBJECT_NAMES['release_empty_heaps_'] = 'heapfree'
+NEAR_HEAP_RESIZE = (
+    'resize_dpmi_heap_', 'resize_heap_target_', 'resize_heap_result_',
+    'resize_use_whole_block_', 'resize_return_block_', 'resize_next_heap_',
+    'resize_check_heap_', 'resize_return_zero_', 'resize_restore_',
+)
+OBJECT_NAMES.update(dict.fromkeys(NEAR_HEAP_RESIZE, 'heaprsz'))
 HEAP_REQUEST_ROUTINES = ('round_heap_request_', 'request_more_heap_')
 OBJECT_NAMES.update(dict.fromkeys(HEAP_REQUEST_ROUTINES, 'heaprnd'))
 OBJECT_NAMES['select_shell_switch_'] = 'rtshell'
@@ -908,6 +914,7 @@ GROUPS = {
     'rtgetvec': (95, DOS_INTERRUPT_VECTORS),
     'openflag': (180, ('__open_flags_',)),
     'heapul': (257, NEAR_HEAP_BOOKKEEPING),
+    'heaprsz': (259, NEAR_HEAP_RESIZE),
     'heaprnd': (122, HEAP_REQUEST_ROUTINES),
     'rtshell': (38, ('select_shell_switch_',)),
     'strmore': (105, STRING_FORMAT_HELPERS),
