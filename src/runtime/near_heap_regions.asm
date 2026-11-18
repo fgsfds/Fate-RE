@@ -16,54 +16,8 @@ link_and_initialize_heap equ 0x652f1
 
     times 63 db 0    ; unlink_near_heap is supplied by C.
 
-release_empty_heaps:
-    push ebx
-    push ecx
-    push edx
-    push esi
-    push edi
-    mov edx, dword [near_heap_head]
-
-.check_heap:
-    test edx, edx
-    je near allocate_dpmi_heap.return
-    mov eax, dword [edx + 0x24]
-    mov eax, dword [eax]
-    mov ebx, dword [edx]
-    add eax, 0x2c
-    cmp eax, ebx
-    jne short .next_heap
-    lea ebx, [edx - 8]
-    mov eax, edx
-    mov ecx, dword [edx + 8]
-    call unlink_near_heap
-    mov edx, ecx
-    mov ecx, dword [ebx + 4]
-    test ecx, ecx
-    jne short .free_dos_selector
-    mov eax, dword [ebx]
-    shr eax, 0x10
-    mov di, word [ebx]
-    mov esi, eax
-    mov ah, 5
-    mov al, 2
-    int 0x31
-    jmp short .check_heap
-
-.free_dos_selector:
-    mov eax, ecx
-    push es
-    mov es, ax
-    mov ah, 0x49
-    int 0x21
-    rcl eax, 1
-    ror eax, 1
-    pop es
-    jmp short .check_heap
-
-.next_heap:
-    mov edx, dword [edx + 8]
-    jmp short .check_heap
+release_empty_heaps equ 0x65190
+    times 94 db 0    ; release_empty_heaps is supplied by C.
 
 resize_dpmi_heap:
     push ebx

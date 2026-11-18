@@ -752,6 +752,7 @@ OBJECT_NAMES.update(dict.fromkeys(DOS_INTERRUPT_VECTORS, 'rtgetvec'))
 OBJECT_NAMES['__open_flags_'] = 'openflag'
 NEAR_HEAP_BOOKKEEPING = ('unlink_near_heap_', 'free_space_at_break_', 'link_and_initialize_heap_')
 OBJECT_NAMES.update(dict.fromkeys(NEAR_HEAP_BOOKKEEPING, 'heapul'))
+OBJECT_NAMES['release_empty_heaps_'] = 'heapfree'
 HEAP_REQUEST_ROUTINES = ('round_heap_request_', 'request_more_heap_')
 OBJECT_NAMES.update(dict.fromkeys(HEAP_REQUEST_ROUTINES, 'heaprnd'))
 OBJECT_NAMES['select_shell_switch_'] = 'rtshell'

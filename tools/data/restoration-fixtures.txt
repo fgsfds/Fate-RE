@@ -56,6 +56,7 @@ check_write_stream_descriptor {exe} {build}/dwrite.obj | dwrite
 check_initksqrt {exe} {asm} {build}/c.json {build}/transcol.obj | sqrtinit transcol
 check_copytilepiece_candidate {exe} {build}/tilecopy.obj | tilecopy
 check_crt_arguments {exe} | crtparse
+check_heap_release {exe} {build}/heapfree.obj | heapfree heapul
 check_float_integer_conversions {exe} | fltint u32float i32float flttrunc fltwiden
 check_spawn_fpu_callbacks {exe} | spnfpu
 check_mouse_binding {exe} | mouseact

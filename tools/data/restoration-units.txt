@@ -179,6 +179,7 @@ runtime/close_stream_resources rtdocls
 runtime/make_temporary_filename rttmp
 runtime/parse_stdio_mode openflag
 runtime/near_heap_bookkeeping heapul /4r /s /or /os /bt=dos
+runtime/near_heap_release heapfree
 runtime/heap_request_rounding heaprnd /4r /s /or /os /bt=dos
 runtime/select_shell_switch rtshell /4r /s /or /os /bt=dos
 runtime/set_text_video_mode txtvmode

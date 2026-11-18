@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1123,
-  "unique_code_bytes": 163845,
-  "le_pointers": 8951,
+  "routines": 1124,
+  "unique_code_bytes": 163939,
+  "le_pointers": 8952,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -7208,6 +7208,16 @@
       "loaded_address": "0x65151",
       "bytes": 63,
       "le_pointers": 4
+    },
+    {
+      "symbol": "release_empty_heaps_",
+      "object": "heapfree.obj",
+      "object_sha256": "c8f3a2b5fc78ffdb671485f7aec38d01d22626183162463d95dbb0927a63f41f",
+      "sha256": "09fc13c726c9def93aed5755c3caaebe0811a61d0446ed523e587ae5831dee91",
+      "raw_offset": "0x8a790",
+      "loaded_address": "0x65190",
+      "bytes": 94,
+      "le_pointers": 1
     },
     {
       "symbol": "link_and_initialize_heap_",
