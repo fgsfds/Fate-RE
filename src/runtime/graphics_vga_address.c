@@ -181,11 +181,13 @@ extern unsigned short rotate_vga_byte(unsigned char value, unsigned char count);
 #pragma aux rotate_vga_byte = 0x66 "ror al,cl" "movzx ax,al" parm [al] [cl] value [ax] modify exact [];
 extern unsigned char count_in_dl(unsigned char count);
 #pragma aux count_in_dl = "" parm [dl] value [dl] modify exact [];
-extern unsigned char prepare_color_count(unsigned char count);
-#pragma aux prepare_color_count = "mov cl,dl" parm [dl] value [cl] modify exact [ecx];
-/* The mask calculation retains only the low word after shifting. */
+extern unsigned char color_count_in_cl(unsigned char count);
+#pragma aux color_count_in_cl = parm [cl] value [cl] modify exact [];
+/* The mask calculation retains only the low word after shifting.
+ * Treat ECX as unavailable after this operation: the color rotation
+ * prepares its own count from the byte still held in DL. */
 extern unsigned rotate_vga_mask_byte(unsigned char value, unsigned char count);
-#pragma aux rotate_vga_mask_byte = 0x66 "ror al,cl" "movzx ax,al" parm [al] [cl] value [eax] modify exact [];
+#pragma aux rotate_vga_mask_byte = 0x66 "ror al,cl" "movzx ax,al" parm [al] [cl] value [eax] modify exact [ecx];
 extern int shift_vga_column(int column);
 #pragma aux shift_vga_column = "sar eax,3" parm [eax] value [eax] modify exact [];
 
@@ -214,7 +216,7 @@ void address_vga_mono_pixel(short x, short y, short color)
     count = count_in_dl(count + 1);
     mask = rotate_vga_mask_byte(0xfe, count);
     mask = bank_address_in_eax((mask << 8) + 1);
-    color_count = prepare_color_count(count);
+    color_count = color_count_in_cl(count);
     pixel_mask = mask;
     pixel_color = rotate_vga_byte(color, color_count);
 }
@@ -256,7 +258,7 @@ void address_cga_mono_pixel(short x, short y, short color)
     count = count_in_dl(count + 1);
     mask = rotate_vga_mask_byte(0xfe, count);
     mask = bank_address_in_eax((mask << 8) | 1);
-    color_count = prepare_color_count(count);
+    color_count = color_count_in_cl(count);
     pixel_mask = mask;
     pixel_color = rotate_vga_byte(color, color_count);
 }
@@ -264,8 +266,10 @@ void address_cga_mono_pixel(short x, short y, short color)
 extern int save_hercules_row(int row);
 #pragma aux save_hercules_row = "" parm [ecx] value [ecx] modify exact [];
 /* The low two row bits choose one of four interleaved 8 KiB banks. */
-extern int hercules_row_bank(int row);
-#pragma aux hercules_row_bank = "mov eax,ecx" "mov ecx,3" "and al,3" "xor ah,ah" "ror ax,cl" "cwde" parm [ecx] value [eax] modify exact [eax ecx];
+extern unsigned char low_row_byte(void);
+#pragma aux low_row_byte = value [al] modify exact [];
+extern int masked_hercules_row(unsigned char);
+#pragma aux masked_hercules_row = "xor ah,ah" "ror ax,cl" "cwde" parm [al] value [eax] modify exact [eax];
 
 void address_hercules_pixel(short x, int y, short color)
 {
@@ -279,7 +283,10 @@ void address_hercules_pixel(short x, int y, short color)
     saved_x = planar_x_in_si(x);
     saved_y = save_hercules_row(y);
     row = byte_offset_in_edx((coordinate_in_eax((short)y) >> 2) * 90);
-    bank = hercules_row_bank(saved_y);
+    /* Load the 16-bit bank-rotation count through the original ECX write. */
+    coordinate_in_eax(saved_y);
+    count_in_ecx(3);
+    bank = masked_hercules_row(low_row_byte() & 3U);
     row = byte_offset_in_edx(row + bank);
     column = coordinate_in_eax(saved_x);
     bit = saved_x & 7;
@@ -291,11 +298,12 @@ void address_hercules_pixel(short x, int y, short color)
     *(volatile unsigned short *)&pixel_selector = selector;
     address = bank_address_in_eax(address + current_buffer_offset);
     count = count_in_dl(*(volatile unsigned char *)&pixel_bit_offset);
-    pixel_address = address;
+    /* Publish the address before incrementing the rotation count. */
+    *(volatile unsigned long *)&pixel_address = address;
     count = count_in_dl(count + 1);
     mask = rotate_vga_mask_byte(0xfe, count);
     mask = bank_address_in_eax((mask << 8) | 1);
-    color_count = prepare_color_count(count);
+    color_count = color_count_in_cl(count);
     pixel_mask = mask;
     pixel_color = rotate_vga_byte(color, color_count);
 }

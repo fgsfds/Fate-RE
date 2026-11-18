@@ -4,12 +4,12 @@ The latest marker audit covers the full **414,639-byte CODE segment**.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 139,528 | 33.65% |
-| Inline assembly instructions in C objects | 23,248 | 5.61% |
+| Compiler-generated instructions | 139,543 | 33.65% |
+| Inline assembly instructions in C objects | 23,233 | 5.60% |
 | Standalone assembly | 250,700 | 60.46% |
 | Unattributed instructions and non-routine tables | 1,163 | 0.28% |
 
-Known remaining assembly, including inline: **273,948 bytes (66.07%)**.
+Known remaining assembly, including inline: **273,933 bytes (66.07%)**.
 The unattributed category contains 810 instruction bytes in eleven routines
 whose marker comparison is unsupported or changes output, plus 352 jump-table
 bytes and one alignment byte. It must not be silently counted as either
@@ -38,9 +38,12 @@ relocation match, including both interrupt paths and the shared return.
 The ceiling and floor `begin_spans` paths move another 34 inline bytes to C
 for texture shift loads and count copies. Their units match 1,540 bytes
 and 145 LE relocation sites and targets.
+The Hercules bank setup and the VGA, CGA, and Hercules color-count reloads
+move another 15 inline bytes to C. The three paths match 356 bytes and 24 LE
+sites and targets; the full `vgapix` unit matches 712 bytes and 51 LE sites.
 
 The measured build and marker report are under `work/restoration-build/` and
-`work/dsh-r4-tails-audit.json`. The audit reuses the checked distinct-end marker
+`work/dsh-r5-pixel-audit.json`. The audit reuses the checked distinct-end
 marker retry for unchanged `flttrunc.obj`.
 The accepted executable is 741,347 bytes with SHA-256
 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.
