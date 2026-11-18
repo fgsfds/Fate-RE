@@ -164,23 +164,26 @@ void florscan_flip_y(void)
     globalypanning = from_dx();
 }
 
-extern void read_x_axis_shift(void);
-#pragma aux read_x_axis_shift = "mov bl, byte ptr [tile_x_shift]" modify exact [ebx];
-
-extern void read_axis_counts(void);
-#pragma aux read_axis_counts = "mov al, byte ptr [tile_y_shift]" "mov cl, bl" modify exact [eax ecx];
+/* Byte-width bindings preserve the untouched high register bits. */
+extern unsigned char from_al(void);
+#pragma aux from_al = value [al] modify exact [];
+extern unsigned char from_bl(void);
+#pragma aux from_bl = value [bl] modify exact [];
+extern void in_cl(unsigned char);
+#pragma aux in_cl = parm [cl] modify exact [];
+extern void in_al(unsigned char);
+#pragma aux in_al = parm [al] modify exact [];
+extern void in_bl(unsigned char);
+#pragma aux in_bl = parm [bl] modify exact [];
 
 extern void scale_x_axes(void);
 #pragma aux scale_x_axes = "shl esi, cl" "shl edi, cl" modify exact [esi edi];
-
-extern void select_y_axis_count(void);
-#pragma aux select_y_axis_count = "mov cl, al" modify exact [ecx];
 
 extern void scale_y_axes(void);
 #pragma aux scale_y_axes = "shl edx, cl" "shl esi, cl" "mov cl, bl" modify exact [ecx edx esi];
 
 extern void scale_x_panning(void);
-#pragma aux scale_x_panning = "shl edi, cl" "mov cl, al" modify exact [ecx edi];
+#pragma aux scale_x_panning = "shl edi, cl" modify exact [edi];
 
 extern void scale_y_panning(void);
 #pragma aux scale_y_panning = "shl eax, cl" modify exact [eax];
@@ -212,20 +215,23 @@ void florscan_begin_spans(void);
 void florscan_begin_spans(void)
 {
     /* Scale floor texture steps and initialize the horizontal span renderer. */
-    read_x_axis_shift();
+    in_bl(tile_x_shift);
     in_si(globalx1);
     in_di(globaly1);
-    read_axis_counts();
+    in_al(tile_y_shift);
+    in_cl(from_bl());
     in_dx(globalx2);
     scale_x_axes();
-    globalx1 = from_si();
-    globaly1 = from_di();
-    select_y_axis_count();
+    /* Keep these stores ahead of the next shift-count copy. */
+    *(volatile long *)&globalx1 = from_si();
+    *(volatile long *)&globaly1 = from_di();
+    in_cl(from_al());
     in_si(globaly2);
     in_di(globalxpanning);
     scale_y_axes();
     globalx2 = from_dx();
     scale_x_panning();
+    in_cl(from_al());
     in_ax(globalypanning);
     globaly2 = from_si();
     scale_y_panning();

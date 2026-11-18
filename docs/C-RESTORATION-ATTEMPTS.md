@@ -20,6 +20,16 @@ lands.
 | `copy_driver_record`, far-pointer C loop | 70 bytes; 4 data fixups | The reference is 74 bytes with 3 LE sites. Watcom accessed the far table through GS and emitted a byte-at-a-time loop; the target loads DS:ESI with `LDS`, preserves DS/ES/FS/GS, and copies 80 bytes with `REP MOVSB`. A far-memory intrinsic variant grew to 93 bytes and emitted an external helper call. The `/os` variant was 77 bytes with the same four fixups; it added an EBP frame but retained GS access and the scalar loop. |
 | DOS DTA transfers, replacing the remaining byte copy with Watcom intrinsic `memcpy` | 49 bytes per direction with `/or`, 37 with `/os`, versus 35 | The speed form emits a dword copy and a byte remainder. The size form emits `push edi; repne movsb; pop edi`. The reference emits only `rep movsb` with a different repeat prefix, so the two-byte copy remains inline. |
 
+### Plane span panning counts
+
+With `/4r /s /or /bt=dos`, splitting the remaining panning shift chains
+in `ceilscan_begin_spans_` and `florscan_begin_spans_` preserved length but
+hoisted `xor eax,eax` ahead of the ceiling X-panning shift, and `mov cl,bl`
+ahead of the floor Y-axis shifts. The exact partial rewrite keeps those
+chains intact. For a further split, make the current and next CL values
+explicit dependencies of each shift helper; do not add a masked C shift
+unless the original encoding still matches. Scratch: `work/dsh-r4-tails/`.
+
 ## Engine source references
 
 Consult the [pinned Build sources](BUILD-SOURCE-REFERENCES.md) first.

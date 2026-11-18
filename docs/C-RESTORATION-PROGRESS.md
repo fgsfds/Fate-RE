@@ -4,12 +4,12 @@ The latest marker audit covers the full **414,639-byte CODE segment**.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 139,494 | 33.64% |
-| Inline assembly instructions in C objects | 23,282 | 5.62% |
+| Compiler-generated instructions | 139,528 | 33.65% |
+| Inline assembly instructions in C objects | 23,248 | 5.61% |
 | Standalone assembly | 250,700 | 60.46% |
 | Unattributed instructions and non-routine tables | 1,163 | 0.28% |
 
-Known remaining assembly, including inline: **273,982 bytes (66.08%)**.
+Known remaining assembly, including inline: **273,948 bytes (66.07%)**.
 The unattributed category contains 810 instruction bytes in eleven routines
 whose marker comparison is unsupported or changes output, plus 352 jump-table
 bytes and one alignment byte. It must not be silently counted as either
@@ -35,9 +35,12 @@ The complete `wallmost` unit matches 646 bytes and 42 LE sites and targets.
 `release_empty_heaps_` now builds from a mixed C unit: 46 of its 94 bytes
 are compiler-generated and 48 remain inline. The complete span and its LE
 relocation match, including both interrupt paths and the shared return.
+The ceiling and floor `begin_spans` paths move another 34 inline bytes to C
+for texture shift loads and count copies. Their units match 1,540 bytes
+and 145 LE relocation sites and targets.
 
 The measured build and marker report are under `work/restoration-build/` and
-`work/dsh-goal-r3-heap-audit.json`. The audit reuses the checked distinct-end
+`work/dsh-r4-tails-audit.json`. The audit reuses the checked distinct-end marker
 marker retry for unchanged `flttrunc.obj`.
 The accepted executable is 741,347 bytes with SHA-256
 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.

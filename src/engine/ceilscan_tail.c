@@ -161,26 +161,23 @@ void ceilscan_flip_y(void)
     globalypanning = from_dx();
 }
 
-extern void read_x_axis_shift(void);
-#pragma aux read_x_axis_shift = "mov al, byte ptr [tile_x_shift]" modify exact [eax];
-
-extern void select_x_axis_count(void);
-#pragma aux select_x_axis_count = "mov cl, al" modify exact [ecx];
+/* Byte-width bindings preserve the untouched high register bits. */
+extern unsigned char from_al(void);
+#pragma aux from_al = value [al] modify exact [];
+extern unsigned char from_bl(void);
+#pragma aux from_bl = value [bl] modify exact [];
+extern void in_cl(unsigned char);
+#pragma aux in_cl = parm [cl] modify exact [];
+extern void in_al(unsigned char);
+#pragma aux in_al = parm [al] modify exact [];
+extern void in_bl(unsigned char);
+#pragma aux in_bl = parm [bl] modify exact [];
 
 extern void shift_x_axis(void);
 #pragma aux shift_x_axis = "shl ebx, cl" "shl esi, cl" modify exact [ebx esi];
 
-extern void read_y_axis_shift(void);
-#pragma aux read_y_axis_shift = "mov bl, byte ptr [tile_y_shift]" modify exact [ebx];
-
-extern void select_y_axis_count(void);
-#pragma aux select_y_axis_count = "mov cl, bl" modify exact [ecx];
-
 extern void shift_y_axis(void);
 #pragma aux shift_y_axis = "shl edi, cl" "shl edx, cl" modify exact [edi edx];
-
-extern void select_x_panning_count(void);
-#pragma aux select_x_panning_count = "mov cl, al" modify exact [ecx];
 
 extern void scale_panning_offsets(void);
 #pragma aux scale_panning_offsets = "shl esi, cl" "mov cl, bl" "xor eax, eax" "shl edi, cl" modify exact [eax ecx esi edi];
@@ -208,22 +205,23 @@ void ceilscan_begin_spans(void);
 void ceilscan_begin_spans(void)
 {
     /* Scale the texture steps and panning, then initialize the span renderer. */
-    read_x_axis_shift();
+    in_al(tile_x_shift);
     in_bx(globalx1);
     in_si(globaly1);
     in_di(globalx2);
-    select_x_axis_count();
+    in_cl(from_al());
     in_dx(globaly2);
     shift_x_axis();
     globalx1 = from_bx();
-    read_y_axis_shift();
+    in_bl(tile_y_shift);
     globaly1 = from_si();
-    select_y_axis_count();
+    in_cl(from_bl());
     in_si(globalxpanning);
     shift_y_axis();
-    globalx2 = from_di();
-    globaly2 = from_dx();
-    select_x_panning_count();
+    /* Keep these stores ahead of the next shift-count copy. */
+    *(volatile long *)&globalx2 = from_di();
+    *(volatile long *)&globaly2 = from_dx();
+    in_cl(from_al());
     in_di(globalypanning);
     scale_panning_offsets();
     globalxpanning = from_si();
