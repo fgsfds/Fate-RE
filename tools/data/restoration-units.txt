@@ -184,6 +184,7 @@ runtime/near_heap_resize heaprsz
 runtime/near_heap_allocate heapall
 runtime/near_heap_growth heapgrow
 runtime/dos_file_open_binary dosbin
+runtime/dos_access dosacc
 runtime/heap_request_rounding heaprnd /4r /s /or /os /bt=dos
 runtime/select_shell_switch rtshell /4r /s /or /os /bt=dos
 runtime/set_text_video_mode txtvmode

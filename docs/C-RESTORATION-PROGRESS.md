@@ -4,12 +4,12 @@ The latest marker audit covers the full **414,639-byte CODE segment**.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 139,845 | 33.73% |
-| Inline assembly instructions in C objects | 23,502 | 5.67% |
-| Standalone assembly | 249,954 | 60.28% |
+| Compiler-generated instructions | 139,865 | 33.73% |
+| Inline assembly instructions in C objects | 23,541 | 5.68% |
+| Standalone assembly | 249,895 | 60.27% |
 | Unattributed instructions and non-routine tables | 1,338 | 0.32% |
 
-Known remaining assembly, including inline: **273,456 bytes (65.95%)**.
+Known remaining assembly, including inline: **273,436 bytes (65.95%)**.
 The unattributed category contains 810 instruction bytes in eleven routines
 whose marker comparison is unsupported or changes output, plus 352 jump-table
 bytes and one alignment byte. It must not be silently counted as either
@@ -17,9 +17,9 @@ C-generated instructions or assembly. In particular, the 26-byte
 `clearallviews_vga_planes_` span remains unknown; its old 22/4 C/inline split
 cannot be reused after the changed translation unit.
 
-At the object/inventory level, C objects cover 164,685 bytes (**39.72%**), including
-the inline instructions above. Standalone assembly covers the other **60.28%**.
-The inventory has 1,151 C routine spans and 531 remaining assembly routine spans.
+At the object/inventory level, C objects cover 164,744 bytes (**39.73%**), including
+the inline instructions above. Standalone assembly covers the other **60.27%**.
+The inventory has 1,153 C routine spans and 530 remaining assembly routine spans.
 
 In `initialize_color_lookup_`, the red-distance multiply and neighbor-loop
 arithmetic move 31 bytes from inline assembly to compiler-generated C. The
@@ -57,9 +57,12 @@ into generated and inline.
 `__set_binary_` now builds as six C continuation spans. All 101 bytes match;
 31 bytes are compiler-generated and 70 remain inline across the handle mode
 and device IOCTL paths.
+`access_` now builds as two C continuation spans. All 59 bytes match; 20 bytes
+are compiler-generated and 39 remain inline across the DOS 43h attribute
+check and the carry-to-errno translation.
 
 The measured build and marker report are under `work/restoration-build/` and
-`work/dsh-r13-setbin-audit.json`. The audit reuses the checked distinct-end
+`work/dsh-r14-access-audit.json`. The audit reuses the checked distinct-end
 marker retry for unchanged `flttrunc.obj`.
 The accepted executable is 741,347 bytes with SHA-256
 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.

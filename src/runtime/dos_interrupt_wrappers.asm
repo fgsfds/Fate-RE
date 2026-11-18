@@ -69,36 +69,8 @@ far_memmove:
     pop esi
     ret 4
 
-access_:
-    push ebx
-    push ecx
-    mov ebx, edx
-    mov edx, eax
-    xor eax, eax
-    mov ah, 0x43
-    int 0x21
-    jb short .translate_dos_status
-    test bl, 2
-    je short .translate_dos_status
-    test cl, 1
-    je short .translate_dos_status
-    mov al, 0
-    mov ah, 6
-    stc
-
-.translate_dos_status:
-    sbb ecx, ecx
-    mov cx, ax
-    mov eax, ecx
-    mov ebx, eax
-    mov edx, eax
-    and ebx, 0xffff
-    shr edx, 0x10
-    mov eax, ebx
-    call dosret0
-    pop ecx
-    pop ebx
-    ret
+access_ equ 0x63130
+    times 59 db 0    ; access_ is supplied by C.
 
     times 17 db 0    ; stream_format_putc is supplied by C.
 

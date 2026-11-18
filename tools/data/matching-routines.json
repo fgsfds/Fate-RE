@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1151,
-  "unique_code_bytes": 164685,
+  "routines": 1153,
+  "unique_code_bytes": 164744,
   "le_pointers": 8959,
   "non_routine_code_spans": [
     {
@@ -6677,6 +6677,26 @@
       "raw_offset": "0x886b3",
       "loaded_address": "0x630b3",
       "bytes": 27,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "access_",
+      "object": "dosacc.obj",
+      "object_sha256": "db6b5f878bf264a8ac7095c4e0d9c89f3a3ffe3a5417a2566c5495540741a98a",
+      "sha256": "010cbb8561e397e1716dc74382562c2a30e254cc966140fd22e7e9aa7da143bf",
+      "raw_offset": "0x88730",
+      "loaded_address": "0x63130",
+      "bytes": 29,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "access_translate_",
+      "object": "dosacc.obj",
+      "object_sha256": "db6b5f878bf264a8ac7095c4e0d9c89f3a3ffe3a5417a2566c5495540741a98a",
+      "sha256": "e533f0ce2eec6110e9e5e0ac3058d252f28a626ba79c6d6621b0d8fcac5f42c5",
+      "raw_offset": "0x8874d",
+      "loaded_address": "0x6314d",
+      "bytes": 30,
       "le_pointers": 0
     },
     {

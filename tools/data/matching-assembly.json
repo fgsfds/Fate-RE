@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 531,
-  "unique_code_bytes": 249954,
+  "routines": 530,
+  "unique_code_bytes": 249895,
   "le_pointers": 13590,
   "non_routine_code_spans": [
     {
@@ -7123,18 +7123,6 @@
       "loaded_address": "0x630ce",
       "public_entry": "0x630ce",
       "binary_offset": 92,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "access_",
-      "source": "src/runtime/dos_interrupt_wrappers.asm",
-      "binary": "dos_interrupt_wrappers.bin",
-      "sha256": "e68b08f5ed995855c739e72126d9a0c427d6783d5dc5204656f655105073967b",
-      "bytes": 59,
-      "raw_offset": "0x88730",
-      "loaded_address": "0x63130",
-      "public_entry": "0x63130",
-      "binary_offset": 190,
       "le_pointers": 0
     },
     {

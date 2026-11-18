@@ -775,6 +775,8 @@ DOS_BINARY_MODE = (
     'set_binary_device_set_', 'set_binary_success_', 'set_binary_restore_',
 )
 OBJECT_NAMES.update(dict.fromkeys(DOS_BINARY_MODE, 'dosbin'))
+DOS_ACCESS = ('access_', 'access_translate_')
+OBJECT_NAMES.update(dict.fromkeys(DOS_ACCESS, 'dosacc'))
 HEAP_REQUEST_ROUTINES = ('round_heap_request_', 'request_more_heap_')
 OBJECT_NAMES.update(dict.fromkeys(HEAP_REQUEST_ROUTINES, 'heaprnd'))
 OBJECT_NAMES['select_shell_switch_'] = 'rtshell'
@@ -934,6 +936,7 @@ GROUPS = {
     'heapall': (211, NEAR_HEAP_ALLOCATE),
     'heapgrow': (175, NEAR_HEAP_GROWTH),
     'dosbin': (101, DOS_BINARY_MODE),
+    'dosacc': (59, DOS_ACCESS),
     'heaprnd': (122, HEAP_REQUEST_ROUTINES),
     'rtshell': (38, ('select_shell_switch_',)),
     'strmore': (105, STRING_FORMAT_HELPERS),

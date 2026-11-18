@@ -2805,7 +2805,6 @@ ROUTINES = [
     ('__InitRtns', 'runtime/crt_entry.asm', 'crt_entry.bin', 0x6337a, 75, {0x9: 0x999b4, 0xf: 0x999d8}),
     ('__FiniRtns', 'runtime/crt_entry.asm', 'crt_entry.bin', 0x633c5, 79, {0xa: 0x999d8, 0x10: 0x999e4}),
     ('far_memmove', 'runtime/dos_interrupt_wrappers.asm', 'dos_interrupt_wrappers.bin', 0x630ce, 98, {}),
-    ('access_', 'runtime/dos_interrupt_wrappers.asm', 'dos_interrupt_wrappers.bin', 0x63130, 59, {}),
     ('fill_byte_pattern', 'runtime/runtime_text_and_fill.asm', 'runtime_text_and_fill.bin', 0x62de0, 49, {}),
     ('fill_dword_pattern', 'runtime/runtime_text_and_fill.asm', 'runtime_text_and_fill.bin', 0x62e17, 108, {}),
     ('write_', 'runtime/dos_write_and_convert.asm', 'dos_write_and_convert.bin', 0x62a97, 465, {}),
