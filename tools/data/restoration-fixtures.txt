@@ -70,6 +70,7 @@ check_sprite_route_dispatch {exe} {build}/routedsp.obj | routedsp
 check_route_sectors {exe} {build}/routesec.obj | routesec
 check_sector_panning {exe} {build}/sectpan.obj | sectpan
 check_update_level_effects {exe} {build}/crushupd.obj | crushupd
+check_crusher_sound {exe} {build}/crushsnd.obj | crushsnd
 check_edit_save_slot_name {exe} {build}/savename.obj | savename
 check_run_save_game_menu {exe} {build}/savmenu.obj | savmenu
 check_run_load_game_menu {exe} {build}/loadmenu.obj | loadmenu

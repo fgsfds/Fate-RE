@@ -4,12 +4,12 @@ The latest marker audit covers the full **414,639-byte CODE segment**.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 139,543 | 33.65% |
-| Inline assembly instructions in C objects | 23,233 | 5.60% |
+| Compiler-generated instructions | 139,547 | 33.66% |
+| Inline assembly instructions in C objects | 23,229 | 5.60% |
 | Standalone assembly | 250,700 | 60.46% |
 | Unattributed instructions and non-routine tables | 1,163 | 0.28% |
 
-Known remaining assembly, including inline: **273,933 bytes (66.07%)**.
+Known remaining assembly, including inline: **273,929 bytes (66.06%)**.
 The unattributed category contains 810 instruction bytes in eleven routines
 whose marker comparison is unsupported or changes output, plus 352 jump-table
 bytes and one alignment byte. It must not be silently counted as either
@@ -41,9 +41,12 @@ and 145 LE relocation sites and targets.
 The Hercules bank setup and the VGA, CGA, and Hercules color-count reloads
 move another 15 inline bytes to C. The three paths match 356 bytes and 24 LE
 sites and targets; the full `vgapix` unit matches 712 bytes and 51 LE sites.
+`play_crusher_sound_` moves both wrapped negations (four bytes) to C while
+keeping the original `TEST/JNS` encodings. All 89 bytes and three LE sites
+and targets match.
 
 The measured build and marker report are under `work/restoration-build/` and
-`work/dsh-r5-pixel-audit.json`. The audit reuses the checked distinct-end
+`work/dsh-r6-crusher-audit.json`. The audit reuses the checked distinct-end
 marker retry for unchanged `flttrunc.obj`.
 The accepted executable is 741,347 bytes with SHA-256
 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.

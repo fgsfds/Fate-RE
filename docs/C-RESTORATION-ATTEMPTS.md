@@ -30,6 +30,15 @@ chains intact. For a further split, make the current and next CL values
 explicit dependencies of each shift helper; do not add a masked C shift
 unless the original encoding still matches. Scratch: `work/dsh-r4-tails/`.
 
+### Crusher distance sign branches
+
+With `/4r /s /or /bt=dos`, the signed test of an unsigned wrapped delta
+emits `TEST/JGE/NEG` rather than `TEST/JNS/NEG` and adds register copies.
+Unsigned comparisons and masks instead emit immediate CMP or TEST. The
+accepted split emits NEG from C but retains TEST/JNS. A further C-only
+probe needs to reproduce the original sign-condition opcode before
+addressing register lifetimes. Scratch: `work/dsh-r6-crusher/`.
+
 ## Engine source references
 
 Consult the [pinned Build sources](BUILD-SOURCE-REFERENCES.md) first.
