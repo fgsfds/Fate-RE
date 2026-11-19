@@ -485,6 +485,7 @@ fate/lookup_record_value lookup
 fate/wait_vertical_retrace waitret
 engine/code_entry_helpers codehelp
 runtime/audio_driver_commands audcmds
+runtime/graphics_planar_scan planar2
 runtime/spawn_fpu spawnfpu
 runtime/graphics_planar_device gfxplane
 runtime/graphics_bitmap_bits gfxbits

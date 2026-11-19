@@ -3990,6 +3990,8 @@ LEAVES['step_planar_left_'] = (0x9783a, 7)
 LEAVES['step_planar_right_'] = (0x97833, 7)
 LEAVES['step_interleaved_up_'] = (0x977f7, 18)
 LEAVES['step_interleaved_down_'] = (0x97809, 18)
+LEAVES['scan_two_planes_left_'] = (0x97c42, 4)
+LEAVES['scan_two_planes_right_'] = (0x97cf5, 4)
 LEAVES['get_audio_data_selector_'] = (0x8c16b, 4)
 LEAVES['get_audio_code_selector_'] = (0x8c16f, 4)
 
