@@ -47,17 +47,17 @@ def main():
     memory = image(exe)
     pointers = read_le_fixups(exe)['pointers']
     loaded = {name: 0x80000 + offset for name, offset in DATA_OFFSETS.items()}
-    symbol = 'windows_driver_interrupt_'
-    raw, size = LEAVES[symbol]
-    entry = raw - 0x25600
-    code, refs = bind_leaf_details(obj, symbol, DATA_OFFSETS, address=entry, functions=FUNCTION_ADDRESSES)
-    assert len(code) == size and code == exe[raw:raw + size], symbol
-    verify_leaf_relocations(code, refs, pointers, entry)
-    patched, _ = bind_leaf_details(obj, symbol, loaded, address=entry, functions=FUNCTION_ADDRESSES)
-    for code2 in (memory[entry:entry + size], patched):
-        for version, expect_call in ((3, True), (2, False)):
-            exercise(memory, entry, code2, version, expect_call)
-    print('PASS: 53 exact bytes, 0 LE relocations, 2 original and 2 restored dispatch cases')
+    for symbol in ('windows_driver_interrupt_', 'windows_driver_interrupt_stop_'):
+        raw, size = LEAVES[symbol]
+        entry = raw - 0x25600
+        code, refs = bind_leaf_details(obj, symbol, DATA_OFFSETS, address=entry, functions=FUNCTION_ADDRESSES)
+        assert len(code) == size and code == exe[raw:raw + size], symbol
+        verify_leaf_relocations(code, refs, pointers, entry)
+        patched, _ = bind_leaf_details(obj, symbol, loaded, address=entry, functions=FUNCTION_ADDRESSES)
+        for code2 in (memory[entry:entry + size], patched):
+            for version, expect_call in ((3, True), (2, False)):
+                exercise(memory, entry, code2, version, expect_call)
+    print('PASS: 106 exact bytes, 0 LE relocations, 4 original and 4 restored dispatch cases')
 
 
 if __name__ == '__main__':

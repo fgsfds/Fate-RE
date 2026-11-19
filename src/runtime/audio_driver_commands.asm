@@ -111,24 +111,8 @@ driver_callbacks_selector equ 0x16b6c
 copied_driver_record equ 0x16b10
 dpmi_memory_info equ 0x16b70
 
-windows_driver_interrupt_stop:
-    save_registers
-    mov ax, 0x1600
-    int 0x2f
-    cmp al, 3
-    jne short .return
-    nop
-    nop
-    nop
-    nop
-    mov ah, 0x81
-    mov al, 0xc
-    mov ebx, dword [ebp + 8]
-    db 0x66, 0x33, 0xd2 ; XOR DX, DX, register-destination encoding.
-    int 0x4b
-    mov ax, 0
-.return:
-    restore_registers
+windows_driver_interrupt_stop equ 0x66881
+    times 53 db 0    ; windows_driver_interrupt_stop is supplied by C.
 
 get_driver_tables:
     save_registers
