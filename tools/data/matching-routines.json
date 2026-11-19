@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1177,
-  "unique_code_bytes": 165705,
+  "routines": 1179,
+  "unique_code_bytes": 165713,
   "le_pointers": 8973,
   "non_routine_code_spans": [
     {
@@ -8007,6 +8007,26 @@
       "raw_offset": "0x8bffe",
       "loaded_address": "0x669fe",
       "bytes": 46,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "get_audio_data_selector_",
+      "object": "audcmds.obj",
+      "object_sha256": "863c2460a28b144ae2e2658566f7bebf98549d6971011cac391f8773cb0b744b",
+      "sha256": "c93c7b8a7abfb07a45f48f117a8198727d542b354a2cd2776d4473734d6ec8ec",
+      "raw_offset": "0x8c16b",
+      "loaded_address": "0x66b6b",
+      "bytes": 4,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "get_audio_code_selector_",
+      "object": "audcmds.obj",
+      "object_sha256": "863c2460a28b144ae2e2658566f7bebf98549d6971011cac391f8773cb0b744b",
+      "sha256": "5ae38531073a078a8af0400dc8d32119c89eb493d8b3d5581542444d00cccc40",
+      "raw_offset": "0x8c16f",
+      "loaded_address": "0x66b6f",
+      "bytes": 4,
       "le_pointers": 0
     },
     {
