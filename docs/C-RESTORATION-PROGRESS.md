@@ -5,8 +5,8 @@ The latest marker audit covers the full **414,639-byte CODE segment**.
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
 | Compiler-generated instructions | 139,892 | 33.74% |
-| Inline assembly instructions in C objects | 23,996 | 5.79% |
-| Standalone assembly | 249,413 | 60.15% |
+| Inline assembly instructions in C objects | 24,064 | 5.80% |
+| Standalone assembly | 249,345 | 60.14% |
 | Unattributed instructions and non-routine tables | 1,338 | 0.32% |
 
 Known remaining assembly, including inline: **273,409 bytes (65.94%)**.
@@ -17,9 +17,9 @@ C-generated instructions or assembly. In particular, the 26-byte
 `clearallviews_vga_planes_` span remains unknown; its old 22/4 C/inline split
 cannot be reused after the changed translation unit.
 
-At the object/inventory level, C objects cover 165,226 bytes (**39.85%**), including
-the inline instructions above. Standalone assembly covers the other **60.15%**.
-The inventory has 1,164 C routine spans and 519 remaining assembly routine spans.
+At the object/inventory level, C objects cover 165,294 bytes (**39.86%**), including
+the inline instructions above. Standalone assembly covers the other **60.14%**.
+The inventory has 1,165 C routine spans and 518 remaining assembly routine spans.
 
 In `initialize_color_lookup_`, the red-distance multiply and neighbor-loop
 arithmetic move 31 bytes from inline assembly to compiler-generated C. The
@@ -72,9 +72,12 @@ prologue/epilogue, the `mov eax`, `lfs`, and the far call).
 The remaining six HMI command wrappers (`driver_command_3`,
 `driver_secondary_command_1`–`4`, and `driver_configure_secondary`) now build
 as one C function each; all 254 bytes match, 0% generated and 100% inline.
+`read_driver_parameters` now builds as one C function; all 68 bytes match, 0%
+generated and 100% inline (the four parameter stores, `mov al,ch/cl`, `cbw`,
+and the far call).
 
 The measured build and marker report are under `work/restoration-build/` and
-`work/dsh-r19-cmd-audit.json`. The audit reuses the checked distinct-end
+`work/dsh-r20-rdp-audit.json`. The audit reuses the checked distinct-end
 marker retry for unchanged `flttrunc.obj`.
 The accepted executable is 741,347 bytes with SHA-256
 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.

@@ -3,6 +3,8 @@ void driver_command_5(void);
 #pragma aux driver_command_5 aborts;
 void driver_command_0(void);
 #pragma aux driver_command_0 aborts;
+void read_driver_parameters(void);
+#pragma aux read_driver_parameters aborts;
 void driver_command_3(void);
 #pragma aux driver_command_3 aborts;
 void driver_secondary_command_1(void);
@@ -76,6 +78,26 @@ extern void ch_dl(void);
 extern void ld_si_2c(void);
 #pragma aux ld_si_2c = "mov si,word ptr [ebp+2ch]" modify exact [esi];
 
+extern unsigned short detector_parameter_ax;
+extern unsigned short detector_parameter_ch;
+extern unsigned short detector_parameter_cl;
+extern unsigned short detector_parameter_dx;
+
+extern void store_ax(void);
+#pragma aux store_ax = "mov word ptr detector_parameter_ax, ax" modify exact [];
+extern void al_ch(void);
+#pragma aux al_ch = "db 8ah, 0c5h" modify exact [eax];
+extern void cbw_(void);
+#pragma aux cbw_ = "cbw" modify exact [eax];
+extern void store_ch(void);
+#pragma aux store_ch = "mov word ptr detector_parameter_ch, ax" modify exact [];
+extern void al_cl(void);
+#pragma aux al_cl = "db 8ah, 0c1h" modify exact [eax];
+extern void store_cl(void);
+#pragma aux store_cl = "mov word ptr detector_parameter_cl, ax" modify exact [];
+extern void store_dx(void);
+#pragma aux store_dx = "mov word ptr detector_parameter_dx, dx" modify exact [];
+
 void driver_command_5(void)
 {
     save_registers();
@@ -91,6 +113,23 @@ void driver_command_0(void)
     cmd0();
     lfs_edi_10();
     call_driver();
+    restore_registers();
+}
+
+void read_driver_parameters(void)
+{
+    save_registers();
+    cmd1();
+    lfs_edi_10();
+    call_driver();
+    store_ax();
+    al_ch();
+    cbw_();
+    store_ch();
+    al_cl();
+    cbw_();
+    store_cl();
+    store_dx();
     restore_registers();
 }
 

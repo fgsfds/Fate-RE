@@ -36,20 +36,8 @@ driver_command_5 equ 0x66641
 driver_command_0 equ 0x66664
     times 35 db 0    ; driver_command_0 is supplied by C.
 
-read_driver_parameters:
-    save_registers
-    mov eax, 1
-    lfs edi, [ebp + 0x10]
-    call far [ebp + 8]
-    mov word [driver_parameter_ax], ax
-    db 0x8a, 0xc5 ; MOV AL, CH, register-destination encoding.
-    cbw
-    mov word [driver_parameter_ch], ax
-    db 0x8a, 0xc1 ; MOV AL, CL, register-destination encoding.
-    cbw
-    mov word [driver_parameter_cl], ax
-    mov word [driver_parameter_dx], dx
-    restore_registers
+read_driver_parameters equ 0x66687
+    times 68 db 0    ; read_driver_parameters is supplied by C.
 
 read_driver_command_table:
     save_registers

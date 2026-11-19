@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1164,
-  "unique_code_bytes": 165226,
-  "le_pointers": 8962,
+  "routines": 1165,
+  "unique_code_bytes": 165294,
+  "le_pointers": 8966,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -7838,6 +7838,16 @@
       "loaded_address": "0x66664",
       "bytes": 35,
       "le_pointers": 0
+    },
+    {
+      "symbol": "read_driver_parameters_",
+      "object": "audiocmd.obj",
+      "object_sha256": "74f3e4afbe94791b035241bbca020b44af81ad743197af6141185e66eb5aa5db",
+      "sha256": "52c789c1e723093a96d669f63d232ef5921a407fb00764cf6d8ecb5a39f674b7",
+      "raw_offset": "0x8bc87",
+      "loaded_address": "0x66687",
+      "bytes": 68,
+      "le_pointers": 4
     },
     {
       "symbol": "driver_command_3_",

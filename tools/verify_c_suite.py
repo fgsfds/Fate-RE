@@ -778,7 +778,7 @@ OBJECT_NAMES.update(dict.fromkeys(DOS_BINARY_MODE, 'dosbin'))
 DOS_ACCESS = ('access_', 'access_translate_')
 OBJECT_NAMES.update(dict.fromkeys(DOS_ACCESS, 'dosacc'))
 TIMER_IRQ_MASK = ('mask_timer_irq_', 'unmask_timer_irq_', 'program_pit_')
-AUDIO_COMMAND_WRAPPERS = ('driver_command_5_', 'driver_command_0_', 'driver_command_3_', 'driver_secondary_command_1_', 'driver_configure_secondary_', 'driver_secondary_command_4_', 'driver_secondary_command_2_', 'driver_secondary_command_3_')
+AUDIO_COMMAND_WRAPPERS = ('driver_command_5_', 'driver_command_0_', 'read_driver_parameters_', 'driver_command_3_', 'driver_secondary_command_1_', 'driver_configure_secondary_', 'driver_secondary_command_4_', 'driver_secondary_command_2_', 'driver_secondary_command_3_')
 OBJECT_NAMES.update(dict.fromkeys(AUDIO_COMMAND_WRAPPERS, 'audiocmd'))
 OBJECT_NAMES.update(dict.fromkeys(TIMER_IRQ_MASK, 'timerirq'))
 HEAP_REQUEST_ROUTINES = ('round_heap_request_', 'request_more_heap_')
@@ -942,7 +942,7 @@ GROUPS = {
     'dosbin': (101, DOS_BINARY_MODE),
     'dosacc': (59, DOS_ACCESS),
     'timerirq': (158, TIMER_IRQ_MASK),
-    'audiocmd': (324, AUDIO_COMMAND_WRAPPERS),
+    'audiocmd': (392, AUDIO_COMMAND_WRAPPERS),
     'heaprnd': (122, HEAP_REQUEST_ROUTINES),
     'rtshell': (38, ('select_shell_switch_',)),
     'strmore': (105, STRING_FORMAT_HELPERS),

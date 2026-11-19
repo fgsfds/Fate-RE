@@ -1596,6 +1596,7 @@ LEAVES.update({
     'program_pit_': (0x8a36f, 70),
     'driver_command_5_': (0x8bc41, 35),
     'driver_command_0_': (0x8bc64, 35),
+    'read_driver_parameters_': (0x8bc87, 68),
     'driver_command_3_': (0x8bd24, 48),
     'driver_secondary_command_1_': (0x8bd54, 35),
     'driver_configure_secondary_': (0x8bd77, 53),
