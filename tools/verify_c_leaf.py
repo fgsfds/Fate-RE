@@ -3981,6 +3981,7 @@ LEAVES.update({
 })
 
 LEAVES['wait_vertical_retrace_'] = (0x66182, 23)
+LEAVES['bios_print_screen_'] = (0x79a68, 3)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

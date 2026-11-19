@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 507,
-  "unique_code_bytes": 248937,
+  "routines": 506,
+  "unique_code_bytes": 248934,
   "le_pointers": 13576,
   "non_routine_code_spans": [
     {
@@ -7267,18 +7267,6 @@
       "loaded_address": "0x10000",
       "public_entry": "0x10000",
       "binary_offset": 0,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "bios_print_screen",
-      "source": "src/engine/code_entry_helpers.asm",
-      "binary": "code_entry_helpers.bin",
-      "sha256": "3fb5848310ed7ff30f4852a477129a686424c82f8d04cb5ee9c80e458aa97be3",
-      "bytes": 3,
-      "raw_offset": "0x79a68",
-      "loaded_address": "0x54468",
-      "public_entry": "0x54468",
-      "binary_offset": 16,
       "le_pointers": 0
     },
     {

@@ -2882,7 +2882,6 @@ ROUTINES = [
     ('draw_sprite_horizontal_reverse_', 'engine/draw_sprite_horizontal_reverse.asm', 'draw_sprite_horizontal_reverse.bin', 0x75310, 159,
      {}),
     ('code_base_trap', 'engine/code_entry_helpers.asm', 'code_entry_helpers.bin', 0x10000, 16, {}),
-    ('bios_print_screen', 'engine/code_entry_helpers.asm', 'code_entry_helpers.bin', 0x54468, 3, {}),
     ('drawrooms_', 'engine/drawrooms.asm', 'drawrooms.bin', 0x44796, 1088, DRAWROOMS_POINTERS),
     ('present_regions_', 'engine/present_regions.asm', 'present_regions.bin', 0x44220, 1356, PRESENT_REGIONS_POINTERS),
     ('scansector_', 'engine/scansector.asm', 'scansector.bin', 0x44bd6, 1853, SCANSECTOR_POINTERS),
@@ -3295,7 +3294,6 @@ NON_ROUTINE_KINDS.update({
 
 GROUP_SLICES = {
     'code_base_trap': (0, 19),
-    'bios_print_screen': (16, 19),
     'code_padding_5d088': (0, 257),
     'code_padding_5ff05': (2, 257),
     'code_padding_60321': (5, 257),

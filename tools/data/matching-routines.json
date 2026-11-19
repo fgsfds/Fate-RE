@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1176,
-  "unique_code_bytes": 165702,
+  "routines": 1177,
+  "unique_code_bytes": 165705,
   "le_pointers": 8973,
   "non_routine_code_spans": [
     {
@@ -4758,6 +4758,16 @@
       "loaded_address": "0x54424",
       "bytes": 68,
       "le_pointers": 1
+    },
+    {
+      "symbol": "bios_print_screen_",
+      "object": "codehelp.obj",
+      "object_sha256": "6459193a9ff255ab00315cabe9c0226453d13a711141c7e1ca34ab49b62453e3",
+      "sha256": "3fb5848310ed7ff30f4852a477129a686424c82f8d04cb5ee9c80e458aa97be3",
+      "raw_offset": "0x79a68",
+      "loaded_address": "0x54468",
+      "bytes": 3,
+      "le_pointers": 0
     },
     {
       "symbol": "drawline256_",
