@@ -4,12 +4,12 @@ The latest marker audit covers the full **414,639-byte CODE segment**.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 139974 | 33.76% |
+| Compiler-generated instructions | 140010 | 33.77% |
 | Inline assembly instructions in C objects | 24,436 | 5.89% |
-| Standalone assembly | 248,891 | 60.03% |
+| Standalone assembly | 248,855 | 60.02% |
 | Unattributed instructions and non-routine tables | 1,338 | 0.32% |
 
-Known remaining assembly, including inline: **273,327 bytes (65.92%)**.
+Known remaining assembly, including inline: **273,291 bytes (65.91%)**.
 The unattributed category contains 810 instruction bytes in eleven routines
 whose marker comparison is unsupported or changes output, plus 352 jump-table
 bytes and one alignment byte. It must not be silently counted as either
@@ -17,9 +17,9 @@ C-generated instructions or assembly. In particular, the 26-byte
 `clearallviews_vga_planes_` span remains unknown; its old 22/4 C/inline split
 cannot be reused after the changed translation unit.
 
-At the object/inventory level, C objects cover 165,748 bytes (**39.97%**), including
-the inline instructions above. Standalone assembly covers the other **60.03%**.
-The inventory has 1,185 C routine spans and 498 remaining assembly routine spans.
+At the object/inventory level, C objects cover 165,784 bytes (**39.98%**), including
+the inline instructions above. Standalone assembly covers the other **60.02%**.
+The inventory has 1,187 C routine spans and 496 remaining assembly routine spans.
 
 `or_masked_byte` now builds as one C function. All 6 bytes match: the routine
 issues the original `and al,ch; or byte ptr es:[edi], al` sequence, and the
@@ -40,6 +40,16 @@ sites or targets.
 routine issues the original `add eax,0xdf83c5d0; add bl,al` sequence, and
 the enclosing wrapper supplies the final `ret`. The span has no LE relocation
 sites or targets.
+
+`step_interleaved_up` now builds as one C function. All 18 bytes match: the
+routine issues the original `add di,0x6000; jns; sub di,0x7fa6; sub di,0x5a`
+sequence, and the enclosing wrapper supplies the final `ret`. The span has no
+LE relocation sites or targets.
+
+`step_interleaved_down` now builds as one C function. All 18 bytes match: the
+routine issues the original `sub di,0x6000; jns; add di,0x7fa6; add di,0x5a`
+sequence, and the enclosing wrapper supplies the final `ret`. The span has no
+LE relocation sites or targets.
 
 `save_fpu_state` now builds as one C function. All 5 bytes match: the routine
 issues the original `FWAIT + FNSAVE [EAX] + FWAIT` sequence, and the enclosing

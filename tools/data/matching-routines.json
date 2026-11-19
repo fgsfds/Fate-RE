@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1185,
-  "unique_code_bytes": 165748,
+  "routines": 1187,
+  "unique_code_bytes": 165784,
   "le_pointers": 8973,
   "non_routine_code_spans": [
     {
@@ -11318,6 +11318,26 @@
       "loaded_address": "0x72180",
       "bytes": 119,
       "le_pointers": 3
+    },
+    {
+      "symbol": "step_interleaved_up_",
+      "object": "gfxplane.obj",
+      "object_sha256": "bf14d1beb9648c97bf9434add8dd86265aaf7540f1fb24e707ec6d1e7bff8bd7",
+      "sha256": "708efc7ba69221fed7fa1847319f0919a88795701f5762f2b08a357c4fa2ebf3",
+      "raw_offset": "0x977f7",
+      "loaded_address": "0x721f7",
+      "bytes": 18,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "step_interleaved_down_",
+      "object": "gfxplane.obj",
+      "object_sha256": "bf14d1beb9648c97bf9434add8dd86265aaf7540f1fb24e707ec6d1e7bff8bd7",
+      "sha256": "7750b9335abd854ef402161c78527f9675f122c644de9729d40199093fda89a1",
+      "raw_offset": "0x97809",
+      "loaded_address": "0x72209",
+      "bytes": 18,
+      "le_pointers": 0
     },
     {
       "symbol": "step_up_80_",
