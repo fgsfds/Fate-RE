@@ -66,6 +66,7 @@ check_timer_irq_mask {exe} {build}/timerirq.obj | timerirq
 check_program_pit {exe} {build}/timerirq.obj | timerirq
 check_audio_command_wrappers {exe} {build}/audiocmd.obj | audiocmd
 check_read_driver_parameters {exe} {build}/audiocmd.obj | audiocmd
+check_windows_driver_interrupt {exe} {build}/windi.obj | windi
 check_mono_pixel_address {exe} {build}/vgapix.obj | vgapix
 check_float_integer_conversions {exe} | fltint u32float i32float flttrunc fltwiden
 check_spawn_fpu_callbacks {exe} | spnfpu

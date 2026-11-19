@@ -1597,6 +1597,7 @@ LEAVES.update({
     'driver_command_5_': (0x8bc41, 35),
     'driver_command_0_': (0x8bc64, 35),
     'read_driver_parameters_': (0x8bc87, 68),
+    'windows_driver_interrupt_': (0x8be4c, 53),
     'driver_command_3_': (0x8bd24, 48),
     'driver_secondary_command_1_': (0x8bd54, 35),
     'driver_configure_secondary_': (0x8bd77, 53),

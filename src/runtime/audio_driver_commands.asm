@@ -101,24 +101,8 @@ probe_windows_driver_value:
 .return:
     restore_registers
 
-windows_driver_interrupt:
-    save_registers
-    mov ax, 0x1600
-    int 0x2f
-    cmp al, 3
-    jne short .return
-    nop
-    nop
-    nop
-    nop
-    mov ah, 0x81
-    mov al, 0xb
-    mov ebx, dword [ebp + 8]
-    db 0x66, 0x33, 0xd2 ; XOR DX, DX, register-destination encoding.
-    int 0x4b
-    mov ax, 0
-.return:
-    restore_registers
+windows_driver_interrupt equ 0x6684c
+    times 53 db 0    ; windows_driver_interrupt is supplied by C.
 
 driver_records equ 0x16b60
 driver_records_selector equ 0x16b64

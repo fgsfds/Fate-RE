@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1165,
-  "unique_code_bytes": 165294,
+  "routines": 1166,
+  "unique_code_bytes": 165347,
   "le_pointers": 8966,
   "non_routine_code_spans": [
     {
@@ -7907,6 +7907,16 @@
       "raw_offset": "0x8bdfb",
       "loaded_address": "0x667fb",
       "bytes": 39,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "windows_driver_interrupt_",
+      "object": "windi.obj",
+      "object_sha256": "26969f62ae7804971bcbb5c102fbc8ed4e8470a170ff012af9b4335d2ef1be07",
+      "sha256": "1d3b0a0b18532457b68d98c05852e0b3f49e864ac7754716b36031749028ae0c",
+      "raw_offset": "0x8be4c",
+      "loaded_address": "0x6684c",
+      "bytes": 53,
       "le_pointers": 0
     },
     {

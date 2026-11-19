@@ -187,6 +187,7 @@ runtime/dos_file_open_binary dosbin
 runtime/dos_access dosacc
 runtime/timer_irq_mask timerirq
 runtime/audio_command_wrappers audiocmd
+runtime/windows_driver_interrupt windi
 runtime/heap_request_rounding heaprnd /4r /s /or /os /bt=dos
 runtime/select_shell_switch rtshell /4r /s /or /os /bt=dos
 runtime/set_text_video_mode txtvmode
