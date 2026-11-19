@@ -5,8 +5,8 @@ The latest marker audit covers the full **414,639-byte CODE segment**.
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
 | Compiler-generated instructions | 139,900 | 33.74% |
-| Inline assembly instructions in C objects | 24,397 | 5.88% |
-| Standalone assembly | 249,004 | 60.05% |
+| Inline assembly instructions in C objects | 24,436 | 5.89% |
+| Standalone assembly | 248,965 | 60.04% |
 | Unattributed instructions and non-routine tables | 1,338 | 0.32% |
 
 Known remaining assembly, including inline: **273,401 bytes (65.94%)**.
@@ -17,9 +17,9 @@ C-generated instructions or assembly. In particular, the 26-byte
 `clearallviews_vga_planes_` span remains unknown; its old 22/4 C/inline split
 cannot be reused after the changed translation unit.
 
-At the object/inventory level, C objects cover 165,635 bytes (**39.95%**), including
-the inline instructions above. Standalone assembly covers the other **60.05%**.
-The inventory has 1,172 C routine spans and 511 remaining assembly routine spans.
+At the object/inventory level, C objects cover 165,674 bytes (**39.96%**), including
+the inline instructions above. Standalone assembly covers the other **60.04%**.
+The inventory has 1,173 C routine spans and 510 remaining assembly routine spans.
 
 In `initialize_color_lookup_`, the red-distance multiply and neighbor-loop
 arithmetic move 31 bytes from inline assembly to compiler-generated C. The
@@ -91,9 +91,12 @@ far stores).
 `release_dos_selector` now builds as one C function; all 46 bytes match, 0%
 generated and 100% inline (the segment setup before the prologue plus the DPMI
 0x101 release).
+`configure_fpu` now builds as one C function; all 39 bytes match, 0% generated
+and 100% inline (the pushed control word, the x87 infinity comparison, and the
+requested control-word load).
 
 The measured build and marker report are under `work/restoration-build/` and
-`work/dsh-r26-rds-audit.json`. The audit reuses the checked distinct-end
+`work/dsh-r27-fpu-audit.json`. The audit reuses the checked distinct-end
 marker retry for unchanged `flttrunc.obj`.
 The accepted executable is 741,347 bytes with SHA-256
 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.

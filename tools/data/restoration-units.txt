@@ -192,6 +192,7 @@ runtime/get_driver_tables gdt
 runtime/query_driver_info qwin
 runtime/set_driver_callback sdc
 runtime/release_dos_selector rds
+runtime/configure_fpu fpu
 runtime/heap_request_rounding heaprnd /4r /s /or /os /bt=dos
 runtime/select_shell_switch rtshell /4r /s /or /os /bt=dos
 runtime/set_text_video_mode txtvmode

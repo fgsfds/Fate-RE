@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1172,
-  "unique_code_bytes": 165635,
+  "routines": 1173,
+  "unique_code_bytes": 165674,
   "le_pointers": 8973,
   "non_routine_code_spans": [
     {
@@ -8258,6 +8258,16 @@
       "loaded_address": "0x67a33",
       "bytes": 14,
       "le_pointers": 1
+    },
+    {
+      "symbol": "configure_fpu_",
+      "object": "fpu.obj",
+      "object_sha256": "975395b3751229d28f4562622e4268060d8d96b24595700c779c73b06fcaab5c",
+      "sha256": "c17666e3fcd3e66c7a8bd6098d4cc2a9f19b4b7893a403543791f8fcfa5426d2",
+      "raw_offset": "0x9038e",
+      "loaded_address": "0x6ad8e",
+      "bytes": 39,
+      "le_pointers": 0
     },
     {
       "symbol": "tell_",

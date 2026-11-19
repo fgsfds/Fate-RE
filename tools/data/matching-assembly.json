@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 511,
-  "unique_code_bytes": 249004,
+  "routines": 510,
+  "unique_code_bytes": 248965,
   "le_pointers": 13576,
   "non_routine_code_spans": [
     {
@@ -5012,18 +5012,6 @@
       "public_entry": "0x67049",
       "binary_offset": 67,
       "le_pointers": 1
-    },
-    {
-      "symbol": "configure_fpu",
-      "source": "src/runtime/configure_fpu.asm",
-      "binary": "configure_fpu.bin",
-      "sha256": "c17666e3fcd3e66c7a8bd6098d4cc2a9f19b4b7893a403543791f8fcfa5426d2",
-      "bytes": 39,
-      "raw_offset": "0x9038e",
-      "loaded_address": "0x6ad8e",
-      "public_entry": "0x6ad8e",
-      "binary_offset": 0,
-      "le_pointers": 0
     },
     {
       "symbol": "save_fpu_state",

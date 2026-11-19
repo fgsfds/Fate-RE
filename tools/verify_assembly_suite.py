@@ -2134,7 +2134,6 @@ ROUTINES = [
     ('check_stack_space', 'runtime/stack_checks.asm', 'stack_checks.bin', 0x6702b, 30,
      {0xa: 0x9447c, 0x17: 0x96c50}),
     ('report_stack_overflow', 'runtime/stack_checks.asm', 'stack_checks.bin', 0x67049, 15, {1: 0x96c52}),
-    ('configure_fpu', 'runtime/configure_fpu.asm', 'configure_fpu.bin', 0x6ad8e, 39, {}),
     ('save_fpu_state', 'runtime/spawn_fpu.asm', 'spawn_fpu.bin', 0x645f7, 5, {}),
     ('restore_fpu_state', 'runtime/spawn_fpu.asm', 'spawn_fpu.bin', 0x645fc, 4, {}),
     ('draw_graphics_span', 'runtime/graphics_span.asm', 'graphics_span.bin', 0x735c4, 182,
