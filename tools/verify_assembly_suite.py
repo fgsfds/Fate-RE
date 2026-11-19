@@ -2817,8 +2817,6 @@ ROUTINES = [
     ('timer_irq', 'runtime/timer_hardware.asm', 'timer_hardware.bin', 0x64cfd, 114, {0x13: 0x96526, 0x2c: 0x96526, 0x34: 0x94516, 0x3b: 0x9451a, 0x42: 0x9450e, 0x50: 0x9651e, 0x56: 0x94508, 0x63: 0x94516, 0x6a: 0x96526}),
     ('program_pit', 'runtime/timer_hardware.asm', 'timer_hardware.bin', 0x64d6f, 70, {0xe: 0x96528}),
     ('install_timer_vector', 'runtime/timer_hardware.asm', 'timer_hardware.bin', 0x64db5, 187, {0x11: 0x94508, 0x18: 0x9450c, 0x1f: 0x94512, 0x25: 0x96528, 0x3a: 0x9652c, 0x4f: 0x944fc, 0x56: 0x94500, 0x61: 0x64cfd, 0x77: 0x944fc, 0x7e: 0x94500, 0x8d: 0x64cfd}),
-    ('mask_timer_irq', 'runtime/timer_hardware.asm', 'timer_hardware.bin', 0x64e70, 44, {0xe: 0x96528}),
-    ('unmask_timer_irq', 'runtime/timer_hardware.asm', 'timer_hardware.bin', 0x64e9c, 44, {0xe: 0x96528}),
     ('restore_timer_vector', 'runtime/timer_hardware.asm', 'timer_hardware.bin', 0x64ec8, 124, {0xe: 0x96528, 0x23: 0x9652c, 0x37: 0x94500, 0x3d: 0x944fc, 0x50: 0x94500, 0x56: 0x944fc}),
     ('chain_original_timer', 'runtime/timer_hardware.asm', 'timer_hardware.bin', 0x64f44, 89, {0x2: 0x96528, 0x10: 0x96526, 0x18: 0x9651e, 0x25: 0x94516, 0x2a: 0x96522, 0x31: 0x9651e, 0x38: 0x944fc, 0x40: 0x94500, 0x49: 0x96522, 0x50: 0x9651e}),
     ('fwrite_', 'runtime/stdio_write.asm', 'stdio_write.bin', 0x60944, 487, {}),
@@ -3874,8 +3872,6 @@ GROUP_SLICES = {
     'timer_irq': (0, 673),
     'program_pit': (114, 673),
     'install_timer_vector': (184, 673),
-    'mask_timer_irq': (371, 673),
-    'unmask_timer_irq': (415, 673),
     'restore_timer_vector': (459, 673),
     'chain_original_timer': (583, 673),
 
@@ -4440,8 +4436,6 @@ DATA_POINTER_SITES = {
     'timer_irq': (19, 44, 52, 59, 66, 80, 86, 99, 106),
     'program_pit': (14,),
     'install_timer_vector': (17, 24, 31, 37, 58, 79, 86, 119, 126),
-    'mask_timer_irq': (14,),
-    'unmask_timer_irq': (14,),
     'restore_timer_vector': (14, 35, 55, 61, 80, 86),
     'chain_original_timer': (2, 16, 24, 37, 42, 49, 56, 64, 73, 80),
 

@@ -183,69 +183,10 @@ install_timer_vector:
     pop ebp
     ret
 
-mask_timer_irq:
-    push ebp
-    db 0x8b, 0xec ; MOV EBP, ESP uses the register-destination opcode.
-    push esi
-    push edi
-    push ebx
-    push ecx
-    push fs
-    push gs
-    push es
-    cmp dword [pit_programming_enabled], 0
-    je short .restore_registers
-    nop
-    nop
-    nop
-    nop
-    mov dx, 0x21
-    in al, dx
-    or al, 1
-    out dx, al
-
-.restore_registers:
-    pop es
-    pop gs
-    pop fs
-    pop ecx
-    pop ebx
-    pop edi
-    pop esi
-    pop ebp
-    ret
-
-unmask_timer_irq:
-    push ebp
-    db 0x8b, 0xec ; MOV EBP, ESP uses the register-destination opcode.
-    push esi
-    push edi
-    push ebx
-    push ecx
-    push fs
-    push gs
-    push es
-    cmp dword [pit_programming_enabled], 0
-    je short .restore_registers
-    nop
-    nop
-    nop
-    nop
-    mov dx, 0x21
-    in al, dx
-    and al, 0xfe
-    out dx, al
-
-.restore_registers:
-    pop es
-    pop gs
-    pop fs
-    pop ecx
-    pop ebx
-    pop edi
-    pop esi
-    pop ebp
-    ret
+mask_timer_irq equ 0x64e70
+    times 44 db 0    ; mask_timer_irq is supplied by C.
+unmask_timer_irq equ 0x64e9c
+    times 44 db 0    ; unmask_timer_irq is supplied by C.
 
 restore_timer_vector:
     push ebp

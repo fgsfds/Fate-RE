@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1153,
-  "unique_code_bytes": 164744,
-  "le_pointers": 8959,
+  "routines": 1155,
+  "unique_code_bytes": 164832,
+  "le_pointers": 8961,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -7268,6 +7268,26 @@
       "loaded_address": "0x64cfc",
       "bytes": 1,
       "le_pointers": 0
+    },
+    {
+      "symbol": "mask_timer_irq_",
+      "object": "timerirq.obj",
+      "object_sha256": "a39198286444a95147983a5785035364a48d8a90bbafcc4061ba0429d08c57c0",
+      "sha256": "bc67e3efd5984e781a45630320384d1071422cacd4474a8c922ec248e0211888",
+      "raw_offset": "0x8a470",
+      "loaded_address": "0x64e70",
+      "bytes": 44,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "unmask_timer_irq_",
+      "object": "timerirq.obj",
+      "object_sha256": "a39198286444a95147983a5785035364a48d8a90bbafcc4061ba0429d08c57c0",
+      "sha256": "8d1238c913638a0888b59fad23131e9d5cb77c15bf68f494e5bd5fc590c10818",
+      "raw_offset": "0x8a49c",
+      "loaded_address": "0x64e9c",
+      "bytes": 44,
+      "le_pointers": 1
     },
     {
       "symbol": "timer_vector_noop_",

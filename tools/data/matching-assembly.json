@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 530,
-  "unique_code_bytes": 249895,
-  "le_pointers": 13590,
+  "routines": 528,
+  "unique_code_bytes": 249807,
+  "le_pointers": 13588,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -7268,30 +7268,6 @@
       "public_entry": "0x64db5",
       "binary_offset": 184,
       "le_pointers": 11
-    },
-    {
-      "symbol": "mask_timer_irq",
-      "source": "src/runtime/timer_hardware.asm",
-      "binary": "timer_hardware.bin",
-      "sha256": "bc67e3efd5984e781a45630320384d1071422cacd4474a8c922ec248e0211888",
-      "bytes": 44,
-      "raw_offset": "0x8a470",
-      "loaded_address": "0x64e70",
-      "public_entry": "0x64e70",
-      "binary_offset": 371,
-      "le_pointers": 1
-    },
-    {
-      "symbol": "unmask_timer_irq",
-      "source": "src/runtime/timer_hardware.asm",
-      "binary": "timer_hardware.bin",
-      "sha256": "8d1238c913638a0888b59fad23131e9d5cb77c15bf68f494e5bd5fc590c10818",
-      "bytes": 44,
-      "raw_offset": "0x8a49c",
-      "loaded_address": "0x64e9c",
-      "public_entry": "0x64e9c",
-      "binary_offset": 415,
-      "le_pointers": 1
     },
     {
       "symbol": "restore_timer_vector",
