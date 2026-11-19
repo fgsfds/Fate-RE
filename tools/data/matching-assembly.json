@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 525,
-  "unique_code_bytes": 249667,
+  "routines": 519,
+  "unique_code_bytes": 249413,
   "le_pointers": 13587,
   "non_routine_code_spans": [
     {
@@ -2482,66 +2482,6 @@
       "le_pointers": 0
     },
     {
-      "symbol": "driver_secondary_command_3",
-      "source": "src/runtime/audio_driver_commands.asm",
-      "binary": "audio_driver_commands.bin",
-      "sha256": "708ce66096501714f836d519539d056b30e5523d237fb4ac0e75632070678504",
-      "bytes": 39,
-      "raw_offset": "0x8bdfb",
-      "loaded_address": "0x667fb",
-      "public_entry": "0x667fb",
-      "binary_offset": 442,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "driver_secondary_command_2",
-      "source": "src/runtime/audio_driver_commands.asm",
-      "binary": "audio_driver_commands.bin",
-      "sha256": "78169199880ebc90fc2f49ae8bb58323aefe06c18f6c33d76becd79dc891508c",
-      "bytes": 38,
-      "raw_offset": "0x8bdd5",
-      "loaded_address": "0x667d5",
-      "public_entry": "0x667d5",
-      "binary_offset": 404,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "driver_secondary_command_4",
-      "source": "src/runtime/audio_driver_commands.asm",
-      "binary": "audio_driver_commands.bin",
-      "sha256": "e1875a401ea9e6e229f901f37cb5d7c0ab2c63e78b21d71a5354bbeea275ad72",
-      "bytes": 41,
-      "raw_offset": "0x8bdac",
-      "loaded_address": "0x667ac",
-      "public_entry": "0x667ac",
-      "binary_offset": 363,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "driver_configure_secondary",
-      "source": "src/runtime/audio_driver_commands.asm",
-      "binary": "audio_driver_commands.bin",
-      "sha256": "4888fe0324d50d72ce17e837da6105bac2aedb62949e3669be2625a546a43c0a",
-      "bytes": 53,
-      "raw_offset": "0x8bd77",
-      "loaded_address": "0x66777",
-      "public_entry": "0x66777",
-      "binary_offset": 310,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "driver_secondary_command_1",
-      "source": "src/runtime/audio_driver_commands.asm",
-      "binary": "audio_driver_commands.bin",
-      "sha256": "7d233776257bf330e449cada3f81e8c11915d79d4f52a2856ef19b0f2e3d8e8d",
-      "bytes": 35,
-      "raw_offset": "0x8bd54",
-      "loaded_address": "0x66754",
-      "public_entry": "0x66754",
-      "binary_offset": 275,
-      "le_pointers": 0
-    },
-    {
       "symbol": "read_driver_parameters",
       "source": "src/runtime/audio_driver_commands.asm",
       "binary": "audio_driver_commands.bin",
@@ -2563,18 +2503,6 @@
       "loaded_address": "0x666cb",
       "public_entry": "0x666cb",
       "binary_offset": 138,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "driver_command_3",
-      "source": "src/runtime/audio_driver_commands.asm",
-      "binary": "audio_driver_commands.bin",
-      "sha256": "e833002e74e0e086b0e75160d4d088c9e18101e4ba75cb1d8fdbf7c70dcce602",
-      "bytes": 48,
-      "raw_offset": "0x8bd24",
-      "loaded_address": "0x66724",
-      "public_entry": "0x66724",
-      "binary_offset": 227,
       "le_pointers": 0
     },
     {

@@ -86,61 +86,18 @@ read_driver_command_table:
     pop ds
     restore_registers
 
-driver_command_3:
-    save_registers
-    mov ebx, dword [ebp + 0x10]
-    mov eax, dword [ebp + 0x14]
-    db 0x8a, 0xe8 ; MOV CH, AL, register-destination encoding.
-    mov eax, dword [ebp + 0x18]
-    db 0x8a, 0xc8 ; MOV CL, AL, register-destination encoding.
-    mov eax, 3
-    lfs edi, [ebp + 0x1c]
-    call far [ebp + 8]
-    restore_registers
-
-driver_secondary_command_1:
-    save_registers
-    mov eax, 1
-    lfs edi, [ebp + 0x10]
-    call far [ebp + 8]
-    restore_registers
-
-driver_configure_secondary:
-    save_registers
-    lfs edi, [ebp + 0x10]
-    mov eax, 0
-    mov bx, word [ebp + 0x18]
-    mov cx, word [ebp + 0x1c]
-    mov dx, word [ebp + 0x20]
-    db 0x8a, 0xea ; MOV CH, DL, register-destination encoding.
-    mov si, word [ebp + 0x2c]
-    call far [ebp + 8]
-    restore_registers
-
-driver_secondary_command_4:
-    save_registers
-    lfs edi, [ebp + 0x10]
-    mov eax, 4
-    mov ecx, dword [ebp + 0x1c]
-    mov edi, dword [ebp + 0x18]
-    call far [ebp + 8]
-    restore_registers
-
-driver_secondary_command_2:
-    save_registers
-    lfs edi, [ebp + 0x10]
-    mov eax, 2
-    mov ebx, dword [ebp + 0x18]
-    call far [ebp + 8]
-    restore_registers
-
-driver_secondary_command_3:
-    save_registers
-    lfs edi, [ebp + 0x10]
-    mov eax, 3
-    mov bx, 8
-    call far [ebp + 8]
-    restore_registers
+driver_command_3 equ 0x66724
+    times 48 db 0    ; driver_command_3 is supplied by C.
+driver_secondary_command_1 equ 0x66754
+    times 35 db 0    ; driver_secondary_command_1 is supplied by C.
+driver_configure_secondary equ 0x66777
+    times 53 db 0    ; driver_configure_secondary is supplied by C.
+driver_secondary_command_4 equ 0x667ac
+    times 41 db 0    ; driver_secondary_command_4 is supplied by C.
+driver_secondary_command_2 equ 0x667d5
+    times 38 db 0    ; driver_secondary_command_2 is supplied by C.
+driver_secondary_command_3 equ 0x667fb
+    times 39 db 0    ; driver_secondary_command_3 is supplied by C.
 
 probe_windows_driver_value:
     save_registers
