@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 528,
-  "unique_code_bytes": 249807,
-  "le_pointers": 13588,
+  "routines": 527,
+  "unique_code_bytes": 249737,
+  "le_pointers": 13587,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -7244,18 +7244,6 @@
       "public_entry": "0x64cfd",
       "binary_offset": 0,
       "le_pointers": 9
-    },
-    {
-      "symbol": "program_pit",
-      "source": "src/runtime/timer_hardware.asm",
-      "binary": "timer_hardware.bin",
-      "sha256": "ed51fbc6f1ea95be85ad9c7c29518850f6fb9d4d25d9692911f49c2fa74d5974",
-      "bytes": 70,
-      "raw_offset": "0x8a36f",
-      "loaded_address": "0x64d6f",
-      "public_entry": "0x64d6f",
-      "binary_offset": 114,
-      "le_pointers": 1
     },
     {
       "symbol": "install_timer_vector",

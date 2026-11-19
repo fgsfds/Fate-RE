@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1155,
-  "unique_code_bytes": 164832,
-  "le_pointers": 8961,
+  "routines": 1156,
+  "unique_code_bytes": 164902,
+  "le_pointers": 8962,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -7268,6 +7268,16 @@
       "loaded_address": "0x64cfc",
       "bytes": 1,
       "le_pointers": 0
+    },
+    {
+      "symbol": "program_pit_",
+      "object": "timerirq.obj",
+      "object_sha256": "570085445c5c8d8749464ece5c6c95368ce9e27490f4c0a3fd4e7b1a8b37b976",
+      "sha256": "ed51fbc6f1ea95be85ad9c7c29518850f6fb9d4d25d9692911f49c2fa74d5974",
+      "raw_offset": "0x8a36f",
+      "loaded_address": "0x64d6f",
+      "bytes": 70,
+      "le_pointers": 1
     },
     {
       "symbol": "mask_timer_irq_",
