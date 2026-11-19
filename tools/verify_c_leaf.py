@@ -3982,6 +3982,8 @@ LEAVES.update({
 
 LEAVES['wait_vertical_retrace_'] = (0x66182, 23)
 LEAVES['bios_print_screen_'] = (0x79a68, 3)
+LEAVES['save_fpu_state_'] = (0x89bf7, 5)
+LEAVES['restore_fpu_state_'] = (0x89bfc, 4)
 LEAVES['get_audio_data_selector_'] = (0x8c16b, 4)
 LEAVES['get_audio_code_selector_'] = (0x8c16f, 4)
 

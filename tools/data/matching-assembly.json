@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 504,
-  "unique_code_bytes": 248926,
+  "routines": 502,
+  "unique_code_bytes": 248917,
   "le_pointers": 13576,
   "non_routine_code_spans": [
     {
@@ -4976,30 +4976,6 @@
       "public_entry": "0x67049",
       "binary_offset": 67,
       "le_pointers": 1
-    },
-    {
-      "symbol": "save_fpu_state",
-      "source": "src/runtime/spawn_fpu.asm",
-      "binary": "spawn_fpu.bin",
-      "sha256": "6c62cae4c2588f61bb255281695a725648d2f382d57bfb63046f284007b8f798",
-      "bytes": 5,
-      "raw_offset": "0x89bf7",
-      "loaded_address": "0x645f7",
-      "public_entry": "0x645f7",
-      "binary_offset": 0,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "restore_fpu_state",
-      "source": "src/runtime/spawn_fpu.asm",
-      "binary": "spawn_fpu.bin",
-      "sha256": "9d45f05da3edf698ac8c7c29c2e326866f1c9cd611f4babed61e520d7fe61105",
-      "bytes": 4,
-      "raw_offset": "0x89bfc",
-      "loaded_address": "0x645fc",
-      "public_entry": "0x645fc",
-      "binary_offset": 5,
-      "le_pointers": 0
     },
     {
       "symbol": "draw_graphics_span",

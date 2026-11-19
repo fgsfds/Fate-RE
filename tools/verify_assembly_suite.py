@@ -2130,8 +2130,6 @@ ROUTINES = [
     ('check_stack_space', 'runtime/stack_checks.asm', 'stack_checks.bin', 0x6702b, 30,
      {0xa: 0x9447c, 0x17: 0x96c50}),
     ('report_stack_overflow', 'runtime/stack_checks.asm', 'stack_checks.bin', 0x67049, 15, {1: 0x96c52}),
-    ('save_fpu_state', 'runtime/spawn_fpu.asm', 'spawn_fpu.bin', 0x645f7, 5, {}),
-    ('restore_fpu_state', 'runtime/spawn_fpu.asm', 'spawn_fpu.bin', 0x645fc, 4, {}),
     ('draw_graphics_span', 'runtime/graphics_span.asm', 'graphics_span.bin', 0x735c4, 182,
      {20: 0x309212, 27: 0x96c80, 46: 0x96c94, 56: 0x3091f6, 80: 0x96c97, 100: 0x96c99, 142: 0x3091f6, 149: 0x96c84, 163: 0x96c80, 169: 0x3091ec}),
     ('clip_graphics_line', 'runtime/graphics_line_clip.asm', 'graphics_line_clip.bin', 0x7376b, 349,
@@ -3778,10 +3776,6 @@ GROUP_SLICES = {
     'check_stack': (18, 82),
     'check_stack_space': (37, 82),
     'report_stack_overflow': (67, 82),
-
-    'save_fpu_state': (0, 9),
-    'restore_fpu_state': (5, 9),
-
 
     'dos_exec': (397, 603),
 

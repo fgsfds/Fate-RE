@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1179,
-  "unique_code_bytes": 165713,
+  "routines": 1181,
+  "unique_code_bytes": 165722,
   "le_pointers": 8973,
   "non_routine_code_spans": [
     {
@@ -7027,6 +7027,26 @@
       "raw_offset": "0x89985",
       "loaded_address": "0x64385",
       "bytes": 22,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "save_fpu_state_",
+      "object": "spawnfpu.obj",
+      "object_sha256": "1703bbd3d1910ed2d3edb38b8c1696d2d5c178a19d91665c756fd9fe135e0392",
+      "sha256": "6c62cae4c2588f61bb255281695a725648d2f382d57bfb63046f284007b8f798",
+      "raw_offset": "0x89bf7",
+      "loaded_address": "0x645f7",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "restore_fpu_state_",
+      "object": "spawnfpu.obj",
+      "object_sha256": "1703bbd3d1910ed2d3edb38b8c1696d2d5c178a19d91665c756fd9fe135e0392",
+      "sha256": "9d45f05da3edf698ac8c7c29c2e326866f1c9cd611f4babed61e520d7fe61105",
+      "raw_offset": "0x89bfc",
+      "loaded_address": "0x645fc",
+      "bytes": 4,
       "le_pointers": 0
     },
     {
