@@ -114,17 +114,8 @@ dpmi_memory_info equ 0x16b70
 windows_driver_interrupt_stop equ 0x66881
     times 53 db 0    ; windows_driver_interrupt_stop is supplied by C.
 
-get_driver_tables:
-    save_registers
-    lfs edi, [ebp + 0x10]
-    mov eax, 4
-    call far [ebp + 8]
-    mov dword [driver_records], esi
-    mov dword [driver_callbacks], edi
-    mov ax, word [ebp + 0x14]
-    mov word [driver_records_selector], ax
-    mov word [driver_callbacks_selector], ax
-    restore_registers
+get_driver_tables equ 0x668b6
+    times 63 db 0    ; get_driver_tables is supplied by C.
 
 copy_driver_record:
     save_registers

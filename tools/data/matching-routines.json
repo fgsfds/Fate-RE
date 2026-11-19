@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1167,
-  "unique_code_bytes": 165400,
-  "le_pointers": 8966,
+  "routines": 1168,
+  "unique_code_bytes": 165463,
+  "le_pointers": 8970,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -7928,6 +7928,16 @@
       "loaded_address": "0x66881",
       "bytes": 53,
       "le_pointers": 0
+    },
+    {
+      "symbol": "get_driver_tables_",
+      "object": "gdt.obj",
+      "object_sha256": "ca21ee0f7668c6ab0d304e38a3c658dd227028ec7ec9e0aaa89a05d02daa3e59",
+      "sha256": "0d403fedc12856a1b456e2ad24e8b37b439593c3f2ca93cc3d4cdc7b90bc7698",
+      "raw_offset": "0x8beb6",
+      "loaded_address": "0x668b6",
+      "bytes": 63,
+      "le_pointers": 4
     },
     {
       "symbol": "audio_helper_region_end_",
