@@ -5,8 +5,8 @@ The latest marker audit covers the full **414,639-byte CODE segment**.
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
 | Compiler-generated instructions | 139,900 | 33.74% |
-| Inline assembly instructions in C objects | 24,225 | 5.84% |
-| Standalone assembly | 249,176 | 60.09% |
+| Inline assembly instructions in C objects | 24,297 | 5.86% |
+| Standalone assembly | 249,104 | 60.08% |
 | Unattributed instructions and non-routine tables | 1,338 | 0.32% |
 
 Known remaining assembly, including inline: **273,401 bytes (65.94%)**.
@@ -17,9 +17,9 @@ C-generated instructions or assembly. In particular, the 26-byte
 `clearallviews_vga_planes_` span remains unknown; its old 22/4 C/inline split
 cannot be reused after the changed translation unit.
 
-At the object/inventory level, C objects cover 165,463 bytes (**39.91%**), including
-the inline instructions above. Standalone assembly covers the other **60.09%**.
-The inventory has 1,168 C routine spans and 515 remaining assembly routine spans.
+At the object/inventory level, C objects cover 165,535 bytes (**39.92%**), including
+the inline instructions above. Standalone assembly covers the other **60.08%**.
+The inventory has 1,170 C routine spans and 513 remaining assembly routine spans.
 
 In `initialize_color_lookup_`, the red-distance multiply and neighbor-loop
 arithmetic move 31 bytes from inline assembly to compiler-generated C. The
@@ -82,9 +82,12 @@ bytes match, 4 generated and 49 inline.
 `get_driver_tables` now builds as one C function; all 63 bytes match, 0%
 generated and 100% inline (the record/callback and selector stores plus the
 far call).
+`query_dpmi_memory` and `query_windows_version` now build as one C function
+each; all 72 bytes match, 0% generated and 100% inline (the `int 2Fh`/`int 31h`
+calls and the memory-info load).
 
 The measured build and marker report are under `work/restoration-build/` and
-`work/dsh-r23-gdt-audit.json`. The audit reuses the checked distinct-end
+`work/dsh-r24-qwin-audit.json`. The audit reuses the checked distinct-end
 marker retry for unchanged `flttrunc.obj`.
 The accepted executable is 741,347 bytes with SHA-256
 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.

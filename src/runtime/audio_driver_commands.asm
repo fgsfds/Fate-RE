@@ -161,22 +161,10 @@ set_driver_callback:
     mov [nosplit esi + ebx + 4], ds
     restore_registers
 
-query_dpmi_memory:
-    save_registers
-    mov ax, 0x500
-    int 0x31
-    push ds
-    pop es
-    mov edi, dpmi_memory_info
-    int 0x31
-    mov eax, dword [dpmi_memory_info]
-    restore_registers
-
-query_windows_version:
-    save_registers
-    mov ax, 0x1600
-    int 0x2f
-    restore_registers
+query_dpmi_memory equ 0x66975
+    times 43 db 0    ; query_dpmi_memory is supplied by C.
+query_windows_version equ 0x669a0
+    times 29 db 0    ; query_windows_version is supplied by C.
 
 allocate_dos_paragraphs:
     save_registers

@@ -781,6 +781,8 @@ TIMER_IRQ_MASK = ('mask_timer_irq_', 'unmask_timer_irq_', 'program_pit_')
 AUDIO_COMMAND_WRAPPERS = ('driver_command_5_', 'driver_command_0_', 'read_driver_parameters_', 'driver_command_3_', 'driver_secondary_command_1_', 'driver_configure_secondary_', 'driver_secondary_command_4_', 'driver_secondary_command_2_', 'driver_secondary_command_3_')
 WINDOWS_DRIVER_INTERRUPT = ('windows_driver_interrupt_', 'windows_driver_interrupt_stop_')
 GET_DRIVER_TABLES = ('get_driver_tables_',)
+QUERY_DRIVER_INFO = ('query_dpmi_memory_', 'query_windows_version_')
+OBJECT_NAMES.update(dict.fromkeys(QUERY_DRIVER_INFO, 'qwin'))
 OBJECT_NAMES.update(dict.fromkeys(GET_DRIVER_TABLES, 'gdt'))
 OBJECT_NAMES.update(dict.fromkeys(WINDOWS_DRIVER_INTERRUPT, 'windi'))
 OBJECT_NAMES.update(dict.fromkeys(AUDIO_COMMAND_WRAPPERS, 'audiocmd'))
@@ -949,6 +951,7 @@ GROUPS = {
     'audiocmd': (392, AUDIO_COMMAND_WRAPPERS),
     'windi': (106, WINDOWS_DRIVER_INTERRUPT),
     'gdt': (63, GET_DRIVER_TABLES),
+    'qwin': (72, QUERY_DRIVER_INFO),
     'heaprnd': (122, HEAP_REQUEST_ROUTINES),
     'rtshell': (38, ('select_shell_switch_',)),
     'strmore': (105, STRING_FORMAT_HELPERS),

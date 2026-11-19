@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1168,
-  "unique_code_bytes": 165463,
-  "le_pointers": 8970,
+  "routines": 1170,
+  "unique_code_bytes": 165535,
+  "le_pointers": 8972,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -7938,6 +7938,26 @@
       "loaded_address": "0x668b6",
       "bytes": 63,
       "le_pointers": 4
+    },
+    {
+      "symbol": "query_dpmi_memory_",
+      "object": "qwin.obj",
+      "object_sha256": "2d365350227153c1f323b3aa590f3335b10763b07412ce418470e9ac17d0efc4",
+      "sha256": "94c3e3c2f01dd7f2e13d175cff5e256be708fff7ff04cc90899a1ce962fa99cb",
+      "raw_offset": "0x8bf75",
+      "loaded_address": "0x66975",
+      "bytes": 43,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "query_windows_version_",
+      "object": "qwin.obj",
+      "object_sha256": "2d365350227153c1f323b3aa590f3335b10763b07412ce418470e9ac17d0efc4",
+      "sha256": "5404e967291f70e726444a26f040e8b4e043cdb2da0e0b2e6c3249961e0e86f1",
+      "raw_offset": "0x8bfa0",
+      "loaded_address": "0x669a0",
+      "bytes": 29,
+      "le_pointers": 0
     },
     {
       "symbol": "audio_helper_region_end_",
