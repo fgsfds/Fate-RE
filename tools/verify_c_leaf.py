@@ -1571,6 +1571,7 @@ LEAVES.update({
     'u32_to_float_': (0x99548, 43),
     'i32_to_float_': (0x99573, 17),
     'truncate_float_': (0x99500, 12),
+    'truncate_float_zero_': (0x99545, 3),
     'truncate_magnitude_': (0x9950c, 37),
     'truncate_shift_left_': (0x99531, 7),
     'truncate_limit_': (0x99538, 13),

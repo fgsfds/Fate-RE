@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 508,
-  "unique_code_bytes": 248940,
+  "routines": 507,
+  "unique_code_bytes": 248937,
   "le_pointers": 13576,
   "non_routine_code_spans": [
     {
@@ -6835,18 +6835,6 @@
       "loaded_address": "0x73e44",
       "public_entry": "0x73e44",
       "binary_offset": 378,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "truncate_float_zero",
-      "source": "src/runtime/software_float_conversions.asm",
-      "binary": "software_float_conversions.bin",
-      "sha256": "62c9597282b79f494e6bf5773ec989992b75d91a10fc5701b624bc268a4c08fe",
-      "bytes": 3,
-      "raw_offset": "0x99545",
-      "loaded_address": "0x73f45",
-      "public_entry": "0x73f45",
-      "binary_offset": 129,
       "le_pointers": 0
     },
     {

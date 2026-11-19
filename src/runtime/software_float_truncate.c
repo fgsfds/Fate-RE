@@ -80,3 +80,13 @@ unsigned long truncate_limit(void)
     in_cl(-cl_value());
     return shift_saturation_mask();
 }
+
+/* Zero the result register: the original routine clears the value in EAX. */
+extern void truncate_float_zero_body(void);
+#pragma aux truncate_float_zero_body = 0x29 0xc0 modify exact [eax];
+void truncate_float_zero(void);
+#pragma aux truncate_float_zero modify exact [eax];
+void truncate_float_zero(void)
+{
+    truncate_float_zero_body();
+}

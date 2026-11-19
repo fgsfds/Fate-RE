@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1175,
-  "unique_code_bytes": 165699,
+  "routines": 1176,
+  "unique_code_bytes": 165702,
   "le_pointers": 8973,
   "non_routine_code_spans": [
     {
@@ -11657,6 +11657,16 @@
       "raw_offset": "0x99538",
       "loaded_address": "0x73f38",
       "bytes": 13,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "truncate_float_zero_",
+      "object": "flttrunc.obj",
+      "object_sha256": "852b9184509d41ad64c087d30bfcd4676812429f7148e34922100f48dd2e34b5",
+      "sha256": "62c9597282b79f494e6bf5773ec989992b75d91a10fc5701b624bc268a4c08fe",
+      "raw_offset": "0x99545",
+      "loaded_address": "0x73f45",
+      "bytes": 3,
       "le_pointers": 0
     },
     {
