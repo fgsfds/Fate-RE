@@ -31,19 +31,10 @@ driver_parameter_dx equ 0x16bfc
     ret
 %endmacro
 
-driver_command_5:
-    save_registers
-    mov eax, 5
-    lfs edi, [ebp + 0x10]
-    call far [ebp + 8]
-    restore_registers
-
-driver_command_0:
-    save_registers
-    mov eax, 0
-    lfs edi, [ebp + 0x10]
-    call far [ebp + 8]
-    restore_registers
+driver_command_5 equ 0x66641
+    times 35 db 0    ; driver_command_5 is supplied by C.
+driver_command_0 equ 0x66664
+    times 35 db 0    ; driver_command_0 is supplied by C.
 
 read_driver_parameters:
     save_registers

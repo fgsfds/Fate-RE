@@ -19,6 +19,7 @@ lands.
 | `strcat_`, scalar C append loop | 31 bytes; no fixups | The reference is 55 bytes. Watcom saved EBX/ECX/EDX instead of ECX/ESI/EDI and emitted scalar scan/copy loops; the assembly saves/restores ES, uses `repne scasb`, then copies byte pairs. Only 1 byte matches at the same offset. |
 | `copy_driver_record`, far-pointer C loop | 70 bytes; 4 data fixups | The reference is 74 bytes with 3 LE sites. Watcom accessed the far table through GS and emitted a byte-at-a-time loop; the target loads DS:ESI with `LDS`, preserves DS/ES/FS/GS, and copies 80 bytes with `REP MOVSB`. A far-memory intrinsic variant grew to 93 bytes and emitted an external helper call. The `/os` variant was 77 bytes with the same four fixups; it added an EBP frame but retained GS access and the scalar loop. |
 | DOS DTA transfers, replacing the remaining byte copy with Watcom intrinsic `memcpy` | 49 bytes per direction with `/or`, 37 with `/os`, versus 35 | The speed form emits a dword copy and a byte remainder. The size form emits `push edi; repne movsb; pop edi`. The reference emits only `rep movsb` with a different repeat prefix, so the two-byte copy remains inline. |
+| `restore_timer_vector`, DPMI/DOS `if`/`else` with trailing NOP padding | 121 bytes | Reference is 124. The three NOPs after the unconditional `jmp` are 16-byte alignment padding before the DOS path (dead code) that Watcom removes; `aborts` on the DPMI aux does not suppress the compiler's own `jmp` past the `else` block. The padding cannot be expressed as reachable C. |
 
 ### Plane span panning counts
 

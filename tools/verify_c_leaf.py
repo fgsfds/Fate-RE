@@ -1594,6 +1594,8 @@ LEAVES.update({
     'mask_timer_irq_': (0x8a470, 44),
     'unmask_timer_irq_': (0x8a49c, 44),
     'program_pit_': (0x8a36f, 70),
+    'driver_command_5_': (0x8bc41, 35),
+    'driver_command_0_': (0x8bc64, 35),
     'translate_exec_result_': (0x8ad18, 5),
     'set_dos_errno_': (0x8ad1d, 102),
     'parse_command_line_': (0x88ad2, 233),

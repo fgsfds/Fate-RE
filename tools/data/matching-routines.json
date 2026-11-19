@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1156,
-  "unique_code_bytes": 164902,
+  "routines": 1158,
+  "unique_code_bytes": 164972,
   "le_pointers": 8962,
   "non_routine_code_spans": [
     {
@@ -7817,6 +7817,26 @@
       "raw_offset": "0x8b990",
       "loaded_address": "0x66390",
       "bytes": 1,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "driver_command_5_",
+      "object": "audiocmd.obj",
+      "object_sha256": "71db83d9cabab66fc6a7c742029b8bfe29f2692074b6d21268214f1a7a0d4cc2",
+      "sha256": "d69549a5c8e4f5bef125b28ee080f617e4ddbd3be9c0cbd5a7666a8131ef44fa",
+      "raw_offset": "0x8bc41",
+      "loaded_address": "0x66641",
+      "bytes": 35,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "driver_command_0_",
+      "object": "audiocmd.obj",
+      "object_sha256": "71db83d9cabab66fc6a7c742029b8bfe29f2692074b6d21268214f1a7a0d4cc2",
+      "sha256": "39b0cbcdc2f37d0aaad677eadc8ae925103e9e577aba93ae160db6ee9ae959be",
+      "raw_offset": "0x8bc64",
+      "loaded_address": "0x66664",
+      "bytes": 35,
       "le_pointers": 0
     },
     {
