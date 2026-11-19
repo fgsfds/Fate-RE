@@ -783,6 +783,8 @@ WINDOWS_DRIVER_INTERRUPT = ('windows_driver_interrupt_', 'windows_driver_interru
 GET_DRIVER_TABLES = ('get_driver_tables_',)
 QUERY_DRIVER_INFO = ('query_dpmi_memory_', 'query_windows_version_')
 SET_DRIVER_CALLBACK = ('set_driver_callback_',)
+RELEASE_DOS_SELECTOR = ('release_dos_selector_',)
+OBJECT_NAMES.update(dict.fromkeys(RELEASE_DOS_SELECTOR, 'rds'))
 OBJECT_NAMES.update(dict.fromkeys(SET_DRIVER_CALLBACK, 'sdc'))
 OBJECT_NAMES.update(dict.fromkeys(QUERY_DRIVER_INFO, 'qwin'))
 OBJECT_NAMES.update(dict.fromkeys(GET_DRIVER_TABLES, 'gdt'))
@@ -955,6 +957,7 @@ GROUPS = {
     'gdt': (63, GET_DRIVER_TABLES),
     'qwin': (72, QUERY_DRIVER_INFO),
     'sdc': (54, SET_DRIVER_CALLBACK),
+    'rds': (46, RELEASE_DOS_SELECTOR),
     'heaprnd': (122, HEAP_REQUEST_ROUTINES),
     'rtshell': (38, ('select_shell_switch_',)),
     'strmore': (105, STRING_FORMAT_HELPERS),

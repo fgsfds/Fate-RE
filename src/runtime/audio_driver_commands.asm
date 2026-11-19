@@ -179,17 +179,8 @@ allocate_dos_paragraphs:
 .return:
     restore_registers
 
-release_dos_selector:
-    mov ax, ds
-    mov gs, ax
-    mov fs, ax
-    mov es, ax
-    save_registers
-    mov ax, 0x101
-    mov dx, word [ebp + 8]
-    int 0x31
-    mov ax, 0
-    restore_registers
+release_dos_selector equ 0x669fe
+    times 46 db 0    ; release_dos_selector is supplied by C.
 
 real_mode_audio_registers equ 0x16ba0
 

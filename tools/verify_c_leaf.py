@@ -1608,6 +1608,7 @@ LEAVES.update({
     'set_driver_callback_': (0x8bf3f, 54),
     'query_dpmi_memory_': (0x8bf75, 43),
     'query_windows_version_': (0x8bfa0, 29),
+    'release_dos_selector_': (0x8bffe, 46),
     'driver_command_3_': (0x8bd24, 48),
     'driver_secondary_command_1_': (0x8bd54, 35),
     'driver_configure_secondary_': (0x8bd77, 53),

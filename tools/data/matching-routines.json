@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1171,
-  "unique_code_bytes": 165589,
+  "routines": 1172,
+  "unique_code_bytes": 165635,
   "le_pointers": 8973,
   "non_routine_code_spans": [
     {
@@ -7967,6 +7967,16 @@
       "raw_offset": "0x8bfa0",
       "loaded_address": "0x669a0",
       "bytes": 29,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "release_dos_selector_",
+      "object": "rds.obj",
+      "object_sha256": "d3326c1a9dac15e19cf877030e79503dfc1c992061f08163746548352e6fdaeb",
+      "sha256": "d52f92af11895b3260f0b9b2ee04a9b650f93b381d7c64fb768dba5a7a6ee07e",
+      "raw_offset": "0x8bffe",
+      "loaded_address": "0x669fe",
+      "bytes": 46,
       "le_pointers": 0
     },
     {
