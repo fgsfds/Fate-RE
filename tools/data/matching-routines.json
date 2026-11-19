@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1170,
-  "unique_code_bytes": 165535,
-  "le_pointers": 8972,
+  "routines": 1171,
+  "unique_code_bytes": 165589,
+  "le_pointers": 8973,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -7938,6 +7938,16 @@
       "loaded_address": "0x668b6",
       "bytes": 63,
       "le_pointers": 4
+    },
+    {
+      "symbol": "set_driver_callback_",
+      "object": "sdc.obj",
+      "object_sha256": "bb50db88c70efe5675354e5e25bc9f58134a2b6ed025cb43d16aff4220dcec68",
+      "sha256": "229d70683979ffca146d4857b113e3080c93a4f3dee0b44ad8ed03eb3f14d48b",
+      "raw_offset": "0x8bf3f",
+      "loaded_address": "0x6693f",
+      "bytes": 54,
+      "le_pointers": 1
     },
     {
       "symbol": "query_dpmi_memory_",

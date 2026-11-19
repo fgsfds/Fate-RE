@@ -1605,6 +1605,7 @@ LEAVES.update({
     'windows_driver_interrupt_': (0x8be4c, 53),
     'windows_driver_interrupt_stop_': (0x8be81, 53),
     'get_driver_tables_': (0x8beb6, 63),
+    'set_driver_callback_': (0x8bf3f, 54),
     'query_dpmi_memory_': (0x8bf75, 43),
     'query_windows_version_': (0x8bfa0, 29),
     'driver_command_3_': (0x8bd24, 48),

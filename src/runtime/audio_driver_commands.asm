@@ -147,19 +147,8 @@ copy_driver_record:
 .return:
     restore_registers
 
-set_driver_callback:
-    save_registers
-    les esi, [driver_callbacks]
-    mov eax, dword [ebp + 8]
-    db 0x8b, 0xd8 ; MOV EBX, EAX, register-destination encoding.
-    shl eax, 1
-    shl ebx, 2
-    db 0x03, 0xd8 ; ADD EBX, EAX, register-destination encoding.
-    mov eax, dword [ebp + 0xc]
-    mov [es:nosplit esi + ebx], eax
-    db 0x66, 0x26 ; Operand-size and ES prefixes in original order.
-    mov [nosplit esi + ebx + 4], ds
-    restore_registers
+set_driver_callback equ 0x6693f
+    times 54 db 0    ; set_driver_callback is supplied by C.
 
 query_dpmi_memory equ 0x66975
     times 43 db 0    ; query_dpmi_memory is supplied by C.
