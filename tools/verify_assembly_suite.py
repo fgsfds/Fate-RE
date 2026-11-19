@@ -1561,8 +1561,6 @@ ROUTINES = [
       0x20fdc0, 752: 0x20fde4, 763: 0x20fde4, 769: 0x20fdec, 777: 0x20fdec, 787: 0x20fde4, 795: 0x20fde4, 804:
       0x20fde4, 814: 0x20fda0, 820: 0x20fdc0, 825: 0x20fde4, 835: 0x20fda0, 841: 0x20fdc0, 851: 0x20fde4, 859:
       0x20fde4, 865: 0x20fdec, 874: 0x20fdec, 879: 0x20fde4, 890: 0x20fde4, 899: 0x20fde4, 911: 0x20fde4}),
-    ('wait_vertical_retrace', 'fate/wait_vertical_retrace.asm', 'wait_vertical_retrace.bin', 0x40b82, 23,
-     {}),
     ('write_vga_palette', 'fate/write_vga_palette.asm', 'write_vga_palette.bin', 0x40b99, 27,
      {}),
     ('dispatch_main_menu', 'fate/dispatch_main_menu.asm', 'dispatch_main_menu.bin', 0x3a148, 509,
@@ -3358,7 +3356,6 @@ GROUP_SLICES = {
     'serial_port_dispatch': (1, 665),
     'initialize_serial_network': (17, 665),
     'retrace_alignment': (0, 24),
-    'wait_vertical_retrace': (1, 24),
     'difficulty_dispatch_alignment': (0, 1),
     'audio_dispatch_alignment': (0, 1),
     'help_dispatch_alignment': (0, 1),

@@ -3978,6 +3978,8 @@ LEAVES.update({
     'float_largest_finite_': (0x995dd, 11),
 })
 
+LEAVES['wait_vertical_retrace_'] = (0x66182, 23)
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

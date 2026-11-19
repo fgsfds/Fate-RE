@@ -133,6 +133,7 @@ OBJECT_NAMES.update({symbol: 'menuhook' for symbol in DISABLED_MENU_HOOKS})
 OBJECT_NAMES.update({symbol: 'raspatch' for symbol in RASTER_SETUP})
 OBJECT_NAMES.update({'deletespritesect_': 'sprlists', 'deletespritestat_': 'sprlists'})
 OBJECT_NAMES['initspritelists_'] = 'initspr'
+OBJECT_NAMES['wait_vertical_retrace_'] = 'waitret'
 OBJECT_NAMES.update({'nsqrt_': 'nsqrt', 'uninitmultiplayers_': 'netstop'})
 SPRITE_INSERTION = ('insertsprite_', 'insertspritesect_', 'insertspritestat_')
 OBJECT_NAMES.update({symbol: 'insert' for symbol in SPRITE_INSERTION})

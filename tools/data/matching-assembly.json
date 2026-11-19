@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 510,
-  "unique_code_bytes": 248965,
+  "routines": 509,
+  "unique_code_bytes": 248942,
   "le_pointers": 13576,
   "non_routine_code_spans": [
     {
@@ -1820,18 +1820,6 @@
       "public_entry": "0x41694",
       "binary_offset": 0,
       "le_pointers": 84
-    },
-    {
-      "symbol": "wait_vertical_retrace",
-      "source": "src/fate/wait_vertical_retrace.asm",
-      "binary": "wait_vertical_retrace.bin",
-      "sha256": "5afd3a42b30f7a6901770569fe03f4801dc5f6acf50dc88f46c1bf5210bc3967",
-      "bytes": 23,
-      "raw_offset": "0x66182",
-      "loaded_address": "0x40b82",
-      "public_entry": "0x40b82",
-      "binary_offset": 1,
-      "le_pointers": 0
     },
     {
       "symbol": "write_vga_palette",

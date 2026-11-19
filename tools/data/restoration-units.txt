@@ -482,3 +482,4 @@ fate/find_spawn_position spawnpos
 fate/resolve_teleport_destination telepdst /3r /s /or /bt=dos
 fate/sectors_share_portal sectport /4r /s /bt=dos
 fate/lookup_record_value lookup
+fate/wait_vertical_retrace waitret

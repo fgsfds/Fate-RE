@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1173,
-  "unique_code_bytes": 165674,
+  "routines": 1174,
+  "unique_code_bytes": 165697,
   "le_pointers": 8973,
   "non_routine_code_spans": [
     {
@@ -3388,6 +3388,16 @@
       "loaded_address": "0x40b49",
       "bytes": 56,
       "le_pointers": 7
+    },
+    {
+      "symbol": "wait_vertical_retrace_",
+      "object": "waitret.obj",
+      "object_sha256": "5db51ee9767c513b8a80ad4be4e7066949b5c6bc9f07deecfed09bfde41e3026",
+      "sha256": "5afd3a42b30f7a6901770569fe03f4801dc5f6acf50dc88f46c1bf5210bc3967",
+      "raw_offset": "0x66182",
+      "loaded_address": "0x40b82",
+      "bytes": 23,
+      "le_pointers": 0
     },
     {
       "symbol": "print_runtime_message_",
