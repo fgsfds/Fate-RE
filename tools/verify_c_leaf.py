@@ -3986,6 +3986,8 @@ LEAVES['save_fpu_state_'] = (0x89bf7, 5)
 LEAVES['restore_fpu_state_'] = (0x89bfc, 4)
 LEAVES['or_masked_byte_'] = (0x991a5, 6)
 LEAVES['xor_masked_byte_'] = (0x991bb, 6)
+LEAVES['step_planar_left_'] = (0x9783a, 7)
+LEAVES['step_planar_right_'] = (0x97833, 7)
 LEAVES['get_audio_data_selector_'] = (0x8c16b, 4)
 LEAVES['get_audio_code_selector_'] = (0x8c16f, 4)
 

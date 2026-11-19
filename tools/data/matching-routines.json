@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1183,
-  "unique_code_bytes": 165734,
+  "routines": 1185,
+  "unique_code_bytes": 165748,
   "le_pointers": 8973,
   "non_routine_code_spans": [
     {
@@ -11357,6 +11357,26 @@
       "raw_offset": "0x9782f",
       "loaded_address": "0x7222f",
       "bytes": 4,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "step_planar_right_",
+      "object": "gfxplane.obj",
+      "object_sha256": "b6195b047cec18c1cee862ce81e6ad572497022bcb524a349180ff2ac7574e3a",
+      "sha256": "b3556cf91e3737b4b5dd1e94ad1f40e1f001d30c5fd93d7c99b4329414e8e7ef",
+      "raw_offset": "0x97833",
+      "loaded_address": "0x72233",
+      "bytes": 7,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "step_planar_left_",
+      "object": "gfxplane.obj",
+      "object_sha256": "b6195b047cec18c1cee862ce81e6ad572497022bcb524a349180ff2ac7574e3a",
+      "sha256": "d7a344383af5b5606b16ff7d92970c98cf69e764c38f09ec2d6982a225a14a4f",
+      "raw_offset": "0x9783a",
+      "loaded_address": "0x7223a",
+      "bytes": 7,
       "le_pointers": 0
     },
     {

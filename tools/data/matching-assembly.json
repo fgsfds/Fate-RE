@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 500,
-  "unique_code_bytes": 248905,
+  "routines": 498,
+  "unique_code_bytes": 248891,
   "le_pointers": 13576,
   "non_routine_code_spans": [
     {
@@ -5455,30 +5455,6 @@
       "loaded_address": "0x72209",
       "public_entry": "0x7220a",
       "binary_offset": 211,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "step_planar_right",
-      "source": "src/runtime/graphics_planar_device.asm",
-      "binary": "graphics_planar_device.bin",
-      "sha256": "b3556cf91e3737b4b5dd1e94ad1f40e1f001d30c5fd93d7c99b4329414e8e7ef",
-      "bytes": 7,
-      "raw_offset": "0x97833",
-      "loaded_address": "0x72233",
-      "public_entry": "0x72234",
-      "binary_offset": 253,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "step_planar_left",
-      "source": "src/runtime/graphics_planar_device.asm",
-      "binary": "graphics_planar_device.bin",
-      "sha256": "d7a344383af5b5606b16ff7d92970c98cf69e764c38f09ec2d6982a225a14a4f",
-      "bytes": 7,
-      "raw_offset": "0x9783a",
-      "loaded_address": "0x7223a",
-      "public_entry": "0x7223b",
-      "binary_offset": 260,
       "le_pointers": 0
     },
     {
