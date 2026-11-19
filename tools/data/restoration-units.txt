@@ -486,3 +486,4 @@ fate/wait_vertical_retrace waitret
 engine/code_entry_helpers codehelp
 runtime/audio_driver_commands audcmds
 runtime/spawn_fpu spawnfpu
+runtime/graphics_bitmap_bits gfxbits

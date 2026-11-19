@@ -4,12 +4,12 @@ The latest marker audit covers the full **414,639-byte CODE segment**.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 139,948 | 33.75% |
+| Compiler-generated instructions | 139960 | 33.75% |
 | Inline assembly instructions in C objects | 24,436 | 5.89% |
-| Standalone assembly | 248,917 | 60.03% |
+| Standalone assembly | 248,905 | 60.03% |
 | Unattributed instructions and non-routine tables | 1,338 | 0.32% |
 
-Known remaining assembly, including inline: **273,353 bytes (65.93%)**.
+Known remaining assembly, including inline: **273,341 bytes (65.92%)**.
 The unattributed category contains 810 instruction bytes in eleven routines
 whose marker comparison is unsupported or changes output, plus 352 jump-table
 bytes and one alignment byte. It must not be silently counted as either
@@ -17,9 +17,19 @@ C-generated instructions or assembly. In particular, the 26-byte
 `clearallviews_vga_planes_` span remains unknown; its old 22/4 C/inline split
 cannot be reused after the changed translation unit.
 
-At the object/inventory level, C objects cover 165,722 bytes (**39.97%**), including
+At the object/inventory level, C objects cover 165,734 bytes (**39.97%**), including
 the inline instructions above. Standalone assembly covers the other **60.03%**.
-The inventory has 1,181 C routine spans and 502 remaining assembly routine spans.
+The inventory has 1,183 C routine spans and 500 remaining assembly routine spans.
+
+`or_masked_byte` now builds as one C function. All 6 bytes match: the routine
+issues the original `and al,ch; or byte ptr es:[edi], al` sequence, and the
+enclosing wrapper supplies the final `ret`. The span has no LE relocation
+sites or targets.
+
+`xor_masked_byte` now builds as one C function. All 6 bytes match: the
+routine issues the original `and al,ch; xor byte ptr es:[edi], al` sequence,
+and the enclosing wrapper supplies the final `ret`. The span has no LE
+relocation sites or targets.
 
 `save_fpu_state` now builds as one C function. All 5 bytes match: the routine
 issues the original `FWAIT + FNSAVE [EAX] + FWAIT` sequence, and the enclosing

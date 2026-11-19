@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 502,
-  "unique_code_bytes": 248917,
+  "routines": 500,
+  "unique_code_bytes": 248905,
   "le_pointers": 13576,
   "non_routine_code_spans": [
     {
@@ -5062,18 +5062,6 @@
       "le_pointers": 0
     },
     {
-      "symbol": "or_masked_byte",
-      "source": "src/runtime/graphics_bitmap_bits.asm",
-      "binary": "graphics_bitmap_bits.bin",
-      "sha256": "e433bdc67ef19b998fbe1fd30bd5843767dec1b344d5c7c47f18661e6e5bec50",
-      "bytes": 6,
-      "raw_offset": "0x991a5",
-      "loaded_address": "0x73ba5",
-      "public_entry": "0x73ba5",
-      "binary_offset": 93,
-      "le_pointers": 0
-    },
-    {
       "symbol": "or_byte_run",
       "source": "src/runtime/graphics_bitmap_bits.asm",
       "binary": "graphics_bitmap_bits.bin",
@@ -5083,18 +5071,6 @@
       "loaded_address": "0x73bab",
       "public_entry": "0x73bab",
       "binary_offset": 99,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "xor_masked_byte",
-      "source": "src/runtime/graphics_bitmap_bits.asm",
-      "binary": "graphics_bitmap_bits.bin",
-      "sha256": "aa890df9ebc68087517344f769b43d09f8ac318e0e0a6771a2281bd38d1a4cd6",
-      "bytes": 6,
-      "raw_offset": "0x991bb",
-      "loaded_address": "0x73bbb",
-      "public_entry": "0x73bbb",
-      "binary_offset": 115,
       "le_pointers": 0
     },
     {
