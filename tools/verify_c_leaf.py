@@ -1723,6 +1723,7 @@ LEAVES.update({
     'exit_': (0x85953, 24),
     '_exit_': (0x8596b, 22),
     '_disable_': (0x859dc, 2),
+    '_enable_': (0x85a09, 2),
     'restore_keyboard_interrupt_': (0x54858, 38),
     'install_keyboard_interrupt_': (0x547fe, 90),
     'exchange_runtime_hook_': (0x90559, 16),

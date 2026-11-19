@@ -4,12 +4,12 @@ The latest marker audit covers the full **414,639-byte CODE segment**.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 139,923 | 33.75% |
+| Compiler-generated instructions | 139,925 | 33.75% |
 | Inline assembly instructions in C objects | 24,436 | 5.89% |
-| Standalone assembly | 248,942 | 60.04% |
+| Standalone assembly | 248,940 | 60.04% |
 | Unattributed instructions and non-routine tables | 1,338 | 0.32% |
 
-Known remaining assembly, including inline: **273,378 bytes (65.93%)**.
+Known remaining assembly, including inline: **273,376 bytes (65.93%)**.
 The unattributed category contains 810 instruction bytes in eleven routines
 whose marker comparison is unsupported or changes output, plus 352 jump-table
 bytes and one alignment byte. It must not be silently counted as either
@@ -17,9 +17,13 @@ C-generated instructions or assembly. In particular, the 26-byte
 `clearallviews_vga_planes_` span remains unknown; its old 22/4 C/inline split
 cannot be reused after the changed translation unit.
 
-At the object/inventory level, C objects cover 165,697 bytes (**39.96%**), including
+At the object/inventory level, C objects cover 165,699 bytes (**39.96%**), including
 the inline instructions above. Standalone assembly covers the other **60.04%**.
-The inventory has 1,174 C routine spans and 509 remaining assembly routine spans.
+The inventory has 1,175 C routine spans and 508 remaining assembly routine spans.
+
+`_enable_` now builds as one C function. All 2 bytes match: the routine emits
+the original `sti` and the enclosing wrapper supplies the `ret`. The span has
+no LE relocation sites or targets.
 
 `wait_vertical_retrace` now builds as one 23-byte C function. All 23 bytes match:
 the routine emits the original `xor edx,edx; xor eax,eax; xor dx,0x3da` setup,

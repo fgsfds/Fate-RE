@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1174,
-  "unique_code_bytes": 165697,
+  "routines": 1175,
+  "unique_code_bytes": 165699,
   "le_pointers": 8973,
   "non_routine_code_spans": [
     {
@@ -5828,6 +5828,16 @@
       "loaded_address": "0x603de",
       "bytes": 43,
       "le_pointers": 1
+    },
+    {
+      "symbol": "_enable_",
+      "object": "rtirq.obj",
+      "object_sha256": "c466c94acc8a78a4882e183fe09ef064577022d5d8ec27c43d4ca2e90598b12b",
+      "sha256": "250eacd2a331a3eabd1449122661231d5a8f533098398c3872ee34f183516742",
+      "raw_offset": "0x85a09",
+      "loaded_address": "0x60409",
+      "bytes": 2,
+      "le_pointers": 0
     },
     {
       "symbol": "__open_flags_",

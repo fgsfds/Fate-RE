@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 509,
-  "unique_code_bytes": 248942,
+  "routines": 508,
+  "unique_code_bytes": 248940,
   "le_pointers": 13576,
   "non_routine_code_spans": [
     {
@@ -7099,18 +7099,6 @@
       "loaded_address": "0x60333",
       "public_entry": "0x60333",
       "binary_offset": 17,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "_enable_",
-      "source": "src/runtime/dos_helpers.asm",
-      "binary": "dos_helpers.bin",
-      "sha256": "250eacd2a331a3eabd1449122661231d5a8f533098398c3872ee34f183516742",
-      "bytes": 2,
-      "raw_offset": "0x85a09",
-      "loaded_address": "0x60409",
-      "public_entry": "0x60409",
-      "binary_offset": 231,
       "le_pointers": 0
     },
     {

@@ -2802,7 +2802,6 @@ ROUTINES = [
     ('fwrite_', 'runtime/stdio_write.asm', 'stdio_write.bin', 0x60944, 487, {}),
     ('fread_', 'runtime/stdio_read_close.asm', 'stdio_read_close.bin', 0x60638, 458, {}),
     ('strcpy_', 'runtime/dos_helpers.asm', 'dos_helpers.bin', 0x60333, 31, {}),
-    ('_enable_', 'runtime/dos_helpers.asm', 'dos_helpers.bin', 0x60409, 2, {}),
     ('_cstart_', 'runtime/cstart.asm', 'cstart.bin', 0x5ff08, 716, CSTART_POINTERS),
     ('setxmode_', 'engine/setxmode.asm', 'setxmode.bin', 0x5c7a1, 1528, SETXMODE_POINTERS),
     ('fillpolygon_', 'engine/fillpolygon.asm', 'fillpolygon.bin', 0x5bfb7, 2026, FILLPOLYGON_POINTERS),
@@ -3841,7 +3840,6 @@ GROUP_SLICES = {
     'fread_': (0, 780),
 
     'strcpy_': (17, 233),
-    '_enable_': (231, 233),
                 'slopevlin_': (80, 341), 'setupslopevlin_': (0, 341), 'sethlinesizes_': (0, 732), 'setuphlineasm4_': (288, 732), 'hlineasm4_': (352, 732), 'mhline_': (0, 305), 'mhlineskipmodify_': (80, 305),
                 'thline_': (0, 290), 'thlineskipmodify_': (80, 290)}
 DATA_POINTER_SITES = {

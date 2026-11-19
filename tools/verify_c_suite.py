@@ -708,7 +708,7 @@ OBJECT_NAMES['install_keyboard_interrupt_'] = 'kbdinst'
 DOS_RUNTIME_STATE = ('exchange_runtime_hook_', 'get_psp_selector_')
 OBJECT_NAMES.update(dict.fromkeys(DOS_RUNTIME_STATE, 'dosstate'))
 
-OBJECT_NAMES.update({'abs_': 'intabs', '__null_int23_exit_': 'rtirq', '_disable_': 'rtirq'})
+OBJECT_NAMES.update({'abs_': 'intabs', '__null_int23_exit_': 'rtirq', '_disable_': 'rtirq', '_enable_': 'rtirq'})
 
 UPPERCASE_STRINGS = ('uppercase_output_', 'strupr_')
 OBJECT_NAMES.update(dict.fromkeys(UPPERCASE_STRINGS, 'rtstr'))
@@ -977,7 +977,7 @@ GROUPS = {
     'cfgsect': (133, ('find_configuration_section_',)),
     'rtstr': (55, UPPERCASE_STRINGS),
     'intabs': (7, ('abs_',)),
-    'rtirq': (3, ('__null_int23_exit_', '_disable_')),
+    'rtirq': (5, ('__null_int23_exit_', '_disable_', '_enable_')),
     'dosstate': (22, DOS_RUNTIME_STATE),
     'kbdrest': (38, ('restore_keyboard_interrupt_',)),
     'kbdinst': (90, ('install_keyboard_interrupt_',)),
