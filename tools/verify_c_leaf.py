@@ -16,7 +16,7 @@ from omf_fixups import Reader, read_externals, read_fixups
 from le_fixups import read_le_fixups, pointer_range
 from verification_diagnostics import code_mismatch, relocation_mismatch
 
-LEAVES = {'update_actor_common_': (0x39e97, 697), 'clipinsideboxline_': (0x717b2, 225), 'inside_': (0x71e8f, 189),
+LEAVES = {'dispatch_actor_update_': (0x39c10, 647), 'update_actor_common_': (0x39e97, 697), 'clipinsideboxline_': (0x717b2, 225), 'inside_': (0x71e8f, 189),
           'animateoffs_': (0x75d58, 139), 'krand_': (0x7b8e5, 20),
           'getmousevalues_': (0x79a24, 68),
           'clipinsidebox_': (0x716c7, 235), 'lastwall_': (0x77ecf, 80),
@@ -303,6 +303,47 @@ FUNCTION_ADDRESSES.update({
 FUNCTION_ADDRESSES.update({'format_sprite_event_error_': 0x601f3,
                            'report_sprite_event_error_': 0x26a03})
 FUNCTION_ADDRESSES['update_actor_common_'] = 0x14897
+FUNCTION_ADDRESSES['dispatch_actor_update_'] = 0x14610
+
+# Actor mode-transition dispatcher and original field/callee aliases.
+DATA_OFFSETS.update({
+    '_actor_mode': 0x7f67f,
+    '_previous_mode': 0x7f964,
+    '_defer_mode_change': 0x709bc,
+    '_actor_sprite_index': 0x7dab8,
+    '_actor_state_byte': 0x7e0f8,
+    '_actor_delay_byte': 0x7df03,
+    '_sprite_x': 0x2040a0,
+    '_sprite_y': 0x2040a4,
+    '_sprite_sector': 0x2040b8,
+    '_sprite_tile': 0x2040ae,
+    '_actor_x': 0x799e8,
+    '_actor_y': 0x7a1bc,
+    '_actor_sector': 0x7d2e4,
+    '_actor_tiles': 0x7abc0,
+    '_mode_one_tile': 0x7abc2,
+    '_mode_two_tile': 0x7abc4,
+    '_mode_three_tile': 0x7abc6,
+    '_mode_four_tile': 0x7abc8,
+    '_mode_five_tile': 0x7abca,
+    '_mode_six_tile': 0x7abcc,
+    '_actor_profile': 0x7e8cc,
+    '_actor_sequence_initial': 0x7e4e2,
+})
+FUNCTION_ADDRESSES.update({
+    'profile_one_mode_one_': 0x15411,
+    'profile_one_mode_two_': 0x163f2,
+    'profile_one_mode_three_': 0x18a37,
+    'profile_one_mode_four_': 0x183ce,
+    'profile_one_mode_five_': 0x17da9,
+    'profile_one_mode_six_': 0x190aa,
+    'profile_two_mode_one_': 0x14b50,
+    'profile_two_mode_two_': 0x15e07,
+    'profile_two_mode_three_': 0x16aa8,
+    'profile_two_mode_four_': 0x1711b,
+    'profile_two_mode_five_': 0x17784,
+})
+
 FUNCTION_ADDRESSES['__GETDS'] = 0x601d4
 FUNCTION_ADDRESSES['memset_'] = 0x61350
 FUNCTION_ADDRESSES['fill_byte_pattern_'] = 0x62de0

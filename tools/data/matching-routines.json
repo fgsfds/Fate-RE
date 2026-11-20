@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1190,
-  "unique_code_bytes": 166489,
-  "le_pointers": 9014,
+  "routines": 1191,
+  "unique_code_bytes": 167136,
+  "le_pointers": 9045,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -468,6 +468,16 @@
       "loaded_address": "0x1404a",
       "bytes": 233,
       "le_pointers": 15
+    },
+    {
+      "symbol": "dispatch_actor_update_",
+      "object": "actdisp.obj",
+      "object_sha256": "0ab3ea008469d749a353ac94e07911bdaa59b9ce6d7c926aeeeeeb73858db369",
+      "sha256": "14570031318605cd650d3480083537dcb6746ebe9910de96f8b2bc15c989e76f",
+      "raw_offset": "0x39c10",
+      "loaded_address": "0x14610",
+      "bytes": 647,
+      "le_pointers": 31
     },
     {
       "symbol": "update_actor_common_",

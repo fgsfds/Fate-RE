@@ -46,6 +46,8 @@ those expectations. Volatile OMF comments, including timestamps, are not compare
 
 ## Patterns verified in Fate
 
+- In [`dispatch_actor_update`](../src/fate/actor_dispatch.c), distinct entry-index and profile-index lifetimes prevent shared scaled-address spills. The explicit actor stage in the flags comma expression controls Watcom-only argument order; verify exact code, LE sites, and fixtures.
+
 - In [`getangle`](../src/engine/getangle.c), the call clobbers EAX and EDX.
 - [`play_sound`](../src/fate/play_sound.asm) clobbers at least EBX and EDX; a conservative caller contract is EAX/EBX/ECX/EDX.
 
