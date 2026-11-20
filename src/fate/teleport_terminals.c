@@ -1,6 +1,7 @@
 extern signed char current_level;
 extern char terminal_y[];
-extern long terminal_x, terminal_destination_x, terminal_destination_y;
+extern long terminal_x[];
+extern long terminal_destination_x, terminal_destination_y;
 extern unsigned char terminal_destination_level, destination_level, terminal_special_case;
 extern short terminal_destination_entry, destination_entry;
 extern short terminal_projectiles[], projectile_count, moving_sprite_count, float_sprite_count;
@@ -20,11 +21,12 @@ extern void begin_terminal_scan(int);
     "push ebp" "mov ebp,100" parm [ebx] modify exact [];
 extern void end_terminal_scan(void);
 #pragma aux end_terminal_scan = "pop ebp" "pop edi" "pop esi" "pop edx" "pop ecx" "pop ebx" modify exact [];
-extern long terminal_location(void);
-#pragma aux terminal_location = \
-    "movsx ecx,byte ptr [current_level]" "mov eax,ecx" "shl eax,3" "add ecx,eax" \
-    "mov eax,edx" "shl eax,2" "sub eax,edx" "shl ecx,4" "shl eax,3" "add eax,ecx" \
-    "mov edx,[eax+terminal_x]" value [edx] modify exact [eax ecx edx];
+/* Empty contracts preserve the original 144-byte level and 24-byte record indices. */
+extern unsigned long terminal_in_ecx(unsigned long);
+#pragma aux terminal_in_ecx = parm [ecx] value [ecx] modify exact [];
+extern unsigned long terminal_edx(void);
+#pragma aux terminal_edx = value [edx] modify exact [];
+
 extern void prepare_terminal_destination(void);
 #pragma aux prepare_terminal_destination = \
     "movsx ecx,byte ptr [current_level]" "movsx esi,bx" "mov edi,ecx" "mov eax,esi" \
@@ -83,7 +85,20 @@ void check_teleport_terminals(void)
     goto count;
 check_terminal:
     /* A level's terminal list ends at the first record with X equal to -1. */
-    if (terminal_location() == -1)
+    /* Six 24-byte records per level: 144*level + 24*terminal. */
+    terminal_in_ecx((unsigned long)current_level);
+    index_in_eax(terminal_level_in_ecx());
+    index_in_eax((int)(terminal_row_offset() << 3));
+    terminal_in_ecx((unsigned long)terminal_level_in_ecx() + terminal_row_offset());
+    index_in_eax((int)terminal_edx());
+    index_in_eax((int)(terminal_row_offset() << 2));
+    index_in_eax((int)(terminal_row_offset() - terminal_edx()));
+    terminal_in_ecx((unsigned long)terminal_level_in_ecx() << 4);
+    index_in_eax((int)(terminal_row_offset() << 3));
+    index_in_eax((int)(terminal_row_offset() + (unsigned long)terminal_level_in_ecx()));
+    /* These extern labels name fields within the packed terminal table. */
+    number_in_edx(*(const long *)((unsigned long)terminal_x + terminal_row_offset()));
+    if (terminal_x_in_edx() == -1)
         goto done;
     player_x_position = number_in_esi(player_x);
     terminal_y_position = terminal_y_after_load(*(const long *)(terminal_y + terminal_row_offset()));

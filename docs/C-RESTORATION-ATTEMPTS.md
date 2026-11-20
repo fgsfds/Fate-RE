@@ -756,3 +756,42 @@ a new SUB ESP,4 before the original PUSH ECX. Earlier getter-only products
 used ESI as an indexing temporary. Green/blue products remain inline;
 next require a weight-lifetime model without an added compiler stack slot.
 Evidence: work/palette-distance-next/iteration.c.
+
+### Actor common counter and health widths
+
+The whole C draft preserves the five-register frame but does not match.
+Watcom 10.5 /4r /s /or /bt=dos emits 681 bytes versus 697 for memory.c.
+Ignoring changed branch displacements, the first mismatch is +0x48:
+XOR DH,DH and DH stores instead of CL; the next health load uses MOV CX
+rather than the original memory CMP. Next expose a CL zero identity and
+preserve the signed memory-health comparison. Do not credit its 41 external
+fixups as matching LE sites. Death handling doubles sprite byte 18; preserve
+that offset when choosing a standard sprite type.
+Evidence: work/actor-common-next/RESULTS.md,
+work/terminal-native-next/memory.obj.
+
+### Clip-edge binding order and CWDE selection
+
+Watcom 10.5 /4r /s /or /os /bt=dos swaps the two pointer moves at +0x6,
+even with separate ESI/EDI identity calls. Native signed-short distance
+selection emits MOVSX EAX,BX instead of CWDE at +0x0f and grows 104 bytes
+to 106. Next resolve the source lifetime/type boundary; do not repeat
+equivalent cast expressions. Evidence: work/clip-complete-next/sbind.c,
+taxis.c and work/terminal-native-next/ corresponding objects.
+
+### Palette initializer clear intrinsic
+
+Watcom 10.5 /4r /s /or /bt=dos memset intrinsics emit 398 bytes, or 382
+with explicit register parameters, versus 490. Their store plan does not
+preserve the original alignment/test paths. Next translate that control
+flow while retaining the string-store primitives, rather than repeating
+memset flag variants. Evidence: work/palette-clear-next/.
+
+### Teleport destination preparation lifetimes
+
+Native destination preparation grows 334 bytes to 338 under /4r /s /bt=dos.
+The first meaningful mismatch is earlier at +0x7f: projectile index widens
+from DI rather than DX, followed by an added MOV EDX,EDI. The isolated
+location calculation is exact and integrated. Next model register lifetimes
+across the full routine before replacing preparation and destination copies.
+Evidence: work/terminal-native-next/prep.c and whole.c.

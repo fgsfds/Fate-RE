@@ -1,7 +1,8 @@
 /* Build Engine & Tools copyright (c) 1993-1997 Ken Silverman. See BUILDLIC.TXT. */
 
 extern short numpalookups;
-extern unsigned char palookup[], palette[], palette_lock, palette_loaded;
+extern unsigned char *palookup[];
+extern unsigned char palette[], palette_lock, palette_loaded;
 
 extern void finish_palookup(void);
 #pragma aux finish_palookup aborts modify exact [];
@@ -19,15 +20,22 @@ extern void begin_palookup(long slot, const unsigned char *remap, int r, int g);
 #pragma aux begin_palookup = "push esi" "push edi" "push ebp" "sub esp,18h" \
     "mov ebp,eax" "mov [esp+0ch],edx" "mov [esp+14h],bl" "mov [esp+10h],cl" \
     parm [eax] [edx] [ebx] [ecx] modify exact [];
-extern void prepare_palookup_slot(void);
-#pragma aux prepare_palookup_slot = "mov ecx,ebp" "shl ecx,2" modify exact [ecx];
+/* Empty ABI contracts for the pointer-table byte index. */
+extern unsigned long current_palookup_slot(void);
+#pragma aux current_palookup_slot = value [ebp] modify exact [];
+extern void set_palookup_slot(unsigned long);
+#pragma aux set_palookup_slot = "" parm [ecx] modify exact [];
 extern long palookup_slot(void);
 #pragma aux palookup_slot = value [ecx] modify exact [];
 extern long current_shade_count(void);
 #pragma aux current_shade_count = "movsx eax,numpalookups" value [eax] modify exact [eax];
-extern void prepare_palette_cache(void);
-#pragma aux prepare_palette_cache = "mov eax,offset palookup" "movsx edx,numpalookups" \
-    "mov ebx,offset palette_lock" "shl edx,8" "add eax,ecx" modify exact [eax ebx edx];
+/* The failed-allocation path uses the same registers as allocache. */
+extern void set_palette_cache_slot(void *);
+#pragma aux set_palette_cache_slot = "" parm [eax] modify exact [];
+extern void set_palette_cache_size(long);
+#pragma aux set_palette_cache_size = "" parm [edx] modify exact [];
+extern void set_palette_cache_lock(void *);
+#pragma aux set_palette_cache_lock = "" parm [ebx] modify exact [];
 extern void *palette_cache_slot(void);
 #pragma aux palette_cache_slot = value [eax] modify exact [];
 extern long palette_cache_size(void);
@@ -45,17 +53,41 @@ extern long tint_mask(void);
 #pragma aux tint_mask = value [eax] modify exact [];
 extern void begin_plain_remap(void);
 #pragma aux begin_plain_remap = "mov [esp+8],eax" modify exact [];
-extern void prepare_remap_column(void);
-#pragma aux prepare_remap_column = "mov eax,[esp+0ch]" "mov edi,dword ptr [palookup]" "add eax,ecx" \
-    "xor ecx,ecx" "mov esi,dword ptr [ebp*4+palookup]" "mov cl,[eax]" "mov eax,[esp+8]" \
-    "add ecx,edi" "add esi,eax" "xor edi,edi" modify exact [eax ecx esi edi];
-extern unsigned char read_remapped_shade(void);
-#pragma aux read_remapped_shade = "inc edi" "mov al,[ecx]" "add ecx,100h" \
-    value [al] modify exact [eax ecx edi];
+/* Only the existing frame reads remain instructions; table indexing is C. */
+extern unsigned long saved_plain_remap_address(void);
+#pragma aux saved_plain_remap_address = "mov eax,[esp+0ch]" value [eax] modify exact [eax];
+extern unsigned long saved_plain_column(void);
+#pragma aux saved_plain_column = "mov eax,[esp+8]" value [eax] modify exact [eax];
+extern unsigned long plain_remap_address(void);
+#pragma aux plain_remap_address = value [eax] modify exact [];
+extern void set_plain_remap_address(unsigned long);
+#pragma aux set_plain_remap_address = "" parm [eax] modify exact [];
+extern unsigned long plain_column_register(void);
+#pragma aux plain_column_register = value [ecx] modify exact [];
+extern long current_plain_slot(void);
+#pragma aux current_plain_slot = value [ebp] modify exact [];
+extern unsigned long retain_plain_base(unsigned long);
+#pragma aux retain_plain_base = "" parm [edi] value [edi] modify exact [];
+extern unsigned long retain_plain_output_base(unsigned long);
+#pragma aux retain_plain_output_base = "" parm [esi] value [esi] modify exact [];
+extern void set_plain_source_index(unsigned char);
+#pragma aux set_plain_source_index = "" parm [cl] modify exact [];
+/* Empty register contracts keep the strided copy in the historical registers.
+   Integer addresses allow the final stride past the allocated shade table. */
+extern unsigned long plain_source_address(void);
+#pragma aux plain_source_address = value [ecx] modify exact [];
+extern void set_plain_source_address(unsigned long);
+#pragma aux set_plain_source_address = "" parm [ecx] modify exact [];
+extern unsigned long plain_output_address(void);
+#pragma aux plain_output_address = value [esi] modify exact [];
+extern void set_plain_output_address(unsigned long);
+#pragma aux set_plain_output_address = "" parm [esi] modify exact [];
+extern void set_plain_shade(long);
+#pragma aux set_plain_shade = "" parm [edi] modify exact [];
+extern unsigned char plain_pixel(unsigned char);
+#pragma aux plain_pixel = "" parm [al] value [al] modify exact [];
 extern unsigned char *palookup_output(void);
 #pragma aux palookup_output = value [esi] modify exact [];
-extern void next_remapped_shade(void);
-#pragma aux next_remapped_shade = "add esi,100h" modify exact [esi];
 extern long active_plain_shade(void);
 #pragma aux active_plain_shade = value [edi] modify exact [];
 extern void next_palookup_index(void);
@@ -108,12 +140,16 @@ void makepalookup(long slot, const unsigned char *remap, int r, int g, int b, in
     begin_palookup(slot, remap, r, g);
     if (!palette_loaded)
         goto done;
-    prepare_palookup_slot();
-    if (!*(long *)(palookup + palookup_slot())) {
-        value = engine_malloc(current_shade_count() << 8);
-        *(long *)(palookup + palookup_slot()) = value;
+    set_palookup_slot(current_palookup_slot() * 4UL);
+    if (!*(unsigned char **)((unsigned char *)palookup + palookup_slot())) {
+        value = engine_malloc((long)((unsigned long)current_shade_count() << 8));
+        *(unsigned char **)((unsigned char *)palookup + palookup_slot()) = (unsigned char *)value;
         if (!value) {
-            prepare_palette_cache();
+            set_palette_cache_slot(palookup);
+            set_palette_cache_size((long)numpalookups);
+            set_palette_cache_lock(&palette_lock);
+            set_palette_cache_size((long)((unsigned long)palette_cache_size() << 8));
+            set_palette_cache_slot((unsigned char *)palette_cache_slot() + palookup_slot());
             allocache(palette_cache_slot(), palette_cache_size(), palette_cache_lock());
         }
     }
@@ -127,12 +163,27 @@ void makepalookup(long slot, const unsigned char *remap, int r, int g, int b, in
     begin_plain_remap();
     goto check_remap_column;
     do {
-        prepare_remap_column();
+        {
+            unsigned long remap_address = saved_plain_remap_address();
+            unsigned long source_base = retain_plain_base((unsigned long)palookup[0]);
+            unsigned long output_base, column;
+            set_plain_remap_address(remap_address + plain_column_register());
+            /* CL receives the remap byte after the full source index is zeroed. */
+            set_plain_source_address(0UL);
+            output_base = retain_plain_output_base((unsigned long)palookup[current_plain_slot()]);
+            set_plain_source_index(*(unsigned char *)plain_remap_address());
+            column = saved_plain_column();
+            set_plain_source_address(plain_source_address() + source_base);
+            set_plain_output_address(output_base + column);
+            set_plain_shade(0);
+        }
         goto check_remap_shade;
         do {
-            pixel = read_remapped_shade();
-            *palookup_output() = pixel;
-            next_remapped_shade();
+            set_plain_shade(active_plain_shade() + 1);
+            pixel = plain_pixel(*(unsigned char *)plain_source_address());
+            set_plain_source_address(plain_source_address() + 256UL);
+            *(unsigned char *)plain_output_address() = pixel;
+            set_plain_output_address(plain_output_address() + 256UL);
 check_remap_shade:;
         } while (active_plain_shade() < current_shade_count());
         next_palookup_index();
