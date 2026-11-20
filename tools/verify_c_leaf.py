@@ -16,7 +16,7 @@ from omf_fixups import Reader, read_externals, read_fixups
 from le_fixups import read_le_fixups, pointer_range
 from verification_diagnostics import code_mismatch, relocation_mismatch
 
-LEAVES = {'dispatch_actor_update_': (0x39c10, 647), 'update_actor_common_': (0x39e97, 697), 'clipinsideboxline_': (0x717b2, 225), 'inside_': (0x71e8f, 189),
+LEAVES = {'update_menu_selection_': (0x5e835, 595), 'dispatch_actor_update_': (0x39c10, 647), 'update_actor_common_': (0x39e97, 697), 'clipinsideboxline_': (0x717b2, 225), 'inside_': (0x71e8f, 189),
           'animateoffs_': (0x75d58, 139), 'krand_': (0x7b8e5, 20),
           'getmousevalues_': (0x79a24, 68),
           'clipinsidebox_': (0x716c7, 235), 'lastwall_': (0x77ecf, 80),
@@ -303,6 +303,16 @@ FUNCTION_ADDRESSES.update({
 FUNCTION_ADDRESSES.update({'format_sprite_event_error_': 0x601f3,
                            'report_sprite_event_error_': 0x26a03})
 FUNCTION_ADDRESSES['update_actor_common_'] = 0x14897
+
+# Menu input accumulators and signed word mouse deltas.
+DATA_OFFSETS.update({
+    '_menu_mouse_x': 0x1741d6,
+    '_menu_mouse_y': 0x1741da,
+    '_mouse_dx': 0x7deda,
+    '_mouse_dy': 0x7dedc,
+})
+FUNCTION_ADDRESSES['update_menu_selection_'] = 0x39235
+
 FUNCTION_ADDRESSES['dispatch_actor_update_'] = 0x14610
 
 # Actor mode-transition dispatcher and original field/callee aliases.

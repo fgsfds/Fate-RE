@@ -13,7 +13,7 @@ extern void presentation_reset(void);
 #pragma aux presentation_reset modify exact [eax];
 extern void draw_menu_frame(unsigned, long, short, const char *, MenuRecord **);
 #pragma aux draw_menu_frame parm routine [eax] [edx] [ebx] [ecx] modify exact [eax ebx ecx edx];
-extern void update_menu_selection(void);
+extern unsigned update_menu_selection(void);
 #pragma aux update_menu_selection modify exact [eax];
 extern void read_save_slot_preview(int);
 #pragma aux read_save_slot_preview modify exact [eax];

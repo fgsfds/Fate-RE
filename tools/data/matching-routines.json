@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1191,
-  "unique_code_bytes": 167136,
-  "le_pointers": 9045,
+  "routines": 1192,
+  "unique_code_bytes": 167731,
+  "le_pointers": 9080,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -2758,6 +2758,16 @@
       "loaded_address": "0x39143",
       "bytes": 242,
       "le_pointers": 9
+    },
+    {
+      "symbol": "update_menu_selection_",
+      "object": "menusel.obj",
+      "object_sha256": "1e66378e5879d66de060d258d58dd980f7733f7cb168a8c42054ed014aba7786",
+      "sha256": "ae60db619c827b8fc9c01c1e79e3263d7a4637d38bd51e76ee68fc4b28138871",
+      "raw_offset": "0x5e835",
+      "loaded_address": "0x39235",
+      "bytes": 595,
+      "le_pointers": 35
     },
     {
       "symbol": "cache_menu_tiles_",

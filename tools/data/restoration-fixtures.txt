@@ -108,3 +108,4 @@ check_clip_edge {exe} {build}/gfxclip.obj | gfxclip
 check_plain_palookup {exe} {build}/palookmk.obj | palookmk
 check_actor_common {exe} {build}/actcomm.obj | actcomm
 check_actor_dispatch {exe} {build}/actdisp.obj | actdisp
+check_menu_selection {exe} {build}/menusel.obj | menusel

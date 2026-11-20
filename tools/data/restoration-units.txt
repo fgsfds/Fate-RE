@@ -491,3 +491,4 @@ runtime/graphics_planar_device gfxplane
 runtime/graphics_bitmap_bits gfxbits
 fate/actor_common actcomm /4r /s /bt=dos
 fate/actor_dispatch actdisp /4r /s /bt=dos
+fate/update_menu_selection menusel /4r /s /or /bt=dos
