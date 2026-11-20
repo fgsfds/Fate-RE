@@ -1,73 +1,60 @@
 ---
 name: fate-restoration-coordination
-description: Coordinate cost-tiered Fate restoration subagents, five-job concurrency, isolated compiler probes, stable integration, exact evidence, and clean pause handoffs
+description: Route bounded Fate restoration work to economical roles, isolate compiler jobs, and hand verified evidence to a writer.
 ---
 
 # Restoration coordination
 
-All paths are repository-relative. This skill lives in the shared `.agents/skills/`
-directory. Read `docs/RESTORATION-AGENTS.md` for roles,
-model choices, and an assignment template. Use
-`.agents/skills/fate-exact-restoration/SKILL.md` for acceptance details.
+Read docs/RESTORATION-AGENTS.md for routes and the task packet. Load the exact
+skill only for acceptance/compilation, and compiler-research only for novel ABI
+or code-generation work. Read guidance once per session; do not reload entire
+skills, inventories or attempt logs for every follow-up.
 
-## Authority and scheduling
+## Route only useful work
 
-- Configuration is not authorization to resume restoration. Honor the user's
-  active/paused state; a pause stops replacement assignments immediately.
-- While restoration is explicitly active, the requested budget is five active
-  subagents, excluding the integrator. Replace a finished task with another
-  useful disjoint assignment. If fewer safe independent tasks exist, explain
-  the shortfall instead of inventing work or allowing overlapping ownership.
-- Five role definitions are reusable capabilities, not a requirement to run
-  exactly one of each. Reuse fate-research for independent hard routines;
-  use fate-scout/fate-verify for cheap mechanical work and fate-probe for
-  fully specified experiments. Rotate fate-review in before risky integration.
-- Do not create perpetual jobs or automatic background restarts. Children do
-  not delegate. Use completion notifications; do not poll child sessions.
+- No worker quota: default 0-2 useful children, optional independent review within
+  the host limit. Never refill slots just because a task finished. Paused
+  restoration stays paused; explicit configuration work is separate.
+- Scout, specified probe, verifier and writer use Luna. Research uses Sol-high;
+  routine independent review uses Sol-medium. Escalate a concrete ambiguity,
+  not all tasks. If a route is unavailable, report it and use an available
+  comparable/lower tier; do not silently upgrade or invent provider/model IDs.
+- On Codex start with fork_turns="none" and an explicit supported model/effort;
+  use the host's fresh-child mechanism elsewhere.
+  Reuse a worker only for the same routine/role while its context is relevant.
+  Renaming its task does not change its existing model or clear old context.
+- Send <=150 words plus paths: objective, owned files, context/evidence, runtime
+  paths, flags, hypothesis, budget, acceptance. Supply bounded excerpts when a
+  read-only role cannot open files. Include the discovered Python executable,
+  PYTHONPATH and working directory once; avoid rediscovering WindowsApps aliases.
+- Use notifications, not progress polling of idle children. Returns are <=150
+  words (research/review <=200) with decisive status and artifact paths. Put full
+  logs/listings/source in ignored scratch. No unchanged status pings or children.
 
-## Isolation is more than different output directories
+## Isolation and acceptance
 
-- Every assignment names owned files/objects, a scratch directory, a hypothesis,
-  an experiment budget, and required evidence. Hand the scout or researcher a
-  bounded `restore.py context` packet. Add reference disassembly or a Ghidra
-  draft when it resolves a specific question. Keep raw images in ignored scratch.
-  Give the probe worker the hypothesis and flags. Give the verifier the frozen
-  candidate and the requested independent checks.
-- Prefer independent worktrees for simultaneous tracked-source edits. Otherwise
-  workers must compile staged scratch source only, with tracked source frozen.
-- Distinct `work/` directories do not isolate sources:
-  `restoration_build.py` stages the complete source set. Never run the shared
-  build while workers are editing the checkout it reads.
-- The integrator creates/assigns worktrees and shared baseline artifacts.
-  Workers must not merge, cherry-pick, commit, push, or refresh shared
-  inventories without explicit integrator authorization.
-- Only the integrator edits shared registries, fixture registrations,
-  inventories, progress/attempt notes, and production build artifacts. A
-  verification agent may run checks in an explicitly handed-off directory
-  exclusively, but may not edit tracked files through the shell.
-
-## Stable handoff
-
-1. Ask workers to stop new hypotheses and finish only an immediately pending
-   verification. Preserve candidate/log evidence.
-2. Require an exact stable patch or restoration of only that worker's failed
-   changes; do not discard unrelated user/agent edits.
-3. Collect source hashes, commands, flags, exact spans and LE evidence,
-   current-report status, expected savings, and failed hypotheses.
-4. Integrate reviewed patches serially into the production checkout. Re-run
-   their targeted checks against the integrated snapshot and requested
-   fixtures. Reject undefined C even if emitted bytes happen to match.
-5. Use fresh default exact production validation; use `--full` for tooling
-   changes or an intentional periodic checkpoint, not every source edit.
-   Never run DOSBox game smoke. Keep compiler DOSBox windowless.
-6. Refresh inventories when registrations/coverage change. Re-measure marker
-   attribution when inline instructions change, including needed retries.
-   Report compiler-generated, inline, standalone assembly, and unknown bytes
-   against the complete CODE segment; count inline within remaining assembly.
-7. Keep open probe clues concise and remove resolved entries. Record the
-   accepted change and verification in the commit message and update measured
-   coverage when it changes. Check the branch, diff, tests, and working tree
-   before signed pushes.
-8. On pause: stop all children, launch no replacements, finish the bounded
-   integration/verification checkpoint, report what was retained or deferred,
-   and leave restoration paused.
+- Separate scratch folders do not isolate shared sources. Workers change only
+  assigned scratch or an isolated worktree. Freeze tracked inputs during builds.
+- The integrator owns shared registries/inventories, production artifacts,
+  acceptance, signing and pushes. It leases one compiler job at a time, including
+  workers: windowless DOSBox, check absent before launch and after exit; no smoke.
+- Default one specified probe, at most three explicitly budgeted. Stop when the
+  first useful result resolves the question; a failure needs a new hypothesis
+  before widening. A source/hash change invalidates its earlier evidence.
+- Integrate reviewed candidates serially. Exact bytes plus LE sites/targets and
+  a fresh whole image are mandatory; behavior alone never earns C coverage.
+  Use default exact validation for source-only edits; full for tool changes or
+  justified checkpoints. Refresh inventories only when registrations change,
+  and attribution when inline bytes change. Reuse only provenance-checked inputs.
+- Freeze the final report packet before assigning fate-writer. Run doctor for
+  current freshness, then restoration_handoff.py for saved-artifact identity and
+  compact metrics. The writer may edit named docs/READMEs/scripts/tests; it cannot
+  accept code, change registries/inventories, or infer results. Never validate
+  while it edits files included in the validation snapshot.
+- Finish writer output before final acceptance if it changes scripts/fixtures.
+  Review its arithmetic, links and script behavior once; do not rewrite correct
+  text just for style. Keep one current blocker per routine, remove solved
+  failures, and avoid duplicating reports in commit messages.
+- On pause: stop new hypotheses/assignments, finish only the pending bounded
+  checkpoint, collect artifacts, stop all children and preserve a concise resume
+  note. Configuration tasks alone do not reactivate restoration.

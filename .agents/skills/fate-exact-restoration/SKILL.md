@@ -4,7 +4,7 @@ description: Restore Fate-RE assembly routines to C with the pinned Watcom 10.5 
 ---
 
 For parallel work, also load `fate-restoration-coordination`; for new compiler/ABI
-hypotheses, load `fate-compiler-research`. The five cost-tiered project agents and
+hypotheses, load `fate-compiler-research`. The six cost-tiered project agents and
 their ownership/handoff rules are documented in `docs/RESTORATION-AGENTS.md`.
 Adding or loading these profiles does not resume paused restoration.
 

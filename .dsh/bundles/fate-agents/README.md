@@ -1,74 +1,35 @@
 # Fate restoration agents for DeepSeek Harness
 
-Converted for DSH 0.2.2-rc.2. This is an installable, configuration-only bundle,
-not an OpenCode configuration directory. It does not override Standard, select a
-primary model, change provider credentials, or resume restoration.
+This installable, configuration-only bundle targets DSH 0.2.2-rc.2. It does not override Standard, select a primary model, change provider credentials, or resume restoration. Configuration work may proceed while restoration is paused.
 
-## Start here
+## Install and use
 
-1. Install this directory with DSH Plugin Manager (local directory). The bundle
-   registers six presets. The project directory alone is not auto-discovered as
-   agent configuration.
-2. Create a **new session**, set its working directory to the Fate-RE repository
-   (or an assigned worktree), and select **Fate restoration**. Existing sessions
-   keep their original preset revision and tool catalog.
-3. The integrator uses the dedicated tools below, not generic `subagent` with a
-   role name. Give each child a complete assignment, owned files, an isolated
-   scratch/worktree directory, a budget, and evidence requirements.
-4. Resume restoration only on explicit user instruction. Installation/testing
-   is configuration work, not permission to start compiler experiments.
+1. Install this directory with DSH Plugin Manager as a local bundle.
+2. Start a new session rooted at the Fate-RE checkout (or assigned worktree) and select **Fate restoration**. Existing sessions retain their loaded preset revision and tool catalog.
+3. Dispatch with the dedicated role tools, supplying a complete bounded task, owned paths, scratch path, and acceptance evidence. Do not use generic subagent dispatch to simulate a route.
+4. Default to zero to two useful children; request an independent review only when useful and within the host limit. No fixed worker count or busywork. A pause stops restoration work; explicit configuration tasks remain allowed.
 
-| Role preset | Integrator tool | Fixed child route | Tool restrictions |
+| Role | Dedicated tool | Route | Tool boundary |
 | --- | --- | --- | --- |
-| `fate-scout` | `fate_scout` | `openai/gpt-6-luna`, `high` | No write/edit, shell, or delegation |
-| `fate-probe` | `fate_probe` | `openai/gpt-6.1-sol`, `high` | No delegation |
-| `fate-verify` | `fate_verify` | `openai/gpt-6-luna`, `high` | No write/edit or delegation; assigned shell checks only |
-| `fate-research` | `fate_research` | `openai/gpt-6.1-sol`, `high` | No delegation |
-| `fate-review` | `fate_review` | `openai/gpt-6.1-sol`, `high` | No write/edit, shell, or delegation |
+| `fate-scout` | `fate_scout` | `openai/gpt-6-luna`, low | No write/edit, shell, or delegation |
+| `fate-probe` | `fate_probe` | `openai/gpt-6-luna`, medium | Specified transformations/experiments only; novel ABI questions go to research; no delegation |
+| `fate-verify` | `fate_verify` | `openai/gpt-6-luna`, low | Assigned frozen checks; no write/edit or delegation |
+| `fate-writer` | `fate_writer` | `openai/gpt-6-luna`, medium | Assigned docs, READMEs, scripts, or tests from frozen evidence |
+| `fate-research` | `fate_research` | `openai/gpt-6.1-sol`, high | ABI/compiler research; no delegation |
+| `fate-review` | `fate_review` | `openai/gpt-6.1-sol`, medium; high only for hard ABI or UB | Independent review; no write/edit, shell, or delegation |
 
-The routes above come from the actual `.opencode/agents/*.md` frontmatter,
-not the older prose table in `docs/RESTORATION-AGENTS.md`. On conversion, the
-current session exposed only Sol. Luna defaults are deliberately preserved at
-the user's request: enable an authorized Luna route before using scout/verifier.
-A missing model must fail visibly; do not silently upgrade cheap work to Sol.
-The fixed routes apply when dispatched by the integrator's dedicated tools.
-Selecting a child preset directly in the UI does not choose its model; select
-the route manually there. Presets define tools/personas, not session models.
+Use fresh children with task packets of at most 150 words plus paths; Codex callers use `fork_turns="none"`. Save routine context and pass bounded excerpts, never full history. A role-label change does not change an existing worker's model; spawn fresh at the intended tier. Parent supplies frozen audit/build reports, hashes, and model details. Derive metrics from JSON, not memory; omit resolved failures and report one blocker per routine. Return at most 150 words (research/review: 200) plus artifact paths, the first meaningful mismatch, and report paths rather than full logs. Avoid progress pings unless blocked.
 
-## Mapping and limitations
+## Security and ownership
 
-- The original prompt bodies are embedded unchanged at the start of each
-  child's persona, followed by a small DSH adapter note.
-- Role restrictions are implemented by omitting tools, not just telling a
-  general-purpose child to behave. Children have no delegation/workflow tools;
-  the integrator's delegation tools also cap absolute depth at one.
-- Read-only roles disable both filesystem mutation tools. Scout/review also
-  omit shell and job tools. Verifier needs shell for assigned checks, so its
-  shell write prohibition remains an instruction, **not an OS security boundary**.
-  Compiler roles likewise rely on explicit ownership plus the session sandbox.
-- Shell-enabled presets use PowerShell, matching this Windows installation.
-- Shared `.agents/skills/` and `AGENTS.md` are loaded using DSH's filesystem
-  skill provider and repository-instructions plugin; skills are not duplicated.
-- Research additionally has web search/fetch. Parent owns shared integration.
-- Keep five useful disjoint workers only while restoration is explicitly active.
-  On pause, stop new assignments and message every active child to stop.
-- Installation registers profile-wide presets but changes no default preset,
-  provider configuration, or user files outside this bundle and the usage guide.
-- The bundle has original network-node artwork; stock declaration rows retain
-  their own DSH package artwork. UI rendering requires a new session and has
-  not been browser-verified by the converter.
+Tool omission is a boundary only where stated. Shell-enabled tools remain subject to session permissions; verifier shell is for assigned checks. Keep scratch in ignored `work/` paths. All DOSBox compilation is serialized and parent-owned unless an exclusive lease is granted. Writers may edit only assigned artifacts from frozen evidence and do no game research, compiler/registry/inventory work, commits, pushes, or new hypotheses. Parent reviews artifact claims and scripts and owns integration.
 
-## Regenerate after editing OpenCode profiles
+## Regenerate
 
-The OpenCode files remain canonical for role prompts and model defaults.
-Run from this repository with a normal Node.js runtime:
+OpenCode files in `.opencode/agents/*.md` are canonical for role bodies. From the repository root, run:
 
 ```powershell
-node .dsh/bundles/fate-agents/build-fate-agents.cjs . .dsh/bundles/fate-agents
+node .dsh/bundles/fate-agents/build-fate-agents.cjs . .dsh/bundles/fate-agents --sync-codex
 ```
 
-This regenerates the manifest, patch and English locale and asserts source
-prompt preservation, role routes, and tool omissions. It leaves this README,
-icon, and the OpenCode files unchanged. Reinstall the local bundle after changes,
-check activation results, and use new sessions. The patch is JSON-form YAML so
-it needs no code plugin, dependencies, build scripts, or custom YAML tags.
+This generates seven presets (parent plus six roles) and the `fate_writer` tool. With no `--sync-codex` flag, generation remains DSH-only. Reinstall the local bundle after regeneration and use a new session to load changes. Use `--sync-codex --check` to detect generated profile drift without writing files.

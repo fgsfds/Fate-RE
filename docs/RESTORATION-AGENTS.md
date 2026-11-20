@@ -1,55 +1,43 @@
 # Restoration agents
 
-Use the shared [.agents skills](../.agents/skills/) and select the configured
-role by name. Confirm model access before assigning work.
+Use the shared [.agents skills](../.agents/skills/) and the configured role presets below. This is configuration guidance; it does not resume a paused restoration. Explicit configuration work may continue while restoration is paused.
 
-| Role | Model and reasoning | Assignment |
+| Role | Route | Assignment |
 | --- | --- | --- |
-| `fate-scout` | GPT-6 Luna, high | Read-only candidate triage |
-| `fate-probe` | GPT-6.1 Sol, high | Bounded compiler experiment |
-| `fate-verify` | GPT-6 Luna, high | Frozen artifact and attribution checks |
-| `fate-research` | GPT-6.1 Sol, high | ABI and compiler hypotheses |
-| `fate-review` | GPT-6.1 Sol, high | Independent C validity and evidence review |
+| `fate-scout` | GPT-6 Luna, low | Read-only candidate triage |
+| `fate-probe` | GPT-6 Luna, medium | Only specified transformations or experiments; escalate a novel ABI question to research |
+| `fate-verify` | GPT-6 Luna, low | Check frozen artifacts and attribution |
+| `fate-writer` | GPT-6 Luna, medium | Edit assigned docs, READMEs, scripts, or tests from frozen evidence |
+| `fate-research` | GPT-6.1 Sol, high | Investigate ABI and compiler hypotheses |
+| `fate-review` | GPT-6.1 Sol, medium; high only for hard ABI or undefined-behavior cases | Independent review of C validity and evidence |
 
-- **Codex:** start a session rooted in this checkout. Project TOML files are in
-  [`.codex/agents/`](../.codex/agents/). Scout and review disable the shell
-  tool. All roles inherit the parent session's permissions.
-- **OpenCode:** role files live in [`.opencode/agents/`](../.opencode/agents/).
-  Use `/reload` if discovery needs a refresh.
-- **DeepSeek Harness:** install the [project bundle](../.dsh/bundles/fate-agents/README.md)
-  through Plugin Manager. Start a new session here with **Fate restoration**.
-  Use its dedicated `fate_scout`, `fate_probe`, `fate_verify`,
-  `fate_research`, and `fate_review` tools for the configured role presets.
+- **Codex:** start a session rooted in this checkout. Project TOML files are in [`.codex/agents/`](../.codex/agents/).
+- **OpenCode:** role bodies in [`.opencode/agents/`](../.opencode/agents/) are canonical. Use `/reload` if discovery needs a refresh.
+- **DeepSeek Harness:** install [the project bundle](../.dsh/bundles/fate-agents/README.md) through Plugin Manager, then start a new session here with **Fate restoration**. Use its dedicated role tools.
 
-While restoration is active, assign up to five useful, disjoint jobs within
-the available concurrency limit. Keep tracked sources isolated and give
-each worker a unique scratch directory. Scout and review are read-only.
-Verifier shell use is limited to assigned checks. The integrator owns
-the production build, inventories, and commits. Stop replenishing on pause.
-See the [coordination skill](../.agents/skills/fate-restoration-coordination/SKILL.md).
+Default to zero to two useful children. Add an independent review only when useful and within the host limit. Do not create busywork or maintain a fixed worker count. Keep jobs disjoint, sources frozen or isolated, and scratch under a unique ignored `work/` directory. A pause stops restoration work and replenishment; an explicit configuration task remains allowed.
 
-## Assignment template
+For Codex children, use `fork_turns="none"`; on other hosts use a fresh child with a bounded task packet. Send a task packet of at most 150 words plus paths. Save routine context to a file and provide only bounded relevant context; never send full history. Changing a role label does not change a running worker's model: spawn a fresh worker when changing tiers. Parent supplies frozen evidence such as final audit/build reports, hashes, and model details. Derive metrics from JSON, never memory; exclude failed-then-resolved stories and report at most one blocker per routine.
 
-```text
-State: restoration active; stop immediately if the parent requests pause.
-Role: <fate-scout | fate-probe | fate-research | fate-verify | fate-review>
-Goal/hypothesis: <one new, justified compiler question or mechanical check>
-Owned files/objects: <explicit disjoint list; no shared integration files>
-Working directory: <isolated worktree or frozen scratch-only compiler setup>
-Scratch/build: work/<unique-task-name>
-Context: <restore.py context output or saved context path>
-Inputs: <pinned reference, flags, source/object hashes, relevant failure notes>
-Budget: <at most three variants unless specifically extended>
-Acceptance: <complete spans + LE sites/targets; optional named fixtures>
-Return: stable exact patch or restored baseline, candidate/log/report paths,
-        first meaningful mismatch, measured/estimated savings, next hypothesis.
-Forbidden: shared production build, registry/inventory edits, commits, pushes,
-           new inline instructions, undefined C, game smoke, child delegation.
+All DOSBox compilation is serialized and owned by the parent unless an exclusive lease is granted. A writer changes only assigned docs, READMEs, scripts, or tests from frozen evidence. Writers do no game research, compiler work, registry or inventory work, commits, pushes, or new hypotheses. Parent reviews artifact claims and scripts.
+
+## Assignment and return
+
+State the pause/active status, role, one bounded goal, owned paths, scratch path, frozen inputs, budget, and acceptance evidence. Return no more than 150 words (research/review: 200) plus artifact paths. Identify the first meaningful mismatch and report paths, not full logs. Avoid progress pings unless blocked. The parent owns production integration, builds, inventories, and commits.
+
+See the [coordination skill](../.agents/skills/fate-restoration-coordination/SKILL.md), [workflow](RESTORATION-WORKFLOW.md), and [progress report](C-RESTORATION-PROGRESS.md) for operating commands and measured coverage.
+
+## Evidence handoff
+
+After the parent checks current freshness with `restore.py doctor`, create a
+compact packet for the writer instead of copying inventories into chat:
+
+```powershell
+python tools/restoration_handoff.py work/palette-clear-build --audit work/palette-clear-audit.json --output work/writer-evidence.json
 ```
 
-The integrator chooses the locally installed Python and verified reference
-paths rather than baking one developer's absolute paths into these profiles.
-Compiler options come from `tools/data/restoration-units.txt`.
-
-See the [workflow](RESTORATION-WORKFLOW.md) for exact commands and
-[progress](C-RESTORATION-PROGRESS.md) for measured coverage.
+The helper checks saved executable, inventory and object identities, then derives
+percentages. Its output describes saved artifacts; it does not replace the
+current-source freshness check or prove a new restoration candidate is exact.
+Read only selected fields and routine rows from larger reports. Keep detailed
+logs in scratch and let the writer update only the named final artifacts.
