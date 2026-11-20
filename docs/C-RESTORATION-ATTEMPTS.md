@@ -757,18 +757,6 @@ used ESI as an indexing temporary. Green/blue products remain inline;
 next require a weight-lifetime model without an added compiler stack slot.
 Evidence: work/palette-distance-next/iteration.c.
 
-### Actor common register lifetimes and instruction scheduling
-
-The pure C death draft emits 679 bytes versus 697 with Watcom 10.5
-/4r /s /bt=dos (without /or). Ignoring changed branch displacements, the
-first mismatch is +0x9e: kind store precedes MOV EAX,ECX. The combined
-vector/attack draft emits 709 and moves the initial actor index into EDI;
-next constrain that index lifetime before more local width edits.
-All 274 original/candidate behavioral cases pass, but no actor C coverage
-is accepted. Sound calls clobber EBX/EDX; older [eax]-only declarations
-must not be reused. Death doubles sprite byte 18, not xrepeat at byte 20.
-Evidence: work/actor-common-next/RESULTS.md and check_behavior.py.
-
 ### Clip-edge binding order and CWDE selection
 
 Watcom 10.5 /4r /s /or /os /bt=dos swaps the two pointer moves at +0x6,

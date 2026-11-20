@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1189,
-  "unique_code_bytes": 165792,
-  "le_pointers": 8973,
+  "routines": 1190,
+  "unique_code_bytes": 166489,
+  "le_pointers": 9014,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -468,6 +468,16 @@
       "loaded_address": "0x1404a",
       "bytes": 233,
       "le_pointers": 15
+    },
+    {
+      "symbol": "update_actor_common_",
+      "object": "actcomm.obj",
+      "object_sha256": "249d017299ed9f82416498d32ed6d7f9e1feeb9448e47749510605a7243ec020",
+      "sha256": "aa272aa5d63cbb0b831d6acfc46773e31bf21884c59c4909c5842551a22bc591",
+      "raw_offset": "0x39e97",
+      "loaded_address": "0x14897",
+      "bytes": 697,
+      "le_pointers": 41
     },
     {
       "symbol": "move_actor_",

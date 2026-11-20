@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 494,
-  "unique_code_bytes": 248847,
-  "le_pointers": 13576,
+  "routines": 493,
+  "unique_code_bytes": 248150,
+  "le_pointers": 13535,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -6332,18 +6332,6 @@
       "public_entry": "0x14610",
       "binary_offset": 0,
       "le_pointers": 31
-    },
-    {
-      "symbol": "update_actor_common",
-      "source": "src/fate/actor_common.asm",
-      "binary": "actor_common.bin",
-      "sha256": "aa272aa5d63cbb0b831d6acfc46773e31bf21884c59c4909c5842551a22bc591",
-      "bytes": 697,
-      "raw_offset": "0x39e97",
-      "loaded_address": "0x14897",
-      "public_entry": "0x14897",
-      "binary_offset": 0,
-      "le_pointers": 41
     },
     {
       "symbol": "update_actor_profile_two_mode_one",

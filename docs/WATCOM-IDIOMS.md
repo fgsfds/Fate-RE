@@ -46,6 +46,9 @@ those expectations. Volatile OMF comments, including timestamps, are not compare
 
 ## Patterns verified in Fate
 
+- In [`getangle`](../src/engine/getangle.c), the call clobbers EAX and EDX.
+- [`play_sound`](../src/fate/play_sound.asm) clobbers at least EBX and EDX; a conservative caller contract is EAX/EBX/ECX/EDX.
+
 - `copytilepiece` keeps a `char` local and compares
   `(unsigned long)(unsigned char)dat != 255` to recover MOVZX and the
   full-width comparison.

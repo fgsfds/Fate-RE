@@ -16,7 +16,7 @@ from omf_fixups import Reader, read_externals, read_fixups
 from le_fixups import read_le_fixups, pointer_range
 from verification_diagnostics import code_mismatch, relocation_mismatch
 
-LEAVES = {'clipinsideboxline_': (0x717b2, 225), 'inside_': (0x71e8f, 189),
+LEAVES = {'update_actor_common_': (0x39e97, 697), 'clipinsideboxline_': (0x717b2, 225), 'inside_': (0x71e8f, 189),
           'animateoffs_': (0x75d58, 139), 'krand_': (0x7b8e5, 20),
           'getmousevalues_': (0x79a24, 68),
           'clipinsidebox_': (0x716c7, 235), 'lastwall_': (0x77ecf, 80),
@@ -43,7 +43,7 @@ LEAVES = {'clipinsideboxline_': (0x717b2, 225), 'inside_': (0x71e8f, 189),
           'raytrace_': (0x792d5, 520), 'netuninitconnection_': (0x67a8f, 93),
           'advance_sequences_': (0x379d6, 203), 'addclipline_': (0x791ed, 65),
           'installbicomhandlers_': (0x686cc, 375)}
-DATA_OFFSETS = {'_conventional_memory_error': 0x191d, '_inbufplc': 0x18fdbc, '_inbufend': 0x18fdf0, '_outbufplc': 0x18fdd8, '_comport': 0x18fde8, '_comtype': 0x18fdf8, '_comerror': 0x18fe1c, '_comresend': 0x18fdf4, '_incnt': 0x18fe00, '_inbuf': 0x18fe24, '_rmbuffer': 0x13ce4, '_sequence_sprites': 0x2040a0, '_object_sequences': 0x6807c, '_active_sequence_count': 0x7dee0, '_active_sequence_sprites': 0x67a3c, '_clipobjectval': 0x196750, '_sector': 0x27c3a0, '_wall': 0x2310a0, '_numsectors': 0x289154, '_numwalls': 0x289152,
+DATA_OFFSETS = {'_actor_recovery_counter': 0x7f295, '_alternate_fire_requested': 0x7dee6, '_conventional_memory_error': 0x191d, '_inbufplc': 0x18fdbc, '_inbufend': 0x18fdf0, '_outbufplc': 0x18fdd8, '_comport': 0x18fde8, '_comtype': 0x18fdf8, '_comerror': 0x18fe1c, '_comresend': 0x18fdf4, '_incnt': 0x18fe00, '_inbuf': 0x18fe24, '_rmbuffer': 0x13ce4, '_sequence_sprites': 0x2040a0, '_object_sequences': 0x6807c, '_active_sequence_count': 0x7dee0, '_active_sequence_sprites': 0x67a3c, '_clipobjectval': 0x196750, '_sector': 0x27c3a0, '_wall': 0x2310a0, '_numsectors': 0x289154, '_numwalls': 0x289152,
                 '_picanm': 0x1ed3a0, '_totalclocklock': 0x2863c0, '_randomseed': 0x287e78, '_moustat': 0x14002,
                 '_sqrtable': 0x1dfa60, '_picsiz': 0x1e5fe0, '_pow2long': 0x14031,
                 '_tilesizx': 0x1f2020, '_tilesizy': 0x1f4020,
@@ -302,6 +302,7 @@ FUNCTION_ADDRESSES.update({
 })
 FUNCTION_ADDRESSES.update({'format_sprite_event_error_': 0x601f3,
                            'report_sprite_event_error_': 0x26a03})
+FUNCTION_ADDRESSES['update_actor_common_'] = 0x14897
 FUNCTION_ADDRESSES['__GETDS'] = 0x601d4
 FUNCTION_ADDRESSES['memset_'] = 0x61350
 FUNCTION_ADDRESSES['fill_byte_pattern_'] = 0x62de0

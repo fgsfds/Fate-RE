@@ -106,3 +106,4 @@ check_synchronize_network_players {exe} {build}/netrsync.obj | netrsync
 check_finalize_board_state {exe} {build}/boardfin.obj | boardfin
 check_clip_edge {exe} {build}/gfxclip.obj | gfxclip
 check_plain_palookup {exe} {build}/palookmk.obj | palookmk
+check_actor_common {exe} {build}/actcomm.obj | actcomm
