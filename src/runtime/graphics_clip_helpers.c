@@ -323,20 +323,18 @@ extern short *bound_clip_x(void);
 #pragma aux bound_clip_x = value [esi] modify exact [];
 extern short *bound_clip_y(void);
 #pragma aux bound_clip_y = value [edi] modify exact [];
-extern int read_bound_clip_x(void);
-#pragma aux read_bound_clip_x = "movsx eax,word ptr [esi]" value [eax] modify exact [eax];
-extern int read_bound_clip_y(void);
-#pragma aux read_bound_clip_y = "movsx eax,word ptr [edi]" value [eax] modify exact [eax];
-extern void update_bound_clip_x(int x);
-#pragma aux update_bound_clip_x = "mov word ptr [esi],ax" parm [eax] modify exact [];
+extern int clip_store_in_eax(int x);
+#pragma aux clip_store_in_eax = "" parm [eax] value [eax] modify exact [];
 extern int axis_distance_to_endpoint(int endpoint, short *position);
 #pragma aux axis_distance_to_endpoint = "mov eax,ebx" "cwde" "movsx ebx,word ptr [esi]" "sub eax,ebx" "cdq" "xor eax,edx" "sub eax,edx" parm [ebx] [esi] value [eax] modify exact [eax ebx edx];
 extern int intersection_y_in_edx(int pair);
 #pragma aux intersection_y_in_edx = "" parm [edx] value [edx] modify exact [];
 extern void retain_intersection_distance(int distance);
 #pragma aux retain_intersection_distance = "mov ebx,eax" "mov ecx,eax" parm [eax] modify exact [ebx ecx];
-extern int doubled_edge_rise(int target, int first);
-#pragma aux doubled_edge_rise = "sub edx,eax" "lea eax,[edx+edx]" parm [edx] [eax] value [eax] modify exact [eax edx];
+extern unsigned long clip_rise_in_edx(unsigned long value);
+#pragma aux clip_rise_in_edx = "" parm [edx] value [edx] modify exact [];
+extern unsigned long clip_rise_in_eax(unsigned long value);
+#pragma aux clip_rise_in_eax = "" parm [eax] value [eax] modify exact [];
 extern int divisor_distance(void);
 #pragma aux divisor_distance = value [ebx] modify exact [];
 extern int divide_intersection_offset(int offset);
@@ -358,8 +356,8 @@ void intersect_clip_edge(short *x, short *y, int other_x, int other_y, int edge)
     distance = axis_distance_to_endpoint(other_x, bound_clip_x());
     y_target = intersection_y_in_edx((short)endpoint.endpoint_y);
     retain_intersection_distance(distance);
-    endpoint.doubled_rise = doubled_edge_rise(y_target, read_bound_clip_y());
-    endpoint.original_x = read_bound_clip_x();
+    endpoint.doubled_rise = (int)clip_rise_in_eax(clip_rise_in_edx((unsigned long)y_target - (unsigned long)(int)*bound_clip_y()) * 2UL);
+    endpoint.original_x = (int)*bound_clip_x();
     rounded = abs((short)edge - endpoint.original_x) * endpoint.doubled_rise;
     /* Bias by half the denominator before the signed division. */
     if (rounded > 0)
@@ -368,6 +366,6 @@ void intersect_clip_edge(short *x, short *y, int other_x, int other_y, int edge)
         rounded -= divisor_distance();
     rounded = intersection_result_in_ebx(divide_intersection_offset(rounded));
     result_y = *bound_clip_y() + rounded;
-    *bound_clip_y() = result_y;
-    update_bound_clip_x(edge);
+    *bound_clip_y() = (short)clip_store_in_eax(result_y);
+    *bound_clip_x() = (short)clip_store_in_eax(edge);
 }

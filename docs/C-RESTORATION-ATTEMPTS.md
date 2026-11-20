@@ -746,3 +746,13 @@ exactly with register-only ECX/EBX identities. A fully C final sum emits
 the three-term LEA into ADD plus LEA. Keep the original four-byte LEA;
 next require a compiler idiom that combines both registers and the bias.
 Evidence: `work/palette-next/pcb4.c`, `pcb5.c`, `pcb6.c`, and `partial.c`.
+
+
+### Palette channel weight lifetimes
+
+With Watcom 10.5 /4r /s /or /bt=dos, per-iteration ESI weight capture and
+an ECX product identity emit 507 bytes versus 490. The first mismatch is
+a new SUB ESP,4 before the original PUSH ECX. Earlier getter-only products
+used ESI as an indexing temporary. Green/blue products remain inline;
+next require a weight-lifetime model without an added compiler stack slot.
+Evidence: work/palette-distance-next/iteration.c.

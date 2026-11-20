@@ -104,3 +104,4 @@ check_draw_ega_text {exe} {build}/egatext.obj | egatext
 check_rotate_network_lead_player {exe} {build}/netlead.obj | netlead
 check_synchronize_network_players {exe} {build}/netrsync.obj | netrsync
 check_finalize_board_state {exe} {build}/boardfin.obj | boardfin
+check_clip_edge {exe} {build}/gfxclip.obj | gfxclip

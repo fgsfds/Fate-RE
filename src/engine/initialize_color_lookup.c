@@ -28,12 +28,18 @@ extern void prepare_mirror_distance_index(void);
 #pragma aux prepare_mirror_distance_index = "mov eax,80h" "sub eax,edx" modify exact [eax];
 extern long active_mirror_distance_index(void);
 #pragma aux active_mirror_distance_index = value [eax] modify exact [];
-extern void prepare_next_distance(void);
-#pragma aux prepare_next_distance = "mov ebx,81h" modify exact [ebx];
-extern void advance_distance(void);
-#pragma aux advance_distance = "sub ebx,eax" "dec edx" "add edi,ebx" modify exact [ebx edx edi];
-extern void double_distance_index(void);
-#pragma aux double_distance_index = "lea eax,[edx+edx]" modify exact [eax];
+
+/* Register-only contracts for the finite-difference square recurrence. */
+extern unsigned long distance_step(void);
+#pragma aux distance_step = value [ebx] modify exact [];
+extern void keep_distance_step(unsigned long);
+#pragma aux keep_distance_step = parm [ebx] modify exact [];
+extern void keep_distance_index(long);
+#pragma aux keep_distance_index = parm [edx] modify exact [];
+extern void keep_squared_distance(unsigned long);
+#pragma aux keep_squared_distance = parm [edi] modify exact [];
+extern void keep_doubled_distance_index(long);
+#pragma aux keep_doubled_distance_index = parm [eax] modify exact [];
 
 extern void prepare_bucket_bitset(void);
 #pragma aux prepare_bucket_bitset = "mov ecx,7dh" "mov edi,offset occupied_palette_buckets" \
@@ -142,11 +148,14 @@ void initialize_color_lookup(long red_weight, long green_weight, long blue_weigh
         blue = blue_distance_value();
         red_color_distance[active_mirror_distance_index()] = red;
         red_color_distance[distance_index()] = red;
-        prepare_next_distance();
+        keep_distance_step(129UL);
         blue_color_distance[active_mirror_distance_index()] = blue;
-        double_distance_index();
+        /* EAX now holds 2*i rather than the mirror index used above. */
+        keep_doubled_distance_index(distance_index() + distance_index());
         blue_color_distance[distance_index()] = blue;
-        advance_distance();
+        keep_distance_step(distance_step() - (unsigned long)active_mirror_distance_index());
+        keep_distance_index(distance_index() - 1);
+        keep_squared_distance(squared_distance_value() + distance_step());
 check_distance:;
     } while (distance_index() >= 0);
 
