@@ -784,3 +784,14 @@ from DI rather than DX, followed by an added MOV EDX,EDI. The isolated
 location calculation is exact and integrated. Next model register lifetimes
 across the full routine before replacing preparation and destination copies.
 Evidence: work/terminal-native-next/prep.c and whole.c.
+
+### Actor dispatcher register lifetimes
+
+`dispatch_actor_update`, `/4r /s /bt=dos`: best valid draft emits 636
+versus 647 bytes and passes 368 original/candidate behavior cases, but code
+and LE sites differ. First difference: extra `mov ebp,ebx` saving an input
+coordinate as BL is reused. Next stage the selected mode explicitly in AL
+before masking EAX, preserving AH/EDX lifetimes. A raw-EAX draft dispatches
+mode 1 instead of deferred previous mode 2; do not reuse its implicit register
+assumptions. EBP auxiliaries fail E1122. Scratch: `work/actor-dispatch-next/`.
+No production change or accepted coverage.
