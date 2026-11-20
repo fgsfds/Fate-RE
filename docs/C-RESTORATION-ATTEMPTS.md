@@ -135,14 +135,14 @@ repeating unsupported EBP parameter constraints. Probe: `work/proxupd-next/`.
 Pinned Watcom 10.5 `/4r /s /or /bt=dos` emits 183 bytes versus 181 for C dword
 stores through typed arrays. It inserts `MOV EDI,ESI` and uses EDI instead of
 the original ESI-scaled index. Empty EDI barriers or preservation constraints
-grow the function to 186â€“188 bytes; explicit address arithmetic still yields
+grow the function to 186Ã¢â‚¬â€œ188 bytes; explicit address arithmetic still yields
 183. Defined four-byte intrinsic `memcpy` stores produce 296 bytes. Both inline
 stores remain. Next recover the original index lifetime without changing the
 declared backing storage contract. Details: `work/ripple-next/RESULTS.md`.
 
 ### Pixel store allocation
 
-Separate EDI-pointer and AL-value constraints produce 100â€“104 bytes versus the
+Separate EDI-pointer and AL-value constraints produce 100Ã¢â‚¬â€œ104 bytes versus the
 94-byte `plotpixel`, changing register allocation. The original store and VGA
 port output remain inline. Next preserve the original color widening and
 pointer lifetime through the shared store. Scratch: `work/pixels-next/`.
@@ -281,7 +281,7 @@ A C conditional absolute value produced 242 bytes and `JGE`/alternate register
 paths at `+0x71`, instead of moving through EAX and using `JNS`. The `labs`
 intrinsic produced 240 bytes, first differing with an extra ESI save at `+0x02`,
 and used `CDQ/XOR/SUB`. Unsigned sign-mask and register-constrained versions
-produced 248â€“251 bytes with extra saves or `TEST immediate/JE`. Isolated probes
+produced 248Ã¢â‚¬â€œ251 bytes with extra saves or `TEST immediate/JE`. Isolated probes
 confirm plain signed comparisons select JGE, not JNS, under these flags.
 Next require a small ordinary-C/intrinsic probe that demonstrably emits the
 historical JNS sequence before repeating whole-function allocation experiments.
@@ -775,3 +775,15 @@ from DI rather than DX, followed by an added MOV EDX,EDI. The isolated
 location calculation is exact and integrated. Next model register lifetimes
 across the full routine before replacing preparation and destination copies.
 Evidence: work/terminal-native-next/prep.c and whole.c.
+
+### Main-menu shared frame
+
+`dispatch_main_menu`, `/4r /s /or /bt=dos`: the 529-byte C group
+(32-byte table included) differs from the 541-byte reference; its 1,442
+original/candidate call, state and shared-frame cases pass. First mismatch:
+zeroing EDX moves ahead of the saved-tick load. The initial game-flag test
+also gains MOV/TEST and an ESI copy; caption X allocation and the merged
+resume/cancel comparison remain different. Next isolate the initial ESI
+result lifetime without losing the EDI/EBP clock pair, then constrain caption
+arithmetic in stages. Retain the alignment byte at 0x3a127 when integrating.
+Scratch: `work/main-menu-next/evidence.json`; no accepted coverage.
