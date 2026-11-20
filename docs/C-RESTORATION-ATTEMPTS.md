@@ -757,18 +757,17 @@ used ESI as an indexing temporary. Green/blue products remain inline;
 next require a weight-lifetime model without an added compiler stack slot.
 Evidence: work/palette-distance-next/iteration.c.
 
-### Actor common counter and health widths
+### Actor common register lifetimes and instruction scheduling
 
-The whole C draft preserves the five-register frame but does not match.
-Watcom 10.5 /4r /s /or /bt=dos emits 681 bytes versus 697 for memory.c.
-Ignoring changed branch displacements, the first mismatch is +0x48:
-XOR DH,DH and DH stores instead of CL; the next health load uses MOV CX
-rather than the original memory CMP. Next expose a CL zero identity and
-preserve the signed memory-health comparison. Do not credit its 41 external
-fixups as matching LE sites. Death handling doubles sprite byte 18; preserve
-that offset when choosing a standard sprite type.
-Evidence: work/actor-common-next/RESULTS.md,
-work/terminal-native-next/memory.obj.
+The pure C death draft emits 679 bytes versus 697 with Watcom 10.5
+/4r /s /bt=dos (without /or). Ignoring changed branch displacements, the
+first mismatch is +0x9e: kind store precedes MOV EAX,ECX. The combined
+vector/attack draft emits 709 and moves the initial actor index into EDI;
+next constrain that index lifetime before more local width edits.
+All 274 original/candidate behavioral cases pass, but no actor C coverage
+is accepted. Sound calls clobber EBX/EDX; older [eax]-only declarations
+must not be reused. Death doubles sprite byte 18, not xrepeat at byte 20.
+Evidence: work/actor-common-next/RESULTS.md and check_behavior.py.
 
 ### Clip-edge binding order and CWDE selection
 
@@ -779,13 +778,15 @@ to 106. Next resolve the source lifetime/type boundary; do not repeat
 equivalent cast expressions. Evidence: work/clip-complete-next/sbind.c,
 taxis.c and work/terminal-native-next/ corresponding objects.
 
-### Palette initializer clear intrinsic
+### Palette clear alignment test lowering
 
-Watcom 10.5 /4r /s /or /bt=dos memset intrinsics emit 398 bytes, or 382
-with explicit register parameters, versus 490. Their store plan does not
-preserve the original alignment/test paths. Next translate that control
-flow while retaining the string-store primitives, rather than repeating
-memset flag variants. Evidence: work/palette-clear-next/.
+The remaining alignment primitives are intentional. Under /4r /s /or
+/bt=dos, fully C address tests copied EDI into EAX and used TEST AL,
+destroying the zero fill value; retaining a C zero local instead added
+MOV EDX,EAX and reloads, also disturbing the bucket counter in EDX.
+The integrated hybrid restores other count/tail control exactly.
+Next require a full-width EDI-test idiom that preserves EAX and EDX.
+Evidence: work/palette-clear-control/rawvalue.c and hybrid.c.
 
 ### Teleport destination preparation lifetimes
 

@@ -47,14 +47,61 @@ extern void prepare_bucket_bitset(void);
 extern void prepare_bucket_heads(void);
 #pragma aux prepare_bucket_heads = "mov ecx,3e8h" "mov edi,offset palette_bucket_head" \
     "xor eax,eax" "mov edx,0ffh" modify exact [eax ecx edx edi];
-/* Keep the original byte, word and dword stores, including their alignment. */
-extern void clear_palette_memory(void);
-#pragma aux clear_palette_memory = "cmp ecx,4" "jae bulk" "test cl,1" "je small_words" \
-    "stosb" "small_words:" "shr ecx,1" 0xf3 "stosw" "jmp clear_done" \
-    "bulk:" "test edi,1" "jz word_boundary" "stosb" "dec ecx" \
-    "word_boundary:" "test edi,2" "jz bulk_dwords" "stosw" "sub ecx,2" \
-    "bulk_dwords:" "mov ebx,ecx" "shr ecx,2" "rep stosd" "test bl,2" "jz last_byte" "stosw" \
-    "last_byte:" "test bl,1" "jz clear_done" "stosb" "clear_done:" modify exact [ebx ecx edi];
+/* C chooses the small-count, bulk and tail paths; alignment blocks and
+   string stores remain instructions. Prepare helpers supply EAX=0 and ECX count.
+   Addresses use unsigned integers so their final advances are not C pointers.
+   Raw EAX inputs are valid only while the generated C control preserves EAX. */
+extern unsigned long palette_clear_count(void);
+#pragma aux palette_clear_count = value [ecx] modify exact [];
+extern void keep_palette_clear_count(unsigned long);
+#pragma aux keep_palette_clear_count = "" parm [ecx] modify exact [];
+extern unsigned long palette_clear_address(void);
+#pragma aux palette_clear_address = value [edi] modify exact [];
+extern unsigned long palette_clear_tail(void);
+#pragma aux palette_clear_tail = value [ebx] modify exact [];
+extern void keep_palette_clear_tail(unsigned long);
+#pragma aux keep_palette_clear_tail = "" parm [ebx] modify exact [];
+extern unsigned long palette_clear_value(void);
+#pragma aux palette_clear_value = value [eax] modify exact [];
+extern void palette_store_byte(unsigned long value, unsigned long address);
+#pragma aux palette_store_byte = "stosb" parm [eax] [edi] modify exact [edi];
+extern void palette_store_word(unsigned long value, unsigned long address);
+#pragma aux palette_store_word = "stosw" parm [eax] [edi] modify exact [edi];
+extern void palette_store_words(unsigned long value, unsigned long address, unsigned long count);
+#pragma aux palette_store_words = 0xf3 "stosw" parm [eax] [edi] [ecx] modify exact [ecx edi];
+extern void palette_store_dwords(unsigned long value, unsigned long address, unsigned long count);
+#pragma aux palette_store_dwords = "rep stosd" parm [eax] [edi] [ecx] modify exact [ecx edi];
+
+/* Preserve the full-EDI alignment tests. The rejected C byte-test lowering
+   copied EDI into EAX, destroying the fill value. These are original blocks. */
+extern void align_palette_to_word(unsigned long value, unsigned long address, unsigned long count);
+#pragma aux align_palette_to_word = "test edi,1" "jz aligned" "stosb" "dec ecx" "aligned:" \
+    parm [eax] [edi] [ecx] modify exact [ecx edi];
+extern void align_palette_to_dword(unsigned long value, unsigned long address, unsigned long count);
+#pragma aux align_palette_to_dword = "test edi,2" "jz aligned" "stosw" "sub ecx,2" "aligned:" \
+    parm [eax] [edi] [ecx] modify exact [ecx edi];
+
+#define CLEAR_PALETTE_MEMORY(prefix) do { \
+    if (palette_clear_count() >= 4UL) goto prefix##_bulk; \
+    if (!((unsigned char)palette_clear_count() & 1)) goto prefix##_small_words; \
+    palette_store_byte(palette_clear_value(), palette_clear_address()); \
+    prefix##_small_words: \
+    keep_palette_clear_count(palette_clear_count() >> 1); \
+    palette_store_words(palette_clear_value(), palette_clear_address(), palette_clear_count()); \
+    goto prefix##_done; \
+    prefix##_bulk: \
+    align_palette_to_word(palette_clear_value(), palette_clear_address(), palette_clear_count()); \
+    align_palette_to_dword(palette_clear_value(), palette_clear_address(), palette_clear_count()); \
+    keep_palette_clear_tail(palette_clear_count()); \
+    keep_palette_clear_count(palette_clear_count() >> 2); \
+    palette_store_dwords(palette_clear_value(), palette_clear_address(), palette_clear_count()); \
+    if (!((unsigned char)palette_clear_tail() & 2)) goto prefix##_last_byte; \
+    palette_store_word(palette_clear_value(), palette_clear_address()); \
+    prefix##_last_byte: \
+    if (!((unsigned char)palette_clear_tail() & 1)) goto prefix##_done; \
+    palette_store_byte(palette_clear_value(), palette_clear_address()); \
+    prefix##_done:; \
+} while (0)
 
 extern void begin_palette_buckets(void);
 #pragma aux begin_palette_buckets = "mov eax,offset lookup_palette_end" modify exact [eax];
@@ -160,9 +207,9 @@ check_distance:;
     } while (distance_index() >= 0);
 
     prepare_bucket_bitset();
-    clear_palette_memory();
+    CLEAR_PALETTE_MEMORY(bitset);
     prepare_bucket_heads();
-    clear_palette_memory();
+    CLEAR_PALETTE_MEMORY(heads);
     /* Walk backward so each occupied bucket links to the previous palette entry. */
     begin_palette_buckets();
     goto check_bucket;
