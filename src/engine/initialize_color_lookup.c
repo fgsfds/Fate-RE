@@ -54,11 +54,17 @@ extern void begin_palette_buckets(void);
 #pragma aux begin_palette_buckets = "mov eax,offset lookup_palette_end" modify exact [eax];
 extern long palette_color_index(void);
 #pragma aux palette_color_index = value [edx] modify exact [];
-extern void calculate_color_bucket(void);
-#pragma aux calculate_color_bucket = "xor ebx,ebx" "mov bl,[eax+1]" "mov ecx,ebx" \
-    "xor ebx,ebx" "mov bl,[eax]" "sar ecx,3" "sar ebx,3" "shl ecx,3" "shl ebx,6" \
-    "add ecx,ebx" "xor ebx,ebx" "mov bl,[eax+2]" "sar ebx,3" "lea edi,[ecx+ebx*1+49h]" \
-    modify exact [ebx ecx edi];
+/* Register-only contracts for the bucket phase; these emit no instructions. */
+extern const unsigned char *current_palette_rgb(void);
+#pragma aux current_palette_rgb = value [eax] modify exact [];
+/* Preserve the original three-input LEA encoding; preceding arithmetic is C. */
+extern void finish_color_bucket(long green_red, long blue);
+#pragma aux finish_color_bucket = "lea edi,[ecx+ebx*1+49h]" parm [ecx] [ebx] modify exact [edi];
+extern long bucket_channel_ebx(long);
+#pragma aux bucket_channel_ebx = parm [ebx] value [ebx] modify exact [];
+extern long bucket_green_ecx(long);
+#pragma aux bucket_green_ecx = parm [ecx] value [ecx] modify exact [];
+
 extern void prepare_color_bucket(void);
 #pragma aux prepare_color_bucket = "mov ebx,edi" "sar ebx,3" "xor ecx,ecx" \
     "mov cl,[ebx+occupied_palette_buckets]" "mov ebx,edi" "and ebx,7" \
@@ -152,7 +158,19 @@ check_distance:;
     begin_palette_buckets();
     goto check_bucket;
     do {
-        calculate_color_bucket();
+        {
+            long green_channel = bucket_green_ecx(bucket_channel_ebx(current_palette_rgb()[1]));
+            long red_channel = bucket_channel_ebx(current_palette_rgb()[0]);
+            long blue_channel;
+            green_channel = bucket_green_ecx(green_channel >> 3);
+            red_channel = bucket_channel_ebx(red_channel >> 3);
+            green_channel = bucket_green_ecx(green_channel << 3);
+            red_channel = bucket_channel_ebx(red_channel << 6);
+            green_channel = bucket_green_ecx(green_channel + red_channel);
+            blue_channel = bucket_channel_ebx(current_palette_rgb()[2]);
+            blue_channel = bucket_channel_ebx(blue_channel >> 3);
+            finish_color_bucket(green_channel, blue_channel);
+        }
         prepare_color_bucket();
         if (occupied_bucket_byte() & current_bucket_bit())
             *(long *)((unsigned char *)palette_bucket_next + current_bucket_link_slot()) = current_bucket_head();

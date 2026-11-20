@@ -737,3 +737,12 @@ With only the wrapper in its analysis span, Ghidra treated the call to the
 preceding unsigned entry as a branch and omitted the sign-bit OR. The
 reference listing confirms both the short tail transfer and the returning
 call. Use both routines when interpreting this control flow.
+
+### Palette bucket final LEA
+
+Watcom 10.5 `/4r /s /or /bt=dos` restores all preceding bucket arithmetic
+exactly with register-only ECX/EBX identities. A fully C final sum emits
+491-492 bytes versus the initializer's 490: at `+0x126`, Watcom splits
+the three-term LEA into ADD plus LEA. Keep the original four-byte LEA;
+next require a compiler idiom that combines both registers and the bias.
+Evidence: `work/palette-next/pcb4.c`, `pcb5.c`, `pcb6.c`, and `partial.c`.
