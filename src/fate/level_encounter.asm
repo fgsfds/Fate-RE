@@ -1,6 +1,7 @@
 ; Update the scripted encounter, sprite triggers and exit state.
 BITS 32
 ORG 0x1de8e
+section .text align=1
 
 random_value equ 0x602d0
 play_sound equ 0x34f79
@@ -246,42 +247,9 @@ update_level_encounter:
     cmp edx, eax
     jng near .spawn_encounter_sprite
 
-.check_first_trigger_sprite:
-    movsx eax, word [first_trigger_sprite]
-    imul eax, eax, 0x2c
-    movsx eax, word [eax + sprite_tile]
-    cmp eax, strict dword 0x568
-    jnz short .check_second_trigger_state
-    movsx eax, word [second_trigger_state]
-    cmp eax, 0x3
-    jz short .check_second_trigger_state
-    xor eax, eax
-    mov al, [second_actor_kind]
-    cmp eax, 0x3
-    jz short .activate_trigger_sectors
-    mov byte [second_actor_mode], 0x2
-
-.activate_trigger_sectors:
-    mov ebx, 0x3
-    mov eax, 0x96
-    xor ecx, ecx
-    mov [second_trigger_state], bx
-    call activate_sector
-    mov eax, 0x99
-    xor edx, edx
-    call activate_sector
-    xor ebx, ebx
-    mov eax, 0x7e
-    call play_sound
-    mov eax, 0x8e
-    xor ecx, ecx
-    xor ebx, ebx
-    xor edx, edx
-    call play_sound
-    movsx eax, word [first_trigger_sprite]
-    imul eax, eax, 0x2c
-    xor ecx, ecx
-    mov [eax + sprite_lotag], cx
+; Complete tile latch is linked from the native C context.
+.check_first_trigger_sprite equ 0x1e1b0
+section .actor_state align=1 vstart=0x1e23a follows=.text
 
 .check_second_trigger_state:
     mov si, [second_trigger_state]
@@ -343,6 +311,7 @@ update_level_encounter:
 .check_exit_scan equ 0x1e30b
 ; The return bytes follow in this blob and are placed separately at 0x1e410.
 
+section .actor_return align=1 vstart=0x1e410 follows=.actor_state
 .return:
     add esp, strict dword 0xb8
     pop ebp

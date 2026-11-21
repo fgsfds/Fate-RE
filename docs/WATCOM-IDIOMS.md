@@ -123,6 +123,10 @@ prefix or pinned epilogue and overlaps with the complete pointer instructions.
 Validate ordinary and marker objects with the same guards; credit only the
 selected instructions, never discarded compiler code or literal tables.
 
+### Separated NASM ranges
+
+Use `section name align=1 vstart=... follows=...` for each physically separated range. Register each physical range in `ASM_SLICES` and verify the whole linked image; a correct local range does not prove intervening bytes or final placement.
+
 ## Adding or changing a probe
 
 1. Add the smallest freestanding expression and its explicit Watcom ABI to the

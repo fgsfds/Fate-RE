@@ -127,14 +127,13 @@ and argument lifetimes; position-struct reuse spills the correct slots but
 changes entry allocation. Player-mirror and tag-width differences remain.
 Evidence and hash-bound behavior report: `work/numbered-board-next/evidence.json`.
 
-### Encounter spawn-prefix allocation
+### Encounter actor-state and spawn-prefix hypothesis
 
-Watcom 10.5 `/4r /s /or /bt=dos`: the whole encounter still differs at the
-missing EBP save; the original retains spawn height across the loop while C
-rematerializes it. Next stage the actual 16-bit sprite ID and random draws in
-DI, DX and BX through genuine empty identities, checking widening and live
-ranges. The exit phase is accepted separately. Evidence and next-probe limits:
-`work/encounter-next/word-register-nextplan.md`.
+Combine SI assignment with its condition and logically OR the already computed signed-short proximity results, preserving both calls. The extra EAX copy, OR destination, and state-1 store remain mismatches; the spawn prefix still lacks the original EBP height allocation. Current phases and bounded next probe: `work/encounter-next/remaining-phases.json`.
+
+### Video prompt-mode blocker
+
+Watcom 10.5 `/4r /s /or /bt=dos` emits 627 bytes versus 617. Brightness lands in ESI instead of ECX and the default-width spill moves from `+0x10` to `+0x14`; the invalid-mode edge also misses the original shared join. Next stage brightness in ECX and inspect width/end-slot lifetimes while retaining the original invalid-input edge in assembly. Probe: `work/video-prompt-next/prompt_video_mode.c`; comparison: `work/video-prompt-next/vidmode.report.json`.
 
 ### Whole palette search frame
 

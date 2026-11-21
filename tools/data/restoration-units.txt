@@ -513,3 +513,4 @@ fate/menuprep menuprep
 fate/level_sector_puzzle sectpuz
 fate/level_sector_puzzle puzact /4r /s /or /bt=dos /dPUZZLE_ACTIVATION_CONTEXT=1
 fate/encounter_exit encexit
+fate/encounter_exit enclatch /4r /s /or /bt=dos /dENCOUNTER_LATCH_CONTEXT=1

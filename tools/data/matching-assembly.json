@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 482,
-  "unique_code_bytes": 235617,
-  "le_pointers": 12740,
+  "routines": 483,
+  "unique_code_bytes": 235479,
+  "le_pointers": 12732,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -996,7 +996,7 @@
       "bytes": 13,
       "raw_offset": "0x43a10",
       "loaded_address": "0x1e410",
-      "binary_offset": 1149,
+      "binary_offset": 1011,
       "le_pointers": 0,
       "kind": "declared read-only tables in CODE"
     },
@@ -6373,13 +6373,25 @@
       "symbol": "update_level_encounter",
       "source": "src/fate/level_encounter.asm",
       "binary": "level_encounter.bin",
-      "sha256": "4ba14d4f56a7af238e57cfc8f74d2bbc6c992a02d9467cc68f4ade0662223453",
-      "bytes": 989,
+      "sha256": "aa3809ab085be34871ac59d0ccdb5c4b8d76741bca140d8a930e10be77a7ef88",
+      "bytes": 642,
       "raw_offset": "0x4352e",
       "loaded_address": "0x1df2e",
       "public_entry": "0x1df2e",
       "binary_offset": 160,
-      "le_pointers": 44
+      "le_pointers": 25
+    },
+    {
+      "symbol": "encounter_actor_state",
+      "source": "src/fate/level_encounter.asm",
+      "binary": "level_encounter.bin",
+      "sha256": "be1bbe5f5f21d9c05abc93eb31a0fdda8d6669be1abfe7e329e5c9f19425e2a0",
+      "bytes": 209,
+      "raw_offset": "0x4383a",
+      "loaded_address": "0x1e23a",
+      "public_entry": "0x1e23a",
+      "binary_offset": 802,
+      "le_pointers": 11
     },
     {
       "symbol": "initialize_destination",

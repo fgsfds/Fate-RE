@@ -4544,6 +4544,19 @@ LEAF_CONTEXT_LITERALS['encounter_exit_context_'] = (160, '4e2264519143a5033cec59
 DATA_OFFSETS.update({'_board4_sector_events': 484764, '_ticks_per_step': 502164, '_first_trigger_state': 75764, '_second_trigger_state': 75766, '_encounter_sequence': 75768, '_exit_scan_initialized': 75782, '_exit_sequence': 75784, '_encounter_clock': 75796, '_rotating_sector_count': 515776, '_encounter_position': 469472, '_first_trigger_sprite': 477518, '_second_trigger_sprite': 477520, '_encounter_sprite_index': 514870, '_first_actor_state': 516907, '_second_actor_state': 516908, '_first_actor_kind': 520414, '_second_actor_kind': 520415, '_first_actor_mode': 521917, '_second_actor_mode': 521918, '_exit_scan_index': 545192})
 FUNCTION_ADDRESSES.update({'near_encounter_position_': 67088, 'update_sprite_sequence_state_': 66611})
 
+LEAVES.update({'encounter_latch_': (0x437b0, 119),
+               'encounter_latch_index_': (0x43827, 10),
+               'encounter_latch_zero_': (0x43831, 2),
+               'encounter_latch_tag_': (0x43833, 7)})
+LEAF_CODE_SLICES.update({
+    'encounter_latch_': ('encounter_latch_context_', 0x26e, 0x2e5, 1249),
+    'encounter_latch_index_': ('encounter_latch_context_', 0x2e7, 0x2f1, 1249),
+    'encounter_latch_zero_': ('encounter_latch_context_', 0x2e5, 0x2e7, 1249),
+    'encounter_latch_tag_': ('encounter_latch_context_', 0x2f1, 0x2f8, 1249),
+})
+LEAF_CONTEXT_LITERALS['encounter_latch_context_'] = LEAF_CONTEXT_LITERALS['encounter_exit_context_']
+LEAF_CONTEXT_SUFFIXES['encounter_latch_context_'] = LEAF_CONTEXT_SUFFIXES['encounter_exit_context_']
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

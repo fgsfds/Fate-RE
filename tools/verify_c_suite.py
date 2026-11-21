@@ -950,6 +950,8 @@ OBJECT_NAMES.update({'puzzle_tile_solution_': 'sectpuz',
                      'puzzle_key_effect_exit_': 'sectpuz'})
 
 OBJECT_NAMES['level_encounter_exit_'] = 'encexit'
+OBJECT_NAMES.update(dict.fromkeys(('encounter_latch_', 'encounter_latch_index_',
+                                  'encounter_latch_zero_', 'encounter_latch_tag_'), 'enclatch'))
 
 GROUPS = {
     'stdwrap': (462, STDIO_HELPERS),
@@ -1495,6 +1497,8 @@ def verify_compiler_groups(exe, directory, names=None):
                                ('puzact', 929, 'puzzle_activation_context_')):
         if selected(name):
             verify_group_layout((directory/(name+'.obj')).read_bytes(), size, [(public, 0)])
+    if selected('enclatch'):
+        verify_group_layout((directory/'enclatch.obj').read_bytes(), 1409, [('encounter_latch_context_', 160)])
     if selected('encexit'):
         verify_group_layout((directory/'encexit.obj').read_bytes(), 1385, [('encounter_exit_context_', 160)])
     if selected('menuprep'):

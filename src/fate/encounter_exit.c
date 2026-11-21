@@ -1,10 +1,13 @@
-/* Board-four encounter algorithm used as compiler context for the complete
- * exit-registration / actor-62 phase at 0x1e30b..0x1e410 (261 bytes).
- * Only that phase is linked. The spawn/actor-63 prefix and compiler tables are
- * private context; the historical assembly still implements those paths.
- * The original 184-byte frame, six saved registers and return tail stay in ASM.
- * Empty identities describe actual C values/registers and emit no instructions.
+/* Board-four encounter algorithm compiled in two private contexts.
+ * The exit context supplies 261 bytes; the latch context supplies 138 bytes.
+ * Only verified slices are linked. The original shared frame and return tail
+ * stay in ASM. Literal prefixes and other private code receive no C credit.
+ * Empty identities emit no instructions. The latch tag store uses independent
+ * EAX address / ECX value stages, placed in the original order by the linker.
  */
+#ifdef ENCOUNTER_LATCH_CONTEXT
+#define encounter_exit_context encounter_latch_context
+#endif
 #pragma pack(push, 1)
 typedef struct { long x, y; } SpawnPosition;
 typedef struct { unsigned char x, y; } SpawnRepeats;
@@ -84,6 +87,31 @@ extern unsigned char exit_byte_cl(unsigned char);
 extern int exit_int_ebx(int);
 #pragma aux exit_int_ebx = "" parm [ebx] value [ebx] modify exact [];
 
+#ifdef ENCOUNTER_LATCH_CONTEXT
+extern unsigned short encounter_draw_dx(unsigned short);
+#pragma aux encounter_draw_dx = "" parm [dx] value [dx] modify exact [];
+extern unsigned short encounter_draw_bx(unsigned short);
+#pragma aux encounter_draw_bx = "" parm [bx] value [bx] modify exact [];
+extern short encounter_slot_di(short);
+#pragma aux encounter_slot_di = "" parm [di] value [di] modify exact [];
+
+/* Actor-63 stages carry the signed word or full-width C value in its use register. */
+extern short encounter_actor_state_si(short);
+#pragma aux encounter_actor_state_si = "" parm [si] value [si] modify exact [];
+extern short encounter_actor_sprite_ax(short);
+#pragma aux encounter_actor_sprite_ax = "" parm [ax] value [ax] modify exact [];
+extern unsigned char encounter_actor_kind_dh(unsigned char);
+#pragma aux encounter_actor_kind_dh = "" parm [dh] value [dh] modify exact [];
+extern int encounter_actor_test_edx(int);
+#pragma aux encounter_actor_test_edx = "" parm [edx] value [edx] modify exact [];
+
+/* Activation consumes EAX and preserves the arguments prepared for the sound call. */
+extern int encounter_activate_keep_flags(int, int);
+#pragma aux encounter_activate_keep_flags "activate_sector_" parm [eax] [ecx] value [ecx] modify exact [eax];
+extern long encounter_activate_keep_x(int, long);
+#pragma aux encounter_activate_keep_x "activate_sector_" parm [eax] [edx] value [edx] modify exact [eax];
+
+#endif
 extern void encounter_exit_context(void);
 #pragma aux encounter_exit_context modify exact [eax];
 
@@ -106,6 +134,9 @@ void encounter_exit_context(void)
     short position_choice, repeat_choice;
     short near_first, near_second;
     unsigned x_shift;
+#ifdef ENCOUNTER_LATCH_CONTEXT
+    unsigned short repeat_draw, x_draw;
+#endif
     long scaled_width;
 
     if ((long)encounter_clock == 10)
@@ -148,12 +179,24 @@ void encounter_exit_context(void)
              * updatesector tests those bytes and leaves its resulting sector here.
              */
             updatesector(spawn.position.x, spawn.position.y, &spawn.sector_hint);
+#ifdef ENCOUNTER_LATCH_CONTEXT
+            slot = encounter_slot_di(spawn_sprite_at_position(0x2b, &spawn.position, spawn.sector_hint));
+#else
             slot = spawn_sprite_at_position(0x2b, &spawn.position, spawn.sector_hint);
+#endif
             sprite[slot].tile = (short)(0x350 + (random_value() & 1));
 
+#ifdef ENCOUNTER_LATCH_CONTEXT
+            repeat_draw = encounter_draw_dx((unsigned char)random_value());
+            x_draw = encounter_draw_bx((unsigned char)random_value());
+            spawn.y_shift = random_value() & 1U;
+            repeat_choice = (short)(repeat_draw & 15U);
+            x_shift = x_draw & 1U;
+#else
             repeat_choice = (short)(random_value() & 15);
             x_shift = random_value() & 1U;
             spawn.y_shift = random_value() & 1U;
+#endif
             sprite[slot].xrepeat = (unsigned char)(repeats[repeat_choice].x >> x_shift);
             sprite[slot].yrepeat = (unsigned char)(repeats[repeat_choice].y >> (unsigned short)spawn.y_shift);
 
@@ -165,6 +208,64 @@ check_spawn_count:
         } while ((short)spawn.number <= (long)(2UL * (unsigned long)ticks_per_step));
     }
 
+#ifdef ENCOUNTER_LATCH_CONTEXT
+check_second_trigger_tile:
+    if (exit_int_eax(sprite[first_trigger_sprite].tile) == 0x568 &&
+        exit_int_eax(second_trigger_state) != 3) {
+        int activated, sector_number, sound_flags;
+        long sound_x, sound_y;
+
+        if (exit_int_eax(second_actor_kind) != 3)
+            second_actor_mode = 2;
+        activated = exit_int_ebx(3);
+        sector_number = exit_int_eax(0x96);
+        sound_flags = exit_int_ecx(0);
+        second_trigger_state = (short)activated;
+        sound_flags = encounter_activate_keep_flags(sector_number, sound_flags);
+
+        sector_number = exit_int_eax(0x99);
+        sound_x = encounter_actor_test_edx(0);
+        sound_x = encounter_activate_keep_x(sector_number, sound_x);
+        sound_y = exit_int_ebx(0);
+        play_sound(0x7e, sound_x, sound_y, sound_flags);
+        play_sound(0x8e, 0, 0, 0);
+        sprite[first_trigger_sprite].lotag = (short)exit_int_ecx(0);
+    }
+
+    {
+        short state = encounter_actor_state_si(second_trigger_state);
+        int kind, actor_sprite;
+
+        if (state != 0)
+            goto update_second_actor;
+        near_first = (short)near_encounter_position(0x2a00, 0x1000);
+        near_second = (short)near_encounter_position(0x2a00, 0x2000);
+        if (encounter_actor_test_edx(near_first | near_second) != 0)
+            goto reset_second_actor;
+        kind = exit_int_eax(second_actor_kind);
+        if (kind != 4 && kind != 5)
+            goto check_exit_scan;
+
+reset_second_actor:
+        second_actor_kind = encounter_actor_kind_dh(0);
+        second_trigger_state = 1;
+        goto check_exit_scan;
+
+update_second_actor:
+        if (exit_int_eax(state) != 1)
+            goto check_exit_scan;
+        update_actor_common(0x3f);
+        update_sprite_sequence_state(0x3f, 0x3100, 0x1800, 0x410a, 0x1800, encounter_sequence);
+        actor_sprite = exit_int_eax(encounter_actor_sprite_ax(encounter_sprite_index));
+        if (exit_int_eax(sprite[actor_sprite].tile) == 0x34b)
+            sprite[first_trigger_sprite].tile = 0x568;
+        if (second_actor_state != 0)
+            goto check_exit_scan;
+        second_trigger_state = 2;
+    }
+
+check_exit_scan:
+#else
 check_second_trigger_tile:
     if (sprite[first_trigger_sprite].tile == 0x568 && second_trigger_state != 3) {
         if (second_actor_kind != 3)
@@ -193,6 +294,7 @@ check_second_trigger_tile:
             second_trigger_state = 2;
     }
 
+#endif
     {
 
     int exit_index;
