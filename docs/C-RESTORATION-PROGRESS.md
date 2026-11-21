@@ -22,10 +22,9 @@ The packet receiver is exact across **826 native C bytes and 90 retained
 assembly bytes**, with **56 C and 9 assembly LE sites**. Its checksum and
 parity C contexts contain no inline assembly instructions and use a RET-suffix
 guard. The behavior oracle passes **104 cases and two controls**. All **55
-focused tests** pass locally. The local full regression run is blocked only by 13
-unexpected unstaged `.dsh`/`.opencode` deletions; those changes are preserved
-and excluded from this work. Full regression validation runs on the clean
-committed tree in CI. The report includes 525 compiler units.
+focused tests** pass locally. The Codex-only configuration passes the local
+full unit suite. Full build and fixture validation runs on the clean committed
+tree in CI. The report includes 525 compiler units.
 
 ## Reproducible evidence
 
@@ -39,8 +38,6 @@ current source freshness.
 - Attribution audit: `work/receiver-finish-audit.json`.
 - Saved C restoration handoff: `work/receiver-finish-handoff.json` (exact
   mode, zero fixture count).
-- Local full regression log: `work/receiver-finish-build/logs/unit-tests.log`;
-  the full run is blocked as described above.
 - Focused test result: 55 tests passed locally.
 
 See [reconstruction](RECONSTRUCTION.md#inline-assembly-audit) for reproduction

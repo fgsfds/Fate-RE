@@ -1,4 +1,4 @@
-# Generated from .opencode/agents; regenerate with --sync-codex.
+# Authoritative Codex subagent profile.
 name = "fate-ci-monitor"
 description = "Watch the assigned commit's CI and report actionable pipeline failures"
 model = "gpt-6-luna"

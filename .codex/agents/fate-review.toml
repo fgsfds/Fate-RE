@@ -1,7 +1,7 @@
-# Generated from .opencode/agents; regenerate with --sync-codex.
+# Authoritative Codex subagent profile.
 name = "fate-review"
 description = "Independent read-only review of C validity, ABI and evidence"
-model = "gpt-6.1-sol"
+model = "gpt-6.2-sol"
 model_reasoning_effort = "medium"
 
 developer_instructions = """

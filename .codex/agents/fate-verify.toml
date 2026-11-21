@@ -1,4 +1,4 @@
-# Generated from .opencode/agents; regenerate with --sync-codex.
+# Authoritative Codex subagent profile.
 name = "fate-verify"
 description = "Mechanical checks of frozen reports, artifacts and attribution"
 model = "gpt-6-luna"

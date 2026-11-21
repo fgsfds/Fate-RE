@@ -1,4 +1,4 @@
-# Generated from .opencode/agents; regenerate with --sync-codex.
+# Authoritative Codex subagent profile.
 name = "fate-scout"
 description = "Read-only triage from a bounded routine packet"
 model = "gpt-6-luna"

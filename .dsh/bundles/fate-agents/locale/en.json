@@ -1,6 +1,0 @@
-{
-  "meta": {
-    "title": "Fate restoration agents",
-    "description": "Integrator plus seven scoped roles. Luna handles scout/probe/verify/writer/ci-monitor; Sol handles research/review. Select Fate restoration in a new session after reinstalling. No default preset, credentials or goal state changes."
-  }
-}

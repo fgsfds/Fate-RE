@@ -9,16 +9,14 @@ Use the shared [.agents skills](../.agents/skills/) and the configured role pres
 | `fate-verify` | GPT-6 Luna, low | Check frozen artifacts and attribution |
 | `fate-ci-monitor` | GPT-6 Luna, low | Watch exact pushed SHAs; report failed jobs and actionable diagnostics to the integrator |
 | `fate-writer` | GPT-6 Luna, medium | Edit assigned docs, READMEs, scripts, or tests from frozen evidence |
-| `fate-research` | GPT-6.1 Sol, high | Investigate ABI and compiler hypotheses |
-| `fate-review` | GPT-6.1 Sol, medium; high only for hard ABI or undefined-behavior cases | Independent review of C validity and evidence |
+| `fate-research` | GPT-6.2 Sol, high | Investigate ABI and compiler hypotheses |
+| `fate-review` | GPT-6.2 Sol, medium; high only for hard ABI or undefined-behavior cases | Independent review of C validity and evidence |
 
-- **Codex:** start a session rooted in this checkout. Project TOML files are in [`.codex/agents/`](../.codex/agents/).
-- **OpenCode:** role bodies in [`.opencode/agents/`](../.opencode/agents/) are canonical. Use `/reload` if discovery needs a refresh.
-- **DeepSeek Harness:** install [the project bundle](../.dsh/bundles/fate-agents/README.md) through Plugin Manager, then start a new session here with **Fate restoration**. Use its dedicated role tools.
+The authoritative profiles are the TOML files in [`.codex/agents/`](../.codex/agents/). Start Codex in this checkout and edit those profiles directly.
 
 Default to zero to two useful children. Add an independent review only when useful and within the host limit. Do not create busywork or maintain a fixed worker count. Keep jobs disjoint, sources frozen or isolated, and scratch under a unique ignored `work/` directory. A pause stops restoration work and replenishment; an explicit configuration task remains allowed.
 
-For Codex children, use `fork_turns="none"`; on other hosts use a fresh child with a bounded task packet. Send a task packet of at most 150 words plus paths. Save routine context to a file and provide only bounded relevant context; never send full history. Changing a role label does not change a running worker's model: spawn a fresh worker when changing tiers. Parent supplies frozen evidence such as final audit/build reports, hashes, and model details. Derive metrics from JSON, never memory; exclude failed-then-resolved stories and report at most one blocker per routine.
+Start Codex children with `fork_turns="none"` and a bounded task packet. Send a task packet of at most 150 words plus paths. Save routine context to a file and provide only bounded relevant context; never send full history. Changing a role label does not change a running worker's model: spawn a fresh worker when changing tiers. Parent supplies frozen evidence such as final audit/build reports, hashes, and model details. Derive metrics from JSON, never memory; exclude failed-then-resolved stories and report at most one blocker per routine.
 
 All DOSBox compilation is serialized and owned by the parent unless an exclusive lease is granted. A writer changes only assigned docs, READMEs, scripts, or tests from frozen evidence. Writers do no game research, compiler work, registry or inventory work, commits, pushes, or new hypotheses. Parent reviews artifact claims and scripts.
 

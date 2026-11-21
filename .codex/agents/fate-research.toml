@@ -1,7 +1,7 @@
-# Generated from .opencode/agents; regenerate with --sync-codex.
+# Authoritative Codex subagent profile.
 name = "fate-research"
 description = "Novel Watcom, ABI and control-flow research after bounded triage"
-model = "gpt-6.1-sol"
+model = "gpt-6.2-sol"
 model_reasoning_effort = "high"
 
 developer_instructions = """
