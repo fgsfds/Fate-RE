@@ -3691,7 +3691,8 @@ LEAF_CONTEXT_SUFFIXES = {
 }
 
 # Exact literal prefixes belong to unlinked compiler context, not C coverage.
-# public -> (prefix bytes, SHA-256, operand offsets -> literal-prefix offsets).
+# public -> (prefix bytes, SHA-256, operand offsets -> literal-prefix offsets,
+#            optional placed CODE-object offset for selected literal pointers).
 LEAF_CONTEXT_LITERALS = {}
 
 LEAF_CONTEXT_FIXUPS = {
@@ -3951,8 +3952,14 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
                 raise ValueError('Compiler context fixup target/form/addend differs')
     literal = LEAF_CONTEXT_LITERALS.get(public_name)
     literal_sites = {} if literal is None else literal[2]
+    literal_base = literal[3] if literal is not None and len(literal) == 4 else None
     if literal is not None:
-        size, digest, _ = literal
+        if len(literal) not in (3, 4):
+            raise ValueError('Invalid compiler literal metadata')
+        size, digest = literal[:2]
+        if len(literal) == 4 and (type(literal_base) is not int
+                                        or not 0 <= literal_base <= 0xffffffff-size):
+            raise ValueError('Invalid placed literal CODE offset')
         if (start != size or hashlib.sha256(segments[seg]['data'][:start]).hexdigest() != digest
                 or [(s, a, n) for s, a, n in publics if s == seg] != [(seg, start, public_name)]):
             raise ValueError('Compiler literal prefix/layout differs')
@@ -3999,12 +4006,19 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
                     or not 0 <= literal_sites[offset] < start):
                 raise ValueError('Compiler literal fixup form/addend differs')
             if kept_start <= offset < kept_end:
-                raise ValueError('Compiler literal operands must remain unlinked')
+                if literal_base is None:
+                    raise ValueError('Compiler literal operands must remain unlinked')
+                if symbol not in LEAF_CODE_SLICES:
+                    raise ValueError('Placed literal context requires a registered slice')
+                if code_bindings is None:
+                    raise ValueError('Selected literal pointer requires CODE binding metadata')
             if address is None:
                 raise ValueError('Compiler literal binding requires a loaded address')
-            # Correct virtual placement of the complete private CODE context.
-            # Both operands are outside the linked slice and receive no credit.
-            value = (address-start+literal_sites[offset]-0x10000) & 0xffffffff
+            # A separately placed, digest-checked literal prefix may supply the
+            # initializer's CODE pointers. Otherwise only private fields bind
+            # virtually; cropping excludes their bytes and metadata.
+            base = address-start-0x10000 if literal_base is None else literal_base
+            value = (base+literal_sites[offset]) & 0xffffffff
             code[offset:offset+4] = value.to_bytes(4, 'little')
             fields.update(sites)
             bindings[offset] = value
@@ -4540,7 +4554,7 @@ FUNCTION_ADDRESSES.update({'absolute_long_': 393923,
 LEAVES['level_encounter_exit_'] = (0x4390b, 261)
 LEAF_CODE_SLICES['level_encounter_exit_'] = ('encounter_exit_context_', 0x3b8, 0x4bd, 1225)
 LEAF_CONTEXT_SUFFIXES['encounter_exit_context_'] = bytes.fromhex('81c4b80000005f5e5a595bc3')
-LEAF_CONTEXT_LITERALS['encounter_exit_context_'] = (160, '4e2264519143a5033cec5947e5fd0649fd21c0189d3ad8c6ad08a90360a51142', {19: 0, 38: 128})
+LEAF_CONTEXT_LITERALS['encounter_exit_context_'] = (160, '4e2264519143a5033cec5947e5fd0649fd21c0189d3ad8c6ad08a90360a51142', {19: 0, 38: 128}, 0xde8e)
 DATA_OFFSETS.update({'_board4_sector_events': 484764, '_ticks_per_step': 502164, '_first_trigger_state': 75764, '_second_trigger_state': 75766, '_encounter_sequence': 75768, '_exit_scan_initialized': 75782, '_exit_sequence': 75784, '_encounter_clock': 75796, '_rotating_sector_count': 515776, '_encounter_position': 469472, '_first_trigger_sprite': 477518, '_second_trigger_sprite': 477520, '_encounter_sprite_index': 514870, '_first_actor_state': 516907, '_second_actor_state': 516908, '_first_actor_kind': 520414, '_second_actor_kind': 520415, '_first_actor_mode': 521917, '_second_actor_mode': 521918, '_exit_scan_index': 545192})
 FUNCTION_ADDRESSES.update({'near_encounter_position_': 67088, 'update_sprite_sequence_state_': 66611})
 
@@ -4554,8 +4568,19 @@ LEAF_CODE_SLICES.update({
     'encounter_latch_zero_': ('encounter_latch_context_', 0x2e5, 0x2e7, 1249),
     'encounter_latch_tag_': ('encounter_latch_context_', 0x2f1, 0x2f8, 1249),
 })
-LEAF_CONTEXT_LITERALS['encounter_latch_context_'] = LEAF_CONTEXT_LITERALS['encounter_exit_context_']
+LEAF_CONTEXT_LITERALS['encounter_latch_context_'] = LEAF_CONTEXT_LITERALS['encounter_exit_context_'][:3]
 LEAF_CONTEXT_SUFFIXES['encounter_latch_context_'] = LEAF_CONTEXT_SUFFIXES['encounter_exit_context_']
+
+LEAVES.update({'encounter_entry_save_': (0x4352e, 5),
+               'encounter_initialize_': (0x43534, 39),
+               'encounter_release_frame_': (0x43a10, 6),
+               'encounter_restore_return_': (0x43a17, 6)})
+LEAF_CODE_SLICES.update({
+    'encounter_entry_save_': ('encounter_exit_context_', 0, 5, 1225),
+    'encounter_initialize_': ('encounter_exit_context_', 5, 44, 1225),
+    'encounter_release_frame_': ('encounter_exit_context_', 1213, 1219, 1225),
+    'encounter_restore_return_': ('encounter_exit_context_', 1219, 1225, 1225),
+})
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

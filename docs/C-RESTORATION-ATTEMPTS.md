@@ -129,7 +129,7 @@ Evidence and hash-bound behavior report: `work/numbered-board-next/evidence.json
 
 ### Encounter actor-state and spawn-prefix hypothesis
 
-Combine SI assignment with its condition and logically OR the already computed signed-short proximity results, preserving both calls. The extra EAX copy, OR destination, and state-1 store remain mismatches; the spawn prefix still lacks the original EBP height allocation. Current phases and bounded next probe: `work/encounter-next/remaining-phases.json`.
+Watcom 10.5 `/4r /s /or /bt=dos` still emits an extra `MOV EAX,ESI` after the SI load. Logical OR of the two computed proximity results emits two TEST/JNE pairs instead of the original signed extensions and `OR EDX,EAX`; the state-1 store also uses ECX. Keep the 209-byte actor phase and 597-byte spawn prefix in assembly. Next investigate the proximity-result lifetime with bitwise OR; the spawn loop separately needs the original EBP height lifetime. Evidence: `work/encounter-next/enccond.dis` and `remaining-phases.json`.
 
 ### Video prompt-mode blocker
 

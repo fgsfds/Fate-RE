@@ -123,6 +123,10 @@ prefix or pinned epilogue and overlaps with the complete pointer instructions.
 Validate ordinary and marker objects with the same guards; credit only the
 selected instructions, never discarded compiler code or literal tables.
 
+### Placed CODE literals and frame checks
+
+For selected slices that point into a digest-checked literal prefix, bind through its explicit registered CODE-object offset and export typed `code_bindings`; load through the CODE segment base (`+0x10000` here). Never infer prefix placement from the selected slice address or add the DS base. For frame tests, prefill saved-register slots with distinct poison, prove entry pushes overwrite them, then pass the captured initialized frame into the return phase and clobber registers before checking restoration and guards.
+
 ### Separated NASM ranges
 
 Use `section name align=1 vstart=... follows=...` for each physically separated range. Register each physical range in `ASM_SLICES` and verify the whole linked image; a correct local range does not prove intervening bytes or final placement.

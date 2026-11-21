@@ -1,7 +1,8 @@
 /* Board-four encounter algorithm compiled in two private contexts.
- * The exit context supplies 261 bytes; the latch context supplies 138 bytes.
- * Only verified slices are linked. The original shared frame and return tail
- * stay in ASM. Literal prefixes and other private code receive no C credit.
+ * The exit context supplies the exit phase and frame/initializer operations;
+ * the latch context supplies 138 bytes. Only verified slices are linked.
+ * Original EBP save/restore slots preserve the six-save legacy frame.
+ * Literal prefixes and other private code receive no C credit.
  * Empty identities emit no instructions. The latch tag store uses independent
  * EAX address / ECX value stages, placed in the original order by the linker.
  */

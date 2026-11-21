@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1240,
-  "unique_code_bytes": 179160,
-  "le_pointers": 9817,
+  "routines": 1244,
+  "unique_code_bytes": 179216,
+  "le_pointers": 9819,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1020,6 +1020,26 @@
       "le_pointers": 28
     },
     {
+      "symbol": "encounter_entry_save_",
+      "object": "encexit.obj",
+      "object_sha256": "d364c9858bcb6e4765fbc132ed8d9b8faa723baa2387e0f8addb407d1637a466",
+      "sha256": "4c15ca2a74a54d7e042fe9de66ade2a6cb3bde3974f51ba77a74ebffb1804d8b",
+      "raw_offset": "0x4352e",
+      "loaded_address": "0x1df2e",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "encounter_initialize_",
+      "object": "encexit.obj",
+      "object_sha256": "d364c9858bcb6e4765fbc132ed8d9b8faa723baa2387e0f8addb407d1637a466",
+      "sha256": "c8927b82b21c3d64ad08ad172244a949b7667b6121f9c5265c6e7459e94706ac",
+      "raw_offset": "0x43534",
+      "loaded_address": "0x1df34",
+      "bytes": 39,
+      "le_pointers": 2
+    },
+    {
       "symbol": "encounter_latch_",
       "object": "enclatch.obj",
       "object_sha256": "cf085c6065b66a274d0882a145710bf064f186a08e7ee3fbd092f792ba0c567a",
@@ -1068,6 +1088,26 @@
       "loaded_address": "0x1e30b",
       "bytes": 261,
       "le_pointers": 20
+    },
+    {
+      "symbol": "encounter_release_frame_",
+      "object": "encexit.obj",
+      "object_sha256": "d364c9858bcb6e4765fbc132ed8d9b8faa723baa2387e0f8addb407d1637a466",
+      "sha256": "a6742d90952ba053b0192168e0aba59e3fe1f9bb07fa7b35d6afd08d196b7b17",
+      "raw_offset": "0x43a10",
+      "loaded_address": "0x1e410",
+      "bytes": 6,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "encounter_restore_return_",
+      "object": "encexit.obj",
+      "object_sha256": "d364c9858bcb6e4765fbc132ed8d9b8faa723baa2387e0f8addb407d1637a466",
+      "sha256": "2cf27f6ddcd494187645482c8e32915ce469ba9abe28cbdc5cfb5b5cf6862e6b",
+      "raw_offset": "0x43a17",
+      "loaded_address": "0x1e417",
+      "bytes": 6,
+      "le_pointers": 0
     },
     {
       "symbol": "update_board_5_script_",

@@ -149,7 +149,7 @@ def decode(blob, symbol, marked, tables=()):
         for name in aliases:
             raw, _ = LEAVES[name]
             bind_leaf_details(blob, name, DATA_OFFSETS, address=raw-0x25600,
-                              functions=FUNCTION_ADDRESSES)
+                              functions=FUNCTION_ADDRESSES, code_bindings={})
         literal_sites = LEAF_CONTEXT_LITERALS[symbol][2]
     body = segments[segment]['data'][start:table_stop]
     decoder = Cs(CS_ARCH_X86, CS_MODE_32)

@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
   "routines": 483,
-  "unique_code_bytes": 235479,
-  "le_pointers": 12732,
+  "unique_code_bytes": 235423,
+  "le_pointers": 12730,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -989,14 +989,26 @@
       "kind": "declared read-only tables in CODE"
     },
     {
-      "symbol": "level_encounter_return",
+      "symbol": "encounter_save_ebp",
       "source": "src/fate/level_encounter.asm",
       "binary": "level_encounter.bin",
-      "sha256": "5d1adf2f63680fb8ddf16ca1ee796d1772f329e3c52bfdd2dbc81f23f1339322",
-      "bytes": 13,
-      "raw_offset": "0x43a10",
-      "loaded_address": "0x1e410",
-      "binary_offset": 1011,
+      "sha256": "a25513c7e0f6eaa80a3337ee18081b9e2ed09e00af8531c8f7bb2542764027e7",
+      "bytes": 1,
+      "raw_offset": "0x43533",
+      "loaded_address": "0x1df33",
+      "binary_offset": 160,
+      "le_pointers": 0,
+      "kind": "declared read-only tables in CODE"
+    },
+    {
+      "symbol": "encounter_restore_ebp",
+      "source": "src/fate/level_encounter.asm",
+      "binary": "level_encounter.bin",
+      "sha256": "cfae0d4248f7142f7b17f826cd7a519280e312577690e957830d23dcf35a3fff",
+      "bytes": 1,
+      "raw_offset": "0x43a16",
+      "loaded_address": "0x1e416",
+      "binary_offset": 967,
       "le_pointers": 0,
       "kind": "declared read-only tables in CODE"
     },
@@ -6370,16 +6382,16 @@
       "le_pointers": 13
     },
     {
-      "symbol": "update_level_encounter",
+      "symbol": "encounter_spawn_prefix",
       "source": "src/fate/level_encounter.asm",
       "binary": "level_encounter.bin",
-      "sha256": "aa3809ab085be34871ac59d0ccdb5c4b8d76741bca140d8a930e10be77a7ef88",
-      "bytes": 642,
-      "raw_offset": "0x4352e",
-      "loaded_address": "0x1df2e",
-      "public_entry": "0x1df2e",
-      "binary_offset": 160,
-      "le_pointers": 25
+      "sha256": "6a5c918a6668853a6808b3ca2e5d363418f14c94ccb52bf0ab1420b293ab5262",
+      "bytes": 597,
+      "raw_offset": "0x4355b",
+      "loaded_address": "0x1df5b",
+      "public_entry": "0x1df5b",
+      "binary_offset": 161,
+      "le_pointers": 23
     },
     {
       "symbol": "encounter_actor_state",
@@ -6390,7 +6402,7 @@
       "raw_offset": "0x4383a",
       "loaded_address": "0x1e23a",
       "public_entry": "0x1e23a",
-      "binary_offset": 802,
+      "binary_offset": 758,
       "le_pointers": 11
     },
     {

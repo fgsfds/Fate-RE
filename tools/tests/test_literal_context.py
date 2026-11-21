@@ -101,3 +101,37 @@ class LiteralMarkerComparison(unittest.TestCase):
                        fixture(fixups=INTERNAL+bytes.fromhex('e4 0e 16 01 01'))):
             with self.subTest(marked=marked), self.assertRaises(ValueError):
                 self.compare(fixture(), marked)
+
+
+class PlacedLiteralPointers(unittest.TestCase):
+    def bind(self, *, address=0x30000, export=True, base=0x10000, symbol='view'):
+        from verify_c_leaf import verify_leaf_relocations
+        with patch.dict(LEAF_CONTEXT_LITERALS,
+                        {'leaf': (4, sha256(PAYLOAD).hexdigest(), {5: 0}, base)}), \
+             patch.dict(LEAF_CONTEXT_SUFFIXES, {'leaf': SUFFIX}), \
+             patch.dict(LEAF_CODE_SLICES, {'view': ('leaf', 4, 9, len(BODY))}):
+            metadata = {} if export else None
+            code, refs = bind_leaf_details(fixture(), symbol, {}, address=address,
+                                          code_bindings=metadata)
+            verify_leaf_relocations(code, refs, {address+1:0x20000}, address,
+                                    code_bindings=metadata)
+            return code, refs, metadata
+
+    def test_exports_placed_code_fields_independently_of_virtual_context(self):
+        expected = (b'\xbe'+(0x10000).to_bytes(4,'little'),
+                    {1:0x10000}, {1:0x10000})
+        self.assertEqual(self.bind(), expected)
+        self.assertEqual(self.bind(address=0x40001), expected)
+
+    def test_selected_pointer_requires_explicit_code_metadata(self):
+        with self.assertRaisesRegex(ValueError, 'CODE binding metadata'):
+            self.bind(export=False)
+
+    def test_rejects_invalid_placed_code_offsets(self):
+        for base in (-1,0xffffffff,1.5,True,None):
+            with self.subTest(base=base), self.assertRaisesRegex(ValueError, 'placed literal CODE'):
+                self.bind(base=base)
+
+    def test_placed_mode_does_not_authorize_the_private_public(self):
+        with self.assertRaisesRegex(ValueError, 'registered slice'):
+            self.bind(symbol='leaf')

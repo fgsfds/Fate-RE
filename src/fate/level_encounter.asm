@@ -73,22 +73,12 @@ spawn_counts:
     times 16 db 15
     times 10 db 7
 
-update_level_encounter:
-    push ebx
-    push ecx
-    push edx
-    push esi
-    push edi
+update_level_encounter equ 0x1df2e
+; C saves five registers; preserve the original additional EBP slot.
+section .save_ebp align=1 vstart=0x1df33 follows=.text
     push ebp
-    sub esp, strict dword 0xb8
-    mov ecx, 0x20
-    mov edi, esp
-    mov esi, spawn_positions - 0x10000
-    rep movsd
-    mov ecx, 0x8
-    lea edi, [esp + 0x80]
-    mov esi, spawn_counts - 0x10000
-    rep movsd
+; Stack allocation and the two array copies are compiler-generated C.
+section .spawn align=1 vstart=0x1df5b follows=.save_ebp
     movsx eax, word [encounter_clock]
     cmp eax, 0xa
     jz near .check_first_trigger_sprite
@@ -249,7 +239,7 @@ update_level_encounter:
 
 ; Complete tile latch is linked from the native C context.
 .check_first_trigger_sprite equ 0x1e1b0
-section .actor_state align=1 vstart=0x1e23a follows=.text
+section .actor_state align=1 vstart=0x1e23a follows=.spawn
 
 .check_second_trigger_state:
     mov si, [second_trigger_state]
@@ -311,13 +301,7 @@ section .actor_state align=1 vstart=0x1e23a follows=.text
 .check_exit_scan equ 0x1e30b
 ; The return bytes follow in this blob and are placed separately at 0x1e410.
 
-section .actor_return align=1 vstart=0x1e410 follows=.actor_state
-.return:
-    add esp, strict dword 0xb8
+section .actor_return align=1 vstart=0x1e416 follows=.actor_state
+.return equ 0x1e410
     pop ebp
-    pop edi
-    pop esi
-    pop edx
-    pop ecx
-    pop ebx
-    ret
+; C supplies the stack release before this slot and the five-pop/RET after it.
