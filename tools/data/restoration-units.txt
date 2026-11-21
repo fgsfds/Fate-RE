@@ -497,3 +497,4 @@ fate/checksum_gameplay_state gamesum /4r /s /or /bt=dos
 
 fate/status_panel statpan
 fate/gameplay_update gamup
+network/netsend netsend

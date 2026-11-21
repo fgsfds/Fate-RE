@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1197,
-  "unique_code_bytes": 171788,
-  "le_pointers": 9363,
+  "routines": 1198,
+  "unique_code_bytes": 172417,
+  "le_pointers": 9420,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -3648,6 +3648,16 @@
       "loaded_address": "0x41cde",
       "bytes": 123,
       "le_pointers": 6
+    },
+    {
+      "symbol": "netsend_",
+      "object": "netsend.obj",
+      "object_sha256": "10faeb2b20b9c4fdf998c1f2dbe245dc7be219d5c0549e8850c52add9db01172",
+      "sha256": "f3ee3fd072207d0bfab4e3320002e8f3fab0daad7bedbf3af0d3286926234ca6",
+      "raw_offset": "0x67359",
+      "loaded_address": "0x41d59",
+      "bytes": 629,
+      "le_pointers": 57
     },
     {
       "symbol": "comsend_",

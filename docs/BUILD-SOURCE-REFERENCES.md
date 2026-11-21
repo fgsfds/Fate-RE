@@ -23,6 +23,18 @@ The downloaded reference files and URL/hash manifest live under ignored
 Preserve Ken Silverman's attribution and applicable `BUILDLIC.TXT` terms when
 adapting source. The repository already contains the Build license.
 
+### Pinned netsend provenance
+
+The `netsend` implementation in `src/network/netsend.c` follows `MULTI.C`
+from `BuildEngine.zip/SRC.ZIP` in `commercial-game-sources/duke_nukem_3d`
+at commit `e75bb067c0d3eba8f716b7781a5c5b6ec93cc2d4`;
+the archived member SHA-256 is
+`1dae938eb772e05e424c0185ef6ea83745ea62ba8bb7528846f3a82a77bf467f`.
+The accepted object matches **629 bytes and all 57 LE sites/targets** with no
+inline assembly. Reuse hint: ordinary `char` byte stores preserve conservative
+pointer-alias reloads; casting unsigned subtraction to signed before shifting
+preserves defined wrapping and target arithmetic-shift behavior.
+
 ### Concrete correspondences and cautions
 
 `SRC/ENGINE.C:1270-1288` and the corresponding floor block at 1436 onward

@@ -116,3 +116,4 @@ check_status_panel --exe {exe} --build {build} | statpan
 check_gameplay_update --exe {exe} --build {build} | gamup
 # Assembly-only caller baseline, checked with the related sample queue/control unit.
 check_play_sound --exe {exe} --build {build} --output {build}/play-sound-behavior.json | audctrl
+check_netsend --exe {exe} --object {build}/netsend.obj --output {build}/netsend-behavior.json | netsend

@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 489,
-  "unique_code_bytes": 242851,
-  "le_pointers": 13186,
+  "routines": 488,
+  "unique_code_bytes": 242222,
+  "le_pointers": 13129,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -1772,18 +1772,6 @@
       "public_entry": "0x42985",
       "binary_offset": 0,
       "le_pointers": 80
-    },
-    {
-      "symbol": "send_ipx_packet",
-      "source": "src/fate/send_ipx_packet.asm",
-      "binary": "send_ipx_packet.bin",
-      "sha256": "f3ee3fd072207d0bfab4e3320002e8f3fab0daad7bedbf3af0d3286926234ca6",
-      "bytes": 629,
-      "raw_offset": "0x67359",
-      "loaded_address": "0x41d59",
-      "public_entry": "0x41d59",
-      "binary_offset": 0,
-      "le_pointers": 57
     },
     {
       "symbol": "send_packet",
