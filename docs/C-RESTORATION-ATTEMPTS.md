@@ -88,17 +88,17 @@ the sort into inline instructions merely to increase the C-object percentage.
 
 ## Other unresolved probes
 
-### Numbered-board loader counters and argument staging
+### Numbered-board loader motion and mirror staging
 
 `load_numbered_board_`, Watcom 10.5 `/4r /s /or /bt=dos`:
-`work/numbered-board-next/sprite_fields.c` emits 929 bytes versus 935;
-bytes and LE verification fail, and behavior has not yet been tested. The
-28-byte frame and shared custom-map output location match. A unified sprite
-record fixes initial store scheduling; first normalized divergence is
-`0x27822`, where strength reduction stores through counter+2 before increment.
-Next make the postincremented ECX counter explicit before address formation.
-Motion-call and player-mirror allocation also remain. Keep verified callee
-clobbers and one-based bounds. Evidence: `work/numbered-board-next/evidence.json`.
+`work/numbered-board-next/spawn_abi.c` emits 927 bytes versus 935. It passes
+32 differential cases across 3,538,944 data bytes, but fails exact bytes/LE.
+Use actual array bases for zero-indexed clears and the sprite creator's short
+return with EAX/EBX/EDX clobbers. First normalized divergence is `0x27894`:
+ECX zero is hoisted before sprite creation. Next recover motion-vector stack
+and argument lifetimes; position-struct reuse spills the correct slots but
+changes entry allocation. Player-mirror and tag-width differences remain.
+Evidence and hash-bound behavior report: `work/numbered-board-next/evidence.json`.
 
 ### Level-sector puzzle activation staging
 

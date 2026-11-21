@@ -24,13 +24,13 @@ extern const char float_sprite_overflow[];
 extern int random_value(void);
 #pragma aux random_value modify exact [eax];
 extern void updatesector(long, long, short *);
-#pragma aux updatesector modify exact [eax];
+#pragma aux updatesector modify exact [eax ebx edx];
 extern short spawn_sprite_at_position(short, Position *, short);
-#pragma aux spawn_sprite_at_position modify exact [eax];
+#pragma aux spawn_sprite_at_position modify exact [eax ebx edx];
 extern void report_game_error(const char *);
 #pragma aux report_game_error modify exact [eax];
 extern int format_game_error(char *, const char *, ...);
-#pragma aux format_game_error "sprintf_" parm caller [] modify exact [eax];
+#pragma aux format_game_error "sprintf_" parm caller [] modify exact [eax edx];
 
 void spawn_float_sprite(short type, short shift_x, short shift_y, const Position *origin, short velocity);
 #pragma aux spawn_float_sprite parm routine [eax] [edx] [ebx] [ecx] modify exact [eax ebx ecx edx];

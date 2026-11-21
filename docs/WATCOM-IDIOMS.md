@@ -46,6 +46,14 @@ those expectations. Volatile OMF comments, including timestamps, are not compare
 
 ## Patterns verified in Fate
 
+- The template sprite creator at `0x11073` returns a short in AX and changes
+  EAX/EBX/EDX. Its 302-byte body saves ECX/ESI/EDI/EBP, not EBX or EDX.
+  Caller declarations and emulator stubs must allow those parameter registers
+  to change; the output type alone does not establish register preservation.
+  The floating-sprite caller also permits EAX/EBX/EDX for `updatesector` and
+  EAX/EDX for `sprintf`; all three corrected declarations retain its exact
+  270-byte code and LE relocations.
+
 - [`checksum_gameplay_state`](../src/fate/checksum_gameplay_state.c) keeps the
   CRC accumulator at 16 bits, reuses the player index as the status-loop index,
   and feeds the player-angle and sprite-Y high bytes with the input operand
