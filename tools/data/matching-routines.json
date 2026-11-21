@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1221,
-  "unique_code_bytes": 177318,
+  "routines": 1222,
+  "unique_code_bytes": 177322,
   "le_pointers": 9700,
   "non_routine_code_spans": [
     {
@@ -3928,6 +3928,16 @@
       "loaded_address": "0x42985",
       "bytes": 914,
       "le_pointers": 57
+    },
+    {
+      "symbol": "getpacket_length_order_",
+      "object": "recvlen.obj",
+      "object_sha256": "ba419e270ec3e70d6c58a85562e20be247a0b7f50bfd33d5dd6afcf5b08d6578",
+      "sha256": "5d51e6893cd8480da51396c851c814e87af0a62f6505b8c1da35538a7892643e",
+      "raw_offset": "0x68317",
+      "loaded_address": "0x42d17",
+      "bytes": 4,
+      "le_pointers": 0
     },
     {
       "symbol": "getpacket_tail_",

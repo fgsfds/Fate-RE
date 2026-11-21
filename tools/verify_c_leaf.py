@@ -3651,7 +3651,8 @@ DATA_OFFSETS.update({
 
 
 # Gameplay-controller compiler sections; calls enter the original public address.
-LEAVES.update({'getpacket_head_': (0x67f85, 914), 'getpacket_tail_': (0x6831b, 511)})
+LEAVES.update({'getpacket_head_': (0x67f85, 914), 'getpacket_tail_': (0x6831b, 511),
+               'getpacket_length_order_': (0x68317, 4)})
 DATA_OFFSETS.update({'_syncstate': 81116, '_netincnt': 1600824, '_comescape': 1637884, '_comreset': 1637932, '_syncbufleng': 1637944, '_syncbuf_backing': 1638496, '_getmess': 1637952, '_myconnectnum': 1637936, '_otherconnectnum': 1637896, '_inbuf': 1637924, '_inbufplc': 1637820, '_inbufend': 1637872, '_outbufplc': 1637848, '_comresend': 1637876, '_comerror': 1637916, '_incnt': 1637888, '_netinbuf': 1637812, '_netinbufplc': 1637816, '_netinbufend': 1637800})
 LEAVES.update({'update_gameplay_head_': (0x39733, 550),
                'update_gameplay_tail_': (0x3996b, 677)})
@@ -3675,6 +3676,7 @@ LEAF_ENTRY_PREFIX_FIXUPS = {
 # Unchanged compiler sections surrounding a separately verified assembly island.
 # Each row names the real OMF public, kept bounds, and required full public size.
 LEAF_CONTEXT_SUFFIXES = {
+    'getpacket_length_copy_': b'\xc3',
     'receive_button_low_': b'\xc3',
     'receive_checksum_order_': b'\xc3',
     'receive_message_delta_': b'\xc3',
@@ -3687,6 +3689,7 @@ LEAF_CONTEXT_SUFFIXES = {
 }
 
 LEAF_CODE_SLICES = {
+    'getpacket_length_order_': ('getpacket_length_copy_', 0, 4, 54),
     'receive_packets_button_low_': ('receive_button_low_', 0, 17, 28),
     'receive_packets_crc_order_': ('receive_checksum_order_', 0, 3, 24),
     'receive_packets_message_delta_': ('receive_message_delta_', 0, 10, 11),

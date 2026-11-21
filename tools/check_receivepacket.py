@@ -400,23 +400,24 @@ def reference_body(exe):
     return original,bytes(body),refs
 
 
-def production_body(exe,obj,assembly,reference):
-    """Accept only the actual compiler object and actual assembled four-byte gap."""
-    assert len(assembly)==4,'retained ASM must contain exactly four bytes'
-    assert assembly==exe[RAW+914:RAW+918],'actual retained ASM differs from pinned reference'
+def production_body(exe,obj,fragment,reference):
+    """Verify the two original C sections and the actual four-byte C fragment."""
+    middle_reference,middle,middle_sites=bind_bodies(exe,fragment,'getpacket_length_order_',ENTRY+914,4,
+        BINDINGS,F,data_base=DS)
+    assert len(middle)==4 and middle_sites==0,'unexpected length fragment shape or relocation'
     pointers=read_le_fixups(exe)['pointers']
     gap_sites=pointer_range(pointers,ENTRY+914,4)
-    assert not gap_sites,'unexpected retained ASM relocation'
+    assert not gap_sites,'unexpected length fragment relocation'
     head_reference,head,head_sites=bind_bodies(exe,obj,'getpacket_head_',ENTRY,914,
         BINDINGS,F,data_base=DS)
     tail_reference,tail,tail_sites=bind_bodies(exe,obj,'getpacket_tail_',ENTRY+918,511,
         BINDINGS,F,data_base=DS)
     assert len(head)==914 and len(tail)==511
-    assert head_sites+tail_sites==80,'combined C/ASM LE count differs'
-    assert head_reference+assembly+tail_reference==reference
-    result=head+assembly+tail
+    assert head_sites+tail_sites==80,'combined C LE count differs'
+    assert head_reference+middle_reference+tail_reference==reference
+    result=head+middle+tail
     assert result==reference,'actual production packet body differs'
-    return result,dict(head=head_sites,retained_asm=0,tail=tail_sites)
+    return result,dict(head=head_sites,length=middle_sites,tail=tail_sites)
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
@@ -424,11 +425,11 @@ def main():
     mode=parser.add_mutually_exclusive_group(required=True)
     mode.add_argument('--production-object',type=Path,help='Actual built netinitc.obj; exact acceptance mode')
     mode.add_argument('--original-only',action='store_true')
-    parser.add_argument('--assembly',type=Path,help='Actual assembled receive_packet.bin, exactly four bytes')
+    parser.add_argument('--fragment-object',type=Path,help='Actual built recvlen.obj; four-byte C section')
     parser.add_argument('--output',type=Path)
     args=parser.parse_args()
-    if bool(args.production_object)!=bool(args.assembly):
-        parser.error('Use --production-object and --assembly together')
+    if bool(args.production_object)!=bool(args.fragment_object):
+        parser.error('Use --production-object and --fragment-object together')
     exe=args.exe.read_bytes()
     raw,reference,refs=reference_body(exe)
     report=dict(fixture='receive-game-packet',status='FAIL',inventory_eligible=False,
@@ -445,13 +446,13 @@ def main():
         candidates={}
         if args.production_object:
             obj=args.production_object.read_bytes()
-            assembly=args.assembly.read_bytes()
-            production,fixups=production_body(exe,obj,assembly,reference)
+            fragment=args.fragment_object.read_bytes()
+            production,fixups=production_body(exe,obj,fragment,reference)
             candidates={'production':production}
             report.update(exact_verified=True,candidate_object_sha256=sha(obj),
-                assembly_sha256=sha(assembly),retained_asm_bytes=4,restored_c_bytes=1425,
+                fragment_object_sha256=sha(fragment),retained_asm_bytes=0,restored_c_bytes=1429,
                 production_object=str(args.production_object.resolve()),
-                assembly=str(args.assembly.resolve()),
+                fragment_object=str(args.fragment_object.resolve()),
                 candidate_bytes=len(production),candidate_absolute_fixups=fixups,
                 production_body_sha256=sha(production))
         report['high_crc_frame_exercised']=True
