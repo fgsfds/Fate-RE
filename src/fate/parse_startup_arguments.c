@@ -30,10 +30,10 @@ extern void start_options(void);
 #pragma aux start_options = "mov ebp,[esp]" "xor esi,esi" modify exact [esi];
 extern void start_arguments(unsigned long);
 #pragma aux start_arguments = "" parm [ecx] modify exact [];
-extern void next_argument(void);
-#pragma aux next_argument = "inc ecx" modify exact [ecx];
-extern void next_option(void);
-#pragma aux next_option = "inc esi" modify exact [esi];
+extern void next_argument(unsigned long);
+#pragma aux next_argument = "" parm [ecx] modify exact [];
+extern void next_option(unsigned long);
+#pragma aux next_option = "" parm [esi] modify exact [];
 
 extern int argument_limit(void);
 #pragma aux argument_limit = value [ebp] modify exact [];
@@ -76,7 +76,7 @@ void parse_startup_arguments(char *map_name)
 
     start_options();
     do {
-        for (start_arguments(1); argument_index() < argument_limit(); next_argument()) {
+        for (start_arguments(1); argument_index() < argument_limit(); next_argument((unsigned long)argument_index() + 1UL)) {
             first = leading_byte(read_argument());
             if (first == '-' || first == '/')
                 goto check_option;
@@ -110,7 +110,7 @@ print_help:
             print_command_line_help();
 advance_argument:;
         }
-        next_option();
+        next_option((unsigned long)option_number() + 1UL);
     } while (option_number() < 3);
 
 done:

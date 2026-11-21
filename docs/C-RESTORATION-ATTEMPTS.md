@@ -88,12 +88,21 @@ the sort into inline instructions merely to increase the C-object percentage.
 
 ## Other unresolved probes
 
-### Audio command argument scheduling
+### Startup option-prefix pointer increment
 
-Replacing command 3's `MOV EAX,3` with C argument preparation moves it before
-`MOV CL,AL` at `0x6673b`, changing the consumed byte. Keep commands 2/3/4's
-original helpers until their implicit register inputs are modeled explicitly.
-Flags and rejected source/object evidence: `work/literal-stage-next/`.
+Ordinary `argument + 1` keeps the parser at 197 bytes but moves INC EAX
+before the keyword-table load at `0x375a5`. Keep the original increment
+helper. Next test the combined call-argument evaluation tree rather than an
+independent addition. Source/object: `work/byte-stage-next/parser-pointer-rejected.*`.
+
+### Audio byte-copy encoding and segment scheduling
+
+Pure byte-register argument stages emit `88 /r` for copies whose target uses
+`8A /r`; retain those copy bodies with explicit inputs. Secondary command
+literals still move before LFS when generated as C argument setup. Next find
+an encoding-compatible copy idiom and preserve the segment-load sequence;
+do not invent register clobbers. Sources/objects: `work/byte-stage-next/` and
+`work/literal-stage-next/`.
 
 ### Numbered-board loader motion and mirror staging
 

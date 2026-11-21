@@ -46,6 +46,12 @@ those expectations. Volatile OMF comments, including timestamps, are not compare
 
 ## Patterns verified in Fate
 
+- Explicit byte inputs (`parm [al]`, `[ch]`, `[cl]`, `[dl]`) prevent argument
+  setup from overwriting a register that an auxiliary still consumes. This
+  lets the primary audio command-3 constant come from C while preserving the
+  original byte-copy encoding. Empty ECX/ESI stages fed by unsigned register
+  values plus one generate the startup parser's exact one-byte INCs.
+
 - Nonzero literals passed to empty full-width register stages can generate
   the original five-byte MOV: audio commands 1/5 and the startup argument index
   remove 20 inline bytes this way. Argument preparation may move across an
