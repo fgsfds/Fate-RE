@@ -32,7 +32,7 @@ BINDINGS.update(dict(_netoutcnt_backing=0x186e47, _omessnum_backing=0x18f6d6,
     _omessconnectindex_backing=0x186cb0))
 F = dict(comsend_=0x41fce, startcom_=0x4204f, getcrc_=0x42f73, netsend_=0x41d59)
 CONTRACT = Contract(ENTRY, STOP, STACK, 4,
-    preserved=('ecx','esi','edi','ebp'), instruction_limit=2000000)
+    preserved=('ecx','esi','edi','ebp'), instruction_limit=2000000, wall_timeout_us=30000000)
 INITIAL = bytes(range(256)) * (DATA_SIZE//256)
 sha = lambda b: hashlib.sha256(b).hexdigest()
 
@@ -237,21 +237,8 @@ def expected_behavior(c):
     return Observation({}, {'DS':bytes(m)},tuple(calls))
 
 
-class LongerTimeout:
-    """Keep Machine's ABI/write checks; permit the bounded busy-loop to finish."""
-    def __init__(self,cpu):
-        self.cpu = cpu
-    def __getattr__(self,name):
-        return getattr(self.cpu,name)
-    def emu_start(self,*args,**kwargs):
-        # Wall time only: Machine still supplies the two-million instruction cap.
-        kwargs['timeout'] = 30000000
-        return self.cpu.emu_start(*args,**kwargs)
-
-
 def exercise(body,c):
     machine = Machine(CONTRACT,body,[Region('DS',DS,DATA_SIZE)])
-    machine.cpu = LongerTimeout(machine.cpu)
     machine.write(DS,initial_memory(c))
     visits = 0
     def busy_hook(cpu,address,size,user):
@@ -329,7 +316,7 @@ def main():
         mode='original-model-only' if a.original_only else 'exact-and-behavior',
         exact_verified=False,reference_sha256=sha(exe),reference_body_sha256=sha(reference),
         reference_le_fixups=62,data_bytes_compared=DATA_SIZE,cases=[],
-        preserved_registers=list(CONTRACT.preserved),instruction_limit=CONTRACT.instruction_limit,
+        preserved_registers=list(CONTRACT.preserved),instruction_limit=CONTRACT.instruction_limit,wall_timeout_us=CONTRACT.wall_timeout_us,
         helper_contracts=dict(comsend='EAX byte; modifies EAX only; escaped ring writes',
             startcom='No arguments; modifies EAX only; deterministic no-drain transmitter',
             getcrc='EAX pointer/EDX signed short; modifies EAX/EDX',

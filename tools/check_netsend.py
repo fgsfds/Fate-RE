@@ -23,7 +23,7 @@ A = dict(socket=0x13e64, compaddr=0x186d88, messout=0x18fd98,
          rmsegment16=0x18fdec)
 F = dict(memcpy_=0x63245, simulate_network_interrupt_=0x42ffc)
 CONTRACT = Contract(ENTRY, STOP, STACK, 4,
-    preserved=('ebx','ecx','esi','edi','ebp'), instruction_limit=400000)
+    preserved=('ebx','ecx','esi','edi','ebp'), instruction_limit=400000, wall_timeout_us=30000000)
 INITIAL = bytes(range(256)) * (DATA_SIZE//256)
 sha = lambda data: hashlib.sha256(data).hexdigest()
 
@@ -181,6 +181,7 @@ def main():
         candidate_object_sha256=sha(obj),reference_body_sha256=sha(reference),
         reference_le_fixups=57,data_bytes_compared=DATA_SIZE,cases=[],
         preserved_registers=list(CONTRACT.preserved),
+        instruction_limit=CONTRACT.instruction_limit, wall_timeout_us=CONTRACT.wall_timeout_us,
         helper_contracts={'memcpy':'EAX/EDX/EBX arguments; modifies EAX only',
             'simulate_network_interrupt':'EAX/EDX/EBX/ECX and three stack words; RET 12; modifies EAX/EBX/ECX/EDX'},
         model_scope='Bounded peers 0..15 and negative short broadcasts; independent packet/ECB bytes and full DS comparison; deterministic driver stub; busy polling bounded to 32768 visits; no live IPX or DOS-driver verification')

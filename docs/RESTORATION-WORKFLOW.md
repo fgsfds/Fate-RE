@@ -188,6 +188,9 @@ Each candidate and the original run independently with the same inputs. The
 shared harness checks return values where defined, preserved registers, stack
 cleanup/guards, declared memory writes, and external-call arguments/order.
 Guest instruction counts, wall time, and executable/writable ranges are bounded.
+Long bounded waits may set `Contract.wall_timeout_us` explicitly (in microseconds)
+for slower CI hosts; keep the guest instruction limit and exact polling-count
+checks unchanged. Both execution budgets must be positive integers.
 Actor fixtures include distance/angle boundaries; tile fixtures include negative
 and zero counts, clipping edges, transparency, lazy loads, and overlapping buffers.
 Seeds are deterministic. A passing scenario suite is evidence, not a proof for

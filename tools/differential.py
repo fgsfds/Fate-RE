@@ -41,6 +41,12 @@ class Contract:
     stack_scratch: int = 4096
     flags_mask: int = 0
     instruction_limit: int = 100000
+    wall_timeout_us: int = 500000
+
+    def __post_init__(self):
+        for name in ('instruction_limit', 'wall_timeout_us'):
+            if type(getattr(self, name)) is not int or getattr(self, name) <= 0:
+                raise ValueError(f'{name} must be a positive integer')
 
 
 @dataclass(frozen=True)
@@ -135,7 +141,7 @@ class Machine:
                  self.cpu.hook_add(UC_HOOK_MEM_WRITE, write_hook))
         try:
             self.cpu.emu_start(contract.entry, contract.stop, count=contract.instruction_limit,
-                               timeout=500000)
+                               timeout=contract.wall_timeout_us)
         except UcError as error:
             raise BehaviorMismatch(f'guest execution failed: {error}') from error
         finally:

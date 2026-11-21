@@ -19,9 +19,9 @@ inline-assembly bytes**. The inventories contain **1,202 C routine spans** and
 **486 assembly routine spans**; attribution remains unresolved in 22 C spans.
 
 The network control handler adds **719 native C bytes, zero inline bytes,
-and 27 LE sites**. Full validation passes **333 unit tests and 118 fixtures**
+and 27 LE sites**. Full validation passes **335 unit tests and 118 fixtures**
 across **521 compiler units**. Its behavior fixture passes **70 cases and
-three negative controls**.
+three negative controls**. The tooling follow-up leaves C/assembly attribution unchanged.
 
 ## Reproducible evidence
 
@@ -30,10 +30,10 @@ The accepted executable remains **741,347 bytes**, SHA-256
 The report scope is verified saved artifacts; check current source freshness
 with `restore.py doctor`.
 
-- Latest full validation: `work/netctrl-build/validation.json`; executable SHA unchanged.
-- Network control fixture: `work/netctrl-build/netctrl-behavior.json`.
-- Attribution audit: `work/netctrl-audit.json`.
-- Verified change packet: `work/netctrl-handoff.json`.
+- Latest full validation: `work/ci-timeout-build/validation.json`; executable SHA unchanged.
+- Network control fixture: `work/ci-timeout-build/netctrl-behavior.json`.
+- Unchanged C attribution audit: `work/netctrl-audit.json`.
+- C restoration packet: `work/netctrl-handoff.json`.
 
 See [reconstruction](RECONSTRUCTION.md#inline-assembly-audit) for reproduction
 and [open probes](C-RESTORATION-ATTEMPTS.md) for unresolved work.

@@ -84,8 +84,27 @@ class BehavioralContract(unittest.TestCase):
         self.assertIn('eflags', diff.first_difference(left, right))
 
     def test_infinite_loop_has_a_finite_instruction_budget(self):
-        with self.assertRaisesRegex(diff.BehaviorMismatch, 'execution budget'):
-            execute(b'\xeb\xfe', contract=diff.Contract(ENTRY, STOP, STACK, 4, instruction_limit=20))
+        for wall_budget in (500000, 30000000):
+            with self.subTest(wall_budget=wall_budget), self.assertRaisesRegex(
+                    diff.BehaviorMismatch, 'execution budget'):
+                execute(b'\xeb\xfe', contract=diff.Contract(ENTRY, STOP, STACK, 4,
+                        instruction_limit=20, wall_timeout_us=wall_budget))
+
+    def test_explicit_wall_budget_reaches_emulator_with_instruction_cap(self):
+        contract = diff.Contract(ENTRY, STOP, STACK, 4, instruction_limit=20,
+                                 wall_timeout_us=30000000)
+        machine = diff.Machine(contract, b'\xc3')
+        with patch.object(machine.cpu, 'emu_start', wraps=machine.cpu.emu_start) as run:
+            machine.run(REGISTERS)
+        self.assertEqual(run.call_args.kwargs['timeout'], 30000000)
+        self.assertEqual(run.call_args.kwargs['count'], 20)
+
+    def test_execution_budgets_cannot_be_disabled(self):
+        for name in ('instruction_limit', 'wall_timeout_us'):
+            for value in (0, -1, None, True, 0.5):
+                with self.subTest(name=name, value=value), self.assertRaisesRegex(
+                        ValueError, 'must be a positive integer'):
+                    diff.Contract(ENTRY, STOP, STACK, 4, **{name: value})
 
     def test_execution_cannot_fall_through_into_uninitialized_memory(self):
         with self.assertRaisesRegex(diff.BehaviorMismatch, 'escaped declared code'):
