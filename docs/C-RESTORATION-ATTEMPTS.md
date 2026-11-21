@@ -842,3 +842,15 @@ resume/cancel comparison remain different. Next isolate the initial ESI
 result lifetime without losing the EDI/EBP clock pair, then constrain caption
 arithmetic in stages. Retain the alignment byte at 0x3a127 when integrating.
 Scratch: `work/main-menu-next/evidence.json`; no accepted coverage.
+
+### Sprite waypoint target: remaining blocker
+
+With Watcom 10.5 `/4r /s /or /bt=dos`, `select_sprite_path_target_`
+passes all 44 behavioral cases at 823 bytes, but
+its reference is 834 bytes and neither byte identity nor LE relocation identity
+matches. Keep the production assembly. The remaining mismatch is compiler
+allocation and scheduling: stack spill placement, ceiling-offset scheduling,
+point-load staging, and cache-scalar lifetimes differ. Do not force padding or
+fake clobbers; recover the source-level lifetimes and recheck the complete bytes
+and LE sites. No C coverage is credited. Evidence:
+`work/sprite-path-target-next/evidence.json`.

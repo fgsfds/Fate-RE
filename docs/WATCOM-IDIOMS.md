@@ -130,3 +130,11 @@ those expectations. Volatile OMF comments, including timestamps, are not compare
 
 An idiom matching this fixture does not establish that it matches a Fate routine.
 Game code still needs its own exact byte, LE-relocation, and whole-image checks.
+
+- **EBP output contracts:** a result-only auxiliary declared `modify exact []`
+  does not track EBP writes. In the isolated probe, input 5 produced outputs 5
+  and 7 (expected sum 12, actual 14), and the caller's EBP sentinel became 7;
+  Watcom did not save it automatically. Explicitly declaring `modify EBP`
+  fails with compiler error E1122. An empty getter is not equivalent to a
+  helper that writes EBP. This probe establishes only this EBP behavior; do not
+  infer preservation or clobber rules for other registers.
