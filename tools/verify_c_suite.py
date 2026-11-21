@@ -954,6 +954,7 @@ OBJECT_NAMES.update({'capture_open_body_': 'capopen', 'capture_close_success_': 
 OBJECT_NAMES.update(dict.fromkeys(('capture_palette_compare_', 'capture_palette_color_',
                                   'capture_palette_zero_'), 'pcxstep'))
 OBJECT_NAMES.update(dict.fromkeys(('setgamemode_init_save_', 'setgamemode_init_body_'), 'setinit'))
+OBJECT_NAMES['setgamemode_display_reset_'] = 'setdisp'
 OBJECT_NAMES['drawmasks_projection_'] = 'drawproj'
 OBJECT_NAMES['level_encounter_exit_'] = 'encexit'
 OBJECT_NAMES.update(dict.fromkeys(('encounter_entry_save_', 'encounter_initialize_',

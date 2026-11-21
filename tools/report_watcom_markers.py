@@ -29,6 +29,9 @@ def verified_switch_tables(inventory, filename, obj):
                   if row['object'] == filename and row['kind'] == 'compiler-generated jump table']
     routine_rows = [row for row in inventory['spans'] if row['object'] == filename]
     if not table_rows:
+        if any(row['symbol'] == 'setgamemode_display_reset_' for row in routine_rows):
+            from bind_setgamemode_display import verified_context_tables
+            return verified_context_tables(obj, routine_rows)
         if any(leaf_public_name(row['symbol']) == 'dispatch_main_menu_' for row in routine_rows):
             # A checked but unlinked table can normalize marker comparisons.
             # It stays outside the credited inventory and contributes zero bytes.

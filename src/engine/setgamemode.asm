@@ -70,35 +70,8 @@ section .palette_and_backend align=1 vstart=0x4b13d follows=.text
 .branch_4b149:
     cmp eax, strict dword 0x100
     jl short .branch_4b13f
-    mov ecx, 0x1000
-    mov edi, waloff
-    xor eax, eax
-    mov esi, 0x200
-    rep stosd
-    mov ecx, 0x20
-    mov edi, engine_1ec6a0
-    xor bl, bl
-    rep stosd
-    mov ecx, 0x80
-    mov edi, show_2d_sprites
-    xor edx, edx
-    rep stosd
-    mov ecx, 0x100
-    mov edi, show_2d_walls
-    xor ebp, ebp
-    rep stosd
-    mov edi, 0xffffffff
-    mov [engine_2891d8], bl
-    mov [frame_state_28913a], dx
-    mov [frame_state_289142], di
-    mov [frame_state_28913c], di
-    call sub_4c0b0
-    xor bh, bh
-    mov al, [video_backend]
-    mov [engine_286ba8], esi
-    mov [engine_286ba0], esi
-    mov [engine_14004], ebp
-    mov [chainstat], bh
+    ; The linked C display reset falls through with the backend in AL.
+section .backend_dispatch align=1 vstart=0x4b1d1 follows=.palette_and_backend
     cmp al, 0x7
     ja near .branch_4b386
     xor edx, edx

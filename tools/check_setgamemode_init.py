@@ -101,6 +101,51 @@ def check(memory, mode, width, height, fail_at):
             raise AssertionError(f'Video setup field at {offset:#x} differs')
 
 
+def check_display_reset(memory, mode, fill):
+    cpu = Uc(UC_ARCH_X86, UC_MODE_32)
+    cpu.mem_map(0, len(memory))
+    cpu.mem_write(0, memory)
+    cpu.reg_write(UC_X86_REG_ESP, STACK)
+    cpu.mem_write(DS + 0x2891db, bytes((mode,)))
+    buffers = ((0x1ffca0, 4096 * 4), (0x1ec6a0, 32 * 4),
+               (0x1ecfa0, 128 * 4), (0x1ec920, 256 * 4))
+    before_call = ((0x2891d8, 'B', 0), (0x28913a, 'h', 0),
+                   (0x289142, 'h', -1), (0x28913c, 'h', -1))
+    after_call = ((0x286ba8, 'I', 512), (0x286ba0, 'I', 512),
+                  (0x14004, 'I', 0), (0x14003, 'B', 0))
+    for offset, count in buffers:
+        cpu.mem_write(DS + offset - 1, b'\xa5' + bytes((fill,)) * count + b'\x5a')
+    for offset, fmt, _ in (*before_call, *after_call):
+        cpu.mem_write(DS + offset, bytes((fill,)) * struct.calcsize('<' + fmt))
+    calls = []
+
+    def check_fields(fields):
+        for offset, fmt, expected in fields:
+            actual, = struct.unpack('<' + fmt,
+                                    cpu.mem_read(DS + offset, struct.calcsize('<' + fmt)))
+            if actual != expected:
+                raise AssertionError(f'Unexpected display reset field at {offset:#x}: {actual}')
+
+    def intercept(emu, address, size, data):
+        calls.append(address)
+        check_fields(before_call)
+        for offset, count in buffers:
+            if emu.mem_read(DS + offset - 1, count + 2) != b'\xa5' + bytes(count) + b'\x5a':
+                raise AssertionError(f'Display buffer at {offset:#x} or its guard differs')
+        sp = emu.reg_read(UC_X86_REG_ESP)
+        ret, = struct.unpack('<I', emu.mem_read(sp, 4))
+        emu.reg_write(UC_X86_REG_ESP, sp + 4)
+        emu.reg_write(UC_X86_REG_EIP, ret)
+
+    cpu.hook_add(UC_HOOK_CODE, intercept, begin=0x4c0b0, end=0x4c0b0)
+    cpu.emu_start(0x4b150, 0x4b1d1, count=6000)
+    if (calls != [0x4c0b0] or cpu.reg_read(UC_X86_REG_EIP) != 0x4b1d1
+            or cpu.reg_read(UC_X86_REG_EAX) & 255 != mode
+            or cpu.reg_read(UC_X86_REG_ESP) != STACK):
+        raise AssertionError('Backend dispatch did not receive the original mode and stack')
+    check_fields(after_call)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--exe', required=True, type=Path)
@@ -112,7 +157,11 @@ def main():
     memory = image(blob)
     for case in CASES:
         check(memory, *case)
-    result = {'status': 'PASS', 'cases': len(CASES), 'allocator_failure_cases': 2}
+    display_cases = ((0, 0x33), (7, 0x94), (255, 0xfe))
+    for mode, fill in display_cases:
+        check_display_reset(memory, mode, fill)
+    result = {'status': 'PASS', 'cases': len(CASES) + len(display_cases),
+              'allocator_failure_cases': 2, 'display_reset_cases': len(display_cases)}
     args.output.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
     print(json.dumps(result))
 

@@ -3916,6 +3916,9 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
         raise ValueError('CODE binding output must be an empty dict; stale metadata rejected')
     segments, publics, externals, flat_groups, fixups = parsed_leaf_object(bytes(blob))
     public_name = leaf_public_name(symbol)
+    if symbol == 'setgamemode_display_reset_':
+        from bind_setgamemode_display import bind_display_reset
+        return bind_display_reset(blob, address)
     if public_name == 'dispatch_main_menu_' and symbol in LEAF_CODE_SLICES:
         from bind_main_menu_sections import bind_section, DATA as menu_data, FUNCTIONS as menu_functions
         # This shared-frame binder supports the fixed production placement.
@@ -4648,6 +4651,9 @@ FUNCTION_ADDRESSES.update({
     'initialize_video_backend_': 0x4a294,
     '_print_diagnostic': 0x40bb4,
 })
+
+LEAVES['setgamemode_display_reset_'] = (0x70750, 129)
+LEAF_CODE_SLICES['setgamemode_display_reset_'] = ('setgamemode_display_context_', 0x102, 0x183, 851)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
