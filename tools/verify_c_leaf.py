@@ -3674,7 +3674,14 @@ LEAF_ENTRY_PREFIX_FIXUPS = {
 
 # Unchanged compiler sections surrounding a separately verified assembly island.
 # Each row names the real OMF public, kept bounds, and required full public size.
+LEAF_CONTEXT_SUFFIXES = {
+    'compare_received_checksums_': b'\xc3',
+    'receiver_parity_tick_': b'\xc3',
+}
+
 LEAF_CODE_SLICES = {
+    'receive_packets_checksums_': ('compare_received_checksums_', 0, 105, 106),
+    'receive_packets_parity_': ('receiver_parity_tick_', 0, 7, 32),
     'receive_packets_entry_': ('receive_packets_', 0, 342, 910),
     'receive_packets_crc_store_': ('receive_packets_', 345, 370, 910),
     'receive_packets_delta_': ('receive_packets_', 472, 615, 910),
@@ -3721,6 +3728,16 @@ DATA_OFFSETS.update({
 })
 FUNCTION_ADDRESSES.update({
     'snapshot_input_': 0x2d1bd,
+})
+
+LEAVES.update({
+    'receive_packets_checksums_': (0x57b79, 105),
+    'receive_packets_parity_': (0x57d72, 7),
+})
+DATA_OFFSETS.update({
+    '_checksum_write_cursor': 0x3cdc,
+    '_checksum_received_cursor': 0x3ce0,
+    '_checksum_read_cursor': 0x3ce4,
 })
 
 # Selected sections of one compiler public may straddle retained assembly.
@@ -3851,6 +3868,9 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
     end = min([a for s, a, _ in publics if s == seg and a > start]
               or [len(segments[seg]['data'])])
     code = bytearray(segments[seg]['data'][start:end])
+    suffix = LEAF_CONTEXT_SUFFIXES.get(public_name, b'')
+    if suffix and not code.endswith(suffix):
+        raise ValueError('Unlinked compiler context suffix differs')
     kept_start, kept_end = leaf_code_bounds(symbol, len(code))
     prefix = LEAF_ENTRY_PREFIXES.get(symbol, 0)
     if address is not None:

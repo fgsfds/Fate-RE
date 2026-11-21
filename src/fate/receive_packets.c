@@ -1,7 +1,8 @@
 // "Build Engine & Tools" Copyright (c) 1993-1997 Ken Silverman
 // See ../engine/BUILDLIC.TXT. Modified from the pinned historical GAME.C.
-/* Production selects nine unchanged C sections (714 bytes); the remaining
- * 202 bytes stay in the receive_*.asm fragments. The full compiler context is
+/* This unit supplies nine unchanged C sections (714 bytes). Native checksum
+ * and parity fragments supply 112 more; 90 bytes remain in receive_*.asm.
+ * The full compiler context of this unit is
  * 910 bytes and is not itself an exact replacement. Branch linking changes
  * validated displacement operands only; see LEAF_CODE_SLICES.
  * Packets/chains must be valid; ring cursors are 0..255. A text packet copies

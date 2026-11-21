@@ -879,11 +879,11 @@ peer-ID arithmetic. Using EBX as the identity for joint5 disrupts other
 lifetimes. Next retain the interrupt prefix and isolate partial-sum lifetimes. Comparison:
 `work/serial-init-next/compiler/joint4.report.json`.
 
-### Packet receiver: remaining CRC/control islands
+### Packet receiver: remaining assembly gaps
 
-With `/4r /s /or /bt=dos`, the full compiler context is 910 bytes versus the
-916-byte target. The first divergence is at `+342`, where the compiler schedules `ADD`
-before `INC`. The remaining CRC comparison/control span is 105 bytes; other exact
-gaps leave 202 bytes in assembly. Preserve the 16-byte `PacketFrame` layout
-and snapshot callback's ESI-preservation contract while isolating these
-islands. Candidate: `src/fate/receive_packets.c`.
+The receiver matches with 826 native C bytes and 90 bytes retained in assembly.
+The remaining gaps are checksum sum ordering (3 bytes), button word merges
+(26), message deadline arithmetic (30), and readiness setup (31). Preserve the 16-byte `PacketFrame` and the
+snapshot callback's ESI contract. Sources:
+`src/fate/receive_packets.c`, `src/fate/receive_checksums.c`, and
+`src/fate/receive_parity.c`.

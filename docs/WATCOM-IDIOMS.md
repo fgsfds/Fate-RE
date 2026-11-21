@@ -162,3 +162,8 @@ instructions; this is verified passthrough behavior, not an invented clobber
 exception. For selected C/assembly branch replacements, the binder validates
 the branch opcode and width, compiled target, placement, and overlap before
 changing the displacement. Exact routine bytes and LE targets remain required.
+
+The receiver's 105-byte CRC and 7-byte parity contexts compile as standalone C
+in `receive_checksums.c` and `receive_parity.c`. Preserve the RET-suffix guard
+when selecting those C spans; the C contexts contain no inline assembly
+instructions.

@@ -924,6 +924,9 @@ OBJECT_NAMES.update({
     'receive_packets_finish_': 'recvpkt',
 })
 
+OBJECT_NAMES.update({'receive_packets_checksums_': 'recvcrc',
+                     'receive_packets_parity_': 'recvpar'})
+
 GROUPS = {
     'stdwrap': (462, STDIO_HELPERS),
     'bufseek': (66, ('seek_within_buffer_',)),
@@ -1459,6 +1462,12 @@ def verify_compiler_groups(exe, directory, names=None):
             raise ValueError(f'Unexpected span sizes for {name}')
         verify_group_layout((directory/(name+'.obj')).read_bytes(), size, layout)
     # The local insertion candidates are only present to preserve Watcom's shared tail.
+    if selected('recvcrc'):
+        verify_group_layout((directory/'recvcrc.obj').read_bytes(), 106,
+                            [('compare_received_checksums_', 0)])
+    if selected('recvpar'):
+        verify_group_layout((directory/'recvpar.obj').read_bytes(), 32,
+                            [('receiver_parity_tick_', 0)])
     if selected('recvpkt'):
         verify_group_layout((directory/'recvpkt.obj').read_bytes(), 910, [('receive_packets_', 0)])
     if selected('sprlists'):

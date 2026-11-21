@@ -60,17 +60,21 @@ table, and all 46 LE sites/targets match (42 body sites and 4 table sites).
 Its 629 native bytes and 19 inline-I/O bytes are reported separately; inline
 I/O remains necessary at the hardware boundary.
 
-`src/fate/receive_packets.c` adapts `GAME.C` from that same pinned
+`src/fate/receive_packets.c` and the standalone C contexts
+`src/fate/receive_checksums.c` and `src/fate/receive_parity.c` adapt `GAME.C`
+from that same pinned
 `BuildEngine.zip/SRC.ZIP`; `GAME.C` was found by searching the archive members,
 not among the previously extracted source files. The archive SHA-256 is
 `a3356a967505baa11337c0916e44986cc835972547fc29b9b9aaa0ab2f919627` and the
 member SHA-256 is `054f06aa497958293fe2224064d25ab752d21fc313c1dd3755ec53999ba3b67d`.
 The source provenance manifest is `work/receive-packets-next/source-provenance.json`.
-Production selects nine coherent C sections (714 native bytes); 202 bytes in
-eight gaps remain assembly. The combined C and assembly body matches all 65 LE
-sites and the full image. Packet/chains validity, ring bounds, byte-truncated
-text length, fixed DS overlays, and unsigned wrapping are explicit source
-contracts, not general input validation guarantees.
+The receiver matches exactly with 826 native C bytes and 90 assembly bytes;
+56 C and 9 assembly LE sites total 65. The CRC (105 bytes) and parity (7 bytes)
+are standalone C contexts protected by a RET-suffix guard; no assembly opcode
+instructions are embedded in those C contexts. The full image is exact.
+Packet/chains validity, ring bounds,
+byte-truncated text length, fixed DS overlays, and unsigned wrapping are
+explicit source contracts, not general input validation guarantees.
 
 ### Concrete correspondences and cautions
 

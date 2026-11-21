@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 492,
-  "unique_code_bytes": 237523,
-  "le_pointers": 12871,
+  "routines": 490,
+  "unique_code_bytes": 237411,
+  "le_pointers": 12858,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -1870,18 +1870,6 @@
       "le_pointers": 0
     },
     {
-      "symbol": "receive_checksum_compare",
-      "source": "src/fate/receive_packets.asm",
-      "binary": "receive_packets.bin",
-      "sha256": "46d1d250e25815a03be982dcc30597af5a58da76659cf8d6decf0c51c6b7acc0",
-      "bytes": 105,
-      "raw_offset": "0x57b79",
-      "loaded_address": "0x32579",
-      "public_entry": "0x32579",
-      "binary_offset": 0,
-      "le_pointers": 13
-    },
-    {
       "symbol": "receive_button_low",
       "source": "src/fate/receive_button_low.asm",
       "binary": "receive_button_low.bin",
@@ -1940,18 +1928,6 @@
       "public_entry": "0x3273c",
       "binary_offset": 0,
       "le_pointers": 1
-    },
-    {
-      "symbol": "receive_snapshot_parity",
-      "source": "src/fate/receive_snapshot_parity.asm",
-      "binary": "receive_snapshot_parity.bin",
-      "sha256": "02efc922087eccfadc1e26b3b3b8e57c1a5b39754e97823cbe2eaa24ab99177e",
-      "bytes": 7,
-      "raw_offset": "0x57d72",
-      "loaded_address": "0x32772",
-      "public_entry": "0x32772",
-      "binary_offset": 0,
-      "le_pointers": 0
     },
     {
       "symbol": "draw_map_overlays",

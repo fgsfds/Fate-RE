@@ -121,4 +121,4 @@ check_sendpacket --exe {exe} --object {build}/sendpack.obj --output {build}/send
 check_receivepacket --exe {exe} --production-object {build}/netinitc.obj --assembly {build}/asm/receive_packet.bin --output {build}/receivepacket-behavior.json | netinitc
 check_netctrl --exe {exe} --object {build}/netinitc.obj --output {build}/netctrl-behavior.json | netinitc
 check_serial_init --exe {exe} --build {build} --output {build}/serial-init-behavior.json | serialin
-check_game_receive_packets --exe {exe} --build {build} --output {build}/game-receive-behavior.json | recvpkt
+check_game_receive_packets --exe {exe} --build {build} --output {build}/game-receive-behavior.json | recvpkt recvcrc recvpar

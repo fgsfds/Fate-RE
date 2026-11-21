@@ -501,3 +501,5 @@ network/netsend netsend
 network/sendpacket sendpack
 network/serialin serialin
 fate/receive_packets recvpkt
+fate/receive_checksums recvcrc
+fate/receive_parity recvpar

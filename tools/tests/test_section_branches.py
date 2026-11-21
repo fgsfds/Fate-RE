@@ -68,3 +68,15 @@ class SectionBindingIntegration(unittest.TestCase):
         self.assertEqual(code[0], 0xe8)
         self.assertEqual(0x1015 + int.from_bytes(code[1:5], 'little', signed=True), 0x2000)
         self.assertEqual(code[5:], bytes.fromhex('eb f9 c3'))
+
+
+class UnlinkedContextSuffix(unittest.TestCase):
+    def test_omitted_return_is_checked_even_when_selected_bytes_match(self):
+        from test_verify_c_leaf import fixture
+        from verify_c_leaf import LEAF_CODE_SLICES, LEAF_CONTEXT_SUFFIXES, bind_leaf_details
+        with patch.dict(LEAF_CODE_SLICES, {'view': ('leaf', 0, 1, 2)}), \
+                patch.dict(LEAF_CONTEXT_SUFFIXES, {'leaf': b'\xc3'}):
+            self.assertEqual(bind_leaf_details(fixture(fixup=b'', code=b'\x90\xc3'),
+                             'view', {}), (b'\x90', {}))
+            with self.assertRaisesRegex(ValueError, 'context suffix'):
+                bind_leaf_details(fixture(fixup=b'', code=b'\x90\x90'), 'view', {})
