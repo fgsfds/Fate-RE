@@ -59,7 +59,7 @@ class Span:
     positions: dict
     inline: list
     references: dict
-    invocations: int
+    invocations: list
     offset: int
     publics: tuple
 
@@ -140,9 +140,7 @@ def decode(blob, symbol, marked, tables=()):
                      default=stop)
     literal_sites = {}
     if symbol in LEAF_CONTEXT_LITERALS:
-        # Both ordinary and marker objects must pass the same strict omitted
-        # context guards as production binding. A sliced public with inline
-        # invocations remains unattributed by placed_measurement.
+        # Both ordinary and marker objects must pass the production context guards.
         aliases = [name for name, spec in LEAF_CODE_SLICES.items() if spec[0] == symbol]
         if not aliases:
             raise ValueError('Literal context lacks verified linked slices')
@@ -173,7 +171,7 @@ def decode(blob, symbol, marked, tables=()):
         if padding and any(fix.segment == segment and fix.offset < table_stop and fix.offset + fix.width > stop
                            for fix in read_fixups(blob)):
             raise ValueError('Relocation overlaps switch alignment')
-    active, invocations = False, 0
+    active, invocations = False, []
     instructions, inline, positions = [], [], {}
     for insn in raw:
         positions[insn.address] = len(instructions)
@@ -186,7 +184,9 @@ def decode(blob, symbol, marked, tables=()):
                 raise ValueError(f'Conflicting marker at {symbol}+{insn.address:#x}')
             active = not active
             if active:
-                invocations += 1
+                invocation_start = len(instructions)
+            else:
+                invocations.append((invocation_start, len(instructions)))
         else:
             instructions.append(insn)
             inline.append(active)
@@ -277,7 +277,7 @@ def branch_target_pair(ordinary, marked, symbol, base, probe, before, after,
     return True
 
 
-def compare(ordinary, marked, symbol, verified_tables=()):
+def compare(ordinary, marked, symbol, verified_tables=(), *, invocation_ranges=None):
     ordinary_tables, marked_tables = (), ()
     if verified_tables:
         sizes = {(segment, offset): size for segment, offset, size in verified_tables}
@@ -328,7 +328,10 @@ def compare(ordinary, marked, symbol, verified_tables=()):
 
     inline_bytes = sum(end - start for start, end in spans)
     total = sum(insn.size for insn in base.instructions)
-    return total, inline_bytes, spans, widened, probe.invocations
+    if invocation_ranges is not None:
+        boundaries = [insn.address for insn in base.instructions] + [total]
+        invocation_ranges.extend((boundaries[a], boundaries[b]) for a, b in probe.invocations)
+    return total, inline_bytes, spans, widened, len(probe.invocations)
 
 
 if __name__ == '__main__':

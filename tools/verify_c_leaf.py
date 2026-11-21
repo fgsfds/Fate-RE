@@ -4584,6 +4584,19 @@ LEAF_CODE_SLICES.update({
     'encounter_restore_return_': ('encounter_exit_context_', 1219, 1225, 1225),
 })
 
+LEAVES['drawmasks_projection_'] = (0x7228a, 0x167)
+LEAF_CODE_SLICES['drawmasks_projection_'] = ('drawmasks_', 0, 0x167, 1259)
+DATA_OFFSETS.update({
+    '_vidoption': 0x14004, '_spritesortcnt': 0x287e84, '_globalposx': 0x286ad0,
+    '_globalposy': 0x286ad4, '_globalposz': 0x286ad8, '_cosviewingrangeglobalang': 0x286ac8,
+    '_sinviewingrangeglobalang': 0x286af8, '_cosglobalang': 0x286ac8, '_singlobalang': 0x286af8,
+    '_xdimen': 0x140b5, '_spritesx': 0x19c6e0, '_spritesy': 0x19d6e0,
+    '_tsprite': 0x2710a0, '_tempsprite': 0x27c048, '_maskwall': 0x19b6e0,
+    '_maskwallcnt': 0x28914c, '_thewall': 0x1c2160, '_xb1': 0x1c5160,
+    '_xb2': 0x1c3160,
+})
+FUNCTION_ADDRESSES.update({'spritewallfront_': 0x45527, 'drawsprite_': 0x4d6ca, 'drawmaskwall_': 0x4d193})
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

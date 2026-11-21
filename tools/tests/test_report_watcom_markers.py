@@ -17,6 +17,26 @@ class PlacedMarkerMeasurements(unittest.TestCase):
                         ValueError, 'Cannot attribute inline invocations'):
                     placed_measurement('view', 4, measurement)
 
+    def test_slice_counts_adjacent_invocations_separately_and_rejects_a_split(self):
+        from compare_watcom_markers import compare
+        from test_watcom_marker_retry import object_with_code
+
+        ordinary = object_with_code(bytes.fromhex('904048c3'))
+        marked = object_with_code(bytes.fromhex('90f140cd81f148cd82c3'))
+        invocations = []
+        measurement = compare(ordinary, marked, 'test', invocation_ranges=invocations)
+        with patch.dict(LEAF_CODE_SLICES, {'view': ('test', 2, 4, 4)}):
+            self.assertEqual(placed_measurement('view', 2, measurement, invocations),
+                             (2, 1, [(0, 1)], [], 1))
+
+        ordinary = object_with_code(bytes.fromhex('904048c3'))
+        marked = object_with_code(bytes.fromhex('90f14048f4c3'))
+        invocations = []
+        measurement = compare(ordinary, marked, 'test', invocation_ranges=invocations)
+        with patch.dict(LEAF_CODE_SLICES, {'view': ('test', 2, 4, 4)}):
+            with self.assertRaisesRegex(ValueError, 'crosses a selected slice boundary'):
+                placed_measurement('view', 2, measurement, invocations)
+
     def test_slice_checks_full_public_and_inventory_extents(self):
         with patch.dict(LEAF_CODE_SLICES, {'view': ('public', 2, 6, 8)}):
             with self.assertRaisesRegex(ValueError, 'Compiler public extent'):

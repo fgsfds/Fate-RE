@@ -62,29 +62,12 @@ and string instructions still need independent byte and LE verification.
 
 ### `drawmasks`: historical source does not yet reproduce the sort
 
-Source-backed scratch: `work/drawmasks-source/v041.c`, based on the pinned
-`ENGINE.C:2830-2970`, compiled with Watcom 10.5 `/4r /s /or /bt=dos`.
-The best candidate is 1,259 bytes versus 1,289, with 71 absolute bindings.
-Only the first **359 bytes and their 25 LE sites** are verified exact; no partial
-span is accepted into production.
-
-Fate predates the published pointer-based sprite sorting: it uses packed
-44-byte records, halving Shell-sort gaps, and in-sort stat-number/floor-Z ties.
-The projection pass matches after those version differences and historical
-arithmetic-helper ABIs are restored. The first byte mismatch is `+0x168`, the
-displacement of the jump around the sort. The first body divergence is target
-`+0x177`: `mov ebp,ecx` versus the candidate's load/add sequence. Target keeps the
-sort index in EBP and sprite pointers in EBX/EDX; the compiler coalesces them
-differently. First full LE discrepancy is candidate `spritesy` at `+0x180`
-versus target `+0x187`/`+0x18e`. Matching relocation counts alone is insufficient.
-
-The `/3r` and size-optimized probes change the entry/frame and do not improve
-this. EBP-bound auxiliary parameters fail with Watcom E1122. Register keywords,
-trig alias spelling, and record-scratch spelling did not recover the required
-allocation. Next investigate the older comparator's expression/liveness and
-translation-unit context: the target also shares a return epilogue with
-`transmaskvline2`. Do not replace that branch with a private return or transcribe
-the sort into inline instructions merely to increase the C-object percentage.
+The historical projection context now supplies the entry through the sort
+locals. With Watcom 10.5 `/4r /s /or /bt=dos`, the remaining sort first differs
+at its entry jump displacement (+0x168), then at +0x177 where the original
+keeps its sort index in EBP. Preserve the shared frame and return through
+`transmaskvline2`. Next test the older packed 44-byte comparator's index and
+pointer lifetimes. Scratch: `work/drawmasks-source/v041.dis`.
 
 ## Other unresolved probes
 

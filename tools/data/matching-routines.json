@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1245,
-  "unique_code_bytes": 179330,
-  "le_pointers": 9826,
+  "routines": 1246,
+  "unique_code_bytes": 179689,
+  "le_pointers": 9851,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -5058,6 +5058,16 @@
       "loaded_address": "0x4cb3a",
       "bytes": 336,
       "le_pointers": 8
+    },
+    {
+      "symbol": "drawmasks_projection_",
+      "object": "drawproj.obj",
+      "object_sha256": "d1a4939f0dafe1dff8fb409b4b483a2669c24c49b7926ee3b7e9852d39dde65f",
+      "sha256": "d972da69e30047bc49b8229be82a273524322ca9284cfc9e982bfa5b32626cc8",
+      "raw_offset": "0x7228a",
+      "loaded_address": "0x4cc8a",
+      "bytes": 359,
+      "le_pointers": 25
     },
     {
       "symbol": "ceilspritescan_",

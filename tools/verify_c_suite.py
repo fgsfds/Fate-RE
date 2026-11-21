@@ -949,6 +949,7 @@ OBJECT_NAMES.update({'puzzle_tile_solution_': 'sectpuz',
                      'puzzle_activate_walls_': 'puzact',
                      'puzzle_key_effect_exit_': 'sectpuz'})
 
+OBJECT_NAMES['drawmasks_projection_'] = 'drawproj'
 OBJECT_NAMES['level_encounter_exit_'] = 'encexit'
 OBJECT_NAMES.update(dict.fromkeys(('encounter_entry_save_', 'encounter_initialize_',
                                   'encounter_release_frame_', 'encounter_restore_return_'), 'encexit'))

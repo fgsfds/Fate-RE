@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
   "routines": 483,
-  "unique_code_bytes": 235309,
-  "le_pointers": 12723,
+  "unique_code_bytes": 234950,
+  "le_pointers": 12698,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -6898,16 +6898,16 @@
       "le_pointers": 69
     },
     {
-      "symbol": "drawmasks_",
+      "symbol": "drawmasks_sort_and_draw",
       "source": "src/engine/drawmasks.asm",
       "binary": "drawmasks.bin",
-      "sha256": "61c036bf611b05687f22fc3e3101726c9aea1de37f040cf87298fa1c8f9718be",
-      "bytes": 1289,
-      "raw_offset": "0x7228a",
-      "loaded_address": "0x4cc8a",
-      "public_entry": "0x4cc8a",
+      "sha256": "4cf6b765a1ebbeb301b4cdb67e6eb7ea6f0b9e71f27a97cb62bb99594f55a1e7",
+      "bytes": 930,
+      "raw_offset": "0x723f1",
+      "loaded_address": "0x4cdf1",
+      "public_entry": "0x4cdf1",
       "binary_offset": 0,
-      "le_pointers": 71
+      "le_pointers": 46
     },
     {
       "symbol": "drawsprite_",

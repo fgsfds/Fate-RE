@@ -48,18 +48,28 @@ def verified_switch_tables(inventory, filename, obj):
                  for row in table_rows)
 
 
-def placed_measurement(symbol, length, measurement):
+def placed_measurement(symbol, length, measurement, invocation_ranges=None):
     size, inline, ranges, widths, invocations = measurement
     start, end = leaf_code_bounds(symbol, size)
     if end - start != length:
         raise ValueError('Inventory extent does not match object public span')
     if symbol in LEAF_CODE_SLICES:
-        # Merged inline ranges do not retain invocation ownership by section.
-        # Keep such slices unknown rather than inventing per-section counts.
-        if inline or ranges or invocations:
+        invocation_ranges = invocation_ranges or []
+        if (len(invocation_ranges) != invocations
+                or sum(b - a for a, b in invocation_ranges) != inline
+                or any(not 0 <= a < b <= size for a, b in invocation_ranges)):
             raise ValueError('Cannot attribute inline invocations in a sliced public')
-        return (length, 0, [], [(site - start, *details) for site, *details in widths
-                               if start <= site < end], 0)
+        selected = [(a, b) for a, b in invocation_ranges if a < end and b > start]
+        if any(a < start or b > end for a, b in selected):
+            raise ValueError('An inline invocation crosses a selected slice boundary')
+        placed = [(max(a, start) - start, min(b, end) - start)
+                  for a, b in ranges if a < end and b > start]
+        inline_bytes = sum(b - a for a, b in placed)
+        if inline_bytes != sum(b - a for a, b in selected):
+            raise ValueError('Inline byte coverage differs from selected invocations')
+        return (length, inline_bytes, placed,
+                [(site - start, *details) for site, *details in widths if start <= site < end],
+                len(selected))
     if any(a < start for a, _ in ranges) or any(site < start for site, *_ in widths):
         raise ValueError('Cannot attribute a marker or changed branch in the retained prefix')
     return (length, inline, [(a - start, b - start) for a, b in ranges],
@@ -117,9 +127,11 @@ def report(build, marker_dir, retry_dir=None):
                 raise ValueError('Diagnostic compile failed: '+detail)
             if path not in marked_files:
                 marked_files[path] = path.read_bytes()
+            invocation_ranges = []
             measurement = compare(original, marked_files[path], leaf_public_name(symbol),
-                                  verified_switch_tables(inventory, filename, original))
-            return placed_measurement(symbol, length, measurement)
+                                  verified_switch_tables(inventory, filename, original),
+                                  invocation_ranges=invocation_ranges)
+            return placed_measurement(symbol, length, measurement, invocation_ranges)
 
         exceptions = (ValueError, KeyError, StopIteration, OSError)
         try:
