@@ -88,6 +88,19 @@ the sort into inline instructions merely to increase the C-object percentage.
 
 ## Other unresolved probes
 
+### Level-sector puzzle activation staging
+
+`update_level_sector_puzzle_`, Watcom 10.5 `/4r /s /or /bt=dos`:
+`work/puzzle-next/tile_lifetime.c` emits 933 bytes versus 932 and passes
+128 differential cases, but fails exact bytes and LE verification. The only
+normalized instruction difference is the solution activation preparation at
+`0x1dc84`: the candidate stages tag 6 through EDI before setting EDI to 1;
+the target uses EAX for 6 and EDX for the later zero. An EAX identity stage
+regresses allocation throughout later trigger paths. Next test once whether
+shared ordinary enable/tag/zero locals across those paths recover their
+lifetimes. Preserve the empty loops and current typed stages; evidence and
+source/object hashes: `work/puzzle-next/evidence.json`.
+
 ### Whole palette search frame
 
 Historical plain C with Watcom's `min` intrinsic and `/4r /s /or /bt=dos`
