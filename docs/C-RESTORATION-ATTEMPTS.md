@@ -71,6 +71,14 @@ pointer lifetimes. Scratch: `work/drawmasks-source/v041.dis`.
 
 ## Other unresolved probes
 
+### PCX planar palette flush
+
+Watcom 10.5 `/4r /s /or /bt=dos` moves the buffer offset from EDI into
+EAX and computes the next offset in ESI in the full-loop candidate. The
+original keeps EDI until the flush decision and loads the descriptor from the
+capture frame. Recover that frame and the offset lifetime together before
+linking the flush. Scratch: `work/pcx-palette-next/pcxpal2.dis`.
+
 ### Gameplay update controller row-offset allocation
 
 `update_gameplay_`, Watcom 10.5 `/4r /s /or /bt=dos`, now keeps only the

@@ -6,7 +6,10 @@ from pathlib import Path
 import struct
 
 from unicorn import Uc, UC_ARCH_X86, UC_MODE_32, UC_HOOK_CODE
-from unicorn.x86_const import UC_X86_REG_EAX, UC_X86_REG_EBX, UC_X86_REG_EIP, UC_X86_REG_ESP
+from unicorn.x86_const import (
+    UC_X86_REG_EAX, UC_X86_REG_EBX, UC_X86_REG_ECX, UC_X86_REG_EDI,
+    UC_X86_REG_EIP, UC_X86_REG_ESP,
+)
 
 from check_start_hook import DS, image
 from compare_exe import TARGET_SHA256
@@ -99,6 +102,30 @@ def run_file_stub(memory, sequence, *, closing):
         raise AssertionError(f'Unexpected capture filename or guard bytes for sequence {sequence}')
 
 
+def check_palette_byte(memory, index, offset, component):
+    cpu = Uc(UC_ARCH_X86, UC_MODE_32)
+    cpu.mem_map(0, len(memory))
+    cpu.mem_write(0, memory)
+    palette = DS + 0x14155
+    destination = DS + 0x1dda60 + offset
+    if index < 48:
+        cpu.mem_write(palette + index, bytes((component,)))
+    cpu.mem_write(destination - 1, b'\xa5\x77\x5a')
+    cpu.reg_write(UC_X86_REG_ECX, index)
+    cpu.reg_write(UC_X86_REG_EDI, offset)
+    cpu.reg_write(UC_X86_REG_ESP, STACK)
+    entry, stop = 0x4c7fd, 0x4c81e
+    cpu.emu_start(entry, stop, count=12)
+    registers = tuple(cpu.reg_read(reg) for reg in (
+        UC_X86_REG_EIP, UC_X86_REG_EAX, UC_X86_REG_ECX, UC_X86_REG_EDI, UC_X86_REG_ESP))
+    if registers != (stop, offset + 1, index, offset, STACK):
+        raise AssertionError(f'Unexpected planar palette handoff for index {index}, offset {offset}')
+    expected = 4 * component & 255 if index < 48 else 0
+    if cpu.mem_read(destination - 1, 3) != bytes((0xa5, expected, 0x5a)):
+        raise AssertionError(f'Incorrect planar palette byte or overwritten guard at index {index}')
+
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--exe', type=Path, required=True)
@@ -116,8 +143,13 @@ def main():
         run_file_stub(memory, sequence, closing=False)
     for sequence in counters:
         run_file_stub(memory, sequence, closing=True)
-    result = {'status': 'PASS', 'cases': len(CASES) + len(filenames) + len(counters),
-              'geometry': len(CASES), 'filenames': len(filenames), 'counters': len(counters)}
+    palette = ((0, 0, 63), (47, 4095, 254), (48, 0, 31), (767, 4095, 63),
+               (1, 37, 0), (19, 40, 64))
+    for case in palette:
+        check_palette_byte(memory, *case)
+    result = {'status': 'PASS', 'cases': len(CASES) + len(filenames) + len(counters) + len(palette),
+              'geometry': len(CASES), 'filenames': len(filenames), 'counters': len(counters),
+              'planar_palette': len(palette)}
     args.output.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
     print(json.dumps(result))
 

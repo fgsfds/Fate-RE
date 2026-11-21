@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1250,
-  "unique_code_bytes": 180105,
-  "le_pointers": 9892,
+  "routines": 1253,
+  "unique_code_bytes": 180134,
+  "le_pointers": 9895,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -5028,6 +5028,36 @@
       "loaded_address": "0x4c4ab",
       "bytes": 100,
       "le_pointers": 14
+    },
+    {
+      "symbol": "capture_palette_compare_",
+      "object": "pcxstep.obj",
+      "object_sha256": "279c633fbe7e4989eda24ba0085879128f97a667702023c94432323e6cb15af2",
+      "sha256": "9577b980de6f583122f1be66ce1411ce0364f03eb7ddc61e44b3e69dadb38d18",
+      "raw_offset": "0x71dfd",
+      "loaded_address": "0x4c7fd",
+      "bytes": 6,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "capture_palette_color_",
+      "object": "pcxstep.obj",
+      "object_sha256": "279c633fbe7e4989eda24ba0085879128f97a667702023c94432323e6cb15af2",
+      "sha256": "10577cf3c64637c1721eed299ca2e94f07211fd4f2e0e4d26decd82e453d42aa",
+      "raw_offset": "0x71e05",
+      "loaded_address": "0x4c805",
+      "bytes": 15,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "capture_palette_zero_",
+      "object": "pcxstep.obj",
+      "object_sha256": "279c633fbe7e4989eda24ba0085879128f97a667702023c94432323e6cb15af2",
+      "sha256": "7bc4a32ef9cadb2001dc31a8d8ad1162459b1f2e6a4ad3ddd362da234f6f6719",
+      "raw_offset": "0x71e16",
+      "loaded_address": "0x4c816",
+      "bytes": 8,
+      "le_pointers": 1
     },
     {
       "symbol": "capture_close_success_",

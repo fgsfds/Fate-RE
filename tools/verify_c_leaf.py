@@ -4611,6 +4611,15 @@ LEAF_CODE_SLICES.update({
     'capture_open_body_': ('capture_open_', 5, 0x91, 149),
     'capture_close_success_': ('capture_close_', 1, 0x17, 25),
 })
+LEAVES.update({'capture_palette_compare_': (0x71dfd, 6),
+               'capture_palette_color_': (0x71e05, 15),
+               'capture_palette_zero_': (0x71e16, 8)})
+LEAF_CODE_SLICES.update({
+    'capture_palette_compare_': ('capture_planar_palette_', 2, 8, 39),
+    'capture_palette_color_': ('capture_planar_palette_', 0xa, 0x19, 39),
+    'capture_palette_zero_': ('capture_planar_palette_', 0x1c, 0x24, 39),
+})
+DATA_OFFSETS.update({'_capture_buffer': 0x1dda60, '_capture_palette16': 0x14155})
 DATA_OFFSETS['_capture_sequence'] = 0x140d3
 FUNCTION_ADDRESSES['_open'] = 0x61368
 

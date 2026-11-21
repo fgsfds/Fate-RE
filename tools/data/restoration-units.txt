@@ -518,3 +518,4 @@ engine/drawmasks_projection drawproj
 engine/capture_header pcxhdr
 engine/capture_open capopen
 engine/capture_close capclose
+engine/capture_palette_byte pcxstep

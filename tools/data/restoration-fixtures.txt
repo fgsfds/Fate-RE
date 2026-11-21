@@ -127,4 +127,4 @@ check_sector_puzzle --exe {exe} --build {build} --output {build}/sector-puzzle-b
 check_encounter_exit --exe {exe} --build {build} --output {build}/encounter-exit-behavior.json | encexit
 check_encounter_latch --exe {exe} --build {build} --output {build}/encounter-latch-behavior.json | enclatch
 check_encounter_frame --exe {exe} --build {build} --output {build}/encounter-frame-behavior.json | encexit
-check_capture_header --exe {exe} --output {build}/capture-header-behavior.json | pcxhdr capopen capclose
+check_capture_header --exe {exe} --output {build}/capture-header-behavior.json | pcxhdr capopen capclose pcxstep

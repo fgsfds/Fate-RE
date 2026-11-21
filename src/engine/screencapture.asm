@@ -324,19 +324,16 @@ section .capture_body align=1 vstart=0x4c50f follows=.header_join
     xor ecx, ecx
     jmp short .branch_4e1
 
-.branch_495:
-    lea eax, [edi + 1]
-    cmp ecx, 0x30
+.branch_495 equ 0x4c7fd
+; C supplies the compare and both stores. Keep their original branches.
+section .palette_choose align=1 vstart=0x4c803 follows=.capture_body
     jge short .branch_4ae
-    mov dl, byte [ecx + engine_14155]
-    shl dl, 2
-    mov byte [edi + engine_1dda60], dl
+
+section .palette_join align=1 vstart=0x4c814 follows=.palette_choose
     jmp short .branch_4b6
+.branch_4ae equ 0x4c816
 
-.branch_4ae:
-    xor bl, bl
-    mov byte [edi + engine_1dda60], bl
-
+section .palette_flush align=1 vstart=0x4c81e follows=.palette_join
 .branch_4b6:
     mov edi, eax
     cmp edi, 0x1000
@@ -369,7 +366,7 @@ section .capture_body align=1 vstart=0x4c50f follows=.header_join
 .branch_505:
     mov eax, dword [esp + 8]
 ; C closes the file, advances the sequence and returns success in EAX.
-section .capture_return align=1 vstart=0x4c887 follows=.capture_body
+section .capture_return align=1 vstart=0x4c887 follows=.palette_flush
 .branch_51f:
     add esp, 0x18
     jmp near ceiling_sprite_restore

@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 484,
-  "unique_code_bytes": 234534,
-  "le_pointers": 12657,
+  "routines": 485,
+  "unique_code_bytes": 234505,
+  "le_pointers": 12654,
   "non_routine_code_spans": [
     {
       "symbol": "capture_after_open",
@@ -29,6 +29,30 @@
       "kind": "declared read-only tables in CODE"
     },
     {
+      "symbol": "capture_palette_choose",
+      "source": "src/engine/screencapture.asm",
+      "binary": "screencapture.bin",
+      "sha256": "e4f14f3ef1a07957c71293053148447b18fb58e8be9d6bbd6dd7378c98143dd8",
+      "bytes": 2,
+      "raw_offset": "0x71e03",
+      "loaded_address": "0x4c803",
+      "binary_offset": 779,
+      "le_pointers": 0,
+      "kind": "declared read-only tables in CODE"
+    },
+    {
+      "symbol": "capture_palette_join",
+      "source": "src/engine/screencapture.asm",
+      "binary": "screencapture.bin",
+      "sha256": "68b50534f0ab3d4a740d9915093dd8228a69f6c01867faaea436093efd3da225",
+      "bytes": 2,
+      "raw_offset": "0x71e14",
+      "loaded_address": "0x4c814",
+      "binary_offset": 781,
+      "le_pointers": 0,
+      "kind": "declared read-only tables in CODE"
+    },
+    {
       "symbol": "capture_return",
       "source": "src/engine/screencapture.asm",
       "binary": "screencapture.bin",
@@ -36,7 +60,7 @@
       "bytes": 8,
       "raw_offset": "0x71e87",
       "loaded_address": "0x4c887",
-      "binary_offset": 895,
+      "binary_offset": 866,
       "le_pointers": 0,
       "kind": "declared read-only tables in CODE"
     },
@@ -6937,13 +6961,25 @@
       "symbol": "capture_pixels",
       "source": "src/engine/screencapture.asm",
       "binary": "screencapture.bin",
-      "sha256": "c3a2a64c42e8067f585ffe5d402941d3436b680e1ae987e239e924efc730dd88",
-      "bytes": 866,
+      "sha256": "4b63cfd6c30a3ddd46ebf2273f7ddef8e22a58c3d69f645fcab1f5dc4d29ff46",
+      "bytes": 750,
       "raw_offset": "0x71b0f",
       "loaded_address": "0x4c50f",
       "public_entry": "0x4c50f",
       "binary_offset": 29,
-      "le_pointers": 28
+      "le_pointers": 23
+    },
+    {
+      "symbol": "capture_palette_flush",
+      "source": "src/engine/screencapture.asm",
+      "binary": "screencapture.bin",
+      "sha256": "0098c985f9a6ec04aeb68e1a485484f051220accad33dd20f92b5279a7788bb4",
+      "bytes": 83,
+      "raw_offset": "0x71e1e",
+      "loaded_address": "0x4c81e",
+      "public_entry": "0x4c81e",
+      "binary_offset": 783,
+      "le_pointers": 2
     },
     {
       "symbol": "drawmasks_sort_and_draw",
