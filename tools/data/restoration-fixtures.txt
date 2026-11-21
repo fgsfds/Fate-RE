@@ -123,3 +123,4 @@ check_netctrl --exe {exe} --object {build}/netinitc.obj --output {build}/netctrl
 check_serial_init --exe {exe} --build {build} --output {build}/serial-init-behavior.json | serialin
 check_game_receive_packets --exe {exe} --build {build} --output {build}/game-receive-behavior.json | recvpkt recvcrc recvpar recvhigh recvhead recvsend recvfrag
 check_main_menu --exe {exe} --build {build} --output {build}/main-menu-behavior.json | mainmenu menuprep
+check_sector_puzzle --exe {exe} --build {build} --output {build}/sector-puzzle-behavior.json | sectpuz puzact

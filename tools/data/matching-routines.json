@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1232,
-  "unique_code_bytes": 177829,
-  "le_pointers": 9730,
+  "routines": 1235,
+  "unique_code_bytes": 178761,
+  "le_pointers": 9789,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -988,6 +988,36 @@
       "loaded_address": "0x1dae9",
       "bytes": 1,
       "le_pointers": 0
+    },
+    {
+      "symbol": "puzzle_tile_solution_",
+      "object": "sectpuz.obj",
+      "object_sha256": "086e4e655ab7ff4c01712c75fc4160ed661030ce11fd89fea9c583bb3f56e4bd",
+      "sha256": "7afc7c490a64e59cf0bf7781d46d6dbe08770fbb3758f55473e8a91ad6cd1d81",
+      "raw_offset": "0x430ea",
+      "loaded_address": "0x1daea",
+      "bytes": 410,
+      "le_pointers": 26
+    },
+    {
+      "symbol": "puzzle_activate_walls_",
+      "object": "puzact.obj",
+      "object_sha256": "70fca15b3c150b452be4a7a6c0f1b5df2c0e5fb20a29c176b2db4804203ef9a6",
+      "sha256": "2973fa4e7fe906f9dd78d7bf796ea993e6f15f578230c0338d0b2db3070287ff",
+      "raw_offset": "0x43284",
+      "loaded_address": "0x1dc84",
+      "bytes": 64,
+      "le_pointers": 5
+    },
+    {
+      "symbol": "puzzle_key_effect_exit_",
+      "object": "sectpuz.obj",
+      "object_sha256": "086e4e655ab7ff4c01712c75fc4160ed661030ce11fd89fea9c583bb3f56e4bd",
+      "sha256": "d7eae54b03db8dd2d74a6343a59ccef751dcf82ea6d8bdc92ea668be347aad68",
+      "raw_offset": "0x432c4",
+      "loaded_address": "0x1dcc4",
+      "bytes": 458,
+      "le_pointers": 28
     },
     {
       "symbol": "update_board_5_script_",

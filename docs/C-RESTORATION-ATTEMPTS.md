@@ -127,16 +127,13 @@ and argument lifetimes; position-struct reuse spills the correct slots but
 changes entry allocation. Player-mirror and tag-width differences remain.
 Evidence and hash-bound behavior report: `work/numbered-board-next/evidence.json`.
 
-### Level-sector puzzle activation staging
+### Encounter spawn-height lifetime
 
-`update_level_sector_puzzle_`, Watcom 10.5 `/4r /s /or /bt=dos`:
-`work/puzzle-next/tile_lifetime.c` emits 933 bytes versus 932 and passes
-128 differential cases, but fails exact bytes/LE. Its only normalized
-difference is solution activation at `0x1dc84`: tag 6 uses EDI instead of EAX.
-Scoped EDI-enabled/EAX-tag/EDX-zero values recover that group but perturb the
-earlier tile comparison and later constant hoisting. Next align those shared
-lifetimes across the whole routine, retaining its empty loops and typed stages.
-Evidence and hashes: `work/puzzle-next/evidence.json`.
+Watcom 10.5 `/4r /s /or /bt=dos`: the candidate is 1,219 bytes versus 1,263.
+First mismatch: EBP is not saved; the original keeps spawn height in EBP across
+the loop while C rematerializes it inside. Next preserve the original
+tail-tested loop layout to test invariant hoisting. Evidence:
+`work/encounter-next/probe-report.json`.
 
 ### Whole palette search frame
 

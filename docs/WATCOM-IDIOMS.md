@@ -33,7 +33,11 @@ The checked-in fixtures currently establish:
   return. Public layout and shared tails therefore matter, not only isolated
   byte counts.
 - `keep_edx`: an external call declared `modify exact [eax]` lets the caller
-  retain its second input in EDX across the call.
+  retain its second input in EDX across the call. The puzzle activation phase
+  uses this contract to carry the clear tag through `activate_sector_`; its
+  two compiler contexts are accepted only as three individually pinned
+  410/64/458-byte slices, with five original branch displacements rebound.
+  Compare each selected slice and its LE targets, not either whole public.
 - `aborting_wrapper`: the tested `aborts` declaration generates a tail JMP,
   not an unconditional guarantee of a particular fatal CALL/no-RET sequence.
 - `rotate_idiom`: this shift/OR expression remains separate shifts and an OR,

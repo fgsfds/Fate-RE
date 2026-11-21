@@ -4443,6 +4443,57 @@ DATA_OFFSETS.update({'_loading_caption_columns': 0x12df8, '_loading_caption': 0x
                      '_menu_dispatch_active': 0x77118})
 FUNCTION_ADDRESSES.update({'draw_menu_text_': 0x386d3, 'main_menu_select_': 0x3a171})
 
+# Consecutive phases of the board-three puzzle; no private context bytes linked.
+LEAVES.update({'puzzle_tile_solution_': (0x430ea, 410),
+               'puzzle_activate_walls_': (0x43284, 64),
+               'puzzle_key_effect_exit_': (0x432c4, 458)})
+LEAF_CODE_SLICES.update({
+    'puzzle_tile_solution_': ('update_level_sector_puzzle_', 0, 0x19a, 933),
+    'puzzle_activate_walls_': ('puzzle_activation_context_', 0x19a, 0x1da, 929),
+    'puzzle_key_effect_exit_': ('update_level_sector_puzzle_', 0x1db, 0x3a5, 933),
+})
+LEAF_SECTION_BRANCHES['update_level_sector_puzzle_'] = (933, 932, {
+    0x00d: (bytes.fromhex('0f85'), 0x1db, 0x1da),
+    0x12b: (bytes.fromhex('0f8e'), 0x1db, 0x1da),
+    0x17c: (bytes.fromhex('75'), 0x1db, 0x1da),
+    0x18a: (bytes.fromhex('75'), 0x1db, 0x1da),
+    0x198: (bytes.fromhex('75'), 0x1db, 0x1da),
+})
+DATA_OFFSETS.update({'_sprite_tile': 2113710,
+ '_player_x': 372124,
+ '_player_y': 372060,
+ '_last_tile_step': 75752,
+ '_puzzle_solved': 75756,
+ '_key_sprite_consumed': 75760,
+ '_game_clock': 2653832,
+ '_previous_effect_active': 545172,
+ '_effect_active': 545176,
+ '_effect_x': 545180,
+ '_effect_y': 545184,
+ '_sector_14_lotag': 2606578,
+ '_sector_15_lotag': 2606618,
+ '_sector_30_lotag': 2607218,
+ '_sector_30_wall_start': 2607184,
+ '_sector_30_wall_count': 2607186,
+ '_sector_floor_tile': 2606008,
+ '_sector_107_floor_tile': 2610288,
+ '_sector_108_floor_tile': 2610328,
+ '_sector_109_floor_tile': 2610368,
+ '_trigger_count': 15334,
+ '_trigger_sprite': 487716,
+ '_trigger_target': 487718,
+ '_wall_tile': 2329584,
+ '_transition_marker': 515822,
+ '_destination_level': 8256,
+ '_destination_x': 502168,
+ '_destination_y': 502172})
+FUNCTION_ADDRESSES.update({'absolute_long_': 393923,
+ 'activate_sector_': 165648,
+ 'remove_sprite_': 69535,
+ 'spawn_level_effect_': 79698,
+ 'update_level_sector_puzzle_': 121578,
+ 'puzzle_activation_context_': 121578})
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

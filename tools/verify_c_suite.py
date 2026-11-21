@@ -945,6 +945,10 @@ OBJECT_NAMES.update({'main_menu_resume_guard_': 'mainmenu',
                      'receive_packets_checksums_': 'recvcrc',
                      'receive_packets_parity_': 'recvpar'})
 
+OBJECT_NAMES.update({'puzzle_tile_solution_': 'sectpuz',
+                     'puzzle_activate_walls_': 'puzact',
+                     'puzzle_key_effect_exit_': 'sectpuz'})
+
 GROUPS = {
     'stdwrap': (462, STDIO_HELPERS),
     'bufseek': (66, ('seek_within_buffer_',)),
@@ -1483,6 +1487,10 @@ def verify_compiler_groups(exe, directory, names=None):
     for name, size, public in (('recvhigh', 10, 'receive_button_high_'),
                                ('recvhead', 37, 'receive_ready_context_'),
                                ('recvsend', 18, 'receive_ready_send_')):
+        if selected(name):
+            verify_group_layout((directory/(name+'.obj')).read_bytes(), size, [(public, 0)])
+    for name, size, public in (('sectpuz', 933, 'update_level_sector_puzzle_'),
+                               ('puzact', 929, 'puzzle_activation_context_')):
         if selected(name):
             verify_group_layout((directory/(name+'.obj')).read_bytes(), size, [(public, 0)])
     if selected('menuprep'):

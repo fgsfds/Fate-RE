@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 483,
-  "unique_code_bytes": 236810,
-  "le_pointers": 12819,
+  "routines": 482,
+  "unique_code_bytes": 235878,
+  "le_pointers": 12760,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -6356,18 +6356,6 @@
       "public_entry": "0x19c7d",
       "binary_offset": 0,
       "le_pointers": 13
-    },
-    {
-      "symbol": "update_level_sector_puzzle",
-      "source": "src/fate/level_sector_puzzle.asm",
-      "binary": "level_sector_puzzle.bin",
-      "sha256": "614d3deffdcbac4e185ee8945acce48aacf75694fe36cb0869f044e1034d26b0",
-      "bytes": 932,
-      "raw_offset": "0x430ea",
-      "loaded_address": "0x1daea",
-      "public_entry": "0x1daea",
-      "binary_offset": 0,
-      "le_pointers": 59
     },
     {
       "symbol": "update_level_encounter",
