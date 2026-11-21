@@ -846,11 +846,11 @@ Scratch: `work/main-menu-next/evidence.json`; no accepted coverage.
 ### Sprite waypoint target: remaining blocker
 
 With Watcom 10.5 `/4r /s /or /bt=dos`, `select_sprite_path_target_`
-passes all 44 behavioral cases at 823 bytes, but
-its reference is 834 bytes and neither byte identity nor LE relocation identity
-matches. Keep the production assembly. The remaining mismatch is compiler
-allocation and scheduling: stack spill placement, ceiling-offset scheduling,
-point-load staging, and cache-scalar lifetimes differ. Do not force padding or
-fake clobbers; recover the source-level lifetimes and recheck the complete bytes
-and LE sites. No C coverage is credited. Evidence:
+passes all 44 behavioral cases at 834 bytes, matching the 834-byte reference;
+byte and LE relocation identity still fail. `sptarg23` restores the
+32-byte stack frame and all eight slot positions. Its first divergence is a hoisted
+`mov edi, ecx` at `0x19c83`. Remaining gaps are visibility-call scheduling, the
+search ESI/EDI pair, and cache lifetimes. Keep `sptarg18` (normalized search and
+row) and `sptarg23` (selected trace) as future merge references.
+Production assembly remains; no C coverage is credited. Evidence:
 `work/sprite-path-target-next/evidence.json`.
