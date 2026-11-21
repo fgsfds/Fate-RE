@@ -509,3 +509,4 @@ fate/receive_ready_send recvsend
 fate/receive_fragments recvfrag
 network/recvlen recvlen
 fate/mainmenu mainmenu
+fate/menuprep menuprep

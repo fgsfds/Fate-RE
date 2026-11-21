@@ -172,7 +172,7 @@ A length-scaling phase can return its result in EAX, then a separate clock phase
 
 ## Main-menu shared-frame idiom
 
-Keep the retained 32-byte table and alignment in place; a checked compiler table is excluded and earns zero restoration credit. Use guarded CALL boundaries where selected contexts need them, and local branches for nearby control flow. Keep the shared-frame continuation as a tail transfer. Generic loaded leaf bindings were intentionally declined; use `check_main_menu` to validate the integrated object and behavior.
+Keep the retained 32-byte table and alignment in place; a checked compiler table is excluded and earns zero restoration credit. The selected C prefix emits a real outgoing PUSH; the following draw_menu_text call consumes that argument through its RET 4. Guard the private call/read suffix and verify exact fixup names and addends even though those successor instructions stay unlinked. Keep the shared-frame continuation as a tail transfer. The generic loaded-binding limitation applies to the switched main-menu binder; use `check_main_menu` to validate the integrated object and behavior.
 
 ## Reusable receiver ABI lesson
 

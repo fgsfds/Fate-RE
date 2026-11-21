@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1225,
-  "unique_code_bytes": 177712,
-  "le_pointers": 9721,
+  "routines": 1227,
+  "unique_code_bytes": 177775,
+  "le_pointers": 9726,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -3130,6 +3130,16 @@
       "le_pointers": 4
     },
     {
+      "symbol": "main_menu_selection_",
+      "object": "menuprep.obj",
+      "object_sha256": "ae97197a867fba4379b376ada31ff3845104ca1c3f15e1caa9e3a901f9505718",
+      "sha256": "f32715430a53c7e298caa0f53e67b566cc9561a1a8108cc17f9e5cd2771ff757",
+      "raw_offset": "0x5f771",
+      "loaded_address": "0x3a171",
+      "bytes": 23,
+      "le_pointers": 3
+    },
+    {
       "symbol": "main_menu_loop_",
       "object": "mainmenu.obj",
       "object_sha256": "5629b3050464e460872a7198bc2bc6b34b24ff0b564064e98e8992b9bc04554a",
@@ -3138,6 +3148,16 @@
       "loaded_address": "0x3a188",
       "bytes": 212,
       "le_pointers": 12
+    },
+    {
+      "symbol": "main_menu_caption_",
+      "object": "menuprep.obj",
+      "object_sha256": "ae97197a867fba4379b376ada31ff3845104ca1c3f15e1caa9e3a901f9505718",
+      "sha256": "c45601b7ca05eea1a1b030f710edb9f22829486fb0414a93a38eee2dcc7b9764",
+      "raw_offset": "0x5f85c",
+      "loaded_address": "0x3a25c",
+      "bytes": 40,
+      "le_pointers": 2
     },
     {
       "symbol": "main_menu_actions_",

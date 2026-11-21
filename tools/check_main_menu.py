@@ -9,7 +9,7 @@ from pathlib import Path
 from bind_main_menu_sections import BASE, DATA, FUNCTIONS, SECTIONS, bind_section
 from check_start_hook import DS, image
 from le_fixups import read_le_fixups
-from verify_c_leaf import verify_leaf_relocations
+from verify_c_leaf import bind_leaf_details, verify_leaf_relocations, FUNCTION_ADDRESSES
 
 ENTRY, SIZE = 0x3a148, 541
 DS_SIZE = 3538944
@@ -153,10 +153,15 @@ def hash_file(path):
 def artifact_hashes(object_path):
     object_path = Path(object_path)
     source = object_path.parent / 'mainmenu.c'
+    prep_source = object_path.parent / 'menuprep.c'
+    prep_object = object_path.parent / 'menuprep.obj'
     if not source.is_file():
         raise FileNotFoundError(f'Missing main menu source for hash report: {source}')
+    for path in (prep_source, prep_object):
+        if not path.is_file():
+            raise FileNotFoundError(f'Missing menu preparation artifact for hash report: {path}')
     assembly = {}
-    for name in ('main_menu_entry.bin', 'main_menu_caption.bin', 'main_menu_resume.bin'):
+    for name in ('main_menu_entry.bin', 'main_menu_resume.bin'):
         path = object_path.parent / 'asm' / name
         if not path.is_file():
             path = object_path.parent / name
@@ -165,6 +170,8 @@ def artifact_hashes(object_path):
         assembly[name] = hash_file(path)
     return {'source_sha256': hash_file(source),
             'object_sha256': hash_file(object_path),
+            'menuprep_source_sha256': hash_file(prep_source),
+            'menuprep_object_sha256': hash_file(prep_object),
             'asm_sha256': assembly}
 
 
@@ -180,8 +187,7 @@ def normalize_span(memory, address, size, pointers):
 
 def verify_assembled_gaps(build, memory, pointers):
     build = Path(build)
-    gaps = (('main_menu_entry.bin', 0x3a127, 97),
-            ('main_menu_caption.bin', 0x3a25c, 40),
+    gaps = (('main_menu_entry.bin', 0x3a127, 74),
             ('main_menu_resume.bin', 0x3a2f3, 15))
     for name, address, size in gaps:
         path = build / name if build.is_dir() else build.parent / name
@@ -216,6 +222,25 @@ def bind_fixture(exe_bytes, object_bytes, build):
             le_sites.append(address + site)
         offset = address - BASE
         group[offset:offset + len(code)] = code
+    prep_object = Path(build).parent / 'menuprep.obj' if not Path(build).is_dir() else Path(build) / 'menuprep.obj'
+    if not prep_object.is_file():
+        raise FileNotFoundError(f'Missing menu preparation object: {prep_object}')
+    prep_bytes = prep_object.read_bytes()
+    for symbol, address, size in (('main_menu_selection_', 0x3a171, 23),
+                                  ('main_menu_caption_', 0x3a25c, 40)):
+        code_bindings = {}
+        code, bindings = bind_leaf_details(prep_bytes, symbol, DATA, address=address,
+                                           functions=FUNCTION_ADDRESSES, code_bindings=code_bindings)
+        if len(code) != size:
+            raise ValueError(f'{symbol}: expected {size} bytes, got {len(code)}')
+        original = normalize_span(memory, address, size, pointers)
+        if code != original:
+            raise ValueError(f'{symbol}: bytes differ from pinned image')
+        verify_leaf_relocations(code, bindings, pointers, address,
+                                code_bindings=code_bindings)
+        le_sites.extend(address + site for site in bindings)
+        offset = address - BASE
+        group[offset:offset + size] = code
     if bytes(group) != original_normalized:
         raise ValueError('Reconstructed 541-byte group differs from pinned image')
     verify_assembled_gaps(build, memory, pointers)
@@ -230,6 +255,10 @@ def bind_fixture(exe_bytes, object_bytes, build):
         if raw_target + delta != target:
             raise ValueError(f'Group relocation target differs at {site:#x}')
         struct.pack_into('<I', group, offset, target)
+    if len(set(le_sites)) != 26:
+        raise ValueError(f'Expected 26 selected LE fixups, got {len(set(le_sites))}')
+    if sum(end - start for _, start, end, _ in SECTIONS) + 23 + 40 != 453:
+        raise ValueError('Expected 453 selected main-menu bytes')
     return memory, bytes(group), sorted(set(le_sites))
 
 
@@ -278,7 +307,7 @@ def main():
             raise AssertionError(f'Behavior mismatch in case {index}: {case!r}')
     report = {'status': 'PASS', 'cases': 1442, 'sha256': PINNED_SHA256,
               **artifact_hashes(object_path),
-              'group_bytes': SIZE, 'selected_bytes': sum(s[2] - s[1] for s in SECTIONS),
+              'group_bytes': SIZE, 'selected_bytes': sum(s[2] - s[1] for s in SECTIONS) + 23 + 40,
               'ds_bytes': DS_SIZE, 'selected_le_sites': le_sites, 'group_le_sites': 38,
               'negative_controls':
               {'clock_store': 'detected', 'switch_case_target': 'detected'},

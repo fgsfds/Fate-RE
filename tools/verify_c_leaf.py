@@ -3676,6 +3676,8 @@ LEAF_ENTRY_PREFIX_FIXUPS = {
 # Unchanged compiler sections surrounding a separately verified assembly island.
 # Each row names the real OMF public, kept bounds, and required full public size.
 LEAF_CONTEXT_SUFFIXES = {
+    'main_caption_setup_': b'\xe8\x00\x00\x00\x00\xc3',
+    'main_menu_select_': b'\xa1\x00\x00\x00\x00\xc3',
     'getpacket_length_copy_': b'\xc3',
     'receive_button_low_': b'\xc3',
     'receive_checksum_order_': b'\xc3',
@@ -3688,7 +3690,18 @@ LEAF_CONTEXT_SUFFIXES = {
     'receive_ready_send_': b'\xe9\x00\x00\x00\x00',
 }
 
+LEAF_CONTEXT_FIXUPS = {
+    'main_caption_setup_': {2: ('_loading_caption_columns', False),
+                            12: ('_loading_caption', False), 41: ('draw_menu_text_', True)},
+    'main_menu_select_': {2: ('_game_in_progress', False),
+                          11: ('_main_menu_selection', False),
+                          19: ('_main_menu_selection', False),
+                          24: ('_menu_dispatch_active', False)},
+}
+
 LEAF_CODE_SLICES = {
+    'main_menu_caption_': ('main_caption_setup_', 0, 40, 46),
+    'main_menu_selection_': ('main_menu_select_', 0, 23, 29),
     'main_menu_loop_': ('dispatch_main_menu_', 0x43, 0x117, 497),
     'main_menu_actions_': ('dispatch_main_menu_', 0x13f, 0x1ae, 497),
     'main_menu_exit_': ('dispatch_main_menu_', 0x1ae, 0x1f1, 497),
@@ -3775,6 +3788,7 @@ DATA_OFFSETS.update({
 # Entries record immutable opcodes, compiler target offsets, and original target
 # offsets. Only displacement operands in the selected section are rebound.
 LEAF_SECTION_BRANCHES = {
+    'main_menu_select_': (29, 29, {7: (b'\x74', 17, 17), 15: (b'\xeb', 23, 23)}),
     'receive_packets_': (910, 916, {
         15: (b'\x0f\x84', 901, 907),
         49: (b'\x0f\x8e', 855, 856),
@@ -3914,6 +3928,18 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
     suffix = LEAF_CONTEXT_SUFFIXES.get(public_name, b'')
     if suffix and not code.endswith(suffix):
         raise ValueError('Unlinked compiler context suffix differs')
+    context_fixups = LEAF_CONTEXT_FIXUPS.get(public_name)
+    if context_fixups is not None:
+        observed = [f for f in fixups if f.segment == seg and start <= f.offset < end]
+        if len(observed) != len(context_fixups) or {f.offset-start for f in observed} != context_fixups.keys():
+            raise ValueError('Compiler context fixup inventory differs')
+        for f in observed:
+            if (f.location != 9 or f.width != 4 or f.target[0] != 2
+                    or not 0 < f.target[1] < len(externals)
+                    or f.frame[0] != 1 or f.frame[1] not in flat_groups
+                    or f.displacement or code[f.offset-start:f.offset-start+4] != bytes(4)
+                    or (externals[f.target[1]], f.relative) != context_fixups[f.offset-start]):
+                raise ValueError('Compiler context fixup target/form/addend differs')
     kept_start, kept_end = leaf_code_bounds(symbol, len(code))
     prefix = LEAF_ENTRY_PREFIXES.get(symbol, 0)
     if address is not None:
@@ -4399,6 +4425,16 @@ LEAVES['scan_two_planes_right_'] = (0x97cf5, 4)
 LEAVES['get_audio_data_selector_'] = (0x8c16b, 4)
 LEAVES['get_audio_code_selector_'] = (0x8c16f, 4)
 
+LEAVES.update({'main_menu_loop_': (0x5f788, 212),
+               'main_menu_actions_': (0x5f884, 111),
+               'main_menu_exit_': (0x5f902, 67)})
+
+LEAVES.update({'main_menu_caption_': (0x5f85c, 40), 'main_menu_selection_': (0x5f771, 23)})
+DATA_OFFSETS.update({'_loading_caption_columns': 0x12df8, '_loading_caption': 0xd7c,
+                     '_game_in_progress': 0x772b8, '_main_menu_selection': 0x1740ec,
+                     '_menu_dispatch_active': 0x77118})
+FUNCTION_ADDRESSES.update({'draw_menu_text_': 0x386d3, 'main_menu_select_': 0x3a171})
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)
@@ -4419,7 +4455,3 @@ if __name__ == '__main__':
     verify_leaf_relocations(code, bindings, read_le_fixups(exe)['pointers'], offset-0x25600,
                             code_bindings=code_bindings)
     print(f'PASS: {args.symbol} all {size} bytes and {len(bindings)} LE pointer targets match')
-
-LEAVES.update({'main_menu_loop_': (0x5f788, 212),
-               'main_menu_actions_': (0x5f884, 111),
-               'main_menu_exit_': (0x5f902, 67)})

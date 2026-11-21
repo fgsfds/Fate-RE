@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 485,
-  "unique_code_bytes": 236927,
-  "le_pointers": 12828,
+  "routines": 484,
+  "unique_code_bytes": 236864,
+  "le_pointers": 12823,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -1765,25 +1765,13 @@
       "symbol": "main_menu_entry",
       "source": "src/fate/dispatch_main_menu.asm",
       "binary": "main_menu_entry.bin",
-      "sha256": "ae8d648ed6a36edbf4ad13a2711f67e304a038d3507b9cf7c17625cc6862a5ba",
-      "bytes": 64,
+      "sha256": "b3c5a7dea068dc10d71024eb61334035a9deafe49d3b1413bb64f2e34bbef808",
+      "bytes": 41,
       "raw_offset": "0x5f748",
       "loaded_address": "0x3a148",
       "public_entry": "0x3a148",
       "binary_offset": 33,
-      "le_pointers": 6
-    },
-    {
-      "symbol": "main_menu_caption",
-      "source": "src/fate/main_menu_caption.asm",
-      "binary": "main_menu_caption.bin",
-      "sha256": "c45601b7ca05eea1a1b030f710edb9f22829486fb0414a93a38eee2dcc7b9764",
-      "bytes": 40,
-      "raw_offset": "0x5f85c",
-      "loaded_address": "0x3a25c",
-      "public_entry": "0x3a25c",
-      "binary_offset": 0,
-      "le_pointers": 2
+      "le_pointers": 3
     },
     {
       "symbol": "main_menu_resume",

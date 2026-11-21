@@ -817,13 +817,7 @@ Evidence: work/terminal-native-next/prep.c and whole.c.
 
 ### Main-menu shared frame
 
-`dispatch_main_menu`, `/4r /s /or /bt=dos`: 390 bytes are native C, with 119
-ASM body bytes remaining. The original 32-byte jump table and alignment byte remain assembly;
-the compiler table is checked but unlinked. Its 1,442 behavior cases and two controls pass.
-The remaining ASM is the 64-byte entry, 40-byte caption allocation, and
-15-byte resume path. Next isolate entry/clock ordering, then caption allocation.
-Evidence: `work/main-menu-native-build/validation.json`,
-`work/main-menu-native-audit.json`, and `work/main-menu-native-handoff.json`.
+`dispatch_main_menu`, `/4r /s /or /bt=dos`: 453 bytes are native C, with 56 ASM body bytes remaining. The original 32-byte jump table and alignment byte remain assembly; the compiler table is checked but unlinked. Its 1,442 behavior cases and two controls pass. The remaining ASM is the 41-byte entry and 15-byte resume path. The blocker is entry/clock ordering and resume sequencing. Evidence: `work/menu-prep-build/validation.json`, `work/menu-prep-audit.json`, and `work/menu-prep-handoff.json`.
 
 ### Sprite waypoint target: remaining blocker
 

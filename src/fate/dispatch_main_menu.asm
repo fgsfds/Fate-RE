@@ -44,7 +44,6 @@ dispatch_main_menu.save_game equ 0x3a2df
 dispatch_main_menu.help equ 0x3a2e9
 dispatch_main_menu.resume equ 0x3a2f3
 dispatch_main_menu.confirm_exit equ 0x3a302
-dispatch_main_menu.branch_3a188 equ 0x3a188
 
     nop
 
@@ -72,10 +71,3 @@ dispatch_main_menu:
     call reset_menu_animation_clock
     mov [frame_state_13150], edx
     call cache_menu_tiles
-    cmp dword [frame_state_772b8], 0x0
-    jz short .branch_3a182
-    mov [frame_state_1740ec], esi
-    jmp short .branch_3a188
-
-.branch_3a182:
-    mov [frame_state_1740ec], edx
