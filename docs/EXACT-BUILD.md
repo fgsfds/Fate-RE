@@ -1,19 +1,26 @@
 # Reproducing the October 1996 FATE.EXE
 
-On 64-bit Windows, run from the repository root with PowerShell 7.4 or later
-and 64-bit Python 3.12 on PATH, as used in CI.
+On 64-bit Windows, run from the repository root with 64-bit Python 3.12 on PATH,
+as used in CI. PowerShell is optional for the exact build.
 
 ```powershell
 python tools/verify_ci_build.py
 ```
 
-The Python entry point verifies the bundled inputs and installs the pinned test
-wheels under the build directory. It calls the PowerShell compiler driver to
+The Python entry point verifies the bundled inputs and calls the Python compiler driver to
 compile the C sources with Watcom 10.5 under DOSBox, then assembles the NASM
 sources and packs the LE executable at `work/ci-build/FATE.EXE`.
 It checks the pinned size of 741,347 bytes and SHA-256
 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.
-Move the previous output directory before rerunning the script.
+Use `--resume` to rebuild and recheck image identity while reusing only verified compiler and
+NASM outputs, or use `--build work/<new-name>` for another clean build.
+Default validation is exact-image acceptance only: no unit-test suite, behavioral
+fixtures, test-wheel installation, or game smoke. Add `--full --jobs 4` for the
+broad regression suite on tooling changes or periodic checkpoints; fixtures then
+run concurrently. Smoke requires the separate, explicit `--full --smoke` option
+and is skipped for the current restoration task.
+See the [focused restoration workflow](RESTORATION-WORKFLOW.md) for probes,
+changed-unit checks, provenance, bounded logs, and stage timings.
 
 The [pinned inputs](../tools/inputs.sha256) include the 10,832-byte DOS/4G stub
 from `EDITART.EXE`, the Watcom 10.5 compiler and graphics library, NASM 3.02,
@@ -48,8 +55,13 @@ See [the recorded gameplay observations](GAMEPLAY.md#dosbox-observations).
 
 ## Verification tools
 
+The explicit `--full` build writes and checks `work/ci-build/c.json` and
+`work/ci-build/assembly.json` against the checked-in CODE inventories. It checks
+the Watcom bytes and LE pointer sites and targets against the hash-verified
+executable, so these checks run from a fresh checkout.
+
 After building, use the commands below with a separate copy of the original
-demo to regenerate the C, assembly, DATA, and font reports. Run the commands
+demo to compare directly and regenerate the C, assembly, DATA, and font reports. Run the commands
 in the same PowerShell session if you plan to reproduce the
 [START gameplay reports](GAMEPLAY.md#reproducing-the-door-and-barrel-reports).
 The DATA and gameplay checks use Unicorn 2.1.4, and the gameplay checks also
@@ -59,7 +71,7 @@ use Capstone 5.0.9.
 $demo = 'C:/path/to/Fate demo'
 $original = Join-Path $demo FATE.EXE
 $build = 'work/ci-build'
-$env:PYTHONPATH = "$build/python-deps"
+$env:PYTHONPATH = '<dependency-cache-directory>'
 python tools/compare_exe.py $original "$build/FATE.EXE"
 python tools/verify_c_suite.py $original $build --output "$build/c.json"
 python tools/verify_assembly_suite.py $original "$build/asm" "$build/c.json" --output "$build/assembly.json"
@@ -72,11 +84,13 @@ python tools/graphics_font_dependency.py $original tools/inputs/watcom/lib386/do
 To run the Python unit tests by themselves after installing the pinned wheels:
 
 ```powershell
-$env:PYTHONPATH = "tools;work/ci-build/python-deps"
+$env:PYTHONPATH = "tools;<dependency-cache-directory>"
 python -m unittest discover -s tools/tests -q
 ```
 
-The [build workflow](../.github/workflows/build.yml) checks the bundled input
-hashes, runs the Python tests, and verifies the rebuilt executable against the
-pinned size and SHA-256. It also checks the START hook fixtures and runs
-`FATE -HELP` in DOSBox.
+The [build workflow](../.github/workflows/build.yml) always checks the bundled
+inputs and verifies the freshly rebuilt executable against the pinned size and
+SHA-256. Source/documentation-only pushes use exact mode. Tooling/configuration
+changes, first pushes, and manual workflow runs use `--full`, adding Python tests,
+compiler regressions, C/assembly inventories, and behavioral fixtures.
+Neither mode runs game smoke implicitly.

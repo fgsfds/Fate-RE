@@ -21,29 +21,17 @@ replace_byte_pixel:
 .fragment_end:
     ret
 
-    db step_byte_up_320.fragment_end - step_byte_up_320
-step_byte_up_320:
-    sub edi, 0x140
-.fragment_end:
-    ret
+    db 6 ; Fragment length for the C-replaced 320-pixel callback.
+    times 7 db 0 ; Reserved for step_byte_up_320 in graphics_byte_steps.c.
 
-    db step_byte_down_320.fragment_end - step_byte_down_320
-step_byte_down_320:
-    add edi, 0x140
-.fragment_end:
-    ret
+    db 6 ; Fragment length for the C-replaced 320-pixel callback.
+    times 7 db 0 ; Reserved for step_byte_down_320 in graphics_byte_steps.c.
 
-    db step_byte_left.fragment_end - step_byte_left
-step_byte_left:
-    dec edi
-.fragment_end:
-    ret
+    db 1 ; Fragment length for the C-replaced horizontal callback.
+    times 2 db 0 ; Reserved for step_byte_left in graphics_byte_steps.c.
 
-    db step_byte_right.fragment_end - step_byte_right
-step_byte_right:
-    inc edi
-.fragment_end:
-    ret
+    db 1 ; Fragment length for the C-replaced horizontal callback.
+    times 2 db 0 ; Reserved for step_byte_right in graphics_byte_steps.c.
 
 read_byte_pixel:
     mov al, byte es:[edi]

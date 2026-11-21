@@ -339,72 +339,9 @@ update_level_encounter:
     jnz short .check_exit_scan
     mov word [second_trigger_state], 0x2
 
-.check_exit_scan:
-    cmp word [exit_scan_initialized], 0x0
-    jnz short .check_first_actor_kind
-    mov ecx, 0x1
-    mov [exit_scan_initialized], cx
-    mov [exit_scan_index], cx
-    jmp short .check_exit_scan_index
-
-.inspect_exit_sector_type:
-    movsx eax, word [nosplit eax*4 + exit_sector_type]
-    cmp eax, 0xb
-    jz short .check_first_actor_kind
-    inc word [exit_scan_index]
-
-.check_exit_scan_index:
-    movsx eax, word [exit_scan_index]
-    cmp eax, 0x1f
-    jng short .inspect_exit_sector_type
-
-.check_first_actor_kind:
-    xor eax, eax
-    mov al, [first_actor_kind]
-    cmp eax, 0x3
-    jz near .return
-    movsx eax, word [first_trigger_state]
-    cmp eax, 0x2
-    jz near .return
-    movsx eax, word [encounter_position]
-    cmp eax, 0x1
-    jnz short .check_exit_trigger_state
-    mov eax, 0x2
-    mov bl, 0x1
-    mov [first_trigger_state], ax
-    mov [first_actor_mode], bl
-
-.check_exit_trigger_state:
-    mov dx, [first_trigger_state]
-    test dx, dx
-    jnz short .update_first_actor
-    movsx eax, word [exit_scan_index]
-    cmp word [nosplit eax*4 + exit_sector_index], 0x0
-    jz short .return
-    mov word [first_trigger_state], 0x1
-    jmp short .return
-
-.update_first_actor:
-    movsx eax, dx
-    cmp eax, 0x1
-    jnz short .return
-    mov eax, 0x3e
-    call update_actor_common
-    push strict dword exit_trigger_state
-    mov ecx, 0x410a
-    mov ebx, 0x18f8
-    push strict dword 0x1800
-    mov edx, 0x1df4
-    mov eax, 0x3e
-    call update_sprite_sequence_state
-    cmp byte [first_actor_state], 0x0
-    jnz short .return
-    mov cl, 0x2
-    movsx eax, word [second_trigger_sprite]
-    mov ebx, 0x2
-    call delete_sprite
-    mov [first_actor_mode], cl
-    mov [first_trigger_state], bx
+; Complete exit-state phase is linked from encounter_exit.c at this address.
+.check_exit_scan equ 0x1e30b
+; The return bytes follow in this blob and are placed separately at 0x1e410.
 
 .return:
     add esp, strict dword 0xb8

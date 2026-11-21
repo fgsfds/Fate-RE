@@ -223,19 +223,18 @@ if __name__ == '__main__':
     integrated_cases = 0
     if args.sector_integration:
         import check_spritechange as change
-        from check_initksqrt import verified_code
-        from check_spritelists import relocated_list
+        from check_initksqrt import verified_tail
         directory, inventory, changes, owner = args.sector_integration
-        _, tail = verified_code(exe, directory, json.loads(inventory.read_text(encoding='utf-8')),
-                                owner.read_bytes())
+        tail = verified_tail(exe, directory, json.loads(inventory.read_text(encoding='utf-8')),
+                             owner.read_bytes())
         change_blob = changes.read_bytes()
         change.verify(exe, change_blob)
         wrapper, _ = bind_leaf_details(change_blob, 'changespritesect_',
                                        {k:v+0x80000 for k,v in change.DATA.items()},
                                        address=0x50bc3, functions=change.FUNCTIONS)
         sector_code = {0x4abbf:tail, 0x50bc3:wrapper,
-                       0x508cd:relocated_list('insertspritesect_',directory),
-                       0x50a1d:relocated_list('deletespritesect_',directory)}
+                       0x508cd:loaded[0x508cd:0x5096b],
+                       0x50a1d:loaded[0x50a1d:0x50af0]}
         integrated = exercise(compiled, append_loaded, sector_code)
         assert integrated == compiled_cases
         integrated_cases = len(integrated)

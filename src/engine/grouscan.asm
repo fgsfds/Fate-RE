@@ -1,15 +1,10 @@
 ; Draw a sloped sector plane using the vertical slope rasterizer.
 BITS 32
-ORG 0x5f1f8
+ORG 0x5f468
 
-sector equ 0x27c3a0
 wall equ 0x2310a0
-picanm equ 0x1ed3a0
 sqrtable equ 0x1dfa60
 picsiz equ 0x1e5fe0
-tilesizx equ 0x1f2020
-tilesizy equ 0x1f4020
-walock equ 0x1f8ca0
 waloff equ 0x1ffca0
 chainplace equ 0x286b4c
 chainstat equ 0x14003
@@ -32,7 +27,6 @@ globalx2 equ 0x286a4c
 globaly1 equ 0x286a50
 globaly2 equ 0x286a58
 reciptable equ 0x1d3160
-gotpic equ 0x1ecda0
 projection_scale equ 0x286b00
 tile_y_shift equ 0x2891d6
 globalposy equ 0x286ad4
@@ -60,187 +54,12 @@ engine_1a3e60 equ 0x1a3e60
 engine_1a7ce0 equ 0x1a7ce0
 engine_286a48 equ 0x286a48
 engine_286a54 equ 0x286a54
-getceilzofslope equ 0x5de70
-getflorzofslope equ 0x5df75
-animateoffs equ 0x50758
-loadtile equ 0x4bb0d
 setupslopevlin equ 0x74f20
 getpalookup equ 0x5fed7
 slopevlin equ 0x74f70
 faketimerhandler equ 0x31ec4
 
-grouscan_:
-    push esi
-    push edi
-    push ebp
-    sub esp, 0x60
-    push eax
-    push edx
-    mov esi, ebx
-    mov byte [esp + 0x64], cl
-    movsx ecx, bx
-    mov eax, ecx
-    shl eax, 2
-    add eax, ecx
-    mov ebp, sector
-    shl eax, 3
-    add ebp, eax
-    cmp byte [esp + 0x64], 0
-    jne short .select_floor
-    mov ebx, dword [globalposy]
-    mov edx, dword [globalposx]
-    mov eax, ecx
-    call getceilzofslope
-    cmp eax, dword [globalposz]
-    jge near .restore_stack
-    movsx eax, word [ebp + 0xc]
-    mov dword [globalorientation], eax
-    mov ax, word [ebp + 0x10]
-    mov word [globalpicnum], ax
-    movsx eax, byte [ebp + 0x14]
-    mov dword [globalshade], eax
-    xor eax, eax
-    mov al, byte [ebp + 0x15]
-    mov dword [globalpal], eax
-    movsx eax, word [ebp + 0x12]
-    mov dword [esp + 0x1c], eax
-    mov eax, dword [ebp + 4]
-    jmp short .select_tile
-
-.select_floor:
-    mov ebx, dword [globalposy]
-    mov edx, dword [globalposx]
-    mov eax, ecx
-    call getflorzofslope
-    cmp eax, dword [globalposz]
-    jle near .restore_stack
-    movsx eax, word [ebp + 0xe]
-    mov dword [globalorientation], eax
-    mov ax, word [ebp + 0x18]
-    mov word [globalpicnum], ax
-    movsx eax, byte [ebp + 0x1c]
-    mov dword [globalshade], eax
-    xor eax, eax
-    mov al, byte [ebp + 0x1d]
-    mov dword [globalpal], eax
-    movsx eax, word [ebp + 0x1a]
-    mov dword [esp + 0x1c], eax
-    mov eax, dword [ebp + 8]
-
-.select_tile:
-    mov dword [esp + 0x28], eax
-    movsx eax, word [globalpicnum]
-    test byte [eax*4 + picanm], 0xc0
-    je short .branch_0ef
-    movsx edx, si
-    call animateoffs
-    add word [globalpicnum], ax
-
-.branch_0ef:
-    movsx edx, word [globalpicnum]
-    lea eax, [edx + edx]
-    cmp word [eax + tilesizx], 0
-    jle near .restore_stack
-    cmp word [eax + tilesizy], 0
-    jle near .restore_stack
-    cmp dword [edx*4 + waloff], 0
-    jne short .branch_126
-    mov eax, edx
-    call loadtile
-
-.branch_126:
-    mov ax, word [globalpicnum]
-    cwde
-    mov ebx, eax
-    cmp byte [eax + walock], 0xc8
-    jae short .branch_13f
-    mov byte [eax + walock], 0xc7
-
-.branch_13f:
-    shr eax, 3
-    and ebx, 7
-    mov dl, byte [eax + gotpic]
-    mov bl, byte [ebx + pow2char]
-    or dl, bl
-    mov byte [eax + gotpic], dl
-    movsx eax, word [ebp]
-    mov edx, wall
-    shl eax, 5
-    add edx, eax
-    movsx eax, word [edx + 8]
-    mov dword [esp + 0x30], edx
-    shl eax, 5
-    mov ebx, dword [esp + 0x30]
-    mov edx, dword [eax + wall]
-    mov esi, dword [ebx]
-    sub edx, esi
-    mov dword [esp + 0x2c], edx
-    imul edx, edx
-    mov edi, dword [ebx + 4]
-    mov eax, dword [eax + engine_2310a4]
-    sub eax, edi
-    mov dword [esp + 0x24], eax
-    imul eax, eax
-    add eax, edx
-    mov dword [engine_286b20], eax
-    fild dword [engine_286b20]
-    fstp dword [engine_286b20]
-    mov bl, byte [engine_286b23]
-    sub bl, 0x44
-    jge short .branch_1c3
-    xor ebx, ebx
-    mov bx, word [nosplit eax*2 + sqrtable]
-    jmp short .branch_1da
-
-.branch_1c3:
-    lea ecx, [nosplit ebx*2]
-    shr eax, cl
-    mov cl, bl
-    xor ebx, ebx
-    mov bx, word [nosplit eax*2 + sqrtable]
-    shl ebx, cl
-
-.branch_1da:
-    shr ebx, 0xa
-    mov eax, ebx
-    mov dword [engine_286b20], eax
-    fild dword [engine_286b20]
-    add eax, eax
-    fstp dword [engine_286b20]
-    sbb ebx, ebx
-    mov eax, dword [engine_286b20]
-    mov ecx, eax
-    and eax, 0x7ff000
-    shr eax, 0xa
-    sub ecx, 0x3f800000
-    shr ecx, 0x17
-    mov eax, dword [eax + reciptable]
-    sar eax, cl
-    xor eax, ebx
-    mov ecx, eax
-    mov ebx, eax
-    mov eax, dword [esp + 0x1c]
-    imul ebx
-    shrd eax, edx, 0x15
-    mov edx, dword [esp + 0x2c]
-    imul edx, eax
-    mov dword [esp + 0x2c], edx
-    mov edx, dword [esp + 0x24]
-    imul edx, eax
-    mov ebx, dword [engine_286b04]
-    mov eax, dword [engine_286af8]
-    mov dword [esp + 0x24], edx
-    imul ebx
-    shrd eax, edx, 0x13
-    mov ebx, dword [engine_286b04]
-    mov esi, eax
-    mov dword [engine_286a78], eax
-    neg esi
-    mov eax, dword [engine_286ac8]
-    mov dword [engine_286a78], esi
-    imul ebx
-    shrd eax, edx, 0x13
-    mov dword [engine_286a7c], eax
+grouscan_raster_body_:
     mov eax, dword [globalposx]
     shl eax, 8
     mov dword [globalx1], eax

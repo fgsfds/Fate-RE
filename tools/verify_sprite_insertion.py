@@ -1,9 +1,4 @@
-"""Exact insertion wrapper; behavioral-only integration of unmatched list helpers.
-
-Resolved internal JMPs are never patched. The whole compiled insertion group runs
-contiguously at its generated layout, so its status helper has a different address
-than FATE. This does not establish a byte match for those two helper bodies.
-"""
+"""Verify and exercise the exact Watcom sprite insertion group."""
 import argparse
 import hashlib
 import json
@@ -12,7 +7,7 @@ from pathlib import Path
 from check_start_hook import EXPECTED, image
 from le_fixups import read_le_fixups
 from match_objects import read_object
-from verify_c_leaf import bind_leaf_details, verify_leaf_relocations
+from verify_c_leaf import bind_leaf_details, verify_leaf_relocations, FUNCTION_ADDRESSES
 from verify_spawn_template_sprite import bind as bind_spawn, verify as verify_spawn, FIELDS
 
 BASE = 0x508b8
@@ -20,29 +15,38 @@ DATA = {'_sprite': 0x2040a0, '_headspritesect': 0x28891e,
         '_prevspritesect': 0x1f6020, '_nextspritesect': 0x1f9ca0,
         '_headspritestat': 0x28811c, '_prevspritestat': 0x1fdca0,
         '_nextspritestat': 0x1fbca0}
-ORIGINAL_FUNCTIONS = {'insertspritesect_': 0x508cd, 'insertspritestat_': 0x5096b}
+INSERTION_LAYOUT = ((0, 'insertsprite_'), (21, 'insertspritesect_'), (179, 'insertspritestat_'))
+INSERTION_SIZE = 337
+SHARED_EPILOGUE = FUNCTION_ADDRESSES['shared_graphics_epilogue_']
+ORIGINAL_FUNCTIONS = {name: BASE + offset for offset, name in INSERTION_LAYOUT}
+ORIGINAL_FUNCTIONS['shared_graphics_epilogue_'] = SHARED_EPILOGUE
 
 
-def wrapper_match(exe, obj):
-    code, refs = bind_leaf_details(obj, 'insertsprite_', DATA, address=BASE,
-                                  functions=ORIGINAL_FUNCTIONS)
-    if code != exe[0x75eb8:0x75ecd]:
-        raise ValueError('Insertion wrapper does not match all 21 bytes')
-    verify_leaf_relocations(code, refs, read_le_fixups(exe)['pointers'], BASE)
-    return len(refs)
+def verify_group(exe, obj):
+    segments, publics = read_object(obj)
+    if publics != [(1, offset, name) for offset, name in INSERTION_LAYOUT]:
+        raise ValueError('Unexpected generated insertion-group layout')
+    if len(segments[1]['data']) != INSERTION_SIZE:
+        raise ValueError('Unexpected insertion-group size')
+    sites = read_le_fixups(exe)['pointers']
+    counts = []
+    for (offset, name), end in zip(INSERTION_LAYOUT, (21, 179, INSERTION_SIZE)):
+        address = BASE + offset
+        raw = address + 0x25600
+        code, refs = bind_leaf_details(obj, name, DATA, address=address,
+                                      functions=ORIGINAL_FUNCTIONS)
+        if code != exe[raw:raw + end - offset]:
+            raise ValueError('Insertion span differs: ' + name)
+        verify_leaf_relocations(code, refs, sites, address)
+        counts.append(len(refs))
+    return counts
 
 
-def integration(obj, spawn, original=None):
+def integration(obj, spawn, original, *, use_compiled):
     from unicorn import Uc, UC_ARCH_X86, UC_MODE_32
     from unicorn.x86_const import (UC_X86_REG_EAX, UC_X86_REG_EBX,
-        UC_X86_REG_ECX, UC_X86_REG_EDX, UC_X86_REG_ESI, UC_X86_REG_EDI,
+        UC_X86_REG_ECX, UC_X86_REG_EDX, UC_X86_REG_EDI, UC_X86_REG_ESI,
         UC_X86_REG_EBP, UC_X86_REG_ESP, UC_X86_REG_EIP, UC_X86_REG_EFLAGS)
-    segments, publics = read_object(obj)
-    if publics != [(1, 0, 'insertsprite_'), (1, 21, 'insertspritesect_'), (1, 175, 'insertspritestat_')]:
-        raise ValueError('Unexpected generated insertion-group layout')
-    if len(segments[1]['data']) != 328:
-        raise ValueError('Unexpected insertion-group size')
-    generated_functions = {name: BASE + offset for seg, offset, name in publics}
     loaded_data = {name: offset + 0x80000 for name, offset in DATA.items()}
     results = []
     for name, sector, status, free, occupied in [
@@ -54,15 +58,14 @@ def integration(obj, spawn, original=None):
             ('bad_status', 5, 1024, [0, 1], False)]:
         for call_spawn in (False, True):
             memory = bytearray(0x400000)
-            if original is None:
-                for seg, offset, symbol in publics:
+            memory[SHARED_EPILOGUE:SHARED_EPILOGUE + 6] = original[SHARED_EPILOGUE:SHARED_EPILOGUE + 6]
+            if use_compiled:
+                for offset, symbol in INSERTION_LAYOUT:
                     code, _ = bind_leaf_details(obj, symbol, loaded_data, address=BASE + offset,
-                                               functions=generated_functions)
+                                                functions=ORIGINAL_FUNCTIONS)
                     memory[BASE + offset:BASE + offset + len(code)] = code
             else:
-                # Oracle instructions are executed only; never output or counted as source.
-                memory[BASE:0x50a09] = original[BASE:0x50a09]
-                memory[0x4abbf:0x4abc5] = original[0x4abbf:0x4abc5]
+                memory[BASE:BASE + INSERTION_SIZE] = original[BASE:BASE + INSERTION_SIZE]
             spawn_code, _ = bind_spawn(spawn, loaded=True)
             memory[0x11073:0x11073 + len(spawn_code)] = spawn_code
             def put(fmt, address, value):
@@ -155,16 +158,19 @@ if __name__ == '__main__':
     exe, obj = args.executable.read_bytes(), args.insertion_object.read_bytes()
     if hashlib.sha256(exe).hexdigest() != EXPECTED:
         raise ValueError('Unsupported executable hash')
-    refs = wrapper_match(exe, obj)
+    refs = verify_group(exe, obj)
+    original = image(exe)
     spawn_report = verify_spawn(args.executable, args.spawn_object)
     result = dict(executable_sha256=EXPECTED, insertion_object_sha256=hashlib.sha256(obj).hexdigest(),
                   spawn_object_sha256=spawn_report['object_sha256'], wrapper_entry=hex(BASE),
-                  exact_wrapper_bytes=21, wrapper_le_targets=refs, wrapper_calls=2,
-                  list_helpers_exact=False, generated_group_bytes=328,
-                  generated_public_offsets={'insertsprite_': 0, 'insertspritesect_': 21, 'insertspritestat_': 175},
+                  exact_wrapper_bytes=21, wrapper_le_targets=refs[0], wrapper_calls=2,
+                  list_helpers_exact=True, list_helper_le_targets=sum(refs[1:]),
+                  generated_group_bytes=INSERTION_SIZE,
+                  generated_public_offsets={name: offset for offset, name in INSERTION_LAYOUT},
                   original_list_helper_offsets={'insertspritesect_': 21, 'insertspritestat_': 179},
                   no_resolved_branch_patching=True, no_external_stubs=True,
-                  integration_cases=integration(obj, args.spawn_object.read_bytes()),
-                  original_instruction_oracle_cases=integration(obj, args.spawn_object.read_bytes(), image(exe)))
+                  integration_cases=integration(obj, args.spawn_object.read_bytes(), original, use_compiled=True),
+                  original_instruction_oracle_cases=integration(obj, args.spawn_object.read_bytes(), original, use_compiled=False))
+    assert result['integration_cases'] == result['original_instruction_oracle_cases']
     args.output.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
-    print('PASS: exact21-byte wrapper; 12 compiled insertion/spawn cases plus 12 original-oracle cases, no stubs')
+    print('PASS: exact 337-byte insertion group; 12 compiled insertion/spawn cases plus 12 original-oracle cases, no stubs')

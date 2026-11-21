@@ -5,7 +5,7 @@ ORG 0x65486
 discard_region_argument equ 0x6547d
 free_ equ 0x6170a
 link_and_initialize_heap equ 0x652f1
-free_space_at_break equ 0x65365
+round_heap_request equ 0x65679
 allocate_dpmi_heap equ 0x653b3
 resize_data_segment equ 0x6b028
 runtime_hook equ 0x17494
@@ -14,80 +14,9 @@ extender_type equ 0x1449a
 extender_subtype equ 0x1449b
 extender_flags equ 0x1449c
 near_heap_head equ 0x141b8
-minimum_heap_growth equ 0x17498
 
-expand_separate_heap:
-    push ebx
-    push ecx
-    push edx
-    push esi
-    push edi
-    push eax
-    cmp dword [runtime_hook], 0
-    jne short .check_limit
-
-.return_zero:
-    xor eax, eax
-    jmp short discard_region_argument
-
-.check_limit:
-    cmp dword [memory_limit], -2
-    je short .return_zero
-    mov eax, esp
-    call round_heap_request
-    test eax, eax
-    je short discard_region_argument
-    cmp byte [extender_type], 1
-    jne short .allocate_dos
-    mov eax, dword [esp]
-    call allocate_dpmi_heap
-    mov ebx, eax
-    mov edx, eax
-    test eax, eax
-    je short .check_block
-    mov eax, dword [eax]
-    mov dword [esp], eax
-    jmp short .check_block
-
-.allocate_dos:
-    mov ebx, dword [esp]
-    mov eax, 0x80004800
-    int 0x21
-    sbb ebx, ebx
-    not ebx
-    and eax, ebx
-    mov ecx, dword [esp]
-    sub ecx, 4
-    mov edx, eax
-    mov dword [esp], ecx
-
-.check_block:
-    test edx, edx
-    je short .return_zero
-    mov eax, dword [esp]
-    mov esi, dword [esp]
-    sub eax, 4
-    cmp eax, esi
-    ja short .return_zero
-    mov dword [esp], eax
-    cmp eax, 0x38
-    jb short .return_zero
-    mov dword [edx], eax
-    mov eax, edx
-    call link_and_initialize_heap
-    mov ebx, eax
-    mov eax, dword [eax]
-    mov dword [esp], eax
-    or al, 1
-    mov dword [ebx], eax
-    mov edi, dword [edx + 0x18]
-    mov dword [edx + 0x14], 0xffffffff
-    inc edi
-    lea eax, [ebx + 4]
-    mov dword [edx + 0x18], edi
-    call free_
-    mov eax, 1
-    jmp near discard_region_argument
+expand_separate_heap equ 0x65486
+    times 175 db 0   ; expand_separate_heap is supplied by C.
 
 expand_dgroup:
     push ebx
@@ -230,69 +159,6 @@ expand_dgroup:
     pop ebx
     ret
 
-round_heap_request:
-    push ebx
-    push edx
-    push esi
-    mov ebx, eax
-    mov edx, dword [eax]
-    add edx, 3
-    and dl, 0xfc
-    test edx, edx
-    jne short .check_extender
+    times 119 db 0    ; round_heap_request is supplied by C.
 
-.return_zero:
-    xor eax, eax
-    pop esi
-    pop edx
-    pop ebx
-    ret
-
-.check_extender:
-    cmp byte [extender_type], 1
-    jne short .check_extender_nine
-    cmp byte [extender_subtype], 0
-    je short .include_handle
-
-.check_extender_nine:
-    cmp byte [extender_type], 9
-    jne short .subtract_free_space
-
-.include_handle:
-    add edx, 8
-    jmp short .add_heap_overhead
-
-.subtract_free_space:
-    call free_space_at_break
-    sub edx, eax
-
-.add_heap_overhead:
-    mov dword [ebx], edx
-    add edx, 0x3c
-    cmp edx, dword [ebx]
-    jb short .return_zero
-    mov esi, dword [minimum_heap_growth]
-    cmp edx, esi
-    jae short .round_to_pages
-    mov edx, esi
-    and dl, 0xfe
-
-.round_to_pages:
-    mov dword [ebx], edx
-    add edx, 0xfff
-    cmp edx, dword [ebx]
-    jb short .return_zero
-    and dh, 0xf0
-    xor dl, dl
-    mov dword [ebx], edx
-    test edx, edx
-    setne al
-    and eax, 0xff
-    pop esi
-    pop edx
-    pop ebx
-    ret
-
-request_more_heap:
-    xor eax, eax
-    ret
+    times 3 db 0      ; request_more_heap is supplied by C.

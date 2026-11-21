@@ -6,21 +6,21 @@ import struct
 from unicorn import Uc, UC_ARCH_X86, UC_MODE_32, UC_HOOK_MEM_WRITE
 from unicorn.x86_const import (
     UC_X86_REG_EBX, UC_X86_REG_ECX, UC_X86_REG_EDX, UC_X86_REG_ESI,
-    UC_X86_REG_EDI, UC_X86_REG_EIP, UC_X86_REG_ESP,
+    UC_X86_REG_EDI, UC_X86_REG_EBP, UC_X86_REG_EIP, UC_X86_REG_ESP,
 )
 
 from check_ksqrt import table_value
 from le_fixups import read_le_fixups
 from verify_assembly_suite import verify
 from verify_c_leaf import (
-    DATA_OFFSETS, FUNCTION_ADDRESSES, bind_leaf_details, verify_leaf_relocations,
+    DATA_OFFSETS, FUNCTION_ADDRESSES, LEAVES, bind_leaf_details, verify_leaf_relocations,
 )
 
 ENTRY, TAIL, OWNER = 0x4caaa, 0x4abbf, 0x4aa28
 TABLE, STACK, STOP = 0x25fa60, 0x3ff000, 0x3fff00
 
 
-def verified_code(exe, directory, c_inventory, owner):
+def verified_tail(exe, directory, c_inventory, owner):
     verify(exe, directory, c_inventory)
     owner_code, refs = bind_leaf_details(
         owner, 'transmaskvline_', DATA_OFFSETS, address=OWNER,
@@ -30,13 +30,25 @@ def verified_code(exe, directory, c_inventory, owner):
         raise ValueError('Shared return owner differs')
     verify_leaf_relocations(owner_code, refs, read_le_fixups(exe)['pointers'], OWNER)
 
-    code = bytearray((directory/'sqrtinit.bin').read_bytes())
-    struct.pack_into('<I', code, 127, TABLE-2)
-    return bytes(code), owner_code[TAIL-OWNER:]
+    return owner_code[TAIL-OWNER:]
 
 
-def check(exe, directory, c_inventory, owner):
-    code, tail = verified_code(exe, directory, c_inventory, owner)
+def verified_code(exe, directory, c_inventory, owner, initializer):
+    tail = verified_tail(exe, directory, c_inventory, owner)
+    symbol = 'initksqrt_'
+    raw, size = LEAVES[symbol]
+    body, refs = bind_leaf_details(initializer, symbol, DATA_OFFSETS, address=ENTRY,
+                                   functions=FUNCTION_ADDRESSES)
+    if body != exe[raw:raw+size]:
+        raise ValueError('Square-root initializer differs')
+    verify_leaf_relocations(body, refs, read_le_fixups(exe)['pointers'], ENTRY)
+    code, _ = bind_leaf_details(initializer, symbol, {'_sqrtable': TABLE}, address=ENTRY,
+                                functions=FUNCTION_ADDRESSES)
+    return code, tail
+
+
+def check(exe, directory, c_inventory, owner, initializer):
+    code, tail = verified_code(exe, directory, c_inventory, owner, initializer)
     machine = Uc(UC_ARCH_X86, UC_MODE_32)
     machine.mem_map(0x10000, 0x3f0000)
     machine.mem_write(ENTRY, code)
@@ -44,7 +56,7 @@ def check(exe, directory, c_inventory, owner):
     machine.mem_write(TABLE-16, b'\xa5'*16 + b'\xcc'*4096 + b'\x5a'*16)
     machine.mem_write(STACK, struct.pack('<I', STOP))
     saved = (UC_X86_REG_EBX, UC_X86_REG_ECX, UC_X86_REG_EDX,
-             UC_X86_REG_ESI, UC_X86_REG_EDI)
+             UC_X86_REG_ESI, UC_X86_REG_EDI, UC_X86_REG_EBP)
     for index, reg in enumerate(saved):
         machine.reg_write(reg, 0x13570000+index)
     machine.reg_write(UC_X86_REG_ESP, STACK)
@@ -63,7 +75,7 @@ def check(exe, directory, c_inventory, owner):
     )
     assert machine.reg_read(UC_X86_REG_EIP) == STOP
     assert machine.reg_read(UC_X86_REG_ESP) == STACK+4
-    assert [machine.reg_read(reg) for reg in saved] == [0x13570000+i for i in range(5)]
+    assert [machine.reg_read(reg) for reg in saved] == [0x13570000+i for i in range(len(saved))]
 
 
 if __name__ == '__main__':
@@ -71,7 +83,10 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('executable', 'assembly_directory', 'c_inventory', 'tail_owner'):
         parser.add_argument(name, type=Path)
+    parser.add_argument('--initializer', type=Path)
     args = parser.parse_args()
+    initializer = args.initializer or args.tail_owner.with_name('sqrtinit.obj')
     check(args.executable.read_bytes(), args.assembly_directory,
-          json.loads(args.c_inventory.read_text(encoding='utf-8')), args.tail_owner.read_bytes())
+          json.loads(args.c_inventory.read_text(encoding='utf-8')), args.tail_owner.read_bytes(),
+          initializer.read_bytes())
     print('PASS: 2,048 square-root entries, guards, registers and shared return')

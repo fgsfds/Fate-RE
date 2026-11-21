@@ -11,7 +11,7 @@ from check_initksqrt import verified_code
 from check_start_hook import image
 from le_fixups import read_le_fixups
 from verify_assembly_suite import (
-    ROUTINES, GROUP_SLICES, CLIPMOVE_POINTERS, GETCLIPLINES_POINTERS,
+    CLIPMOVE_POINTERS, GETCLIPLINES_POINTERS,
 )
 from verify_c_leaf import (
     LEAVES, DATA_OFFSETS, FUNCTION_ADDRESSES, bind_leaf_details,
@@ -26,7 +26,8 @@ COORDS = 0x350004
 def setup(exe, historical, objects, binaries, inventory, compiled=False):
     original = image(exe)
     init, init_tail = verified_code(exe, binaries, inventory,
-                                    (objects/'transcol.obj').read_bytes())
+                                    (objects/'transcol.obj').read_bytes(),
+                                    (objects/'sqrtinit.obj').read_bytes())
     if compiled:
         lines = bytearray((binaries/'getcliplines.bin').read_bytes())
         pointers = GETCLIPLINES_POINTERS
@@ -39,6 +40,7 @@ def setup(exe, historical, objects, binaries, inventory, compiled=False):
     code = {
         ENTRY: original[ENTRY:END], LINES: bytes(lines),
         0x4caaa: init, 0x4abbf: init_tail,
+        0x4c944: original[0x4c944:0x4c94c],
         0x51fbb: (binaries/'hitscan.bin').read_bytes()[-6:],
         0x47f04: (binaries/'ceilscan.bin').read_bytes()[-8:],
     }
@@ -48,7 +50,9 @@ def setup(exe, historical, objects, binaries, inventory, compiled=False):
             struct.pack_into('<I',body,site,target)
         code[ENTRY] = bytes(body)
     for symbol, filename in (('inside_','inside'),('addclipline_','clipadd'),
-                             ('raytrace_','raytrace'),('clipinsideboxline_','clipline')):
+                             ('raytrace_','raytrace'),('clipinsideboxline_','clipline'),
+                             ('keepaway_','keepaway'),('rintersect_','rinterc'),
+                             ('getceilzofslope_','slphgt'),('getflorzofslope_','slphgt')):
         raw, size = LEAVES[symbol]
         address = raw-0x25600
         blob = (objects/(filename+'.obj')).read_bytes()
@@ -59,13 +63,6 @@ def setup(exe, historical, objects, binaries, inventory, compiled=False):
         code[address], _ = bind_leaf_details(
             blob,symbol,{name:value+0x80000 for name,value in DATA_OFFSETS.items()},
             address=address,functions=FUNCTION_ADDRESSES)
-    for symbol in ('rintersect_','keepaway_','getceilzofslope_','getflorzofslope_'):
-        _, _, filename, address, size, pointers = next(r for r in ROUTINES if r[0]==symbol)
-        start = GROUP_SLICES.get(symbol,(0,0))[0]
-        body = bytearray((binaries/filename).read_bytes()[start:start+size])
-        for site,target in pointers.items():
-            struct.pack_into('<I',body,site,target)
-        code[address] = bytes(body)
     machine = Uc(UC_ARCH_X86,UC_MODE_32)
     machine.mem_map(0x10000,0x3f0000)
     for address,body in code.items():

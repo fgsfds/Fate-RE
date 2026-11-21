@@ -2,10 +2,8 @@
 // Ken Silverman's official web site: "http://www.advsys.net/ken"
 // See the included license file "BUILDLIC.TXT" for license info.
 // This file has been modified from Ken Silverman's original release
-#pragma aux readpixel =\
-	"mov al, byte ptr [edi]",\
-	parm nomemory [edi]\
-	modify exact [eax]\
+extern char *pixel_address(long address);
+#pragma aux pixel_address = "" parm nomemory [edi] value [edi] modify exact [eax];
 
 #pragma aux drawpixel =\
 	"mov byte ptr [edi], al",\
@@ -37,8 +35,8 @@ char getpixel(long x, long y)
 	if (chainstat != 0)
 	{
 		koutpw(0x3ce,4+((x&3)<<8));
-		return(readpixel(ylookup[y]+(x>>2)+chainplace));
+		return(*pixel_address(ylookup[y]+(x>>2)+chainplace));
 	}
 	else
-	return(readpixel(ylookup[y]+x+frameplace));
+	return(*pixel_address(ylookup[y]+x+frameplace));
 }

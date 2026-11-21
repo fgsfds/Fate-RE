@@ -16,8 +16,39 @@ jobs:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - name: Build and verify
-        run: python tools/verify_ci_build.py
+        env:
+          CHECK_EVENT: ${{ github.event_name }}
+          CHECK_BASE: ${{ github.event.before }}
+        run: |
+          # Source-only pushes need the exact image gate, not every emulator
+          # fixture. Tooling changes, first pushes, and manual runs get the
+          # broad regression suite. Game smoke is never implicit.
+          $full = $env:CHECK_EVENT -ne 'push' -or [string]::IsNullOrEmpty($env:CHECK_BASE) -or $env:CHECK_BASE -match '^0+$'
+          if (-not $full) {
+            $changed = @(git diff --name-only $env:CHECK_BASE HEAD)
+            if ($LASTEXITCODE -ne 0) {
+              $full = $true
+            } else {
+              $full = @($changed | Where-Object { $_ -notmatch '^(src/|docs/|\.agents/|AGENTS\.md$|README\.md$)' }).Count -gt 0
+            }
+          }
+          $options = @('--jobs', '4')
+          if ($full) { $options += '--full' } else { $options += '--exact' }
+          python tools/verify_ci_build.py @options
+          exit $LASTEXITCODE
+      - name: Validation diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-diagnostics
+          path: |
+            work/ci-build/logs/
+            work/ci-build/stages.json
+            work/ci-build/validation.json
+            work/ci-build/build-provenance.json
+          if-no-files-found: ignore

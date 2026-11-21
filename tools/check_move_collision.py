@@ -14,13 +14,13 @@ from unicorn.x86_const import (
 import check_move_listed_sprite as move
 import check_spritechange as change
 from check_clipmove_oracle import setup, STACK, STOP
-from check_spritelists import relocated_list
+from check_start_hook import image
 from le_fixups import read_le_fixups
 from verify_c_leaf import (
     bind_leaf_details, verify_leaf_relocations, DATA_OFFSETS, FUNCTION_ADDRESSES,
 )
 from verify_historical_zrange import ENTRY as ZRANGE, bind_verified as bind_historical_zrange
-from verify_assembly_suite import COMBINED_SLOPE_POINTERS, GETZRANGE_POINTERS
+from verify_assembly_suite import GETZRANGE_POINTERS
 
 SECTORS, WALLS, SPRITES = 0x2fc3a0, 0x2b10a0, 0x2840a0
 HEADS, FREE, PREV, NEXT = 0x30891e, 0x30911e, 0x276020, 0x279ca0
@@ -50,21 +50,28 @@ def install(exe, historical, objects, binaries, inventory):
     assert vertical == historical_vertical
     for site, target in GETZRANGE_POINTERS.items():
         struct.pack_into('<I', vertical, site, target)
-    slope = bytearray((binaries/'slopepair.bin').read_bytes())
-    for site,target in COMBINED_SLOPE_POINTERS.items():
-        struct.pack_into('<I', slope, site, target)
+    slope_object = (objects/'slopepr.obj').read_bytes()
+    slope, refs = bind_leaf_details(slope_object, 'getzsofslope_', DATA_OFFSETS,
+                                    address=0x5e07a, functions=FUNCTION_ADDRESSES)
+    assert len(slope)==301 and slope==exe[0x8367a:0x837a7]
+    verify_leaf_relocations(slope, refs, fixups, 0x5e07a)
+    slope, _ = bind_leaf_details(
+        slope_object, 'getzsofslope_', {k:v+0x80000 for k,v in DATA_OFFSETS.items()},
+        address=0x5e07a, functions=FUNCTION_ADDRESSES,
+    )
     editor, refs = bind_leaf_details(
         (objects/'editor16.obj').read_bytes(), 'drawline256_', DATA_OFFSETS,
         address=0x5446b, functions=FUNCTION_ADDRESSES,
     )
     assert len(editor)==1123 and editor==exe[0x79a6b:0x79ece]
     verify_leaf_relocations(editor, refs, fixups, 0x5446b)
+    linked = image(exe)
     bodies = {
         move.ADDRESS: move.bind(movement, loaded=True)[0],
         move.APPEND_ADDRESS: move.bind_append(append, loaded=True)[0],
         0x50bc3: change_code,
-        0x508cd: relocated_list('insertspritesect_', binaries),
-        0x50a1d: relocated_list('deletespritesect_', binaries),
+        0x508cd: linked[0x508cd:0x5096b],
+        0x50a1d: linked[0x50a1d:0x50af0],
         ZRANGE: bytes(vertical), 0x5e07a: bytes(slope), 0x548c8: editor[0x45d:],
     }
     for address, body in bodies.items():

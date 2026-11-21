@@ -2,7 +2,6 @@
 BITS 32
 ORG 0x62a97
 
-character_types equ 0x1f20
 get_io_mode equ 0x65783
 set_errno equ 0x6468e
 set_dos_errno equ 0x6571d
@@ -210,171 +209,13 @@ write_:
     pop ecx
     ret
 
-atoi_:
-    push ebx
-    push ecx
-    push edx
-
-.skip_space:
-    mov dl, byte [eax]
-    inc dl
-    and edx, 0xff
-    test byte [edx + character_types], 2
-    je short .read_sign
-    inc eax
-    jmp short .skip_space
-
-.read_sign:
-    mov cl, byte [eax]
-    cmp cl, 0x2b
-    je short .skip_sign
-    cmp cl, 0x2d
-    jne short .start_decimal
-
-.skip_sign:
-    inc eax
-
-.start_decimal:
-    xor ebx, ebx
-
-.check_digit:
-    mov dl, byte [eax]
-    inc dl
-    and edx, 0xff
-    test byte [edx + character_types], 0x20
-    je short .apply_sign
-    imul ebx, ebx, 0xa
-    xor edx, edx
-    mov dl, byte [eax]
-    add ebx, edx
-    inc eax
-    sub ebx, 0x30
-    jmp short .check_digit
-
-.apply_sign:
-    cmp cl, 0x2d
-    jne short .return_integer
-    neg ebx
-
-.return_integer:
-    mov eax, ebx
-    pop edx
-    pop ecx
-    pop ebx
-    ret
+    times 87 db 0    ; atoi is supplied by C.
 
 integer_digits:
     db "0123456789abcdefghijklmnopqrstuvwxyz", 0
 
-ultoa_:
-    push ecx
-    push esi
-    push edi
-    push ebp
-    sub esp, 0x28
-    mov ebp, edx
-    mov edi, ebx
-    mov esi, edx
-    xor dl, dl
-    lea ecx, [esp + 1]
-    mov byte [esp], dl
+    times 74 db 0    ; ultoa is supplied by C.
 
-.divide_by_radix:
-    lea ebx, [esp + 0x24]
-    mov dword [esp + 0x24], edi
-    xor edx, edx
-    div dword [ebx]
-    mov dword [ebx], eax
-    mov al, byte cs:[edx + integer_digits - 0x10000]
-    mov byte [ecx], al
-    mov eax, dword [esp + 0x24]
-    inc ecx
-    test eax, eax
-    jne short .divide_by_radix
+    times 27 db 0    ; ltoa is placed here from C.
 
-.copy_digit_in_reverse:
-    dec ecx
-    mov al, byte [ecx]
-    mov byte [esi], al
-    inc esi
-    test al, al
-    jne short .copy_digit_in_reverse
-    mov eax, ebp
-    add esp, 0x28
-    pop ebp
-    pop edi
-    pop esi
-    pop ecx
-    ret
-
-ltoa_:
-    push ecx
-    mov ecx, edx
-    cmp ebx, 0xa
-    jne short .convert_magnitude
-    test eax, eax
-    jge short .convert_magnitude
-    neg eax
-    mov byte [edx], 0x2d
-    inc edx
-
-.convert_magnitude:
-    call ultoa_
-    mov eax, ecx
-    pop ecx
-    ret
-
-memmove_:
-    push ecx
-    push esi
-    push edi
-    mov esi, edx
-    mov ecx, ebx
-    cmp edx, eax
-    je short .restore_registers
-    jae short .copy_forward
-    add edx, ebx
-    cmp edx, eax
-    jbe short .copy_forward
-    lea edi, [eax + ebx]
-    lea esi, [edx - 1]
-    dec edi
-    mov edx, ds
-    push es
-    mov es, edx
-    std
-    dec esi
-    dec edi
-    shr ecx, 1
-    db 0x66 ; Original operand-size prefix precedes REP.
-    rep movsd
-    adc ecx, ecx
-    inc esi
-    inc edi
-    db 0x66 ; Original operand-size prefix precedes REP.
-    rep movsb
-    pop es
-    cld
-    pop edi
-    pop esi
-    pop ecx
-    ret
-
-.copy_forward:
-    mov edx, ds
-    mov edi, eax
-    push es
-    mov es, edx
-    push ecx
-    shr ecx, 2
-    rep movsd
-    pop ecx
-    and ecx, 3
-    rep movsb
-    pop es
-
-.restore_registers:
-    pop edi
-    pop esi
-    pop ecx
-    ret
+    times 76 db 0    ; memmove is supplied by C.

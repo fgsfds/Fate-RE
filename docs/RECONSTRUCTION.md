@@ -39,11 +39,21 @@ from reconstructed operands.
 
 ## Build inventories and evidence
 
-- [C CODE inventory](../tools/data/matching-routines.json) covers 38,880 bytes.
-- [Assembly CODE inventory](../tools/data/matching-assembly.json) covers 375,759 bytes.
-- [Source DATA inventory](../tools/data/matching-initialized.json) covers 95,547 stored bytes.
+<!-- restoration-coverage:start -->
+- [C CODE inventory](../tools/data/matching-routines.json) covers 1,236 routines
+  and compiler-generated tables, totaling 179,022 bytes (43.18% of CODE).
+  This includes mixed C/inline-assembly objects, not just assembly-free C.
+- [Assembly CODE inventory](../tools/data/matching-assembly.json) covers
+  235,617 bytes (56.82% of CODE).
+- [Source DATA inventory](../tools/data/matching-initialized.json) covers
+  95,547 stored bytes.
 - [Watcom font dependency](../tools/data/matching-graphics-font-dependency.json) supplies
-  9,384 stored bytes from three pinned `GRAPH.LIB` members.
+  9,384 stored bytes from the pinned `GRAPH.LIB`.
+<!-- restoration-coverage:end -->
+
+Source DATA includes 56,008 bytes of board navigation layouts built from C;
+the font dependency comes from three pinned `GRAPH.LIB` members.
+
 - The DOS prefix matches the first 10,832 bytes of the demo's `EDITART.EXE` and
   the June 6, 1996 archive copy. Its SHA-256 is
   `b852ae395b9ad04503fc907ad03fa28ea6a17bf5f6c2be045bf96f7177592699`.
@@ -54,3 +64,34 @@ read from GRAPH.LIB. The final size and SHA-256 checks cover the DOS prefix,
 LE metadata, relocation encoding, page padding, and object bytes. The exact
 original compiler version, translation-unit boundaries, and linker invocation
 remain unidentified.
+
+## Inline assembly audit
+
+See [current attribution](C-RESTORATION-PROGRESS.md) for the measured split
+between compiler-generated C, inline assembly, standalone assembly, and
+unattributed bytes. The generated inventories above track object placement
+and include mixed C and inline assembly.
+
+Start with a successful exact build and its fresh `c.json` and `assembly.json`.
+Run with Capstone on Python's import path and use the pinned DOSBox executable.
+
+```powershell
+python tools/stage_watcom_markers.py work/restoration-build work/inline-audit --dosbox <DOSBox.exe>
+python tools/report_watcom_markers.py work/restoration-build work/inline-audit work/inline-audit.json
+```
+
+The first command compiles a disposable source copy with markers around
+instruction-emitting Watcom auxiliaries. The report counts original bytes
+after checking aligned instructions, branch targets, and relocation operands
+against the marked objects. Watcom switch dispatches also require matching
+table targets in their original order. Unsupported routines and non-routine CODE spans
+remain unattributed. The production link uses the original objects.
+
+The default markers can merge at shared branch joins. If the report lists
+conflicting or unbalanced markers, retry those objects with distinct
+end markers and add the retry directory to the report.
+
+```powershell
+python tools/stage_watcom_markers.py work/restoration-build work/inline-retry --dosbox <DOSBox.exe> --retry-report work/inline-audit.json
+python tools/report_watcom_markers.py work/restoration-build work/inline-audit work/inline-final.json --retry-marker-dir work/inline-retry
+```

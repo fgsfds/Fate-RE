@@ -49,6 +49,12 @@ def verify(exe, directory, binaries):
     rows.append(dict(kind='mouse sensitivity defaults', object='mousedef.obj',
                      object_sha256=mouse['object_sha256'], bytes=mouse['bytes'],
                      raw_offset=mouse['raw_offset'], ds_offset=mouse['ds_offset']))
+    navigation = verify_scalars(exe, (directory/'navdata.obj').read_bytes(), 0xa031c,
+                                0x4d1c, 56008, [('_board_path_data', 0)])
+    rows.append(dict(kind='board navigation layouts', object='navdata.obj',
+                     object_sha256=navigation['object_sha256'], bytes=navigation['bytes'],
+                     payload_sha256=navigation['payload_sha256'],
+                     raw_offset=navigation['raw_offset'], ds_offset=navigation['ds_offset']))
     from check_start_hook import image
     loaded = image(exe)
     pointers = read_le_fixups(exe)['pointers']
@@ -98,7 +104,6 @@ def verify(exe, directory, binaries):
         ('weapon animation tables after shared offset', 'weapon_animation_tables.bin', 0xade6a, 0x1286a, 958),
         ('board script configuration and defaults', 'level_script_defaults.bin', 0xaddf4, 0x127f4, 118),
         ('navigation and puzzle state defaults', 'navigation_puzzle_defaults.bin', 0xadde4, 0x127e4, 16),
-        ('board navigation layouts', 'sprite_navigation_data.bin', 0xa031c, 0x4d1c, 56008),
         ('level transition defaults and board names', 'level_name_defaults.bin', 0x9d62c, 0x202c, 561),
         ('inventory, actor waypoints and sprite templates', 'actor_initial_state.bin', 0x9d85d, 0x225d, 2431),
         ('interaction configuration and defaults', 'interaction_configuration.bin', 0x9f1ec, 0x3bec, 280),

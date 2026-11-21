@@ -1,4 +1,4 @@
-; Detect x87 support and supply adjacent CRT helpers.
+; Detect x87 support.
 BITS 32
 ORG 0x6463b
 
@@ -34,18 +34,3 @@ check_update_flag:
 restore_probe_register:
     pop edx
     ret
-
-tolower_:
-    cmp eax, 0x41
-    jl short return_character
-    cmp eax, 0x5a
-    jg short return_character
-    add eax, 0x20
-
-return_character:
-    ret
-
-set_permission_denied:
-    mov eax, 0xd
-
-; Fall through to set_errno at 0x6468e.
