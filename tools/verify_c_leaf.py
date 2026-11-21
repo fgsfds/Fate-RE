@@ -3675,11 +3675,128 @@ LEAF_ENTRY_PREFIX_FIXUPS = {
 # Unchanged compiler sections surrounding a separately verified assembly island.
 # Each row names the real OMF public, kept bounds, and required full public size.
 LEAF_CODE_SLICES = {
+    'receive_packets_entry_': ('receive_packets_', 0, 342, 910),
+    'receive_packets_crc_store_': ('receive_packets_', 345, 370, 910),
+    'receive_packets_delta_': ('receive_packets_', 472, 615, 910),
+    'receive_packets_buttons_': ('receive_packets_', 636, 687, 910),
+    'receive_packets_text_': ('receive_packets_', 696, 739, 910),
+    'receive_packets_ready_': ('receive_packets_', 767, 783, 910),
+    'receive_packets_ready_test_': ('receive_packets_', 801, 820, 910),
+    'receive_packets_poll_': ('receive_packets_', 833, 874, 910),
+    'receive_packets_finish_': ('receive_packets_', 876, 910, 910),
+
     'getpacket_head_': ('getpacket_', 0, 914, 1429),
     'getpacket_tail_': ('getpacket_', 918, 1429, 1429),
     'update_gameplay_head_': ('update_gameplay_', 0, 550, 1245),
     'update_gameplay_tail_': ('update_gameplay_', 568, 1245, 1245),
 }
+
+
+
+LEAVES.update({
+    'receive_packets_entry_': (0x57a07, 342),
+    'receive_packets_crc_store_': (0x57b60, 25),
+    'receive_packets_delta_': (0x57be2, 143),
+    'receive_packets_buttons_': (0x57c82, 51),
+    'receive_packets_text_': (0x57cbe, 43),
+    'receive_packets_ready_': (0x57d07, 16),
+    'receive_packets_ready_test_': (0x57d29, 19),
+    'receive_packets_poll_': (0x57d49, 41),
+    'receive_packets_finish_': (0x57d79, 34),
+})
+DATA_OFFSETS.update({
+    '_sync_error': 0x3cda,
+    '_received_write_index': 0x3ce0,
+    '_event_read_index': 0x3ce4,
+    '_last_tick': 0x3cea,
+    '_local_player': 0x13ce2,
+    '_packet': 0x1d92c,
+    '_received_checksum': 0x1e5fc,
+    '_generated_checksum': 0x1f7fc,
+    '_peer_ready_stage': 0x20a1c,
+    '_quit_requested': 0x6793d,
+    '_message_deadline': 0x7709c,
+    '_message_text': 0x7aa70,
+    '_message_length': 0x7f874,
+})
+FUNCTION_ADDRESSES.update({
+    'snapshot_input_': 0x2d1bd,
+})
+
+# Selected sections of one compiler public may straddle retained assembly.
+# Entries record immutable opcodes, compiler target offsets, and original target
+# offsets. Only displacement operands in the selected section are rebound.
+LEAF_SECTION_BRANCHES = {
+    'receive_packets_': (910, 916, {
+        15: (b'\x0f\x84', 901, 907),
+        49: (b'\x0f\x8e', 855, 856),
+        62: (b'r', 90, 90),
+        64: (b'\x0f\x86', 701, 700),
+        72: (b'r', 27, 27),
+        74: (b'\x0f\x86', 772, 773),
+        82: (b'\x0f\x84', 843, 844),
+        88: (b'\xeb', 27, 27),
+        92: (b'\x0f\x87', 491, 494),
+        121: (b'\xe9', 284, 284),
+        152: (b't', 175, 175),
+        179: (b't', 202, 202),
+        206: (b't', 229, 229),
+        233: (b't', 273, 273),
+        286: (b'\x0f\x8d', 126, 126),
+        299: (b't', 370, 370),
+        368: (b'\xeb', 292, 292),
+        486: (b'\xe9', 27, 27),
+        507: (b't', 538, 541),
+        541: (b't', 568, 571),
+        571: (b't', 598, 601),
+        601: (b't', 646, 645),
+        649: (b'\x0f\x84', 27, 27),
+        696: (b'\xe9', 27, 27),
+        720: (b'\xeb', 735, 734),
+        737: (b'}', 722, 721),
+        767: (b'\xe9', 27, 27),
+        801: (b'\x0f\x85', 27, 27),
+        814: (b'\x0f\x85', 27, 27),
+        838: (b'\xe9', 27, 27),
+        850: (b'\xe9', 27, 27),
+        868: (b't', 901, 907),
+        876: (b'u', 901, 907),
+        885: (b't', 895, 901),
+        893: (b'\xeb', 901, 907),
+    }),
+}
+
+
+def bind_section_branches(code, public, address, functions, fields, kept_start, kept_end):
+    if public not in LEAF_SECTION_BRANCHES:
+        return
+    compiler_size, placed_size, branches = LEAF_SECTION_BRANCHES[public]
+    if len(code) != compiler_size or address is None or public not in (functions or {}):
+        raise ValueError('Section branch public extent/address differs')
+    for site, (opcode, compiled_target, placed_target) in branches.items():
+        if len(opcode) == 1 and (opcode == b'\xeb' or 0x70 <= opcode[0] <= 0x7f):
+            width = 1
+        elif opcode == b'\xe9' or (len(opcode) == 2 and opcode[0] == 0x0f and 0x80 <= opcode[1] <= 0x8f):
+            width = 4
+        else:
+            raise ValueError('Unsupported section branch opcode')
+        operand, end = site + len(opcode), site + len(opcode) + width
+        if (site < 0 or end > len(code) or code[site:operand] != opcode
+                or fields.intersection(range(site, end))):
+            raise ValueError('Section branch opcode/fixup differs')
+        if not 0 <= compiled_target < compiler_size or not 0 <= placed_target < placed_size:
+            raise ValueError('Section branch target outside public')
+        if end + int.from_bytes(code[operand:end], 'little', signed=True) != compiled_target:
+            raise ValueError('Section branch compiler target differs')
+        fields.update(range(site, end))
+        if any(site < boundary < end for boundary in (kept_start, kept_end)):
+            raise ValueError('Section boundary splits a branch')
+        if kept_start <= site < kept_end:
+            displacement = functions[public] + placed_target - (address + end)
+            try:
+                code[operand:end] = displacement.to_bytes(width, 'little', signed=True)
+            except OverflowError as error:
+                raise ValueError('Placed section branch exceeds original width') from error
 
 
 def leaf_public_name(symbol):
@@ -3829,6 +3946,8 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
                 raise ValueError('Compiler-local epilogue does not match the shared epilogue')
         displacement = functions[placed_symbol] + placed_offset - (address + instruction_end)
         code[operand:instruction_end] = displacement.to_bytes(4, 'little', signed=True)
+    if symbol in LEAF_CODE_SLICES:
+        bind_section_branches(code, public_name, address, functions, fields, kept_start, kept_end)
     if seen_prefix_fixups != set(prefix_fixups):
         raise ValueError('Missing retained assembly prefix relocation')
     bind_short_returns(code, public_name, address, functions, fields)

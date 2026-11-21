@@ -911,6 +911,19 @@ TIMER_CALLBACK_ROUTINES = (
 
 OBJECT_NAMES.update(dict.fromkeys(TIMER_CALLBACK_ROUTINES, 'timercb'))
 
+
+OBJECT_NAMES.update({
+    'receive_packets_entry_': 'recvpkt',
+    'receive_packets_crc_store_': 'recvpkt',
+    'receive_packets_delta_': 'recvpkt',
+    'receive_packets_buttons_': 'recvpkt',
+    'receive_packets_text_': 'recvpkt',
+    'receive_packets_ready_': 'recvpkt',
+    'receive_packets_ready_test_': 'recvpkt',
+    'receive_packets_poll_': 'recvpkt',
+    'receive_packets_finish_': 'recvpkt',
+})
+
 GROUPS = {
     'stdwrap': (462, STDIO_HELPERS),
     'bufseek': (66, ('seek_within_buffer_',)),
@@ -1446,6 +1459,8 @@ def verify_compiler_groups(exe, directory, names=None):
             raise ValueError(f'Unexpected span sizes for {name}')
         verify_group_layout((directory/(name+'.obj')).read_bytes(), size, layout)
     # The local insertion candidates are only present to preserve Watcom's shared tail.
+    if selected('recvpkt'):
+        verify_group_layout((directory/'recvpkt.obj').read_bytes(), 910, [('receive_packets_', 0)])
     if selected('sprlists'):
         verify_group_layout((directory/'sprlists.obj').read_bytes(), 774, [
             ('insertsprite_', 0), ('insertspritesect_', 21), ('insertspritestat_', 177),

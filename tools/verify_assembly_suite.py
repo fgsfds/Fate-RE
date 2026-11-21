@@ -1565,16 +1565,14 @@ ROUTINES = [
       0x1054dc, 622: 0x1f160f, 629: 0x1054dc, 641: 0x1f160f, 648: 0x1054dc, 658: 0x92cd0, 670: 0x1f160f, 677:
       0x1054dc, 684: 0x1f160f, 691: 0x1054dc, 703: 0x1f160f, 710: 0x1054dc, 721: 0x1f160f, 728: 0x1054dc, 744:
       0x1f160f}),
-    ('receive_packets', 'fate/receive_packets.asm', 'receive_packets.bin', 0x32407, 916,
-     {10: 0x83c98, 28: 0x9d92c, 56: 0x9d92c, 101: 0x93ce0, 116: 0x21028a, 134: 0x9d92c, 164: 0x9d92c, 171:
-      0xdac3c, 191: 0x9d92c, 198: 0xdac3d, 218: 0x9d92c, 225: 0xdac3e, 239: 0x9d92d, 247: 0x9d92c, 269: 0xdac3f,
-      280: 0x20fd78, 305: 0x83ce0, 311: 0x9d92c, 319: 0x9e5fc, 327: 0x9d92d, 335: 0x9e5fc, 349: 0x9e5fa, 364:
-      0x83ce0, 371: 0x83cdc, 377: 0x83ce4, 387: 0x83ce0, 398: 0x83cda, 403: 0x83ce4, 411: 0x83cda, 419: 0x9f7fa,
-      427: 0x9e5fa, 439: 0x83ce4, 446: 0x83cdc, 452: 0x83ce4, 459: 0x83cda, 469: 0x83ce0, 498: 0x9d92d, 526:
-      0x9d92e, 532: 0xdac3c, 560: 0x9d92c, 567: 0xdac3d, 590: 0x9d92c, 597: 0xdac3e, 621: 0xdac3f, 629: 0x9d92c,
-      641: 0xdac3f, 669: 0xdac3f, 675: 0x9d92c, 691: 0xdac3f, 707: 0xff874, 714: 0xff874, 724: 0x9d92e, 730:
-      0xfaa71, 741: 0xff874, 750: 0x307e88, 764: 0xf709c, 780: 0x9d92d, 787: 0x21028a, 793: 0xa0a1c, 827:
-      0x9d92c, 846: 0xe793d, 858: 0x93ce2, 865: 0x21028a, 895: 0x83cea, 903: 0x83cea}),
+    ('receive_checksum_order', 'fate/receive_checksum_order.asm', 'receive_checksum_order.bin', 206173, 3, {}),
+    ('receive_checksum_compare', 'fate/receive_packets.asm', 'receive_packets.bin', 206201, 105, {1: 539868, 7: 539876, 17: 539872, 28: 539866, 33: 539876, 41: 539866, 49: 653306, 57: 648698, 69: 539876, 76: 539868, 82: 539876, 89: 539866, 99: 539872}),
+    ('receive_button_low', 'fate/receive_button_low.asm', 'receive_button_low.bin', 206449, 17, {3: 896063, 11: 645420}),
+    ('receive_button_high', 'fate/receive_button_high.asm', 'receive_button_high.bin', 206517, 9, {5: 896063}),
+    ('receive_message_deadline', 'fate/receive_message_deadline.asm', 'receive_message_deadline.bin', 206569, 30, {3: 1046644, 12: 3178120, 26: 1011868}),
+    ('receive_ready_head', 'fate/receive_ready_head.asm', 'receive_ready_head.bin', 206615, 18, {3: 2163338, 9: 657948}),
+    ('receive_ready_send', 'fate/receive_ready_send.asm', 'receive_ready_send.bin', 206652, 13, {6: 645420}),
+    ('receive_snapshot_parity', 'fate/receive_snapshot_parity.asm', 'receive_snapshot_parity.bin', 206706, 7, {}),
     ('draw_map_overlays', 'fate/draw_map_overlays.asm', 'draw_map_overlays.bin', 0x3279b, 4638,
      {30: 0x2b00a0, 59: 0x2b00a0, 75: 0x307e7c, 101: 0x307e7c, 154: 0x2fc3a0, 162: 0x2fc3a2, 170: 0x2b10a0, 181:
       0x2fc3a4, 196: 0x2fc3a8, 251: 0x26c920, 288: 0x26c920, 344: 0x2fc3a4, 352: 0x2fc3a8, 376: 0x2b10ae, 401:
@@ -3763,10 +3761,14 @@ DATA_POINTER_SITES = {
     'play_sound': (16, 35, 44, 60, 65, 90, 95, 102, 113, 125, 165, 171, 182, 198, 209, 214, 223, 231, 242, 249,
      260, 281, 291, 305, 313, 320, 325, 339, 344, 358, 365, 372, 381, 399, 545, 552, 592, 599, 607, 614, 622,
      629, 641, 648, 658, 670, 677, 684, 691, 703, 710, 721, 728, 744,),
-    'receive_packets': (10, 28, 56, 101, 116, 134, 164, 171, 191, 198, 218, 225, 239, 247, 269, 280, 305, 311,
-     319, 327, 335, 349, 364, 371, 377, 387, 398, 403, 411, 419, 427, 439, 446, 452, 459, 469, 498, 526, 532,
-     560, 567, 590, 597, 621, 629, 641, 669, 675, 691, 707, 714, 724, 730, 741, 750, 764, 780, 787, 793, 827,
-     846, 858, 865, 895, 903),
+    'receive_checksum_order': (),
+    'receive_checksum_compare': (1, 7, 17, 28, 33, 41, 49, 57, 69, 76, 82, 89, 99),
+    'receive_button_low': (3, 11),
+    'receive_button_high': (5,),
+    'receive_message_deadline': (3, 12, 26),
+    'receive_ready_head': (3, 9),
+    'receive_ready_send': (6,),
+    'receive_snapshot_parity': (),
     'draw_map_overlays': (30, 59, 75, 101, 154, 162, 170, 181, 196, 251, 288, 344, 352, 376, 401, 407, 441, 447,
      469, 475, 495, 508, 514, 555, 562, 574, 580, 660, 716, 744, 805, 861, 957, 972, 982, 1006, 1022, 1058,
      1133, 1178, 1221, 1238, 1254, 1271, 1287, 1324, 1344, 1351, 1376, 1547, 1555, 1586, 1609, 1702, 1714, 1765,

@@ -5,25 +5,25 @@ Attribution retains all four categories:
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 150,742 | 36.35% |
+| Compiler-generated instructions | 151,456 | 36.53% |
 | Inline assembly instructions in C objects | 24,253 | 5.85% |
-| Standalone assembly | 238,237 | 57.46% |
+| Standalone assembly | 237,523 | 57.28% |
 | Unattributed instructions and non-routine tables | 1,407 | 0.34% |
 
 The unattributed category contains **1,038 instruction bytes in 22 unknown
 routines** and **369 non-routine bytes**. The audit does not credit these bytes
-to C or assembly. Remaining assembly, including inline: **262,490 bytes (63.31%)**.
+to C or assembly. Remaining assembly, including inline: **261,776 bytes (63.13%)**.
 
-C-object inventory covers **176,402 bytes (42.54%)**, including **24,253
-inline-assembly bytes**. The inventories contain **1,203 C routine spans** and
-**485 assembly routine spans**; attribution remains unresolved in 22 C spans.
+C-object inventory covers **177,116 bytes (42.72%)**, including **24,253
+inline-assembly bytes**. The inventories contain **1,212 C routine spans** and
+**492 assembly routine spans**; attribution remains unresolved in 22 C spans.
 
-The serial network initializer restores a **648-byte body
-(629 native and 19 inline-I/O bytes)** plus a **16-byte CODE table**, matching
-all **46 LE sites** (42 body and 4 table sites). Its behavior fixture passes
-**38 cases and two negative controls**. Full validation passes **342 unit tests
-and 119 fixtures** across **522 compiler units**. The separate IPX context
-routine remains assembly; its unlinked historical companion receives no coverage.
+The packet receiver covers **714 native C bytes and zero inline bytes**, with
+**202 bytes retained in assembly**, across a 916-byte routine. Its 43 C and 22
+assembly LE sites total 65; the binder validates 35 selected branch
+displacements. The 910-byte full C compiler context is not exact. The behavior
+oracle passes **104 cases and two controls**. Full validation passes **348 unit
+tests and 120 fixtures** across **523 compiler units**.
 
 ## Reproducible evidence
 
@@ -32,11 +32,11 @@ The accepted executable remains **741,347 bytes**, SHA-256
 The report scope is verified saved artifacts; `restore.py doctor` reports
 current source freshness.
 
-- Latest full validation: `work/serial-init-build/validation.json` and
-  `work/serial-init-build/logs/unit-tests.log`.
-- Serial behavior fixture: `work/serial-init-build/serial-init-behavior.json`.
-- C attribution audit: `work/serial-init-audit.json`.
-- C restoration handoff: `work/serial-init-handoff.json`.
+- Latest full validation: `work/receiver-build/validation.json` and
+  `work/receiver-build/logs/unit-tests.log`.
+- Packet receiver behavior oracle: `work/receiver-build/game-receive-behavior.json`.
+- C attribution audit: `work/receiver-audit.json`.
+- C restoration handoff: `work/receiver-handoff.json`.
 
 See [reconstruction](RECONSTRUCTION.md#inline-assembly-audit) for reproduction
 and [open probes](C-RESTORATION-ATTEMPTS.md) for unresolved work.

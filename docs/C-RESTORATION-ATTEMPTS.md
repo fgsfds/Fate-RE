@@ -878,3 +878,12 @@ With `/4r /s /or /bt=dos`,
 peer-ID arithmetic. Using EBX as the identity for joint5 disrupts other
 lifetimes. Next retain the interrupt prefix and isolate partial-sum lifetimes. Comparison:
 `work/serial-init-next/compiler/joint4.report.json`.
+
+### Packet receiver: remaining CRC/control islands
+
+With `/4r /s /or /bt=dos`, the full compiler context is 910 bytes versus the
+916-byte target. The first divergence is at `+342`, where the compiler schedules `ADD`
+before `INC`. The remaining CRC comparison/control span is 105 bytes; other exact
+gaps leave 202 bytes in assembly. Preserve the 16-byte `PacketFrame` layout
+and snapshot callback's ESI-preservation contract while isolating these
+islands. Candidate: `src/fate/receive_packets.c`.
