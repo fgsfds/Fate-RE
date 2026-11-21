@@ -3,6 +3,8 @@
 // See the included license file "../engine/BUILDLIC.TXT" for license info.
 // This file has been modified from Ken Silverman's original release
 void *memcpy(void *destination, const void *source, unsigned int count);
+/* memcpy preserves GS; keep the historical parameter-register clobbers. */
+#pragma aux memcpy modify exact [eax ebx edx];
 #define MAXPLAYERS 16
 extern long connectnum[MAXPLAYERS], myconnectnum;
 extern short numplayers, socket, connecthead, connectpoint2[MAXPLAYERS], myconnectindex;
@@ -57,3 +59,5 @@ netinitconnection (long newconnectnum, char *newcompaddr)
 
 /* Shared compilation preserves the receive routine's common return jump. */
 #include "getpkt.c"
+
+#include "netctrl.c"

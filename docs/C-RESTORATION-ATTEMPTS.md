@@ -155,17 +155,6 @@ Making red addressable preserves a PUSH EAX but changes the later bounds
 and register lifetimes. Next recover the original five-slot frame and
 query-value lifetimes together. Scratch: `work/palette-whole-c/`.
 
-### Network control packet frame and dispatch
-
-With Watcom 10.5 `/4r /s /or /bt=dos`, `ncd1.c` emits 634 bytes versus
-719 and restores the ESI/EDI inputs and 0xfe dispatch pivot. The frame
-still first differs at `+0x7`: eight local bytes versus four. It also
-uses JE where the original uses JBE after the lower-opcode branch.
-Peer-ID decoding is hoisted before the serial/IPX transport test.
-Next keep decoding within each transport arm and preserve its original
-ADD-based byte accumulation. Evidence is under
-`work/network-control-abi-agent/`.
-
 ### Counted player effect: ordinary motion-call argument staging
 
 With pinned Watcom 10.5 `/3r /s /or /oa /bt=dos`, replacing the staged motion

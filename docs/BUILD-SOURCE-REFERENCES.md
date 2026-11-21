@@ -48,6 +48,12 @@ to unsigned avoids left-shifting a negative short. Input/storage contracts are
 in source: `0xff` broadcasts from local are excluded because the historical
 parser leaves `j` uninitialized on that path.
 
+`processreservedmessage` in `src/network/netctrl.c` restores the complete
+**719-byte control handler and all 27 LE sites/targets** from the same source.
+Accurate GS-preservation contracts retain the compiler's common-return folding.
+The linker validates each original condition and in-object target before
+rebasing the 14 shared-return branches; it changes displacement operands only.
+
 ### Concrete correspondences and cautions
 
 `SRC/ENGINE.C:1270-1288` and the corresponding floor block at 1436 onward

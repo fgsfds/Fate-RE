@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1201,
-  "unique_code_bytes": 175019,
-  "le_pointers": 9562,
+  "routines": 1202,
+  "unique_code_bytes": 175738,
+  "le_pointers": 9589,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -3798,6 +3798,16 @@
       "loaded_address": "0x43243",
       "bytes": 126,
       "le_pointers": 6
+    },
+    {
+      "symbol": "processreservedmessage_",
+      "object": "netinitc.obj",
+      "object_sha256": "75fa1212039ad07cc7dccf7546b027b3e92096b5ffac18c7bc3337b11ad26446",
+      "sha256": "06ca736f48991869366382c97cb1cd325e2257823da17b02a6c75ff1f4617255",
+      "raw_offset": "0x688c1",
+      "loaded_address": "0x432c1",
+      "bytes": 719,
+      "le_pointers": 27
     },
     {
       "symbol": "send_network_join_request_",

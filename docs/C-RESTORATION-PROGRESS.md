@@ -5,23 +5,23 @@ Attribution retains all four categories:
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 149,394 | 36.03% |
+| Compiler-generated instructions | 150,113 | 36.20% |
 | Inline assembly instructions in C objects | 24,234 | 5.84% |
-| Standalone assembly | 239,620 | 57.79% |
+| Standalone assembly | 238,901 | 57.62% |
 | Unattributed instructions and non-routine tables | 1,391 | 0.34% |
 
 The unattributed category contains **1,038 instruction bytes in 22 unknown
 routines** and **353 non-routine bytes**. The audit does not credit these bytes
-to C or assembly. Remaining assembly, including inline: **263,854 bytes (63.63%)**.
+to C or assembly. Remaining assembly, including inline: **263,135 bytes (63.46%)**.
 
-C-object inventory covers **175,019 bytes (42.21%)**, including **24,234
-inline-assembly bytes**. The inventories contain **1,201 C routine spans** and
-**487 assembly routine spans**; attribution remains unresolved in 22 C spans.
+C-object inventory covers **175,738 bytes (42.38%)**, including **24,234
+inline-assembly bytes**. The inventories contain **1,202 C routine spans** and
+**486 assembly routine spans**; attribution remains unresolved in 22 C spans.
 
-The getpacket update adds **1,425 native C bytes, retains four assembly bytes,
-and matches 80 LE sites**. Full validation passes **330 unit tests and 117
-fixtures** across **521 compiler units**. Its behavior fixture passes **110
-cases and three negative controls**.
+The network control handler adds **719 native C bytes, zero inline bytes,
+and 27 LE sites**. Full validation passes **333 unit tests and 118 fixtures**
+across **521 compiler units**. Its behavior fixture passes **70 cases and
+three negative controls**.
 
 ## Reproducible evidence
 
@@ -30,10 +30,10 @@ The accepted executable remains **741,347 bytes**, SHA-256
 The report scope is verified saved artifacts; check current source freshness
 with `restore.py doctor`.
 
-- Latest full validation: `work/getpacket-build/validation.json`; executable SHA unchanged.
-- Getpacket behavior fixture: `work/getpacket-build/receivepacket-behavior.json`.
-- Attribution audit: `work/getpacket-audit.json`.
-- Verified change packet: `work/getpacket-handoff.json`.
+- Latest full validation: `work/netctrl-build/validation.json`; executable SHA unchanged.
+- Network control fixture: `work/netctrl-build/netctrl-behavior.json`.
+- Attribution audit: `work/netctrl-audit.json`.
+- Verified change packet: `work/netctrl-handoff.json`.
 
 See [reconstruction](RECONSTRUCTION.md#inline-assembly-audit) for reproduction
 and [open probes](C-RESTORATION-ATTEMPTS.md) for unresolved work.

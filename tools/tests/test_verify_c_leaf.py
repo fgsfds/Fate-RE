@@ -142,6 +142,40 @@ class CompiledLeaf(unittest.TestCase):
                 self.assertEqual(code, b'\xe9' + (-0x204).to_bytes(4, 'little', signed=True))
                 self.assertEqual(bindings, {})
 
+    def test_conditional_internal_jump_preserves_condition_and_rebases_target(self):
+        body = b'\x90\xc3\x0f\x85' + (-7).to_bytes(4, 'little', signed=True)
+        blob = record(0x96, b'\x05_TEXT\x04CODE')
+        blob += record(0x99, b'\x69' + len(body).to_bytes(4, 'little') + b'\x01\x02\x00')
+        blob += record(0xa1, b'\x01' + bytes(4) + body)
+        blob += record(0x91, b'\x00\x01\x06parent' + bytes(5)
+                       + b'\x06caller\x02' + bytes(4))
+        with patch.dict(INTERNAL_LEAF_JUMPS, {'caller': {0: ('parent', 1, 0x85)}}):
+            code, refs = bind_leaf_details(blob, 'caller', {}, address=0x1200,
+                                          functions={'parent': 0x1000})
+        self.assertEqual(code, b'\x0f\x85' + (-0x205).to_bytes(4, 'little', signed=True))
+        self.assertEqual(refs, {})
+
+    def test_conditional_internal_jump_rejects_changed_condition_or_target(self):
+        for opcode, relative, error in ((0x84, -7, 'Invalid internal leaf jump'),
+                                        (0x85, -8, 'Unexpected internal leaf jump target')):
+            body = b'\x90\xc3\x0f' + bytes((opcode,)) + relative.to_bytes(4, 'little', signed=True)
+            blob = record(0x96, b'\x05_TEXT\x04CODE')
+            blob += record(0x99, b'\x69' + len(body).to_bytes(4, 'little') + b'\x01\x02\x00')
+            blob += record(0xa1, b'\x01' + bytes(4) + body)
+            blob += record(0x91, b'\x00\x01\x06parent' + bytes(5)
+                           + b'\x06caller\x02' + bytes(4))
+            with self.subTest(opcode=opcode, relative=relative), patch.dict(
+                    INTERNAL_LEAF_JUMPS, {'caller': {0: ('parent', 1, 0x85)}}):
+                with self.assertRaisesRegex(ValueError, error):
+                    bind_leaf_details(blob, 'caller', {}, address=0x1200,
+                                      functions={'parent': 0x1000})
+
+    def test_internal_jump_rejects_unsupported_condition_encoding(self):
+        with patch.dict(INTERNAL_LEAF_JUMPS, {'leaf': {0: ('parent', 1, 0x75)}}):
+            with self.assertRaisesRegex(ValueError, 'Unsupported internal leaf jump form'):
+                bind_leaf_details(fixture(b'', b'\x0f\x85'+bytes(4)), 'leaf', {},
+                                  address=0x1200, functions={'parent': 0x1000})
+
     def test_shared_epilogue_alias_checks_local_instructions(self):
         epilogue = bytes.fromhex('5f5e5a595bc3')
         for tail in (epilogue, b'\x90' + epilogue[1:]):

@@ -16,7 +16,7 @@ from omf_fixups import Reader, read_externals, read_fixups
 from le_fixups import read_le_fixups, pointer_range
 from verification_diagnostics import code_mismatch, relocation_mismatch
 
-LEAVES = {'sendpacket_': (0x67aec, 1177), 'netsend_': (0x67359, 629), 'checksum_gameplay_state_': (0x5923f, 1490), 'process_gameplay_frame_': (0x5283e, 732), 'update_menu_selection_': (0x5e835, 595), 'dispatch_actor_update_': (0x39c10, 647), 'update_actor_common_': (0x39e97, 697), 'clipinsideboxline_': (0x717b2, 225), 'inside_': (0x71e8f, 189),
+LEAVES = {'processreservedmessage_': (0x688c1, 719), 'sendpacket_': (0x67aec, 1177), 'netsend_': (0x67359, 629), 'checksum_gameplay_state_': (0x5923f, 1490), 'process_gameplay_frame_': (0x5283e, 732), 'update_menu_selection_': (0x5e835, 595), 'dispatch_actor_update_': (0x39c10, 647), 'update_actor_common_': (0x39e97, 697), 'clipinsideboxline_': (0x717b2, 225), 'inside_': (0x71e8f, 189),
           'animateoffs_': (0x75d58, 139), 'krand_': (0x7b8e5, 20),
           'getmousevalues_': (0x79a24, 68),
           'clipinsidebox_': (0x716c7, 235), 'lastwall_': (0x77ecf, 80),
@@ -295,7 +295,7 @@ DATA_OFFSETS.update({
 })
 
 # Error/printing dependencies remain identified bindings, not reconstructed code.
-FUNCTION_ADDRESSES = {'getpacket_': 0x42985, 'processreservedmessage_': 0x432c1, 'netinitconnection_': 0x42319, 'sendpacket_': 0x424ec, 'comsend_': 0x41fce, 'getcrc_': 0x42f73, 'netsend_': 0x41d59, 'simulate_network_interrupt_': 0x42ffc, 'convalloc32_': 0x42fbb, 'sequence_remove_sprite_': 0x10f9f, 'int386_': 0x630b3, 'int386x_': 0x6309a, 'format_listed_sprite_error_': 0x601f3, 'report_listed_sprite_error_': 0x26a03, 'insertspritesect_': 0x508cd, 'insertspritestat_': 0x5096b, 'insert_template_sprite_': 0x508b8, 'record_lookup_error_': 0x26a03, 'memcpy_': 0x63245, 'type_lookup_error_': 0x26a03, 'getpalookup_': 0x5fed7, 'tvlineasm1_': 0x744d0, 'lookup_error_': 0x26a03, 'setverts_': 0x599c5, 'remove_engine_sprite_': 0x50a09, 'inside_': 0x4c88f, 'allocache_': 0x40c73,
+FUNCTION_ADDRESSES = {'netuninitconnection_': 0x4248f, 'getpacket_': 0x42985, 'processreservedmessage_': 0x432c1, 'netinitconnection_': 0x42319, 'sendpacket_': 0x424ec, 'comsend_': 0x41fce, 'getcrc_': 0x42f73, 'netsend_': 0x41d59, 'simulate_network_interrupt_': 0x42ffc, 'convalloc32_': 0x42fbb, 'sequence_remove_sprite_': 0x10f9f, 'int386_': 0x630b3, 'int386x_': 0x6309a, 'format_listed_sprite_error_': 0x601f3, 'report_listed_sprite_error_': 0x26a03, 'insertspritesect_': 0x508cd, 'insertspritestat_': 0x5096b, 'insert_template_sprite_': 0x508b8, 'record_lookup_error_': 0x26a03, 'memcpy_': 0x63245, 'type_lookup_error_': 0x26a03, 'getpalookup_': 0x5fed7, 'tvlineasm1_': 0x744d0, 'lookup_error_': 0x26a03, 'setverts_': 0x599c5, 'remove_engine_sprite_': 0x50a09, 'inside_': 0x4c88f, 'allocache_': 0x40c73,
                       'printf_': 0x40bb4, 'reportandexit_': 0x40f9e,
                       'lseek_': 0x615b6, 'filelength_': 0x63208, 'close_': 0x6219a, 'outpw_': 0x63320,
                       'kfree_': 0x44791, 'read_': 0x615f7, 'min_': 0x63201,
@@ -3574,6 +3574,17 @@ def flat_frame_groups(blob):
 # Watcom resolves these direct jumps in the object without an OMF fixup.
 # The public entries retain their original, nonadjacent executable spans.
 INTERNAL_LEAF_JUMPS = {
+    'processreservedmessage_': {
+        **dict.fromkeys((32, 171, 515, 534, 603, 714), ('netinitconnection_', 365)),
+        39: ('netinitconnection_', 365, 0x85),
+        176: ('netinitconnection_', 365, 0x8c),
+        226: ('netinitconnection_', 365, 0x84),
+        270: ('netinitconnection_', 365, 0x85),
+        293: ('netinitconnection_', 365, 0x85),
+        608: ('netinitconnection_', 365, 0x8c),
+        624: ('netinitconnection_', 365, 0x8d),
+        698: ('netinitconnection_', 365, 0x8c),
+    },
     'getpacket_': {1424: ('netinitconnection_', 368)},
     'deletespritesect_': {0x1f: ('insertspritesect_', 0x96), 0xce: ('insertspritesect_', 0x96)},
     'deletespritestat_': {0x1f: ('insertspritesect_', 0x96), 0xce: ('insertspritesect_', 0x96)},
@@ -3791,24 +3802,33 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
             bindings[offset] = value
             if is_code_pointer:
                 generated_code_bindings[offset] = value
-    for site, (target_symbol, target_offset) in INTERNAL_LEAF_JUMPS.get(public_name, {}).items():
+    for site, spec in INTERNAL_LEAF_JUMPS.get(public_name, {}).items():
+        # A third element records the immutable near-Jcc condition byte.
+        # Only the displacement is rebound when compiler publics move apart.
+        if len(spec) not in (2, 3) or (len(spec) == 3 and not 0x80 <= spec[2] <= 0x8f):
+            raise ValueError('Unsupported internal leaf jump form')
+        target_symbol, target_offset = spec[:2]
+        opcode = b'\xe9' if len(spec) == 2 else bytes((0x0f, spec[2]))
+        operand = site + len(opcode)
+        instruction_end = operand + 4
         target = [off for s, off, name in publics if s == seg and name == target_symbol]
         alias = INTERNAL_EPILOGUE_ALIASES.get((target_symbol, target_offset))
         placed_symbol, placed_offset = (alias[0], 0) if alias else (target_symbol, target_offset)
         if address is None or placed_symbol not in (functions or {}):
             raise ValueError('Internal leaf jump requires loaded source and target addresses')
-        if (len(target) != 1 or site + 5 > len(code) or code[site] != 0xe9
-                or fields.intersection(range(site, site + 5))):
+        if (len(target) != 1 or site < 0 or instruction_end > len(code)
+                or code[site:operand] != opcode
+                or fields.intersection(range(site, instruction_end))):
             raise ValueError('Invalid internal leaf jump')
-        displacement = int.from_bytes(code[site+1:site+5], 'little', signed=True)
-        if start + site + 5 + displacement != target[0] + target_offset:
+        displacement = int.from_bytes(code[operand:instruction_end], 'little', signed=True)
+        if start + instruction_end + displacement != target[0] + target_offset:
             raise ValueError('Unexpected internal leaf jump target')
         if alias:
             epilogue = target[0] + target_offset
             if segments[seg]['data'][epilogue:epilogue + len(alias[1])] != alias[1]:
                 raise ValueError('Compiler-local epilogue does not match the shared epilogue')
-        displacement = functions[placed_symbol] + placed_offset - (address + site + 5)
-        code[site+1:site+5] = displacement.to_bytes(4, 'little', signed=True)
+        displacement = functions[placed_symbol] + placed_offset - (address + instruction_end)
+        code[operand:instruction_end] = displacement.to_bytes(4, 'little', signed=True)
     if seen_prefix_fixups != set(prefix_fixups):
         raise ValueError('Missing retained assembly prefix relocation')
     bind_short_returns(code, public_name, address, functions, fields)
