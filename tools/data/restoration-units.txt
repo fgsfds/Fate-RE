@@ -496,3 +496,4 @@ fate/process_gameplay_frame procfram /4r /s /or /bt=dos
 fate/checksum_gameplay_state gamesum /4r /s /or /bt=dos
 
 fate/status_panel statpan
+fate/gameplay_update gamup

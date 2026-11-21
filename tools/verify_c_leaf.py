@@ -3631,6 +3631,13 @@ DATA_OFFSETS.update({
     '_window_right': 0x286b98, '_window_left': 0x286b9c,
 })
 
+
+# Gameplay-controller compiler sections; calls enter the original public address.
+LEAVES.update({'update_gameplay_head_': (0x39733, 550),
+               'update_gameplay_tail_': (0x3996b, 677)})
+FUNCTION_ADDRESSES.update({'select_item_': 229592, 'refresh_inventory_': 169035, 'check_teleport_terminals_': 81311, 'absolute_long_': 393923, 'activate_sector_': 165648, 'update_sector_events_': 171220, 'update_periodic_sequences_': 74710, 'update_proximity_sprites_': 66250, 'update_float_sprites_': 79535, 'update_moving_sprite_physics_': 79968, 'update_projectiles_': 78391, 'update_sector_panning_': 73358, 'update_fall_triggers_': 68495, 'update_level_effects_': 263778, 'save_level_and_load_board_': 81645, 'initialize_destination_': 158250, 'update_actor_states_': 124848, 'update_gameplay_': 82227})
+DATA_OFFSETS.update({'_inventory_override_request': 424318, '_inventory_override': 19732, '_previous_override': 19734, '_status_right_tenths': 405916, '_saved_status_right': 19736, '_item_enabled': 8807, '_item_stock': 8823, '_item_alternate_stock': 8839, '_saved_item_enabled': 522574, '_saved_item_stock': 522558, '_saved_item_alternate_stock': 522542, '_left_icon': 8248, '_middle_icon': 8250, '_right_icon': 8252, '_effect_count': 8797, '_status_flag': 8801, '_saved_left_icon': 522540, '_saved_middle_icon': 522538, '_saved_right_icon': 522536, '_saved_effect_count': 522534, '_saved_status_flag': 522532, '_game_clock': 2653832, '_last_step_clock': 502160, '_advance_clock': 8859, '_level_sector_ids': 484252, '_level_sector_active': 484254, '_sector_hitag': 2606020, '_level_sector_x': 477596, '_level_sector_y': 477600, '_player_x': 372124, '_player_y': 372060, '_actor_active': 519350, '_actor_level': 518849, '_actor_sprite': 514744, '_sprite_x': 2113696, '_sprite_y': 2113700, '_current_level': 522366, '_level_sector_count': 502332, '_player_sector': 371964, '_special_sector': 515812, '_last_sequence_clock': 8240, '_destination_level': 8256, '_loaded_level': 522365, '_level_left_icon': 502176, '_level_middle_icon': 502178, '_level_right_icon': 502180, '_modified_levels': 515746, '_mod_extension': 720, '_destination_entry': 515822, '_destination_x': 502168, '_destination_y': 502172})
+
 # The exact image retains this entry sequence from assembly and takes the
 # remaining bytes from the compiler public of the same name.
 LEAF_ENTRY_PREFIXES = {'run_menu_loop_': 17, 'draw_status_panel_': 84}
@@ -3643,6 +3650,32 @@ LEAF_ENTRY_PREFIX_FIXUPS = {
         58: ('_panel_top', False), 80: ('draw_tile_', True),
     },
 }
+
+
+# Unchanged compiler sections surrounding a separately verified assembly island.
+# Each row names the real OMF public, kept bounds, and required full public size.
+LEAF_CODE_SLICES = {
+    'update_gameplay_head_': ('update_gameplay_', 0, 550, 1245),
+    'update_gameplay_tail_': ('update_gameplay_', 568, 1245, 1245),
+}
+
+
+def leaf_public_name(symbol):
+    return LEAF_CODE_SLICES.get(symbol, (symbol,))[0]
+
+
+def leaf_code_bounds(symbol, public_size):
+    if symbol in LEAF_CODE_SLICES:
+        if symbol in LEAF_ENTRY_PREFIXES or symbol in LEAF_ENTRY_PREFIX_FIXUPS:
+            raise ValueError('A sliced leaf cannot also retain an entry prefix')
+        _, start, end, expected_size = LEAF_CODE_SLICES[symbol]
+        if public_size != expected_size or not 0 <= start < end <= public_size:
+            raise ValueError('Compiler public extent differs from registered leaf slice')
+        return start, end
+    prefix = LEAF_ENTRY_PREFIXES.get(symbol, 0)
+    if not 0 <= prefix < public_size:
+        raise ValueError('Retained assembly prefix exceeds the compiler public')
+    return prefix, public_size
 
 
 @lru_cache(maxsize=512)
@@ -3660,7 +3693,7 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
     """Return unchanged (code, all_absolute_bindings), plus optional CODE metadata.
 
     address and returned fixup offsets refer to the placed span after any
-    retained assembly entry prefix.
+    retained assembly entry prefix or registered compiler section.
 
     code_bindings must be an empty output dict when a CODE pointer is used. It
     receives leaf-relative site -> final object-relative operand, including
@@ -3669,7 +3702,8 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
     if code_bindings is not None and (not isinstance(code_bindings, dict) or code_bindings):
         raise ValueError('CODE binding output must be an empty dict; stale metadata rejected')
     segments, publics, externals, flat_groups, fixups = parsed_leaf_object(bytes(blob))
-    found = [(seg, off) for seg, off, name in publics if name == symbol]
+    public_name = leaf_public_name(symbol)
+    found = [(seg, off) for seg, off, name in publics if name == public_name]
     if len(found) != 1:
         raise ValueError('Expected exactly one leaf public symbol')
     seg, start = found[0]
@@ -3678,11 +3712,10 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
     end = min([a for s, a, _ in publics if s == seg and a > start]
               or [len(segments[seg]['data'])])
     code = bytearray(segments[seg]['data'][start:end])
+    kept_start, kept_end = leaf_code_bounds(symbol, len(code))
     prefix = LEAF_ENTRY_PREFIXES.get(symbol, 0)
-    if prefix >= len(code):
-        raise ValueError('Retained assembly prefix exceeds the compiler public')
     if address is not None:
-        address -= prefix
+        address -= kept_start
     prefix_fixups = LEAF_ENTRY_PREFIX_FIXUPS.get(symbol, {})
     seen_prefix_fixups = set()
     fields = set()
@@ -3697,6 +3730,10 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
                 raise ValueError('Relocation in retained assembly prefix')
             if offset + 4 > prefix:
                 raise ValueError('Relocation crosses retained assembly prefix boundary')
+        if symbol in LEAF_CODE_SLICES and any(
+                0 < boundary < len(code) and offset < boundary < offset + 4
+                for boundary in (kept_start, kept_end)):
+            raise ValueError('Relocation crosses selected leaf boundary')
         if fix.location != 9 or fix.target[0] != 2:
             raise ValueError('Unsupported leaf relocation')
         # Small-model Watcom emits frame-by-target near calls. Both addresses
@@ -3712,7 +3749,7 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
                 raise ValueError('Unexpected retained assembly prefix relocation')
             seen_prefix_fixups.add(offset)
         is_code_pointer = not fix.relative and name in (absolute_code or {})
-        data_name, opcode = SMALL_MODEL_DATA_REFERENCES.get(symbol, {}).get(offset, (None, b''))
+        data_name, opcode = SMALL_MODEL_DATA_REFERENCES.get(public_name, {}).get(offset, (None, b''))
         small_model_data = (fix.frame == (5, None) and not fix.relative
                             and not is_code_pointer and not fix.displacement
                             and data_name == name and offset >= len(opcode)
@@ -3743,7 +3780,7 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
             bindings[offset] = value
             if is_code_pointer:
                 generated_code_bindings[offset] = value
-    for site, (target_symbol, target_offset) in INTERNAL_LEAF_JUMPS.get(symbol, {}).items():
+    for site, (target_symbol, target_offset) in INTERNAL_LEAF_JUMPS.get(public_name, {}).items():
         target = [off for s, off, name in publics if s == seg and name == target_symbol]
         alias = INTERNAL_EPILOGUE_ALIASES.get((target_symbol, target_offset))
         placed_symbol, placed_offset = (alias[0], 0) if alias else (target_symbol, target_offset)
@@ -3763,12 +3800,12 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
         code[site+1:site+5] = displacement.to_bytes(4, 'little', signed=True)
     if seen_prefix_fixups != set(prefix_fixups):
         raise ValueError('Missing retained assembly prefix relocation')
-    bind_short_returns(code, symbol, address, functions, fields)
+    bind_short_returns(code, public_name, address, functions, fields)
     if code_bindings is not None:
-        code_bindings.update((site - prefix, ref) for site, ref in generated_code_bindings.items()
-                             if site >= prefix)
-    return bytes(code[prefix:]), {site - prefix: ref for site, ref in bindings.items()
-                                  if site >= prefix}
+        code_bindings.update((site - kept_start, ref) for site, ref in generated_code_bindings.items()
+                             if kept_start <= site < kept_end)
+    return bytes(code[kept_start:kept_end]), {site - kept_start: ref for site, ref in bindings.items()
+                                               if kept_start <= site < kept_end}
 
 
 def bind_leaf(blob, symbol, values, **kwargs):

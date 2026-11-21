@@ -113,3 +113,4 @@ check_gameplay_frame {exe} {build}/procfram.obj | procfram
 check_gameplay_checksum {exe} {build}/gamesum.obj | gamesum
 
 check_status_panel --exe {exe} --build {build} | statpan
+check_gameplay_update --exe {exe} --build {build} | gamup

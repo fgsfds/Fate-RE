@@ -9,7 +9,8 @@ import re
 from build_object_images import CODE_RAW, CODE_SIZE
 from compare_exe import TARGET_SHA256
 from compare_watcom_markers import compare
-from verify_c_leaf import LEAF_ENTRY_PREFIXES
+from verify_c_leaf import (LEAF_ENTRY_PREFIXES, LEAF_CODE_SLICES,
+                           leaf_public_name, leaf_code_bounds)
 from match_objects import read_object
 
 
@@ -40,6 +41,24 @@ def verified_switch_tables(inventory, filename, obj):
         raise ValueError('Switch tables do not belong to a CODE section')
     return tuple((segment, int(row['raw_offset'], 16) - base, row['bytes'])
                  for row in table_rows)
+
+
+def placed_measurement(symbol, length, measurement):
+    size, inline, ranges, widths, invocations = measurement
+    start, end = leaf_code_bounds(symbol, size)
+    if end - start != length:
+        raise ValueError('Inventory extent does not match object public span')
+    if symbol in LEAF_CODE_SLICES:
+        # Merged inline ranges do not retain invocation ownership by section.
+        # Keep such slices unknown rather than inventing per-section counts.
+        if inline or ranges or invocations:
+            raise ValueError('Cannot attribute inline invocations in a sliced public')
+        return (length, 0, [], [(site - start, *details) for site, *details in widths
+                               if start <= site < end], 0)
+    if any(a < start for a, _ in ranges) or any(site < start for site, *_ in widths):
+        raise ValueError('Cannot attribute a marker or changed branch in the retained prefix')
+    return (length, inline, [(a - start, b - start) for a, b in ranges],
+            [(site - start, *details) for site, *details in widths], invocations)
 
 
 def report(build, marker_dir, retry_dir=None):
@@ -93,16 +112,9 @@ def report(build, marker_dir, retry_dir=None):
                 raise ValueError('Diagnostic compile failed: '+detail)
             if path not in marked_files:
                 marked_files[path] = path.read_bytes()
-            measurement = compare(original, marked_files[path], symbol,
+            measurement = compare(original, marked_files[path], leaf_public_name(symbol),
                                   verified_switch_tables(inventory, filename, original))
-            size, inline, ranges, widths, invocations = measurement
-            prefix = LEAF_ENTRY_PREFIXES.get(symbol, 0)
-            if size - prefix != length:
-                raise ValueError('Inventory extent does not match object public span')
-            if any(start < prefix for start, _ in ranges) or any(site < prefix for site, *_ in widths):
-                raise ValueError('Cannot attribute a marker or changed branch in the retained prefix')
-            return (length, inline, [(start - prefix, end - prefix) for start, end in ranges],
-                    [(site - prefix, *details) for site, *details in widths], invocations)
+            return placed_measurement(symbol, length, measurement)
 
         exceptions = (ValueError, KeyError, StopIteration, OSError)
         try:

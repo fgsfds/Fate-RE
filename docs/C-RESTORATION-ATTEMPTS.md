@@ -90,19 +90,14 @@ the sort into inline instructions merely to increase the C-object percentage.
 
 ### Gameplay update controller row-offset allocation
 
-`update_gameplay_`, Watcom 10.5 `/4r /s /or /bt=dos`:
-`work/gameplay-update-next/vacated_registers.c` emits the target 1,245 bytes,
-matches all 113 LE sites/targets, and passes 32 differential cases covering
-state, call order, preserved registers and callee stack cleanup. It is **not
-byte-identical**: three row-address instructions starting at `0x14359` use
-EBX instead of EBP. Inventory, proximity branches and level-transition
-allocation now agree. Keep the shared grant/proximity flag, short counter,
-stock/row EDX reuse, explicit ECX column and separate post-transition level
-lifetime. Typed row structs and a signed row/sector scalar preserve the same
-mismatch; explicit byte offsets spill the counter. Next require a defined-C
-lifetime model that coalesces the initial row offset with EBP; do not retry
-unsupported EBP modification contracts. Production assembly remains in place.
-Evidence: `work/gameplay-update-next/evidence.json`.
+`update_gameplay_`, Watcom 10.5 `/4r /s /or /bt=dos`, now keeps only the
+18-byte row-address setup at `0x14359` in assembly. The two C sections match
+1,227 bytes and 112 LE sites; the retained setup has one LE site. The full C
+output still differs in three operand bytes, choosing EBX instead of EBP.
+Next investigate coalescing the row-offset temporary with the later EBP
+sector/Y scalar; do not relax clobber declarations (see `WATCOM-IDIOMS.md`).
+Evidence: `work/gameplay-controller-build/validation.json` and
+`work/gameplay-controller-audit.json`.
 
 ### Startup option-prefix pointer increment
 

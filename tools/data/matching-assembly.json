@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
   "routines": 489,
-  "unique_code_bytes": 244078,
-  "le_pointers": 13298,
+  "unique_code_bytes": 242851,
+  "le_pointers": 13186,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -6274,16 +6274,16 @@
       "le_pointers": 80
     },
     {
-      "symbol": "update_gameplay",
+      "symbol": "update_gameplay_row_setup",
       "source": "src/fate/gameplay_update.asm",
       "binary": "gameplay_update.bin",
-      "sha256": "ff6f285f4a2375d9c87107c80ffb3c3991daa06a210e354dc4ad2182bb5cdf4b",
-      "bytes": 1245,
-      "raw_offset": "0x39733",
-      "loaded_address": "0x14133",
-      "public_entry": "0x14133",
+      "sha256": "c55ae2c25ef9e3cf7d35b61a4b21a812d463c1341ad15edbc94a2392e71f7d26",
+      "bytes": 18,
+      "raw_offset": "0x39959",
+      "loaded_address": "0x14359",
+      "public_entry": "0x14359",
       "binary_offset": 0,
-      "le_pointers": 113
+      "le_pointers": 1
     },
     {
       "symbol": "update_actor_profile_two_mode_one",

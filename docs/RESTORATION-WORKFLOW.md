@@ -308,6 +308,14 @@ required to report C/assembly percentages honestly. Keep mixed C objects separat
 from assembly-free C, and distinguish standalone assembly from measured inline
 assembly.
 
+For unchanged C sections around a small assembly gap, `LEAF_CODE_SLICES`
+records the actual OMF public, selected bounds, and required full public size.
+Keep the assembly gap at its original address without added transfers or
+opcode patches. Prove instruction boundaries, live register/frame handoffs,
+each section's bytes and LE sites, then the complete image; credit only the
+selected C bytes. Marker attribution currently requires sliced publics to
+have zero inline-assembly invocations; otherwise keep those slices unknown.
+
 ## Artifacts and freshness
 
 - `build-provenance.json`: per-object content keys, input hashes, output hashes,
