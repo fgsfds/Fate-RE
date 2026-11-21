@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
   "routines": 489,
-  "unique_code_bytes": 244686,
-  "le_pointers": 13334,
+  "unique_code_bytes": 244078,
+  "le_pointers": 13298,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -6205,13 +6205,13 @@
       "symbol": "draw_status_panel",
       "source": "src/fate/status_panel.asm",
       "binary": "status_panel.bin",
-      "sha256": "818eb8737cc879b0e4310d36f862f8ff260be4da6e37245a55d4d68fb60d834d",
-      "bytes": 692,
+      "sha256": "9467567deadcb7f8898275373d7d87ef86fb3945321e81382bfbceca9450e73f",
+      "bytes": 84,
       "raw_offset": "0x35c7a",
       "loaded_address": "0x1067a",
       "public_entry": "0x1067a",
       "binary_offset": 0,
-      "le_pointers": 41
+      "le_pointers": 5
     },
     {
       "symbol": "update_mouse_held_sprite",

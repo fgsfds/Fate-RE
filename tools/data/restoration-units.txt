@@ -494,3 +494,5 @@ fate/actor_dispatch actdisp /4r /s /bt=dos
 fate/update_menu_selection menusel /4r /s /or /bt=dos
 fate/process_gameplay_frame procfram /4r /s /or /bt=dos
 fate/checksum_gameplay_state gamesum /4r /s /or /bt=dos
+
+fate/status_panel statpan

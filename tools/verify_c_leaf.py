@@ -3616,9 +3616,33 @@ def bind_short_returns(code, symbol, address, functions, fixup_fields):
         code[site + 1] = displacement & 0xff
 
 
+
+# Status-panel body; its 84-byte entry remains separately verified assembly.
+LEAVES['draw_status_panel_'] = (0x35cce, 608)
+FUNCTION_ADDRESSES.update({'draw_status_panel_': 0x1067a,
+                           'draw_tile_': 0x57181, 'draw_number_text_': 0x385f4})
+DATA_OFFSETS.update({
+    '_number_format': 0xe4, '_show_left_icon': 0x2038,
+    '_show_middle_icon': 0x203a, '_show_right_icon': 0x203c,
+    '_status_left_value': 0x225d, '_status_left_tenths': 0x2263,
+    '_status_right_values': 0x2277, '_status_right_index': 0x2be2,
+    '_status_right_tenths': 0x6319c, '_panel_top': 0x7f898,
+    '_window_bottom': 0x286b90, '_window_top': 0x286b94,
+    '_window_right': 0x286b98, '_window_left': 0x286b9c,
+})
+
 # The exact image retains this entry sequence from assembly and takes the
 # remaining bytes from the compiler public of the same name.
-LEAF_ENTRY_PREFIXES = {'run_menu_loop_': 17}
+LEAF_ENTRY_PREFIXES = {'run_menu_loop_': 17, 'draw_status_panel_': 84}
+# Only these compiler-prefix references may be discarded. The independently
+# verified assembly prefix owns its actual operands in the production image.
+LEAF_ENTRY_PREFIX_FIXUPS = {
+    'draw_status_panel_': {
+        16: ('_window_bottom', False), 23: ('_window_right', False),
+        30: ('_window_top', False), 37: ('_window_left', False),
+        58: ('_panel_top', False), 80: ('draw_tile_', True),
+    },
+}
 
 
 @lru_cache(maxsize=512)
@@ -3659,6 +3683,8 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
         raise ValueError('Retained assembly prefix exceeds the compiler public')
     if address is not None:
         address -= prefix
+    prefix_fixups = LEAF_ENTRY_PREFIX_FIXUPS.get(symbol, {})
+    seen_prefix_fixups = set()
     fields = set()
     bindings = {}
     generated_code_bindings = {}
@@ -3667,7 +3693,10 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
             continue
         offset = fix.offset - start
         if offset < prefix:
-            raise ValueError('Relocation in retained assembly prefix')
+            if offset not in prefix_fixups:
+                raise ValueError('Relocation in retained assembly prefix')
+            if offset + 4 > prefix:
+                raise ValueError('Relocation crosses retained assembly prefix boundary')
         if fix.location != 9 or fix.target[0] != 2:
             raise ValueError('Unsupported leaf relocation')
         # Small-model Watcom emits frame-by-target near calls. Both addresses
@@ -3678,6 +3707,10 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
         if not 0 < fix.target[1] < len(externals):
             raise ValueError('External index outside table')
         name = externals[fix.target[1]]
+        if offset < prefix:
+            if prefix_fixups[offset] != (name, fix.relative):
+                raise ValueError('Unexpected retained assembly prefix relocation')
+            seen_prefix_fixups.add(offset)
         is_code_pointer = not fix.relative and name in (absolute_code or {})
         data_name, opcode = SMALL_MODEL_DATA_REFERENCES.get(symbol, {}).get(offset, (None, b''))
         small_model_data = (fix.frame == (5, None) and not fix.relative
@@ -3728,10 +3761,14 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
                 raise ValueError('Compiler-local epilogue does not match the shared epilogue')
         displacement = functions[placed_symbol] + placed_offset - (address + site + 5)
         code[site+1:site+5] = displacement.to_bytes(4, 'little', signed=True)
+    if seen_prefix_fixups != set(prefix_fixups):
+        raise ValueError('Missing retained assembly prefix relocation')
     bind_short_returns(code, symbol, address, functions, fields)
     if code_bindings is not None:
-        code_bindings.update((site - prefix, ref) for site, ref in generated_code_bindings.items())
-    return bytes(code[prefix:]), {site - prefix: ref for site, ref in bindings.items()}
+        code_bindings.update((site - prefix, ref) for site, ref in generated_code_bindings.items()
+                             if site >= prefix)
+    return bytes(code[prefix:]), {site - prefix: ref for site, ref in bindings.items()
+                                  if site >= prefix}
 
 
 def bind_leaf(blob, symbol, values, **kwargs):

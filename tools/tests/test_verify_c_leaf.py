@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch
 from test_match_objects import record
 from verify_c_leaf import (
-    INTERNAL_EPILOGUE_ALIASES, INTERNAL_LEAF_JUMPS, INTERNAL_SHORT_RETURNS, LEAVES, LEAF_ENTRY_PREFIXES,
+    INTERNAL_EPILOGUE_ALIASES, INTERNAL_LEAF_JUMPS, INTERNAL_SHORT_RETURNS, LEAVES, LEAF_ENTRY_PREFIXES, LEAF_ENTRY_PREFIX_FIXUPS,
     bind_leaf, bind_leaf_details, bind_short_returns, verify_leaf_relocations,
 )
 
@@ -37,6 +37,48 @@ class CompiledLeaf(unittest.TestCase):
             obj = fixture(code=bytes(5))
             with self.assertRaisesRegex(ValueError, 'Relocation in retained assembly prefix'):
                 bind_leaf_details(obj, 'leaf', {'global': 0x200})
+
+    def test_allowlisted_prefix_data_fixup_is_bound_then_excluded(self):
+        with patch.dict(LEAF_ENTRY_PREFIXES, {'leaf': 4}), patch.dict(
+                LEAF_ENTRY_PREFIX_FIXUPS, {'leaf': {0: ('global', False)}}):
+            obj = fixture(bytes.fromhex('e4 00 16 01 01'), code=bytes(4) + b'\xc3')
+            code, refs = bind_leaf_details(obj, 'leaf', {'global': 0x200})
+            self.assertEqual((code, refs), (b'\xc3', {}))
+            with self.assertRaisesRegex(ValueError, 'Unbound leaf symbol'):
+                bind_leaf_details(obj, 'leaf', {})
+
+    def test_allowlisted_prefix_relative_call_is_excluded(self):
+        with patch.dict(LEAF_ENTRY_PREFIXES, {'leaf': 5}), patch.dict(
+                LEAF_ENTRY_PREFIX_FIXUPS, {'leaf': {1: ('global', True)}}):
+            obj = fixture(bytes.fromhex('a4 01 16 01 01'), b'\xe8' + bytes(4) + b'\xc3')
+            code, refs = bind_leaf_details(obj, 'leaf', {}, address=0x100,
+                                           functions={'global': 0x200})
+            self.assertEqual((code, refs), (b'\xc3', {}))
+
+    def test_prefix_fixup_cannot_cross_kept_body_boundary(self):
+        with patch.dict(LEAF_ENTRY_PREFIXES, {'leaf': 2}), patch.dict(
+                LEAF_ENTRY_PREFIX_FIXUPS, {'leaf': {0: ('global', False)}}):
+            with self.assertRaisesRegex(ValueError, 'crosses retained assembly prefix'):
+                bind_leaf_details(fixture(bytes.fromhex('e4 00 16 01 01'), code=bytes(5)), 'leaf', {'global': 0x200})
+
+    def test_prefix_fixup_identity_and_completeness_are_checked(self):
+        for expected in ({0: ('other', False)}, {0: ('global', True)}):
+            with self.subTest(expected=expected), patch.dict(LEAF_ENTRY_PREFIXES, {'leaf': 4}), patch.dict(
+                    LEAF_ENTRY_PREFIX_FIXUPS, {'leaf': expected}):
+                with self.assertRaisesRegex(ValueError, 'Unexpected retained assembly prefix'):
+                    bind_leaf_details(fixture(bytes.fromhex('e4 00 16 01 01'), code=bytes(4) + b'\xc3'), 'leaf', {'global': 0x200})
+        with patch.dict(LEAF_ENTRY_PREFIXES, {'leaf': 4}), patch.dict(
+                LEAF_ENTRY_PREFIX_FIXUPS, {'leaf': {0: ('global', False)}}):
+            with self.assertRaisesRegex(ValueError, 'Missing retained assembly prefix'):
+                bind_leaf_details(fixture(b'', bytes(4) + b'\xc3'), 'leaf', {'global': 0x200})
+
+    def test_prefix_code_pointer_metadata_has_no_negative_sites(self):
+        with patch.dict(LEAF_ENTRY_PREFIXES, {'leaf': 4}), patch.dict(
+                LEAF_ENTRY_PREFIX_FIXUPS, {'leaf': {0: ('global', False)}}):
+            metadata = {}
+            code, refs = bind_leaf_details(fixture(bytes.fromhex('e4 00 16 01 01'), code=bytes(4) + b'\xc3'), 'leaf', {},
+                                           absolute_code={'global': 0x200}, code_bindings=metadata)
+            self.assertEqual((code, refs, metadata), (b'\xc3', {}, {}))
 
     def test_internal_jump_between_discontiguous_leaves(self):
         for relative, error in ((-6, None), (-7, 'Unexpected internal leaf jump target')):
