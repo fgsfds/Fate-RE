@@ -127,14 +127,14 @@ and argument lifetimes; position-struct reuse spills the correct slots but
 changes entry allocation. Player-mirror and tag-width differences remain.
 Evidence and hash-bound behavior report: `work/numbered-board-next/evidence.json`.
 
-### Encounter spawn-height lifetime
+### Encounter spawn-prefix allocation
 
-Watcom 10.5 `/4r /s /or /bt=dos`: the ordinary candidate remains 1,219 bytes
-versus 1,263. EBP is not saved: the original retains spawn height across the
-loop while C rematerializes it inside. Next compare spawn-loop live ranges
-and guard the two internal CODE literal-template relocations before another
-allocation probe. Current evidence and source hashes:
-`work/encounter-next/current-blocker.json`.
+Watcom 10.5 `/4r /s /or /bt=dos`: the whole encounter still differs at the
+missing EBP save; the original retains spawn height across the loop while C
+rematerializes it. Next stage the actual 16-bit sprite ID and random draws in
+DI, DX and BX through genuine empty identities, checking widening and live
+ranges. The exit phase is accepted separately. Evidence and next-probe limits:
+`work/encounter-next/word-register-nextplan.md`.
 
 ### Whole palette search frame
 

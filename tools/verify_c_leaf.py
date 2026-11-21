@@ -3690,6 +3690,10 @@ LEAF_CONTEXT_SUFFIXES = {
     'receive_ready_send_': b'\xe9\x00\x00\x00\x00',
 }
 
+# Exact literal prefixes belong to unlinked compiler context, not C coverage.
+# public -> (prefix bytes, SHA-256, operand offsets -> literal-prefix offsets).
+LEAF_CONTEXT_LITERALS = {}
+
 LEAF_CONTEXT_FIXUPS = {
     'main_caption_setup_': {2: ('_loading_caption_columns', False),
                             12: ('_loading_caption', False), 41: ('draw_menu_text_', True)},
@@ -3945,6 +3949,20 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
                     or f.displacement or code[f.offset-start:f.offset-start+4] != bytes(4)
                     or (externals[f.target[1]], f.relative) != context_fixups[f.offset-start]):
                 raise ValueError('Compiler context fixup target/form/addend differs')
+    literal = LEAF_CONTEXT_LITERALS.get(public_name)
+    literal_sites = {} if literal is None else literal[2]
+    if literal is not None:
+        size, digest, _ = literal
+        if (start != size or hashlib.sha256(segments[seg]['data'][:start]).hexdigest() != digest
+                or [(s, a, n) for s, a, n in publics if s == seg] != [(seg, start, public_name)]):
+            raise ValueError('Compiler literal prefix/layout differs')
+        if any(f.segment == seg and (f.offset < start or f.offset+f.width > end-len(suffix))
+               for f in fixups):
+            raise ValueError('Fixup intersects compiler literal prefix or context suffix')
+        observed = [f.offset-start for f in fixups if f.segment == seg and start <= f.offset < end
+                    and (f.target[0] == 0 or f.offset-start in literal_sites)]
+        if len(observed) != len(literal_sites) or set(observed) != set(literal_sites):
+            raise ValueError('Compiler literal fixup inventory differs')
     kept_start, kept_end = leaf_code_bounds(symbol, len(code))
     prefix = LEAF_ENTRY_PREFIXES.get(symbol, 0)
     if address is not None:
@@ -3952,6 +3970,7 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
     prefix_fixups = LEAF_ENTRY_PREFIX_FIXUPS.get(symbol, {})
     seen_prefix_fixups = set()
     fields = set()
+    literal_instructions = {byte for site in literal_sites for byte in range(site-1, site+4)}
     bindings = {}
     generated_code_bindings = {}
     for fix in fixups:
@@ -3967,6 +3986,30 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
                 0 < boundary < len(code) and offset < boundary < offset + 4
                 for boundary in (kept_start, kept_end)):
             raise ValueError('Relocation crosses selected leaf boundary')
+        if offset not in literal_sites and literal_instructions.intersection(range(offset, offset+4)):
+            raise ValueError('Fixup overlaps a compiler literal instruction')
+        if offset in literal_sites:
+            sites = set(range(offset, offset+4))
+            if (fix.location != 9 or fix.width != 4 or fix.relative
+                    or fix.target != (0, seg) or fix.displacement
+                    or fix.frame[0] != 1 or fix.frame[1] not in flat_groups
+                    or not 0 < offset <= len(code)-4 or fields & sites
+                    or code[offset-1] != 0xbe
+                    or int.from_bytes(code[offset:offset+4], 'little') != literal_sites[offset]
+                    or not 0 <= literal_sites[offset] < start):
+                raise ValueError('Compiler literal fixup form/addend differs')
+            if kept_start <= offset < kept_end:
+                raise ValueError('Compiler literal operands must remain unlinked')
+            if address is None:
+                raise ValueError('Compiler literal binding requires a loaded address')
+            # Correct virtual placement of the complete private CODE context.
+            # Both operands are outside the linked slice and receive no credit.
+            value = (address-start+literal_sites[offset]-0x10000) & 0xffffffff
+            code[offset:offset+4] = value.to_bytes(4, 'little')
+            fields.update(sites)
+            bindings[offset] = value
+            generated_code_bindings[offset] = value
+            continue
         if fix.location != 9 or fix.target[0] != 2:
             raise ValueError('Unsupported leaf relocation')
         # Small-model Watcom emits frame-by-target near calls. Both addresses
@@ -4493,6 +4536,13 @@ FUNCTION_ADDRESSES.update({'absolute_long_': 393923,
  'spawn_level_effect_': 79698,
  'update_level_sector_puzzle_': 121578,
  'puzzle_activation_context_': 121578})
+
+LEAVES['level_encounter_exit_'] = (0x4390b, 261)
+LEAF_CODE_SLICES['level_encounter_exit_'] = ('encounter_exit_context_', 0x3b8, 0x4bd, 1225)
+LEAF_CONTEXT_SUFFIXES['encounter_exit_context_'] = bytes.fromhex('81c4b80000005f5e5a595bc3')
+LEAF_CONTEXT_LITERALS['encounter_exit_context_'] = (160, '4e2264519143a5033cec5947e5fd0649fd21c0189d3ad8c6ad08a90360a51142', {19: 0, 38: 128})
+DATA_OFFSETS.update({'_board4_sector_events': 484764, '_ticks_per_step': 502164, '_first_trigger_state': 75764, '_second_trigger_state': 75766, '_encounter_sequence': 75768, '_exit_scan_initialized': 75782, '_exit_sequence': 75784, '_encounter_clock': 75796, '_rotating_sector_count': 515776, '_encounter_position': 469472, '_first_trigger_sprite': 477518, '_second_trigger_sprite': 477520, '_encounter_sprite_index': 514870, '_first_actor_state': 516907, '_second_actor_state': 516908, '_first_actor_kind': 520414, '_second_actor_kind': 520415, '_first_actor_mode': 521917, '_second_actor_mode': 521918, '_exit_scan_index': 545192})
+FUNCTION_ADDRESSES.update({'near_encounter_position_': 67088, 'update_sprite_sequence_state_': 66611})
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

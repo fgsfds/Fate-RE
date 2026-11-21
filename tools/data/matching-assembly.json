@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
   "routines": 482,
-  "unique_code_bytes": 235878,
-  "le_pointers": 12760,
+  "unique_code_bytes": 235617,
+  "le_pointers": 12740,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -986,6 +986,18 @@
       "loaded_address": "0x2a257",
       "binary_offset": 104,
       "le_pointers": 53,
+      "kind": "declared read-only tables in CODE"
+    },
+    {
+      "symbol": "level_encounter_return",
+      "source": "src/fate/level_encounter.asm",
+      "binary": "level_encounter.bin",
+      "sha256": "5d1adf2f63680fb8ddf16ca1ee796d1772f329e3c52bfdd2dbc81f23f1339322",
+      "bytes": 13,
+      "raw_offset": "0x43a10",
+      "loaded_address": "0x1e410",
+      "binary_offset": 1149,
+      "le_pointers": 0,
       "kind": "declared read-only tables in CODE"
     },
     {
@@ -6361,13 +6373,13 @@
       "symbol": "update_level_encounter",
       "source": "src/fate/level_encounter.asm",
       "binary": "level_encounter.bin",
-      "sha256": "340a6da3ab035106b42c277df2dbb835d08d685249187a97ee64573643f24902",
-      "bytes": 1263,
+      "sha256": "4ba14d4f56a7af238e57cfc8f74d2bbc6c992a02d9467cc68f4ade0662223453",
+      "bytes": 989,
       "raw_offset": "0x4352e",
       "loaded_address": "0x1df2e",
       "public_entry": "0x1df2e",
       "binary_offset": 160,
-      "le_pointers": 64
+      "le_pointers": 44
     },
     {
       "symbol": "initialize_destination",

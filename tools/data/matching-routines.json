@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1235,
-  "unique_code_bytes": 178761,
-  "le_pointers": 9789,
+  "routines": 1236,
+  "unique_code_bytes": 179022,
+  "le_pointers": 9809,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1018,6 +1018,16 @@
       "loaded_address": "0x1dcc4",
       "bytes": 458,
       "le_pointers": 28
+    },
+    {
+      "symbol": "level_encounter_exit_",
+      "object": "encexit.obj",
+      "object_sha256": "a5b78d78205b82060a1b5aa2c64f50c292125562ae442513735f0f4527203790",
+      "sha256": "5508f9df3717d3ebd832bd61f87b692e09b5c8dd00cc5c71086b505e74e155da",
+      "raw_offset": "0x4390b",
+      "loaded_address": "0x1e30b",
+      "bytes": 261,
+      "le_pointers": 20
     },
     {
       "symbol": "update_board_5_script_",

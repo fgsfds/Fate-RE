@@ -124,3 +124,4 @@ check_serial_init --exe {exe} --build {build} --output {build}/serial-init-behav
 check_game_receive_packets --exe {exe} --build {build} --output {build}/game-receive-behavior.json | recvpkt recvcrc recvpar recvhigh recvhead recvsend recvfrag
 check_main_menu --exe {exe} --build {build} --output {build}/main-menu-behavior.json | mainmenu menuprep
 check_sector_puzzle --exe {exe} --build {build} --output {build}/sector-puzzle-behavior.json | sectpuz puzact
+check_encounter_exit --exe {exe} --build {build} --output {build}/encounter-exit-behavior.json | encexit

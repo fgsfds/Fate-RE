@@ -949,6 +949,8 @@ OBJECT_NAMES.update({'puzzle_tile_solution_': 'sectpuz',
                      'puzzle_activate_walls_': 'puzact',
                      'puzzle_key_effect_exit_': 'sectpuz'})
 
+OBJECT_NAMES['level_encounter_exit_'] = 'encexit'
+
 GROUPS = {
     'stdwrap': (462, STDIO_HELPERS),
     'bufseek': (66, ('seek_within_buffer_',)),
@@ -1493,6 +1495,8 @@ def verify_compiler_groups(exe, directory, names=None):
                                ('puzact', 929, 'puzzle_activation_context_')):
         if selected(name):
             verify_group_layout((directory/(name+'.obj')).read_bytes(), size, [(public, 0)])
+    if selected('encexit'):
+        verify_group_layout((directory/'encexit.obj').read_bytes(), 1385, [('encounter_exit_context_', 160)])
     if selected('menuprep'):
         verify_group_layout((directory/'menuprep.obj').read_bytes(), 75,
                             [('main_caption_setup_', 0), ('main_menu_select_', 46)])

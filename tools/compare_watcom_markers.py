@@ -9,7 +9,9 @@ from capstone.x86_const import X86_OP_IMM
 
 from match_objects import read_object
 from omf_fixups import read_externals, read_fixups
-from verify_c_leaf import flat_frame_groups
+from verify_c_leaf import (flat_frame_groups, LEAF_CONTEXT_LITERALS,
+                           LEAF_CODE_SLICES, LEAVES, DATA_OFFSETS,
+                           FUNCTION_ADDRESSES, bind_leaf_details)
 
 # These literal short branches cross linked routine boundaries. The exact
 # linker verifies their final displacements. Marker objects keep the same
@@ -136,6 +138,19 @@ def decode(blob, symbol, marked, tables=()):
                default=len(segments[segment]['data']))
     table_stop = min((t.offset for t in tables if t.segment == segment and start <= t.offset < stop),
                      default=stop)
+    literal_sites = {}
+    if symbol in LEAF_CONTEXT_LITERALS:
+        # Both ordinary and marker objects must pass the same strict omitted
+        # context guards as production binding. A sliced public with inline
+        # invocations remains unattributed by placed_measurement.
+        aliases = [name for name, spec in LEAF_CODE_SLICES.items() if spec[0] == symbol]
+        if not aliases:
+            raise ValueError('Literal context lacks verified linked slices')
+        for name in aliases:
+            raw, _ = LEAVES[name]
+            bind_leaf_details(blob, name, DATA_OFFSETS, address=raw-0x25600,
+                              functions=FUNCTION_ADDRESSES)
+        literal_sites = LEAF_CONTEXT_LITERALS[symbol][2]
     body = segments[segment]['data'][start:table_stop]
     decoder = Cs(CS_ARCH_X86, CS_MODE_32)
     decoder.detail = True
@@ -195,6 +210,11 @@ def decode(blob, symbol, marked, tables=()):
             raise ValueError('Fixup spans opcode or marker boundary')
         if item.target[0] == 2:
             target = externals[item.target[1]]
+        elif site in literal_sites:
+            if (item.target != (0, segment) or insn.size != 5
+                    or insn.bytes[0] != 0xbe or site != insn.address+1):
+                raise ValueError('Literal context instruction differs')
+            target = f'CODE literal-prefix+{literal_sites[site]:#x}'
         else:
             slot = next((i for i, t in enumerate(tables)
                          if t.segment == segment and t.dispatch_field == item.offset), None)

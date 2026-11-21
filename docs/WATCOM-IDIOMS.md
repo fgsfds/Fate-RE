@@ -115,6 +115,14 @@ those expectations. Volatile OMF comments, including timestamps, are not compare
   Without `volatile`, `/4r /s /or /bt=dos` used an ESP temporary, changing both
   the shared frame and the LE sites.
 
+### Literal-template and marker guards
+
+For an unlinked initialized-array prefix in CODE, pin its payload digest,
+public offset and exact internal pointer fields. Reject fixups in the literal
+prefix or pinned epilogue and overlaps with the complete pointer instructions.
+Validate ordinary and marker objects with the same guards; credit only the
+selected instructions, never discarded compiler code or literal tables.
+
 ## Adding or changing a probe
 
 1. Add the smallest freestanding expression and its explicit Watcom ABI to the
