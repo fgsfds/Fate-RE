@@ -178,6 +178,12 @@ the candidate's instruction bytes, size, or LE sites to match the reference.
 OMF fixups still require explicit, supported symbol bindings; unsupported object
 forms fail rather than guessing a linker transformation.
 
+New research fixtures should reuse `Machine`, `Contract`, and `Region` from
+`tools/differential.py`. Include every relevant data range and the confirmed
+callee register changes. For a callee-popped stub, register actual `RET n`
+bytes with `add_code` and `stubs`; do not manually advance ESP before a plain
+RET. Add a bad-branch and preserved-register mutation to check the oracle.
+
 Each candidate and the original run independently with the same inputs. The
 shared harness checks return values where defined, preserved registers, stack
 cleanup/guards, declared memory writes, and external-call arguments/order.

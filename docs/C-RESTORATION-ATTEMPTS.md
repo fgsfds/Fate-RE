@@ -88,6 +88,17 @@ the sort into inline instructions merely to increase the C-object percentage.
 
 ## Other unresolved probes
 
+### Gameplay update controller allocation
+
+`update_gameplay_`, Watcom 10.5 `/4r /s /or /bt=dos`: the paired-record
+candidate emits 1,242 bytes versus 1,245; the earlier wide-condition form
+emits 1,240. Both pass 32 differential cases, but neither passes bytes/LE.
+Inventory save/restore now agrees in normalized instructions. First meaningful
+difference is grant-item setup at `0x142b5`; proximity register allocation
+and transition-indicator staging also differ. Next retain short IDs and paired
+records while recovering the grant step's EDI lifetime. Ghidra cross-check,
+hash-bound behavior reports and rejected probes: `work/gameplay-update-next/evidence.json`.
+
 ### Startup option-prefix pointer increment
 
 Ordinary `argument + 1` keeps the parser at 197 bytes but moves INC EAX
