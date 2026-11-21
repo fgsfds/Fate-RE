@@ -54,3 +54,6 @@ netinitconnection (long newconnectnum, char *newcompaddr)
 
 	return(1);
 }
+
+/* Shared compilation preserves the receive routine's common return jump. */
+#include "getpkt.c"

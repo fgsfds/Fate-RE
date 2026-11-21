@@ -41,6 +41,13 @@ assembly. Widening its byte comparisons reproduces the target instructions.
 Peer -1 history reads use explicit target-linked DS overlays, rather than
 separate portable objects: `omessleng[-1]` aliases `omessnum[12..15]`.
 
+The `getpacket_` implementation in `src/network/getpkt.c` follows the same
+pinned `MULTI.C`. It is included by `netinitconnection.c` after the initializer,
+letting Watcom generate the shared-return jump. Casting the CRC representation
+to unsigned avoids left-shifting a negative short. Input/storage contracts are
+in source: `0xff` broadcasts from local are excluded because the historical
+parser leaves `j` uninitialized on that path.
+
 ### Concrete correspondences and cautions
 
 `SRC/ENGINE.C:1270-1288` and the corresponding floor block at 1436 onward

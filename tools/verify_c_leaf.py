@@ -295,7 +295,7 @@ DATA_OFFSETS.update({
 })
 
 # Error/printing dependencies remain identified bindings, not reconstructed code.
-FUNCTION_ADDRESSES = {'sendpacket_': 0x424ec, 'comsend_': 0x41fce, 'getcrc_': 0x42f73, 'netsend_': 0x41d59, 'simulate_network_interrupt_': 0x42ffc, 'convalloc32_': 0x42fbb, 'sequence_remove_sprite_': 0x10f9f, 'int386_': 0x630b3, 'int386x_': 0x6309a, 'format_listed_sprite_error_': 0x601f3, 'report_listed_sprite_error_': 0x26a03, 'insertspritesect_': 0x508cd, 'insertspritestat_': 0x5096b, 'insert_template_sprite_': 0x508b8, 'record_lookup_error_': 0x26a03, 'memcpy_': 0x63245, 'type_lookup_error_': 0x26a03, 'getpalookup_': 0x5fed7, 'tvlineasm1_': 0x744d0, 'lookup_error_': 0x26a03, 'setverts_': 0x599c5, 'remove_engine_sprite_': 0x50a09, 'inside_': 0x4c88f, 'allocache_': 0x40c73,
+FUNCTION_ADDRESSES = {'getpacket_': 0x42985, 'processreservedmessage_': 0x432c1, 'netinitconnection_': 0x42319, 'sendpacket_': 0x424ec, 'comsend_': 0x41fce, 'getcrc_': 0x42f73, 'netsend_': 0x41d59, 'simulate_network_interrupt_': 0x42ffc, 'convalloc32_': 0x42fbb, 'sequence_remove_sprite_': 0x10f9f, 'int386_': 0x630b3, 'int386x_': 0x6309a, 'format_listed_sprite_error_': 0x601f3, 'report_listed_sprite_error_': 0x26a03, 'insertspritesect_': 0x508cd, 'insertspritestat_': 0x5096b, 'insert_template_sprite_': 0x508b8, 'record_lookup_error_': 0x26a03, 'memcpy_': 0x63245, 'type_lookup_error_': 0x26a03, 'getpalookup_': 0x5fed7, 'tvlineasm1_': 0x744d0, 'lookup_error_': 0x26a03, 'setverts_': 0x599c5, 'remove_engine_sprite_': 0x50a09, 'inside_': 0x4c88f, 'allocache_': 0x40c73,
                       'printf_': 0x40bb4, 'reportandexit_': 0x40f9e,
                       'lseek_': 0x615b6, 'filelength_': 0x63208, 'close_': 0x6219a, 'outpw_': 0x63320,
                       'kfree_': 0x44791, 'read_': 0x615f7, 'min_': 0x63201,
@@ -3574,6 +3574,7 @@ def flat_frame_groups(blob):
 # Watcom resolves these direct jumps in the object without an OMF fixup.
 # The public entries retain their original, nonadjacent executable spans.
 INTERNAL_LEAF_JUMPS = {
+    'getpacket_': {1424: ('netinitconnection_', 368)},
     'deletespritesect_': {0x1f: ('insertspritesect_', 0x96), 0xce: ('insertspritesect_', 0x96)},
     'deletespritestat_': {0x1f: ('insertspritesect_', 0x96), 0xce: ('insertspritesect_', 0x96)},
     'read_configuration_line_': {141: ('find_configuration_key_', 0xaa)},
@@ -3639,6 +3640,8 @@ DATA_OFFSETS.update({
 
 
 # Gameplay-controller compiler sections; calls enter the original public address.
+LEAVES.update({'getpacket_head_': (0x67f85, 914), 'getpacket_tail_': (0x6831b, 511)})
+DATA_OFFSETS.update({'_syncstate': 81116, '_netincnt': 1600824, '_comescape': 1637884, '_comreset': 1637932, '_syncbufleng': 1637944, '_syncbuf_backing': 1638496, '_getmess': 1637952, '_myconnectnum': 1637936, '_otherconnectnum': 1637896, '_inbuf': 1637924, '_inbufplc': 1637820, '_inbufend': 1637872, '_outbufplc': 1637848, '_comresend': 1637876, '_comerror': 1637916, '_incnt': 1637888, '_netinbuf': 1637812, '_netinbufplc': 1637816, '_netinbufend': 1637800})
 LEAVES.update({'update_gameplay_head_': (0x39733, 550),
                'update_gameplay_tail_': (0x3996b, 677)})
 FUNCTION_ADDRESSES.update({'select_item_': 229592, 'refresh_inventory_': 169035, 'check_teleport_terminals_': 81311, 'absolute_long_': 393923, 'activate_sector_': 165648, 'update_sector_events_': 171220, 'update_periodic_sequences_': 74710, 'update_proximity_sprites_': 66250, 'update_float_sprites_': 79535, 'update_moving_sprite_physics_': 79968, 'update_projectiles_': 78391, 'update_sector_panning_': 73358, 'update_fall_triggers_': 68495, 'update_level_effects_': 263778, 'save_level_and_load_board_': 81645, 'initialize_destination_': 158250, 'update_actor_states_': 124848, 'update_gameplay_': 82227})
@@ -3661,6 +3664,8 @@ LEAF_ENTRY_PREFIX_FIXUPS = {
 # Unchanged compiler sections surrounding a separately verified assembly island.
 # Each row names the real OMF public, kept bounds, and required full public size.
 LEAF_CODE_SLICES = {
+    'getpacket_head_': ('getpacket_', 0, 914, 1429),
+    'getpacket_tail_': ('getpacket_', 918, 1429, 1429),
     'update_gameplay_head_': ('update_gameplay_', 0, 550, 1245),
     'update_gameplay_tail_': ('update_gameplay_', 568, 1245, 1245),
 }

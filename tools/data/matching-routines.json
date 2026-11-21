@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1199,
-  "unique_code_bytes": 173594,
-  "le_pointers": 9482,
+  "routines": 1201,
+  "unique_code_bytes": 175019,
+  "le_pointers": 9562,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -3718,6 +3718,26 @@
       "loaded_address": "0x424ec",
       "bytes": 1177,
       "le_pointers": 62
+    },
+    {
+      "symbol": "getpacket_head_",
+      "object": "netinitc.obj",
+      "object_sha256": "782b29b9111302f76d4aec741b91f09bda334342adeb8d37863afcca60c02f42",
+      "sha256": "d562da8d708f84df3f7f9271b94942efd93a70dea6422aa2793c8dc739b4c733",
+      "raw_offset": "0x67f85",
+      "loaded_address": "0x42985",
+      "bytes": 914,
+      "le_pointers": 57
+    },
+    {
+      "symbol": "getpacket_tail_",
+      "object": "netinitc.obj",
+      "object_sha256": "782b29b9111302f76d4aec741b91f09bda334342adeb8d37863afcca60c02f42",
+      "sha256": "cbf6612facefa85ca1b50cc72d99b64dddcbc5e03956d0ddb53930f3a5da54ee",
+      "raw_offset": "0x6831b",
+      "loaded_address": "0x42d1b",
+      "bytes": 511,
+      "le_pointers": 23
     },
     {
       "symbol": "initcrc_",

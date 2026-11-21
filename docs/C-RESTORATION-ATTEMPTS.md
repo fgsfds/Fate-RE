@@ -88,6 +88,14 @@ the sort into inline instructions merely to increase the C-object percentage.
 
 ## Other unresolved probes
 
+### Getpacket index-zero scheduling
+
+Watcom 10.5 `/4r /s /or /bt=dos` emits `ADD ESI,EAX` before `XOR EBX,EBX`
+at `getpacket_+914`; the original order is reversed, with four assembly bytes retained.
+Next isolate index-zero scheduling without reordering volatile ring reads.
+Evidence: `work/getpacket-build/validation.json` and
+`work/getpacket-audit.json`.
+
 ### Gameplay update controller row-offset allocation
 
 `update_gameplay_`, Watcom 10.5 `/4r /s /or /bt=dos`, now keeps only the

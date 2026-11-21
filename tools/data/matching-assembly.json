@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
   "routines": 487,
-  "unique_code_bytes": 241045,
-  "le_pointers": 13067,
+  "unique_code_bytes": 239620,
+  "le_pointers": 12987,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -1762,16 +1762,16 @@
       "le_pointers": 27
     },
     {
-      "symbol": "receive_packet",
+      "symbol": "receive_length_order",
       "source": "src/fate/receive_packet.asm",
       "binary": "receive_packet.bin",
-      "sha256": "b2cec89e519d9924da1e5b69ac5a5166f4c2980073581c73f0ee6526bd538de5",
-      "bytes": 1429,
-      "raw_offset": "0x67f85",
-      "loaded_address": "0x42985",
-      "public_entry": "0x42985",
+      "sha256": "5d51e6893cd8480da51396c851c814e87af0a62f6505b8c1da35538a7892643e",
+      "bytes": 4,
+      "raw_offset": "0x68317",
+      "loaded_address": "0x42d17",
+      "public_entry": "0x42d17",
       "binary_offset": 0,
-      "le_pointers": 80
+      "le_pointers": 0
     },
     {
       "symbol": "initialize_serial_network",

@@ -118,3 +118,4 @@ check_gameplay_update --exe {exe} --build {build} | gamup
 check_play_sound --exe {exe} --build {build} --output {build}/play-sound-behavior.json | audctrl
 check_netsend --exe {exe} --object {build}/netsend.obj --output {build}/netsend-behavior.json | netsend
 check_sendpacket --exe {exe} --object {build}/sendpack.obj --output {build}/sendpacket-behavior.json | sendpack
+check_receivepacket --exe {exe} --production-object {build}/netinitc.obj --assembly {build}/asm/receive_packet.bin --output {build}/receivepacket-behavior.json | netinitc
