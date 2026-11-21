@@ -1,7 +1,7 @@
 """Select unchanged Watcom main-menu sections around retained assembly.
 
 Only displacement operands are linked. The original switch table remains ASM:
-its resume slots intentionally enter the retained resume block. The excluded
+its resume slots enter the unfolded compiler guard and retained false jump. The excluded
 compiler table is still checked against its exact source destinations.
 """
 from bind_melee_group import bind_switch_group
@@ -15,7 +15,12 @@ SECTIONS = (('main_menu_loop_', 0x43, 0x117, 0x3a188),
             ('main_menu_save_', 0, 17, 0x3a148),
             ('main_menu_tick_', 19, 25, 0x3a159),
             ('main_menu_zero_', 17, 19, 0x3a15f),
-            ('main_menu_initialize_', 25, 41, 0x3a161))
+            ('main_menu_initialize_', 25, 41, 0x3a161),
+            ('main_menu_resume_guard_', 0x1d1, 0x1de, 0x3a2f3))
+# Cases 5/6 and cancellation share this exact compiler block. It is linked
+# at two disjoint original locations; only the JNE displacement differs.
+SHARED_GUARD_CONTEXT = (b'\x83\x3d' + bytes(4) + b'\x00\x0f\x85'
+                        + (0xbf-0x1de).to_bytes(4, 'little', signed=True))
 # Instruction-aligned entry phases cover compiler bytes[0,41) exactly once.
 # The independent tick load and register zero are placed in original order.
 ENTRY_CONTEXT = bytes.fromhex(
@@ -156,6 +161,8 @@ def bind_section(blob, symbol, address=None, code_bindings=None):
     raw = segments[1]['data']
     if raw[32:73] != ENTRY_CONTEXT:
         raise ValueError('Main-menu entry context differs')
+    if raw[32+0x1d1:32+0x1de] != SHARED_GUARD_CONTEXT:
+        raise ValueError('Main-menu shared guard context differs')
     if len(fixups) != len(FIXUPS) or {f.offset for f in fixups} != FIXUPS.keys():
         raise ValueError('Main-menu fixup inventory differs')
     for f in fixups:

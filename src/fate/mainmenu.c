@@ -1,7 +1,9 @@
 // "Build Engine & Tools" Copyright (c) 1993-1997 Ken Silverman
 // See ../engine/BUILDLIC.TXT.
-/* Seven unchanged sections supply 431 bytes; menuprep.c supplies another 63.
- * The resume block, original table and alignment remain assembly. The full
+/* Eight placed sections supply 444 image bytes; menuprep.c supplies 63 more.
+ * The shared resume/cancel guard is emitted once and linked at two original
+ * locations, adding 13 image bytes but no new unique compiler output.
+ * The false resume jump, original table and alignment remain assembly. The full
  * private C context is not exact. Empty ABI auxiliaries preserve real values.
  * EDI/EBP hold clock snapshots and ESI the result through the shared frame.
  * The entry's independent tick load and EDX zero are selected in original

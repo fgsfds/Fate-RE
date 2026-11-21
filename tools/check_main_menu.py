@@ -188,7 +188,7 @@ def normalize_span(memory, address, size, pointers):
 def verify_assembled_gaps(build, memory, pointers):
     build = Path(build)
     gaps = (('main_menu_table.bin', 0x3a127, 33),
-            ('main_menu_resume.bin', 0x3a2f3, 15))
+            ('main_menu_resume.bin', 0x3a300, 2))
     for name, address, size in gaps:
         path = build / name if build.is_dir() else build.parent / name
         if not path.is_file() and build.is_dir():
@@ -198,6 +198,11 @@ def verify_assembled_gaps(build, memory, pointers):
         expected = normalize_span(memory, address, size, pointers)
         if path.read_bytes() != expected:
             raise ValueError(f'Assembled gap differs from pinned bytes: {name}')
+    resume_path = build / 'main_menu_resume.bin' if build.is_dir() else build.parent / 'main_menu_resume.bin'
+    if not resume_path.is_file() and build.is_dir():
+        resume_path = build / 'asm' / 'main_menu_resume.bin'
+    if resume_path.read_bytes() != b'\xeb\x30':
+        raise ValueError('Resume suffix must be EB30 (JMP 3a332)')
 
 
 def bind_fixture(exe_bytes, object_bytes, build):
@@ -255,10 +260,10 @@ def bind_fixture(exe_bytes, object_bytes, build):
         if raw_target + delta != target:
             raise ValueError(f'Group relocation target differs at {site:#x}')
         struct.pack_into('<I', group, offset, target)
-    if len(set(le_sites)) != 29:
-        raise ValueError(f'Expected 29 selected LE fixups, got {len(set(le_sites))}')
-    if sum(end - start for _, start, end, _ in SECTIONS) + 23 + 40 != 494:
-        raise ValueError('Expected 494 selected main-menu bytes')
+    if len(set(le_sites)) != 30:
+        raise ValueError(f'Expected 30 selected LE fixups, got {len(set(le_sites))}')
+    if sum(end - start for _, start, end, _ in SECTIONS) + 23 + 40 != 507:
+        raise ValueError('Expected 507 selected main-menu bytes')
     return memory, bytes(group), sorted(set(le_sites))
 
 
@@ -308,6 +313,8 @@ def main():
     report = {'status': 'PASS', 'cases': 1442, 'sha256': PINNED_SHA256,
               **artifact_hashes(object_path),
               'group_bytes': SIZE, 'selected_bytes': sum(s[2] - s[1] for s in SECTIONS) + 23 + 40,
+              'resume_guard_linked_bytes': 13,
+              'resume_guard_new_unique_compiler_bytes': 0,
               'ds_bytes': DS_SIZE, 'selected_le_sites': le_sites, 'group_le_sites': 38,
               'negative_controls':
               {'clock_store': 'detected', 'switch_case_target': 'detected'},

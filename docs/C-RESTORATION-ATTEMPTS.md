@@ -817,7 +817,7 @@ Evidence: work/terminal-native-next/prep.c and whole.c.
 
 ### Main-menu shared frame
 
-`dispatch_main_menu`, `/4r /s /or /bt=dos`: 494 bytes are native C, with 15 ASM body bytes remaining. Four instruction-aligned C phases cover source bytes 0–41 exactly once. The original 32-byte jump table and alignment byte remain assembly; the checked compiler table is unlinked. Its 1,442 behavior cases and two controls pass. Only the 15-byte resume path remains in the routine body. Watcom merges resume with cancellation. Next qualify the shared 13-byte guard at the original resume entry, retaining its two-byte false-path jump. Evidence: `work/menu-entry-build/validation.json`, `work/menu-entry-audit.json`, `work/menu-entry-handoff.json`, and `work/menu-entry-docs.json`.
+`dispatch_main_menu`, `/4r /s /or /bt=dos`: 507 C-linked image bytes, 30 C LE sites, and 2 retained ASM body bytes. Four instruction-aligned C phases cover source bytes 0–41 exactly once. The original 32-byte jump table and alignment byte remain assembly; the checked compiler table is unlinked. The 1,442 behavior cases and two controls pass. Watcom emits the shared guard once, linked at two disjoint original addresses: 13 additional linked image bytes and zero new unique compiler bytes. The final 2-byte false-path JMP is the only blocker: Watcom merges the source flow. Preserve its original opcode width. Evidence: `work/menu-guard-build/validation.json`, `work/menu-guard-audit.json`, and `work/menu-guard-handoff.json`.
 
 ### Sprite waypoint target: remaining blocker
 

@@ -1,7 +1,7 @@
 """Guard regressions for section placement, OMF transfers and retained tables."""
 import unittest
 from test_match_objects import record
-from bind_main_menu_sections import bind_section, SECTIONS, FIXUPS, BRANCHES, ENTRY_CONTEXT
+from bind_main_menu_sections import bind_section, SECTIONS, FIXUPS, BRANCHES, ENTRY_CONTEXT, SHARED_GUARD_CONTEXT
 
 
 def object_fixture(*, mutate=None, wrong_target=None, missing=None, public_offset=32):
@@ -9,6 +9,7 @@ def object_fixture(*, mutate=None, wrong_target=None, missing=None, public_offse
     indices = {name: i+1 for i,name in enumerate(names)}
     code = bytearray(529)
     code[32:73]=ENTRY_CONTEXT
+    code[32+0x1d1:32+0x1de]=SHARED_GUARD_CONTEXT
     for site,(name,relative,addend,opcode) in FIXUPS.items():
         code[site:site+4] = addend.to_bytes(4,'little')
         if opcode: code[site-1:site] = opcode
@@ -94,7 +95,7 @@ class MainMenuSections(unittest.TestCase):
                                   functions=functions,absolute_code=code,code_bindings={})
 
     def test_entry_phases_cover_source_once_and_restore_original_tick_order(self):
-        phases=SECTIONS[3:]
+        phases=SECTIONS[3:7]
         source=[i for _,a,b,_ in phases for i in range(a,b)]
         self.assertEqual(sorted(source),list(range(41)))
         self.assertEqual([t for _,_,_,t in phases],[0x3a148,0x3a159,0x3a15f,0x3a161])
@@ -109,3 +110,25 @@ class MainMenuSections(unittest.TestCase):
         for off in (32,32+17):
             with self.subTest(off=off),self.assertRaisesRegex(ValueError,'entry context'):
                 self.bind(object_fixture(mutate=lambda c:c.__setitem__(off,0x90)),3)
+
+    def test_unfolds_one_semantic_guard_at_two_disjoint_original_locations(self):
+        obj=object_fixture()
+        resume,refs,code_refs=self.bind(obj,7)
+        exit_code,exit_refs,_=self.bind(obj,2)
+        cancel=exit_code[0x23:0x30]
+        self.assertEqual(len(resume),13)
+        self.assertEqual(resume[:9],cancel[:9])
+        self.assertEqual(refs,{2:0x772b8})
+        self.assertEqual(exit_refs[0x25],0x772b8)
+        self.assertEqual(code_refs,{})
+        for code,address in ((resume,0x3a2f3),(cancel,0x3a325)):
+            self.assertEqual(address+13+int.from_bytes(code[9:13],'little',signed=True),0x3a204)
+        self.assertEqual(FIXUPS[20][2],32+0x1d1)
+        self.assertEqual(FIXUPS[24][2],32+0x1d1)
+        self.assertEqual(BRANCHES[0x80],(b'\x0f\x84',0x1d1,0x1dd))
+        self.assertEqual(sum(b-a for _,a,b,_ in SECTIONS),444)
+        self.assertEqual(len({i for _,a,b,_ in SECTIONS for i in range(a,b)}),431)
+
+    def test_rejects_altered_shared_guard_predicate(self):
+        with self.assertRaisesRegex(ValueError,'shared guard context'):
+            self.bind(object_fixture(mutate=lambda c:c.__setitem__(32+0x1d1+6,1)),7)

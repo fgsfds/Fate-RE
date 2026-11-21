@@ -177,8 +177,12 @@ Keep the retained 32-byte table and alignment in place; a checked compiler table
 The menu entry is covered by four instruction-aligned C phases spanning source
 bytes 0–41 exactly once. An independent swap of the register-zero and tick-load
 operations is proven to preserve clock-read order, flags, all six saves, and the
-shared frame. Keep the full selected compiler context and fixups pinned, and
-verify the accepted image hash; isolated phase bytes are not sufficient evidence.
+shared frame. The shared guard is emitted once and linked at two disjoint original
+addresses; account for 13 linked image bytes and zero new unique compiler bytes.
+For an unfolded semantic source block, pin its ingress and egress boundaries and
+account linked image bytes by address, separately from unique compiler bytes.
+Keep the full selected compiler context and fixups pinned, and verify the accepted image hash; isolated phase bytes
+are not sufficient evidence.
 
 ## Reusable receiver ABI lesson
 

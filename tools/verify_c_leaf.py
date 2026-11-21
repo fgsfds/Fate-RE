@@ -3700,6 +3700,7 @@ LEAF_CONTEXT_FIXUPS = {
 }
 
 LEAF_CODE_SLICES = {
+    'main_menu_resume_guard_': ('dispatch_main_menu_', 0x1d1, 0x1de, 497),
     'main_menu_save_': ('dispatch_main_menu_', 0, 17, 497),
     'main_menu_tick_': ('dispatch_main_menu_', 19, 25, 497),
     'main_menu_zero_': ('dispatch_main_menu_', 17, 19, 497),
@@ -4429,7 +4430,8 @@ LEAVES['scan_two_planes_right_'] = (0x97cf5, 4)
 LEAVES['get_audio_data_selector_'] = (0x8c16b, 4)
 LEAVES['get_audio_code_selector_'] = (0x8c16f, 4)
 
-LEAVES.update({'main_menu_save_': (0x5f748, 17), 'main_menu_tick_': (0x5f759, 6),
+LEAVES.update({'main_menu_resume_guard_': (0x5f8f3, 13),
+               'main_menu_save_': (0x5f748, 17), 'main_menu_tick_': (0x5f759, 6),
                'main_menu_zero_': (0x5f75f, 2), 'main_menu_initialize_': (0x5f761, 16),
                'main_menu_loop_': (0x5f788, 212),
                'main_menu_actions_': (0x5f884, 111),
