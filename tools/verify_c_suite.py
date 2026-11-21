@@ -950,6 +950,7 @@ OBJECT_NAMES.update({'puzzle_tile_solution_': 'sectpuz',
                      'puzzle_key_effect_exit_': 'sectpuz'})
 
 OBJECT_NAMES.update({'capture_header_mode_': 'pcxhdr', 'capture_header_planar_': 'pcxhdr'})
+OBJECT_NAMES.update({'capture_open_body_': 'capopen', 'capture_close_success_': 'capclose'})
 OBJECT_NAMES['drawmasks_projection_'] = 'drawproj'
 OBJECT_NAMES['level_encounter_exit_'] = 'encexit'
 OBJECT_NAMES.update(dict.fromkeys(('encounter_entry_save_', 'encounter_initialize_',

@@ -4605,6 +4605,15 @@ LEAF_CODE_SLICES.update({
 })
 DATA_OFFSETS['_pcx_header'] = 0x140d5
 
+LEAVES.update({'capture_open_body_': (0x71976, 140),
+               'capture_close_success_': (0x71e71, 22)})
+LEAF_CODE_SLICES.update({
+    'capture_open_body_': ('capture_open_', 5, 0x91, 149),
+    'capture_close_success_': ('capture_close_', 1, 0x17, 25),
+})
+DATA_OFFSETS['_capture_sequence'] = 0x140d3
+FUNCTION_ADDRESSES['_open'] = 0x61368
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

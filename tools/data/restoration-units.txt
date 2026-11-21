@@ -516,3 +516,5 @@ fate/encounter_exit encexit
 fate/encounter_exit enclatch /4r /s /or /bt=dos /dENCOUNTER_LATCH_CONTEXT=1
 engine/drawmasks_projection drawproj
 engine/capture_header pcxhdr
+engine/capture_open capopen
+engine/capture_close capclose

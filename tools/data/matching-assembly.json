@@ -1,9 +1,21 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
   "routines": 484,
-  "unique_code_bytes": 234696,
-  "le_pointers": 12663,
+  "unique_code_bytes": 234534,
+  "le_pointers": 12657,
   "non_routine_code_spans": [
+    {
+      "symbol": "capture_after_open",
+      "source": "src/engine/screencapture.asm",
+      "binary": "screencapture.bin",
+      "sha256": "6371498f14da0606b1f321e037623bdcd9d42e0605f6372bdf0b83b741742f7d",
+      "bytes": 13,
+      "raw_offset": "0x71a02",
+      "loaded_address": "0x4c402",
+      "binary_offset": 14,
+      "le_pointers": 0,
+      "kind": "declared read-only tables in CODE"
+    },
     {
       "symbol": "capture_header_join",
       "source": "src/engine/screencapture.asm",
@@ -12,7 +24,19 @@
       "bytes": 2,
       "raw_offset": "0x71aa9",
       "loaded_address": "0x4c4a9",
-      "binary_offset": 167,
+      "binary_offset": 27,
+      "le_pointers": 0,
+      "kind": "declared read-only tables in CODE"
+    },
+    {
+      "symbol": "capture_return",
+      "source": "src/engine/screencapture.asm",
+      "binary": "screencapture.bin",
+      "sha256": "b62a6eb73c1d85b71899d082dccd953000cbabc974fb601f5fb46c68685f311f",
+      "bytes": 8,
+      "raw_offset": "0x71e87",
+      "loaded_address": "0x4c887",
+      "binary_offset": 895,
       "le_pointers": 0,
       "kind": "declared read-only tables in CODE"
     },
@@ -6901,25 +6925,25 @@
       "symbol": "screencapture_",
       "source": "src/engine/screencapture.asm",
       "binary": "screencapture.bin",
-      "sha256": "8072ed2c82017f3a2fb1be2e2895e49b8d60bab4b1a40a56a8e32c8748243ddd",
-      "bytes": 167,
+      "sha256": "b6c515764e0c70a8b0dd7def9c65ff4110e4ef93dd5f4f2d507c3d834a93193d",
+      "bytes": 14,
       "raw_offset": "0x71968",
       "loaded_address": "0x4c368",
       "public_entry": "0x4c368",
       "binary_offset": 0,
-      "le_pointers": 4
+      "le_pointers": 0
     },
     {
       "symbol": "capture_pixels",
       "source": "src/engine/screencapture.asm",
       "binary": "screencapture.bin",
-      "sha256": "6c30a4fead43460075fa3251c09693235cb29294698563954a6c4534b4ca69a6",
-      "bytes": 896,
+      "sha256": "c3a2a64c42e8067f585ffe5d402941d3436b680e1ae987e239e924efc730dd88",
+      "bytes": 866,
       "raw_offset": "0x71b0f",
       "loaded_address": "0x4c50f",
       "public_entry": "0x4c50f",
-      "binary_offset": 169,
-      "le_pointers": 30
+      "binary_offset": 29,
+      "le_pointers": 28
     },
     {
       "symbol": "drawmasks_sort_and_draw",

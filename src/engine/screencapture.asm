@@ -38,53 +38,13 @@ screencapture_:
     sub esp, 0x18
     mov ebx, eax
     mov byte [esp + 0x14], dl
-    movsx edx, word [capture_sequence]
-    mov ecx, 0x3e8
-    mov eax, edx
-    sar edx, 0x1f
-    idiv ecx
-    mov edx, eax
-    mov ecx, 0xa
-    sar edx, 0x1f
-    idiv ecx
-    add edx, 0x30
-    mov byte [ebx + 4], dl
-    movsx edx, word [capture_sequence]
-    mov ecx, 0x64
-    mov eax, edx
-    sar edx, 0x1f
-    idiv ecx
-    mov edx, eax
-    mov ecx, 0xa
-    sar edx, 0x1f
-    idiv ecx
-    add edx, 0x30
-    mov byte [ebx + 5], dl
-    movsx edx, word [capture_sequence]
-    mov eax, edx
-    sar edx, 0x1f
-    idiv ecx
-    mov edx, eax
-    sar edx, 0x1f
-    idiv ecx
-    add edx, 0x30
-    mov byte [ebx + 6], dl
-    movsx edx, word [capture_sequence]
-    mov eax, edx
-    sar edx, 0x1f
-    idiv ecx
-    push 0x80
-    push 0x261
-    add edx, 0x30
-    push ebx
-    mov byte [ebx + 7], dl
-    call runtime_open
-    add esp, 0xc
+    ; The C filename and open path inherits EBX and the original frame.
+section .after_open align=1 vstart=0x4c402 follows=.text
     mov dword [esp + 8], eax
     cmp eax, -1
     je near .branch_51f
 ; C emits the mode check and both PCX geometry paths.
-section .header_join align=1 vstart=0x4c4a9 follows=.text
+section .header_join align=1 vstart=0x4c4a9 follows=.after_open
     jmp short .branch_1a7
 
 section .capture_body align=1 vstart=0x4c50f follows=.header_join
@@ -408,12 +368,8 @@ section .capture_body align=1 vstart=0x4c50f follows=.header_join
 
 .branch_505:
     mov eax, dword [esp + 8]
-    call runtime_close
-    mov dx, word [capture_sequence]
-    inc edx
-    xor eax, eax
-    mov word [capture_sequence], dx
-
+; C closes the file, advances the sequence and returns success in EAX.
+section .capture_return align=1 vstart=0x4c887 follows=.capture_body
 .branch_51f:
     add esp, 0x18
     jmp near ceiling_sprite_restore

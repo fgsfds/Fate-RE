@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1248,
-  "unique_code_bytes": 179943,
-  "le_pointers": 9886,
+  "routines": 1250,
+  "unique_code_bytes": 180105,
+  "le_pointers": 9892,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -5000,6 +5000,16 @@
       "le_pointers": 4
     },
     {
+      "symbol": "capture_open_body_",
+      "object": "capopen.obj",
+      "object_sha256": "2aa7210ecfe6bb74b837201863ca1576ac6419844767d8504308af0d791250eb",
+      "sha256": "b692c8aef6cff320d9cd422a8330e3756cc80a34efc8fa7d28e1273e3cd831f3",
+      "raw_offset": "0x71976",
+      "loaded_address": "0x4c376",
+      "bytes": 140,
+      "le_pointers": 4
+    },
+    {
       "symbol": "capture_header_mode_",
       "object": "pcxhdr.obj",
       "object_sha256": "6a00c7d1ab731a4be1198187f5ddceca89909ba8b0898f441776e0821fca9394",
@@ -5018,6 +5028,16 @@
       "loaded_address": "0x4c4ab",
       "bytes": 100,
       "le_pointers": 14
+    },
+    {
+      "symbol": "capture_close_success_",
+      "object": "capclose.obj",
+      "object_sha256": "8b95fec2cd36b867ddc3f9da5501bdbed8c056f453d2534a590480b06f55838f",
+      "sha256": "8ffcb01fffc93c6e8d2b75cd7f740701b0e98952dd599a6315bde60013c5cba5",
+      "raw_offset": "0x71e71",
+      "loaded_address": "0x4c871",
+      "bytes": 22,
+      "le_pointers": 2
     },
     {
       "symbol": "inside_",
