@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
   "routines": 483,
-  "unique_code_bytes": 235423,
-  "le_pointers": 12730,
+  "unique_code_bytes": 235309,
+  "le_pointers": 12723,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -1008,7 +1008,7 @@
       "bytes": 1,
       "raw_offset": "0x43a16",
       "loaded_address": "0x1e416",
-      "binary_offset": 967,
+      "binary_offset": 853,
       "le_pointers": 0,
       "kind": "declared read-only tables in CODE"
     },
@@ -6397,13 +6397,13 @@
       "symbol": "encounter_actor_state",
       "source": "src/fate/level_encounter.asm",
       "binary": "level_encounter.bin",
-      "sha256": "be1bbe5f5f21d9c05abc93eb31a0fdda8d6669be1abfe7e329e5c9f19425e2a0",
-      "bytes": 209,
+      "sha256": "839308a78c9daff71ff983676c997844098aad21e7c822c63ec839cee88aac1c",
+      "bytes": 95,
       "raw_offset": "0x4383a",
       "loaded_address": "0x1e23a",
       "public_entry": "0x1e23a",
       "binary_offset": 758,
-      "le_pointers": 11
+      "le_pointers": 4
     },
     {
       "symbol": "initialize_destination",

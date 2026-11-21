@@ -129,7 +129,7 @@ Evidence and hash-bound behavior report: `work/numbered-board-next/evidence.json
 
 ### Encounter actor-state and spawn-prefix hypothesis
 
-Watcom 10.5 `/4r /s /or /bt=dos` still emits an extra `MOV EAX,ESI` after the SI load. Logical OR of the two computed proximity results emits two TEST/JNE pairs instead of the original signed extensions and `OR EDX,EAX`; the state-1 store also uses ECX. Keep the 209-byte actor phase and 597-byte spawn prefix in assembly. Next investigate the proximity-result lifetime with bitwise OR; the spawn loop separately needs the original EBP height lifetime. Evidence: `work/encounter-next/enccond.dis` and `remaining-phases.json`.
+Watcom 10.5 `/4r /s /or /bt=dos` still emits an extra `MOV EAX,ESI` after the SI load. Logical OR of the two computed proximity results emits two TEST/JNE pairs instead of the original signed extensions and `OR EDX,EAX`; the state-1 store also uses ECX. The remaining 95-byte actor gate and 597-byte spawn prefix stay in assembly. Next investigate the proximity-result lifetime with bitwise OR; the spawn loop separately needs the original EBP height lifetime. Evidence: `work/encounter-next/enccond.dis` and `remaining-phases.json`.
 
 ### Video prompt-mode blocker
 

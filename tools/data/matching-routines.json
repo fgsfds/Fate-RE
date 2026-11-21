@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1244,
-  "unique_code_bytes": 179216,
-  "le_pointers": 9819,
+  "routines": 1245,
+  "unique_code_bytes": 179330,
+  "le_pointers": 9826,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1078,6 +1078,16 @@
       "loaded_address": "0x1e233",
       "bytes": 7,
       "le_pointers": 1
+    },
+    {
+      "symbol": "encounter_update_second_actor_",
+      "object": "enclatch.obj",
+      "object_sha256": "a04b90dc796e0a5b5848b412830e38ab602dd5648da2a96734a6d0105fb9de39",
+      "sha256": "f42f37ae4f0c2fb85faad9d8bae27eb3dccd24a3f7dfc8a20b7afe9a3b2db400",
+      "raw_offset": "0x43899",
+      "loaded_address": "0x1e299",
+      "bytes": 114,
+      "le_pointers": 7
     },
     {
       "symbol": "level_encounter_exit_",

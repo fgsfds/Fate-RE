@@ -953,7 +953,8 @@ OBJECT_NAMES['level_encounter_exit_'] = 'encexit'
 OBJECT_NAMES.update(dict.fromkeys(('encounter_entry_save_', 'encounter_initialize_',
                                   'encounter_release_frame_', 'encounter_restore_return_'), 'encexit'))
 OBJECT_NAMES.update(dict.fromkeys(('encounter_latch_', 'encounter_latch_index_',
-                                  'encounter_latch_zero_', 'encounter_latch_tag_'), 'enclatch'))
+                                  'encounter_latch_zero_', 'encounter_latch_tag_',
+                                  'encounter_update_second_actor_'), 'enclatch'))
 
 GROUPS = {
     'stdwrap': (462, STDIO_HELPERS),

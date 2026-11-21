@@ -4,18 +4,18 @@ The current saved attribution audit covers all 414,639 CODE bytes and includes 5
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 153,556 | 37.03% |
+| Compiler-generated instructions | 153,670 | 37.06% |
 | Inline assembly instructions in C objects | 24,253 | 5.85% |
-| Standalone assembly | 235,423 | 56.78% |
+| Standalone assembly | 235,309 | 56.75% |
 | Unattributed instructions and non-routine tables | 1,407 | 0.34% |
 
-The unattributed category contains 1,038 instruction bytes in 22 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 259,676 bytes (62.63%). C-object inventory covers 179,216 bytes (43.22%) and 1,244 C routine spans; the assembly inventory has 483 spans.
+The unattributed category contains 1,038 instruction bytes in 22 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 259,562 bytes (62.60%). C-object inventory covers 179,330 bytes (43.25%) and 1,245 C routine spans; the assembly inventory has 483 spans.
 
 The accepted executable is 741,347 bytes, SHA-256 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.
 
 `update_level_sector_puzzle_` is restored in readable C: 932 bytes and 59 LE sites, with no inline instructions. One C translation unit compiles twice into three selected phases (410/64/458 bytes); five existing branch edges change displacement only. Neither full compiler public matches by itself. Its differential fixture passes 128 cases and rejects both activation-tag and exit-destination code mutations.
 
-`level_encounter_exit_`, its tile latch, and frame operations contribute 455 exact native C body bytes and 30 LE sites from one C source compiled in two private contexts, with no inline assembly. The exit phase is 261 bytes; the latch phases total 138 bytes. The latch fixture passes 360 cases and rejects the state and sound machine-code mutations. It compares natural compiler order with linked order; the index and zero phases commute. The frame fixture covers four cases and rejects a typed CODE pointer mutation and a POP EDI mutation. Its 56 bytes span four aliases of 5/39/6/6 bytes with two typed CODE fields. The original 184-byte frame and six saves remain; PUSH/POP EBP are two retained ASM instructions, and the 13-byte return path is stitched from a C release, ASM POP EBP, and C register restore. The encounter retains 808 assembly body bytes and 160 assembly table bytes. The private publics are 1,225 and 1,249 bytes, each preceded by a separate 160-byte literal prefix; only selected exact slices are linked, with no C credit for those prefixes or tables.
+`level_encounter_exit_`, its tile latch, frame operations, and second actor update contribute 569 exact native C body bytes and 37 LE sites from one C source compiled in two private contexts, with no inline assembly. The exit phase is 261 bytes; the latch phases total 138 bytes. The latch fixture passes 360 cases and rejects the state and sound machine-code mutations. It compares natural compiler order with linked order; the index and zero phases commute. The frame fixture covers four cases and rejects a typed CODE pointer mutation and a POP EDI mutation. Its 56 bytes span four aliases of 5/39/6/6 bytes with two typed CODE fields. The original 184-byte frame and six saves remain; PUSH/POP EBP are two retained ASM instructions, and the 13-byte return path is stitched from a C release, ASM POP EBP, and C register restore. The second actor update adds 114 bytes and seven LE sites from the existing latch context. The encounter retains 694 assembly body bytes and 160 assembly table bytes. The private publics are 1,225 and 1,249 bytes, each preceded by a separate 160-byte literal prefix; only selected exact slices are linked, with no C credit for those prefixes or tables.
 
 The receiver has 916 native C bytes, 0 retained ASM bytes, and 65 LE sites, with no inline assembly. Its behavior oracle passes 104 cases and two controls. Private RETs remain unlinked and guarded.
 
@@ -27,11 +27,11 @@ The receiver has 916 native C bytes, 0 retained ASM bytes, and 65 LE sites, with
 
 The saved full validation and audit artifacts verify the pinned image:
 
-- Full validation and 125 fixtures: `work/encounter-frame-build/validation.json`.
+- Full validation and 125 fixtures: `work/encounter-actor-build/validation.json`.
 - Encounter frame behavior: `work/encounter-frame-build/encounter-frame-behavior.json`.
-- Encounter frame handoff: `work/encounter-frame-handoff.json`.
-- Attribution audit: `work/encounter-frame-audit.json`.
-- Unit test log: `work/encounter-frame-build/logs/unit-tests.log`.
+- Encounter handoff: `work/encounter-actor-handoff.json`.
+- Attribution audit: `work/encounter-actor-audit.json`.
+- Unit test log: `work/encounter-actor-build/logs/unit-tests.log`.
 - Encounter latch behavior: `work/encounter-latch-build/encounter-latch-behavior.json`.
 - Puzzle exact slices, relocations, and behavior: `work/sector-puzzle-build/sector-puzzle-behavior.json`.
 

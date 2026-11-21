@@ -269,33 +269,8 @@ section .actor_state align=1 vstart=0x1e23a follows=.spawn
     mov word [second_trigger_state], 0x1
     jmp near .check_exit_scan
 
-.update_second_actor:
-    movsx eax, si
-    cmp eax, 0x1
-    jnz short .check_exit_scan
-    mov eax, 0x3f
-    call update_actor_common
-    push strict dword encounter_parameters
-    mov ecx, 0x410a
-    mov ebx, 0x1800
-    push strict dword 0x1800
-    mov edx, 0x3100
-    mov eax, 0x3f
-    call update_sprite_sequence_state
-    mov ax, [encounter_sprite_index]
-    cwde
-    imul eax, eax, 0x2c
-    movsx eax, word [eax + sprite_tile]
-    cmp eax, strict dword 0x34b
-    jnz short .check_second_actor_reaction
-    movsx eax, word [first_trigger_sprite]
-    imul eax, eax, 0x2c
-    mov word [eax + sprite_tile], 0x568
-
-.check_second_actor_reaction:
-    cmp byte [second_actor_state], 0x0
-    jnz short .check_exit_scan
-    mov word [second_trigger_state], 0x2
+; The existing C latch context supplies the second actor update.
+.update_second_actor equ 0x1e299
 
 ; Complete exit-state phase is linked from encounter_exit.c at this address.
 .check_exit_scan equ 0x1e30b

@@ -4561,12 +4561,14 @@ FUNCTION_ADDRESSES.update({'near_encounter_position_': 67088, 'update_sprite_seq
 LEAVES.update({'encounter_latch_': (0x437b0, 119),
                'encounter_latch_index_': (0x43827, 10),
                'encounter_latch_zero_': (0x43831, 2),
-               'encounter_latch_tag_': (0x43833, 7)})
+               'encounter_latch_tag_': (0x43833, 7),
+               'encounter_update_second_actor_': (0x43899, 114)})
 LEAF_CODE_SLICES.update({
     'encounter_latch_': ('encounter_latch_context_', 0x26e, 0x2e5, 1249),
     'encounter_latch_index_': ('encounter_latch_context_', 0x2e7, 0x2f1, 1249),
     'encounter_latch_zero_': ('encounter_latch_context_', 0x2e5, 0x2e7, 1249),
     'encounter_latch_tag_': ('encounter_latch_context_', 0x2f1, 0x2f8, 1249),
+    'encounter_update_second_actor_': ('encounter_latch_context_', 0x35e, 0x3d0, 1249),
 })
 LEAF_CONTEXT_LITERALS['encounter_latch_context_'] = LEAF_CONTEXT_LITERALS['encounter_exit_context_'][:3]
 LEAF_CONTEXT_SUFFIXES['encounter_latch_context_'] = LEAF_CONTEXT_SUFFIXES['encounter_exit_context_']
