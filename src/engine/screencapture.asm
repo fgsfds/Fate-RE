@@ -83,66 +83,11 @@ screencapture_:
     mov dword [esp + 8], eax
     cmp eax, -1
     je near .branch_51f
-    cmp dword [qsetmode], 0xc8
-    jne near .branch_143
-    mov al, byte [presentation_width]
-    dec al
-    mov byte [engine_140dd], al
-    mov eax, dword [presentation_width]
-    dec eax
-    sar eax, 8
-    and eax, 0xff
-    mov byte [engine_140de], al
-    mov al, byte [presentation_height]
-    dec al
-    mov byte [engine_140df], al
-    mov eax, dword [presentation_height]
-    dec eax
-    sar eax, 8
-    and eax, 0xff
-    mov byte [engine_140e0], al
-    mov al, byte [presentation_width]
-    mov byte [engine_140e1], al
-    mov eax, dword [presentation_width]
-    sar eax, 8
-    and eax, 0xff
-    mov byte [engine_140e2], al
-    mov al, byte [presentation_height]
-    mov byte [engine_140e3], al
-    mov eax, dword [presentation_height]
-    sar eax, 8
-    and eax, 0xff
-    mov byte [engine_140e4], al
-    mov al, byte [engine_140e1]
-    mov byte [engine_14117], al
-    mov al, byte [engine_140e2]
-    mov byte [engine_14118], al
+; C emits the mode check and both PCX geometry paths.
+section .header_join align=1 vstart=0x4c4a9 follows=.text
     jmp short .branch_1a7
 
-.branch_143:
-    mov byte [engine_140dd], 0x7f
-    mov al, byte [qsetmode]
-    dec al
-    mov byte [engine_140df], al
-    mov eax, dword [qsetmode]
-    dec eax
-    mov dl, 2
-    sar eax, 8
-    mov byte [engine_140de], dl
-    and eax, 0xff
-    mov dh, 0x80
-    mov byte [engine_140e0], al
-    mov al, byte [qsetmode]
-    mov byte [engine_140e1], dh
-    mov byte [engine_140e3], al
-    mov eax, dword [qsetmode]
-    mov byte [engine_140e2], dl
-    sar eax, 8
-    mov byte [engine_14117], dh
-    and eax, 0xff
-    mov byte [engine_14118], dl
-    mov byte [engine_140e4], al
-
+section .capture_body align=1 vstart=0x4c50f follows=.header_join
 .branch_1a7:
     mov ebx, 0x80
     mov edx, engine_140d5

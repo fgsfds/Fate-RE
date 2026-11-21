@@ -2660,7 +2660,10 @@ ROUTINES = [
     ('fillpolygon_', 'engine/fillpolygon.asm', 'fillpolygon.bin', 0x5bfb7, 2026, FILLPOLYGON_POINTERS),
     ('clippoly_', 'engine/clippoly.asm', 'clippoly.bin', 0x5b230, 3463, CLIPPOLY_POINTERS),
     ('drawmapview_', 'engine/drawmapview.asm', 'drawmapview.bin', 0x59d2c, 5380, DRAWMAPVIEW_POINTERS),
-    ('screencapture_', 'engine/screencapture.asm', 'screencapture.bin', 0x4c368, 1319, SCREENCAPTURE_POINTERS),
+    ('screencapture_', 'engine/screencapture.asm', 'screencapture.bin', 0x4c368, 167,
+     {site: target for site, target in SCREENCAPTURE_POINTERS.items() if site < 0xa7}),
+    ('capture_pixels', 'engine/screencapture.asm', 'screencapture.bin', 0x4c50f, 896,
+     {site - 0x1a7: target for site, target in SCREENCAPTURE_POINTERS.items() if site >= 0x1a7}),
     ('drawmasks_sort_and_draw', 'engine/drawmasks.asm', 'drawmasks.bin', 0x4cdf1, 930,
      {site - 0x167: target for site, target in DRAWMASKS_POINTERS.items() if site >= 0x167}),
     ('drawsprite_', 'engine/drawsprite.asm', 'drawsprite.bin', 0x4d6ca, 11175, DRAWSPRITE_POINTERS),
@@ -2840,6 +2843,7 @@ ROUTINES = [
      {24: 0x306aa4, 36: 0x306aa8}),
 ]
 NON_ROUTINE_UNITS = [
+    ('capture_header_join', 'engine/screencapture.asm', 'screencapture.bin', 0x4c4a9, 2, {}),
     ('code_padding_5d088', 'runtime/remaining_code_padding.asm', 'remaining_code_padding.bin', 0x5d088, 2, {}),
     ('code_padding_5ff05', 'runtime/remaining_code_padding.asm', 'remaining_code_padding.bin', 0x5ff05, 3, {}),
     ('code_padding_60321', 'runtime/remaining_code_padding.asm', 'remaining_code_padding.bin', 0x60321, 1, {}),
@@ -3144,6 +3148,9 @@ NON_ROUTINE_KINDS.update({
 })
 
 GROUP_SLICES = {
+    'screencapture_': (0, 1065),
+    'capture_header_join': (167, 1065),
+    'capture_pixels': (169, 1065),
     'code_base_trap': (0, 19),
     'code_padding_5d088': (0, 257),
     'code_padding_5ff05': (2, 257),
@@ -4176,7 +4183,8 @@ DATA_POINTER_SITES = {
                       'fillpolygon_': FILLPOLYGON_POINTERS.keys(),
                       'clippoly_': CLIPPOLY_POINTERS.keys(),
                       'drawmapview_': DRAWMAPVIEW_POINTERS.keys(),
-                      'screencapture_': SCREENCAPTURE_POINTERS.keys(),
+                      'screencapture_': tuple(site for site in SCREENCAPTURE_POINTERS if site < 0xa7),
+                      'capture_pixels': tuple(site - 0x1a7 for site in SCREENCAPTURE_POINTERS if site >= 0x1a7),
                       'drawmasks_sort_and_draw': tuple(site - 0x167 for site in DRAWMASKS_POINTERS if site >= 0x167),
                       'drawsprite_': DRAWSPRITE_POINTERS.keys(),
                       'drawmaskwall_': DRAWMASKWALL_POINTERS.keys(),

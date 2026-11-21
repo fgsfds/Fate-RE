@@ -4597,6 +4597,14 @@ DATA_OFFSETS.update({
 })
 FUNCTION_ADDRESSES.update({'spritewallfront_': 0x45527, 'drawsprite_': 0x4d6ca, 'drawmaskwall_': 0x4d193})
 
+LEAVES.update({'capture_header_mode_': (0x71a0f, 154),
+               'capture_header_planar_': (0x71aab, 100)})
+LEAF_CODE_SLICES.update({
+    'capture_header_mode_': ('capture_header_', 1, 0x9b, 259),
+    'capture_header_planar_': ('capture_header_', 0x9d, 0x101, 259),
+})
+DATA_OFFSETS['_pcx_header'] = 0x140d5
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

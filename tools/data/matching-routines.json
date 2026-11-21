@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1246,
-  "unique_code_bytes": 179689,
-  "le_pointers": 9851,
+  "routines": 1248,
+  "unique_code_bytes": 179943,
+  "le_pointers": 9886,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -4998,6 +4998,26 @@
       "loaded_address": "0x4c293",
       "bytes": 213,
       "le_pointers": 4
+    },
+    {
+      "symbol": "capture_header_mode_",
+      "object": "pcxhdr.obj",
+      "object_sha256": "6a00c7d1ab731a4be1198187f5ddceca89909ba8b0898f441776e0821fca9394",
+      "sha256": "50095a38ed38f46187191b62e88477356acdae623e162eef18fca203fef5b763",
+      "raw_offset": "0x71a0f",
+      "loaded_address": "0x4c40f",
+      "bytes": 154,
+      "le_pointers": 21
+    },
+    {
+      "symbol": "capture_header_planar_",
+      "object": "pcxhdr.obj",
+      "object_sha256": "6a00c7d1ab731a4be1198187f5ddceca89909ba8b0898f441776e0821fca9394",
+      "sha256": "df489fdff20088af11bb1c5fe252ddd934ba022c9c485b18014e7f9163c678f8",
+      "raw_offset": "0x71aab",
+      "loaded_address": "0x4c4ab",
+      "bytes": 100,
+      "le_pointers": 14
     },
     {
       "symbol": "inside_",

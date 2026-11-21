@@ -1,9 +1,21 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 483,
-  "unique_code_bytes": 234950,
-  "le_pointers": 12698,
+  "routines": 484,
+  "unique_code_bytes": 234696,
+  "le_pointers": 12663,
   "non_routine_code_spans": [
+    {
+      "symbol": "capture_header_join",
+      "source": "src/engine/screencapture.asm",
+      "binary": "screencapture.bin",
+      "sha256": "c1472ba4a2ffaeb81b51fe6ce91e0d2092fb497b3670f3715a4a71803b23941a",
+      "bytes": 2,
+      "raw_offset": "0x71aa9",
+      "loaded_address": "0x4c4a9",
+      "binary_offset": 167,
+      "le_pointers": 0,
+      "kind": "declared read-only tables in CODE"
+    },
     {
       "symbol": "code_padding_5d088",
       "source": "src/runtime/remaining_code_padding.asm",
@@ -6889,13 +6901,25 @@
       "symbol": "screencapture_",
       "source": "src/engine/screencapture.asm",
       "binary": "screencapture.bin",
-      "sha256": "63eb2615cf315f8f122e4f878c523c7741eee0fc54d9909b9b83aeaddc26b5e6",
-      "bytes": 1319,
+      "sha256": "8072ed2c82017f3a2fb1be2e2895e49b8d60bab4b1a40a56a8e32c8748243ddd",
+      "bytes": 167,
       "raw_offset": "0x71968",
       "loaded_address": "0x4c368",
       "public_entry": "0x4c368",
       "binary_offset": 0,
-      "le_pointers": 69
+      "le_pointers": 4
+    },
+    {
+      "symbol": "capture_pixels",
+      "source": "src/engine/screencapture.asm",
+      "binary": "screencapture.bin",
+      "sha256": "6c30a4fead43460075fa3251c09693235cb29294698563954a6c4534b4ca69a6",
+      "bytes": 896,
+      "raw_offset": "0x71b0f",
+      "loaded_address": "0x4c50f",
+      "public_entry": "0x4c50f",
+      "binary_offset": 169,
+      "le_pointers": 30
     },
     {
       "symbol": "drawmasks_sort_and_draw",
