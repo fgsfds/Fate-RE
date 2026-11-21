@@ -129,11 +129,12 @@ Evidence and hash-bound behavior report: `work/numbered-board-next/evidence.json
 
 ### Encounter spawn-height lifetime
 
-Watcom 10.5 `/4r /s /or /bt=dos`: the candidate is 1,219 bytes versus 1,263.
-First mismatch: EBP is not saved; the original keeps spawn height in EBP across
-the loop while C rematerializes it inside. Next preserve the original
-tail-tested loop layout to test invariant hoisting. Evidence:
-`work/encounter-next/probe-report.json`.
+Watcom 10.5 `/4r /s /or /bt=dos`: the ordinary candidate remains 1,219 bytes
+versus 1,263. EBP is not saved: the original retains spawn height across the
+loop while C rematerializes it inside. Next compare spawn-loop live ranges
+and guard the two internal CODE literal-template relocations before another
+allocation probe. Current evidence and source hashes:
+`work/encounter-next/current-blocker.json`.
 
 ### Whole palette search frame
 
