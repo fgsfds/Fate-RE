@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 490,
-  "unique_code_bytes": 237411,
-  "le_pointers": 12858,
+  "routines": 487,
+  "unique_code_bytes": 237371,
+  "le_pointers": 12854,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -1882,18 +1882,6 @@
       "le_pointers": 2
     },
     {
-      "symbol": "receive_button_high",
-      "source": "src/fate/receive_button_high.asm",
-      "binary": "receive_button_high.bin",
-      "sha256": "9ff18691bfb0a37881aea2171c2b48b8ed590202125a6f500935e144bc844c9a",
-      "bytes": 9,
-      "raw_offset": "0x57cb5",
-      "loaded_address": "0x326b5",
-      "public_entry": "0x326b5",
-      "binary_offset": 0,
-      "le_pointers": 1
-    },
-    {
       "symbol": "receive_message_deadline",
       "source": "src/fate/receive_message_deadline.asm",
       "binary": "receive_message_deadline.bin",
@@ -1904,30 +1892,6 @@
       "public_entry": "0x326e9",
       "binary_offset": 0,
       "le_pointers": 3
-    },
-    {
-      "symbol": "receive_ready_head",
-      "source": "src/fate/receive_ready_head.asm",
-      "binary": "receive_ready_head.bin",
-      "sha256": "88a170e30a40d659540ab3d2a2c569edf89cbe3e247e09579a28c4081048d181",
-      "bytes": 18,
-      "raw_offset": "0x57d17",
-      "loaded_address": "0x32717",
-      "public_entry": "0x32717",
-      "binary_offset": 0,
-      "le_pointers": 2
-    },
-    {
-      "symbol": "receive_ready_send",
-      "source": "src/fate/receive_ready_send.asm",
-      "binary": "receive_ready_send.bin",
-      "sha256": "bc22b93c30c485290b3c9ad87b9900efffcbc512908b7691cb156dd045dbaefb",
-      "bytes": 13,
-      "raw_offset": "0x57d3c",
-      "loaded_address": "0x3273c",
-      "public_entry": "0x3273c",
-      "binary_offset": 0,
-      "le_pointers": 1
     },
     {
       "symbol": "draw_map_overlays",

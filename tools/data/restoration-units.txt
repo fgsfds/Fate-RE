@@ -503,3 +503,6 @@ network/serialin serialin
 fate/receive_packets recvpkt
 fate/receive_checksums recvcrc
 fate/receive_parity recvpar
+fate/receive_button_high recvhigh
+fate/receive_ready_head recvhead
+fate/receive_ready_send recvsend

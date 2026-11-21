@@ -3677,9 +3677,15 @@ LEAF_ENTRY_PREFIX_FIXUPS = {
 LEAF_CONTEXT_SUFFIXES = {
     'compare_received_checksums_': b'\xc3',
     'receiver_parity_tick_': b'\xc3',
+    'receive_button_high_': b'\xc3',
+    'receive_ready_context_': b'\xc3',
+    'receive_ready_send_': b'\xe9\x00\x00\x00\x00',
 }
 
 LEAF_CODE_SLICES = {
+    'receive_packets_button_high_': ('receive_button_high_', 0, 9, 10),
+    'receive_packets_ready_head_': ('receive_ready_context_', 0, 18, 37),
+    'receive_packets_ready_send_': ('receive_ready_send_', 0, 13, 18),
     'receive_packets_checksums_': ('compare_received_checksums_', 0, 105, 106),
     'receive_packets_parity_': ('receiver_parity_tick_', 0, 7, 32),
     'receive_packets_entry_': ('receive_packets_', 0, 342, 910),
@@ -3728,13 +3734,18 @@ DATA_OFFSETS.update({
 })
 FUNCTION_ADDRESSES.update({
     'snapshot_input_': 0x2d1bd,
+    'receive_ready_send_': 0x3273c,
 })
 
 LEAVES.update({
     'receive_packets_checksums_': (0x57b79, 105),
+    'receive_packets_button_high_': (0x57cb5, 9),
+    'receive_packets_ready_head_': (0x57d17, 18),
+    'receive_packets_ready_send_': (0x57d3c, 13),
     'receive_packets_parity_': (0x57d72, 7),
 })
 DATA_OFFSETS.update({
+    '_receiver_button_bytes': 0x5ac3c,
     '_checksum_write_cursor': 0x3cdc,
     '_checksum_received_cursor': 0x3ce0,
     '_checksum_read_cursor': 0x3ce4,

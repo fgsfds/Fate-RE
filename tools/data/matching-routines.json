@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1214,
-  "unique_code_bytes": 177228,
-  "le_pointers": 9691,
+  "routines": 1217,
+  "unique_code_bytes": 177268,
+  "le_pointers": 9695,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1560,6 +1560,16 @@
       "le_pointers": 3
     },
     {
+      "symbol": "receive_packets_button_high_",
+      "object": "recvhigh.obj",
+      "object_sha256": "18b195af5b2c9d141116efbfb0ecb21d4f209f788f0b2e05c62613926947ebb8",
+      "sha256": "9ff18691bfb0a37881aea2171c2b48b8ed590202125a6f500935e144bc844c9a",
+      "raw_offset": "0x57cb5",
+      "loaded_address": "0x326b5",
+      "bytes": 9,
+      "le_pointers": 1
+    },
+    {
       "symbol": "receive_packets_text_",
       "object": "recvpkt.obj",
       "object_sha256": "3536a12e205bf0ed99a37f6ce2270df45c869c9976d417d1355a9bbd4b295565",
@@ -1580,6 +1590,16 @@
       "le_pointers": 1
     },
     {
+      "symbol": "receive_packets_ready_head_",
+      "object": "recvhead.obj",
+      "object_sha256": "846b12ee8a513e18bfdc3fb4dfb533a39e987d319c01412c34cb64e29fd8ca5d",
+      "sha256": "88a170e30a40d659540ab3d2a2c569edf89cbe3e247e09579a28c4081048d181",
+      "raw_offset": "0x57d17",
+      "loaded_address": "0x32717",
+      "bytes": 18,
+      "le_pointers": 2
+    },
+    {
       "symbol": "receive_packets_ready_test_",
       "object": "recvpkt.obj",
       "object_sha256": "3536a12e205bf0ed99a37f6ce2270df45c869c9976d417d1355a9bbd4b295565",
@@ -1588,6 +1608,16 @@
       "loaded_address": "0x32729",
       "bytes": 19,
       "le_pointers": 0
+    },
+    {
+      "symbol": "receive_packets_ready_send_",
+      "object": "recvsend.obj",
+      "object_sha256": "d528223198246b5c21442dd0b566eca7e83ad35d4068ef05f6f968c19c7de28b",
+      "sha256": "bc22b93c30c485290b3c9ad87b9900efffcbc512908b7691cb156dd045dbaefb",
+      "raw_offset": "0x57d3c",
+      "loaded_address": "0x3273c",
+      "bytes": 13,
+      "le_pointers": 1
     },
     {
       "symbol": "receive_packets_poll_",
