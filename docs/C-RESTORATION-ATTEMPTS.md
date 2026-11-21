@@ -88,6 +88,18 @@ the sort into inline instructions merely to increase the C-object percentage.
 
 ## Other unresolved probes
 
+### Numbered-board loader counters and argument staging
+
+`load_numbered_board_`, Watcom 10.5 `/4r /s /or /bt=dos`:
+`work/numbered-board-next/sprite_fields.c` emits 929 bytes versus 935;
+bytes and LE verification fail, and behavior has not yet been tested. The
+28-byte frame and shared custom-map output location match. A unified sprite
+record fixes initial store scheduling; first normalized divergence is
+`0x27822`, where strength reduction stores through counter+2 before increment.
+Next make the postincremented ECX counter explicit before address formation.
+Motion-call and player-mirror allocation also remain. Keep verified callee
+clobbers and one-based bounds. Evidence: `work/numbered-board-next/evidence.json`.
+
 ### Level-sector puzzle activation staging
 
 `update_level_sector_puzzle_`, Watcom 10.5 `/4r /s /or /bt=dos`:
@@ -96,9 +108,10 @@ the sort into inline instructions merely to increase the C-object percentage.
 normalized instruction difference is the solution activation preparation at
 `0x1dc84`: the candidate stages tag 6 through EDI before setting EDI to 1;
 the target uses EAX for 6 and EDX for the later zero. An EAX identity stage
-regresses allocation throughout later trigger paths. Next test once whether
-shared ordinary enable/tag/zero locals across those paths recover their
-lifetimes. Preserve the empty loops and current typed stages; evidence and
+regresses allocation throughout later trigger paths. Shared enable/tag/zero
+locals introduce an eight-byte frame; changing the tag return to AX also
+regresses later allocation. Next isolate the solution allocator with its shared
+downstream constants. Preserve the empty loops and typed stages; evidence and
 source/object hashes: `work/puzzle-next/evidence.json`.
 
 ### Whole palette search frame
