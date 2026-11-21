@@ -170,6 +170,10 @@ instructions.
 
 A length-scaling phase can return its result in EAX, then a separate clock phase can consume EAX. Selecting these adjacent compiler contexts preserves load order directly, without volatile tricks or added CALLs. Private RETs stay unlinked and guarded.
 
+## Main-menu shared-frame idiom
+
+Keep the retained 32-byte table and alignment in place; a checked compiler table is excluded and earns zero restoration credit. Use guarded CALL boundaries where selected contexts need them, and local branches for nearby control flow. Keep the shared-frame continuation as a tail transfer. Generic loaded leaf bindings were intentionally declined; use `check_main_menu` to validate the integrated object and behavior.
+
 ## Reusable receiver ABI lesson
 
 Declare function formals at their full ECX/EDX width, then narrow them inside the body; narrow formals can change Watcom's register/stack ABI. A sender stored in a 12-byte struct has its field at offset 8; with the 4-byte return address, it is at ESP+12. Keep suffix guards when selecting spans that share a return tail. The RET-suffix guard and the separate send-tail JMP guard protect different excluded contexts. For packet receiver branch selection, preserve both applicable guards and validate branch opcode/width, compiled target, placement, and overlap; exact routine bytes and LE targets remain required.

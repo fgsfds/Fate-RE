@@ -3689,6 +3689,9 @@ LEAF_CONTEXT_SUFFIXES = {
 }
 
 LEAF_CODE_SLICES = {
+    'main_menu_loop_': ('dispatch_main_menu_', 0x43, 0x117, 497),
+    'main_menu_actions_': ('dispatch_main_menu_', 0x13f, 0x1ae, 497),
+    'main_menu_exit_': ('dispatch_main_menu_', 0x1ae, 0x1f1, 497),
     'getpacket_length_order_': ('getpacket_length_copy_', 0, 4, 54),
     'receive_packets_button_low_': ('receive_button_low_', 0, 17, 28),
     'receive_packets_crc_order_': ('receive_checksum_order_', 0, 3, 24),
@@ -3812,10 +3815,12 @@ LEAF_SECTION_BRANCHES = {
 }
 
 
-def bind_section_branches(code, public, address, functions, fields, kept_start, kept_end):
-    if public not in LEAF_SECTION_BRANCHES:
-        return
-    compiler_size, placed_size, branches = LEAF_SECTION_BRANCHES[public]
+def bind_section_branches(code, public, address, functions, fields, kept_start, kept_end, *, metadata=None):
+    if metadata is None:
+        if public not in LEAF_SECTION_BRANCHES:
+            return
+        metadata = LEAF_SECTION_BRANCHES[public]
+    compiler_size, placed_size, branches = metadata
     if len(code) != compiler_size or address is None or public not in (functions or {}):
         raise ValueError('Section branch public extent/address differs')
     for site, (opcode, compiled_target, placed_target) in branches.items():
@@ -3887,6 +3892,16 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
         raise ValueError('CODE binding output must be an empty dict; stale metadata rejected')
     segments, publics, externals, flat_groups, fixups = parsed_leaf_object(bytes(blob))
     public_name = leaf_public_name(symbol)
+    if public_name == 'dispatch_main_menu_' and symbol in LEAF_CODE_SLICES:
+        from bind_main_menu_sections import bind_section, DATA as menu_data, FUNCTIONS as menu_functions
+        # This shared-frame binder supports the fixed production placement.
+        # Loaded/alternate execution uses the explicit full-group fixture.
+        if (any(name in values and values[name] != target for name, target in menu_data.items())
+                or any(name in (functions or {}) and functions[name] != target
+                       for name, target in menu_functions.items())
+                or set(menu_data).intersection(absolute_code or {})):
+            raise ValueError('Main-menu sections require fixed bindings; use the full-group fixture')
+        return bind_section(blob, symbol, address=address, code_bindings=code_bindings)
     found = [(seg, off) for seg, off, name in publics if name == public_name]
     if len(found) != 1:
         raise ValueError('Expected exactly one leaf public symbol')
@@ -4404,3 +4419,7 @@ if __name__ == '__main__':
     verify_leaf_relocations(code, bindings, read_le_fixups(exe)['pointers'], offset-0x25600,
                             code_bindings=code_bindings)
     print(f'PASS: {args.symbol} all {size} bytes and {len(bindings)} LE pointer targets match')
+
+LEAVES.update({'main_menu_loop_': (0x5f788, 212),
+               'main_menu_actions_': (0x5f884, 111),
+               'main_menu_exit_': (0x5f902, 67)})

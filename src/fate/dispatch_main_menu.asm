@@ -1,3 +1,4 @@
+; Retained main-menu table and shared-frame entry. Other blocks are C.
 ; Dispatch main menu.
 BITS 32
 ORG 0x3a127
@@ -36,6 +37,15 @@ totalclock equ 0x287e88
 presentation_height equ 0x287e8c
 presentation_width equ 0x287e90
 
+dispatch_main_menu.new_game equ 0x3a1dd
+dispatch_main_menu.options equ 0x3a298
+dispatch_main_menu.load_game equ 0x3a2a2
+dispatch_main_menu.save_game equ 0x3a2df
+dispatch_main_menu.help equ 0x3a2e9
+dispatch_main_menu.resume equ 0x3a2f3
+dispatch_main_menu.confirm_exit equ 0x3a302
+dispatch_main_menu.branch_3a188 equ 0x3a188
+
     nop
 
 main_menu_dispatch:
@@ -69,138 +79,3 @@ dispatch_main_menu:
 
 .branch_3a182:
     mov [frame_state_1740ec], edx
-
-.branch_3a188:
-    cmp dword [special_case_counter], 0x0
-    jz near .branch_3a334
-    cmp dword [frame_state_772b8], 0x0
-    jnz short .branch_3a1a5
-    push strict dword frame_state_173ff0
-    jmp short .branch_3a1aa
-
-.branch_3a1a5:
-    push strict dword frame_state_174028
-
-.branch_3a1aa:
-    mov ecx, frame_state_d72
-    mov ebx, 0x820
-    mov edx, 0x8
-    mov eax, frame_state_1740ec
-    call run_menu_loop
-    test eax, eax
-    jz near .branch_3a325
-    mov eax, [frame_state_1740ec]
-    cmp eax, 0x7
-    ja short .branch_3a188
-    jmp dword near [cs:eax*4 + main_menu_dispatch - 0x10000]
-.new_game:
-    mov ebx, 0x1
-    mov eax, [frame_state_772b8]
-    mov [toggled_mode], bx
-    test eax, eax
-    jz short .branch_3a1fb
-    call confirm_menu_action
-    test eax, eax
-    jz short .branch_3a188
-
-.branch_3a1fb:
-    call sub_3a6e5
-    test eax, eax
-    jng short .branch_3a20e
-
-.branch_3a204:
-    mov esi, 0x1
-    jmp near .branch_3a334
-
-.branch_3a20e:
-    call sub_3ae7c
-    test eax, eax
-    jz near .branch_3a188
-    xor eax, eax
-    mov esi, 0x1
-    call clearview
-    mov eax, [presentation_height]
-    sub eax, esi
-    push eax
-    mov eax, [presentation_width]
-    sub eax, esi
-    push eax
-    push strict byte 0x0
-    push strict byte 0x0
-    push strict byte 0x2
-    push strict byte 0x0
-    push strict byte 0x0
-    mov ebx, 0x10000
-    mov edx, 0x640000
-    push strict dword 0x9a1
-    xor ecx, ecx
-    mov eax, 0xa00000
-    call rotatesprite
-    mov edx, [frame_state_12df8]
-    mov eax, edx
-    shl eax, byte 0x3
-    mov ecx, frame_state_d7c
-    sub eax, edx
-    mov edx, 0xa0
-    sar eax, 1
-    mov ebx, 0xffffffff
-    sub edx, eax
-    push esi
-    mov eax, edx
-    mov edx, 0x4e
-    call draw_menu_text
-    call nextpage
-
-.branch_3a28e:
-    call sub_3b14b
-    jmp near .branch_3a334
-.options:
-    call run_options_menu
-    jmp near .branch_3a188
-.load_game:
-    cmp dword [frame_state_772b8], 0x0
-    jz short .branch_3a2b8
-    call confirm_menu_action
-    test eax, eax
-    jz near .branch_3a188
-
-.branch_3a2b8:
-    call run_load_game_menu
-    cmp eax, -1
-    jz near .branch_3a188
-    mov esi, 0x1
-    mov edx, 0x2
-    mov [frame_state_77114], esi
-    mov [difficulty_divisor], dx
-    jmp short .branch_3a28e
-.save_game:
-    call run_save_game_menu
-    jmp near .branch_3a188
-.help:
-    call sub_3a8bc
-    jmp near .branch_3a188
-.resume:
-    cmp dword [frame_state_772b8], 0x0
-    jnz near .branch_3a204
-    jmp short .branch_3a332
-.confirm_exit:
-    call confirm_menu_action
-    test eax, eax
-    jz near .branch_3a188
-    xor esi, esi
-    mov [special_case_counter], esi
-    mov [frame_state_772b8], esi
-    mov [frame_state_12dd4], esi
-    jmp short .branch_3a334
-
-.branch_3a325:
-    cmp dword [frame_state_772b8], 0x0
-    jnz near .branch_3a204
-
-.branch_3a332:
-    xor esi, esi
-
-.branch_3a334:
-    mov [totalclock], edi
-    mov [last_tick], ebp
-    jmp near menu_selection_return

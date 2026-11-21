@@ -817,15 +817,13 @@ Evidence: work/terminal-native-next/prep.c and whole.c.
 
 ### Main-menu shared frame
 
-`dispatch_main_menu`, `/4r /s /or /bt=dos`: the 529-byte C group
-(32-byte table included) differs from the 541-byte reference; its 1,442
-original/candidate call, state and shared-frame cases pass. First mismatch:
-zeroing EDX moves ahead of the saved-tick load. The initial game-flag test
-also gains MOV/TEST and an ESI copy; caption X allocation and the merged
-resume/cancel comparison remain different. Next isolate the initial ESI
-result lifetime without losing the EDI/EBP clock pair, then constrain caption
-arithmetic in stages. Retain the alignment byte at 0x3a127 when integrating.
-Scratch: `work/main-menu-next/evidence.json`; no accepted coverage.
+`dispatch_main_menu`, `/4r /s /or /bt=dos`: 390 bytes are native C, with 119
+ASM body bytes remaining. The original 32-byte jump table and alignment byte remain assembly;
+the compiler table is checked but unlinked. Its 1,442 behavior cases and two controls pass.
+The remaining ASM is the 64-byte entry, 40-byte caption allocation, and
+15-byte resume path. Next isolate entry/clock ordering, then caption allocation.
+Evidence: `work/main-menu-native-build/validation.json`,
+`work/main-menu-native-audit.json`, and `work/main-menu-native-handoff.json`.
 
 ### Sprite waypoint target: remaining blocker
 

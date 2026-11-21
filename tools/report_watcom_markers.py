@@ -27,9 +27,14 @@ def error_reason(error):
 def verified_switch_tables(inventory, filename, obj):
     table_rows = [row for row in inventory['non_routine_code_spans']
                   if row['object'] == filename and row['kind'] == 'compiler-generated jump table']
-    if not table_rows:
-        return ()
     routine_rows = [row for row in inventory['spans'] if row['object'] == filename]
+    if not table_rows:
+        if any(leaf_public_name(row['symbol']) == 'dispatch_main_menu_' for row in routine_rows):
+            # A checked but unlinked table can normalize marker comparisons.
+            # It stays outside the credited inventory and contributes zero bytes.
+            from bind_main_menu_sections import verified_context_tables
+            return verified_context_tables(obj, routine_rows)
+        return ()
     segments, public_rows = read_object(obj)
     by_name = {name: (seg, offset) for seg, offset, name in public_rows}
     placement = {(by_name[row['symbol']][0], int(row['raw_offset'], 16) - by_name[row['symbol']][1])

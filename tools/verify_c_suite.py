@@ -924,7 +924,10 @@ OBJECT_NAMES.update({
     'receive_packets_finish_': 'recvpkt',
 })
 
-OBJECT_NAMES.update({'getpacket_length_order_': 'recvlen',
+OBJECT_NAMES.update({'main_menu_loop_': 'mainmenu',
+                     'main_menu_actions_': 'mainmenu',
+                     'main_menu_exit_': 'mainmenu',
+                     'getpacket_length_order_': 'recvlen',
                      'receive_packets_button_low_': 'recvfrag',
                      'receive_packets_crc_order_': 'recvfrag',
                      'receive_packets_message_delta_': 'recvfrag',
@@ -1475,6 +1478,8 @@ def verify_compiler_groups(exe, directory, names=None):
                                ('recvsend', 18, 'receive_ready_send_')):
         if selected(name):
             verify_group_layout((directory/(name+'.obj')).read_bytes(), size, [(public, 0)])
+    if selected('mainmenu'):
+        verify_group_layout((directory/'mainmenu.obj').read_bytes(), 529, [('dispatch_main_menu_', 32)])
     if selected('recvlen'):
         verify_group_layout((directory/'recvlen.obj').read_bytes(), 54, [('getpacket_length_copy_', 0)])
     if selected('recvfrag'):

@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 483,
-  "unique_code_bytes": 237317,
-  "le_pointers": 12849,
+  "routines": 485,
+  "unique_code_bytes": 236927,
+  "le_pointers": 12828,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -775,7 +775,7 @@
     {
       "symbol": "main_menu_alignment",
       "source": "src/fate/dispatch_main_menu.asm",
-      "binary": "dispatch_main_menu.bin",
+      "binary": "main_menu_entry.bin",
       "sha256": "9e076ceaf246b6003d9c2680a2b4cf0bffd069805902b0b5edeebf49039fe4bd",
       "bytes": 1,
       "raw_offset": "0x5f727",
@@ -787,7 +787,7 @@
     {
       "symbol": "main_menu_dispatch",
       "source": "src/fate/dispatch_main_menu.asm",
-      "binary": "dispatch_main_menu.bin",
+      "binary": "main_menu_entry.bin",
       "sha256": "b457775e26c4875fa679a47d19004eb3a2ecb860eac2ede095e501e53c15a2c1",
       "bytes": 32,
       "raw_offset": "0x5f728",
@@ -1762,16 +1762,40 @@
       "le_pointers": 0
     },
     {
-      "symbol": "dispatch_main_menu",
+      "symbol": "main_menu_entry",
       "source": "src/fate/dispatch_main_menu.asm",
-      "binary": "dispatch_main_menu.bin",
-      "sha256": "80ca4c0a1e1a8148c6763cb138c8c9d5626c77018f106cf8c3e73aab4209ad44",
-      "bytes": 509,
+      "binary": "main_menu_entry.bin",
+      "sha256": "ae8d648ed6a36edbf4ad13a2711f67e304a038d3507b9cf7c17625cc6862a5ba",
+      "bytes": 64,
       "raw_offset": "0x5f748",
       "loaded_address": "0x3a148",
       "public_entry": "0x3a148",
       "binary_offset": 33,
-      "le_pointers": 30
+      "le_pointers": 6
+    },
+    {
+      "symbol": "main_menu_caption",
+      "source": "src/fate/main_menu_caption.asm",
+      "binary": "main_menu_caption.bin",
+      "sha256": "c45601b7ca05eea1a1b030f710edb9f22829486fb0414a93a38eee2dcc7b9764",
+      "bytes": 40,
+      "raw_offset": "0x5f85c",
+      "loaded_address": "0x3a25c",
+      "public_entry": "0x3a25c",
+      "binary_offset": 0,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "main_menu_resume",
+      "source": "src/fate/main_menu_resume.asm",
+      "binary": "main_menu_resume.bin",
+      "sha256": "96dc552bd30a23e2ac1096a93286b49acb897564499939c604f6c98a9073f569",
+      "bytes": 15,
+      "raw_offset": "0x5f8f3",
+      "loaded_address": "0x3a2f3",
+      "public_entry": "0x3a2f3",
+      "binary_offset": 0,
+      "le_pointers": 1
     },
     {
       "symbol": "render_save_slot_preview",
