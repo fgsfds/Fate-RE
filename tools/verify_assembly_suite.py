@@ -1504,13 +1504,6 @@ ROUTINES = [
       925: 0x306b74, 931: 0x306b78, 940: 0x306b84, 949: 0x306b54, 964: 0x306b64, 985: 0x306b70,
       993: 0x26c49c, 1010: 0x26c49e, 1016: 0x306b78, 1042: 0x819fd}),
     ('receive_length_order', 'fate/receive_packet.asm', 'receive_packet.bin', 0x42d17, 4, {}),
-    ('initialize_serial_network', 'fate/initialize_serial_network.asm', 'initialize_serial_network.bin', 0x41a56, 648,
-     {7: 0x20fe10, 31: 0x93cdf, 42: 0x20fe04, 52: 0x20fe00, 62: 0x20fdbc, 68: 0x20fe14, 78: 0x20fdf0, 88:
-      0x20fdd8, 98: 0x20fdd0, 108: 0x20fe10, 122: 0x20fde8, 142: 0x20fe10, 156: 0x41a46, 187: 0x20fde8, 211:
-      0x20fde8, 227: 0x20fe28, 257: 0x20fde8, 282: 0x20fe28, 293: 0x20fde8, 312: 0x20fde8, 325: 0x20fde8, 342:
-      0x20fde8, 359: 0x20fde8, 383: 0x20fdf8, 393: 0x20fdf8, 401: 0x20fde8, 416: 0x20fdf8, 429: 0x20fde8, 452:
-      0x20fde8, 467: 0x20fde8, 484: 0x20fde8, 497: 0x20fe04, 533: 0x20fde8, 545: 0x20fde8, 557: 0x20fde8, 566:
-      0x20fde8, 578: 0x20fde8, 603: 0x20fdfc, 608: 0x20fe2c, 613: 0x20fe1c, 621: 0x20fdf4, 639: 0x20fe38}),
     ('initialize_ipx', 'fate/initialize_ipx.asm', 'initialize_ipx.bin', 0x41694, 945,
      {61: 0x20fdc0, 70: 0x818fe, 84: 0x20fdc0, 90: 0x20fde4, 99: 0x20fde0, 108: 0x20fdd4, 117: 0x20fdac, 126:
       0x20fda0, 138: 0x20fd98, 150: 0x20fda4, 164: 0x20fd9c, 172: 0x20fdc0, 178: 0x20fdb0, 193: 0x20fdb8, 201:
@@ -2941,8 +2934,6 @@ NON_ROUTINE_UNITS = [
      0x4b47c, 2, {}),
     ('serial_dispatch_alignment', 'fate/initialize_serial_network.asm', 'initialize_serial_network.bin', 0x41a45, 1,
      {}),
-    ('serial_port_dispatch', 'fate/initialize_serial_network.asm', 'initialize_serial_network.bin', 0x41a46, 16,
-     {0: 0x41af6, 4: 0x41afd, 8: 0x41b04, 12: 0x41b0b}),
     ('retrace_alignment', 'fate/wait_vertical_retrace.asm', 'wait_vertical_retrace.bin', 0x40b81, 1, {}),
     ('difficulty_dispatch_alignment', 'fate/run_difficulty_menu.asm', 'run_difficulty_menu.bin', 0x3ae6b, 1,
      {}),
@@ -3233,9 +3224,7 @@ GROUP_SLICES = {
     'raster_alignment_7524e': (26, 49),
     'raster_alignment_752a4': (28, 49),
     'raster_alignment_75307': (40, 49),
-    'serial_dispatch_alignment': (0, 665),
-    'serial_port_dispatch': (1, 665),
-    'initialize_serial_network': (17, 665),
+    'serial_dispatch_alignment': (0, 1),
     'retrace_alignment': (0, 24),
     'difficulty_dispatch_alignment': (0, 1),
     'audio_dispatch_alignment': (0, 1),
@@ -3752,9 +3741,6 @@ DATA_POINTER_SITES = {
      854, 873, 879, 885, 892, 899, 909, 914, 920, 925, 931, 940, 949, 964, 985, 993, 1010, 1016,
      1042,),
     'receive_length_order': (),
-    'initialize_serial_network': (7, 31, 42, 52, 62, 68, 78, 88, 98, 108, 122, 142, 187, 211, 227, 257, 282,
-     293, 312, 325, 342, 359, 383, 393, 401, 416, 429, 452, 467, 484, 497, 533, 545, 557, 566, 578, 603, 608,
-     613, 621, 639,),
     'initialize_ipx': (61, 70, 84, 90, 99, 108, 117, 126, 138, 150, 164, 172, 178, 193, 201, 207, 215, 221, 226,
      245, 261, 289, 321, 327, 337, 342, 349, 357, 362, 404, 414, 422, 432, 441, 450, 460, 481, 487, 507, 528,
      536, 555, 574, 590, 596, 601, 611, 617, 627, 635, 641, 650, 655, 666, 672, 682, 692, 700, 709, 719, 725,

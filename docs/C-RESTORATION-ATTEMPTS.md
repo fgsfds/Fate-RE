@@ -867,3 +867,14 @@ reloads also differ. Next isolate entry x/y lifetimes and the failure-index
 reload without broad volatile qualifiers. Production remains assembly; no C
 coverage is credited. Probe: `work/play-sound-next/parameter_lifetime.c`;
 comparison: `work/play-sound-next/compiler/playsnd2.report.json`.
+
+### IPX initializer: ES boundary and lifetimes
+
+Watcom 10.5 flat model rejects modifying ES with E1122. Keep the original raw
+INT 2F boundary; the historical companion preserves ES only while unlinked
+and documents binder relocation behavior, not C restoration or IPX coverage.
+With `/4r /s /or /bt=dos`,
+`work/serial-init-next/historical_lifetimes.c` first diverges at `0x41804` in
+peer-ID arithmetic. Using EBX as the identity for joint5 disrupts other
+lifetimes. Next retain the interrupt prefix and isolate partial-sum lifetimes. Comparison:
+`work/serial-init-next/compiler/joint4.report.json`.

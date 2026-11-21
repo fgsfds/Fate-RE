@@ -120,3 +120,4 @@ check_netsend --exe {exe} --object {build}/netsend.obj --output {build}/netsend-
 check_sendpacket --exe {exe} --object {build}/sendpack.obj --output {build}/sendpacket-behavior.json | sendpack
 check_receivepacket --exe {exe} --production-object {build}/netinitc.obj --assembly {build}/asm/receive_packet.bin --output {build}/receivepacket-behavior.json | netinitc
 check_netctrl --exe {exe} --object {build}/netinitc.obj --output {build}/netctrl-behavior.json | netinitc
+check_serial_init --exe {exe} --build {build} --output {build}/serial-init-behavior.json | serialin

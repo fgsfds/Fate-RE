@@ -31,7 +31,7 @@ def bind_switch_group(blob, *, base, loaded, symbol, prefix_size, data_targets, 
 
 
 def bind_switch_groups(blob, *, base, loaded, tables, data_targets, call_targets):
-    """Bind adjacent Watcom functions, each with a same-segment switch table."""
+    """Bind adjacent publics; a zero prefix marks an ordinary companion."""
     segments, publics = read_object(blob)
     if publics != [(1, start + size, symbol) for start, size, _, symbol in tables]:
         raise ValueError('Unexpected switch-group public layout')
@@ -78,6 +78,10 @@ def bind_switch_groups(blob, *, base, loaded, tables, data_targets, call_targets
             raise ValueError('Unsupported switch-group target method')
         code[off:off + 4] = (value & 0xffffffff).to_bytes(4, 'little')
     pairs = [(start, size, len(code) if end is None else end) for start, size, end, _ in tables]
+    if any(start < 0 or size < 0 or size % 4 or not start + size < end <= len(code)
+           for start, size, end in pairs):
+        raise ValueError('Invalid switch-group table/function extent')
+    pairs = [row for row in pairs if row[1]]
     table_slots = {site for start, size, _ in pairs for site in range(start, start + size, 4)}
     if len(code_refs) != len(table_slots) + len(pairs) or table_slots - code_refs.keys():
         raise ValueError('Expected generated table slots and one dispatch pointer per table')

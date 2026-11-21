@@ -144,11 +144,11 @@ def decode(blob, symbol, marked, tables=()):
         raise ValueError(f'Could not decode complete routine {symbol}')
 
     if table_stop < stop:
-        # Watcom can insert one-byte NOPs before the next public's table.
+        # Watcom inserts NOP or MOV EAX,EAX alignment before the next table.
         # Skip only these decoded terminal alignment bytes after a RET and
         # its optional closing marker. The inventory still checks base size.
         padding = 0
-        while raw and bytes(raw[-1].bytes) == b'\x90':
+        while raw and bytes(raw[-1].bytes) in (b'\x90', b'\x8b\xc0'):
             padding += raw[-1].size
             raw.pop()
         end = -2 if raw and marked and bytes(raw[-1].bytes) == MARK_END else -1

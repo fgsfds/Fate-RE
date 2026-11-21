@@ -27,7 +27,8 @@ INCLUDES = dict(zip(
     'ceilhl cacheglo msgconst line256 line16 lines modes16 clear2d grid2d'.split(),
     ('engine/ceilhl cache/globals cache/messages_const engine/drawline256 engine/drawline16 '
      'engine/lines engine/modes16 engine/clear2dscreen engine/draw2dgrid').split()))
-INCLUDES.update({'getpkt': 'network/getpkt', 'netctrl': 'network/netctrl'})
+INCLUDES.update({'getpkt': 'network/getpkt', 'netctrl': 'network/netctrl',
+                 'ipxctx': 'network/ipxctx'})
 # Preserve existing initialized-DATA object provenance. CODE comparisons ignore
 # volatile OMF timestamps; these historical DATA hashes still require them.
 SOURCE_TIMES = {

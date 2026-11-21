@@ -54,6 +54,12 @@ Accurate GS-preservation contracts retain the compiler's common-return folding.
 The linker validates each original condition and in-object target before
 rebasing the 14 shared-return branches; it changes displacement operands only.
 
+The serial network initializer in `src/network/serialin.c` follows the same pinned `MULTI.C`
+provenance as `netsend`: its exact body is 648 bytes, with a 16-byte CODE
+table, and all 46 LE sites/targets match (42 body sites and 4 table sites).
+Its 629 native bytes and 19 inline-I/O bytes are reported separately; inline
+I/O remains necessary at the hardware boundary.
+
 ### Concrete correspondences and cautions
 
 `SRC/ENGINE.C:1270-1288` and the corresponding floor block at 1436 onward

@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 486,
-  "unique_code_bytes": 238901,
-  "le_pointers": 12960,
+  "routines": 485,
+  "unique_code_bytes": 238237,
+  "le_pointers": 12914,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -723,18 +723,6 @@
       "binary_offset": 0,
       "le_pointers": 0,
       "kind": "alignment before dispatch table"
-    },
-    {
-      "symbol": "serial_port_dispatch",
-      "source": "src/fate/initialize_serial_network.asm",
-      "binary": "initialize_serial_network.bin",
-      "sha256": "f84586e4540cfadff472003b51604abb0bb2de55203eae715018155b11724331",
-      "bytes": 16,
-      "raw_offset": "0x67046",
-      "loaded_address": "0x41a46",
-      "binary_offset": 1,
-      "le_pointers": 4,
-      "kind": "declared read-only tables in CODE"
     },
     {
       "symbol": "retrace_alignment",
@@ -1760,18 +1748,6 @@
       "public_entry": "0x42d17",
       "binary_offset": 0,
       "le_pointers": 0
-    },
-    {
-      "symbol": "initialize_serial_network",
-      "source": "src/fate/initialize_serial_network.asm",
-      "binary": "initialize_serial_network.bin",
-      "sha256": "86b3985c19506b386d3b5863526355927cc558d6f05ab70a1406aaeb04e53a2d",
-      "bytes": 648,
-      "raw_offset": "0x67056",
-      "loaded_address": "0x41a56",
-      "public_entry": "0x41a56",
-      "binary_offset": 17,
-      "le_pointers": 42
     },
     {
       "symbol": "initialize_ipx",

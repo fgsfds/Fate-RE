@@ -49,6 +49,9 @@ def switch_groups():
     """One binder registration shared by validation, linking, and targeted probes."""
     table = 'compiler-generated jump table'
     specs = (
+        ('serialin', 'bind_serial_init', [(0, 16, None, table, 4),
+                                          (16, None, 'initialize_serial_network_', None, 42)],
+         (41, 5, 4)),
         ('melee', 'bind_melee_group', [(0, 32, None, table, 8),
                                      (32, None, 'melee_trigger_', None, 17)], (16, 9, 11)),
         ('crushini', 'bind_crush_init_group', [(0, 60, None, table, 15),

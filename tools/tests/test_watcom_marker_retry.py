@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 
-from compare_watcom_markers import FIXED_SHORT_BRANCHES, compare
+from compare_watcom_markers import FIXED_SHORT_BRANCHES, JumpTable, compare, decode
 from mark_watcom_aux import instrument
 from test_match_objects import record
 
@@ -96,3 +96,22 @@ class MarkerRetryTests(unittest.TestCase):
         retry, _ = instrument(source, unique_ends=True)
         self.assertIn('"db 0e9h, 078h, 0ffh, 0ffh, 0ffh"', standard)
         self.assertIn('"db 0e9h, 06fh, 0ffh, 0ffh, 0ffh"', retry)
+
+
+class SwitchAlignmentTests(unittest.TestCase):
+    def decode_before_table(self, body):
+        offset = len(body)
+        public = b'\x04next' + (offset + 4).to_bytes(4, 'little') + b'\x00'
+        blob = object_with_code(body + bytes(4) + b'\xc3', public)
+        return decode(blob, 'test', False, (JumpTable(1, offset, 0, (offset + 4,)),))
+
+    def test_observed_two_byte_watcom_alignment_is_not_tail_code(self):
+        span = self.decode_before_table(b'\xc3\x90\x8b\xc0')
+        self.assertEqual([bytes(ins.bytes) for ins in span.instructions], [b'\xc3'])
+        self.assertEqual(span.positions, {0: 0, 1: 1})
+
+    def test_alignment_requires_return_and_at_most_three_bytes(self):
+        for body in (b'\x40\x90\x8b\xc0', b'\xc3\x8b\xc0\x8b\xc0',
+                     b'\xc3\x90\x31\xc0'):
+            with self.subTest(body=body), self.assertRaisesRegex(ValueError, 'alignment'):
+                self.decode_before_table(body)

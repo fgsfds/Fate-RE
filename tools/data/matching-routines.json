@@ -1,9 +1,19 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1202,
-  "unique_code_bytes": 175738,
-  "le_pointers": 9589,
+  "routines": 1203,
+  "unique_code_bytes": 176402,
+  "le_pointers": 9635,
   "non_routine_code_spans": [
+    {
+      "kind": "compiler-generated jump table",
+      "object": "serialin.obj",
+      "object_sha256": "ee6f1e2b27a2a7eeba57c0209faf81f2f5eb18d2e9dd0346218999f65382da27",
+      "raw_offset": "0x67046",
+      "sha256": "f84586e4540cfadff472003b51604abb0bb2de55203eae715018155b11724331",
+      "loaded_address": "0x41a46",
+      "bytes": 16,
+      "le_pointers": 4
+    },
     {
       "kind": "compiler-generated jump table",
       "object": "melee.obj",
@@ -3638,6 +3648,16 @@
       "loaded_address": "0x4164f",
       "bytes": 69,
       "le_pointers": 4
+    },
+    {
+      "symbol": "initialize_serial_network_",
+      "object": "serialin.obj",
+      "object_sha256": "ee6f1e2b27a2a7eeba57c0209faf81f2f5eb18d2e9dd0346218999f65382da27",
+      "raw_offset": "0x67056",
+      "sha256": "86b3985c19506b386d3b5863526355927cc558d6f05ab70a1406aaeb04e53a2d",
+      "loaded_address": "0x41a56",
+      "bytes": 648,
+      "le_pointers": 42
     },
     {
       "symbol": "shutdown_serial_network_",

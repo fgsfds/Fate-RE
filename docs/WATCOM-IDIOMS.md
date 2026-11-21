@@ -138,3 +138,18 @@ Game code still needs its own exact byte, LE-relocation, and whole-image checks.
   fails with compiler error E1122. An empty getter is not equivalent to a
   helper that writes EBP. This probe establishes only this EBP behavior; do not
   infer preservation or clobber rules for other registers.
+
+## Historical networking companions
+
+An unlinked historical companion can be useful when its provenance and exact
+link boundary are explicit. `ipxctx.c` is such a companion: it is not linked
+into the production image and contributes no IPX coverage. Its C body provokes
+Watcom's six-byte five-`POP`-plus-`RET` epilogue; the binder verifies the local epilogue,
+opcodes, and original targets, then rebinds only two branch displacements
+(`EB`/`E9`) to the existing `ASM` routine at `0x41a3f`. It does not patch
+opcodes. The ES-preservation wrapper is excluded from production; keep
+selection strict and coverage reporting honest.
+
+The marker comparison recognizes up to three total padding bytes after `RET`,
+including `NOP` (`90`) and `MOV EAX,EAX` (`8b c0`). This does not relax
+production acceptance; the verifier checks the padding explicitly.
