@@ -88,16 +88,17 @@ the sort into inline instructions merely to increase the C-object percentage.
 
 ## Other unresolved probes
 
-### Gameplay update controller allocation
+### Gameplay update controller proximity and transition allocation
 
-`update_gameplay_`, Watcom 10.5 `/4r /s /or /bt=dos`: the paired-record
-candidate emits 1,242 bytes versus 1,245; the earlier wide-condition form
-emits 1,240. Both pass 32 differential cases, but neither passes bytes/LE.
-Inventory save/restore now agrees in normalized instructions. First meaningful
-difference is grant-item setup at `0x142b5`; proximity register allocation
-and transition-indicator staging also differ. Next retain short IDs and paired
-records while recovering the grant step's EDI lifetime. Ghidra cross-check,
-hash-bound behavior reports and rejected probes: `work/gameplay-update-next/evidence.json`.
+`update_gameplay_`, Watcom 10.5 `/4r /s /or /bt=dos`:
+`work/gameplay-update-next/shared_row.c` emits 1,241 bytes versus 1,245 and
+passes 32 differential cases, but fails exact bytes/LE. Inventory, grant and
+timer groups now agree in normalized instructions. First remaining divergence
+is sector-table addressing at `0x14359`. Keep the shared grant/proximity short
+flag, short counter, stock/row EDX reuse, and sector/Y scratch lifetime. Next
+materialize the row byte offset in that scratch and recover the column's ECX
+lifetime; transition-indicator staging also remains. Evidence and hash-bound
+behavior reports: `work/gameplay-update-next/evidence.json`.
 
 ### Startup option-prefix pointer increment
 
