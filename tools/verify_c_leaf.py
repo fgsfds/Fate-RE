@@ -16,7 +16,7 @@ from omf_fixups import Reader, read_externals, read_fixups
 from le_fixups import read_le_fixups, pointer_range
 from verification_diagnostics import code_mismatch, relocation_mismatch
 
-LEAVES = {'process_gameplay_frame_': (0x5283e, 732), 'update_menu_selection_': (0x5e835, 595), 'dispatch_actor_update_': (0x39c10, 647), 'update_actor_common_': (0x39e97, 697), 'clipinsideboxline_': (0x717b2, 225), 'inside_': (0x71e8f, 189),
+LEAVES = {'checksum_gameplay_state_': (0x5923f, 1490), 'process_gameplay_frame_': (0x5283e, 732), 'update_menu_selection_': (0x5e835, 595), 'dispatch_actor_update_': (0x39c10, 647), 'update_actor_common_': (0x39e97, 697), 'clipinsideboxline_': (0x717b2, 225), 'inside_': (0x71e8f, 189),
           'animateoffs_': (0x75d58, 139), 'krand_': (0x7b8e5, 20),
           'getmousevalues_': (0x79a24, 68),
           'clipinsidebox_': (0x716c7, 235), 'lastwall_': (0x77ecf, 80),
@@ -312,6 +312,25 @@ DATA_OFFSETS.update({
     '_mouse_dy': 0x7dedc,
 })
 FUNCTION_ADDRESSES['update_menu_selection_'] = 0x39235
+
+
+# Synchronization checksum reads these fields through its own typed view.
+DATA_OFFSETS.update({
+    '_checksum_checksum_table': 0x18f778,
+    '_checksum_first_player': 0x19028a,
+    '_checksum_hit_sprite_list_head': 0x28811c,
+    '_checksum_next_player': 0x18fd78,
+    '_checksum_next_sprite_stat': 0x1fbca0,
+    '_checksum_player_angle': 0x6308c,
+    '_checksum_player_horizon': 0x62f8c,
+    '_checksum_player_sector': 0x5acfc,
+    '_checksum_player_x': 0x5ad9c,
+    '_checksum_player_y': 0x5ad5c,
+    '_checksum_player_z': 0x5ad1c,
+    '_checksum_random_seed': 0x287e78,
+    '_checksum_sprite': 0x2040a0,
+    '_checksum_status_right_tenths': 0x6319c,
+})
 
 # Gameplay input frames, interpolation snapshots, and recording state.
 DATA_OFFSETS.update({

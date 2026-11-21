@@ -110,3 +110,4 @@ check_actor_common {exe} {build}/actcomm.obj | actcomm
 check_actor_dispatch {exe} {build}/actdisp.obj | actdisp
 check_menu_selection {exe} {build}/menusel.obj | menusel
 check_gameplay_frame {exe} {build}/procfram.obj | procfram
+check_gameplay_checksum {exe} {build}/gamesum.obj | gamesum

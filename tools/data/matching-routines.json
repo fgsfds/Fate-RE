@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1193,
-  "unique_code_bytes": 168463,
-  "le_pointers": 9144,
+  "routines": 1194,
+  "unique_code_bytes": 169953,
+  "le_pointers": 9215,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1488,6 +1488,16 @@
       "loaded_address": "0x33af0",
       "bytes": 335,
       "le_pointers": 25
+    },
+    {
+      "symbol": "checksum_gameplay_state_",
+      "object": "gamesum.obj",
+      "object_sha256": "d8f9b35f95c186b599cf1cfcec39a9c86767e431034ce9f0e1f8c1d8b9367d84",
+      "sha256": "9301b4c033175f520963a00909926496e5799e0cb9f841427a5a9a5ea2854601",
+      "raw_offset": "0x5923f",
+      "loaded_address": "0x33c3f",
+      "bytes": 1490,
+      "le_pointers": 71
     },
     {
       "symbol": "finalize_board_state_",

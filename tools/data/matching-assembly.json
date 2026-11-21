@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 490,
-  "unique_code_bytes": 246176,
-  "le_pointers": 13405,
+  "routines": 489,
+  "unique_code_bytes": 244686,
+  "le_pointers": 13334,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -1916,18 +1916,6 @@
       "public_entry": "0x34f79",
       "binary_offset": 0,
       "le_pointers": 57
-    },
-    {
-      "symbol": "checksum_gameplay_state",
-      "source": "src/fate/checksum_gameplay_state.asm",
-      "binary": "checksum_gameplay_state.bin",
-      "sha256": "9301b4c033175f520963a00909926496e5799e0cb9f841427a5a9a5ea2854601",
-      "bytes": 1490,
-      "raw_offset": "0x5923f",
-      "loaded_address": "0x33c3f",
-      "public_entry": "0x33c3f",
-      "binary_offset": 0,
-      "le_pointers": 71
     },
     {
       "symbol": "receive_packets",

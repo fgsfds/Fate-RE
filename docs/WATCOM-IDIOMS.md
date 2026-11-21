@@ -46,6 +46,13 @@ those expectations. Volatile OMF comments, including timestamps, are not compare
 
 ## Patterns verified in Fate
 
+- [`checksum_gameplay_state`](../src/fate/checksum_gameplay_state.c) keeps the
+  CRC accumulator at 16 bits, reuses the player index as the status-loop index,
+  and feeds the player-angle and sprite-Y high bytes with the input operand
+  first in the lookup-index XOR. The equivalent XOR operand order changes
+  Watcom temporary allocation and memory-XOR selection. Under `/4r /s /or`,
+  this produces all 1,490 bytes and 71 LE targets without inline assembly.
+
 - [`process_gameplay_frame`](../src/fate/process_gameplay_frame.c) reuses short
   loop indices and keeps the recording count's ESI identity stage local to one
   iteration. This lets ESI hold the column after the count dies; constraining
