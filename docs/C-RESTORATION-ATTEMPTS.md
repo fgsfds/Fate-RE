@@ -88,17 +88,21 @@ the sort into inline instructions merely to increase the C-object percentage.
 
 ## Other unresolved probes
 
-### Gameplay update controller proximity and transition allocation
+### Gameplay update controller row-offset allocation
 
 `update_gameplay_`, Watcom 10.5 `/4r /s /or /bt=dos`:
-`work/gameplay-update-next/shared_row.c` emits 1,241 bytes versus 1,245 and
-passes 32 differential cases, but fails exact bytes/LE. Inventory, grant and
-timer groups now agree in normalized instructions. First remaining divergence
-is sector-table addressing at `0x14359`. Keep the shared grant/proximity short
-flag, short counter, stock/row EDX reuse, and sector/Y scratch lifetime. Next
-materialize the row byte offset in that scratch and recover the column's ECX
-lifetime; transition-indicator staging also remains. Evidence and hash-bound
-behavior reports: `work/gameplay-update-next/evidence.json`.
+`work/gameplay-update-next/vacated_registers.c` emits the target 1,245 bytes,
+matches all 113 LE sites/targets, and passes 32 differential cases covering
+state, call order, preserved registers and callee stack cleanup. It is **not
+byte-identical**: three row-address instructions starting at `0x14359` use
+EBX instead of EBP. Inventory, proximity branches and level-transition
+allocation now agree. Keep the shared grant/proximity flag, short counter,
+stock/row EDX reuse, explicit ECX column and separate post-transition level
+lifetime. Typed row structs and a signed row/sector scalar preserve the same
+mismatch; explicit byte offsets spill the counter. Next require a defined-C
+lifetime model that coalesces the initial row offset with EBP; do not retry
+unsupported EBP modification contracts. Production assembly remains in place.
+Evidence: `work/gameplay-update-next/evidence.json`.
 
 ### Startup option-prefix pointer increment
 
