@@ -21,8 +21,8 @@ extern void advance_drive_buffer(void);
 #pragma aux advance_drive_buffer = "add edx,3" modify exact [edx];
 extern void begin_components(void);
 #pragma aux begin_components = "mov ebp,esi" "mov ebx,esi" modify exact [ebx];
-extern void reset_extension(void);
-#pragma aux reset_extension = "xor edi,edi" modify exact [edi];
+extern void reset_extension(unsigned long zero);
+#pragma aux reset_extension = "" parm [edi] modify exact [];
 extern void advance_split_path(void);
 #pragma aux advance_split_path = "inc esi" modify exact [esi];
 extern void mark_extension(void);
@@ -81,7 +81,7 @@ char *split_path(const char *path, char *out, char **drive, char **directory,
 
     begin_components();
 reset_component:
-    reset_extension();
+    reset_extension(0);
     for (;;) {
         ch = read_path_byte();
         if (!ch)

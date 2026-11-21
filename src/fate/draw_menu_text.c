@@ -6,8 +6,8 @@ extern long value_in_ebx(long);
 #pragma aux value_in_ebx = "" parm [ebx] value [ebx] modify exact [];
 extern long value_in_ecx(long);
 #pragma aux value_in_ecx = "" parm [ecx] value [ecx] modify exact [];
-extern void clear_alpha_register(void);
-#pragma aux clear_alpha_register = "xor ecx,ecx" modify exact [ecx];
+extern void clear_alpha_register(unsigned long zero);
+#pragma aux clear_alpha_register = "" parm [ecx] modify exact [];
 extern void load_alpha_low_byte(unsigned char);
 #pragma aux load_alpha_low_byte = "" parm [cl] modify exact [];
 extern long value_in_edx(long);
@@ -135,7 +135,7 @@ void draw_menu_text(long x, long y, long shade, const unsigned char *text, int f
                 unsigned digit;
                 unsigned char type_index = *character + 1;
                 saved.alpha = keep_alpha_mask(character_types[type_index] & 0xc0);
-                clear_alpha_register();
+                clear_alpha_register(0);
                 load_alpha_low_byte(saved.alpha);
                 if (value_ecx()) {
                     tile = *character + 0x7c4;

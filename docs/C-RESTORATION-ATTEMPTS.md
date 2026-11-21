@@ -88,6 +88,16 @@ the sort into inline instructions merely to increase the C-object percentage.
 
 ## Other unresolved probes
 
+### Gameplay frame recording-loop allocation
+
+`process_gameplay_frame_`, `/4r /s /or /bt=dos`: the typed candidate emits
+733 bytes versus the 732-byte reference; 640 behavior cases pass, but there is no exact credit. Its
+first raw byte mismatch is at `+0x1e7`; branch displacement and register
+allocation differences remain. The typed form's recording path swaps EDI/ESI,
+adds a MOVSX stack read, and uses AX rather than DX for the final loop test.
+Use `canonical.c`'s reused short indices and field order; `typed_stages.c` is
+the best next research basis. Evidence: `work/gameplay-frame-next/evidence.json`.
+
 ### Whole palette search frame
 
 Historical plain C with Watcom's `min` intrinsic and `/4r /s /or /bt=dos`

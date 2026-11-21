@@ -46,6 +46,11 @@ those expectations. Volatile OMF comments, including timestamps, are not compare
 
 ## Patterns verified in Fate
 
+- A full-width zero passed to an empty register stage can generate the original
+  XOR from C, as in [`format_engine`](../src/runtime/format_engine.c). Parameter
+  setup may move or disappear in other contexts; verify each complete object
+  and its relocations before accepting the replacement.
+
 - In [`dispatch_actor_update`](../src/fate/actor_dispatch.c), distinct entry-index and profile-index lifetimes prevent shared scaled-address spills. The explicit actor stage in the flags comma expression controls Watcom-only argument order; verify exact code, LE sites, and fixtures.
 
 - `update_menu_selection` matches ordinary C under `/4r /s /or /bt=dos`; check the routine’s historical scheduling flags before introducing register helpers. The actor dispatcher’s no-`/or` build is a distinct compiler context.

@@ -35,8 +35,8 @@ extern void *framebuffer_for_free(void);
 extern void *zero_eax(void);
 #pragma aux zero_eax = "xor eax,eax" value [eax] modify exact [eax];
 
-extern void begin_palette_cleanup(void);
-#pragma aux begin_palette_cleanup = "xor ebx,ebx" modify exact [ebx];
+extern void begin_palette_cleanup(unsigned long zero);
+#pragma aux begin_palette_cleanup = "" parm [ebx] modify exact [];
 extern void prepare_palette_slot(void);
 #pragma aux prepare_palette_slot = "mov edx,ebx" "shl edx,2" modify exact [edx];
 extern long palette_slot_offset(void);
@@ -118,7 +118,7 @@ void shutdown_video_engine(void)
     }
 
     /* Palette banks are allocated and released separately. */
-    begin_palette_cleanup();
+    begin_palette_cleanup(0);
     goto check_palette;
     do {
         prepare_palette_slot();

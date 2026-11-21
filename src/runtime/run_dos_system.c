@@ -23,8 +23,8 @@ extern const char *saved_command(void);
 #pragma aux saved_command = "" value [edx] modify exact [];
 extern char *option_in_eax(char *);
 #pragma aux option_in_eax = "" parm [eax] value [eax] modify exact [];
-extern void clear_switch_argument(void);
-#pragma aux clear_switch_argument = "xor edx,edx" modify exact [edx];
+extern void clear_switch_argument(unsigned long zero);
+#pragma aux clear_switch_argument = "" parm [edx] modify exact [];
 extern int switch_argument(void);
 #pragma aux switch_argument = "" value [edx] modify exact [];
 extern unsigned char last_force(void);
@@ -48,7 +48,7 @@ int system(const char *command)
     /* Watcom pushes these variadic arguments right to left. Save the command
        before setting up the switch, then reload the flag before selecting argv[0]. */
     return spawnlp(0, path, name_in_eax(last_force() ? cmd_name : command_name),
-                   (clear_switch_argument(), option = option_in_eax(switch_text),
+                   (clear_switch_argument(0), option = option_in_eax(switch_text),
                     in_dl(force_slash), option = select_shell_switch(option, switch_argument()),
                     in_dl(force_slash), option),
                    saved_command(), (char *)0);

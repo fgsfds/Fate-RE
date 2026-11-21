@@ -55,8 +55,8 @@ extern void *scratch_in_ecx(void *);
 
 extern void load_far_value(void);
 #pragma aux load_far_value = "mov dl,es:[ebx]" modify exact [edx];
-extern void clear_writer_byte(void);
-#pragma aux clear_writer_byte = "xor edx,edx" modify exact [edx];
+extern void clear_writer_byte(unsigned long zero);
+#pragma aux clear_writer_byte = "" parm [edx] modify exact [];
 extern unsigned writer_byte(void);
 #pragma aux writer_byte = "" value [edx] modify exact [];
 extern void put_writer_byte(unsigned char);
@@ -216,7 +216,7 @@ scan_format:
     if (ch == '%')
         goto parse_conversion;
     pattern_to_edi(next_specifier());
-    clear_writer_byte();
+    clear_writer_byte(0);
     state = writer_state((FormatState *)&frame.destination);
     put_writer_byte(ch);
     frame.writer(state, writer_byte());
@@ -312,7 +312,7 @@ format_value:
             frame.width = width;
             if (width < 0)
                 break;
-            clear_writer_byte();
+            clear_writer_byte(0);
             state = writer_state((FormatState *)&frame.destination);
             put_writer_byte(frame.pad);
             frame.writer(state, writer_byte());
@@ -320,7 +320,7 @@ format_value:
     }
     prefix_in_ecx((const unsigned char *)frame.prefix);
     while ((ch = byte_in_al(*prefix_position())) != 0) {
-        clear_writer_byte();
+        clear_writer_byte(0);
         put_writer_byte(ch);
         state = writer_state((FormatState *)&frame.destination);
         prefix_in_ecx(prefix_position() + 1);
@@ -341,7 +341,7 @@ format_value:
             frame.width = width;
             if (width < 0)
                 break;
-            clear_writer_byte();
+            clear_writer_byte(0);
             state = writer_state((FormatState *)&frame.destination);
             put_writer_byte(frame.pad);
             frame.writer(state, writer_byte());
@@ -358,7 +358,7 @@ format_value:
         frame.length = value_in_ecx(remaining - 1);
         if (!remaining)
             break;
-        clear_writer_byte();
+        clear_writer_byte(0);
         state = writer_state((FormatState *)&frame.destination);
         load_far_value();
         frame.writer(state, writer_byte());
@@ -372,7 +372,7 @@ emit_string:
         frame.length = value_in_edx(remaining - 1);
         if (!remaining)
             break;
-        clear_writer_byte();
+        clear_writer_byte(0);
         state = writer_state((FormatState *)&frame.destination);
         load_far_value();
         frame.writer(state, writer_byte());
@@ -386,7 +386,7 @@ emit_value:
         frame.length = value_in_ecx(remaining - 1);
         if (!remaining)
             break;
-        clear_writer_byte();
+        clear_writer_byte(0);
         state = writer_state((FormatState *)&frame.destination);
         load_far_value();
         frame.writer(state, writer_byte());
