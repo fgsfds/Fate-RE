@@ -88,6 +88,13 @@ the sort into inline instructions merely to increase the C-object percentage.
 
 ## Other unresolved probes
 
+### Audio command argument scheduling
+
+Replacing command 3's `MOV EAX,3` with C argument preparation moves it before
+`MOV CL,AL` at `0x6673b`, changing the consumed byte. Keep commands 2/3/4's
+original helpers until their implicit register inputs are modeled explicitly.
+Flags and rejected source/object evidence: `work/literal-stage-next/`.
+
 ### Numbered-board loader motion and mirror staging
 
 `load_numbered_board_`, Watcom 10.5 `/4r /s /or /bt=dos`:
@@ -104,15 +111,12 @@ Evidence and hash-bound behavior report: `work/numbered-board-next/evidence.json
 
 `update_level_sector_puzzle_`, Watcom 10.5 `/4r /s /or /bt=dos`:
 `work/puzzle-next/tile_lifetime.c` emits 933 bytes versus 932 and passes
-128 differential cases, but fails exact bytes and LE verification. The only
-normalized instruction difference is the solution activation preparation at
-`0x1dc84`: the candidate stages tag 6 through EDI before setting EDI to 1;
-the target uses EAX for 6 and EDX for the later zero. An EAX identity stage
-regresses allocation throughout later trigger paths. Shared enable/tag/zero
-locals introduce an eight-byte frame; changing the tag return to AX also
-regresses later allocation. Next isolate the solution allocator with its shared
-downstream constants. Preserve the empty loops and typed stages; evidence and
-source/object hashes: `work/puzzle-next/evidence.json`.
+128 differential cases, but fails exact bytes/LE. Its only normalized
+difference is solution activation at `0x1dc84`: tag 6 uses EDI instead of EAX.
+Scoped EDI-enabled/EAX-tag/EDX-zero values recover that group but perturb the
+earlier tile comparison and later constant hoisting. Next align those shared
+lifetimes across the whole routine, retaining its empty loops and typed stages.
+Evidence and hashes: `work/puzzle-next/evidence.json`.
 
 ### Whole palette search frame
 

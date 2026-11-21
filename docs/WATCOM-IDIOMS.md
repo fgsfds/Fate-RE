@@ -46,6 +46,12 @@ those expectations. Volatile OMF comments, including timestamps, are not compare
 
 ## Patterns verified in Fate
 
+- Nonzero literals passed to empty full-width register stages can generate
+  the original five-byte MOV: audio commands 1/5 and the startup argument index
+  remove 20 inline bytes this way. Argument preparation may move across an
+  auxiliary with undeclared register inputs; exact code verification must
+  precede acceptance, and remaining consumers need explicit input contracts.
+
 - The template sprite creator at `0x11073` returns a short in AX and changes
   EAX/EBX/EDX. Its 302-byte body saves ECX/ESI/EDI/EBP, not EBX or EDX.
   Caller declarations and emulator stubs must allow those parameter registers

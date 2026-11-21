@@ -28,8 +28,8 @@ extern int begin_parsing(char *);
     parm [eax] value [eax] modify exact [eax ebx ecx edx esi edi];
 extern void start_options(void);
 #pragma aux start_options = "mov ebp,[esp]" "xor esi,esi" modify exact [esi];
-extern void start_arguments(void);
-#pragma aux start_arguments = "mov ecx,1" modify exact [ecx];
+extern void start_arguments(unsigned long);
+#pragma aux start_arguments = "" parm [ecx] modify exact [];
 extern void next_argument(void);
 #pragma aux next_argument = "inc ecx" modify exact [ecx];
 extern void next_option(void);
@@ -76,7 +76,7 @@ void parse_startup_arguments(char *map_name)
 
     start_options();
     do {
-        for (start_arguments(); argument_index() < argument_limit(); next_argument()) {
+        for (start_arguments(1); argument_index() < argument_limit(); next_argument()) {
             first = leading_byte(read_argument());
             if (first == '-' || first == '/')
                 goto check_option;

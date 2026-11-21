@@ -38,16 +38,16 @@ extern void lfs_edi_1c(void);
 
 extern void cmd0(void);
 #pragma aux cmd0 = "mov eax,0" modify exact [eax];
-extern void cmd1(void);
-#pragma aux cmd1 = "mov eax,1" modify exact [eax];
+extern void cmd1(unsigned long);
+#pragma aux cmd1 = "" parm [eax] modify exact [];
 extern void cmd2(void);
 #pragma aux cmd2 = "mov eax,2" modify exact [eax];
 extern void cmd3(void);
 #pragma aux cmd3 = "mov eax,3" modify exact [eax];
 extern void cmd4(void);
 #pragma aux cmd4 = "mov eax,4" modify exact [eax];
-extern void cmd5(void);
-#pragma aux cmd5 = "mov eax,5" modify exact [eax];
+extern void cmd5(unsigned long);
+#pragma aux cmd5 = "" parm [eax] modify exact [];
 
 extern void ld_ebx_10(void);
 #pragma aux ld_ebx_10 = "mov ebx,[ebp+10h]" modify exact [ebx];
@@ -101,7 +101,7 @@ extern void store_dx(void);
 void driver_command_5(void)
 {
     save_registers();
-    cmd5();
+    cmd5(5);
     lfs_edi_10();
     call_driver();
     restore_registers();
@@ -119,7 +119,7 @@ void driver_command_0(void)
 void read_driver_parameters(void)
 {
     save_registers();
-    cmd1();
+    cmd1(1);
     lfs_edi_10();
     call_driver();
     store_ax();
@@ -150,7 +150,7 @@ void driver_command_3(void)
 void driver_secondary_command_1(void)
 {
     save_registers();
-    cmd1();
+    cmd1(1);
     lfs_edi_10();
     call_driver();
     restore_registers();
