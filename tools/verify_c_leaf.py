@@ -16,7 +16,7 @@ from omf_fixups import Reader, read_externals, read_fixups
 from le_fixups import read_le_fixups, pointer_range
 from verification_diagnostics import code_mismatch, relocation_mismatch
 
-LEAVES = {'netsend_': (0x67359, 629), 'checksum_gameplay_state_': (0x5923f, 1490), 'process_gameplay_frame_': (0x5283e, 732), 'update_menu_selection_': (0x5e835, 595), 'dispatch_actor_update_': (0x39c10, 647), 'update_actor_common_': (0x39e97, 697), 'clipinsideboxline_': (0x717b2, 225), 'inside_': (0x71e8f, 189),
+LEAVES = {'sendpacket_': (0x67aec, 1177), 'netsend_': (0x67359, 629), 'checksum_gameplay_state_': (0x5923f, 1490), 'process_gameplay_frame_': (0x5283e, 732), 'update_menu_selection_': (0x5e835, 595), 'dispatch_actor_update_': (0x39c10, 647), 'update_actor_common_': (0x39e97, 697), 'clipinsideboxline_': (0x717b2, 225), 'inside_': (0x71e8f, 189),
           'animateoffs_': (0x75d58, 139), 'krand_': (0x7b8e5, 20),
           'getmousevalues_': (0x79a24, 68),
           'clipinsidebox_': (0x716c7, 235), 'lastwall_': (0x77ecf, 80),
@@ -191,6 +191,11 @@ LEAVES['startcom_'] = (0x6764f, 268)
 LEAVES['comhandler_'] = (0x6775b, 446)
 LEAVES['simulateint_'] = (0x685fc, 208)
 DATA_OFFSETS.update({'_ecbput': 0x18fde0, '_ipxout': 0x18fdac, '_messout': 0x18fd98})
+# Guard-prefixed arrays describe the original broadcast peer-minus-one reads.
+DATA_OFFSETS.update({'_multioption': 0x13cde, '_comrateoption': 0x13cdf,
+    '_outbufindex': 0x18fb78, '_outcnt': 0x18fe14, '_netoutcnt_backing': 0x186e47,
+    '_omessnum_backing': 0x18f6d6, '_omessout_backing': 0x1865d0,
+    '_omessleng_backing': 0x18f6f0, '_omessconnectindex_backing': 0x186cb0})
 DATA_OFFSETS.update({
     '_RMI': 0x19028c,
     '_rmoffset32': 0x18fdc0,
@@ -290,7 +295,7 @@ DATA_OFFSETS.update({
 })
 
 # Error/printing dependencies remain identified bindings, not reconstructed code.
-FUNCTION_ADDRESSES = {'netsend_': 0x41d59, 'simulate_network_interrupt_': 0x42ffc, 'convalloc32_': 0x42fbb, 'sequence_remove_sprite_': 0x10f9f, 'int386_': 0x630b3, 'int386x_': 0x6309a, 'format_listed_sprite_error_': 0x601f3, 'report_listed_sprite_error_': 0x26a03, 'insertspritesect_': 0x508cd, 'insertspritestat_': 0x5096b, 'insert_template_sprite_': 0x508b8, 'record_lookup_error_': 0x26a03, 'memcpy_': 0x63245, 'type_lookup_error_': 0x26a03, 'getpalookup_': 0x5fed7, 'tvlineasm1_': 0x744d0, 'lookup_error_': 0x26a03, 'setverts_': 0x599c5, 'remove_engine_sprite_': 0x50a09, 'inside_': 0x4c88f, 'allocache_': 0x40c73,
+FUNCTION_ADDRESSES = {'sendpacket_': 0x424ec, 'comsend_': 0x41fce, 'getcrc_': 0x42f73, 'netsend_': 0x41d59, 'simulate_network_interrupt_': 0x42ffc, 'convalloc32_': 0x42fbb, 'sequence_remove_sprite_': 0x10f9f, 'int386_': 0x630b3, 'int386x_': 0x6309a, 'format_listed_sprite_error_': 0x601f3, 'report_listed_sprite_error_': 0x26a03, 'insertspritesect_': 0x508cd, 'insertspritestat_': 0x5096b, 'insert_template_sprite_': 0x508b8, 'record_lookup_error_': 0x26a03, 'memcpy_': 0x63245, 'type_lookup_error_': 0x26a03, 'getpalookup_': 0x5fed7, 'tvlineasm1_': 0x744d0, 'lookup_error_': 0x26a03, 'setverts_': 0x599c5, 'remove_engine_sprite_': 0x50a09, 'inside_': 0x4c88f, 'allocache_': 0x40c73,
                       'printf_': 0x40bb4, 'reportandexit_': 0x40f9e,
                       'lseek_': 0x615b6, 'filelength_': 0x63208, 'close_': 0x6219a, 'outpw_': 0x63320,
                       'kfree_': 0x44791, 'read_': 0x615f7, 'min_': 0x63201,

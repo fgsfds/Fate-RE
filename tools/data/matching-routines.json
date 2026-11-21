@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1198,
-  "unique_code_bytes": 172417,
-  "le_pointers": 9420,
+  "routines": 1199,
+  "unique_code_bytes": 173594,
+  "le_pointers": 9482,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -3708,6 +3708,16 @@
       "loaded_address": "0x4248f",
       "bytes": 93,
       "le_pointers": 7
+    },
+    {
+      "symbol": "sendpacket_",
+      "object": "sendpack.obj",
+      "object_sha256": "8967df3485bb97476cc179371fbd03a97d594e21dcdd61459b727a22c87cffe4",
+      "sha256": "652092bed8a5c79e7875066caa1612df8d61f45c28b77b0f71a0b7c53d4f9f54",
+      "raw_offset": "0x67aec",
+      "loaded_address": "0x424ec",
+      "bytes": 1177,
+      "le_pointers": 62
     },
     {
       "symbol": "initcrc_",

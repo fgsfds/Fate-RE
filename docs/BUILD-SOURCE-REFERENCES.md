@@ -23,7 +23,7 @@ The downloaded reference files and URL/hash manifest live under ignored
 Preserve Ken Silverman's attribution and applicable `BUILDLIC.TXT` terms when
 adapting source. The repository already contains the Build license.
 
-### Pinned netsend provenance
+### Pinned networking provenance
 
 The `netsend` implementation in `src/network/netsend.c` follows `MULTI.C`
 from `BuildEngine.zip/SRC.ZIP` in `commercial-game-sources/duke_nukem_3d`
@@ -34,6 +34,12 @@ The accepted object matches **629 bytes and all 57 LE sites/targets** with no
 inline assembly. Reuse hint: ordinary `char` byte stores preserve conservative
 pointer-alias reloads; casting unsigned subtraction to signed before shifting
 preserves defined wrapping and target arithmetic-shift behavior.
+
+The `sendpacket` implementation in `src/network/sendpacket.c` also follows
+`MULTI.C`: **1,177 bytes and all 62 LE sites/targets** match without inline
+assembly. Widening its byte comparisons reproduces the target instructions.
+Peer -1 history reads use explicit target-linked DS overlays, rather than
+separate portable objects: `omessleng[-1]` aliases `omessnum[12..15]`.
 
 ### Concrete correspondences and cautions
 
