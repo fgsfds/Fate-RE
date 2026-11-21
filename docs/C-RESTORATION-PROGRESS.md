@@ -21,7 +21,7 @@ inline-assembly bytes**. The inventories contain **1,197 C routine spans** and
 
 The gameplay-controller update adds **1,227 native C bytes and 112 C LE sites**;
 an 18-byte row-address sequence remains in assembly, with one LE site. Full validation
-passes **330 unit tests and 113 fixtures** across **519 compiler units**.
+passes **330 unit tests and 114 fixtures** across **519 compiler units**.
 
 ## Reproducible evidence
 
@@ -30,7 +30,9 @@ The accepted executable remains **741,347 bytes**, SHA-256
 The report scope is verified saved artifacts; check current source freshness
 with `restore.py doctor`.
 
-- Full validation: `work/gameplay-controller-build/validation.json`.
+- Latest full validation: `work/play-sound-build/validation.json`; executable SHA unchanged.
+  The new regression fixture changes no C coverage or attribution.
+- `play_sound` checks: 60 behavior cases and two negative controls pass; its 755-byte assembly body and 57 LE sites remain.
 - Attribution audit: `work/gameplay-controller-audit.json`.
 - Verified change packet: `work/gameplay-controller-handoff.json`.
 - Controller regression: `work/gameplay-controller-build/gameplay-update-behavior.json`.

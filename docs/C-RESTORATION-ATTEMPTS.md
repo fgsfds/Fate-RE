@@ -859,3 +859,14 @@ clipping. Keep the named `first_top` lifetime and its empty EDX identity;
 recover initial drawing-argument scheduling without changing the exact body.
 Probe: `work/status-panel-next/initial_top_lifetime.c`. Accepted evidence:
 `work/status-panel-build/validation.json` and `work/status-panel-audit.json`.
+
+### Sound playback: entry and scheduling blocker
+
+`play_sound_`, Watcom 10.5 `/4r /s /or /bt=dos`: the closest whole-C
+candidate is 743 bytes versus 755, with all 60 behavior cases passing but
+byte and LE identity failing. First divergence at `0x34f81`: the EBP y copy
+precedes the x stack store. Seek arguments, descriptor stores and queue-failure
+reloads also differ. Next isolate entry x/y lifetimes and the failure-index
+reload without broad volatile qualifiers. Production remains assembly; no C
+coverage is credited. Probe: `work/play-sound-next/parameter_lifetime.c`;
+comparison: `work/play-sound-next/compiler/playsnd2.report.json`.
