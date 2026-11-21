@@ -14,11 +14,17 @@ This installable, configuration-only bundle targets DSH 0.2.2-rc.2. It does not 
 | `fate-scout` | `fate_scout` | `openai/gpt-6-luna`, low | No write/edit, shell, or delegation |
 | `fate-probe` | `fate_probe` | `openai/gpt-6-luna`, medium | Specified transformations/experiments only; novel ABI questions go to research; no delegation |
 | `fate-verify` | `fate_verify` | `openai/gpt-6-luna`, low | Assigned frozen checks; no write/edit or delegation |
+| `fate-ci-monitor` | `fate_ci_monitor` | `openai/gpt-6-luna`, low | Read-only CI watching for assigned SHA; report to parent; no retries or delegation |
 | `fate-writer` | `fate_writer` | `openai/gpt-6-luna`, medium | Assigned docs, READMEs, scripts, or tests from frozen evidence |
 | `fate-research` | `fate_research` | `openai/gpt-6.1-sol`, high | ABI/compiler research; no delegation |
 | `fate-review` | `fate_review` | `openai/gpt-6.1-sol`, medium; high only for hard ABI or UB | Independent review; no write/edit, shell, or delegation |
 
 Use fresh children with task packets of at most 150 words plus paths; Codex callers use `fork_turns="none"`. Save routine context and pass bounded excerpts, never full history. A role-label change does not change an existing worker's model; spawn fresh at the intended tier. Parent supplies frozen audit/build reports, hashes, and model details. Derive metrics from JSON, not memory; omit resolved failures and report one blocker per routine. Return at most 150 words (research/review: 200) plus artifact paths, the first meaningful mismatch, and report paths rather than full logs. Avoid progress pings unless blocked.
+
+After active-work pushes, give `fate_ci_monitor` the exact SHA, known runs,
+previous findings and a watch budget. The parent fixes reported failures and
+checks the correction SHA. A pause stops the watcher; no background schedule
+is installed by this bundle.
 
 ## Security and ownership
 
@@ -32,4 +38,4 @@ OpenCode files in `.opencode/agents/*.md` are canonical for role bodies. From th
 node .dsh/bundles/fate-agents/build-fate-agents.cjs . .dsh/bundles/fate-agents --sync-codex
 ```
 
-This generates seven presets (parent plus six roles) and the `fate_writer` tool. With no `--sync-codex` flag, generation remains DSH-only. Reinstall the local bundle after regeneration and use a new session to load changes. Use `--sync-codex --check` to detect generated profile drift without writing files.
+This generates eight presets (parent plus seven roles), including the `fate_ci_monitor` tool. With no `--sync-codex` flag, generation remains DSH-only. Reinstall the local bundle after regeneration and use a new session to load changes. Use `--sync-codex --check` to detect generated profile drift without writing files.

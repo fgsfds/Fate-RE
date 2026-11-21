@@ -5,7 +5,7 @@ const [project, output, ...options] = process.argv.slice(2);
 assert(project && output, 'Usage: build-fate-agents.cjs <project> <output> [--sync-codex] [--check]');
 assert(options.every(x => ['--sync-codex', '--check'].includes(x)), 'Unknown option');
 const check = options.includes('--check');
-const roles = ['scout', 'probe', 'verify', 'research', 'review', 'writer'];
+const roles = ['scout', 'probe', 'verify', 'research', 'review', 'writer', 'ci-monitor'];
 const plugin = (id, name, config) => ({
   id, name: '@deepseek-ai/dsh-' + name, ...(config === undefined ? {} : { config }),
 });
@@ -59,7 +59,7 @@ for (const role of roles) {
 const parent = {
   id: 'preset-fate-restoration', name: '@deepseek-ai/dsh-agent-preset', config: {
     id: 'fate-restoration', name: 'Fate restoration', order: 20,
-    description: 'Integrator with six economical, scoped roles; configuration does not resume restoration.',
+    description: 'Integrator with seven economical, scoped roles; configuration does not resume restoration.',
     plugins: [
       plugin('persona', 'persona', { prefix:
         'You integrate Fate-RE restoration. Read AGENTS.md once and fate-restoration-coordination. ' +
@@ -67,6 +67,8 @@ const parent = {
         'Default to 0-2 useful children, not a headcount quota. Supply short fresh packets, owned paths, ' +
         'runtime paths, flags, one hypothesis and a budget. Use cheap scout/probe/verify/writer routes; ' +
         'research and independent review handle concrete uncertainty. Report unavailable routes without silently upgrading. ' +
+        'After active-work pushes, assign the exact SHA to fate_ci_monitor. Fix reported pipeline failures, ' +
+        'push the correction and recheck its new SHA; pending or absent runs are not success. ' +
         'Only one leased windowless DOSBox compiler at a time; verify exit before another starts. No game smoke. ' +
         'Keep shared acceptance, registries/inventories and commits centralized. After evidence freezes, ' +
         'delegate named docs/scripts/tests to fate_writer and review once before accepting. ' +
@@ -114,7 +116,7 @@ function emit(filename, text) {
 }
 emit(path.join(output, 'cordis.patch.yml'), JSON.stringify([{ insert: rows }], null, 2) + '\n');
 emit(path.join(output, 'package.json'), JSON.stringify({
-  name: '@local/fate-restoration-agents', version: '1.1.0', private: true, type: 'module',
+  name: '@local/fate-restoration-agents', version: '1.2.0', private: true, type: 'module',
   description: 'Fate-RE restoration presets and role-specific delegation tools for DeepSeek Harness.',
   exports: { './locale/*.json': './locale/*.json', './icon': './icon.svg' },
   files: ['cordis.patch.yml', 'locale', 'icon.svg', 'README.md', 'build-fate-agents.cjs'],
@@ -122,7 +124,7 @@ emit(path.join(output, 'package.json'), JSON.stringify({
 }, null, 2) + '\n');
 emit(path.join(output, 'locale/en.json'), JSON.stringify({ meta: {
   title: 'Fate restoration agents',
-  description: 'Integrator plus six scoped roles. Luna handles scout/probe/verify/writer; Sol handles research/review. ' +
+  description: 'Integrator plus seven scoped roles. Luna handles scout/probe/verify/writer/ci-monitor; Sol handles research/review. ' +
     'Select Fate restoration in a new session after reinstalling. No default preset, credentials or goal state changes.',
 } }, null, 2) + '\n');
 if (options.includes('--sync-codex')) for (const s of sources) {
@@ -136,5 +138,5 @@ if (options.includes('--sync-codex')) for (const s of sources) {
     (s.noShell ? '\n[features]\nshell_tool = false\n' : '');
   emit(path.join(project, '.codex/agents', s.id + '.toml'), text);
 }
-console.log('PASS: ' + (check ? 'checked' : 'generated') + ' seven presets, six routes and child tool boundaries' +
+console.log('PASS: ' + (check ? 'checked' : 'generated') + ' ' + (roles.length + 1) + ' presets, ' + roles.length + ' routes and child tool boundaries' +
   (options.includes('--sync-codex') ? '; Codex mirrors checked' : ''));

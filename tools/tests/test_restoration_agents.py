@@ -8,6 +8,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[2]
 ROUTES = {
     'scout': ('gpt-6-luna', 'low'),
+    'ci-monitor': ('gpt-6-luna', 'low'),
     'probe': ('gpt-6-luna', 'medium'),
     'verify': ('gpt-6-luna', 'low'),
     'writer': ('gpt-6-luna', 'medium'),
@@ -30,8 +31,8 @@ class RestorationAgentTests(unittest.TestCase):
         self.presets = {row['config']['id']: row['config'] for row in self.rows}
         self.parent = self.presets['fate-restoration']
 
-    def test_all_six_routes_agree_across_runtimes(self):
-        self.assertEqual(len(self.rows), 7)
+    def test_all_routes_agree_across_runtimes(self):
+        self.assertEqual(len(self.rows), len(ROUTES) + 1)
         for role, (model, effort) in ROUTES.items():
             with self.subTest(role=role):
                 header, body = source(role)
@@ -44,7 +45,7 @@ class RestorationAgentTests(unittest.TestCase):
                 self.assertEqual(delegate['agentOptions'], dict(provider='openai', model=model, reasoningEffort=effort))
                 self.assertFalse(delegate['modelSelection'])
                 self.assertEqual(delegate['agentPreset'], 'fate-' + role)
-                self.assertEqual(delegate['toolName'], 'fate_' + role)
+                self.assertEqual(delegate['toolName'], 'fate_' + role.replace('-', '_'))
 
     def test_child_delegation_is_absent_and_depth_is_bounded(self):
         for role in ROUTES:
@@ -59,7 +60,7 @@ class RestorationAgentTests(unittest.TestCase):
     def test_read_only_roles_and_writer_tools(self):
         for role in ROUTES:
             plugins = {p['id']: p for p in self.presets['fate-' + role]['plugins']}
-            readonly = role in ('scout', 'verify', 'review')
+            readonly = role in ('scout', 'verify', 'review', 'ci-monitor')
             self.assertEqual(plugins['tool-fs']['config']['write'], not readonly)
             self.assertEqual(plugins['tool-fs']['config']['edit'], not readonly)
             self.assertEqual('tool-pwsh' in plugins, role not in ('scout', 'review'))

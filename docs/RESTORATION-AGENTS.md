@@ -7,6 +7,7 @@ Use the shared [.agents skills](../.agents/skills/) and the configured role pres
 | `fate-scout` | GPT-6 Luna, low | Read-only candidate triage |
 | `fate-probe` | GPT-6 Luna, medium | Only specified transformations or experiments; escalate a novel ABI question to research |
 | `fate-verify` | GPT-6 Luna, low | Check frozen artifacts and attribution |
+| `fate-ci-monitor` | GPT-6 Luna, low | Watch exact pushed SHAs; report failed jobs and actionable diagnostics to the integrator |
 | `fate-writer` | GPT-6 Luna, medium | Edit assigned docs, READMEs, scripts, or tests from frozen evidence |
 | `fate-research` | GPT-6.1 Sol, high | Investigate ABI and compiler hypotheses |
 | `fate-review` | GPT-6.1 Sol, medium; high only for hard ABI or undefined-behavior cases | Independent review of C validity and evidence |
@@ -20,6 +21,17 @@ Default to zero to two useful children. Add an independent review only when usef
 For Codex children, use `fork_turns="none"`; on other hosts use a fresh child with a bounded task packet. Send a task packet of at most 150 words plus paths. Save routine context to a file and provide only bounded relevant context; never send full history. Changing a role label does not change a running worker's model: spawn a fresh worker when changing tiers. Parent supplies frozen evidence such as final audit/build reports, hashes, and model details. Derive metrics from JSON, never memory; exclude failed-then-resolved stories and report at most one blocker per routine.
 
 All DOSBox compilation is serialized and owned by the parent unless an exclusive lease is granted. A writer changes only assigned docs, READMEs, scripts, or tests from frozen evidence. Writers do no game research, compiler work, registry or inventory work, commits, pushes, or new hypotheses. Parent reviews artifact claims and scripts.
+
+## Pipeline monitoring
+
+After each push during active work, assign `fate-ci-monitor` the repository,
+branch, exact SHA, run IDs/attempts, previous findings and a bounded watch budget.
+It reports failures immediately with run/job links and a small relevant error
+excerpt. It uses read-only GitHub access, accounts for push-triggered workflows,
+and treats pending or absent runs as unverified. The integrator fixes failures,
+pushes a correction and has its new SHA checked. No monitor-driven retries,
+workflow changes or public comments. Stop the monitor on pause; configuration
+changes alone do not start it or resume restoration.
 
 ## Assignment and return
 

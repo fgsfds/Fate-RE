@@ -15,7 +15,7 @@ skills, inventories or attempt logs for every follow-up.
 - No worker quota: default 0-2 useful children, optional independent review within
   the host limit. Never refill slots just because a task finished. Paused
   restoration stays paused; explicit configuration work is separate.
-- Scout, specified probe, verifier and writer use Luna. Research uses Sol-high;
+- Scout, specified probe, verifier, CI monitor and writer use Luna. Research uses Sol-high;
   routine independent review uses Sol-medium. Escalate a concrete ambiguity,
   not all tasks. If a route is unavailable, report it and use an available
   comparable/lower tier; do not silently upgrade or invent provider/model IDs.
@@ -55,6 +55,10 @@ skills, inventories or attempt logs for every follow-up.
   Review its arithmetic, links and script behavior once; do not rewrite correct
   text just for style. Keep one current blocker per routine, remove solved
   failures, and avoid duplicating reports in commit messages.
+- After active-work pushes, assign fate-ci-monitor the exact SHA and a bounded
+  watch budget. The parent fixes reported failures and checks the correction SHA;
+  pending/absent workflows are unverified. Deduplicate unchanged reports and stop
+  the watcher on pause. Configuration alone does not start a watch.
 - On pause: stop new hypotheses/assignments, finish only the pending bounded
   checkpoint, collect artifacts, stop all children and preserve a concise resume
   note. Configuration tasks alone do not reactivate restoration.
