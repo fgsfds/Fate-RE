@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1192,
-  "unique_code_bytes": 167731,
-  "le_pointers": 9080,
+  "routines": 1193,
+  "unique_code_bytes": 168463,
+  "le_pointers": 9144,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1238,6 +1238,16 @@
       "loaded_address": "0x2d1bd",
       "bytes": 129,
       "le_pointers": 15
+    },
+    {
+      "symbol": "process_gameplay_frame_",
+      "object": "procfram.obj",
+      "object_sha256": "fef1cd061b297fa57a3059e96d37c5ffa4ae737a988c67c25783e0744bfbf57d",
+      "sha256": "10476998898e092631744dd83747f0dfe50da90a09777a61722618b2862f52fa",
+      "raw_offset": "0x5283e",
+      "loaded_address": "0x2d23e",
+      "bytes": 732,
+      "le_pointers": 64
     },
     {
       "symbol": "initialize_board_entry_",

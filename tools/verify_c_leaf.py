@@ -16,7 +16,7 @@ from omf_fixups import Reader, read_externals, read_fixups
 from le_fixups import read_le_fixups, pointer_range
 from verification_diagnostics import code_mismatch, relocation_mismatch
 
-LEAVES = {'update_menu_selection_': (0x5e835, 595), 'dispatch_actor_update_': (0x39c10, 647), 'update_actor_common_': (0x39e97, 697), 'clipinsideboxline_': (0x717b2, 225), 'inside_': (0x71e8f, 189),
+LEAVES = {'process_gameplay_frame_': (0x5283e, 732), 'update_menu_selection_': (0x5e835, 595), 'dispatch_actor_update_': (0x39c10, 647), 'update_actor_common_': (0x39e97, 697), 'clipinsideboxline_': (0x717b2, 225), 'inside_': (0x71e8f, 189),
           'animateoffs_': (0x75d58, 139), 'krand_': (0x7b8e5, 20),
           'getmousevalues_': (0x79a24, 68),
           'clipinsidebox_': (0x716c7, 235), 'lastwall_': (0x77ecf, 80),
@@ -312,6 +312,52 @@ DATA_OFFSETS.update({
     '_mouse_dy': 0x7dedc,
 })
 FUNCTION_ADDRESSES['update_menu_selection_'] = 0x39235
+
+# Gameplay input frames, interpolation snapshots, and recording state.
+DATA_OFFSETS.update({
+    '_actor_clock': 0x770b8,
+    '_connecthead': 0x19028a,
+    '_connectpoint2': 0x18fd78,
+    '_frame_current_input': 0x5ac8c,
+    '_event_queue': 0x1f7fc,
+    '_event_write_index': 0x3cdc,
+    '_frame_network_enabled': 0x3c98,
+    '_frame_old_angle': 0x209fc,
+    '_frame_old_height': 0x2cb2c,
+    '_frame_old_horizon': 0x2ca2c,
+    '_frame_old_x': 0x2caac,
+    '_frame_old_y': 0x2caec,
+    '_frame_old_z': 0x2ca6c,
+    '_frame_player_angle': 0x6308c,
+    '_frame_player_height': 0x5ae1c,
+    '_frame_player_horizon': 0x62f8c,
+    '_frame_player_sector': 0x5acfc,
+    '_frame_player_x': 0x5ad9c,
+    '_frame_player_y': 0x5ad5c,
+    '_frame_player_z': 0x5ad1c,
+    '_frame_previous_sector': 0x5acdc,
+    '_frame_recorded_input': 0x2db6c,
+    '_frame_recording_mode': 0x3cd6,
+    '_frame_sprite': 0x2040a0,
+    '_frame_sprite_positions': 0x20a2c,
+    '_frame_status_mask': 0x3ccb,
+    '_headspritestat': 0x28811c,
+    '_input_history': 0x55bbc,
+    '_input_read_index': 0x770cc,
+    '_nextspritestat': 0x1fbca0,
+    '_player_count': 0x13ce0,
+    '_processed_frame_count': 0x770d4,
+    '_recorded_frame_count': 0x770d0,
+})
+FUNCTION_ADDRESSES.update({
+    'checksum_gameplay_state_': 0x33c3f,
+    'do_animations_': 0x2eeae,
+    'process_gameplay_frame_': 0x2d23e,
+    'rotate_network_lead_player_': 0x2f035,
+    'update_board_environment_': 0x2a56e,
+    'update_interpolations_': 0x34589,
+    'update_player_motion_': 0x2b3ed,
+})
 
 FUNCTION_ADDRESSES['dispatch_actor_update_'] = 0x14610
 

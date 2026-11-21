@@ -46,6 +46,13 @@ those expectations. Volatile OMF comments, including timestamps, are not compare
 
 ## Patterns verified in Fate
 
+- [`process_gameplay_frame`](../src/fate/process_gameplay_frame.c) reuses short
+  loop indices and keeps the recording count's ESI identity stage local to one
+  iteration. This lets ESI hold the column after the count dies; constraining
+  player and column separately lengthens lifetimes and changes allocation.
+  `/4r /s /or /bt=dos` matches all 732 bytes and 64 LE targets; only the
+  two-byte position-copy primitive remains inline.
+
 - A full-width zero passed to an empty register stage can generate the original
   XOR from C, as in [`format_engine`](../src/runtime/format_engine.c). Parameter
   setup may move or disappear in other contexts; verify each complete object
