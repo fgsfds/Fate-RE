@@ -1,12 +1,14 @@
 // "Build Engine & Tools" Copyright (c) 1993-1997 Ken Silverman
 // See ../engine/BUILDLIC.TXT.
-/* Three unchanged sections supply 390 bytes; the original entry, caption
- * setup, resume block and table remain assembly. The full private C context
- * is not exact. Empty ABI auxiliaries preserve real register values.
+/* Seven unchanged sections supply 431 bytes; menuprep.c supplies another 63.
+ * The resume block, original table and alignment remain assembly. The full
+ * private C context is not exact. Empty ABI auxiliaries preserve real values.
  * EDI/EBP hold clock snapshots and ESI the result through the shared frame.
+ * The entry's independent tick load and EDX zero are selected in original
+ * order; all six saves and the clock-read order remain unchanged.
  * return_main_menu is a nonreturning shared-frame tail continuation, not an
  * ordinary callable helper: it returns ESI in EAX and restores six saves.
- * Selection guards its E9 transfer. No private prologue or table is linked.
+ * Selection guards its E9 transfer. No private table is linked.
  */
 #include "menurec.h"
 extern long totalclock, menu_saved_tick, menu_animation_clock;

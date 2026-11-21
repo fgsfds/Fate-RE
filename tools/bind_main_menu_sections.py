@@ -11,7 +11,16 @@ BASE, ENTRY, GROUP_SIZE, PUBLIC_SIZE = 0x3a128, 0x3a148, 529, 497
 PUBLIC = 'dispatch_main_menu_'
 SECTIONS = (('main_menu_loop_', 0x43, 0x117, 0x3a188),
             ('main_menu_actions_', 0x13f, 0x1ae, 0x3a284),
-            ('main_menu_exit_', 0x1ae, 0x1f1, 0x3a302))
+            ('main_menu_exit_', 0x1ae, 0x1f1, 0x3a302),
+            ('main_menu_save_', 0, 17, 0x3a148),
+            ('main_menu_tick_', 19, 25, 0x3a159),
+            ('main_menu_zero_', 17, 19, 0x3a15f),
+            ('main_menu_initialize_', 25, 41, 0x3a161))
+# Instruction-aligned entry phases cover compiler bytes[0,41) exactly once.
+# The independent tick load and register zero are placed in original order.
+ENTRY_CONTEXT = bytes.fromhex(
+    '53 51 52 56 57 55 be 01 00 00 00 8b 3d 00 00 00 00 '
+    '31 d2 8b 2d 00 00 00 00 e8 00 00 00 00 89 15 00 00 00 00 e8 00 00 00 00')
 DATA = {
     '_difficulty_divisor': 0x7deec,
     '_game_in_progress': 0x772b8,
@@ -145,6 +154,8 @@ def bind_section(blob, symbol, address=None, code_bindings=None):
     if publics != ((1, 32, PUBLIC),) or len(segments[1]['data']) != GROUP_SIZE:
         raise ValueError('Main-menu compiler group extent/public differs')
     raw = segments[1]['data']
+    if raw[32:73] != ENTRY_CONTEXT:
+        raise ValueError('Main-menu entry context differs')
     if len(fixups) != len(FIXUPS) or {f.offset for f in fixups} != FIXUPS.keys():
         raise ValueError('Main-menu fixup inventory differs')
     for f in fixups:

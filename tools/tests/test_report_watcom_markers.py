@@ -49,7 +49,7 @@ class UnlinkedTableContext(unittest.TestCase):
         obj=object_fixture(); inventory=self.inventory(obj)
         self.assertEqual(verified_switch_tables(inventory,'mainmenu.obj',obj),((1,0,32),))
         self.assertEqual(inventory['non_routine_code_spans'],[])
-        self.assertEqual(sum(r['bytes'] for r in inventory['spans']),390)
+        self.assertEqual(sum(r['bytes'] for r in inventory['spans']),431)
 
     def test_rejects_incomplete_inventory_or_changed_linked_section(self):
         from test_main_menu_sections import object_fixture

@@ -924,7 +924,11 @@ OBJECT_NAMES.update({
     'receive_packets_finish_': 'recvpkt',
 })
 
-OBJECT_NAMES.update({'main_menu_caption_': 'menuprep',
+OBJECT_NAMES.update({'main_menu_save_': 'mainmenu',
+                     'main_menu_tick_': 'mainmenu',
+                     'main_menu_zero_': 'mainmenu',
+                     'main_menu_initialize_': 'mainmenu',
+                     'main_menu_caption_': 'menuprep',
                      'main_menu_selection_': 'menuprep',
                      'main_menu_loop_': 'mainmenu',
                      'main_menu_actions_': 'mainmenu',

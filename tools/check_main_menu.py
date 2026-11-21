@@ -161,7 +161,7 @@ def artifact_hashes(object_path):
         if not path.is_file():
             raise FileNotFoundError(f'Missing menu preparation artifact for hash report: {path}')
     assembly = {}
-    for name in ('main_menu_entry.bin', 'main_menu_resume.bin'):
+    for name in ('main_menu_table.bin', 'main_menu_resume.bin'):
         path = object_path.parent / 'asm' / name
         if not path.is_file():
             path = object_path.parent / name
@@ -187,7 +187,7 @@ def normalize_span(memory, address, size, pointers):
 
 def verify_assembled_gaps(build, memory, pointers):
     build = Path(build)
-    gaps = (('main_menu_entry.bin', 0x3a127, 74),
+    gaps = (('main_menu_table.bin', 0x3a127, 33),
             ('main_menu_resume.bin', 0x3a2f3, 15))
     for name, address, size in gaps:
         path = build / name if build.is_dir() else build.parent / name
@@ -255,10 +255,10 @@ def bind_fixture(exe_bytes, object_bytes, build):
         if raw_target + delta != target:
             raise ValueError(f'Group relocation target differs at {site:#x}')
         struct.pack_into('<I', group, offset, target)
-    if len(set(le_sites)) != 26:
-        raise ValueError(f'Expected 26 selected LE fixups, got {len(set(le_sites))}')
-    if sum(end - start for _, start, end, _ in SECTIONS) + 23 + 40 != 453:
-        raise ValueError('Expected 453 selected main-menu bytes')
+    if len(set(le_sites)) != 29:
+        raise ValueError(f'Expected 29 selected LE fixups, got {len(set(le_sites))}')
+    if sum(end - start for _, start, end, _ in SECTIONS) + 23 + 40 != 494:
+        raise ValueError('Expected 494 selected main-menu bytes')
     return memory, bytes(group), sorted(set(le_sites))
 
 

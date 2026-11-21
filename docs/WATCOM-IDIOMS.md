@@ -174,6 +174,12 @@ A length-scaling phase can return its result in EAX, then a separate clock phase
 
 Keep the retained 32-byte table and alignment in place; a checked compiler table is excluded and earns zero restoration credit. The selected C prefix emits a real outgoing PUSH; the following draw_menu_text call consumes that argument through its RET 4. Guard the private call/read suffix and verify exact fixup names and addends even though those successor instructions stay unlinked. Keep the shared-frame continuation as a tail transfer. The generic loaded-binding limitation applies to the switched main-menu binder; use `check_main_menu` to validate the integrated object and behavior.
 
+The menu entry is covered by four instruction-aligned C phases spanning source
+bytes 0–41 exactly once. An independent swap of the register-zero and tick-load
+operations is proven to preserve clock-read order, flags, all six saves, and the
+shared frame. Keep the full selected compiler context and fixups pinned, and
+verify the accepted image hash; isolated phase bytes are not sufficient evidence.
+
 ## Reusable receiver ABI lesson
 
 Declare function formals at their full ECX/EDX width, then narrow them inside the body; narrow formals can change Watcom's register/stack ABI. A sender stored in a 12-byte struct has its field at offset 8; with the 4-byte return address, it is at ESP+12. Keep suffix guards when selecting spans that share a return tail. The RET-suffix guard and the separate send-tail JMP guard protect different excluded contexts. For packet receiver branch selection, preserve both applicable guards and validate branch opcode/width, compiled target, placement, and overlap; exact routine bytes and LE targets remain required.

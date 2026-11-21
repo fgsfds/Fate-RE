@@ -1,13 +1,14 @@
 """Guard regressions for section placement, OMF transfers and retained tables."""
 import unittest
 from test_match_objects import record
-from bind_main_menu_sections import bind_section, SECTIONS, FIXUPS, BRANCHES
+from bind_main_menu_sections import bind_section, SECTIONS, FIXUPS, BRANCHES, ENTRY_CONTEXT
 
 
 def object_fixture(*, mutate=None, wrong_target=None, missing=None, public_offset=32):
     names = sorted({name for name, relative, addend, opcode in FIXUPS.values() if name})
     indices = {name: i+1 for i,name in enumerate(names)}
     code = bytearray(529)
+    code[32:73]=ENTRY_CONTEXT
     for site,(name,relative,addend,opcode) in FIXUPS.items():
         code[site:site+4] = addend.to_bytes(4,'little')
         if opcode: code[site-1:site] = opcode
@@ -91,3 +92,20 @@ class MainMenuSections(unittest.TestCase):
             with self.subTest(),self.assertRaisesRegex(ValueError,'fixed bindings'):
                 bind_leaf_details(obj,'main_menu_loop_',values,address=0x3a188,
                                   functions=functions,absolute_code=code,code_bindings={})
+
+    def test_entry_phases_cover_source_once_and_restore_original_tick_order(self):
+        phases=SECTIONS[3:]
+        source=[i for _,a,b,_ in phases for i in range(a,b)]
+        self.assertEqual(sorted(source),list(range(41)))
+        self.assertEqual([t for _,_,_,t in phases],[0x3a148,0x3a159,0x3a15f,0x3a161])
+        rows=[self.bind(object_fixture(),i) for i in range(3,7)]
+        self.assertEqual([len(r[1]) for r in rows],[1,1,0,1])
+        body=b''.join(r[0] for r in rows)
+        self.assertEqual(len(body),41)
+        self.assertEqual(body[:6],bytes.fromhex('53 51 52 56 57 55'))
+        self.assertEqual(body[17:25],b'\x8b\x2d'+(0x3cea).to_bytes(4,'little')+b'\x31\xd2')
+
+    def test_rejects_changed_entry_register_or_zero_sequence(self):
+        for off in (32,32+17):
+            with self.subTest(off=off),self.assertRaisesRegex(ValueError,'entry context'):
+                self.bind(object_fixture(mutate=lambda c:c.__setitem__(off,0x90)),3)
