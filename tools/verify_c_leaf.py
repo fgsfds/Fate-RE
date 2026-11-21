@@ -4623,6 +4623,32 @@ DATA_OFFSETS.update({'_capture_buffer': 0x1dda60, '_capture_palette16': 0x14155}
 DATA_OFFSETS['_capture_sequence'] = 0x140d3
 FUNCTION_ADDRESSES['_open'] = 0x61368
 
+LEAVES.update({'setgamemode_init_save_': (0x7064e, 2),
+               'setgamemode_init_body_': (0x70652, 235)})
+LEAF_CODE_SLICES.update({
+    'setgamemode_init_save_': ('setgamemode_init_context_', 0, 2, 240),
+    'setgamemode_init_body_': ('setgamemode_init_context_', 2, 237, 240),
+})
+DATA_OFFSETS.update({
+    '_setmode_vidoption': 0x2891db,
+    '_out_of_memory_message': 0x1af9,
+    '_horizlookup2': 0x286aec,
+    '_parallaxyoffs': 0x286b88,
+    '_parallaxyscale': 0x286b8c,
+    '_searchx': 0x289122,
+    '_searchit': 0x28912a,
+    '_xyaspect': 0x286bac,
+    '_pskyoff': 0x1ed1a0,
+    '_pskybits_fate': 0x289150,
+    '_parallaxtype': 0x2891da,
+    '_showinvisibility': 0x2891d9,
+    '_paletteloaded': 0x140c2,
+})
+FUNCTION_ADDRESSES.update({
+    'initialize_video_backend_': 0x4a294,
+    '_print_diagnostic': 0x40bb4,
+})
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

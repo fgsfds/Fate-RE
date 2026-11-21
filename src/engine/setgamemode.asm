@@ -1,6 +1,6 @@
 ; Configure engine video mode, allocate render buffers and initialize viewport state.
 BITS 32
-ORG 0x4b04e
+ORG 0x4b050
 
 out_of_memory_message equ 0x1af9
 horizon_allocation_message equ 0x1b08
@@ -53,73 +53,13 @@ engine_2891d9 equ 0x2891d9
 engine_2891da equ 0x2891da
 video_backend equ 0x2891db
 
-setgamemode:
-    push ecx
-    push esi
+setgamemode equ 0x4b04e
+; Watcom saves ECX/ESI and initializes the video state. The shared exit also
+; restores EDI and EBP, so keep those saves in their original slots.
     push edi
     push ebp
-    mov [video_backend], al
-    mov [xdim], edx
-    mov [ydim], ebx
-    call initialize_video_backend
-    mov edx, [ydim]
-    mov eax, edx
-    shl eax, byte 0x2
-    sub eax, edx
-    shl eax, byte 0x2
-    call engine_malloc
-    mov [horizlookup_base], eax
-    test eax, eax
-    jnz short .branch_4b09a
-    push strict dword out_of_memory_message
-    call print_diagnostic
-    add esp, 0x4
-    xor eax, eax
-    call runtime_exit
 
-.branch_4b09a:
-    mov edx, [ydim]
-    mov eax, edx
-    shl eax, byte 0x2
-    sub eax, edx
-    shl eax, byte 0x2
-    call engine_malloc
-    mov [horizlookup], eax
-    test eax, eax
-    jnz short .branch_4b0cc
-    push strict dword out_of_memory_message
-    call print_diagnostic
-    add esp, 0x4
-    xor eax, eax
-    call runtime_exit
-
-.branch_4b0cc:
-    mov ecx, 0x10000
-    mov esi, 0xffffffff
-    mov edx, [ydim]
-    xor ebx, ebx
-    mov eax, edx
-    mov [engine_286b88], ebx
-    mov [engine_286b8c], ecx
-    mov [engine_289122], si
-    shl eax, byte 0x2
-    xor ecx, ecx
-    sub eax, edx
-    mov [engine_28912a], cx
-    sar eax, 1
-    mov edx, 0xffffffff
-    mov [horizycent], eax
-    mov [viewingrange_reciprocal], edx
-    xor edx, edx
-    mov ah, 0x2
-    mov [engine_1ed1a0], dx
-    mov [engine_289150], dx
-    xor dl, dl
-    mov [engine_2891da], ah
-    mov [engine_2891d9], dl
-    xor dh, dh
-    xor eax, eax
-    mov [frame_state_140c2], dh
+section .palette_and_backend align=1 vstart=0x4b13d follows=.text
     jmp short .branch_4b149
 
 .branch_4b13f:

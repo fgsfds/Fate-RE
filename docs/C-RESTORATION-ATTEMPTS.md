@@ -281,20 +281,13 @@ operation. Next require a verified multiword multiplication idiom supported by
 10.5, while preserving the branch to the existing shared register restore.
 Evidence: `work/viewangle-next/NOTES.md`.
 
-### `setgamemode`: palette-loop allocation remains nonexact
+### `setgamemode`: palette-loop allocation
 
-The pinned historical `ENGINE.C` guides the candidate under ignored
-`work/setgamemode-source/`. Best remains 851 bytes versus Fate's 834; only the
-first 243 bytes and their 21 LE sites/targets match. The first divergence at
-loaded `0x4b140` is `xor ebx,ebx` instead of `xor ecx,ecx` in the palette loop.
-Full code and relocation checks fail, so the production assembly is unchanged.
-
-Saved notes record pinned Watcom 10.5 flags, the earlier compiler-option matrix,
-and switch/loop register-liveness experiments. The resumed investigation found
-no productive new hypothesis; do not repeat those matrices. Next require a
-source-motivated allocation change that preserves the exact prefix while
-recovering ECX for the loop, then recheck the whole switch and all 75 LE sites.
-Partial-prefix agreement is not accepted coverage. No game smoke test ran.
+The standalone initializer now links before the original palette jump. The
+`/4r /s /or /bt=dos` full-context probe uses EBX where the remaining palette
+loop first clears ECX at `0x4b140`. The shared frame and backend dispatch stay
+in assembly. Next look for a source change that preserves EAX as the index and
+ECX as the stored zero. Scratch: `work/setgamemode-source/init00.txt`.
 
 ### `getangle`: keep the historical absolute-value primitive
 
