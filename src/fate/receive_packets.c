@@ -1,7 +1,8 @@
 // "Build Engine & Tools" Copyright (c) 1993-1997 Ken Silverman
 // See ../engine/BUILDLIC.TXT. Modified from the pinned historical GAME.C.
 /* This unit supplies nine unchanged C sections (714 bytes). Native checksum
- * and parity fragments supply 112 more; 90 bytes remain in receive_*.asm.
+ * and parity fragments supply 112 more; the remaining C contexts supply 90.
+ * Together the selected sections cover all 916 bytes without inline assembly.
  * The full compiler context of this unit is
  * 910 bytes and is not itself an exact replacement. Branch linking changes
  * validated displacement operands only; see LEAF_CODE_SLICES.
@@ -48,7 +49,7 @@ extern short checksum_sum(short);
 extern short parity_word(unsigned long);
 #pragma aux parity_word = parm nomemory [eax] value [ax] modify exact nomemory [];
 void receive_packets(void);
-/* Assembly saves EBX ECX EDX ESI EDI and leaves only EAX unspecified. */
+/* The entry saves EBX ECX EDX ESI EDI and leaves only EAX unspecified. */
 #pragma aux receive_packets parm [] modify exact [eax];
 void receive_packets(void)
 {

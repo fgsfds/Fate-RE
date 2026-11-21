@@ -878,11 +878,3 @@ With `/4r /s /or /bt=dos`,
 peer-ID arithmetic. Using EBX as the identity for joint5 disrupts other
 lifetimes. Next retain the interrupt prefix and isolate partial-sum lifetimes. Comparison:
 `work/serial-init-next/compiler/joint4.report.json`.
-
-### Packet receiver: remaining assembly gaps
-
-The accepted receiver is 866 native C bytes and 50 retained assembly bytes, with 60 C and 5 assembly LE sites. Exact high-byte, head, and send prefixes contribute 9, 18, and 13 bytes. The excluded RET, head branches, and send-tail JMP are documented in `src/fate/receive_button_high.c`, `src/fate/receive_ready_head.c`, and `src/fate/receive_ready_send.c`. Remaining gaps: checksum sum ordering (3 bytes), low-button merge (17 bytes), and message deadline arithmetic (30 bytes). Preserve the 16-byte `PacketFrame` and snapshot callback ESI contract.
-
-The remaining blocker is deadline arithmetic: `/4r /s /or` hoists the clock read before the shift. Next useful hypothesis: ordered volatile views of the clock value, testing whether they preserve the shift-before-read schedule. Keep the three unresolved byte gaps separate.
-
-Evidence: `work/receiver-ready-build/validation.json`, `work/receiver-ready-audit.json`, `work/receiver-ready-build/game-receive-behavior.json`, and `work/receiver-ready-handoff.json`, and `work/receiver-ready-build/logs/unit-tests.log`. Sources: `src/fate/receive_packets.c`, `src/fate/receive_checksums.c`, `src/fate/receive_parity.c`, `src/fate/receive_button_high.c`, `src/fate/receive_ready_head.c`, and `src/fate/receive_ready_send.c`.

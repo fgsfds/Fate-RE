@@ -168,6 +168,8 @@ in `receive_checksums.c` and `receive_parity.c`. Preserve the RET-suffix guard
 when selecting those C spans; the C contexts contain no inline assembly
 instructions.
 
+A length-scaling phase can return its result in EAX, then a separate clock phase can consume EAX. Selecting these adjacent compiler contexts preserves load order directly, without volatile tricks or added CALLs. Private RETs stay unlinked and guarded.
+
 ## Reusable receiver ABI lesson
 
 Declare function formals at their full ECX/EDX width, then narrow them inside the body; narrow formals can change Watcom's register/stack ABI. A sender stored in a 12-byte struct has its field at offset 8; with the 4-byte return address, it is at ESP+12. Keep suffix guards when selecting spans that share a return tail. The RET-suffix guard and the separate send-tail JMP guard protect different excluded contexts. For packet receiver branch selection, preserve both applicable guards and validate branch opcode/width, compiled target, placement, and overlap; exact routine bytes and LE targets remain required.

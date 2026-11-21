@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1217,
-  "unique_code_bytes": 177268,
-  "le_pointers": 9695,
+  "routines": 1221,
+  "unique_code_bytes": 177318,
+  "le_pointers": 9700,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1520,6 +1520,16 @@
       "le_pointers": 21
     },
     {
+      "symbol": "receive_packets_crc_order_",
+      "object": "recvfrag.obj",
+      "object_sha256": "64eadad69cf8cf319eab2b7ea7c1b9ae2c44fcdacb7e518034f99e91f27857a4",
+      "sha256": "ac79bdd2244becf7151101f34ea89a30ba8429e4b4bf681292c1c8000a60a933",
+      "raw_offset": "0x57b5d",
+      "loaded_address": "0x3255d",
+      "bytes": 3,
+      "le_pointers": 0
+    },
+    {
       "symbol": "receive_packets_crc_store_",
       "object": "recvpkt.obj",
       "object_sha256": "3536a12e205bf0ed99a37f6ce2270df45c869c9976d417d1355a9bbd4b295565",
@@ -1550,6 +1560,16 @@
       "le_pointers": 7
     },
     {
+      "symbol": "receive_packets_button_low_",
+      "object": "recvfrag.obj",
+      "object_sha256": "64eadad69cf8cf319eab2b7ea7c1b9ae2c44fcdacb7e518034f99e91f27857a4",
+      "sha256": "903e4f03a5f70094669e28ba2d159e69276794dba0dde575bdf9c79f96484bf0",
+      "raw_offset": "0x57c71",
+      "loaded_address": "0x32671",
+      "bytes": 17,
+      "le_pointers": 2
+    },
+    {
       "symbol": "receive_packets_buttons_",
       "object": "recvpkt.obj",
       "object_sha256": "3536a12e205bf0ed99a37f6ce2270df45c869c9976d417d1355a9bbd4b295565",
@@ -1578,6 +1598,26 @@
       "loaded_address": "0x326be",
       "bytes": 43,
       "le_pointers": 4
+    },
+    {
+      "symbol": "receive_packets_message_delta_",
+      "object": "recvfrag.obj",
+      "object_sha256": "64eadad69cf8cf319eab2b7ea7c1b9ae2c44fcdacb7e518034f99e91f27857a4",
+      "sha256": "f786f0f1f007d267990ea8d7b2512662296600b5902fced215defcd8e3bfb750",
+      "raw_offset": "0x57ce9",
+      "loaded_address": "0x326e9",
+      "bytes": 10,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "receive_packets_message_clock_",
+      "object": "recvfrag.obj",
+      "object_sha256": "64eadad69cf8cf319eab2b7ea7c1b9ae2c44fcdacb7e518034f99e91f27857a4",
+      "sha256": "8090f65c704dcb72b28de54e0305b6053a81f13a8fba22fb83492016c25414b4",
+      "raw_offset": "0x57cf3",
+      "loaded_address": "0x326f3",
+      "bytes": 20,
+      "le_pointers": 2
     },
     {
       "symbol": "receive_packets_ready_",

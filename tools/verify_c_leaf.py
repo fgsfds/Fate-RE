@@ -3675,6 +3675,10 @@ LEAF_ENTRY_PREFIX_FIXUPS = {
 # Unchanged compiler sections surrounding a separately verified assembly island.
 # Each row names the real OMF public, kept bounds, and required full public size.
 LEAF_CONTEXT_SUFFIXES = {
+    'receive_button_low_': b'\xc3',
+    'receive_checksum_order_': b'\xc3',
+    'receive_message_delta_': b'\xc3',
+    'receive_message_clock_': b'\xc3',
     'compare_received_checksums_': b'\xc3',
     'receiver_parity_tick_': b'\xc3',
     'receive_button_high_': b'\xc3',
@@ -3683,6 +3687,10 @@ LEAF_CONTEXT_SUFFIXES = {
 }
 
 LEAF_CODE_SLICES = {
+    'receive_packets_button_low_': ('receive_button_low_', 0, 17, 28),
+    'receive_packets_crc_order_': ('receive_checksum_order_', 0, 3, 24),
+    'receive_packets_message_delta_': ('receive_message_delta_', 0, 10, 11),
+    'receive_packets_message_clock_': ('receive_message_clock_', 0, 20, 21),
     'receive_packets_button_high_': ('receive_button_high_', 0, 9, 10),
     'receive_packets_ready_head_': ('receive_ready_context_', 0, 18, 37),
     'receive_packets_ready_send_': ('receive_ready_send_', 0, 13, 18),
@@ -3739,6 +3747,10 @@ FUNCTION_ADDRESSES.update({
 
 LEAVES.update({
     'receive_packets_checksums_': (0x57b79, 105),
+    'receive_packets_button_low_': (0x57c71, 17),
+    'receive_packets_crc_order_': (0x57b5d, 3),
+    'receive_packets_message_delta_': (0x57ce9, 10),
+    'receive_packets_message_clock_': (0x57cf3, 20),
     'receive_packets_button_high_': (0x57cb5, 9),
     'receive_packets_ready_head_': (0x57d17, 18),
     'receive_packets_ready_send_': (0x57d3c, 13),
@@ -3746,6 +3758,8 @@ LEAVES.update({
 })
 DATA_OFFSETS.update({
     '_receiver_button_bytes': 0x5ac3c,
+    '_receiver_crc_words': 0x1e5fc,
+    '_receiver_crc_cursor': 0x3ce0,
     '_checksum_write_cursor': 0x3cdc,
     '_checksum_received_cursor': 0x3ce0,
     '_checksum_read_cursor': 0x3ce4,

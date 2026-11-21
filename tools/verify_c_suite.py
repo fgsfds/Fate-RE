@@ -924,7 +924,11 @@ OBJECT_NAMES.update({
     'receive_packets_finish_': 'recvpkt',
 })
 
-OBJECT_NAMES.update({'receive_packets_button_high_': 'recvhigh',
+OBJECT_NAMES.update({'receive_packets_button_low_': 'recvfrag',
+                     'receive_packets_crc_order_': 'recvfrag',
+                     'receive_packets_message_delta_': 'recvfrag',
+                     'receive_packets_message_clock_': 'recvfrag',
+                     'receive_packets_button_high_': 'recvhigh',
                      'receive_packets_ready_head_': 'recvhead',
                      'receive_packets_ready_send_': 'recvsend',
                      'receive_packets_checksums_': 'recvcrc',
@@ -1470,6 +1474,10 @@ def verify_compiler_groups(exe, directory, names=None):
                                ('recvsend', 18, 'receive_ready_send_')):
         if selected(name):
             verify_group_layout((directory/(name+'.obj')).read_bytes(), size, [(public, 0)])
+    if selected('recvfrag'):
+        verify_group_layout((directory/'recvfrag.obj').read_bytes(), 84, [
+            ('receive_button_low_', 0), ('receive_checksum_order_', 28),
+            ('receive_message_delta_', 52), ('receive_message_clock_', 63)])
     if selected('recvcrc'):
         verify_group_layout((directory/'recvcrc.obj').read_bytes(), 106,
                             [('compare_received_checksums_', 0)])

@@ -246,8 +246,8 @@ def exercise(body,c):
                             ebp=0x456789ab,eflags=0x202))
 
 
-HYBRID_C = (('recvpkt.obj', 'receive_packets_entry_', 0, 342), ('recvpkt.obj', 'receive_packets_crc_store_', 345, 25), ('recvpkt.obj', 'receive_packets_delta_', 475, 143), ('recvpkt.obj', 'receive_packets_buttons_', 635, 51), ('recvpkt.obj', 'receive_packets_text_', 695, 43), ('recvpkt.obj', 'receive_packets_ready_', 768, 16), ('recvpkt.obj', 'receive_packets_ready_test_', 802, 19), ('recvpkt.obj', 'receive_packets_poll_', 834, 41), ('recvpkt.obj', 'receive_packets_finish_', 882, 34), ('recvcrc.obj', 'receive_packets_checksums_', 370, 105), ('recvpar.obj', 'receive_packets_parity_', 875, 7), ('recvhigh.obj', 'receive_packets_button_high_', 686, 9), ('recvhead.obj', 'receive_packets_ready_head_', 784, 18), ('recvsend.obj', 'receive_packets_ready_send_', 821, 13))
-HYBRID_ASM = (('receive_checksum_order.bin', 342, 3), ('receive_button_low.bin', 618, 17), ('receive_message_deadline.bin', 738, 30))
+HYBRID_C = (('recvpkt.obj', 'receive_packets_entry_', 0, 342), ('recvpkt.obj', 'receive_packets_crc_store_', 345, 25), ('recvpkt.obj', 'receive_packets_delta_', 475, 143), ('recvpkt.obj', 'receive_packets_buttons_', 635, 51), ('recvpkt.obj', 'receive_packets_text_', 695, 43), ('recvpkt.obj', 'receive_packets_ready_', 768, 16), ('recvpkt.obj', 'receive_packets_ready_test_', 802, 19), ('recvpkt.obj', 'receive_packets_poll_', 834, 41), ('recvpkt.obj', 'receive_packets_finish_', 882, 34), ('recvcrc.obj', 'receive_packets_checksums_', 370, 105), ('recvpar.obj', 'receive_packets_parity_', 875, 7), ('recvhigh.obj', 'receive_packets_button_high_', 686, 9), ('recvhead.obj', 'receive_packets_ready_head_', 784, 18), ('recvsend.obj', 'receive_packets_ready_send_', 821, 13), ('recvfrag.obj', 'receive_packets_button_low_', 618, 17), ('recvfrag.obj', 'receive_packets_crc_order_', 342, 3), ('recvfrag.obj', 'receive_packets_message_delta_', 738, 10), ('recvfrag.obj', 'receive_packets_message_clock_', 748, 20))
+HYBRID_ASM = ()
 
 
 def bind_hybrid(exe, obj, build):
@@ -266,6 +266,8 @@ def bind_hybrid(exe, obj, build):
         candidate[start:start+len(code)]=code
     data_values={'_'+k:v for k,v in A.items()}
     data_values.update(_receiver_button_bytes=A['current_input'],
+                    _receiver_crc_words=A['received_checksum'],
+                    _receiver_crc_cursor=A['received_write_index'],
                     _checksum_write_cursor=A['event_write_index'],
                     _checksum_received_cursor=A['received_write_index'],
                     _checksum_read_cursor=A['event_read_index'])
@@ -283,7 +285,7 @@ def bind_hybrid(exe, obj, build):
         assert len(code)==size
         place(start,code)
     assert covered==set(range(SIZE)), 'hybrid does not partition the whole receiver'
-    assert native_sites==60, 'expected 60 selected C LE sites'
+    assert native_sites==65, 'expected 65 selected C LE sites'
     assert bytes(candidate)==target, 'hybrid differs from pinned whole receiver'
     reference=bytearray(target)
     fixups=pointer_range(pointers,ENTRY,SIZE)
@@ -319,7 +321,7 @@ def main():
     try:
         if args.build and not args.behavior_only:
             reference,candidate,fixups=bind_hybrid(exe,obj,args.build)
-            report.update(native_c_bytes=866,retained_assembly_bytes=50,native_le_sites=60)
+            report.update(native_c_bytes=916,retained_assembly_bytes=0,native_le_sites=65)
         else:
             reference,candidate,fixups=bind_bodies(exe,obj,'receive_packets_',ENTRY,SIZE,
                 {'_'+k:v for k,v in A.items()},F,data_base=DS,behavior_only=args.behavior_only)
@@ -327,7 +329,7 @@ def main():
                       exact_verified=not args.behavior_only)
         if args.build and not args.behavior_only:
             report.update(fragment_object_sha256={name:sha((args.build/name).read_bytes())
-                    for name in ('recvcrc.obj','recvpar.obj','recvhigh.obj','recvhead.obj','recvsend.obj')})
+                    for name in ('recvcrc.obj','recvpar.obj','recvhigh.obj','recvhead.obj','recvsend.obj','recvfrag.obj')})
         selected=cases()
         for c in selected:
             expected=expected_behavior(c)

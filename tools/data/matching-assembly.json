@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 487,
-  "unique_code_bytes": 237371,
-  "le_pointers": 12854,
+  "routines": 484,
+  "unique_code_bytes": 237321,
+  "le_pointers": 12849,
   "non_routine_code_spans": [
     {
       "symbol": "code_padding_5d088",
@@ -1856,42 +1856,6 @@
       "public_entry": "0x34f79",
       "binary_offset": 0,
       "le_pointers": 57
-    },
-    {
-      "symbol": "receive_checksum_order",
-      "source": "src/fate/receive_checksum_order.asm",
-      "binary": "receive_checksum_order.bin",
-      "sha256": "ac79bdd2244becf7151101f34ea89a30ba8429e4b4bf681292c1c8000a60a933",
-      "bytes": 3,
-      "raw_offset": "0x57b5d",
-      "loaded_address": "0x3255d",
-      "public_entry": "0x3255d",
-      "binary_offset": 0,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "receive_button_low",
-      "source": "src/fate/receive_button_low.asm",
-      "binary": "receive_button_low.bin",
-      "sha256": "903e4f03a5f70094669e28ba2d159e69276794dba0dde575bdf9c79f96484bf0",
-      "bytes": 17,
-      "raw_offset": "0x57c71",
-      "loaded_address": "0x32671",
-      "public_entry": "0x32671",
-      "binary_offset": 0,
-      "le_pointers": 2
-    },
-    {
-      "symbol": "receive_message_deadline",
-      "source": "src/fate/receive_message_deadline.asm",
-      "binary": "receive_message_deadline.bin",
-      "sha256": "dc0cff8554f86585fe44246ba5f217a76161ba3341d5d818e9b0ce7e9b2b9a17",
-      "bytes": 30,
-      "raw_offset": "0x57ce9",
-      "loaded_address": "0x326e9",
-      "public_entry": "0x326e9",
-      "binary_offset": 0,
-      "le_pointers": 3
     },
     {
       "symbol": "draw_map_overlays",
