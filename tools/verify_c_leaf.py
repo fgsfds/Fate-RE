@@ -4582,6 +4582,22 @@ LEAF_CODE_SLICES.update({
 LEAF_CONTEXT_LITERALS['encounter_latch_context_'] = LEAF_CONTEXT_LITERALS['encounter_exit_context_'][:3]
 LEAF_CONTEXT_SUFFIXES['encounter_latch_context_'] = LEAF_CONTEXT_SUFFIXES['encounter_exit_context_']
 
+LEAVES['encounter_spawn_checks_'] = (0x4355b, 149)
+LEAF_CODE_SLICES['encounter_spawn_checks_'] = ('encounter_spawn_context_', 0x2c, 0xc1, 1260)
+LEAVES['encounter_spawn_sound_'] = (0x435f0, 16)
+LEAF_CODE_SLICES['encounter_spawn_sound_'] = ('encounter_spawn_context_', 0xc3, 0xd3, 1260)
+LEAVES['encounter_spawn_zero_di_'] = (0x43600, 2)
+LEAF_CODE_SLICES['encounter_spawn_zero_di_'] = ('encounter_spawn_context_', 0xc1, 0xc3, 1260)
+LEAVES['encounter_spawn_sectors_clock_'] = (0x43602, 110)
+LEAF_CODE_SLICES['encounter_spawn_sectors_clock_'] = ('encounter_spawn_context_', 0xd3, 0x141, 1260)
+LEAF_CONTEXT_LITERALS['encounter_spawn_context_'] = LEAF_CONTEXT_LITERALS['encounter_latch_context_']
+LEAF_CONTEXT_SUFFIXES['encounter_spawn_context_'] = LEAF_CONTEXT_SUFFIXES['encounter_latch_context_']
+FUNCTION_ADDRESSES['encounter_spawn_context_'] = 0x1df2e
+LEAF_SECTION_BRANCHES['encounter_spawn_context_'] = (1260, 1263, {
+    0x36: (bytes.fromhex('0f84'), 0x277, 0x282),
+    0x127: (bytes.fromhex('0f8e'), 0x277, 0x282),
+})
+
 LEAVES['encounter_reset_state_'] = (0x43883, 22)
 FUNCTION_ADDRESSES['encounter_exit_scan_'] = 0x1e30b
 

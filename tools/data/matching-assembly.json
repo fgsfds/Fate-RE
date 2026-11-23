@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
   "routines": 486,
-  "unique_code_bytes": 233739,
-  "le_pointers": 12594,
+  "unique_code_bytes": 233462,
+  "le_pointers": 12579,
   "non_routine_code_spans": [
     {
       "symbol": "setgamemode_save_tail",
@@ -1080,7 +1080,7 @@
       "bytes": 1,
       "raw_offset": "0x43a16",
       "loaded_address": "0x1e416",
-      "binary_offset": 758,
+      "binary_offset": 481,
       "le_pointers": 0,
       "kind": "declared read-only tables in CODE"
     },
@@ -6454,16 +6454,16 @@
       "le_pointers": 13
     },
     {
-      "symbol": "encounter_spawn_prefix",
+      "symbol": "encounter_spawn_loop",
       "source": "src/fate/level_encounter.asm",
       "binary": "level_encounter.bin",
-      "sha256": "6a5c918a6668853a6808b3ca2e5d363418f14c94ccb52bf0ab1420b293ab5262",
-      "bytes": 597,
-      "raw_offset": "0x4355b",
-      "loaded_address": "0x1df5b",
-      "public_entry": "0x1df5b",
+      "sha256": "784ec425517b1547597b2a255f7c61e668b853358118d520812b226e8efa07f8",
+      "bytes": 320,
+      "raw_offset": "0x43670",
+      "loaded_address": "0x1e070",
+      "public_entry": "0x1e070",
       "binary_offset": 161,
-      "le_pointers": 23
+      "le_pointers": 8
     },
     {
       "symbol": "initialize_destination",

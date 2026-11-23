@@ -847,3 +847,17 @@ instead places 1 in ECX and 32768 in EBP. The first meaningful mismatch
 remains the mode-6 state entry at `0x4b2e0`. Next model the separate CH
 and EBP constant lifetimes without an EBP auxiliary. Production state
 blocks remain assembly. Scratch: `work/stereo-state-probe/register_lifetimes.c`.
+
+
+### Encounter spawn-loop preparation: invariant Z register
+
+With Watcom 10.5 `/4r /s /or /bt=dos /dENCOUNTER_SPAWN_CONTEXT=1`,
+the trigger/sector/clock phase now links 277 exact compiler bytes and 15
+LE sites. The first remaining mismatch is `0x1e070`: C stores loop count 1
+directly to `[esp+0xb4]`, while the reference loads EAX=1 and EBP=-50170
+before storing the count. The reference keeps EBP as the invariant spawn Z
+through the loop; the private compiler context stores that constant inside
+the body. Next expose the invariant's lifetime across the loop without an
+EBP-bound auxiliary, whose E1122 blocker is already known. Research variants
+and first mismatches remain in `work/spawn-research/proposals.md` and
+`work/spawn-v2-build/encsp3.obj`.

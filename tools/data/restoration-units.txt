@@ -524,3 +524,4 @@ engine/setgamemode_display setdisp
 engine/palette_lookup plook
 fate/encounter_exit encact /4r /s /or /bt=dos /dENCOUNTER_ACTOR_CONTEXT=1
 fate/encounter_reset encreset
+fate/encounter_exit encspawn /4r /s /or /bt=dos /dENCOUNTER_SPAWN_CONTEXT=1

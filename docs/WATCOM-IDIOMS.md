@@ -225,3 +225,13 @@ isolates the actor reset from the exit scan so Watcom emits the immediate word
 store. Its `aborts` continuation emits the original tail JMP while preserving
 the caller's existing frame. Verify the complete standalone body and its branch
 fixup before replacing the shared-frame assembly tail.
+
+
+The encounter trigger phase uses `play_sound_` with an additional EDI input and
+DI result to carry zero across the call. The pinned callee saves ESI/EDI/EBP,
+overwrites EDI before consuming it internally, and restores all three at its
+common return. Keep the original four game arguments and conservative
+EAX/EBX/ECX/EDX clobbers. A two-byte compiler-generated EDI clear can be selected
+separately when Watcom schedules it before the first sound call. Check that
+intervening instructions do not consume the value or its flags, and compare
+natural versus linked order with poisoned caller-clobbered registers.

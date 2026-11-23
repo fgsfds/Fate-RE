@@ -1,8 +1,12 @@
+#ifdef ENCOUNTER_SPAWN_CONTEXT
+#define ENCOUNTER_LATCH_CONTEXT 1
+#define encounter_latch_context encounter_spawn_context
+#endif
 #ifdef ENCOUNTER_ACTOR_CONTEXT
 #define ENCOUNTER_LATCH_CONTEXT 1
 #define encounter_latch_context encounter_actor_context
 #endif
-/* Board-four encounter algorithm compiled in three private contexts.
+/* Board-four encounter algorithm compiled in four private contexts.
  * The exit context supplies the exit phase and frame/initializer operations;
  * the latch context supplies the latch and second-actor phases; the actor
  * context supplies the proximity and kind checks. Only verified slices are linked.
@@ -93,6 +97,24 @@ extern unsigned char exit_byte_cl(unsigned char);
 extern int exit_int_ebx(int);
 #pragma aux exit_int_ebx = "" parm [ebx] value [ebx] modify exact [];
 
+#ifdef ENCOUNTER_SPAWN_CONTEXT
+/* Keep the sign-extended hitag available for its full-width compare. */
+extern int encounter_spawn_edx(int);
+#pragma aux encounter_spawn_edx = "" parm [edx] value [edx] modify exact [];
+
+/* play_sound saves EDI on entry and restores it on every return. */
+extern short encounter_sound_keep_edi(int, long, long, int, int);
+#pragma aux encounter_sound_keep_edi "play_sound_" parm [eax] [edx] [ebx] [ecx] [edi] \
+    value [di] modify exact [eax ebx ecx edx];
+
+/* Read the clock in CX and return the incremented word in DI. */
+extern short encounter_spawn_clock_cx(short);
+#pragma aux encounter_spawn_clock_cx = "" parm [cx] value [cx] modify exact [];
+extern short encounter_spawn_clock_di(short);
+#pragma aux encounter_spawn_clock_di = "" parm [di] value [di] modify exact [];
+
+#endif
+
 #ifdef ENCOUNTER_LATCH_CONTEXT
 extern unsigned short encounter_draw_dx(unsigned short);
 #pragma aux encounter_draw_dx = "" parm [dx] value [dx] modify exact [];
@@ -139,6 +161,9 @@ void encounter_exit_context(void)
     short index, slot, sector_index;
     short position_choice, repeat_choice;
     short near_first, near_second;
+#ifdef ENCOUNTER_SPAWN_CONTEXT
+    short current_clock;
+#endif
     unsigned x_shift;
 #ifdef ENCOUNTER_LATCH_CONTEXT
     unsigned short repeat_draw, x_draw;
@@ -151,27 +176,57 @@ void encounter_exit_context(void)
     if (encounter_clock == 0) {
         for (index = 1; index <= trigger_count; index = (short)((unsigned short)index + 1U)) {
             slot = trigger_sprite[index].sprite;
+#ifdef ENCOUNTER_SPAWN_CONTEXT
+            if (encounter_spawn_edx(sprite[slot].hitag) != 0x203)
+#else
             if (sprite[slot].hitag != 0x203)
+#endif
                 continue;
             if (sprite[slot].x <= -0x3002L || sprite[slot].x >= -0x1403L)
                 continue;
             if (sprite[slot].y <= -0x2d0bL || sprite[slot].y >= -0x1206L)
                 continue;
 
+#ifdef ENCOUNTER_SPAWN_CONTEXT
+            {
+                int initial_clock, centered_sound, sound_y, sound_x;
+
+                initial_clock = exit_int_ecx(1);
+                centered_sound = exit_int_eax(0x88);
+                sound_y = exit_int_ebx(0);
+                sound_x = encounter_spawn_edx(0);
+                encounter_clock = (short)initial_clock;
+                play_sound(centered_sound, sound_x, sound_y, 0);
+            }
+            rotating_sector_count = encounter_sound_keep_edi(0x87, 0, 0, 0, 0);
+#else
             encounter_clock = 1;
             play_sound(0x88, 0, 0, 0);
             play_sound(0x87, 0, 0, 0);
             rotating_sector_count = 0;
+#endif
             for (sector_index = 0; sector_index < numsectors; ++sector_index) {
+#ifdef ENCOUNTER_SPAWN_CONTEXT
+                if (exit_int_ebx(sector[sector_index].lotag) == 0xe)
+                    sector[sector_index].lotag = (short)exit_int_ebx(0);
+#else
                 if (sector[sector_index].lotag == 0xe)
                     sector[sector_index].lotag = 0;
+#endif
             }
         }
     }
 
+#ifdef ENCOUNTER_SPAWN_CONTEXT
+    current_clock = encounter_spawn_clock_cx(encounter_clock);
+    if (current_clock > 0) {
+        if (advance_clock != 0)
+            encounter_clock = encounter_spawn_clock_di((short)((unsigned short)current_clock + 1U));
+#else
     if (encounter_clock > 0) {
         if (advance_clock != 0)
             encounter_clock = (short)((unsigned short)encounter_clock + 1U);
+#endif
 
         spawn.number = 1;
         goto check_spawn_count;
