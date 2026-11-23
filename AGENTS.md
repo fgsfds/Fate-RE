@@ -16,6 +16,22 @@
 - Use `validate --full` for tooling changes or periodic broad regression checkpoints, not every source-only edit. Neither exact nor full runs game smoke by default; `--smoke` requires explicit `--full`. Skip game smoke for the current restoration task. Focused `probe` / `validate --changed` fixtures require `--fixtures`; `behavior` is a separate, nonexact diagnostic.
 - Refresh code inventories when registrations, inventories, or coverage change, not for every source-only edit. Attribution audits remain separate and are required for honest C/assembly percentage claims.
 
+## Subagent profiles
+
+Use the authoritative profiles in `.codex/agents/` for suitable bounded, independent tasks. Read the selected TOML before assigning work and apply its model, reasoning effort, role instructions, and tool restrictions. Follow the [coordination workflow](docs/RESTORATION-AGENTS.md) for fresh context, task packets, compiler leases, and evidence handoffs. The integrator retains production acceptance, shared registries and inventories, commits, and pushes.
+
+| Profile | Assignment |
+| --- | --- |
+| [fate-scout](.codex/agents/fate-scout.toml) | Read-only candidate triage from a bounded packet |
+| [fate-probe](.codex/agents/fate-probe.toml) | Specified mechanical patches and bounded compiler experiments |
+| [fate-research](.codex/agents/fate-research.toml) | Novel Watcom, ABI, and control-flow questions |
+| [fate-review](.codex/agents/fate-review.toml) | Independent C-validity, ABI, and evidence review |
+| [fate-verify](.codex/agents/fate-verify.toml) | Mechanical checks of frozen artifacts and attribution |
+| [fate-writer](.codex/agents/fate-writer.toml) | Assigned documentation, scripts, and tests from frozen evidence |
+| [fate-ci-monitor](.codex/agents/fate-ci-monitor.toml) | Read-only CI monitoring for the exact pushed SHA |
+
+Keep assignments disjoint and within the host limit. A profile catalog does not require a fixed worker count. Stop restoration workers on pause; explicit configuration work remains allowed.
+
 ## Source code references
 
 Consult these repositories for historical Build Engine algorithms, types, and compiler idioms. Source similarity does not replace exact binary and relocation verification. Preserve attribution and applicable licenses. See [pinned vanilla references](docs/BUILD-SOURCE-REFERENCES.md) and [additional source findings](docs/ADDITIONAL-BUILD-SOURCES.md) before repeating research.
