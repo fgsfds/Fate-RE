@@ -1,3 +1,6 @@
+#ifdef ENCOUNTER_SPAWN_LOOP_CONTEXT
+#define encounter_spawn_context encounter_spawn_loop_context
+#endif
 #ifdef ENCOUNTER_SPAWN_CONTEXT
 #define ENCOUNTER_LATCH_CONTEXT 1
 #define encounter_latch_context encounter_spawn_context
@@ -6,7 +9,7 @@
 #define ENCOUNTER_LATCH_CONTEXT 1
 #define encounter_latch_context encounter_actor_context
 #endif
-/* Board-four encounter algorithm compiled in four private contexts.
+/* Board-four encounter algorithm compiled in five private contexts.
  * The exit context supplies the exit phase and frame/initializer operations;
  * the latch context supplies the latch and second-actor phases; the actor
  * context supplies the proximity and kind checks. Only verified slices are linked.
@@ -96,6 +99,31 @@ extern unsigned char exit_byte_cl(unsigned char);
 #pragma aux exit_byte_cl = "" parm [cl] value [cl] modify exact [];
 extern int exit_int_ebx(int);
 #pragma aux exit_int_ebx = "" parm [ebx] value [ebx] modify exact [];
+
+#if defined(ENCOUNTER_SPAWN_CONTEXT) && defined(ENCOUNTER_SPAWN_LOOP_CONTEXT)
+/* Watcom/x86 exposes the unsigned long as four little-endian bytes. */
+typedef union {
+    unsigned long value;
+    unsigned char byte[4];
+} EncounterPackedDraw;
+
+extern unsigned long encounter_draw_edx(unsigned long);
+#pragma aux encounter_draw_edx = "" parm [edx] value [edx] modify exact [];
+extern unsigned char encounter_draw_ah(unsigned long);
+#pragma aux encounter_draw_ah = "" parm [eax] value [ah] modify exact [];
+extern unsigned char encounter_draw_dh(unsigned char);
+#pragma aux encounter_draw_dh = "" parm [dh] value [dh] modify exact [];
+extern unsigned char encounter_draw_dl(unsigned char);
+#pragma aux encounter_draw_dl = "" parm [dl] value [dl] modify exact [];
+
+/* The retained setup assigns the height in EBP before any body entry.
+ * This reader belongs to the selected body, not a callable C entry. */
+extern long encounter_spawn_height(void);
+#pragma aux encounter_spawn_height = "" value [ebp] modify exact [];
+
+extern short *encounter_spawn_hint_ebx(short *);
+#pragma aux encounter_spawn_hint_ebx = "" parm [ebx] value [ebx] modify exact [];
+#endif
 
 #ifdef ENCOUNTER_SPAWN_CONTEXT
 /* Keep the sign-extended hitag available for its full-width compare. */
@@ -228,6 +256,32 @@ void encounter_exit_context(void)
             encounter_clock = (short)((unsigned short)encounter_clock + 1U);
 #endif
 
+#if defined(ENCOUNTER_SPAWN_CONTEXT) && defined(ENCOUNTER_SPAWN_LOOP_CONTEXT)
+        spawn.number = (unsigned long)exit_int_eax(1);
+        goto check_spawn_count;
+        do {
+            long call_x, call_y;
+            short *hint;
+            unsigned long raw_draw;
+            EncounterPackedDraw packed_draw;
+
+            raw_draw = (unsigned long)random_value();
+            packed_draw.value = encounter_draw_edx(raw_draw);
+            packed_draw.byte[1] = encounter_draw_dh(
+                encounter_draw_dh(packed_draw.byte[1]) ^ encounter_draw_ah(raw_draw));
+            packed_draw.byte[0] = encounter_draw_dl(packed_draw.byte[0] & 15U);
+            position_choice = (short)exit_int_ebx(
+                (short)encounter_draw_dx((unsigned short)packed_draw.value));
+            spawn.position.x = positions[position_choice].x;
+            call_y = exit_int_eax(positions[position_choice].y);
+            hint = encounter_spawn_hint_ebx(&spawn.sector_hint);
+            spawn.position.y = call_y;
+            call_y = encounter_spawn_edx(call_y);
+            call_x = exit_int_eax(spawn.position.x);
+            spawn.position.z = encounter_spawn_height();
+            /* Use the incoming bytes of the original frame's hint slot. */
+            updatesector(call_x, call_y, hint);
+#else
         spawn.number = 1;
         goto check_spawn_count;
         do {
@@ -240,12 +294,22 @@ void encounter_exit_context(void)
              * updatesector tests those bytes and leaves its resulting sector here.
              */
             updatesector(spawn.position.x, spawn.position.y, &spawn.sector_hint);
+#endif
 #ifdef ENCOUNTER_LATCH_CONTEXT
             slot = encounter_slot_di(spawn_sprite_at_position(0x2b, &spawn.position, spawn.sector_hint));
 #else
             slot = spawn_sprite_at_position(0x2b, &spawn.position, spawn.sector_hint);
 #endif
+#if defined(ENCOUNTER_SPAWN_CONTEXT) && defined(ENCOUNTER_SPAWN_LOOP_CONTEXT)
+            raw_draw = (unsigned long)random_value();
+            packed_draw.value = encounter_draw_edx(raw_draw);
+            packed_draw.byte[1] = encounter_draw_dh(
+                encounter_draw_dh(packed_draw.byte[1]) ^ encounter_draw_ah(raw_draw));
+            packed_draw.byte[0] = encounter_draw_dl(packed_draw.byte[0] & 1U);
+            sprite[slot].tile = (short)encounter_draw_edx(packed_draw.value + 0x350UL);
+#else
             sprite[slot].tile = (short)(0x350 + (random_value() & 1));
+#endif
 
 #ifdef ENCOUNTER_LATCH_CONTEXT
             repeat_draw = encounter_draw_dx((unsigned char)random_value());

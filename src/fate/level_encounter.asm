@@ -78,35 +78,9 @@ update_level_encounter equ 0x1df2e
 section .save_ebp align=1 vstart=0x1df33 follows=.text
     push ebp
 ; Stack allocation and the two array copies are compiler-generated C.
-section .spawn align=1 vstart=0x1e070 follows=.save_ebp
-.prepare_spawn_loop:
-    mov eax, 0x1
+section .spawn_height align=1 vstart=0x1e075 follows=.save_ebp
     mov ebp, 0xffff3c06
-    mov [esp + 0xb4], eax
-    jmp near .check_spawn_count
-
-.spawn_encounter_sprite:
-    call random_value
-    mov edx, eax
-    xor dh, ah
-    and dl, 0xf
-    movsx ebx, dx
-    mov eax, [esp + ebx*8]
-    mov [esp + 0xa0], eax
-    mov eax, [esp + ebx*8 + 0x4]
-    lea ebx, [esp + 0xac]
-    mov [esp + 0xa4], eax
-    mov edx, eax
-    mov eax, [esp + 0xa0]
-    mov [esp + 0xa8], ebp
-    call update_sector
-    movsx ebx, word [esp + 0xac]
-    lea edx, [esp + 0xa0]
-    mov eax, 0x2b
-    call spawn_sprite_at_position
-    mov edi, eax
-    movsx edi, di
-    imul esi, edi, 0x2c
+section .spawn align=1 vstart=0x1e0e7 follows=.spawn_height
     call random_value
     mov edx, eax
     xor dh, ah
@@ -151,14 +125,6 @@ section .spawn align=1 vstart=0x1e070 follows=.save_ebp
     call add_listed_sprite
     mov [esp + 0xb4], edx
 
-.check_spawn_count:
-    mov eax, [ticks_per_step]
-    movsx edx, word [esp + 0xb4]
-    add eax, eax
-    cmp edx, eax
-    jng near .spawn_encounter_sprite
-
-; Complete tile latch is linked from the native C context.
 .check_first_trigger_sprite equ 0x1e1b0
 .check_second_trigger_state equ 0x1e23a
 

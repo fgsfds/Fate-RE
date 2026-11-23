@@ -3947,6 +3947,11 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
     suffix = LEAF_CONTEXT_SUFFIXES.get(public_name, b'')
     if suffix and not code.endswith(suffix):
         raise ValueError('Unlinked compiler context suffix differs')
+    # DX is already 0..15 and MOVSX EBX,DX already extended the index.
+    # The second, idempotent extension remains unlinked and must stay guarded.
+    if (public_name == 'encounter_spawn_loop_context_'
+            and code[0x161:0x164] != bytes.fromhex('0fbfdb')):
+        raise ValueError('Unlinked spawn index extension differs')
     context_fixups = LEAF_CONTEXT_FIXUPS.get(public_name)
     if context_fixups is not None:
         observed = [f for f in fixups if f.segment == seg and start <= f.offset < end]
@@ -4596,6 +4601,30 @@ FUNCTION_ADDRESSES['encounter_spawn_context_'] = 0x1df2e
 LEAF_SECTION_BRANCHES['encounter_spawn_context_'] = (1260, 1263, {
     0x36: (bytes.fromhex('0f84'), 0x277, 0x282),
     0x127: (bytes.fromhex('0f8e'), 0x277, 0x282),
+})
+
+LEAVES['encounter_loop_one_'] = (0x43670, 5)
+LEAF_CODE_SLICES['encounter_loop_one_'] = ('encounter_spawn_loop_context_', 0x141, 0x146, 1266)
+LEAVES['encounter_loop_start_'] = (0x4367a, 12)
+LEAF_CODE_SLICES['encounter_loop_start_'] = ('encounter_spawn_loop_context_', 0x146, 0x152, 1266)
+LEAVES['encounter_loop_position_'] = (0x43686, 15)
+LEAF_CODE_SLICES['encounter_loop_position_'] = ('encounter_spawn_loop_context_', 0x152, 0x161, 1266)
+LEAVES['encounter_loop_coordinates_'] = (0x43695, 21)
+LEAF_CODE_SLICES['encounter_loop_coordinates_'] = ('encounter_spawn_loop_context_', 0x164, 0x179, 1266)
+LEAVES['encounter_loop_store_y_'] = (0x436aa, 7)
+LEAF_CODE_SLICES['encounter_loop_store_y_'] = ('encounter_spawn_loop_context_', 0x17b, 0x182, 1266)
+LEAVES['encounter_loop_y_argument_'] = (0x436b1, 2)
+LEAF_CODE_SLICES['encounter_loop_y_argument_'] = ('encounter_spawn_loop_context_', 0x179, 0x17b, 1266)
+LEAVES['encounter_loop_spawn_'] = (0x436b3, 52)
+LEAF_CODE_SLICES['encounter_loop_spawn_'] = ('encounter_spawn_loop_context_', 0x182, 0x1b6, 1266)
+LEAVES['encounter_loop_guard_'] = (0x43799, 23)
+LEAF_CODE_SLICES['encounter_loop_guard_'] = ('encounter_spawn_loop_context_', 0x266, 0x27d, 1266)
+LEAF_CONTEXT_LITERALS['encounter_spawn_loop_context_'] = LEAF_CONTEXT_LITERALS['encounter_latch_context_']
+LEAF_CONTEXT_SUFFIXES['encounter_spawn_loop_context_'] = LEAF_CONTEXT_SUFFIXES['encounter_latch_context_']
+FUNCTION_ADDRESSES['encounter_spawn_loop_context_'] = 0x1df2e
+LEAF_SECTION_BRANCHES['encounter_spawn_loop_context_'] = (1266, 1263, {
+    0x14d: (bytes.fromhex('e9'), 0x266, 0x26b),
+    0x277: (bytes.fromhex('0f8e'), 0x152, 0x158),
 })
 
 LEAVES['encounter_reset_state_'] = (0x43883, 22)

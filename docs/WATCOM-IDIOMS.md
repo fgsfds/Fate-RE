@@ -235,3 +235,13 @@ EAX/EBX/ECX/EDX clobbers. A two-byte compiler-generated EDI clear can be selecte
 separately when Watcom schedules it before the first sound call. Check that
 intervening instructions do not consume the value or its flags, and compare
 natural versus linked order with poisoned caller-clobbered registers.
+
+
+The encounter position context initializes all bytes of a 32-bit unsigned union,
+then constrains its byte fields to reproduce DH/AH clearing and DL masking.
+After MOVSX EBX,DX, the masked index is already 0..15. A second MOVSX EBX,BX
+is idempotent and flag-neutral; its exact bytes are guarded even though that
+private instruction stays unlinked. The natural-order fixture retains it and
+compares the frame, register handoff, and resulting sprite fields. A getter for
+the legacy EBP height is valid only after the retained initializer on every
+reaching path, including loop backedges that preserve EBP through callees.

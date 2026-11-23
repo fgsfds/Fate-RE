@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1272,
-  "unique_code_bytes": 181177,
-  "le_pointers": 9970,
+  "routines": 1280,
+  "unique_code_bytes": 181314,
+  "le_pointers": 9971,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1078,6 +1078,86 @@
       "loaded_address": "0x1e002",
       "bytes": 110,
       "le_pointers": 8
+    },
+    {
+      "symbol": "encounter_loop_one_",
+      "object": "encloop.obj",
+      "object_sha256": "b9999a519e14f1becada0acf249346452cf8c2893c988ae81eeb1640ef2d2fb1",
+      "sha256": "173c093d57da014e0a94224d45afe0c3acd2d81942e5370fca1559cbeeece74c",
+      "raw_offset": "0x43670",
+      "loaded_address": "0x1e070",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "encounter_loop_start_",
+      "object": "encloop.obj",
+      "object_sha256": "b9999a519e14f1becada0acf249346452cf8c2893c988ae81eeb1640ef2d2fb1",
+      "sha256": "e7a10b73fe5c0f79c9398c854d75dff9e1558d70cee38f9d83ab6786e1c66bf8",
+      "raw_offset": "0x4367a",
+      "loaded_address": "0x1e07a",
+      "bytes": 12,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "encounter_loop_position_",
+      "object": "encloop.obj",
+      "object_sha256": "b9999a519e14f1becada0acf249346452cf8c2893c988ae81eeb1640ef2d2fb1",
+      "sha256": "d33e7b6dcdd07c50ef6f1aef66143c1908bff3bb544efaebc3cf7c8c0c5aeed7",
+      "raw_offset": "0x43686",
+      "loaded_address": "0x1e086",
+      "bytes": 15,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "encounter_loop_coordinates_",
+      "object": "encloop.obj",
+      "object_sha256": "b9999a519e14f1becada0acf249346452cf8c2893c988ae81eeb1640ef2d2fb1",
+      "sha256": "7454566f803d9d56500c25b07cfd22a4482ec7347c0997d4287ba3fa7ec7dcbe",
+      "raw_offset": "0x43695",
+      "loaded_address": "0x1e095",
+      "bytes": 21,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "encounter_loop_store_y_",
+      "object": "encloop.obj",
+      "object_sha256": "b9999a519e14f1becada0acf249346452cf8c2893c988ae81eeb1640ef2d2fb1",
+      "sha256": "5bf112ad82fe4c2d6c1ad0f661b2558f1c525662bdf3afae2ff8421150dc9d3a",
+      "raw_offset": "0x436aa",
+      "loaded_address": "0x1e0aa",
+      "bytes": 7,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "encounter_loop_y_argument_",
+      "object": "encloop.obj",
+      "object_sha256": "b9999a519e14f1becada0acf249346452cf8c2893c988ae81eeb1640ef2d2fb1",
+      "sha256": "253aa00c2dbbb117d146347fbacae9ee27e47b32bcdef68e72f244258330c351",
+      "raw_offset": "0x436b1",
+      "loaded_address": "0x1e0b1",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "encounter_loop_spawn_",
+      "object": "encloop.obj",
+      "object_sha256": "b9999a519e14f1becada0acf249346452cf8c2893c988ae81eeb1640ef2d2fb1",
+      "sha256": "692ce673a1cfcf8cfa1819e6ffc5e81e8578ac9171ae0182bd3c75f98d9a36ad",
+      "raw_offset": "0x436b3",
+      "loaded_address": "0x1e0b3",
+      "bytes": 52,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "encounter_loop_guard_",
+      "object": "encloop.obj",
+      "object_sha256": "b9999a519e14f1becada0acf249346452cf8c2893c988ae81eeb1640ef2d2fb1",
+      "sha256": "e090e58dd05c5958888d517628a39bb2aa35cb23ce78b09ab7f99cdbd148b177",
+      "raw_offset": "0x43799",
+      "loaded_address": "0x1e199",
+      "bytes": 23,
+      "le_pointers": 1
     },
     {
       "symbol": "encounter_latch_",

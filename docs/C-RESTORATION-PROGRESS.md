@@ -1,23 +1,23 @@
 # Exact C restoration progress
 
-The current saved attribution audit covers all 414,639 CODE bytes and includes 547 compiler units. Saved full validation passed 398 tests and 129 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
+The current saved attribution audit covers all 414,639 CODE bytes and includes 548 compiler units. Saved full validation passed 398 tests and 130 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 155,459 | 37.49% |
+| Compiler-generated instructions | 155,596 | 37.53% |
 | Inline assembly instructions in C objects | 24,311 | 5.86% |
-| Standalone assembly | 233,462 | 56.30% |
+| Standalone assembly | 233,325 | 56.27% |
 | Unattributed instructions and non-routine tables | 1,407 | 0.34% |
 
-The unattributed category contains 1,038 instruction bytes in 22 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 257,773 bytes (62.17%). C-object inventory covers 181,177 bytes (43.70%) and 1,272 C routine spans; the assembly inventory has 486 spans.
+The unattributed category contains 1,038 instruction bytes in 22 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 257,636 bytes (62.14%). C-object inventory covers 181,314 bytes (43.73%) and 1,280 C routine spans; the assembly inventory has 487 spans.
 
 The accepted executable is 741,347 bytes, SHA-256 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.
 
 `update_level_sector_puzzle_` is restored in readable C: 932 bytes and 59 LE sites, with no inline instructions. One C translation unit compiles twice into three selected phases (410/64/458 bytes); five existing branch edges change displacement only. Neither full compiler public matches by itself. Its differential fixture passes 128 cases and rejects both activation-tag and exit-destination code mutations.
 
-The encounter links 941 compiler-generated body bytes and 56 LE sites from four private contexts of `encounter_exit.c` and a standalone reset, with no inline assembly. The exit phase contributes 261 bytes, the latch phases 138, frame operations 56, the second actor update 114, actor decisions 73, and the reset 22. The new trigger/sector/clock phase contributes 277 bytes and 15 LE sites. Four selected slices retain both sound calls and the original placement of the EDI clear; the pinned sound callee preserves ESI/EDI/EBP. Its oracle passes 432 model cases, compares natural compiler order with linked order for all cases, and rejects tag, sound-ID, and sector-tag mutations. Two branch edges into the tile latch change displacement only.
+The encounter links 1,078 compiler-generated body bytes and 57 LE sites from five private contexts of `encounter_exit.c` and a standalone reset, with no inline assembly. The exit phase contributes 261 bytes, the latch phases 138, frame operations 56, the second actor update 114, actor decisions 73, and the reset 22. The new trigger/sector/clock phase contributes 277 bytes and 15 LE sites. Four selected slices retain both sound calls and the original placement of the EDI clear; the pinned sound callee preserves ESI/EDI/EBP. Its oracle passes 432 model cases, compares natural compiler order with linked order for all cases, and rejects tag, sound-ID, and sector-tag mutations. Two branch edges into the tile latch change displacement only. The new loop context adds 137 bytes and one LE site for setup, position selection, coordinate/sector handoff, sprite indexing, and the loop guard. Its oracle passes 259 model and natural-position-order cases, three code mutation controls, and a control for the omitted redundant MOVSX. The retained setup initializes EBP to the Z invariant before the getter reads it; the private duplicate index extension is guarded and excluded. Two further branch edges retain their widths after placement.
 
-The latch oracle passes 360 cases and two mutation controls, the actor oracle 320 cases and three controls, and the frame oracle four cases with typed-CODE-pointer and POP-register controls. The original 184-byte frame and six saves remain. PUSH/POP EBP retain two assembly instructions; C supplies the surrounding frame setup, release, and register restoration. Remaining encounter assembly is 320 spawn-loop bytes, those two EBP bytes, and 160 table bytes. Private C publics are 1,225, 1,249, 1,249, and 1,260 bytes, each preceded by a guarded 160-byte literal prefix. Only selected slices link, and the private prefixes receive no C credit.
+The latch oracle passes 360 cases and two mutation controls, the actor oracle 320 cases and three controls, and the frame oracle four cases with typed-CODE-pointer and POP-register controls. The original 184-byte frame and six saves remain. PUSH/POP EBP retain two assembly instructions; C supplies the surrounding frame setup, release, and register restoration. Remaining encounter assembly is 178 sprite-attribute bytes, the five-byte EBP height initializer, those two EBP save/restore bytes, and 160 table bytes. Private C publics are 1,225, 1,249, 1,249, 1,260, and 1,266 bytes, each preceded by a guarded 160-byte literal prefix. Only selected slices link, and the private prefixes receive no C credit.
 
 Video-mode setup links 671 bytes and 56 LE sites from C contexts. The 129-byte display reset contains 121 compiler-generated bytes and eight bytes from four inline bulk clears. The palette lookup loop adds 19 compiler-generated bytes and one LE site, with EBX preserved by empty ABI identities. Its three guarded slot-range cases and two mutation controls pass. The planar backend geometry adds 63 compiler-generated bytes and five LE sites, with eight cases checking page counts, chain flags, output registers, and the zero flag consumed by the retained branch. Two geometry mutation controls pass. Six framebuffer allocation phases add 208 compiler-generated bytes and 15 LE sites, including shared error handling and the direct VGA framebuffer assignment. Fourteen allocation cases and two mutation controls check all backend modes and allocation failures. Ten checked compiler branch edges retain their original opcode widths after placement. The padded-width entry and shared finish/return add 15 compiler-generated bytes and one LE site. Two return cases and a POP-register mutation control check the saved registers and stack cleanup. The original switch table, stereo state stores, and EDI/EBP saves stay in assembly. The thirty-five-case fixture checks both horizon allocation failures, the palette handoff, reset buffer guards, and backend selection state.
 
@@ -35,11 +35,12 @@ The receiver has 916 native C bytes, 0 retained ASM bytes, and 65 LE sites, with
 
 The saved full validation and audit artifacts verify the pinned image:
 
-- Full validation and 129 fixtures: `work/palette-loop-check/validation.json`.
+- Full validation and 130 fixtures: `work/palette-loop-check/validation.json`.
 - Encounter frame behavior: `work/encounter-frame-build/encounter-frame-behavior.json`.
 - Video initialization handoff: `work/setmode-display-handoff.json`.
-- Attribution audit: `work/encounter-spawn-audit.json`.
+- Attribution audit: `work/encounter-loop-audit.json`.
 - Unit test log: `work/palette-loop-check/logs/unit-tests.log`.
+- Encounter loop setup and position phase: `work/encounter-loop-build/behavior.json`.
 - Encounter trigger/sector/clock phase: `work/encounter-spawn-build/behavior.json`.
 - Encounter actor decisions: `work/encounter-reset-probe/behavior.json`.
 - Encounter latch behavior: `work/encounter-latch-build/encounter-latch-behavior.json`.

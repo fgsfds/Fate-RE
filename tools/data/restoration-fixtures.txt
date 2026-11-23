@@ -131,3 +131,4 @@ check_capture_header --exe {exe} --output {build}/capture-header-behavior.json |
 check_setgamemode_init --exe {exe} --output {build}/setgamemode-init-behavior.json | setinit setdisp plook
 check_encounter_actor --exe {exe} --output {build}/encounter-actor-behavior.json | encact encreset
 check_encounter_spawn --exe {exe} --build {build} --output {build}/encounter-spawn-behavior.json | encspawn
+check_encounter_spawn_loop --exe {exe} --build {build} --output {build}/encounter-spawn-loop-behavior.json | encloop

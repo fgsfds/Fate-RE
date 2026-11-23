@@ -849,15 +849,18 @@ and EBP constant lifetimes without an EBP auxiliary. Production state
 blocks remain assembly. Scratch: `work/stereo-state-probe/register_lifetimes.c`.
 
 
-### Encounter spawn-loop preparation: invariant Z register
+### Encounter sprite attributes: union carrier and height setup
 
-With Watcom 10.5 `/4r /s /or /bt=dos /dENCOUNTER_SPAWN_CONTEXT=1`,
-the trigger/sector/clock phase now links 277 exact compiler bytes and 15
-LE sites. The first remaining mismatch is `0x1e070`: C stores loop count 1
-directly to `[esp+0xb4]`, while the reference loads EAX=1 and EBP=-50170
-before storing the count. The reference keeps EBP as the invariant spawn Z
-through the loop; the private compiler context stores that constant inside
-the body. Next expose the invariant's lifetime across the loop without an
-EBP-bound auxiliary, whose E1122 blocker is already known. Research variants
-and first mismatches remain in `work/spawn-research/proposals.md` and
-`work/spawn-v2-build/encsp3.obj`.
+Watcom 10.5 `/4r /s /or /bt=dos /dENCOUNTER_SPAWN_CONTEXT=1
+/dENCOUNTER_SPAWN_LOOP_CONTEXT=1` supplies 137 exact bytes for loop setup,
+position selection and handoff, sprite indexing, and the loop guard. An EBP
+getter reproduces the Z store after the retained `mov ebp,-50170`; that
+five-byte initializer remains assembly because an EBP input auxiliary is
+rejected with E1122. The first attribute mismatch, aligned at `0x1e0e7`, is
+at +7: the initialized union carrier copies EAX into EBX before XOR DH,AH.
+It later uses LEA through EBX instead of ADD EDX,0x350. A full-width index
+and in-place addition variant removes a redundant index extension but moves
+the ADD into EBX and changes the loop-guard allocation. Next retain EDX as
+the union carrier through both byte updates, without another result-only
+EDX constraint. Sources and logs: `work/spawn-loop-research/` and
+`work/spawn-loop-v1/`, `work/spawn-loop-v2/`, `work/spawn-loop-v3/`.

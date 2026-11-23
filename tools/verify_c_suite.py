@@ -968,6 +968,14 @@ OBJECT_NAMES['encounter_spawn_checks_'] = 'encspawn'
 OBJECT_NAMES['encounter_spawn_sound_'] = 'encspawn'
 OBJECT_NAMES['encounter_spawn_zero_di_'] = 'encspawn'
 OBJECT_NAMES['encounter_spawn_sectors_clock_'] = 'encspawn'
+OBJECT_NAMES['encounter_loop_one_'] = 'encloop'
+OBJECT_NAMES['encounter_loop_start_'] = 'encloop'
+OBJECT_NAMES['encounter_loop_position_'] = 'encloop'
+OBJECT_NAMES['encounter_loop_coordinates_'] = 'encloop'
+OBJECT_NAMES['encounter_loop_store_y_'] = 'encloop'
+OBJECT_NAMES['encounter_loop_y_argument_'] = 'encloop'
+OBJECT_NAMES['encounter_loop_spawn_'] = 'encloop'
+OBJECT_NAMES['encounter_loop_guard_'] = 'encloop'
 OBJECT_NAMES['encounter_reset_state_'] = 'encreset'
 OBJECT_NAMES['encounter_actor_state_'] = 'encact'
 OBJECT_NAMES['setgamemode_display_reset_'] = 'setdisp'
@@ -1523,6 +1531,8 @@ def verify_compiler_groups(exe, directory, names=None):
                                ('puzact', 929, 'puzzle_activation_context_')):
         if selected(name):
             verify_group_layout((directory/(name+'.obj')).read_bytes(), size, [(public, 0)])
+    if selected('encloop'):
+        verify_group_layout((directory/'encloop.obj').read_bytes(), 1426, [('encounter_spawn_loop_context_', 160)])
     if selected('encspawn'):
         verify_group_layout((directory/'encspawn.obj').read_bytes(), 1420, [('encounter_spawn_context_', 160)])
     if selected('encreset'):
