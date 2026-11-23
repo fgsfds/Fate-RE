@@ -129,3 +129,4 @@ check_encounter_latch --exe {exe} --build {build} --output {build}/encounter-lat
 check_encounter_frame --exe {exe} --build {build} --output {build}/encounter-frame-behavior.json | encexit
 check_capture_header --exe {exe} --output {build}/capture-header-behavior.json | pcxhdr capopen capclose pcxstep
 check_setgamemode_init --exe {exe} --output {build}/setgamemode-init-behavior.json | setinit setdisp plook
+check_encounter_actor --exe {exe} --output {build}/encounter-actor-behavior.json | encact

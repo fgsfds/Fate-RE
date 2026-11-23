@@ -1,6 +1,11 @@
-/* Board-four encounter algorithm compiled in two private contexts.
+#ifdef ENCOUNTER_ACTOR_CONTEXT
+#define ENCOUNTER_LATCH_CONTEXT 1
+#define encounter_latch_context encounter_actor_context
+#endif
+/* Board-four encounter algorithm compiled in three private contexts.
  * The exit context supplies the exit phase and frame/initializer operations;
- * the latch context supplies 138 bytes. Only verified slices are linked.
+ * the latch context supplies the latch and second-actor phases; the actor
+ * context supplies the proximity and kind checks. Only verified slices are linked.
  * Original EBP save/restore slots preserve the six-save legacy frame.
  * Literal prefixes and other private code receive no C credit.
  * Empty identities emit no instructions. The latch tag store uses independent
@@ -236,23 +241,38 @@ check_second_trigger_tile:
     {
         short state = encounter_actor_state_si(second_trigger_state);
         int kind, actor_sprite;
+#ifdef ENCOUNTER_ACTOR_CONTEXT
+        int near_union;
+#endif
 
         if (state != 0)
             goto update_second_actor;
         near_first = (short)near_encounter_position(0x2a00, 0x1000);
         near_second = (short)near_encounter_position(0x2a00, 0x2000);
+#ifdef ENCOUNTER_ACTOR_CONTEXT
+        near_union = encounter_actor_test_edx(near_first) | near_second;
+        if (near_union != 0)
+#else
         if (encounter_actor_test_edx(near_first | near_second) != 0)
+#endif
             goto reset_second_actor;
         kind = exit_int_eax(second_actor_kind);
         if (kind != 4 && kind != 5)
             goto check_exit_scan;
 
-reset_second_actor:
+reset_second_actor: {
+#ifdef ENCOUNTER_ACTOR_CONTEXT
+        encounter_actor_test_edx(near_union);
+#endif
         second_actor_kind = encounter_actor_kind_dh(0);
         second_trigger_state = 1;
         goto check_exit_scan;
+    }
 
 update_second_actor:
+#ifdef ENCOUNTER_ACTOR_CONTEXT
+        state = second_trigger_state;
+#endif
         if (exit_int_eax(state) != 1)
             goto check_exit_scan;
         update_actor_common(0x3f);

@@ -239,30 +239,8 @@ section .spawn align=1 vstart=0x1df5b follows=.save_ebp
 
 ; Complete tile latch is linked from the native C context.
 .check_first_trigger_sprite equ 0x1e1b0
-section .actor_state align=1 vstart=0x1e23a follows=.spawn
-
-.check_second_trigger_state:
-    mov si, [second_trigger_state]
-    test si, si
-    jnz short .update_second_actor
-    mov edx, 0x1000
-    mov eax, 0x2a00
-    call check_encounter_condition
-    mov edx, 0x2000
-    mov ebx, eax
-    mov eax, 0x2a00
-    call check_encounter_condition
-    movsx edx, bx
-    cwde
-    or edx, eax
-    jnz short .reset_second_actor_kind
-    xor eax, eax
-    mov al, [second_actor_kind]
-    cmp eax, 0x4
-    jz short .reset_second_actor_kind
-    cmp eax, 0x5
-    jnz near .check_exit_scan
-
+section .actor_state align=1 vstart=0x1e283 follows=.spawn
+.check_second_trigger_state equ 0x1e23a
 .reset_second_actor_kind:
     xor dh, dh
     mov [second_actor_kind], dh
