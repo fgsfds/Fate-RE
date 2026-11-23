@@ -1531,6 +1531,9 @@ def verify_compiler_groups(exe, directory, names=None):
                                ('puzact', 929, 'puzzle_activation_context_')):
         if selected(name):
             verify_group_layout((directory/(name+'.obj')).read_bytes(), size, [(public, 0)])
+    if selected('ripctl'):
+        verify_group_layout((directory/'ripctl.obj').read_bytes(), 56,
+                            [('ripple_spawn_limit_', 0), ('ripple_mask_row_', 23)])
     if selected('encloop'):
         verify_group_layout((directory/'encloop.obj').read_bytes(), 1426, [('encounter_spawn_loop_context_', 160)])
     if selected('encspawn'):
@@ -1587,6 +1590,9 @@ def verify_compiler_groups(exe, directory, names=None):
 for _name in ('ripple_sum_first_', 'ripple_sum_second_',
               'ripple_sum_third_', 'ripple_sum_fourth_'):
     OBJECT_NAMES[_name] = 'ripsum'
+
+OBJECT_NAMES['ripple_spawn_limit_phase_'] = 'ripctl'
+OBJECT_NAMES['ripple_mask_row_phase_'] = 'ripctl'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

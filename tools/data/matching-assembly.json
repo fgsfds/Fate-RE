@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 491,
-  "unique_code_bytes": 233173,
-  "le_pointers": 12578,
+  "routines": 493,
+  "unique_code_bytes": 233119,
+  "le_pointers": 12577,
   "non_routine_code_spans": [
     {
       "symbol": "setgamemode_save_tail",
@@ -7630,16 +7630,40 @@
       "le_pointers": 2
     },
     {
-      "symbol": "animate_ripple_prefix",
+      "symbol": "animate_ripple_entry",
       "source": "src/fate/animate_ripple_texture.asm",
       "binary": "animate_ripple_texture.bin",
-      "sha256": "f49c970df2f4ed1672d024e110272e8ff211920ef1c15628e90d911654cc9d87",
-      "bytes": 601,
+      "sha256": "3d8153c97ba8d2b52ba00b11f0b4e5f110e665fb07f980c545ecb42813856e16",
+      "bytes": 11,
       "raw_offset": "0x54157",
       "loaded_address": "0x2eb57",
       "public_entry": "0x2eb57",
       "binary_offset": 0,
-      "le_pointers": 36
+      "le_pointers": 0
+    },
+    {
+      "symbol": "animate_ripple_control",
+      "source": "src/fate/animate_ripple_texture.asm",
+      "binary": "animate_ripple_texture.bin",
+      "sha256": "983cee3d467833965c46b4ea7f509138042a9118e564d57b3bb672d440229a2b",
+      "bytes": 336,
+      "raw_offset": "0x54178",
+      "loaded_address": "0x2eb78",
+      "public_entry": "0x2eb78",
+      "binary_offset": 11,
+      "le_pointers": 26
+    },
+    {
+      "symbol": "animate_ripple_border",
+      "source": "src/fate/animate_ripple_texture.asm",
+      "binary": "animate_ripple_texture.bin",
+      "sha256": "52e2dd4cff093c39d41b9c68325eb65fc44ad471f7c28ca8af7bd83aaae36c7a",
+      "bytes": 200,
+      "raw_offset": "0x542e8",
+      "loaded_address": "0x2ece8",
+      "public_entry": "0x2ece8",
+      "binary_offset": 347,
+      "le_pointers": 9
     },
     {
       "symbol": "animate_ripple_second_setup",
@@ -7650,7 +7674,7 @@
       "raw_offset": "0x543d6",
       "loaded_address": "0x2edd6",
       "public_entry": "0x2edd6",
-      "binary_offset": 601,
+      "binary_offset": 547,
       "le_pointers": 0
     },
     {
@@ -7662,7 +7686,7 @@
       "raw_offset": "0x54401",
       "loaded_address": "0x2ee01",
       "public_entry": "0x2ee01",
-      "binary_offset": 606,
+      "binary_offset": 552,
       "le_pointers": 0
     },
     {
@@ -7674,7 +7698,7 @@
       "raw_offset": "0x5443d",
       "loaded_address": "0x2ee3d",
       "public_entry": "0x2ee3d",
-      "binary_offset": 628,
+      "binary_offset": 574,
       "le_pointers": 0
     },
     {
@@ -7686,7 +7710,7 @@
       "raw_offset": "0x54470",
       "loaded_address": "0x2ee70",
       "public_entry": "0x2ee70",
-      "binary_offset": 641,
+      "binary_offset": 587,
       "le_pointers": 1
     }
   ]

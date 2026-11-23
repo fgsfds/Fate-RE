@@ -29,13 +29,8 @@ animate_ripple_texture:
     push ebp
     sub esp, 0x14
     mov edx, eax
-    mov eax, 0x20
-    sub eax, [ripple_count]
-    dec eax
-    cmp eax, 0x3
-    jl short .branch_2eb78
-    mov eax, 0x3
-
+; C computes and clamps the creation count in EAX.
+section .control align=1 vstart=0x2eb78 follows=.text
 .branch_2eb78:
     mov esi, 0x1
     mov [esp], eax
@@ -145,23 +140,9 @@ animate_ripple_texture:
     xor ebp, ebp
     jmp short .branch_2ece9
 
-.branch_2ecc8:
-    mov ecx, 0x20
-    jmp short .branch_2ecdf
-
-.branch_2eccf:
-    mov edi, [esi]
-    dec ecx
-    and edi, strict dword 0x1f1f1f1f
-    add esi, 0x4
-    mov [eax], edi
-    mov eax, ebx
-
-.branch_2ecdf:
-    lea ebx, [eax + 0x4]
-    test ecx, ecx
-    jg short .branch_2eccf
-    mov eax, ebx
+.branch_2ecc8 equ 0x2ecc8
+; C copies and masks one 128-byte row, returning the next row in EAX.
+section .after_mask_row align=1 vstart=0x2ece8 follows=.control
     inc ebp
 
 .branch_2ece9:
@@ -236,7 +217,7 @@ animate_ripple_texture:
 .branch_2edae:
     mov ebx, ecx
 ; Compiler-generated C supplies this seven-neighbor sum.
-section .after_sum1 align=1 vstart=0x2edd6 follows=.text
+section .after_sum1 align=1 vstart=0x2edd6 follows=.after_mask_row
     lea ebx, [ecx + 0x1]
     mov edi, eax
 ; Compiler-generated C supplies this seven-neighbor sum.

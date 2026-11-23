@@ -1,28 +1,31 @@
 # Exact C restoration progress
 
-The current saved attribution audit covers all 414,639 CODE bytes and includes 549 compiler units. Saved full validation passed 398 tests and 131 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
+The current saved attribution audit covers all 414,639 CODE bytes and includes 550 compiler units. Saved full validation passed 398 tests and 131 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 155,748 | 37.56% |
+| Compiler-generated instructions | 155,802 | 37.58% |
 | Inline assembly instructions in C objects | 24,311 | 5.86% |
-| Standalone assembly | 233,173 | 56.24% |
+| Standalone assembly | 233,119 | 56.22% |
 | Unattributed instructions and non-routine tables | 1,407 | 0.34% |
 
-The unattributed category contains 1,038 instruction bytes in 22 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 257,484 bytes (62.10%). C-object inventory covers 181,466 bytes (43.76%) and 1,284 C routine spans; the assembly inventory has 491 spans.
+The unattributed category contains 1,038 instruction bytes in 22 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 257,430 bytes (62.09%). C-object inventory covers 181,520 bytes (43.78%) and 1,286 C routine spans; the assembly inventory has 493 spans.
 
 The accepted executable is 741,347 bytes, SHA-256 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.
 
-Ripple texture filtering now links 152 compiler-generated image bytes at four
-seven-neighbor stencil sites, with zero LE sites and no inline instructions.
-They reuse one 38-byte compiler body; its one-byte RET remains unlinked and
-guarded. The parent routine retains 703 assembly bytes and all 37 LE sites.
+Ripple animation now links 206 compiler-generated image bytes: the
+22-byte creation-count clamp, the 32-byte masked row copy, and 152 bytes
+at four seven-neighbor stencil sites. The sums reuse one 38-byte compiler
+body; together the three distinct compiler bodies total 92 bytes.
+Three compiler RETs remain unlinked and guarded. The C phases contain one
+LE site and no inline instructions; 649 assembly bytes and 36 LE sites remain.
 The independent toroidal oracle passes 32 synthetic full-routine cases,
-including particle creation/removal, every bordered-buffer byte and padding
-guard, counter wraparound, and preserved registers. Another 68 isolated sum
-cases check full-byte inputs and poisoned upper registers. Three machine
-mutations are rejected. Full-function C candidates remain unlinked because
-register allocation and packed-output scheduling differ from the reference.
+including creation/removal, the entire bordered buffer and padding guards,
+counter wraparound, and preserved registers. Isolated fixtures add 33 count
+cases, 16 masked-row cases across all pointer alignments, and 68 sum cases
+with poisoned upper registers. Six machine mutations are rejected. The row
+checks the destination +132 and source +128 pointer handoffs as well as
+every live output register and the untouched source/padding bytes.
 
 `update_level_sector_puzzle_` is restored in readable C: 932 bytes and 59 LE sites, with no inline instructions. One C translation unit compiles twice into three selected phases (410/64/458 bytes); five existing branch edges change displacement only. Neither full compiler public matches by itself. Its differential fixture passes 128 cases and rejects both activation-tag and exit-destination code mutations.
 
@@ -50,7 +53,7 @@ The saved full validation and audit artifacts verify the pinned image:
 - Encounter frame behavior: `work/encounter-frame-build/encounter-frame-behavior.json`.
 - Video initialization handoff: `work/setmode-display-handoff.json`.
 - Ripple parent and C sum behavior: `work/palette-loop-check/ripple-texture-behavior.json`.
-- Attribution audit: `work/ripple-sum-audit.json`.
+- Attribution audit: `work/ripple-control-audit.json`.
 - Unit test log: `work/palette-loop-check/logs/unit-tests.log`.
 - Encounter loop setup and position phase: `work/encounter-loop-build/behavior.json`.
 - Encounter trigger/sector/clock phase: `work/encounter-spawn-build/behavior.json`.

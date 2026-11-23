@@ -132,4 +132,4 @@ check_setgamemode_init --exe {exe} --output {build}/setgamemode-init-behavior.js
 check_encounter_actor --exe {exe} --output {build}/encounter-actor-behavior.json | encact encreset
 check_encounter_spawn --exe {exe} --build {build} --output {build}/encounter-spawn-behavior.json | encspawn
 check_encounter_spawn_loop --exe {exe} --build {build} --output {build}/encounter-spawn-loop-behavior.json | encloop
-check_ripple_texture --exe {exe} --build {build} --output {build}/ripple-texture-behavior.json | ripsum
+check_ripple_texture --exe {exe} --build {build} --output {build}/ripple-texture-behavior.json | ripsum ripctl

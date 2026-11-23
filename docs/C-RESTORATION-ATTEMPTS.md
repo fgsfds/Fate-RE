@@ -872,15 +872,17 @@ availability rather than another union spelling. Sources and reports:
 ### Ripple animation: pixel carrier and packed output lifetimes
 
 Watcom 10.5 `/4r /s /or /bt=dos`: the full C reconstruction passes 32
-independent-oracle cases, including the entire 17,160-byte bordered buffer
-and preserved registers. The closest variant is 865 bytes versus 855 and
-restores the original 20-byte frame. Its first meaningful mismatch at
-`0x2eb62` copies the texture pointer into EBP; the subsequent countdown
-steals EDX, changing radial and border loop allocation. A third variant's
-AL/DL constraints recover the seven-neighbor sum, now integrated separately,
-but broaden the frame and spill the output row counter. Next split texture
-and countdown lifetimes at the creation/radial boundary while keeping the
-pixel carrier in EDX; retain the accepted leaf for all four stencil sums.
-Sources, hashes and comparisons: `work/ripple-research/semantic-notes.md`,
-`work/ripple-v1/` through `work/ripple-v3/`. The remaining 703 bytes and
-all 37 LE sites stay assembly.
+independent-oracle cases; the closest full candidate is 865 bytes versus
+855 with the original 20-byte frame. Isolating creation and radial updates
+produces 372- and 389-byte callable contexts, each passing 32 phase cases.
+The first keeps the frame but copies EDX pixels into EBP; binding competing
+values moves that copy to a stack spill and grows the effective frame to
+28 bytes. Neither complete control context matches. The count clamp,
+masked row copy and four stencil sums are integrated as ordinary C leaves;
+649 assembly bytes and 36 LE sites remain. Next isolate the creation loop's
+remaining-count lifetime across the second RNG call, keeping the existing
+ESI step and EDI next-count values distinct; do not repeat broad EDX
+reassertions, which preserve a redundant pixel copy. Frozen sources,
+hashes, first mismatches and phase evidence:
+`work/ripple-control-research/semantic-notes.md`,
+`work/ripple-v6/`, and `work/ripple-v9/`.

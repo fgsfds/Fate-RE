@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1284,
-  "unique_code_bytes": 181466,
-  "le_pointers": 9971,
+  "routines": 1286,
+  "unique_code_bytes": 181520,
+  "le_pointers": 9972,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1708,6 +1708,26 @@
       "loaded_address": "0x2eaa2",
       "bytes": 181,
       "le_pointers": 8
+    },
+    {
+      "symbol": "ripple_spawn_limit_phase_",
+      "object": "ripctl.obj",
+      "object_sha256": "7e3de68f99191ae2085323e1bc61b2f42117bbd26b79614db6dc642490e96b31",
+      "sha256": "1cacc07b08dff2d4a89124b7c8cf47f843b68d0b2535f4424096edd813ac9486",
+      "raw_offset": "0x54162",
+      "loaded_address": "0x2eb62",
+      "bytes": 22,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "ripple_mask_row_phase_",
+      "object": "ripctl.obj",
+      "object_sha256": "7e3de68f99191ae2085323e1bc61b2f42117bbd26b79614db6dc642490e96b31",
+      "sha256": "ec765f9ae17bd89bf0e07d661bde8b68526a785bfa314ac17d978a86c4655251",
+      "raw_offset": "0x542c8",
+      "loaded_address": "0x2ecc8",
+      "bytes": 32,
+      "le_pointers": 0
     },
     {
       "symbol": "ripple_sum_first_",

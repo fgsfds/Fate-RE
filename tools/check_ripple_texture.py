@@ -142,6 +142,46 @@ def check_leaf(body, samples):
     assert all(cpu.reg_read(reg) == 0xabc00000 + i for i, reg in enumerate(preserved))
 
 
+
+def check_control_leaf(code, kind, value, alignment=0):
+    cpu = Uc(UC_ARCH_X86, UC_MODE_32)
+    cpu.mem_map(0, 0x400000)
+    entry = 0x2eb62 if kind == 'limit' else 0x2ecc8
+    cpu.mem_write(entry, code + b'\xc3')
+    cpu.mem_write(STACK, struct.pack('<I', STOP) + b'\xa5' * 16)
+    cpu.reg_write(UC_X86_REG_ESP, STACK)
+    for i, reg in enumerate(REGS):
+        cpu.reg_write(reg, 0xabc00000 + i)
+    if kind == 'limit':
+        cpu.mem_write(DS + COUNT, struct.pack('<i', value))
+    else:
+        source, destination = 0x300000 + alignment, 0x310001 + alignment
+        pixels = bytes((i * value + value * 17) & 255 for i in range(128))
+        cpu.mem_write(source - 16, b'\xcc' * 16 + pixels + b'\xdd' * 16)
+        cpu.mem_write(destination - 16, b'\xa7' * 164)
+        cpu.reg_write(UC_X86_REG_EAX, destination)
+        cpu.reg_write(UC_X86_REG_ESI, source)
+    cpu.emu_start(entry, STOP, count=1000)
+    assert cpu.reg_read(UC_X86_REG_EIP) == STOP
+    assert cpu.reg_read(UC_X86_REG_ESP) == STACK + 4
+    assert cpu.mem_read(STACK + 4, 16) == b'\xa5' * 16
+    if kind == 'limit':
+        assert cpu.reg_read(UC_X86_REG_EAX) == min(3, 31 - value) & 0xffffffff
+        assert all(cpu.reg_read(reg) == 0xabc00000 + i for i, reg in enumerate(REGS))
+        assert cpu.mem_read(DS + COUNT, 4) == struct.pack('<i', value)
+    else:
+        assert cpu.reg_read(UC_X86_REG_EAX) == destination + 132
+        assert cpu.reg_read(UC_X86_REG_EBX) == destination + 132
+        assert cpu.reg_read(UC_X86_REG_ESI) == source + 128
+        assert cpu.reg_read(UC_X86_REG_ECX) == 0
+        assert cpu.reg_read(UC_X86_REG_EDI) == int.from_bytes(pixels[-4:], 'little') & 0x1f1f1f1f
+        assert cpu.reg_read(UC_X86_REG_EDX) == 0xabc00002
+        assert cpu.reg_read(UC_X86_REG_EBP) == 0xabc00005
+        assert cpu.mem_read(destination - 16, 164) == (
+            b'\xa7' * 16 + bytes(pixel & 31 for pixel in pixels) + b'\xa7' * 20)
+        assert cpu.mem_read(source - 16, 160) == b'\xcc' * 16 + pixels + b'\xdd' * 16
+
+
 def require_rejected(action):
     try:
         action()
@@ -173,6 +213,38 @@ def main():
         if code is not None:
             assert body == code
         code = body
+    controls = {}
+    obj_control = (args.build / 'ripctl.obj').read_bytes()
+    for symbol, kind in (('ripple_spawn_limit_phase_', 'limit'),
+                         ('ripple_mask_row_phase_', 'row')):
+        raw, size = LEAVES[symbol]
+        body, bindings = bind_leaf_details(obj_control, symbol, DATA_OFFSETS,
+                                           address=raw - 0x25600,
+                                           functions=FUNCTION_ADDRESSES)
+        assert body == executable[raw:raw + size]
+        verify_leaf_relocations(body, bindings, read_le_fixups(executable)['pointers'],
+                                raw - 0x25600)
+        relocated, _ = bind_leaf_details(
+            obj_control, symbol, {name: DS + off for name, off in DATA_OFFSETS.items()},
+            address=raw - 0x25600, functions=FUNCTION_ADDRESSES)
+        controls[kind] = relocated
+    for value in range(33):
+        check_control_leaf(controls['limit'], 'limit', value)
+    for value in (0, 1, 7, 255):
+        for alignment in range(4):
+            check_control_leaf(controls['row'], 'row', value, alignment)
+    altered = bytearray(controls['limit'])
+    assert altered[15] == 0x7c
+    altered[15] = 0x7f
+    require_rejected(lambda: check_control_leaf(bytes(altered), 'limit', 0))
+    altered = bytearray(controls['row'])
+    assert altered[12:16] == b'\x1f' * 4
+    altered[12] = 0x1e
+    require_rejected(lambda: check_control_leaf(bytes(altered), 'row', 1))
+    altered = bytearray(controls['row'])
+    assert altered[28] == 0x7f
+    altered[28] = 0x7e
+    require_rejected(lambda: check_control_leaf(bytes(altered), 'row', 1))
     for count in (0, 1, 4, 28, 29, 30, 31, 32):
         for seed in range(4):
             exercise(memory, count, seed)
@@ -192,9 +264,10 @@ def main():
     altered_image[0x2edb0 + 36:0x2edb0 + 38] = b'\x90\x90'
     require_rejected(lambda: exercise(bytes(altered_image), 32, 2))
     result = dict(status='PASS', parent_cases=32, leaf_cases=len(samples),
-                  mutation_controls=3, linked_c_bytes=152,
-                  unique_compiler_body_bytes=38, unlinked_return_bytes=1,
-                  le_sites=0)
+                  mutation_controls=6, spawn_limit_cases=33, masked_row_cases=16,
+                  linked_c_bytes=206,
+                  unique_compiler_body_bytes=92, unlinked_return_bytes=3,
+                  le_sites=1)
     if args.output:
         args.output.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
     print(json.dumps(result))

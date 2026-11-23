@@ -255,3 +255,11 @@ original sites: 152 linked image bytes, 38 distinct compiler body bytes,
 and no linked RET. The independent oracle checks seven neighbors (the
 lower-right sample is omitted), toroidal borders, and the original write
 to the final bottom-row padding byte.
+
+The ripple row helper returns the destination for the next row in EAX.
+A void helper lets Watcom discard the final MOV EAX,EBX, even though the
+retained outer loop consumes that handoff. The pointer return keeps all
+32 original body bytes, including internal short branches, without an
+inline instruction. Destination arithmetic uses a byte pointer into the
+entire assembly-owned raw bordered plane; packed word accesses cover the
+unaligned stores, and the source advances through exactly 32 packed words.

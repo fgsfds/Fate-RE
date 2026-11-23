@@ -4752,6 +4752,17 @@ for _name, _raw in (
 LEAF_CONTEXT_SUFFIXES['ripple_neighbor_sum_'] = b'\xc3'
 FUNCTION_ADDRESSES['ripple_neighbor_sum_'] = 0x2edb0
 
+LEAVES['ripple_spawn_limit_phase_'] = (0x54162, 22)
+LEAF_CODE_SLICES['ripple_spawn_limit_phase_'] = ('ripple_spawn_limit_', 0, 22, 23)
+LEAVES['ripple_mask_row_phase_'] = (0x542c8, 32)
+LEAF_CODE_SLICES['ripple_mask_row_phase_'] = ('ripple_mask_row_', 0, 32, 33)
+LEAF_CONTEXT_SUFFIXES['ripple_spawn_limit_'] = b'\xc3'
+LEAF_CONTEXT_SUFFIXES['ripple_mask_row_'] = b'\xc3'
+FUNCTION_ADDRESSES.update({'ripple_spawn_limit_': 0x2eb62, 'ripple_mask_row_': 0x2ecc8})
+LEAF_SECTION_BRANCHES['ripple_spawn_limit_'] = (23, 23, {15: (b'\x7c', 22, 22)})
+LEAF_SECTION_BRANCHES['ripple_mask_row_'] = (33, 33, {
+    5: (b'\xeb', 23, 23), 28: (b'\x7f', 7, 7)})
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)
