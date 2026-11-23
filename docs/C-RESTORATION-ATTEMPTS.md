@@ -281,14 +281,6 @@ operation. Next require a verified multiword multiplication idiom supported by
 10.5, while preserving the branch to the existing shared register restore.
 Evidence: `work/viewangle-next/NOTES.md`.
 
-### `setgamemode`: palette-loop allocation
-
-The standalone initializer now links before the original palette jump. The
-`/4r /s /or /bt=dos` full-context probe uses EBX where the remaining palette
-loop first clears ECX at `0x4b140`. The shared frame and backend dispatch stay
-in assembly. Next look for a source change that preserves EAX as the index and
-ECX as the stored zero. Scratch: `work/setgamemode-source/init00.txt`.
-
 ### `getangle`: keep the historical absolute-value primitive
 
 The source-backed retry used the pinned `ENGINE.C:2757-2766` and

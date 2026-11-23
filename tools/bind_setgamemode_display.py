@@ -111,9 +111,63 @@ def bind_backend_geometry(blob, address):
     return code[start:end], selected
 
 
+ALLOCATION_PHASES = {
+    'setgamemode_allocate_planar_': (0x203, 0x246, 0x4b232),
+    'setgamemode_allocate_padded_': (0x251, 0x26c, 0x4b27a),
+    'setgamemode_allocate_linear_': (0x278, 0x28d, 0x4b295),
+    'setgamemode_direct_frame_': (0x28d, 0x29c, 0x4b2aa),
+    'setgamemode_allocate_stereo_': (0x29c, 0x2c3, 0x4b2b9),
+    'setgamemode_allocate_stereo_double_': (0x304, 0x32b, 0x4b320),
+}
+ALLOCATION_BRANCHES = {
+    0x203: (b'\x0f\x85', 0x369, 0x4b386),
+    0x221: (b'\x75', 0x237, 0x4b266),
+    0x241: (b'\xe9', 0x369, 0x4b386),
+    0x263: (b'\x75', 0x237, 0x4b266),
+    0x26a: (b'\xeb', 0x228, 0x4b257),
+    0x284: (b'\x75', 0x237, 0x4b266),
+    0x28b: (b'\xeb', 0x228, 0x4b257),
+    0x297: (b'\xe9', 0x369, 0x4b386),
+    0x2ad: (b'\x75', 0x2c3, 0x4b2e0),
+    0x315: (b'\x75', 0x32b, 0x4b347),
+}
+
+
+def bind_allocation_phase(blob, symbol, address):
+    start, end, expected_address = ALLOCATION_PHASES[symbol]
+    if address != expected_address:
+        raise ValueError('Video allocation phase requires its original placement')
+    bind_display_reset(blob, ADDRESS)
+    code, data, pointers, calls = bind_switch_group(
+        blob, base=address - start, loaded=False, symbol=PUBLIC, prefix_size=PREFIX,
+        data_targets=DATA, call_targets=CALLS)
+    _, _, _, _, fixups = parsed_leaf_object(bytes(blob))
+    if any(f.offset < cut < f.offset + f.width for f in fixups for cut in (start, end)):
+        raise ValueError('Video allocation fixup crosses the selected slice')
+    if any(start <= site < end for site in pointers):
+        raise ValueError('Video allocation unexpectedly includes a CODE pointer')
+    code = bytearray(code)
+    for site, (opcode, target, placed) in ALLOCATION_BRANCHES.items():
+        if not start <= site < end:
+            continue
+        width = 4 if len(opcode) == 2 or opcode == b'\xe9' else 1
+        operand, next_instruction = site + len(opcode), site + len(opcode) + width
+        if (code[site:operand] != opcode or next_instruction > end
+                or next_instruction + int.from_bytes(code[operand:next_instruction],
+                                                       'little', signed=True) != target):
+            raise ValueError('Video allocation compiler branch differs')
+        code[operand:next_instruction] = (placed - (address + next_instruction - start)).to_bytes(
+            width, 'little', signed=True)
+    return bytes(code[start:end]), {site - start: value for site, value in data.items()
+                                   if start <= site < end}
+
+
 def verified_context_tables(blob, rows):
     phases = {ALIAS: (ADDRESS, SIZE, bind_display_reset),
               'setgamemode_backend_geometry_': (0x4b1f3, 63, bind_backend_geometry)}
+    for symbol, (start, end, address) in ALLOCATION_PHASES.items():
+        phases[symbol] = (address, end - start,
+                          lambda blob, address, symbol=symbol: bind_allocation_phase(blob, symbol, address))
     if len(rows) != len(phases) or {row['symbol'] for row in rows} != set(phases):
         raise ValueError('Display context attribution inventory differs')
     for row in rows:

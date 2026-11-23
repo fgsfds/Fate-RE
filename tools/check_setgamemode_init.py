@@ -187,6 +187,54 @@ def check_backend_geometry(memory, pixels, chain):
         raise AssertionError('Backend geometry zero flag differs')
 
 
+def check_backend_allocation(memory, mode, fail):
+    cpu = Uc(UC_ARCH_X86, UC_MODE_32)
+    cpu.mem_map(0, len(memory))
+    cpu.mem_write(0, memory)
+    width, height = 320, 480
+    allocation = 0 if fail else 0x301000
+    for offset, value in ((0x287e90, width), (0x287e8c, height), (0x286b74, 0x12345678)):
+        cpu.mem_write(DS + offset, struct.pack('<I', value))
+    cpu.mem_write(DS + 0x2891db, bytes((mode,)))
+    cpu.reg_write(UC_X86_REG_EAX, mode)
+    cpu.reg_write(UC_X86_REG_ESP, STACK)
+    requests, diagnostics = [], []
+    messages = {0: 0x1b08, 1: 0x1b31, 2: 0x1b5a, 6: 0x1b83, 7: 0x1bac}
+
+    def intercept(emu, address, size, data):
+        sp = emu.reg_read(UC_X86_REG_ESP)
+        if address == EXIT:
+            if emu.reg_read(UC_X86_REG_EAX) != 0:
+                raise AssertionError('Allocation error exit status differs')
+            emu.emu_stop()
+            return
+        if address == MALLOC:
+            requests.append(emu.reg_read(UC_X86_REG_EAX))
+            emu.reg_write(UC_X86_REG_EAX, allocation)
+        else:
+            diagnostics.append(struct.unpack('<I', emu.mem_read(sp + 4, 4))[0])
+        ret, = struct.unpack('<I', emu.mem_read(sp, 4))
+        emu.reg_write(UC_X86_REG_ESP, sp + 4)
+        emu.reg_write(UC_X86_REG_EIP, ret)
+
+    for address in (MALLOC, DIAGNOSTIC, EXIT):
+        cpu.hook_add(UC_HOOK_CODE, intercept, begin=address, end=address)
+    cpu.emu_start(0x4b1d1, 0x4b386, count=150)
+    expected_request = {0: width * height, 1: (width + 8) * height,
+                        2: width * height, 6: 65536, 7: 131072}.get(mode)
+    if requests != ([] if expected_request is None else [expected_request]):
+        raise AssertionError('Backend allocator request differs')
+    if fail:
+        if diagnostics != [DS + messages[mode]] or cpu.reg_read(UC_X86_REG_EIP) != EXIT:
+            raise AssertionError('Backend allocation failure path differs')
+        return
+    expected_frame = allocation if mode in messages else 0xa0000 if mode <= 5 else 0x12345678
+    if (cpu.mem_read(DS + 0x286b74, 4) != struct.pack('<I', expected_frame)
+            or diagnostics or cpu.reg_read(UC_X86_REG_EIP) != 0x4b386
+            or cpu.reg_read(UC_X86_REG_ESP) != STACK):
+        raise AssertionError('Backend allocation success handoff differs')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--exe', required=True, type=Path)
@@ -224,7 +272,20 @@ def main():
             pass
         else:
             raise AssertionError('Geometry oracle accepted a code or pointer mutation')
-    result = {'backend_geometry_mutation_controls': 2, 'backend_geometry_cases': 8, 'palette_lookup_mutation_controls': 2, 'palette_lookup_cases': 3, 'status': 'PASS', 'cases': len(CASES) + len(display_cases) + 11,
+    for mode in range(9):
+        check_backend_allocation(memory, mode, False)
+    for mode in (0, 1, 2, 6, 7):
+        check_backend_allocation(memory, mode, True)
+    for offset, mode in ((0x4b24a, 0), (0x4b2ba, 6)):
+        mutant = bytearray(memory)
+        mutant[offset] ^= 1
+        try:
+            check_backend_allocation(bytes(mutant), mode, False)
+        except AssertionError:
+            pass
+        else:
+            raise AssertionError('Allocation oracle accepted a pointer or request mutation')
+    result = {'backend_allocation_mutation_controls': 2, 'backend_allocation_cases': 14, 'backend_geometry_mutation_controls': 2, 'backend_geometry_cases': 8, 'palette_lookup_mutation_controls': 2, 'palette_lookup_cases': 3, 'status': 'PASS', 'cases': len(CASES) + len(display_cases) + 25,
               'allocator_failure_cases': 2, 'display_reset_cases': len(display_cases)}
     args.output.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
     print(json.dumps(result))

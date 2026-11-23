@@ -68,54 +68,9 @@ section .backend_dispatch align=1 vstart=0x4b1d1 follows=.text
     mov eax, [xdim]
     imul eax, ebx
     jmp dword near [cs:edx*4 + video_mode_dispatch]
-section .backend_allocation align=1 vstart=0x4b232 follows=.backend_dispatch
-    jnz near .branch_4b386
+section .backend_padded_entry align=1 vstart=0x4b275 follows=.backend_dispatch
     mov eax, [xdim]
-    imul eax, [ydim]
-    call engine_malloc
-    mov [software_framebuffer], eax
-    test eax, eax
-    jnz short .branch_4b266
-    push strict dword horizon_allocation_message
-
-.branch_4b257:
-    call print_diagnostic
-    add esp, 0x4
-    xor eax, eax
-    call runtime_exit
-
-.branch_4b266:
-    mov eax, [software_framebuffer]
-    mov [draw_page_address], eax
-    jmp near .branch_4b386
-    mov eax, [xdim]
-    add eax, 0x8
-    imul eax, ebx
-    call engine_malloc
-    mov [software_framebuffer], eax
-    test eax, eax
-    jnz short .branch_4b266
-    push strict dword screen_allocation_message_1
-    jmp short .branch_4b257
-    call engine_malloc
-    mov [software_framebuffer], eax
-    test eax, eax
-    jnz short .branch_4b266
-    push strict dword screen_allocation_message_2
-    jmp short .branch_4b257
-    mov dword [draw_page_address], 0xa0000
-    jmp near .branch_4b386
-    mov eax, 0x10000
-    call engine_malloc
-    mov [software_framebuffer], eax
-    test eax, eax
-    jnz short .branch_4b2e0
-    push strict dword screen_allocation_message_3
-    call print_diagnostic
-    add esp, 0x4
-    xor eax, eax
-    call runtime_exit
-
+section .backend_stereo_state align=1 vstart=0x4b2e0 follows=.backend_padded_entry
 .branch_4b2e0:
     mov ch, 0x2
     mov ebp, 0x1
@@ -131,17 +86,7 @@ section .backend_allocation align=1 vstart=0x4b232 follows=.backend_dispatch
     mov [video_backend], ch
     mov [engine_286b40], eax
     jmp short .branch_4b386
-    mov eax, 0x20000
-    call engine_malloc
-    mov [software_framebuffer], eax
-    test eax, eax
-    jnz short .branch_4b347
-    push strict dword screen_allocation_message_4
-    call print_diagnostic
-    add esp, 0x4
-    xor eax, eax
-    call runtime_exit
-
+section .backend_stereo_double_state align=1 vstart=0x4b347 follows=.backend_stereo_state
 .branch_4b347:
     mov cl, 0x2
     mov esi, 0x8000

@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1258,
-  "unique_code_bytes": 180582,
-  "le_pointers": 9935,
+  "routines": 1264,
+  "unique_code_bytes": 180790,
+  "le_pointers": 9950,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -4958,6 +4958,66 @@
       "loaded_address": "0x4b1f3",
       "bytes": 63,
       "le_pointers": 5
+    },
+    {
+      "symbol": "setgamemode_allocate_planar_",
+      "object": "setdisp.obj",
+      "object_sha256": "17110da6d747b4397ecc3c8023ec53f642678f27ddfaaf625b79760f0ec10870",
+      "sha256": "257bac76f85cfda343ded904ee3470683f47ab9278c59f1429778cbd4d39144b",
+      "raw_offset": "0x70832",
+      "loaded_address": "0x4b232",
+      "bytes": 67,
+      "le_pointers": 6
+    },
+    {
+      "symbol": "setgamemode_allocate_padded_",
+      "object": "setdisp.obj",
+      "object_sha256": "17110da6d747b4397ecc3c8023ec53f642678f27ddfaaf625b79760f0ec10870",
+      "sha256": "2168cc2c29956b4383e20e6697a1a0c1b565683b4e98a41dc37e81079dd123b9",
+      "raw_offset": "0x7087a",
+      "loaded_address": "0x4b27a",
+      "bytes": 27,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "setgamemode_allocate_linear_",
+      "object": "setdisp.obj",
+      "object_sha256": "17110da6d747b4397ecc3c8023ec53f642678f27ddfaaf625b79760f0ec10870",
+      "sha256": "bfeb1c1b910cdcded94ea9e30a538bf5f927028298724e258cedd04921a36513",
+      "raw_offset": "0x70895",
+      "loaded_address": "0x4b295",
+      "bytes": 21,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "setgamemode_direct_frame_",
+      "object": "setdisp.obj",
+      "object_sha256": "17110da6d747b4397ecc3c8023ec53f642678f27ddfaaf625b79760f0ec10870",
+      "sha256": "84eee26ef1cd3164031bd55e4d696e25e67b5f61dc96879d652fd2cee06869ca",
+      "raw_offset": "0x708aa",
+      "loaded_address": "0x4b2aa",
+      "bytes": 15,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "setgamemode_allocate_stereo_",
+      "object": "setdisp.obj",
+      "object_sha256": "17110da6d747b4397ecc3c8023ec53f642678f27ddfaaf625b79760f0ec10870",
+      "sha256": "da80509001eef7f68222227193587e79f394abc22baa7b621ebf07560e350610",
+      "raw_offset": "0x708b9",
+      "loaded_address": "0x4b2b9",
+      "bytes": 39,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "setgamemode_allocate_stereo_double_",
+      "object": "setdisp.obj",
+      "object_sha256": "17110da6d747b4397ecc3c8023ec53f642678f27ddfaaf625b79760f0ec10870",
+      "sha256": "fbbe0d0233ec517b0bc33782ca5dfd32f8180d746fdbe78dd31239a4a9cb991c",
+      "raw_offset": "0x70920",
+      "loaded_address": "0x4b320",
+      "bytes": 39,
+      "le_pointers": 2
     },
     {
       "symbol": "shutdown_video_engine_",
