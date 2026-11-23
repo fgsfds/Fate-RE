@@ -340,10 +340,12 @@ class DependencyReuse(unittest.TestCase):
 
     def test_reuses_only_matching_installed_file_hashes(self):
         with patch.object(workflow, 'TOOLS', self.root), patch.object(
-                workflow.subprocess, 'run', side_effect=self.install) as installer:
+                workflow, 'subprocess') as dependency_process:
+            # Keep the installer mock local so platform detection can use subprocess.
+            dependency_process.run.side_effect = self.install
             workflow.ensure_dependencies(self.directory)
             workflow.ensure_dependencies(self.directory)
-            self.assertEqual(installer.call_count, 1)
+            dependency_process.run.assert_called_once()
             (self.directory / 'module.py').write_text('changed')
             with self.assertRaisesRegex(ValueError, 'Dependency cache changed'):
                 workflow.ensure_dependencies(self.directory)

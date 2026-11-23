@@ -798,7 +798,7 @@ Evidence: work/terminal-native-next/prep.c and whole.c.
 
 ### Main-menu shared frame
 
-`dispatch_main_menu`, `/4r /s /or /bt=dos`: 507 C-linked image bytes, 30 C LE sites, and 2 retained ASM body bytes. Four instruction-aligned C phases cover source bytes 0–41 exactly once. The original 32-byte jump table and alignment byte remain assembly; the checked compiler table is unlinked. The 1,442 behavior cases and two controls pass. Watcom emits the shared guard once, linked at two disjoint original addresses: 13 additional linked image bytes and zero new unique compiler bytes. The final 2-byte false-path JMP is the only blocker: Watcom merges the source flow. Preserve its original opcode width. Evidence: `work/menu-guard-build/validation.json`, `work/menu-guard-audit.json`, and `work/menu-guard-handoff.json`.
+`dispatch_main_menu`, `/4r /s /or /bt=dos`: 507 C-linked image bytes, 30 C LE sites, and 2 retained ASM body bytes. Four instruction-aligned C phases cover source bytes 0â€“41 exactly once. The original 32-byte jump table and alignment byte remain assembly; the checked compiler table is unlinked. The 1,442 behavior cases and two controls pass. Watcom emits the shared guard once, linked at two disjoint original addresses: 13 additional linked image bytes and zero new unique compiler bytes. The final 2-byte false-path JMP is the only blocker: Watcom merges the source flow. Preserve its original opcode width. Evidence: `work/menu-guard-build/validation.json`, `work/menu-guard-audit.json`, and `work/menu-guard-handoff.json`.
 
 ### Sprite waypoint target: remaining blocker
 
@@ -843,3 +843,15 @@ With `/4r /s /or /bt=dos`,
 peer-ID arithmetic. Using EBX as the identity for joint5 disrupts other
 lifetimes. Next retain the interrupt prefix and isolate partial-sum lifetimes. Comparison:
 `work/serial-init-next/compiler/joint4.report.json`.
+
+### Video palette lookup loop: ECX scheduling
+
+Watcom 10.5 `/4r /s /or /bt=dos`, existing display context: the 19-byte
+palette lookup loop matches shape and size but uses EBX instead of ECX.
+An empty ECX zero identity preserves the 851-byte context and accepted display
+reset, but first differs at loop +2 (`0x4b13f`): `xor ecx,ecx` precedes
+`inc eax`; the reference increments first. Adding an EAX index input, with
+both `i` and `i + 1`, changes the wider public extent and fails the existing
+context guard. Keep the assembly loop. Next investigate the biased induction
+variable and scheduling dependency together without binding the index to EAX.
+Scratch: `work/palette-lookup-probe/index_dependency.c`; no new C coverage.
