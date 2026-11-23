@@ -217,3 +217,11 @@ keep the incoming EBX value live through a standalone C loop. Watcom 10.5
 `inc eax` before `xor ecx,ecx`, matching the original 19-byte loop. Constraining
 the zero through an ECX identity alone schedules the XOR before the increment.
 The checked public has one extra private RET, excluded by the leaf slice.
+
+
+A shared context can materialize a constant in a register to reuse it on a later
+path, changing an otherwise simple memory store. `src/fate/encounter_reset.c`
+isolates the actor reset from the exit scan so Watcom emits the immediate word
+store. Its `aborts` continuation emits the original tail JMP while preserving
+the caller's existing frame. Verify the complete standalone body and its branch
+fixup before replacing the shared-frame assembly tail.

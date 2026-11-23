@@ -964,6 +964,7 @@ OBJECT_NAMES['setgamemode_allocate_stereo_'] = 'setdisp'
 OBJECT_NAMES['setgamemode_allocate_stereo_double_'] = 'setdisp'
 OBJECT_NAMES['setgamemode_backend_geometry_'] = 'setdisp'
 OBJECT_NAMES['palette_lookup_'] = 'plook'
+OBJECT_NAMES['encounter_reset_state_'] = 'encreset'
 OBJECT_NAMES['encounter_actor_state_'] = 'encact'
 OBJECT_NAMES['setgamemode_display_reset_'] = 'setdisp'
 OBJECT_NAMES['drawmasks_projection_'] = 'drawproj'
@@ -1518,6 +1519,8 @@ def verify_compiler_groups(exe, directory, names=None):
                                ('puzact', 929, 'puzzle_activation_context_')):
         if selected(name):
             verify_group_layout((directory/(name+'.obj')).read_bytes(), size, [(public, 0)])
+    if selected('encreset'):
+        verify_group_layout((directory/'encreset.obj').read_bytes(), 22, [('encounter_reset_state_', 0)])
     if selected('encact'):
         verify_group_layout((directory/'encact.obj').read_bytes(), 1409, [('encounter_actor_context_', 160)])
     if selected('enclatch'):

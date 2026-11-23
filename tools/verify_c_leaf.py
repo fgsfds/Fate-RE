@@ -4582,6 +4582,9 @@ LEAF_CODE_SLICES.update({
 LEAF_CONTEXT_LITERALS['encounter_latch_context_'] = LEAF_CONTEXT_LITERALS['encounter_exit_context_'][:3]
 LEAF_CONTEXT_SUFFIXES['encounter_latch_context_'] = LEAF_CONTEXT_SUFFIXES['encounter_exit_context_']
 
+LEAVES['encounter_reset_state_'] = (0x43883, 22)
+FUNCTION_ADDRESSES['encounter_exit_scan_'] = 0x1e30b
+
 LEAVES['encounter_actor_state_'] = (0x4383a, 73)
 LEAF_CODE_SLICES['encounter_actor_state_'] = ('encounter_actor_context_', 0x2f8, 0x341, 1249)
 LEAF_CONTEXT_LITERALS['encounter_actor_context_'] = LEAF_CONTEXT_LITERALS['encounter_latch_context_']

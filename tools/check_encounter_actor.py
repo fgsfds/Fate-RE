@@ -80,7 +80,7 @@ def main():
             for results in PAIRS:
                 check(memory, state, kind, results)
                 cases += 1
-    for offset, value in ((0x1e26a, 0x21), (0x1e247, 1)):
+    for offset, value in ((0x1e26a, 0x21), (0x1e247, 1), (0x1e292, 2)):
         mutant = bytearray(memory)
         mutant[offset] = value
         try:
@@ -88,8 +88,8 @@ def main():
         except AssertionError:
             pass
         else:
-            raise AssertionError('Actor oracle accepted an OR or call-argument mutation')
-    report = dict(status='PASS', cases=cases, mutation_controls=2)
+            raise AssertionError('Actor oracle accepted an OR, call-argument, or state-store mutation')
+    report = dict(status='PASS', cases=cases, mutation_controls=3)
     args.output.write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
     print(json.dumps(report))
 

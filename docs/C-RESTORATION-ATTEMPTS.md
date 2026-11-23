@@ -847,17 +847,3 @@ instead places 1 in ECX and 32768 in EBP. The first meaningful mismatch
 remains the mode-6 state entry at `0x4b2e0`. Next model the separate CH
 and EBP constant lifetimes without an EBP auxiliary. Production state
 blocks remain assembly. Scratch: `work/stereo-state-probe/register_lifetimes.c`.
-
-
-### Encounter actor reset: immediate state store
-
-Watcom 10.5 `/4r /s /or /bt=dos /dENCOUNTER_ACTOR_CONTEXT=1` now supplies
-73 exact bytes through the proximity and kind checks. Reloading state only
-in the private update path removes an early `mov eax,esi`. Keeping the OR
-result live in EDX at the reset label removes the extra TEST and reproduces
-the original OR destination. The remaining reset tail is 25 bytes versus 22:
-at original `0x1e285`, the compiler materializes 1 in ECX before the kind
-store instead of emitting the immediate word store. A volatile state store
-retains that sequence; preserving ECX changes the temporary to ESI. Next
-isolate the reset tail from the shared exit-scan constant lifetime.
-Scratch: `work/encounter-actor-probe/encact.obj`.
