@@ -245,3 +245,13 @@ private instruction stays unlinked. The natural-order fixture retains it and
 compares the frame, register handoff, and resulting sprite fields. A getter for
 the legacy EBP height is valid only after the retained initializer on every
 reaching path, including loop backedges that preserve EBP through callees.
+
+The ripple stencil keeps each byte addition in AL or DL with empty
+unsigned-char identities after each update. Constraining only the first
+loads lets Watcom introduce AH/DH temporaries and an ECX save; constraining
+each result emits the original eight-instruction, 38-byte sum with no
+auxiliary instructions. One checked compiler body is placed at all four
+original sites: 152 linked image bytes, 38 distinct compiler body bytes,
+and no linked RET. The independent oracle checks seven neighbors (the
+lower-right sample is omitted), toroidal borders, and the original write
+to the final bottom-row padding byte.

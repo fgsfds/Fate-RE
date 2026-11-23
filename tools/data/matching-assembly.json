@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 487,
-  "unique_code_bytes": 233325,
+  "routines": 491,
+  "unique_code_bytes": 233173,
   "le_pointers": 12578,
   "non_routine_code_spans": [
     {
@@ -1988,18 +1988,6 @@
       "public_entry": "0x2f27e",
       "binary_offset": 0,
       "le_pointers": 36
-    },
-    {
-      "symbol": "animate_ripple_texture",
-      "source": "src/fate/animate_ripple_texture.asm",
-      "binary": "animate_ripple_texture.bin",
-      "sha256": "10018037890ed57ffb82aa12c80051c638627bc95c136ae9ce4b5c78920e5cef",
-      "bytes": 855,
-      "raw_offset": "0x54157",
-      "loaded_address": "0x2eb57",
-      "public_entry": "0x2eb57",
-      "binary_offset": 0,
-      "le_pointers": 37
     },
     {
       "symbol": "render_gameplay_frame",
@@ -7640,6 +7628,66 @@
       "public_entry": "0x74c40",
       "binary_offset": 80,
       "le_pointers": 2
+    },
+    {
+      "symbol": "animate_ripple_prefix",
+      "source": "src/fate/animate_ripple_texture.asm",
+      "binary": "animate_ripple_texture.bin",
+      "sha256": "f49c970df2f4ed1672d024e110272e8ff211920ef1c15628e90d911654cc9d87",
+      "bytes": 601,
+      "raw_offset": "0x54157",
+      "loaded_address": "0x2eb57",
+      "public_entry": "0x2eb57",
+      "binary_offset": 0,
+      "le_pointers": 36
+    },
+    {
+      "symbol": "animate_ripple_second_setup",
+      "source": "src/fate/animate_ripple_texture.asm",
+      "binary": "animate_ripple_texture.bin",
+      "sha256": "5414addf8ee2414caa9edc13069c632cb8ffa72a70ba71c6eac8d2bdd3b146fd",
+      "bytes": 5,
+      "raw_offset": "0x543d6",
+      "loaded_address": "0x2edd6",
+      "public_entry": "0x2edd6",
+      "binary_offset": 601,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "animate_ripple_pack_second",
+      "source": "src/fate/animate_ripple_texture.asm",
+      "binary": "animate_ripple_texture.bin",
+      "sha256": "312441d4c866f89353fbc82ff57543d1d44209b28a3577c1b9412820e03d1523",
+      "bytes": 22,
+      "raw_offset": "0x54401",
+      "loaded_address": "0x2ee01",
+      "public_entry": "0x2ee01",
+      "binary_offset": 606,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "animate_ripple_pack_third",
+      "source": "src/fate/animate_ripple_texture.asm",
+      "binary": "animate_ripple_texture.bin",
+      "sha256": "2cba9b0e5db31c7572324bb6b4668f52df3fbb228d66727f11ad1d062833979d",
+      "bytes": 13,
+      "raw_offset": "0x5443d",
+      "loaded_address": "0x2ee3d",
+      "public_entry": "0x2ee3d",
+      "binary_offset": 628,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "animate_ripple_pack_fourth",
+      "source": "src/fate/animate_ripple_texture.asm",
+      "binary": "animate_ripple_texture.bin",
+      "sha256": "b9ccecf415f4b9721f1ddc28f8c4a0bd7dd39819435f075d9631fded79530ac4",
+      "bytes": 62,
+      "raw_offset": "0x54470",
+      "loaded_address": "0x2ee70",
+      "public_entry": "0x2ee70",
+      "binary_offset": 641,
+      "le_pointers": 1
     }
   ]
 }

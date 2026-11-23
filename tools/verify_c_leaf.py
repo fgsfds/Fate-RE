@@ -4743,6 +4743,15 @@ LEAF_CODE_SLICES['palette_lookup_'] = ('palette_lookup_', 0, 19, 20)
 LEAVES['setgamemode_display_reset_'] = (0x70750, 129)
 LEAF_CODE_SLICES['setgamemode_display_reset_'] = ('setgamemode_display_context_', 0x102, 0x183, 851)
 
+# One compiler body implements the four original stencil sums in place.
+for _name, _raw in (
+        ('ripple_sum_first_', 0x543b0), ('ripple_sum_second_', 0x543db),
+        ('ripple_sum_third_', 0x54417), ('ripple_sum_fourth_', 0x5444a)):
+    LEAVES[_name] = (_raw, 38)
+    LEAF_CODE_SLICES[_name] = ('ripple_neighbor_sum_', 0, 38, 39)
+LEAF_CONTEXT_SUFFIXES['ripple_neighbor_sum_'] = b'\xc3'
+FUNCTION_ADDRESSES['ripple_neighbor_sum_'] = 0x2edb0
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

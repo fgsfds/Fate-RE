@@ -1,6 +1,7 @@
 ; Advance the ripple effect in a 128-by-128 texture.
 BITS 32
 ORG 0x2eb57
+section .text align=1
 
 radial_sample_count equ 0x5ae5c
 radial_x_offsets equ 0x5aedc
@@ -234,50 +235,26 @@ animate_ripple_texture:
 
 .branch_2edae:
     mov ebx, ecx
-    mov al, [ebx-0x85]
-    mov dl, [ebx-0x1]
-    add al, [ebx-0x84]
-    add dl, [ebx + 0x83]
-    add al, [ebx-0x83]
-    add dl, [ebx + 0x84]
-    add al, [ebx + 0x1]
-    add al, dl
+; Compiler-generated C supplies this seven-neighbor sum.
+section .after_sum1 align=1 vstart=0x2edd6 follows=.text
     lea ebx, [ecx + 0x1]
     mov edi, eax
-    mov al, [ebx-0x85]
-    mov dl, [ebx-0x1]
-    add al, [ebx-0x84]
-    add dl, [ebx + 0x83]
-    add al, [ebx-0x83]
-    add dl, [ebx + 0x84]
-    add al, [ebx + 0x1]
-    add al, dl
+; Compiler-generated C supplies this seven-neighbor sum.
+section .after_sum2 align=1 vstart=0x2ee01 follows=.after_sum1
     and edi, strict dword 0xf8
     and eax, strict dword 0xf8
     sar edi, byte 0x3
     shl eax, byte 0x5
     lea ebx, [ecx + 0x2]
     add edi, eax
-    mov al, [ebx-0x85]
-    mov dl, [ebx-0x1]
-    add al, [ebx-0x84]
-    add dl, [ebx + 0x83]
-    add al, [ebx-0x83]
-    add dl, [ebx + 0x84]
-    add al, [ebx + 0x1]
-    add al, dl
+; Compiler-generated C supplies this seven-neighbor sum.
+section .after_sum3 align=1 vstart=0x2ee3d follows=.after_sum2
     and eax, strict dword 0xf8
     shl eax, byte 0xd
     lea ebx, [ecx + 0x3]
     add edi, eax
-    mov al, [ebx-0x85]
-    mov dl, [ebx-0x1]
-    add al, [ebx-0x84]
-    add dl, [ebx + 0x83]
-    add al, [ebx-0x83]
-    add dl, [ebx + 0x84]
-    add al, [ebx + 0x1]
-    add al, dl
+; Compiler-generated C supplies this seven-neighbor sum.
+section .after_sum4 align=1 vstart=0x2ee70 follows=.after_sum3
     and eax, strict dword 0xf8
     shl eax, byte 0x15
     add eax, edi

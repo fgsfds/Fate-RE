@@ -860,7 +860,27 @@ rejected with E1122. The first attribute mismatch, aligned at `0x1e0e7`, is
 at +7: the initialized union carrier copies EAX into EBX before XOR DH,AH.
 It later uses LEA through EBX instead of ADD EDX,0x350. A full-width index
 and in-place addition variant removes a redundant index extension but moves
-the ADD into EBX and changes the loop-guard allocation. Next retain EDX as
-the union carrier through both byte updates, without another result-only
-EDX constraint. Sources and logs: `work/spawn-loop-research/` and
-`work/spawn-loop-v1/`, `work/spawn-loop-v2/`, `work/spawn-loop-v3/`.
+the ADD into EBX and changes the loop-guard allocation. Three further
+attribute probes retained the extra EBX copy: explicit DX-lane joining added
+upper-word reassembly, separate initialized draw unions spilled at ESP+B8/BC,
+and full-width EDX barriers kept the arithmetic in EBX. Next isolate a tile
+context with the original incoming EBX live through the phase, testing register
+availability rather than another union spelling. Sources and reports:
+`work/spawn-attributes-research/` and
+`work/spawn-attributes-v1/` through `work/spawn-attributes-v3/`.
+
+### Ripple animation: pixel carrier and packed output lifetimes
+
+Watcom 10.5 `/4r /s /or /bt=dos`: the full C reconstruction passes 32
+independent-oracle cases, including the entire 17,160-byte bordered buffer
+and preserved registers. The closest variant is 865 bytes versus 855 and
+restores the original 20-byte frame. Its first meaningful mismatch at
+`0x2eb62` copies the texture pointer into EBP; the subsequent countdown
+steals EDX, changing radial and border loop allocation. A third variant's
+AL/DL constraints recover the seven-neighbor sum, now integrated separately,
+but broaden the frame and spill the output row counter. Next split texture
+and countdown lifetimes at the creation/radial boundary while keeping the
+pixel carrier in EDX; retain the accepted leaf for all four stencil sums.
+Sources, hashes and comparisons: `work/ripple-research/semantic-notes.md`,
+`work/ripple-v1/` through `work/ripple-v3/`. The remaining 703 bytes and
+all 37 LE sites stay assembly.

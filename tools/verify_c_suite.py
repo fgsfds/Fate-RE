@@ -1584,6 +1584,10 @@ def verify_compiler_groups(exe, directory, names=None):
         verify_network_defaults(exe, (directory/'netdefs.obj').read_bytes())
 
 
+for _name in ('ripple_sum_first_', 'ripple_sum_second_',
+              'ripple_sum_third_', 'ripple_sum_fourth_'):
+    OBJECT_NAMES[_name] = 'ripsum'
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

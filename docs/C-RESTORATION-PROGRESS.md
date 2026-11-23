@@ -1,17 +1,28 @@
 # Exact C restoration progress
 
-The current saved attribution audit covers all 414,639 CODE bytes and includes 548 compiler units. Saved full validation passed 398 tests and 130 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
+The current saved attribution audit covers all 414,639 CODE bytes and includes 549 compiler units. Saved full validation passed 398 tests and 131 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 155,596 | 37.53% |
+| Compiler-generated instructions | 155,748 | 37.56% |
 | Inline assembly instructions in C objects | 24,311 | 5.86% |
-| Standalone assembly | 233,325 | 56.27% |
+| Standalone assembly | 233,173 | 56.24% |
 | Unattributed instructions and non-routine tables | 1,407 | 0.34% |
 
-The unattributed category contains 1,038 instruction bytes in 22 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 257,636 bytes (62.14%). C-object inventory covers 181,314 bytes (43.73%) and 1,280 C routine spans; the assembly inventory has 487 spans.
+The unattributed category contains 1,038 instruction bytes in 22 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 257,484 bytes (62.10%). C-object inventory covers 181,466 bytes (43.76%) and 1,284 C routine spans; the assembly inventory has 491 spans.
 
 The accepted executable is 741,347 bytes, SHA-256 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.
+
+Ripple texture filtering now links 152 compiler-generated image bytes at four
+seven-neighbor stencil sites, with zero LE sites and no inline instructions.
+They reuse one 38-byte compiler body; its one-byte RET remains unlinked and
+guarded. The parent routine retains 703 assembly bytes and all 37 LE sites.
+The independent toroidal oracle passes 32 synthetic full-routine cases,
+including particle creation/removal, every bordered-buffer byte and padding
+guard, counter wraparound, and preserved registers. Another 68 isolated sum
+cases check full-byte inputs and poisoned upper registers. Three machine
+mutations are rejected. Full-function C candidates remain unlinked because
+register allocation and packed-output scheduling differ from the reference.
 
 `update_level_sector_puzzle_` is restored in readable C: 932 bytes and 59 LE sites, with no inline instructions. One C translation unit compiles twice into three selected phases (410/64/458 bytes); five existing branch edges change displacement only. Neither full compiler public matches by itself. Its differential fixture passes 128 cases and rejects both activation-tag and exit-destination code mutations.
 
@@ -35,10 +46,11 @@ The receiver has 916 native C bytes, 0 retained ASM bytes, and 65 LE sites, with
 
 The saved full validation and audit artifacts verify the pinned image:
 
-- Full validation and 130 fixtures: `work/palette-loop-check/validation.json`.
+- Full validation and 131 fixtures: `work/palette-loop-check/validation.json`.
 - Encounter frame behavior: `work/encounter-frame-build/encounter-frame-behavior.json`.
 - Video initialization handoff: `work/setmode-display-handoff.json`.
-- Attribution audit: `work/encounter-loop-audit.json`.
+- Ripple parent and C sum behavior: `work/palette-loop-check/ripple-texture-behavior.json`.
+- Attribution audit: `work/ripple-sum-audit.json`.
 - Unit test log: `work/palette-loop-check/logs/unit-tests.log`.
 - Encounter loop setup and position phase: `work/encounter-loop-build/behavior.json`.
 - Encounter trigger/sector/clock phase: `work/encounter-spawn-build/behavior.json`.

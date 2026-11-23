@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1280,
-  "unique_code_bytes": 181314,
+  "routines": 1284,
+  "unique_code_bytes": 181466,
   "le_pointers": 9971,
   "non_routine_code_spans": [
     {
@@ -1708,6 +1708,46 @@
       "loaded_address": "0x2eaa2",
       "bytes": 181,
       "le_pointers": 8
+    },
+    {
+      "symbol": "ripple_sum_first_",
+      "object": "ripsum.obj",
+      "object_sha256": "505785eae51bffe4762d2cf61cc652041e3f2d5363fb474af79aed00ddd12acd",
+      "sha256": "6bcbecafca2ecac91a90017e295b769d8c0b1941ed13dd7695283a5476ab839f",
+      "raw_offset": "0x543b0",
+      "loaded_address": "0x2edb0",
+      "bytes": 38,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "ripple_sum_second_",
+      "object": "ripsum.obj",
+      "object_sha256": "505785eae51bffe4762d2cf61cc652041e3f2d5363fb474af79aed00ddd12acd",
+      "sha256": "6bcbecafca2ecac91a90017e295b769d8c0b1941ed13dd7695283a5476ab839f",
+      "raw_offset": "0x543db",
+      "loaded_address": "0x2eddb",
+      "bytes": 38,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "ripple_sum_third_",
+      "object": "ripsum.obj",
+      "object_sha256": "505785eae51bffe4762d2cf61cc652041e3f2d5363fb474af79aed00ddd12acd",
+      "sha256": "6bcbecafca2ecac91a90017e295b769d8c0b1941ed13dd7695283a5476ab839f",
+      "raw_offset": "0x54417",
+      "loaded_address": "0x2ee17",
+      "bytes": 38,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "ripple_sum_fourth_",
+      "object": "ripsum.obj",
+      "object_sha256": "505785eae51bffe4762d2cf61cc652041e3f2d5363fb474af79aed00ddd12acd",
+      "sha256": "6bcbecafca2ecac91a90017e295b769d8c0b1941ed13dd7695283a5476ab839f",
+      "raw_offset": "0x5444a",
+      "loaded_address": "0x2ee4a",
+      "bytes": 38,
+      "le_pointers": 0
     },
     {
       "symbol": "doanimations_",
