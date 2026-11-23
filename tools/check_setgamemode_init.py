@@ -146,6 +146,24 @@ def check_display_reset(memory, mode, fill):
     check_fields(after_call)
 
 
+def check_palette_lookup(memory, first):
+    cpu = Uc(UC_ARCH_X86, UC_MODE_32)
+    cpu.mem_map(0, len(memory))
+    cpu.mem_write(0, memory)
+    base = DS + 0x203ca0
+    cpu.mem_write(base - 4, b'\xa5' * (256 * 4 + 8))
+    cpu.reg_write(UC_X86_REG_EAX, first)
+    cpu.reg_write(UC_X86_REG_EBX, 0x12345678)
+    cpu.reg_write(UC_X86_REG_ESP, STACK)
+    cpu.emu_start(0x4b13d, 0x4b150, count=2000)
+    expected = b'\xa5' * (4 + first * 4) + bytes((256 - first) * 4) + b'\xa5' * 4
+    if cpu.mem_read(base - 4, len(expected)) != expected:
+        raise AssertionError('Palette lookup contents or boundary guards differ')
+    if (cpu.reg_read(UC_X86_REG_EAX), cpu.reg_read(UC_X86_REG_EBX),
+            cpu.reg_read(UC_X86_REG_ESP)) != (256, 0x12345678, STACK):
+        raise AssertionError('Palette lookup register or stack handoff differs')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--exe', required=True, type=Path)
@@ -160,7 +178,18 @@ def main():
     display_cases = ((0, 0x33), (7, 0x94), (255, 0xfe))
     for mode, fill in display_cases:
         check_display_reset(memory, mode, fill)
-    result = {'status': 'PASS', 'cases': len(CASES) + len(display_cases),
+    for first in (0, 255, 256):
+        check_palette_lookup(memory, first)
+    for offset in (0x4b13f, 0x4b145):
+        mutant = bytearray(memory)
+        mutant[offset] ^= 1
+        try:
+            check_palette_lookup(bytes(mutant), 0)
+        except AssertionError:
+            pass
+        else:
+            raise AssertionError('Palette lookup oracle accepted a code or pointer mutation')
+    result = {'palette_lookup_mutation_controls': 2, 'palette_lookup_cases': 3, 'status': 'PASS', 'cases': len(CASES) + len(display_cases) + 3,
               'allocator_failure_cases': 2, 'display_reset_cases': len(display_cases)}
     args.output.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
     print(json.dumps(result))

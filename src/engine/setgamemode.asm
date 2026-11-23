@@ -59,19 +59,7 @@ setgamemode equ 0x4b04e
     push edi
     push ebp
 
-section .palette_and_backend align=1 vstart=0x4b13d follows=.text
-    jmp short .branch_4b149
-
-.branch_4b13f:
-    inc eax
-    xor ecx, ecx
-    mov [nosplit eax*4 + frame_state_203c9c], ecx
-
-.branch_4b149:
-    cmp eax, strict dword 0x100
-    jl short .branch_4b13f
-    ; The linked C display reset falls through with the backend in AL.
-section .backend_dispatch align=1 vstart=0x4b1d1 follows=.palette_and_backend
+section .backend_dispatch align=1 vstart=0x4b1d1 follows=.text
     cmp al, 0x7
     ja near .branch_4b386
     xor edx, edx

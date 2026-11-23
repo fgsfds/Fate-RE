@@ -2777,8 +2777,6 @@ ROUTINES = [
     ('faketimerhandler_', 'fate/faketimerhandler.asm', 'faketimerhandler.bin',
      0x31ec4, 1347, TIMER_CALLBACK_POINTERS),
     ('__CHP', 'runtime/chp.asm', 'chp.bin', 0x60304, 29, {}),
-    ('setgamemode_palette_lookup', 'engine/setgamemode.asm', 'setgamemode.bin', 0x4b13d, 19,
-     {8: 0x283c9c}),
     ('setgamemode_backend_dispatch', 'engine/setgamemode.asm', 'setgamemode.bin', 0x4b1d1, 447,
      {12: 0x307e8c, 19: 0x307e90, 30: 0x4b02e, 45: 0x306b48, 65: 0x306b4c, 74: 0x94004,
       85: 0x94003, 92: 0x94004, 104: 0x307e90, 111: 0x307e8c, 121: 0x93ff0, 130: 0x81b08,
@@ -3150,9 +3148,8 @@ NON_ROUTINE_KINDS.update({
 })
 
 GROUP_SLICES = {
-    'setgamemode_save_tail': (0, 468),
-    'setgamemode_palette_lookup': (2, 468),
-    'setgamemode_backend_dispatch': (21, 468),
+    'setgamemode_save_tail': (0, 449),
+    'setgamemode_backend_dispatch': (2, 449),
     'screencapture_': (0, 874),
     'capture_after_open': (14, 874),
     'capture_header_join': (27, 874),
@@ -3697,7 +3694,6 @@ DATA_POINTER_SITES = {
      295, 306, 311, 323, 349, 355, 362, 367, 374, 400, 406, 413, 419, 435, 440, 447, 472, 483, 533,
      551, 556, 563, 589, 595, 636, 654, 659, 664, 677, 683, 694, 712, 718, 727, 732, 739, 749, 764,
      771, 782, 792, 798, 823, 828, 839, 847, 852, 857, 864, 870,),
-    'setgamemode_palette_lookup': (8,),
     'setgamemode_backend_dispatch': (12, 19, 45, 65, 74, 85, 92, 104, 111, 121, 130, 150, 155, 165, 181, 190, 202, 211, 219, 243, 252, 279, 289, 297, 302, 308, 313, 324, 329, 346, 355, 382, 392, 398, 406, 411, 417, 427, 433),
     'nextpage_': (10, 23, 76, 85, 94, 99, 110, 122, 131, 137, 182, 203, 224, 233, 253, 260, 267, 274, 283, 292, 300,
      306, 314, 321, 328, 334, 352, 363, 380, 400, 408, 428, 434, 444, 457, 467, 526, 553, 653, 750,

@@ -843,15 +843,3 @@ With `/4r /s /or /bt=dos`,
 peer-ID arithmetic. Using EBX as the identity for joint5 disrupts other
 lifetimes. Next retain the interrupt prefix and isolate partial-sum lifetimes. Comparison:
 `work/serial-init-next/compiler/joint4.report.json`.
-
-### Video palette lookup loop: ECX scheduling
-
-Watcom 10.5 `/4r /s /or /bt=dos`, existing display context: the 19-byte
-palette lookup loop matches shape and size but uses EBX instead of ECX.
-An empty ECX zero identity preserves the 851-byte context and accepted display
-reset, but first differs at loop +2 (`0x4b13f`): `xor ecx,ecx` precedes
-`inc eax`; the reference increments first. Adding an EAX index input, with
-both `i` and `i + 1`, changes the wider public extent and fails the existing
-context guard. Keep the assembly loop. Next investigate the biased induction
-variable and scheduling dependency together without binding the index to EAX.
-Scratch: `work/palette-lookup-probe/index_dependency.c`; no new C coverage.

@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1256,
-  "unique_code_bytes": 180500,
-  "le_pointers": 9929,
+  "routines": 1257,
+  "unique_code_bytes": 180519,
+  "le_pointers": 9930,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -4928,6 +4928,16 @@
       "loaded_address": "0x4b052",
       "bytes": 235,
       "le_pointers": 21
+    },
+    {
+      "symbol": "palette_lookup_",
+      "object": "plook.obj",
+      "object_sha256": "5d89e74e194b925da9ee601118500c3f90be178709db599cf492dc3d673e74e5",
+      "sha256": "bd84103059baa2e734b5fba1c35df5b054e979e748134bb7cc2256ad3c5eeef6",
+      "raw_offset": "0x7073d",
+      "loaded_address": "0x4b13d",
+      "bytes": 19,
+      "le_pointers": 1
     },
     {
       "symbol": "setgamemode_display_reset_",
