@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 485,
-  "unique_code_bytes": 234120,
-  "le_pointers": 12619,
+  "routines": 486,
+  "unique_code_bytes": 234057,
+  "le_pointers": 12614,
   "non_routine_code_spans": [
     {
       "symbol": "setgamemode_save_tail",
@@ -7321,13 +7321,25 @@
       "symbol": "setgamemode_backend_dispatch",
       "source": "src/engine/setgamemode.asm",
       "binary": "setgamemode.bin",
-      "sha256": "12972d824d1610c90c7eee67f6f0865a4691b0a8186f350648786ae96f052df0",
-      "bytes": 447,
+      "sha256": "49253d4a77bac8e6fc3fe64426349c0e85af54ae14a65bdaf069378a63760cc0",
+      "bytes": 34,
       "raw_offset": "0x707d1",
       "loaded_address": "0x4b1d1",
       "public_entry": "0x4b1d1",
       "binary_offset": 2,
-      "le_pointers": 40
+      "le_pointers": 3
+    },
+    {
+      "symbol": "setgamemode_backend_allocation",
+      "source": "src/engine/setgamemode.asm",
+      "binary": "setgamemode.bin",
+      "sha256": "114612d8bc48b321a0926cf0c8d63011ef22603e7d53c7393a16f34ce7fcf014",
+      "bytes": 350,
+      "raw_offset": "0x70832",
+      "loaded_address": "0x4b232",
+      "public_entry": "0x4b232",
+      "binary_offset": 36,
+      "le_pointers": 32
     },
     {
       "symbol": "nextpage_",

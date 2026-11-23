@@ -8,7 +8,7 @@ import struct
 from unicorn import Uc, UC_ARCH_X86, UC_MODE_32, UC_HOOK_CODE
 from unicorn.x86_const import (
     UC_X86_REG_EAX, UC_X86_REG_EBX, UC_X86_REG_ECX, UC_X86_REG_EDX,
-    UC_X86_REG_EBP, UC_X86_REG_EDI, UC_X86_REG_EIP, UC_X86_REG_ESI, UC_X86_REG_ESP,
+    UC_X86_REG_EFLAGS, UC_X86_REG_EBP, UC_X86_REG_EDI, UC_X86_REG_EIP, UC_X86_REG_ESI, UC_X86_REG_ESP,
 )
 
 from check_start_hook import DS, image
@@ -164,6 +164,29 @@ def check_palette_lookup(memory, first):
         raise AssertionError('Palette lookup register or stack handoff differs')
 
 
+def check_backend_geometry(memory, pixels, chain):
+    cpu = Uc(UC_ARCH_X86, UC_MODE_32)
+    cpu.mem_map(0, len(memory))
+    cpu.mem_write(0, memory)
+    cpu.reg_write(UC_X86_REG_EAX, pixels)
+    cpu.reg_write(UC_X86_REG_ESP, STACK)
+    cpu.mem_write(DS + 0x14003, bytes((chain,)))
+    cpu.emu_start(0x4b1f3, 0x4b232, count=30)
+    size = ((pixels >> 2) + 255) & ~255
+    pages, remainder = divmod(65536, size)
+    expected = ((0x286b48, size), (0x286b4c, 0xa0000), (0x14004, pages))
+    for offset, value in expected:
+        if cpu.mem_read(DS + offset, 4) != struct.pack('<I', value):
+            raise AssertionError('Backend geometry output differs')
+    if cpu.mem_read(DS + 0x14003, 1) != bytes((1 if pages >= 2 else chain,)):
+        raise AssertionError('Backend geometry chain flag differs')
+    if tuple(cpu.reg_read(reg) for reg in (UC_X86_REG_EAX, UC_X86_REG_EBX,
+                                         UC_X86_REG_EDX, UC_X86_REG_ESP)) != (pages, size, remainder, STACK):
+        raise AssertionError('Backend geometry register handoff differs')
+    if bool(cpu.reg_read(UC_X86_REG_EFLAGS) & 0x40) != (pages == 1):
+        raise AssertionError('Backend geometry zero flag differs')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--exe', required=True, type=Path)
@@ -189,7 +212,19 @@ def main():
             pass
         else:
             raise AssertionError('Palette lookup oracle accepted a code or pointer mutation')
-    result = {'palette_lookup_mutation_controls': 2, 'palette_lookup_cases': 3, 'status': 'PASS', 'cases': len(CASES) + len(display_cases) + 3,
+    for pixels in (320 * 200, 320 * 350, 640 * 480, 1024 * 1024):
+        for chain in (0, 1):
+            check_backend_geometry(memory, pixels, chain)
+    for offset in (0x4b1f5, 0x4b21b):
+        mutant = bytearray(memory)
+        mutant[offset] ^= 1
+        try:
+            check_backend_geometry(bytes(mutant), 320 * 200, 0)
+        except AssertionError:
+            pass
+        else:
+            raise AssertionError('Geometry oracle accepted a code or pointer mutation')
+    result = {'backend_geometry_mutation_controls': 2, 'backend_geometry_cases': 8, 'palette_lookup_mutation_controls': 2, 'palette_lookup_cases': 3, 'status': 'PASS', 'cases': len(CASES) + len(display_cases) + 11,
               'allocator_failure_cases': 2, 'display_reset_cases': len(display_cases)}
     args.output.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
     print(json.dumps(result))

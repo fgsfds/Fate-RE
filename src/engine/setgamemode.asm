@@ -68,23 +68,7 @@ section .backend_dispatch align=1 vstart=0x4b1d1 follows=.text
     mov eax, [xdim]
     imul eax, ebx
     jmp dword near [cs:edx*4 + video_mode_dispatch]
-    sar eax, byte 0x2
-    add eax, strict dword 0xff
-    xor al, al
-    mov [frame_state_286b48], eax
-    mov ebx, eax
-    mov eax, 0x10000
-    mov edx, eax
-    sar edx, byte 0x1f
-    idiv ebx
-    mov dword [chainplace], 0xa0000
-    mov [engine_14004], eax
-    cmp eax, 0x2
-    jl short .branch_4b22b
-    mov byte [chainstat], 0x1
-
-.branch_4b22b:
-    cmp dword [engine_14004], 0x1
+section .backend_allocation align=1 vstart=0x4b232 follows=.backend_dispatch
     jnz near .branch_4b386
     mov eax, [xdim]
     imul eax, [ydim]

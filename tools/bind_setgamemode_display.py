@@ -92,12 +92,34 @@ def bind_display_reset(blob, address):
     return code[start:end], selected_data
 
 
+def bind_backend_geometry(blob, address):
+    if address != 0x4b1f3:
+        raise ValueError('Backend geometry requires its original placement')
+    # Validate the shared context and its switch before selecting another phase.
+    bind_display_reset(blob, ADDRESS)
+    code, data, _, calls = bind_switch_group(
+        blob, base=BASE, loaded=False, symbol=PUBLIC, prefix_size=PREFIX,
+        data_targets=DATA, call_targets=CALLS)
+    start, end = 0x1c4, 0x203
+    _, _, _, _, fixups = parsed_leaf_object(bytes(blob))
+    if any(f.offset < cut < f.offset + f.width for f in fixups for cut in (start, end)):
+        raise ValueError('Backend geometry fixup crosses the selected slice')
+    selected = {site - start: value for site, value in data.items() if start <= site < end}
+    if (tuple(sorted(selected)) != (0xb, 0x1f, 0x28, 0x33, 0x3a)
+            or any(start <= site < end for site in calls)):
+        raise ValueError('Backend geometry fixup inventory differs')
+    return code[start:end], selected
+
+
 def verified_context_tables(blob, rows):
-    if len(rows) != 1 or rows[0]['symbol'] != ALIAS:
-        raise ValueError('Display reset attribution inventory differs')
-    row = rows[0]
-    code, refs = bind_display_reset(blob, ADDRESS)
-    if (int(row['raw_offset'], 16) != ADDRESS + 0x25600 or row['bytes'] != SIZE
-            or row['sha256'] != sha256(code).hexdigest() or row['le_pointers'] != len(refs)):
-        raise ValueError('Display reset attribution linked slice differs')
+    phases = {ALIAS: (ADDRESS, SIZE, bind_display_reset),
+              'setgamemode_backend_geometry_': (0x4b1f3, 63, bind_backend_geometry)}
+    if len(rows) != len(phases) or {row['symbol'] for row in rows} != set(phases):
+        raise ValueError('Display context attribution inventory differs')
+    for row in rows:
+        address, size, binder = phases[row['symbol']]
+        code, refs = binder(blob, address)
+        if (int(row['raw_offset'], 16) != address + 0x25600 or row['bytes'] != size
+                or row['sha256'] != sha256(code).hexdigest() or row['le_pointers'] != len(refs)):
+            raise ValueError('Display context attribution linked slice differs')
     return ((1, 0, PREFIX),)

@@ -3916,6 +3916,9 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
         raise ValueError('CODE binding output must be an empty dict; stale metadata rejected')
     segments, publics, externals, flat_groups, fixups = parsed_leaf_object(bytes(blob))
     public_name = leaf_public_name(symbol)
+    if symbol == 'setgamemode_backend_geometry_':
+        from bind_setgamemode_display import bind_backend_geometry
+        return bind_backend_geometry(blob, address)
     if symbol == 'setgamemode_display_reset_':
         from bind_setgamemode_display import bind_display_reset
         return bind_display_reset(blob, address)
@@ -4651,6 +4654,9 @@ FUNCTION_ADDRESSES.update({
     'initialize_video_backend_': 0x4a294,
     '_print_diagnostic': 0x40bb4,
 })
+
+LEAVES['setgamemode_backend_geometry_'] = (0x707f3, 63)
+LEAF_CODE_SLICES['setgamemode_backend_geometry_'] = ('setgamemode_display_context_', 0x1a4, 0x1e3, 851)
 
 LEAVES['palette_lookup_'] = (0x7073d, 19)
 LEAF_CODE_SLICES['palette_lookup_'] = ('palette_lookup_', 0, 19, 20)

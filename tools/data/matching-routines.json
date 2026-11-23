@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1257,
-  "unique_code_bytes": 180519,
-  "le_pointers": 9930,
+  "routines": 1258,
+  "unique_code_bytes": 180582,
+  "le_pointers": 9935,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -4948,6 +4948,16 @@
       "loaded_address": "0x4b150",
       "bytes": 129,
       "le_pointers": 13
+    },
+    {
+      "symbol": "setgamemode_backend_geometry_",
+      "object": "setdisp.obj",
+      "object_sha256": "17110da6d747b4397ecc3c8023ec53f642678f27ddfaaf625b79760f0ec10870",
+      "sha256": "16976916343238566bdd1bfe69ec11e2538351e6f3df803a5263db1127610575",
+      "raw_offset": "0x707f3",
+      "loaded_address": "0x4b1f3",
+      "bytes": 63,
+      "le_pointers": 5
     },
     {
       "symbol": "shutdown_video_engine_",
