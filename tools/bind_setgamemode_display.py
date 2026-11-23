@@ -112,6 +112,8 @@ def bind_backend_geometry(blob, address):
 
 
 ALLOCATION_PHASES = {
+    'setgamemode_padded_width_': (0x246, 0x24b, 0x4b275),
+    'setgamemode_finish_return_': (0x369, 0x373, 0x4b386),
     'setgamemode_allocate_planar_': (0x203, 0x246, 0x4b232),
     'setgamemode_allocate_padded_': (0x251, 0x26c, 0x4b27a),
     'setgamemode_allocate_linear_': (0x278, 0x28d, 0x4b295),

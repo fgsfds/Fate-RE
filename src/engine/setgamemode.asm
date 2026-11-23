@@ -54,6 +54,7 @@ engine_2891da equ 0x2891da
 video_backend equ 0x2891db
 
 setgamemode equ 0x4b04e
+.branch_4b386 equ 0x4b386
 ; Watcom saves ECX/ESI and initializes the video state. The shared exit also
 ; restores EDI and EBP, so keep those saves in their original slots.
     push edi
@@ -68,9 +69,7 @@ section .backend_dispatch align=1 vstart=0x4b1d1 follows=.text
     mov eax, [xdim]
     imul eax, ebx
     jmp dword near [cs:edx*4 + video_mode_dispatch]
-section .backend_padded_entry align=1 vstart=0x4b275 follows=.backend_dispatch
-    mov eax, [xdim]
-section .backend_stereo_state align=1 vstart=0x4b2e0 follows=.backend_padded_entry
+section .backend_stereo_state align=1 vstart=0x4b2e0 follows=.backend_dispatch
 .branch_4b2e0:
     mov ch, 0x2
     mov ebp, 0x1
@@ -101,11 +100,3 @@ section .backend_stereo_double_state align=1 vstart=0x4b347 follows=.backend_ste
     mov ecx, 0x1
     mov [video_mode], eax
     mov [page_flip_enabled], ecx
-
-.branch_4b386:
-    call finish_video_mode_setup
-    pop ebp
-    pop edi
-    pop esi
-    pop ecx
-    ret

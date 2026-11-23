@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 488,
-  "unique_code_bytes": 233849,
-  "le_pointers": 12599,
+  "routines": 487,
+  "unique_code_bytes": 233834,
+  "le_pointers": 12598,
   "non_routine_code_spans": [
     {
       "symbol": "setgamemode_save_tail",
@@ -7330,18 +7330,6 @@
       "le_pointers": 3
     },
     {
-      "symbol": "setgamemode_padded_entry",
-      "source": "src/engine/setgamemode.asm",
-      "binary": "setgamemode.bin",
-      "sha256": "d40c94c95583906f62f5cedf19487886e50560aa4933dc79a828de020820a2f6",
-      "bytes": 5,
-      "raw_offset": "0x70875",
-      "loaded_address": "0x4b275",
-      "public_entry": "0x4b275",
-      "binary_offset": 36,
-      "le_pointers": 1
-    },
-    {
       "symbol": "setgamemode_stereo_state",
       "source": "src/engine/setgamemode.asm",
       "binary": "setgamemode.bin",
@@ -7350,19 +7338,19 @@
       "raw_offset": "0x708e0",
       "loaded_address": "0x4b2e0",
       "public_entry": "0x4b2e0",
-      "binary_offset": 41,
+      "binary_offset": 36,
       "le_pointers": 8
     },
     {
       "symbol": "setgamemode_stereo_double_state",
       "source": "src/engine/setgamemode.asm",
       "binary": "setgamemode.bin",
-      "sha256": "2f339cec70c8d2057495ce7e80a1dc52332703b717138c557459d14515fa135e",
-      "bytes": 73,
+      "sha256": "9de3fd339642432a955ea711a038da36274681b0dac5705efc2eda05f665f4c9",
+      "bytes": 63,
       "raw_offset": "0x70947",
       "loaded_address": "0x4b347",
       "public_entry": "0x4b347",
-      "binary_offset": 105,
+      "binary_offset": 100,
       "le_pointers": 8
     },
     {

@@ -4658,6 +4658,11 @@ FUNCTION_ADDRESSES.update({
     '_print_diagnostic': 0x40bb4,
 })
 
+LEAVES['setgamemode_padded_width_'] = (0x70875, 5)
+LEAF_CODE_SLICES['setgamemode_padded_width_'] = ('setgamemode_display_context_', 0x226, 0x22b, 851)
+LEAVES['setgamemode_finish_return_'] = (0x70986, 10)
+LEAF_CODE_SLICES['setgamemode_finish_return_'] = ('setgamemode_display_context_', 0x349, 0x353, 851)
+
 LEAVES['setgamemode_allocate_planar_'] = (0x70832, 67)
 LEAF_CODE_SLICES['setgamemode_allocate_planar_'] = ('setgamemode_display_context_', 0x1e3, 0x226, 851)
 LEAVES['setgamemode_allocate_padded_'] = (0x7087a, 27)

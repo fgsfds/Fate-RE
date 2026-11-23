@@ -835,3 +835,15 @@ With `/4r /s /or /bt=dos`,
 peer-ID arithmetic. Using EBX as the identity for joint5 disrupts other
 lifetimes. Next retain the interrupt prefix and isolate partial-sum lifetimes. Comparison:
 `work/serial-init-next/compiler/joint4.report.json`.
+
+
+### Stereo video reset: constant registers and store ordering
+
+Watcom 10.5 `/4r /s /or /bt=dos`: an empty EBP-bound flip identity
+fails with E1122. Keeping EBX/ESI/EDI live compiles, but the mode-6 block
+loads the framebuffer before setting CH and uses EBP for pixel width 32.
+Adding an EDX pixel identity and ordering the C stores by the reference
+instead places 1 in ECX and 32768 in EBP. The first meaningful mismatch
+remains the mode-6 state entry at `0x4b2e0`. Next model the separate CH
+and EBP constant lifetimes without an EBP auxiliary. Production state
+blocks remain assembly. Scratch: `work/stereo-state-probe/register_lifetimes.c`.

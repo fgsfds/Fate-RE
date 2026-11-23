@@ -235,6 +235,31 @@ def check_backend_allocation(memory, mode, fail):
         raise AssertionError('Backend allocation success handoff differs')
 
 
+def check_video_return(memory, values):
+    cpu = Uc(UC_ARCH_X86, UC_MODE_32)
+    cpu.mem_map(0, len(memory))
+    cpu.mem_write(0, memory)
+    stop = 0x90000
+    cpu.mem_write(STACK, struct.pack('<5I', *values, stop))
+    cpu.reg_write(UC_X86_REG_ESP, STACK)
+    calls = []
+
+    def intercept(emu, address, size, data):
+        calls.append(address)
+        sp = emu.reg_read(UC_X86_REG_ESP)
+        if sp != STACK - 4:
+            raise AssertionError('Video finish call stack differs')
+        ret, = struct.unpack('<I', emu.mem_read(sp, 4))
+        emu.reg_write(UC_X86_REG_ESP, sp + 4)
+        emu.reg_write(UC_X86_REG_EIP, ret)
+
+    cpu.hook_add(UC_HOOK_CODE, intercept, begin=0x4a367, end=0x4a367)
+    cpu.emu_start(0x4b386, stop, count=20)
+    if (calls != [0x4a367] or tuple(cpu.reg_read(reg) for reg in SAVES) != values
+            or cpu.reg_read(UC_X86_REG_ESP) != STACK + 20):
+        raise AssertionError('Video return register or stack restoration differs')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--exe', required=True, type=Path)
@@ -285,7 +310,17 @@ def main():
             pass
         else:
             raise AssertionError('Allocation oracle accepted a pointer or request mutation')
-    result = {'backend_allocation_mutation_controls': 2, 'backend_allocation_cases': 14, 'backend_geometry_mutation_controls': 2, 'backend_geometry_cases': 8, 'palette_lookup_mutation_controls': 2, 'palette_lookup_cases': 3, 'status': 'PASS', 'cases': len(CASES) + len(display_cases) + 25,
+    for values in (SAVED_VALUES, (0xffffffff, 0x12345678, 0x89abcdef, 0)):
+        check_video_return(memory, values)
+    mutant = bytearray(memory)
+    mutant[0x4b38b] = 0x5b
+    try:
+        check_video_return(bytes(mutant), SAVED_VALUES)
+    except AssertionError:
+        pass
+    else:
+        raise AssertionError('Video return oracle accepted a POP register mutation')
+    result = {'video_return_cases': 2, 'video_return_mutation_controls': 1, 'backend_allocation_mutation_controls': 2, 'backend_allocation_cases': 14, 'backend_geometry_mutation_controls': 2, 'backend_geometry_cases': 8, 'palette_lookup_mutation_controls': 2, 'palette_lookup_cases': 3, 'status': 'PASS', 'cases': len(CASES) + len(display_cases) + 27,
               'allocator_failure_cases': 2, 'display_reset_cases': len(display_cases)}
     args.output.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
     print(json.dumps(result))

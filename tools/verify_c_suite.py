@@ -954,6 +954,8 @@ OBJECT_NAMES.update({'capture_open_body_': 'capopen', 'capture_close_success_': 
 OBJECT_NAMES.update(dict.fromkeys(('capture_palette_compare_', 'capture_palette_color_',
                                   'capture_palette_zero_'), 'pcxstep'))
 OBJECT_NAMES.update(dict.fromkeys(('setgamemode_init_save_', 'setgamemode_init_body_'), 'setinit'))
+OBJECT_NAMES['setgamemode_padded_width_'] = 'setdisp'
+OBJECT_NAMES['setgamemode_finish_return_'] = 'setdisp'
 OBJECT_NAMES['setgamemode_allocate_planar_'] = 'setdisp'
 OBJECT_NAMES['setgamemode_allocate_padded_'] = 'setdisp'
 OBJECT_NAMES['setgamemode_allocate_linear_'] = 'setdisp'
