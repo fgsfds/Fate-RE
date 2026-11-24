@@ -3916,6 +3916,9 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
         raise ValueError('CODE binding output must be an empty dict; stale metadata rejected')
     segments, publics, externals, flat_groups, fixups = parsed_leaf_object(bytes(blob))
     public_name = leaf_public_name(symbol)
+    if public_name == 'setgamemode_dispatch_context_':
+        from bind_setgamemode_dispatch import bind_section
+        return bind_section(blob, symbol, address=address, code_bindings=code_bindings)
     from bind_setgamemode_stereo import CONTEXTS as stereo_contexts, verify_context
     if public_name in stereo_contexts:
         verify_context(blob)
@@ -4660,6 +4663,11 @@ FUNCTION_ADDRESSES.update({
     'initialize_video_backend_': 0x4a294,
     '_print_diagnostic': 0x40bb4,
 })
+
+LEAVES['setgamemode_backend_dispatch_setup_'] = (0x707d9, 18)
+LEAF_CODE_SLICES['setgamemode_backend_dispatch_setup_'] = ('setgamemode_dispatch_context_', 6, 24, 458)
+LEAVES['setgamemode_backend_dispatch_jump_'] = (0x707eb, 8)
+LEAF_CODE_SLICES['setgamemode_backend_dispatch_jump_'] = ('setgamemode_dispatch_context_', 0x21, 0x29, 458)
 
 LEAVES['setgamemode_save_tail_'] = (0x70650, 2)
 LEAF_CODE_SLICES['setgamemode_save_tail_'] = ('setgamemode_display_context_', 2, 4, 851)

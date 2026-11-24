@@ -65,8 +65,12 @@ def code_images(objects, binaries):
         address = int(row['raw_offset'], 16)
         name = row['object']
         blob = read_blob(objects / name)
-        if name in groups:
-            binder, base, *_ = groups[name]
+        group = groups.get(name)
+        # One object may supply a generated table and separately placed leaves.
+        # Route only spans inside the registered contiguous group through it.
+        if (group is not None and group[1] + 0x25600 <= address
+                and address + row['bytes'] <= group[1] + 0x25600 + group[2]):
+            binder, base, *_ = group
             if name not in bound_groups:
                 bound_groups[name] = binder(blob)[0]
             code = bound_groups[name]

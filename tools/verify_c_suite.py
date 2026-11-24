@@ -967,6 +967,8 @@ OBJECT_NAMES['setgamemode_allocate_stereo_double_'] = 'setdisp'
 OBJECT_NAMES['setgamemode_backend_geometry_'] = 'setdisp'
 from bind_setgamemode_stereo import PHASES as STEREO_PHASES
 OBJECT_NAMES.update(dict.fromkeys(STEREO_PHASES, 'ststate'))
+OBJECT_NAMES.update(dict.fromkeys(('setgamemode_backend_dispatch_setup_',
+                                  'setgamemode_backend_dispatch_jump_'), 'vmoddsp'))
 OBJECT_NAMES['palette_lookup_'] = 'plook'
 OBJECT_NAMES['setgamemode_display_reset_'] = 'setdisp'
 OBJECT_NAMES['drawmasks_projection_'] = 'drawproj'

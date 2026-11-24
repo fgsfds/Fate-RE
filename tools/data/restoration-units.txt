@@ -524,3 +524,5 @@ engine/setgamemode_display setdisp
 engine/palette_lookup plook
 
 engine/setgamemode_stereo ststate
+
+engine/setgamemode_dispatch vmoddsp

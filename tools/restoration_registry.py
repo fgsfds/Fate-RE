@@ -49,6 +49,7 @@ def switch_groups():
     """One binder registration shared by validation, linking, and targeted probes."""
     table = 'compiler-generated jump table'
     specs = (
+        ('vmoddsp', 'bind_setgamemode_dispatch', [(0, 32, None, table, 8)], (0, 8, 0)),
         ('serialin', 'bind_serial_init', [(0, 16, None, table, 4),
                                           (16, None, 'initialize_serial_network_', None, 42)],
          (41, 5, 4)),

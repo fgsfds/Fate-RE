@@ -131,3 +131,5 @@ check_capture_header --exe {exe} --output {build}/capture-header-behavior.json |
 check_setgamemode_init --exe {exe} --object {build}/setdisp.obj --output {build}/setgamemode-init-behavior.json | setinit setdisp plook
 
 check_setgamemode_stereo --exe {exe} --object {build}/ststate.obj --output {build}/setgamemode-stereo-behavior.json | ststate setdisp
+
+check_setgamemode_dispatch --exe {exe} --object {build}/vmoddsp.obj --output {build}/setgamemode-dispatch-behavior.json | vmoddsp

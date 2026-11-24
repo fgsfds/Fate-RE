@@ -2777,7 +2777,6 @@ ROUTINES = [
     ('faketimerhandler_', 'fate/faketimerhandler.asm', 'faketimerhandler.bin',
      0x31ec4, 1347, TIMER_CALLBACK_POINTERS),
     ('__CHP', 'runtime/chp.asm', 'chp.bin', 0x60304, 29, {}),
-    ('setgamemode_backend_dispatch', 'engine/setgamemode.asm', 'setgamemode.bin', 0x4b1d9, 26, {4: 3178124, 11: 3178128, 22: 307246}),
     ('nextpage_', 'engine/nextpage.asm', 'nextpage.bin', 0x4b496, 1655,
      {10: 0x940ba, 23: 0x306a74, 76: 0x94014, 85: 0x306b24, 94: 0x93ff0, 99: 0x306b38, 110: 0x306b38,
       122: 0x306b38, 131: 0x93ff0, 137: 0x306b44, 182: 0x940cf, 203: 0x211763, 224: 0x211763,
@@ -2894,9 +2893,6 @@ NON_ROUTINE_UNITS = [
      'audio_input_dispatch_zero_tail.bin', 0x6bfb9, 512, {}),
     ('audio_output_dispatch_zero_tail', 'runtime/audio_output_dispatch_zero_tail.asm',
      'audio_output_dispatch_zero_tail.bin', 0x6dd7d, 896, {}),
-    ('setgamemode_dispatch', 'engine/video_mode_dispatch.asm', 'video_mode_dispatch.bin', 0x4b02e, 32,
-     {0: 0x4b1f3, 4: 0x4b275, 8: 0x4b295, 12: 0x4b2aa, 16: 0x4b2aa, 20: 0x4b2aa, 24: 0x4b2b9,
-      28: 0x4b320}),
     ('page_present_dispatch', 'engine/page_present_dispatch.asm', 'page_present_dispatch.bin', 0x4b47e, 24,
      {0: 0x4b624, 4: 0x4b874, 8: 0x4b8df, 12: 0x4b8f3, 16: 0x4b91b, 20: 0x4b93d}),
     ('page_present_alignment', 'engine/page_present_alignment.asm', 'page_present_alignment.bin',
@@ -3140,7 +3136,6 @@ NON_ROUTINE_KINDS.update({
 })
 
 GROUP_SLICES = {
-    'setgamemode_backend_dispatch': (0, 26),
     'screencapture_': (0, 874),
     'capture_after_open': (14, 874),
     'capture_header_join': (27, 874),
@@ -3685,7 +3680,6 @@ DATA_POINTER_SITES = {
      295, 306, 311, 323, 349, 355, 362, 367, 374, 400, 406, 413, 419, 435, 440, 447, 472, 483, 533,
      551, 556, 563, 589, 595, 636, 654, 659, 664, 677, 683, 694, 712, 718, 727, 732, 739, 749, 764,
      771, 782, 792, 798, 823, 828, 839, 847, 852, 857, 864, 870,),
-    'setgamemode_backend_dispatch': (4, 11),
     'nextpage_': (10, 23, 76, 85, 94, 99, 110, 122, 131, 137, 182, 203, 224, 233, 253, 260, 267, 274, 283, 292, 300,
      306, 314, 321, 328, 334, 352, 363, 380, 400, 408, 428, 434, 444, 457, 467, 526, 553, 653, 750,
      849, 934, 950, 975, 991, 1002, 1011, 1017, 1036, 1042, 1047, 1053, 1060, 1066, 1078, 1083,

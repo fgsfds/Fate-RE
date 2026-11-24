@@ -234,3 +234,20 @@ register/flag/memory dependencies. The stereo fixture compares original,
 placed and natural compiler order, including poisoned byte-register upper
 bits and shared return restoration. Do not reorder volatile accesses to make
 this proof: volatile access order is part of that C program's semantics.
+
+
+### Switch index byte writes and generated table relocation
+
+For the video-mode dispatch, zero an unsigned dword union through an empty
+EDX identity, write its low byte from AL, and keep height in EBX and the
+unsigned wrapping product in EAX. Watcom emits the original XOR EDX,
+MOV DL,AL and CS:EDX table jump. The private switch's CMP EDX/JA is redundant
+under the earlier linked AL guard; excluding it preserves the original IMUL
+flags. This relies on the pinned 32-bit little-endian Watcom representation.
+
+A generated table can be placed separately from selected code in the same
+object. Guard the entire raw group and fixup inventory, then translate each
+same-CODE target through its checked case-entry map. Verify every placed
+CODE relocation and replay with the translated table installed. Count table
+bytes as data. The image builder routes only the registered contiguous group
+interval through its group binder and binds separately placed leaves normally.

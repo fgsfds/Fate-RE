@@ -28,6 +28,9 @@ def verified_switch_tables(inventory, filename, obj):
     table_rows = [row for row in inventory['non_routine_code_spans']
                   if row['object'] == filename and row['kind'] == 'compiler-generated jump table']
     routine_rows = [row for row in inventory['spans'] if row['object'] == filename]
+    if any(leaf_public_name(row['symbol']) == 'setgamemode_dispatch_context_' for row in routine_rows):
+        from bind_setgamemode_dispatch import verified_context_tables
+        return verified_context_tables(obj, routine_rows, table_rows)
     if not table_rows:
         if any(row['symbol'] == 'setgamemode_display_reset_' for row in routine_rows):
             from bind_setgamemode_display import verified_context_tables

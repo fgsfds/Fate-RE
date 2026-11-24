@@ -1,9 +1,19 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1284,
-  "unique_code_bytes": 180942,
-  "le_pointers": 9967,
+  "routines": 1286,
+  "unique_code_bytes": 181000,
+  "le_pointers": 9978,
   "non_routine_code_spans": [
+    {
+      "kind": "compiler-generated jump table",
+      "object": "vmoddsp.obj",
+      "object_sha256": "5b302cf5720aedff044e671fc75be65ac2bf3da51c5f192b8a2f106709f8b018",
+      "raw_offset": "0x7062e",
+      "sha256": "b877293cb9e74b6e765f046e70a33527b91d255f4f1245093a45e341570ae7d7",
+      "loaded_address": "0x4b02e",
+      "bytes": 32,
+      "le_pointers": 8
+    },
     {
       "kind": "compiler-generated jump table",
       "object": "serialin.obj",
@@ -4968,6 +4978,26 @@
       "loaded_address": "0x4b1d1",
       "bytes": 8,
       "le_pointers": 0
+    },
+    {
+      "symbol": "setgamemode_backend_dispatch_setup_",
+      "object": "vmoddsp.obj",
+      "object_sha256": "5b302cf5720aedff044e671fc75be65ac2bf3da51c5f192b8a2f106709f8b018",
+      "sha256": "3a182d9bfded8a1d685153e46331e4310a8ddaa33d5e8002b7a46971b4def384",
+      "raw_offset": "0x707d9",
+      "loaded_address": "0x4b1d9",
+      "bytes": 18,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "setgamemode_backend_dispatch_jump_",
+      "object": "vmoddsp.obj",
+      "object_sha256": "5b302cf5720aedff044e671fc75be65ac2bf3da51c5f192b8a2f106709f8b018",
+      "sha256": "0bf0e9dd8937f75219fc6555fd20920abce4a1606fbe446c207276edec9517aa",
+      "raw_offset": "0x707eb",
+      "loaded_address": "0x4b1eb",
+      "bytes": 8,
+      "le_pointers": 1
     },
     {
       "symbol": "setgamemode_backend_geometry_",
