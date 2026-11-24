@@ -521,3 +521,14 @@ without union byte-store merge code. A full-EAX identity between stages and
 Watcom's low-word signed conversion retain CWDE and the final full-register
 TEST. Preserve the initialized four-byte object and verify its high neighbor
 bytes as well as the predicate bit.
+
+
+A partial switch-context binder must guard the complete compiler group,
+including excluded table slots and the dispatch reference. Keep CODE literals
+separate from DATA aliases even when both are declared as const externs:
+loaded addresses use the CODE base 0x10000 instead of DATA base 0x80000.
+Reclassify their relocation metadata as CODE before verification. Retained
+TEST instructions may supply flags for selected C branches when both test
+contexts prove the same predicate; verify each incoming frame slot and actual
+CALL return address in the composed execution. An unlinked safe-return edge
+in the private context does not replace the original invalid-input branch.

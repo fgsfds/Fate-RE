@@ -150,3 +150,4 @@ check_save_players_finish --exe {exe} --build {build} --output {build}/save-play
 check_video_dos_allocation --exe {exe} --build {build} --output {build}/video-dos-allocation.json | vdosio vbufret vbufscal dosmem vesaq
 check_video_memory_mapping --exe {exe} --build {build} --output {build}/video-memory-mapping.json | vmapctx
 check_vesa_mode_initialization --exe {exe} --build {build} --output {build}/vesa-mode-initialization.json | vbeinit vbeprdc vbehdr
+check_video_mode_prompt --exe {exe} --build {build} --output {build}/video-mode-prompt.json | vprompt

@@ -1,15 +1,15 @@
 # Exact C restoration progress
 
-The current saved attribution audit covers all 414,639 CODE bytes and includes 582 compiler units. Saved full validation passed 405 tests and 148 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
+The current saved attribution audit covers all 414,639 CODE bytes and includes 583 compiler units. Saved full validation passed 405 tests and 149 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 169,210 | 40.809% |
+| Compiler-generated instructions | 169,563 | 40.894% |
 | Inline assembly instructions in C objects | 24,342 | 5.871% |
-| Standalone assembly | 219,836 | 53.019% |
+| Standalone assembly | 219,483 | 52.934% |
 | Unattributed instructions and non-routine tables | 1,251 | 0.302% |
 
-The unattributed category contains 882 instruction bytes in 16 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 244,178 bytes (58.89%). C-object inventory covers 194,803 bytes (46.98%) and 1,498 C routine spans; the assembly inventory has 483 spans.
+The unattributed category contains 882 instruction bytes in 16 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 243,825 bytes (58.80%). C-object inventory covers 195,156 bytes (47.07%) and 1,505 C routine spans; the assembly inventory has 488 spans.
 
 The accepted executable is 741,347 bytes, SHA-256 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.
 
@@ -130,6 +130,33 @@ range and check its pointer lifetimes. Full context hashes guard the five
 unlinked footer bytes; two additional mutation controls cover footer and
 player-context returns. This checkpoint replaces the last 110 assembly bytes
 in the two save/load routines.
+
+The video-mode size prompt supplies 353 of its 617 body bytes (57.21%) from
+seven checked C sections, all compiler-generated. Its 18 LE sites include two
+CODE references to the embedded defaults and 16 DATA references. The remaining
+264 body bytes, original 24-byte dispatch table and one alignment byte stay in
+assembly. A dedicated binder guards the entire 647-byte private compiler group,
+including its unlinked six-entry table, all 48 fixups, 23 direct branches and
+13 calls. Sixteen selected branches keep their original displacements; ten
+selected calls receive ordinary placement rebinding. No private table bytes
+receive C credit. The public caller's short/short ABI remains unchanged; the
+separate C context carries brightness through a full register and narrows it
+to the original word. The known caller supplies modes 0..5. Original dispatch,
+invalid-mode edge, stack defaults and CX brightness tests remain assembly, so
+selected sections consume the original frame and flag handoffs. This is a
+restoration through C sections, not a whole matching compiler public.
+
+The prompt fixture passes 732 cases: 244 each for reference, placed and private
+code. An independent model checks clamping, the last matching duplicate,
+permuted size maps, signed dimensions, the negative selection sentinel,
+stale positive selections, all six mode names, highlighting and all 13 text
+rows. All 16,704 visits to original callee entry addresses use stubbed color
+and print bodies. Every visit checks its actual return address, argument
+stack depth and saved registers. Placed/reference modes additionally verify
+original default slots, pointer roots and full CX brightness with poisoned
+upper EDX bits. Full DATA, caller/lower-stack guards, 9,516 print argument
+lists and high getter-word poison pass. Thirteen negative controls include
+valid-checksum OMF mutations to the private return, table and external target.
 
 VESA-mode initialization supplies 1,052 of its 1,072 bytes (98.13%) from
 35 checked compiler phases, all native C, with all 59 LE sites. The remaining
@@ -357,7 +384,7 @@ The receiver has 916 native C bytes, 0 retained ASM bytes, and 65 LE sites, with
 
 The saved full validation and audit artifacts verify the pinned image:
 
-- Full validation and 148 fixtures: `work/palette-loop-check/validation.json`.
+- Full validation and 149 fixtures: `work/palette-loop-check/validation.json`.
 - Encounter frame behavior: `work/encounter-frame-build/encounter-frame-behavior.json`.
 - Video initialization handoff: `work/setmode-display-handoff.json`.
 - Ripple parent and C sum behavior: `work/palette-loop-check/ripple-texture-behavior.json`.
@@ -375,7 +402,8 @@ The saved full validation and audit artifacts verify the pinned image:
 - Video DOS allocation and continuation: `work/palette-loop-check/video-dos-allocation.json`.
 - Complete video-memory mapping: `work/palette-loop-check/video-memory-mapping.json`.
 - VESA initialization contexts: `work/palette-loop-check/vesa-mode-initialization.json`.
-- Attribution audit: `work/vesa-init60-audit.json`.
+- Video-mode prompt sections and call frames: `work/palette-loop-check/video-mode-prompt.json`.
+- Attribution audit: `work/video-prompt-audit.json`.
 - Unit test log: `work/palette-loop-check/logs/unit-tests.log`.
 - Encounter loop setup and position phase: `work/encounter-loop-build/behavior.json`.
 - Encounter trigger/sector/clock phase: `work/encounter-spawn-build/behavior.json`.

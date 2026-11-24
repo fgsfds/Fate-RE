@@ -2665,6 +2665,238 @@
           }
         }
       ]
+    },
+    {
+      "object": "vprompt",
+      "source": "fate/prompt_video_mode",
+      "size": 647,
+      "binder": "bind_video_prompt_sections",
+      "contexts": [
+        {
+          "public": "prompt_video_mode_context_",
+          "start": 24,
+          "size": 623,
+          "sha256": "05baf7c97a4f2579e92649c6bf57ad89f8cce00776c12752b45f7d4dbd1e91ff",
+          "fixups": {
+            "13": [
+              "_video_default_indices",
+              false,
+              0
+            ],
+            "22": [
+              "_video_default_width",
+              false,
+              0
+            ],
+            "32": [
+              "_video_default_height",
+              false,
+              0
+            ],
+            "61": [
+              null,
+              false,
+              0
+            ],
+            "66": [
+              "_first_mode_indices",
+              false,
+              0
+            ],
+            "71": [
+              "_first_mode_widths",
+              false,
+              0
+            ],
+            "76": [
+              "_first_mode_heights",
+              false,
+              0
+            ],
+            "92": [
+              "_video_size_count",
+              false,
+              0
+            ],
+            "99": [
+              "_second_mode_indices",
+              false,
+              0
+            ],
+            "104": [
+              "_second_mode_widths",
+              false,
+              0
+            ],
+            "109": [
+              "_second_mode_heights",
+              false,
+              0
+            ],
+            "125": [
+              "_video_size_count",
+              false,
+              0
+            ],
+            "153": [
+              "_video_size_count",
+              false,
+              0
+            ],
+            "159": [
+              "_video_size_selection",
+              false,
+              0
+            ],
+            "166": [
+              "_video_size_count",
+              false,
+              0
+            ],
+            "180": [
+              "_video_size_selection",
+              false,
+              0
+            ],
+            "233": [
+              "_requested_video_width",
+              false,
+              0
+            ],
+            "244": [
+              "_requested_video_height",
+              false,
+              0
+            ],
+            "253": [
+              "_video_size_selection",
+              false,
+              0
+            ],
+            "261": [
+              "_video_size_count",
+              false,
+              0
+            ],
+            "270": [
+              "_video_size_selection",
+              false,
+              0
+            ],
+            "313": [
+              "set_background_color_",
+              true,
+              0
+            ],
+            "320": [
+              "set_text_color_",
+              true,
+              0
+            ],
+            "325": [
+              "_video_mode_selection",
+              false,
+              0
+            ],
+            "332": [
+              "_video_mode_names",
+              false,
+              0
+            ],
+            "338": [
+              "_video_size_heading",
+              false,
+              0
+            ],
+            "347": [
+              "print_video_text_at_",
+              true,
+              0
+            ],
+            "360": [
+              "set_background_color_",
+              true,
+              0
+            ],
+            "383": [
+              "set_text_color_",
+              true,
+              0
+            ],
+            "397": [
+              "_video_size_count",
+              false,
+              0
+            ],
+            "404": [
+              "_video_size_empty_row",
+              false,
+              0
+            ],
+            "413": [
+              "print_video_text_at_",
+              true,
+              0
+            ],
+            "428": [
+              "_video_size_selection",
+              false,
+              0
+            ],
+            "452": [
+              "set_background_color_",
+              true,
+              0
+            ],
+            "462": [
+              "set_text_color_",
+              true,
+              0
+            ],
+            "514": [
+              "_video_prompt_size_format",
+              false,
+              0
+            ],
+            "523": [
+              "print_video_text_at_",
+              true,
+              0
+            ],
+            "531": [
+              "get_text_color_",
+              true,
+              0
+            ],
+            "547": [
+              "set_background_color_",
+              true,
+              0
+            ],
+            "570": [
+              "set_text_color_",
+              true,
+              0
+            ],
+            "598": [
+              "_video_size_footer",
+              false,
+              0
+            ],
+            "607": [
+              "print_video_text_at_",
+              true,
+              0
+            ]
+          },
+          "branches": {
+            "public_address": 224522,
+            "compiler_size": 623,
+            "placed_size": 617,
+            "sites": {}
+          }
+        }
+      ]
     }
   ],
   "phases": [
@@ -3486,6 +3718,76 @@
       "end": 1012,
       "address": 278690,
       "routine": "initialize_vesa_mode",
+      "le_sites": 1
+    },
+    {
+      "phase": "video_prompt_entry_",
+      "public": "prompt_video_mode_context_",
+      "object": "vprompt",
+      "begin": 0,
+      "end": 26,
+      "address": 224522,
+      "routine": "prompt_video_mode",
+      "le_sites": 2
+    },
+    {
+      "phase": "video_prompt_clamp_size_",
+      "public": "prompt_video_mode_context_",
+      "object": "vprompt",
+      "begin": 157,
+      "end": 188,
+      "address": 224673,
+      "routine": "prompt_video_mode",
+      "le_sites": 3
+    },
+    {
+      "phase": "video_prompt_match_size_",
+      "public": "prompt_video_mode_context_",
+      "object": "vprompt",
+      "begin": 228,
+      "end": 291,
+      "address": 224744,
+      "routine": "prompt_video_mode",
+      "le_sites": 5
+    },
+    {
+      "phase": "video_prompt_heading_",
+      "public": "prompt_video_mode_context_",
+      "object": "vprompt",
+      "begin": 298,
+      "end": 364,
+      "address": 224814,
+      "routine": "prompt_video_mode",
+      "le_sites": 3
+    },
+    {
+      "phase": "video_prompt_placeholders_",
+      "public": "prompt_video_mode_context_",
+      "object": "vprompt",
+      "begin": 367,
+      "end": 434,
+      "address": 224883,
+      "routine": "prompt_video_mode",
+      "le_sites": 3
+    },
+    {
+      "phase": "video_prompt_print_size_",
+      "public": "prompt_video_mode_context_",
+      "object": "vprompt",
+      "begin": 488,
+      "end": 551,
+      "address": 225004,
+      "routine": "prompt_video_mode",
+      "le_sites": 1
+    },
+    {
+      "phase": "video_prompt_footer_",
+      "public": "prompt_video_mode_context_",
+      "object": "vprompt",
+      "begin": 586,
+      "end": 623,
+      "address": 225102,
+      "routine": "prompt_video_mode",
       "le_sites": 1
     }
   ]

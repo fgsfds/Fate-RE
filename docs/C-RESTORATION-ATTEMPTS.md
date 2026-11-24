@@ -112,9 +112,22 @@ Evidence and hash-bound behavior report: `work/numbered-board-next/evidence.json
 
 Watcom 10.5 `/4r /s /or /bt=dos` still emits an extra `MOV EAX,ESI` after the SI load. Logical OR of the two computed proximity results emits two TEST/JNE pairs instead of the original signed extensions and `OR EDX,EAX`; the state-1 store also uses ECX. The remaining 95-byte actor gate and 597-byte spawn prefix stay in assembly. Next investigate the proximity-result lifetime with bitwise OR; the spawn loop separately needs the original EBP height lifetime. Evidence: `work/encounter-next/enccond.dis` and `remaining-phases.json`.
 
-### Video prompt-mode blocker
+### Video prompt-mode frame and brightness
 
-Watcom 10.5 `/4r /s /or /bt=dos` emits 627 bytes versus 617. Brightness lands in ESI instead of ECX and the default-width spill moves from `+0x10` to `+0x14`; the invalid-mode edge also misses the original shared join. Next stage brightness in ECX and inspect width/end-slot lifetimes while retaining the original invalid-input edge in assembly. Probe: `work/video-prompt-next/prompt_video_mode.c`; comparison: `work/video-prompt-next/vidmode.report.json`.
+`prompt_video_mode`, Watcom 10.5 `/4r /s /or /bt=dos`: seven checked sections
+supply 353 native body bytes and 18 LE sites. The remaining 264 body bytes,
+24-byte dispatch and alignment byte retain their original assembly. The
+623-byte private body first differs at +0x1d: its default width lives at
+ESP+8 rather than the original ESP+0x10. Repeated low-CX bindings add moves;
+a packed frame variant grows the allocation from 0x18 to 0x1c and emits
+word-width stores. Brightness later lives in ESI in the private context,
+while original retained tests still consume CX. Next isolate full-width
+default carriers and their actual slot lifetimes before widening selection.
+The original invalid-mode join remains unchanged; the caller supplies 0..5.
+The separate context interface does not replace the public short/short ABI.
+Frozen probes and seam contracts: `work/video-prompt-restoration/evidence.md`
+and `work/video-prompt-restoration/section-contracts.md`. Accepted fixture:
+`work/palette-loop-check/video-mode-prompt.json`.
 
 ### Whole palette search frame
 
@@ -860,7 +873,11 @@ Only 20 bytes remain assembly: three BIOS calls and the five-byte jump to the
 shared register restore at 0x50347. The private contexts use their own compiler
 epilogues; no matching transfer with the original saved-slot contract is proven.
 A continuation model must account for the five saved registers and caller return
-address, rather than declaring the restore as an ordinary zero-argument callee.
+address, rather than declaring the restore as an ordinary zero-argument callee. External-frame
+probes 61/62 reproduce the restore suffix but retain a four-byte stack slot.
+A pointer identity eliminates the BIOS-pointer spill only by moving the spill
+to the incoming width. Their jumps require ADD ESP,4 before the five pops;
+the original does not. Evidence: `work/vesa-init-research/probe62.json`.
 
 Original calls 0x43d62, 0x43ea3 and 0x43ee2 remain assembly. On cached probing,
 4f02 has no dominating writes to CX/DX/SI/DI; 4f0a reads unwritten ES/DS at

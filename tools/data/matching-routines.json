@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1498,
-  "unique_code_bytes": 194803,
-  "le_pointers": 10595,
+  "routines": 1505,
+  "unique_code_bytes": 195156,
+  "le_pointers": 10613,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -4268,6 +4268,76 @@
       "loaded_address": "0x36c16",
       "bytes": 219,
       "le_pointers": 8
+    },
+    {
+      "symbol": "video_prompt_entry_",
+      "object": "vprompt.obj",
+      "object_sha256": "9c94cef07aca951bbe809f29f0530e4aa9ae42d8b59d3d76c98b49886a997b38",
+      "sha256": "d45a253fa729a56f78404093a2037fb1a94efc22cec221390df15d76e2e7ff9a",
+      "raw_offset": "0x5c30a",
+      "loaded_address": "0x36d0a",
+      "bytes": 26,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "video_prompt_clamp_size_",
+      "object": "vprompt.obj",
+      "object_sha256": "9c94cef07aca951bbe809f29f0530e4aa9ae42d8b59d3d76c98b49886a997b38",
+      "sha256": "6510ce40360aa561611b1dec7f68d2468d918c733d56087cf36032033b8a6b37",
+      "raw_offset": "0x5c3a1",
+      "loaded_address": "0x36da1",
+      "bytes": 31,
+      "le_pointers": 3
+    },
+    {
+      "symbol": "video_prompt_match_size_",
+      "object": "vprompt.obj",
+      "object_sha256": "9c94cef07aca951bbe809f29f0530e4aa9ae42d8b59d3d76c98b49886a997b38",
+      "sha256": "88fcd3ce95709ce5c8d9098d5e87afee47dddb257eab1a0f9c43fddd2e3f8797",
+      "raw_offset": "0x5c3e8",
+      "loaded_address": "0x36de8",
+      "bytes": 63,
+      "le_pointers": 5
+    },
+    {
+      "symbol": "video_prompt_heading_",
+      "object": "vprompt.obj",
+      "object_sha256": "9c94cef07aca951bbe809f29f0530e4aa9ae42d8b59d3d76c98b49886a997b38",
+      "sha256": "1e645d3d93aa0ed3b840014c62167e7996a1e5daa156373b399b72a569428c7f",
+      "raw_offset": "0x5c42e",
+      "loaded_address": "0x36e2e",
+      "bytes": 66,
+      "le_pointers": 3
+    },
+    {
+      "symbol": "video_prompt_placeholders_",
+      "object": "vprompt.obj",
+      "object_sha256": "9c94cef07aca951bbe809f29f0530e4aa9ae42d8b59d3d76c98b49886a997b38",
+      "sha256": "b28c5f1c47e4c9d13eb1ffa4aee73ade61c3dcb455be10a1895656f43ae17750",
+      "raw_offset": "0x5c473",
+      "loaded_address": "0x36e73",
+      "bytes": 67,
+      "le_pointers": 3
+    },
+    {
+      "symbol": "video_prompt_print_size_",
+      "object": "vprompt.obj",
+      "object_sha256": "9c94cef07aca951bbe809f29f0530e4aa9ae42d8b59d3d76c98b49886a997b38",
+      "sha256": "ab07fc8e5aef178e7e9bf3f4620818f6932d607b52c9ffc9e9000a7658be2d1d",
+      "raw_offset": "0x5c4ec",
+      "loaded_address": "0x36eec",
+      "bytes": 63,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "video_prompt_footer_",
+      "object": "vprompt.obj",
+      "object_sha256": "9c94cef07aca951bbe809f29f0530e4aa9ae42d8b59d3d76c98b49886a997b38",
+      "sha256": "26ef9457a81c3acec2e9439a0bbb139274d021f1a61bb855483ed72d93985203",
+      "raw_offset": "0x5c54e",
+      "loaded_address": "0x36f4e",
+      "bytes": 37,
+      "le_pointers": 1
     },
     {
       "symbol": "prompt_video_settings_",

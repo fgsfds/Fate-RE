@@ -3932,6 +3932,13 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
     if symbol == 'setgamemode_display_reset_':
         from bind_setgamemode_display import bind_display_reset
         return bind_display_reset(blob, address)
+    if public_name == 'prompt_video_mode_context_' and symbol in LEAF_CODE_SLICES:
+        from bind_video_prompt_sections import bind_section, DATA as prompt_data, CODE as prompt_code, FUNCTIONS as prompt_functions
+        if (any(name in values and values[name] != target for name,target in prompt_data.items())
+                or any(name in (functions or {}) and functions[name] != target for name,target in prompt_functions.items())
+                or any(name in (absolute_code or {}) and absolute_code[name] != target for name,target in prompt_code.items())):
+            raise ValueError('Video prompt sections require fixed bindings; use the loaded context binder')
+        return bind_section(blob, symbol, address=address, code_bindings=code_bindings)
     if public_name == 'dispatch_main_menu_' and symbol in LEAF_CODE_SLICES:
         from bind_main_menu_sections import bind_section, DATA as menu_data, FUNCTIONS as menu_functions
         # This shared-frame binder supports the fixed production placement.
@@ -5063,6 +5070,9 @@ CODE_OFFSETS['free_video_dos_memory_'] = 0x33a1d
 DATA_OFFSETS.update({'_mapped_video_base': 2648920, '_video_selector_allocation_error': 6495, '_video_physical_mapping_error': 6525, '_video_selector_base_error': 6561, '_video_selector_limit_error': 6593})
 DATA_OFFSETS.update({'_vesa_request_signature': 6626, '_vesa_reply_signature': 6631, '_vesa_not_supported_message': 6636, '_vesa_mode_not_found_message': 6653, '_software_framebuffer': 81904, '_vesa_probe_attempted': 81908, '_vesa_pm_set_window': 81909, '_vesa_pm_set_display_start': 81913, '_vesa_controller_info': 2015904, '_page_offsets': 2016412, '_linear_page_addresses': 2016672, '_vesa_mode_list': 2017056, '_skip_bank_switch': 2648916, '_mapped_video_base': 2648920, '_bank_shift': 2648924, '_linear_framebuffer_enabled': 2648928, '_video_pitch': 2648932, '_video_width': 2648936, '_video_page_size': 2648944, '_draw_page_address': 2648948, '_video_page_count': 2648952, '_video_height': 2648956, '_use_software_framebuffer': 2648964, '_framebuffer_offset': 2654486, '_framebuffer_selector': 2654490})
 FUNCTION_ADDRESSES.update({'printf_': 265140, 'runtime_exit_': 394067, 'strncpy_': 406170, 'strncmp_': 406207, 'divide_vesa_offset_': 406248, 'get_vesa_mode_info_': 277072, 'query_vesa_mode_': 277288, 'dpmi_real_mode_interrupt_': 276490, 'dpmi_real_mode_far_call_': 276729, 'map_video_memory_': 277361})
+DATA_OFFSETS.update({'_first_mode_indices': 77140, '_first_mode_widths': 77128, '_first_mode_heights': 77134, '_second_mode_indices': 77160, '_second_mode_widths': 77152, '_second_mode_heights': 77156, '_video_size_selection': 1523028, '_video_size_count': 1523030, '_requested_video_width': 77172, '_requested_video_height': 77176, '_video_mode_selection': 77168, '_video_mode_names': 77104, '_video_size_heading': 2531, '_video_size_empty_row': 2539, '_video_prompt_size_format': 2557, '_video_size_footer': 2573})
+CODE_OFFSETS.update({'_video_default_indices': 158026, '_video_default_width': 158030, '_video_default_height': 158032})
+FUNCTION_ADDRESSES.update({'set_background_color_': 455103, 'set_text_color_': 455261, 'get_text_color_': 455212, 'print_video_text_at_': 224014})
 CONTROLLER_PREFIX_LAYOUT = json.loads((Path(__file__).parent/'data/controller-prefix-layout.json').read_text(encoding='utf-8'))
 COMPILER_CONTEXT_OBJECTS = SAVE_DYNAMIC_LAYOUT['objects'] + CONTROLLER_PREFIX_LAYOUT['objects']
 COMPILER_CONTEXT_PHASES = SAVE_DYNAMIC_LAYOUT['phases'] + CONTROLLER_PREFIX_LAYOUT['phases']

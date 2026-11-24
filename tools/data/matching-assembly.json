@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 483,
-  "unique_code_bytes": 219836,
-  "le_pointers": 11954,
+  "routines": 488,
+  "unique_code_bytes": 219483,
+  "le_pointers": 11936,
   "non_routine_code_spans": [
     {
       "symbol": "setgamemode_save_tail",
@@ -1930,16 +1930,76 @@
       "le_pointers": 49
     },
     {
-      "symbol": "prompt_video_mode",
+      "symbol": "video_prompt_original_setup",
       "source": "src/fate/prompt_video_mode.asm",
       "binary": "prompt_video_mode.bin",
-      "sha256": "ae9c2c4e79fba10ac2a70b183779a03712769a7f60fc15d1c979e05ae44e076e",
-      "bytes": 617,
-      "raw_offset": "0x5c30a",
-      "loaded_address": "0x36d0a",
-      "public_entry": "0x36d0a",
+      "sha256": "a88b7029ad91c56f5c1de9dddfd4125a4ebcac5936776769522c03b9dd8b61c7",
+      "bytes": 125,
+      "raw_offset": "0x5c324",
+      "loaded_address": "0x36d24",
+      "public_entry": "0x36d24",
       "binary_offset": 25,
-      "le_pointers": 29
+      "le_pointers": 11
+    },
+    {
+      "symbol": "video_prompt_original_search",
+      "source": "src/fate/prompt_video_mode.asm",
+      "binary": "prompt_video_mode.bin",
+      "sha256": "b565f8a7c2a79696869c375b8bb95bd50a1e1cc91a4452ebb8565346fe097699",
+      "bytes": 40,
+      "raw_offset": "0x5c3c0",
+      "loaded_address": "0x36dc0",
+      "public_entry": "0x36dc0",
+      "binary_offset": 150,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "video_prompt_original_limit",
+      "source": "src/fate/prompt_video_mode.asm",
+      "binary": "prompt_video_mode.bin",
+      "sha256": "b9f98b252342377eb72d413fbdd563d58a2335614a78e95c3f7ff2f432d93e64",
+      "bytes": 7,
+      "raw_offset": "0x5c427",
+      "loaded_address": "0x36e27",
+      "public_entry": "0x36e27",
+      "binary_offset": 190,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "video_prompt_original_brightness",
+      "source": "src/fate/prompt_video_mode.asm",
+      "binary": "prompt_video_mode.bin",
+      "sha256": "e72d83e5313cde1df84597482ce9cff01115949d2d760494150e1f55fff81e05",
+      "bytes": 3,
+      "raw_offset": "0x5c470",
+      "loaded_address": "0x36e70",
+      "public_entry": "0x36e70",
+      "binary_offset": 197,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "video_prompt_original_selected_row",
+      "source": "src/fate/prompt_video_mode.asm",
+      "binary": "prompt_video_mode.bin",
+      "sha256": "3daab08ba665f189387aa12b8acab50508996038f9941a3a2a70d70fc707dab2",
+      "bytes": 54,
+      "raw_offset": "0x5c4b6",
+      "loaded_address": "0x36eb6",
+      "public_entry": "0x36eb6",
+      "binary_offset": 200,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "video_prompt_original_row_step",
+      "source": "src/fate/prompt_video_mode.asm",
+      "binary": "prompt_video_mode.bin",
+      "sha256": "61302450a3af12fbb8205dea37978a9e3bbb896a7c596ecbd158119d39f98cd0",
+      "bytes": 35,
+      "raw_offset": "0x5c52b",
+      "loaded_address": "0x36f2b",
+      "public_entry": "0x36f2b",
+      "binary_offset": 254,
+      "le_pointers": 0
     },
     {
       "symbol": "play_sound",
