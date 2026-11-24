@@ -142,11 +142,61 @@ def frame_oracle(entry,cleanup):
     return cases,3
 
 
+def shift_oracle(blob):
+    """Check byte-count ABI, unsigned words, defined flags and preserved frame."""
+    from unicorn.x86_const import (UC_X86_REG_EFLAGS,)
+    public='menu_mask_shift_';address=0x3969e
+    bound,_=bind_leaf_details(blob,'menu_native_mask_shift_phase_',{},address=address)
+    alias=public+'whole_private_check'
+    v.LEAF_CODE_SLICES[alias]=(public,0,13,13)
+    try:code,_=bind_leaf_details(blob,alias,{},address=0x400000)
+    finally:del v.LEAF_CODE_SLICES[alias]
+    private_address,stack,stop=0x400000,0x4ff000,0x4fff00
+    registers=(UC_X86_REG_EAX,UC_X86_REG_EBX,UC_X86_REG_ECX,UC_X86_REG_EDX,
+               UC_X86_REG_ESI,UC_X86_REG_EDI,UC_X86_REG_EBP)
+    cases=0
+    for count in range(32):
+        for bit in (0,1,0x80000000,0xffffffff,0x12345678,0xabcdef01):
+            for flags in (0x202,0x8d7):
+                for full in (False,True):
+                    cpu=Uc(UC_ARCH_X86,UC_MODE_32);cpu.mem_map(0,0x500000)
+                    entry=private_address if full else address
+                    cpu.mem_write(entry,code if full else bound)
+                    frame=pack('<II',stop,bit)+b'\xa5'*56
+                    cpu.mem_write(stack,frame);cpu.mem_write(stack-128,b'\x6c'*128)
+                    want={r:0xabc00000+i for i,r in enumerate(registers)}
+                    want[UC_X86_REG_ECX]=(0x33abcd00|((count+1)&31)) if full else (0x330000|count)
+                    want[UC_X86_REG_EDX]=(0xa1b2c300|count) if full else bit
+                    for r,value in want.items():cpu.reg_write(r,value)
+                    cpu.reg_write(UC_X86_REG_ESP,stack);cpu.reg_write(UC_X86_REG_EFLAGS,flags)
+                    end=stop if full else address+2
+                    cpu.emu_start(entry,end,count=20)
+                    result=(bit<<count)&0xffffffff;want[UC_X86_REG_EDX]=result
+                    assert all(cpu.reg_read(r)==value for r,value in want.items())
+                    assert cpu.reg_read(UC_X86_REG_ESP)==stack+(8 if full else 0)
+                    assert cpu.reg_read(UC_X86_REG_EIP)==end
+                    assert cpu.mem_read(stack,len(frame))==frame
+                    if full:
+                        expected_guard=b'\x6c'*124+pack('<I',want[UC_X86_REG_ECX])
+                    else:expected_guard=b'\x6c'*128
+                    assert cpu.mem_read(stack-128,128)==expected_guard
+                    actual_flags=cpu.reg_read(UC_X86_REG_EFLAGS)
+                    if count==0:assert actual_flags&0xed5==flags&0xed5
+                    else:
+                        cf=(bit>>(32-count))&1
+                        defined=cf|(4 if (result&255).bit_count()%2==0 else 0)|(0x40 if result==0 else 0)|(0x80 if result&0x80000000 else 0)
+                        assert actual_flags&0xc5==defined
+                        if count==1:assert (actual_flags>>11)&1==((result>>31)^cf)
+                    cases+=1
+    return cases
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)
     parser.add_argument('object', type=Path)
     parser.add_argument('return_object', type=Path, help='normal-return compiler context')
+    parser.add_argument('mask_object',type=Path,help='native C mask-shift context')
     parser.add_argument('--output',type=Path)
     args = parser.parse_args()
 
@@ -155,26 +205,29 @@ def main():
     unrelocated, refs = bind_leaf_details(
         obj, 'run_menu_loop_', DATA_OFFSETS, address=ADDRESS + ENTRY_SIZE, functions=FUNCTION_ADDRESSES)
     verify_leaf_relocations(unrelocated, refs, read_le_fixups(executable)['pointers'], ADDRESS + ENTRY_SIZE)
-    assert len(unrelocated) == 258 and len(refs) == 19
+    assert len(unrelocated) == 82
+    le_sites=len(refs)
     compiled, _ = bind_leaf_details(
         obj, 'run_menu_loop_', {name: DATA_BASE + offset for name, offset in DATA_OFFSETS.items()},
         address=ADDRESS + ENTRY_SIZE, functions=FUNCTION_ADDRESSES)
-    placed=bytearray(SIZE);canonical=bytearray(SIZE);covered=set(range(17,275))
-    canonical[17:275]=unrelocated;placed[17:275]=compiled
-    return_obj=args.return_object.read_bytes();objects={'menuloop':obj,'mnuret':return_obj}
+    placed=bytearray(SIZE);canonical=bytearray(SIZE);covered=set(range(17,99))
+    canonical[17:99]=unrelocated;placed[17:99]=compiled
+    return_obj=args.return_object.read_bytes();objects={'menuloop':obj,'mnuret':return_obj,'mnumask':args.mask_object.read_bytes()}
     phases=[r for r in v.CONTROLLER_PREFIX_LAYOUT['phases'] if r['routine']=='run_menu_loop']
     for phase in phases:
         address=phase['address'];offset=address-ADDRESS;size=phase['end']-phase['begin']
         sites=set(range(offset,offset+size));assert not covered&sites;covered|=sites
         raw,bindings=bind_leaf_details(objects[phase['object']],phase['phase'],DATA_OFFSETS,address=address,functions=FUNCTION_ADDRESSES)
         verify_leaf_relocations(raw,bindings,read_le_fixups(executable)['pointers'],address)
+        le_sites+=len(bindings)
         canonical[offset:offset+size]=raw
         code,_=bind_leaf_details(objects[phase['object']],phase['phase'],{name:DATA_BASE+value for name,value in DATA_OFFSETS.items()},address=address,functions=FUNCTION_ADDRESSES)
         placed[offset:offset+size]=code
-    assert covered==set(range(SIZE))
+    assert covered==set(range(SIZE)) and le_sites==19
     assert canonical==executable[0x25600+ADDRESS:0x25600+ADDRESS+SIZE]
     compiled=bytes(placed)
     entry_cases,cleanup_cases=frame_oracle(compiled[:17],compiled[275:278])
+    mask_cases=shift_oracle(objects['mnumask'])
     private=[]
     for public,blob,size in (('run_menu_loop_',obj,283),('menu_loop_context_',return_obj,284)):
         alias=public+'complete_private_check'
@@ -196,6 +249,8 @@ def main():
     rejected(mutate_public_byte(obj,'run_menu_loop_',275),first,'context')
     rejected(mutate_public_byte(return_obj,'menu_loop_context_',283),cleanup,'context')
     rejected(rename_external(obj,b'presentation_reset_',b'presentation_reseu_'),first,'fixup')
+    mask_phase=next(r for r in phases if r['object']=='mnumask')
+    rejected(mutate_public_byte(objects['mnumask'],'menu_mask_shift_',12),mask_phase,'context')
     digest=v.LEAF_CONTEXT_SHA256.pop('menu_loop_context_')
     try:rejected(mutate_public_byte(return_obj,'menu_loop_context_',28),cleanup,'addend')
     finally:v.LEAF_CONTEXT_SHA256['menu_loop_context_']=digest
@@ -215,7 +270,8 @@ def main():
             assert exercise(body, linked[TAIL:TAIL + 6], rows, initial, updates) == expected
     result=dict(status='PASS',scenarios=len(cases),reference_executions=len(cases),placed_executions=len(cases),
                 private_executions=len(cases)*len(private),entry_frame_cases=entry_cases,cleanup_cases=cleanup_cases,
-                context_controls=controls,le_sites=len(refs),c_object_bytes=283,retained_assembly_bytes=0)
+                context_controls=controls,le_sites=le_sites,c_object_bytes=283,native_bytes=283,inline_bytes=0,
+                mask_shift_cases=mask_cases,retained_assembly_bytes=0)
     output=args.output or args.object.parent/'menu-loop.json'
     output.write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
     print(json.dumps(result))

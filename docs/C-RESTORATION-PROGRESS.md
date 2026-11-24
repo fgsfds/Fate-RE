@@ -1,15 +1,15 @@
 # Exact C restoration progress
 
-The current saved attribution audit covers all 414,639 CODE bytes and includes 574 compiler units. Saved full validation passed 405 tests and 145 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
+The current saved attribution audit covers all 414,639 CODE bytes and includes 575 compiler units. Saved full validation passed 405 tests and 145 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 167,570 | 40.413% |
-| Inline assembly instructions in C objects | 24,308 | 5.862% |
+| Compiler-generated instructions | 167,572 | 40.414% |
+| Inline assembly instructions in C objects | 24,306 | 5.862% |
 | Standalone assembly | 221,510 | 53.422% |
 | Unattributed instructions and non-routine tables | 1,251 | 0.302% |
 
-The unattributed category contains 882 instruction bytes in 16 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 245,818 bytes (59.28%). C-object inventory covers 193,129 bytes (46.58%) and 1,429 C routine spans; the assembly inventory has 481 spans.
+The unattributed category contains 882 instruction bytes in 16 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 245,816 bytes (59.28%). C-object inventory covers 193,129 bytes (46.58%) and 1,431 C routine spans; the assembly inventory has 481 spans.
 
 The accepted executable is 741,347 bytes, SHA-256 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.
 
@@ -131,8 +131,8 @@ unlinked footer bytes; two additional mutation controls cover footer and
 player-context returns. This checkpoint replaces the last 110 assembly bytes
 in the two save/load routines.
 
-The menu loop now links all 283 image bytes from C objects: 281 native
-compiler bytes and the existing two-byte inline mask shift. Its final
+The menu loop now links all 283 image bytes as native compiler-generated C
+with no inline instructions and 19 matching LE sites. Its final
 17-byte assembly entry has been removed. Three guarded compiler phases
 preserve the original register saves, eight-byte frame allocation, ESI stack
 argument load, count store and EDI/EBP argument copies. The independent
@@ -149,9 +149,15 @@ selection updates and save-preview calls across the reference, placed body
 and both private contexts (12 complete executions). Thirty-two entry cases
 check poisoned registers, full count words, exact stack writes and SUB flags;
 three cleanup cases check ESP, EIP, registers, flags and stack preservation.
-Four mutation controls cover unlinked code, the private RET, target and addend.
-This checkpoint adds 17 C-object bytes and 20 native bytes by also removing
-three inline bytes. The original mask shift remains the only inline operation.
+Five mutation controls cover unlinked code, private returns, targets and addends.
+The mask shift comes from a genuine two-argument C function with count in DL
+and the unsigned word on the stack. Its 13-byte context copies DL to CL before
+loading the word into EDX; only the two-byte native shift is linked. The eleven
+private bytes, including ECX save/restore and RET 4, are fully guarded.
+All 32 counts (0..31), six unsigned words and two flag patterns pass in placed
+and private modes: 768 cases. Private CL starts differently from DL, and the
+fixture checks full ECX restoration, the caller frame and defined shift flags.
+This checkpoint replaces the final two inline menu-loop bytes with native C.
 
 The gameplay controller is entirely compiler-generated C: all 1,245 bytes
 and 113 LE sites. Its final 18-byte row setup comes from a genuine C context
@@ -282,7 +288,7 @@ The saved full validation and audit artifacts verify the pinned image:
 - Gameplay controller and row handoffs: `work/palette-loop-check/gameplay-update-behavior.json`.
 - Complete status-panel contexts: `work/palette-loop-check/status-panel-behavior.json`.
 - Menu entry, private contexts and cleanup: `work/palette-loop-check/menu-loop.json`.
-- Attribution audit: `work/menu-complete-audit.json`.
+- Attribution audit: `work/menu-mask-audit.json`.
 - Unit test log: `work/palette-loop-check/logs/unit-tests.log`.
 - Encounter loop setup and position phase: `work/encounter-loop-build/behavior.json`.
 - Encounter trigger/sector/clock phase: `work/encounter-spawn-build/behavior.json`.

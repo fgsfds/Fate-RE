@@ -74,7 +74,15 @@ class Registrations(unittest.TestCase):
                 self.assertTrue(all(left[1] == right[0] for left, right in zip(parts, parts[1:])))
 
     def test_context_is_bounded_and_finds_attempts(self):
-        context = routine_context('run_menu_loop')
+        # Restored routines lose their resolved notes. Keep this lookup test
+        # independent of which production routines still have open blockers.
+        original_read_text = Path.read_text
+        def read_context_file(path, *args, **kwargs):
+            if path.name == 'C-RESTORATION-ATTEMPTS.md':
+                return '### Menu loop test\n\nrun_menu_loop_: bounded test evidence.\n'
+            return original_read_text(path, *args, **kwargs)
+        with patch.object(Path, 'read_text', read_context_file):
+            context = routine_context('run_menu_loop')
         self.assertEqual(context['units'][0]['object'], 'menuloop.obj')
         self.assertEqual(context['fixtures'], ['check_run_menu_loop'])
         self.assertTrue(context['attempts']['lines'])

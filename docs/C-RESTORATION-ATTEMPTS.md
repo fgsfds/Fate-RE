@@ -340,12 +340,6 @@ attempt needs a compiler-recognized dword fill that preserves
 the register state across the next read.
 
 
-### Menu loop mask shift
-
-`run_menu_loop_`: replacing the inline shift with a C expression using a byte count added
-an AND ECX, 255. Reading the full shift register and masking to the x86
-five-bit count instead added an AND ECX, 31. The target shifts directly
-by CL, so the inline shift remains.
 
 ### Save-slot preview rendering
 

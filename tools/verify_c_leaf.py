@@ -917,7 +917,7 @@ LEAVES['prepwall_last_column_'] = (0x6cdc0, 245)
 LEAVES['transmaskwallscan_'] = (0x6f3d1, 440)
 LEAVES['completemirror_'] = (0x82f1e, 1192)
 LEAVES.update({'init_fpu_callbacks_': (0x89c00, 49), 'check_fpu_callbacks_': (0x89c31, 10)})
-LEAVES['run_menu_loop_'] = (0x5ec4c, 258)
+LEAVES['run_menu_loop_'] = (0x5ec4c, 82)
 LEAVES['wallfront_'] = (0x6a913, 5)
 LEAVES['wallfront_geometry_'] = (0x6a918, 527)
 LEAVES['cansee_'] = (0x76333, 482)
@@ -3711,7 +3711,7 @@ LEAF_CONTEXT_FIXUPS = {
 }
 
 LEAF_CODE_SLICES = {
-    'run_menu_loop_': ('run_menu_loop_', 17, 275, 283),
+    'run_menu_loop_': ('run_menu_loop_', 17, 99, 283),
     'main_menu_resume_guard_': ('dispatch_main_menu_', 0x1d1, 0x1de, 497),
     'main_menu_save_': ('dispatch_main_menu_', 0, 17, 497),
     'main_menu_tick_': ('dispatch_main_menu_', 19, 25, 497),

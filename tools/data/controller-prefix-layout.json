@@ -855,6 +855,20 @@
           }
         }
       ]
+    },
+    {
+      "object": "mnumask",
+      "source": "fate/menu_mask_shift",
+      "size": 13,
+      "contexts": [
+        {
+          "public": "menu_mask_shift_",
+          "start": 0,
+          "size": 13,
+          "sha256": "3ec8d3a7cdfa4633673c65f3baf6c144be76cedcdcddcb3dd0e2de9b915f3d17",
+          "fixups": {}
+        }
+      ]
     }
   ],
   "phases": [
@@ -987,6 +1001,26 @@
       "address": 235345,
       "routine": "run_menu_loop",
       "le_sites": 0
+    },
+    {
+      "phase": "menu_native_mask_shift_phase_",
+      "public": "menu_mask_shift_",
+      "object": "mnumask",
+      "begin": 7,
+      "end": 9,
+      "address": 235166,
+      "routine": "run_menu_loop",
+      "le_sites": 0
+    },
+    {
+      "phase": "run_menu_after_shift_phase_",
+      "public": "run_menu_loop_",
+      "object": "menuloop",
+      "begin": 101,
+      "end": 275,
+      "address": 235168,
+      "routine": "run_menu_loop",
+      "le_sites": 12
     }
   ]
 }

@@ -90,7 +90,7 @@ check_edit_save_slot_name {exe} {build}/savename.obj | savename
 check_run_save_game_menu {exe} {build}/savmenu.obj | savmenu
 check_run_load_game_menu {exe} {build}/loadmenu.obj | loadmenu
 check_run_key_binding_menu {exe} {build}/keybind.obj | keybind
-check_run_menu_loop {exe} {build}/menuloop.obj {build}/mnuret.obj | menuloop mnuret
+check_run_menu_loop {exe} {build}/menuloop.obj {build}/mnuret.obj {build}/mnumask.obj | menuloop mnuret mnumask
 check_save_build_map {exe} {build}/savemap.obj | savemap
 check_load_build_map {exe} {build}/loadmap.obj | loadmap
 check_teleport_terminals {exe} {build}/telterm.obj | telterm

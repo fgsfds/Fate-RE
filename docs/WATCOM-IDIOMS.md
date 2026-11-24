@@ -27,6 +27,13 @@ The checked-in fixtures currently establish:
   establishes the same ABI.
 - `unsigned_word` and `low_byte`: the speed variant uses immediate masks;
   the other tested variants use zero-extension instructions.
+- A genuine two-argument C shift context can put an unsigned byte count in
+  DL and the unsigned word on the stack. With `parm [edx] value [edx]`, the
+  compiler saves ECX, copies DL to CL, loads EDX from the stack, then emits
+  `SHL EDX,CL` directly. Select only the shift when the surrounding context
+  already establishes CL and EDX. Counts must be 0..31; the other eleven
+  compiler bytes remain guarded. Private tests must start CL differently
+  from DL and verify full ECX restoration and RET 4 cleanup.
 - `packed_value`: a packed field at offset one is loaded directly from `[eax+1]`.
 - `less_than_memory`: the comparison uses `[edx]` directly. Under `/4r /s /or`,
   its `SETL AL` falls through into the following `low_byte` public's mask and
