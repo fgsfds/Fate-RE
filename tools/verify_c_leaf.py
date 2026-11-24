@@ -3695,6 +3695,9 @@ LEAF_CONTEXT_SUFFIXES = {
 #            optional placed CODE-object offset for selected literal pointers).
 LEAF_CONTEXT_LITERALS = {}
 
+# Complete private contexts, including unlinked stack wrappers and shared tails.
+LEAF_CONTEXT_BYTES = {}
+
 LEAF_CONTEXT_FIXUPS = {
     'main_caption_setup_': {2: ('_loading_caption_columns', False),
                             12: ('_loading_caption', False), 41: ('draw_menu_text_', True)},
@@ -3944,6 +3947,9 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
     end = min([a for s, a, _ in publics if s == seg and a > start]
               or [len(segments[seg]['data'])])
     code = bytearray(segments[seg]['data'][start:end])
+    expected_context = LEAF_CONTEXT_BYTES.get(public_name)
+    if expected_context is not None and bytes(code) != expected_context:
+        raise ValueError('Compiler private context bytes differ')
     suffix = LEAF_CONTEXT_SUFFIXES.get(public_name, b'')
     if suffix and not code.endswith(suffix):
         raise ValueError('Unlinked compiler context suffix differs')
@@ -4910,6 +4916,63 @@ LEAF_CONTEXT_SUFFIXES['ripple_stencil_next2_'] = b'\xc3'
 LEAVES['ripple_stencil_next3_phase_'] = (0x54445, 3)
 LEAF_CODE_SLICES['ripple_stencil_next3_phase_'] = ('ripple_stencil_next3_', 0, 3, 4)
 LEAF_CONTEXT_SUFFIXES['ripple_stencil_next3_'] = b'\xc3'
+
+FUNCTION_ADDRESSES.update({'ripple_particle_continue_': 0x2ebda, 'ripple_sample_continue_': 0x2ec1c, 'ripple_spawn_continue_': 0x2eb82})
+LEAVES['ripple_frame_allocate_phase_'] = (0x5415d, 3)
+LEAF_CODE_SLICES['ripple_frame_allocate_phase_'] = ('ripple_seed_and_read_ecx_', 0, 3, 13)
+LEAVES['ripple_index_seed_phase_'] = (0x5417d, 3)
+LEAF_CODE_SLICES['ripple_index_seed_phase_'] = ('ripple_seed_and_read_ecx_', 3, 6, 13)
+LEAVES['ripple_index_commit_phase_'] = (0x541a1, 3)
+LEAF_CODE_SLICES['ripple_index_commit_phase_'] = ('ripple_commit_and_read_eax_', 3, 6, 13)
+LEAVES['ripple_index_spawn_read_phase_'] = (0x541c5, 3)
+LEAF_CODE_SLICES['ripple_index_spawn_read_phase_'] = ('ripple_seed_and_read_ecx_', 6, 9, 13)
+LEAVES['ripple_index_radial_seed_phase_'] = (0x541d2, 3)
+LEAF_CODE_SLICES['ripple_index_radial_seed_phase_'] = ('ripple_seed_and_read_ecx_', 3, 6, 13)
+LEAVES['ripple_index_floor_read_phase_'] = (0x54263, 3)
+LEAF_CODE_SLICES['ripple_index_floor_read_phase_'] = ('ripple_commit_and_read_eax_', 6, 9, 13)
+LEAVES['ripple_index_step_phase_'] = (0x542af, 3)
+LEAF_CODE_SLICES['ripple_index_step_phase_'] = ('ripple_step_and_read_eax_', 6, 9, 11)
+LEAVES['ripple_index_radial_read_phase_'] = (0x542b2, 3)
+LEAF_CODE_SLICES['ripple_index_radial_read_phase_'] = ('ripple_commit_and_read_eax_', 6, 9, 13)
+LEAVES['ripple_frame_release_phase_'] = (0x544a4, 3)
+LEAF_CODE_SLICES['ripple_frame_release_phase_'] = ('ripple_seed_and_read_ecx_', 9, 12, 13)
+LEAVES['ripple_frame_return_phase_'] = (0x544ad, 1)
+LEAF_CODE_SLICES['ripple_frame_return_phase_'] = ('ripple_seed_and_read_ecx_', 12, 13, 13)
+LEAVES['ripple_particle_guard_phase_'] = (0x542b5, 8)
+LEAF_CODE_SLICES['ripple_particle_guard_phase_'] = ('ripple_particle_guard_', 0, 8, 9)
+LEAVES['ripple_sample_step_phase_'] = (0x5425e, 1)
+LEAF_CODE_SLICES['ripple_sample_step_phase_'] = ('ripple_sample_step_', 0, 1, 2)
+LEAVES['ripple_sample_test_phase_'] = (0x5425f, 2)
+LEAF_CODE_SLICES['ripple_sample_test_phase_'] = ('ripple_sample_guard_', 0, 2, 9)
+LEAVES['ripple_spawn_test_phase_'] = (0x541c8, 2)
+LEAF_CODE_SLICES['ripple_spawn_test_phase_'] = ('ripple_spawn_guard_', 0, 2, 9)
+LEAVES['ripple_last_slot_phase_'] = (0x541cc, 6)
+LEAF_CODE_SLICES['ripple_last_slot_phase_'] = ('ripple_last_slot_', 0, 6, 7)
+LEAVES['ripple_random_x_call_phase_'] = (0x54182, 5)
+LEAF_CODE_SLICES['ripple_random_x_call_phase_'] = ('ripple_random_draw_', 0, 5, 8)
+LEAVES['ripple_random_y_call_phase_'] = (0x5419c, 5)
+LEAF_CODE_SLICES['ripple_random_y_call_phase_'] = ('ripple_random_draw_', 0, 5, 8)
+LEAVES['ripple_mask_guard_compare_phase_'] = (0x542e9, 6)
+LEAF_CODE_SLICES['ripple_mask_guard_compare_phase_'] = ('ripple_output_row_guard_', 0, 6, 19)
+LEAVES['ripple_vertical_guard_compare_phase_'] = (0x5434c, 6)
+LEAF_CODE_SLICES['ripple_vertical_guard_compare_phase_'] = ('ripple_output_row_guard_', 0, 6, 19)
+LEAF_CONTEXT_BYTES['ripple_seed_and_read_ecx_'] = bytes.fromhex('83ec148904248b0c2483c414c3')
+LEAF_CONTEXT_FIXUPS['ripple_seed_and_read_ecx_'] = {}
+LEAF_CONTEXT_BYTES['ripple_commit_and_read_eax_'] = bytes.fromhex('83ec14892c248b042483c414c3')
+LEAF_CONTEXT_FIXUPS['ripple_commit_and_read_eax_'] = {}
+LEAF_CONTEXT_BYTES['ripple_step_and_read_eax_'] = bytes.fromhex('83ec14890424ff0c24ebee')
+LEAF_CONTEXT_FIXUPS['ripple_step_and_read_eax_'] = {}
+LEAF_CONTEXT_SUFFIXES['ripple_particle_guard_'] = bytes.fromhex('c3')
+LEAF_CONTEXT_SUFFIXES['ripple_sample_step_'] = bytes.fromhex('c3')
+LEAF_CONTEXT_SUFFIXES['ripple_sample_guard_'] = bytes.fromhex('7cfbe900000000')
+LEAF_CONTEXT_SUFFIXES['ripple_spawn_guard_'] = bytes.fromhex('7cf2e900000000')
+LEAF_CONTEXT_SUFFIXES['ripple_last_slot_'] = bytes.fromhex('c3')
+LEAF_CONTEXT_SUFFIXES['ripple_random_draw_'] = bytes.fromhex('89c3c3')
+LEAF_CONTEXT_FIXUPS['ripple_particle_guard_'] = {4: ('ripple_particle_continue_', True)}
+LEAF_CONTEXT_FIXUPS['ripple_sample_guard_'] = {5: ('ripple_sample_continue_', True)}
+LEAF_CONTEXT_FIXUPS['ripple_spawn_guard_'] = {5: ('ripple_spawn_continue_', True)}
+LEAF_CONTEXT_FIXUPS['ripple_last_slot_'] = {1: ('_ripple_count', False)}
+LEAF_CONTEXT_FIXUPS['ripple_random_draw_'] = {1: ('random_value_', True)}
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

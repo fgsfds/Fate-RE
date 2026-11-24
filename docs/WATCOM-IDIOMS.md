@@ -320,3 +320,20 @@ The ripple word guard starts its own translation unit to retain the exact
 layout. A conservative clobber on an empty identity may also constrain
 scheduling without adding instructions; the ripple EAX destination
 handoff invalidates ESI before binding its tile pointer.
+
+
+For an in-place field at ESP+0, an initialized volatile local struct can
+provide the correct compiler context when a stack formal begins at +4.
+The ripple index contexts allocate the real 20-byte layout, initialize
+the index, then read or decrement it. Selected instructions reuse the
+caller's already allocated frame; one context also supplies the outer
+allocation, release and return. Guard the complete context and its zero
+fixups, including any private initializer or shared-return jump. A raw
+ESP getter instead introduced an EAX home and saved-register wrappers.
+Do not execute a private RET with the index still at the top of stack.
+
+A C wrapper returning the RNG's EAX value in EBX emits CALL, a result
+copy and RET rather than a tail JMP. The ripple build links the CALL
+twice; existing coordinate phases perform the result copy. Guard the
+unlinked copy/RET and the relative-call symbol, and test the actual call
+stack before relying on the selected instruction alone.

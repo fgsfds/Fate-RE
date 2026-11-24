@@ -27,71 +27,52 @@ animate_ripple_texture:
     push esi
     push edi
     push ebp
-    sub esp, 0x14
 ; C computes and clamps the creation count in EAX.
 ; C establishes the tile register and the creation step.
-section .control align=1 vstart=0x2eb7d follows=.text
-    mov [esp], eax
+section .control align=1 vstart=0x2eb80 follows=.text
     jmp short .branch_2ebc5
 
 .branch_2eb82:
-    call random_value
 ; C copies the X draw, reads the slot, masks it, and stores the coordinate.
 ; Its EBP countdown handoffs surround the selected X instructions.
-section .after_x_store align=1 vstart=0x2eb9c follows=.control
-    call random_value
-    mov [esp], ebp
 ; C stores the Y draw, radius and updated count.
-section .after_spawn_slot align=1 vstart=0x2ebc5 follows=.after_x_store
+section .after_spawn_slot align=1 vstart=0x2ebca follows=.control
 
-.branch_2ebc5:
-    mov ecx, [esp]
-    test ecx, ecx
+.branch_2ebc5 equ 0x2ebc5
     jnl short .branch_2eb82
-    mov eax, [ripple_count]
-    dec eax
-    mov [esp], eax
+section .radial_jump align=1 vstart=0x2ebd5 follows=.after_spawn_slot
     jmp near .branch_2ecb2
 
 .branch_2ebda:
 ; C supplies the slot handoff, radial setup and Y-origin handoff.
-section .after_radial_setup align=1 vstart=0x2ec1a follows=.after_spawn_slot
+section .after_radial_setup align=1 vstart=0x2ec1a follows=.radial_jump
     jmp short .branch_2ec5f
 
 .branch_2ec1c equ 0x2ec1c
 ; C supplies sample coordinate selection and byte addition.
 ; C clamps the updated pixel to the original floor.
-section .after_pixel_floor align=1 vstart=0x2ec5e follows=.after_radial_setup
+section .after_pixel_floor align=1 vstart=0x2ec61 follows=.after_radial_setup
 
-.branch_2ec5e:
-    dec esi
+.branch_2ec5e equ 0x2ec5e
 
-.branch_2ec5f:
-    test esi, esi
+.branch_2ec5f equ 0x2ec5f
     jnl short .branch_2ec1c
-    mov eax, [esp]
 ; C advances the radius and removes expired rings.
-section .after_radius_update align=1 vstart=0x2ecaf follows=.after_pixel_floor
 
-.branch_2ecaf:
-    dec dword [esp]
+.branch_2ecaf equ 0x2ecaf
 
-.branch_2ecb2:
-    mov eax, [esp]
-    test eax, eax
-    jnl near .branch_2ebda
+.branch_2ecb2 equ 0x2ecb2
 ; C establishes the masked-row destination and tile input.
 ; C resets the row counter at each pass ingress.
-section .mask_row_counter align=1 vstart=0x2ecc6 follows=.after_radius_update
+section .mask_row_counter align=1 vstart=0x2ecc6 follows=.after_pixel_floor
     jmp short .branch_2ece9
 
 .branch_2ecc8 equ 0x2ecc8
 ; C copies and masks one 128-byte row, returning the next row in EAX.
 ; C advances the shared EBP row counter.
-section .after_mask_row align=1 vstart=0x2ece9 follows=.mask_row_counter
+section .after_mask_row align=1 vstart=0x2ecef follows=.mask_row_counter
 
-.branch_2ece9:
-    cmp ebp, strict dword 0x80
+.branch_2ece9 equ 0x2ece9
     jl short .branch_2ecc8
 ; C supplies the counter initialization and top/bottom border loop.
 section .after_border_columns align=1 vstart=0x2ed1b follows=.after_mask_row
@@ -99,9 +80,8 @@ section .after_border_columns align=1 vstart=0x2ed1b follows=.after_mask_row
 
 .branch_2ed1d equ 0x2ed1d
 ; C head, counter increment and tail share the caller's row state.
-section .vertical_row_guard align=1 vstart=0x2ed4c follows=.after_border_columns
-.branch_2ed4c:
-    cmp ebp, strict dword 0x80
+section .vertical_row_guard align=1 vstart=0x2ed52 follows=.after_border_columns
+.branch_2ed4c equ 0x2ed4c
     jl short .branch_2ed1d
 ; C supplies all four corner reads, masks and stores.
 ; C also supplies the output tile pointer and row reset.
@@ -119,12 +99,10 @@ section .output_row_jump align=1 vstart=0x2eda9 follows=.after_corners
 ; C supplies both signed loop guards, the row increment and frame advance.
 .branch_2ee87 equ 0x2ee87
 .branch_2ee92 equ 0x2ee92
-section .output_epilogue align=1 vstart=0x2eea4 follows=.output_row_jump
-    add esp, 0x14
+section .output_epilogue align=1 vstart=0x2eea7 follows=.output_row_jump
     pop ebp
     pop edi
     pop esi
     pop edx
     pop ecx
     pop ebx
-    ret

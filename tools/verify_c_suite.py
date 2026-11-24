@@ -1535,6 +1535,15 @@ def verify_compiler_groups(exe, directory, names=None):
         verify_group_layout((directory/'ripout.obj').read_bytes(), 49,
                             [('ripple_output_row_', 0), ('ripple_store_output_', 32),
                              ('ripple_mask_begin_', 41)])
+    if selected('ripidx'):
+        verify_group_layout((directory/'ripidx.obj').read_bytes(), 37,
+                            [('ripple_seed_and_read_ecx_', 0), ('ripple_commit_and_read_eax_', 13),
+                             ('ripple_step_and_read_eax_', 26)])
+    if selected('riptest'):
+        verify_group_layout((directory/'riptest.obj').read_bytes(), 44,
+                            [('ripple_particle_guard_', 0), ('ripple_sample_step_', 9),
+                             ('ripple_sample_guard_', 11), ('ripple_spawn_guard_', 20),
+                             ('ripple_last_slot_', 29), ('ripple_random_draw_', 36)])
     if selected('ripbook'):
         verify_group_layout((directory/'ripbook.obj').read_bytes(), 49,
                             [('ripple_spawn_countdown_', 0), ('ripple_radial_set_slot_', 5), ('ripple_radial_load_y_', 8), ('ripple_row_reset_', 16), ('ripple_tile_register_', 19), ('ripple_spawn_step_', 22), ('ripple_output_tile_', 28), ('ripple_stencil_center_', 31), ('ripple_stencil_next1_', 34), ('ripple_first_lane_', 38), ('ripple_stencil_next2_', 41), ('ripple_stencil_next3_', 45)])
@@ -1644,6 +1653,25 @@ OBJECT_NAMES['ripple_vertical_tail_phase_'] = 'ripbord'
 OBJECT_NAMES['ripple_output_row_phase_'] = 'ripout'
 OBJECT_NAMES['ripple_store_output_phase_'] = 'ripout'
 OBJECT_NAMES['ripple_mask_begin_phase_'] = 'ripout'
+OBJECT_NAMES['ripple_frame_allocate_phase_'] = 'ripidx'
+OBJECT_NAMES['ripple_index_seed_phase_'] = 'ripidx'
+OBJECT_NAMES['ripple_index_commit_phase_'] = 'ripidx'
+OBJECT_NAMES['ripple_index_spawn_read_phase_'] = 'ripidx'
+OBJECT_NAMES['ripple_index_radial_seed_phase_'] = 'ripidx'
+OBJECT_NAMES['ripple_index_floor_read_phase_'] = 'ripidx'
+OBJECT_NAMES['ripple_index_step_phase_'] = 'ripidx'
+OBJECT_NAMES['ripple_index_radial_read_phase_'] = 'ripidx'
+OBJECT_NAMES['ripple_frame_release_phase_'] = 'ripidx'
+OBJECT_NAMES['ripple_frame_return_phase_'] = 'ripidx'
+OBJECT_NAMES['ripple_particle_guard_phase_'] = 'riptest'
+OBJECT_NAMES['ripple_sample_step_phase_'] = 'riptest'
+OBJECT_NAMES['ripple_sample_test_phase_'] = 'riptest'
+OBJECT_NAMES['ripple_spawn_test_phase_'] = 'riptest'
+OBJECT_NAMES['ripple_last_slot_phase_'] = 'riptest'
+OBJECT_NAMES['ripple_random_x_call_phase_'] = 'riptest'
+OBJECT_NAMES['ripple_random_y_call_phase_'] = 'riptest'
+OBJECT_NAMES['ripple_mask_guard_compare_phase_'] = 'riploop'
+OBJECT_NAMES['ripple_vertical_guard_compare_phase_'] = 'riploop'
 OBJECT_NAMES['ripple_spawn_count_copy_phase_'] = 'ripbook'
 OBJECT_NAMES['ripple_spawn_count_step_phase_'] = 'ripbook'
 OBJECT_NAMES['ripple_radial_set_slot_phase_'] = 'ripbook'

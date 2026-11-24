@@ -869,41 +869,20 @@ availability rather than another union spelling. Sources and reports:
 `work/spawn-attributes-research/` and
 `work/spawn-attributes-v1/` through `work/spawn-attributes-v3/`.
 
-### Ripple animation: creation-loop count lifetime
+### Ripple animation: final control/frame consolidation
 
-Watcom 10.5 `/4r /s /or /bt=dos`: the closest full C candidate is 865
-bytes versus 855. A creation-only context with explicit preserved RNG
-register inputs passes 32 isolated cases but grows the 93-byte window
-to a 154-byte function, spilling pending count at ESP+1C and preserving
-incoming EDX/EDI on the stack. Declaring EBP in the function's modified
-register list is rejected with E1122, as are EBP input auxiliaries.
-The count clamp, masked row, top/bottom borders and four stencil sums
-are now integrated; 112 bytes and 1 LE site remain assembly.
-Both coordinate stores, the pixel floor, radius removal and all corner
-stores now match as selected C leaves. The X and corner phases preserve
-the independent EBP/ESI bookkeeping between their selected slices.
-Radial setup/sample and output lane packing now match as C leaves.
-Caller-cleanup stack formals preserve the original +8/+12 frame fields;
-retained EBP assignments establish slot and Y getter preconditions.
-The vertical row body now matches around a shared C INC EBP, and
-caller-stack output setup preserves the +4 end-pointer field. The packed
-word store hands off both incremented pointers. A public EBP return
-matches all three row increments; signed output guards with `aborts`
-continuations and the unsigned frame advance also match. Combining the
-word guard after an existing RET changes it to a JGE/shared-RET plus JMP;
-a separate loop unit retains its exact near JL. The creation countdown,
-slot/Y handoffs and row resets now also match with public EBP results.
-The remaining stack index accesses, guards, calls, ingress jumps and frame
-wrapper still need consolidation. A creation context returning its pending
-count in EBP grows to 160 bytes and spills that value at ESP+1C rather than
-producing the original EBP lifetime; its source/log are
-`work/ripple-bookkeeping-research/ripple_create_result_ebp.c` and
-`work/ripple-v41/`. Next model the caller-owned stack index directly without
-retaining untouched incoming EBP as a competing C value.
-Frozen loop evidence: `work/ripple-loop-research/RESULTS.md`.
-Creation sources, register-oracle cases, hashes and first mismatches:
-`work/ripple-create-research/semantic-notes.md` and
-`work/ripple-v16/`, `work/ripple-v19/`. The broader preparation
-contexts still copy the pixel pointer or spill the row counter;
-their frozen sources/reports remain in `work/ripple-border-probe/`
-and `work/ripple-v13/` through `work/ripple-v15/`.
+Watcom 10.5 `/4r /s /or /bt=dos`: the closest whole C candidate remains
+865 bytes versus 855. Its first meaningful mismatch is an extra
+MOV EBP,EAX at +0xB, preserving the texture pointer where the original
+keeps EDX. Selected C contexts now supply 812 image bytes, all 37 LE
+sites, frame allocation/release, stack-index operations, RNG calls and
+guard predicates. The remaining 43 assembly bytes are six saved-register
+pushes, six pops and eleven control transfers. Initialized volatile
+20-byte local contexts resolve the old stack-index spills; complete raw
+contexts and absent fixups guard their private wrappers and shared tails.
+A direct ESP getter instead homes the pointer in EAX and adds wrappers
+(`work/ripple-v47/`); the accepted local model is `work/ripple-v48/`.
+Next consolidate the saved-register and control layout around the matched
+EDX/EBP lifetimes. Whole source/report: `work/ripple-research/animate_ripple_texture_v2.c`
+and `work/ripple-v2/`; accepted frame/control evidence:
+`work/ripple-stack-check/` and `work/palette-loop-check/ripple-stack.json`.

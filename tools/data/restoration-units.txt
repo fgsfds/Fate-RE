@@ -535,3 +535,5 @@ fate/ripple_packing rippack
 fate/ripple_output ripout
 fate/ripple_output_loop riploop
 fate/ripple_bookkeeping ripbook
+fate/ripple_index_frame ripidx
+fate/ripple_loop_control riptest
