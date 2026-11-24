@@ -426,3 +426,20 @@ clock load, two additions and final store. Return the actual zero result
 to preserve the final XOR. Test poisoned upper length bits and clocks
 around wrap and exact zero; XOR leaves AF undefined, so exclude AF from
 the defined-flag oracle. Keep DF and IF preservation separate.
+
+
+Fixed character-only structures of 13 and 12 bytes produce three MOVSDs
+plus an optional MOVSB under the pinned flags. Structure assignment copies
+bytes after NUL too; measure the resulting string separately. A meaningful
+EBX length result prevents a final tail transfer, but another context may
+share that CALL/return tail. Keep the complete object layout for private
+emulation and select only the actual placed instructions. Calls between
+pointer setup and copy require proven ESI/EDI preservation. Native strlen
+loads ES, so initialize a flat GDT and DS/ES/SS in the fixture.
+
+For marker comparisons of a shared suffix, an external E8 CALL can be
+compared by identical complete suffix instructions and normalized fixups.
+Require a relative dword external FLAT relocation and matching addend,
+reject indirect transfers, and require a terminal near RET to exclude an
+unchecked fall-through into another public. Keep unsupported transfers
+unknown; a matching printed target alone is insufficient.

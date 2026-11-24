@@ -239,6 +239,64 @@
           }
         }
       ]
+    },
+    {
+      "object": "svmsg",
+      "source": "fate/save_status_message",
+      "size": 47,
+      "contexts": [
+        {
+          "public": "save_copy_loaded_message_",
+          "start": 0,
+          "size": 27,
+          "sha256": "aa5478b562bdc5cfe8792c8854c315e3658e4623fb839e5cdd50c7c84c0dd5a6",
+          "fixups": {
+            "1": [
+              "_save_loaded_status",
+              false,
+              0
+            ],
+            "6": [
+              "_save_loaded_message",
+              false,
+              0
+            ],
+            "11": [
+              "_save_loaded_status",
+              false,
+              0
+            ],
+            "20": [
+              "strlen_",
+              true,
+              0
+            ]
+          }
+        },
+        {
+          "public": "save_copy_saved_message_",
+          "start": 27,
+          "size": 20,
+          "sha256": "d69736ceab8a108becd52b647454b6363a4d7d3baef57468a05467fc0fc18006",
+          "fixups": {
+            "1": [
+              "_save_saved_status",
+              false,
+              0
+            ],
+            "6": [
+              "_save_saved_message",
+              false,
+              0
+            ],
+            "11": [
+              "_save_saved_status",
+              false,
+              0
+            ]
+          }
+        }
+      ]
     }
   ],
   "phases": [
@@ -351,6 +409,56 @@
       "address": 204440,
       "routine": "write_game_data",
       "le_sites": 3
+    },
+    {
+      "phase": "save_read_message_phase_",
+      "public": "save_copy_loaded_message_",
+      "object": "svmsg",
+      "begin": 0,
+      "end": 24,
+      "address": 199007,
+      "routine": "read_game_data",
+      "le_sites": 3
+    },
+    {
+      "phase": "save_saved_destination_message_phase_",
+      "public": "save_copy_saved_message_",
+      "object": "svmsg",
+      "begin": 0,
+      "end": 5,
+      "address": 204405,
+      "routine": "write_game_data",
+      "le_sites": 1
+    },
+    {
+      "phase": "save_saved_source_message_phase_",
+      "public": "save_copy_saved_message_",
+      "object": "svmsg",
+      "begin": 5,
+      "end": 10,
+      "address": 204417,
+      "routine": "write_game_data",
+      "le_sites": 1
+    },
+    {
+      "phase": "save_saved_copy_message_phase_",
+      "public": "save_copy_saved_message_",
+      "object": "svmsg",
+      "begin": 10,
+      "end": 18,
+      "address": 204427,
+      "routine": "write_game_data",
+      "le_sites": 1
+    },
+    {
+      "phase": "save_saved_length_message_phase_",
+      "public": "save_copy_loaded_message_",
+      "object": "svmsg",
+      "begin": 19,
+      "end": 24,
+      "address": 204435,
+      "routine": "write_game_data",
+      "le_sites": 0
     }
   ]
 }

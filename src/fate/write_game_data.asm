@@ -302,19 +302,18 @@ write_game_data:
 ; C field run 0 ends here.
 section .retained_1 align=1 vstart=0x31e73 follows=.text
     mov eax, esi
-    mov edi, status_text
-    call sub_4032e
-    mov eax, esi
-    mov esi, saved_message
-    call fclose
-    mov eax, status_text
-    movsd
-    movsd
-    movsd
-    call strlen
 
 ; C field run 1 ends here.
-section .retained_2 align=1 vstart=0x31ebb follows=.retained_1
+section .retained_2 align=1 vstart=0x31e7a follows=.retained_1
+    call sub_4032e
+    mov eax, esi
+
+; C field run 2 ends here.
+section .retained_3 align=1 vstart=0x31e86 follows=.retained_2
+    call fclose
+
+; C field run 3 ends here.
+section .retained_4 align=1 vstart=0x31ebb follows=.retained_3
     add esp, 0x14
     pop edi
     pop esi

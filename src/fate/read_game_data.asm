@@ -325,14 +325,6 @@ section .retained_2 align=1 vstart=0x30934 follows=.retained_1
     movsx edi, word [nosplit edi*2 + next_player]
     test edi, edi
     jnl short .initialize_player_after_restore
-    mov edi, status_text
-    mov esi, loaded_message
-    mov eax, status_text
-    movsd
-    movsd
-    movsd
-    movsb
-    call strlen
 
 ; C field run 2 ends here.
 section .retained_3 align=1 vstart=0x3099a follows=.retained_2

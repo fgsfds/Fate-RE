@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1398,
-  "unique_code_bytes": 192655,
-  "le_pointers": 10497,
+  "routines": 1403,
+  "unique_code_bytes": 192702,
+  "le_pointers": 10503,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -2750,6 +2750,16 @@
       "le_pointers": 4
     },
     {
+      "symbol": "save_read_message_phase_",
+      "object": "svmsg.obj",
+      "object_sha256": "de9157423b3325cd2301cb24341e3d8e4ebd6827adc9e7ebd687c0e9ef3dd6ca",
+      "sha256": "dbd155c2db85c3fff8fec27f298e9fb84f7716e164323f3e5a3b87dbe73f2cf0",
+      "raw_offset": "0x55f5f",
+      "loaded_address": "0x3095f",
+      "bytes": 24,
+      "le_pointers": 3
+    },
+    {
       "symbol": "save_read_status_phase_",
       "object": "svstat.obj",
       "object_sha256": "f1970ef517941399414d033040bc6b30446e4c155f2eacac67ce1acc67d54bb9",
@@ -2948,6 +2958,46 @@
       "loaded_address": "0x31e1b",
       "bytes": 88,
       "le_pointers": 4
+    },
+    {
+      "symbol": "save_saved_destination_message_phase_",
+      "object": "svmsg.obj",
+      "object_sha256": "de9157423b3325cd2301cb24341e3d8e4ebd6827adc9e7ebd687c0e9ef3dd6ca",
+      "sha256": "978854d2e8bc3f41b2e703da3d6eba4bc7086c1be2e9b698daea4e7b4070399d",
+      "raw_offset": "0x57475",
+      "loaded_address": "0x31e75",
+      "bytes": 5,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "save_saved_source_message_phase_",
+      "object": "svmsg.obj",
+      "object_sha256": "de9157423b3325cd2301cb24341e3d8e4ebd6827adc9e7ebd687c0e9ef3dd6ca",
+      "sha256": "a52026f4df1c3b76ab9e8b9ee2f22e8c7ce9be52069f783ae3ce5554d97c29c5",
+      "raw_offset": "0x57481",
+      "loaded_address": "0x31e81",
+      "bytes": 5,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "save_saved_copy_message_phase_",
+      "object": "svmsg.obj",
+      "object_sha256": "de9157423b3325cd2301cb24341e3d8e4ebd6827adc9e7ebd687c0e9ef3dd6ca",
+      "sha256": "d2bd1a912e33c710f5f01de94a4fab528a257aff6f9de3042c70115f00fb5bc3",
+      "raw_offset": "0x5748b",
+      "loaded_address": "0x31e8b",
+      "bytes": 8,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "save_saved_length_message_phase_",
+      "object": "svmsg.obj",
+      "object_sha256": "de9157423b3325cd2301cb24341e3d8e4ebd6827adc9e7ebd687c0e9ef3dd6ca",
+      "sha256": "ce2c627c95981ebd0189909fd61c8bc405cffdb36d5eaf4232f4040f4c99030f",
+      "raw_offset": "0x57493",
+      "loaded_address": "0x31e93",
+      "bytes": 5,
+      "le_pointers": 0
     },
     {
       "symbol": "save_write_status_phase_",

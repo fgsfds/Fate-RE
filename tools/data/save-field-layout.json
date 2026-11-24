@@ -1607,16 +1607,16 @@
         },
         {
           "begin": 5321,
-          "end": 5388,
+          "end": 5364,
           "binary_offset": 131
         },
         {
           "begin": 5423,
           "end": 5432,
-          "binary_offset": 198
+          "binary_offset": 174
         }
       ],
-      "retained_bytes": 207,
+      "retained_bytes": 183,
       "additional_c_layouts": [
         "save-byte-layout.json",
         "save-dynamic-layout.json"
@@ -3210,16 +3210,26 @@
         },
         {
           "begin": 5328,
-          "end": 5365,
+          "end": 5330,
           "binary_offset": 102
+        },
+        {
+          "begin": 5335,
+          "end": 5342,
+          "binary_offset": 104
+        },
+        {
+          "begin": 5347,
+          "end": 5352,
+          "binary_offset": 111
         },
         {
           "begin": 5400,
           "end": 5409,
-          "binary_offset": 139
+          "binary_offset": 116
         }
       ],
-      "retained_bytes": 148,
+      "retained_bytes": 125,
       "additional_c_layouts": [
         "save-byte-layout.json",
         "save-dynamic-layout.json"

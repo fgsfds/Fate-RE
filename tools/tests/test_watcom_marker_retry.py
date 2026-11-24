@@ -13,6 +13,25 @@ def object_with_code(code, additional_public=b''):
     return blob + record(0x91, b'\x00\x01\x04test\x00\x00\x00\x00\x00' + additional_public)
 
 
+def shared_call_object(marked=False, *, callee=b'callee', relocated=True, addend=0, flat=True,
+                       terminal_return=True, indirect=b''):
+    prefix = b'\xf1\x90\xf4' if marked else b'\x90'
+    body = prefix + b'\xe8' + addend.to_bytes(4, 'little') + b'\x89\xc3'
+    body += indirect + (b'\xc3' if terminal_return else b'\x90')
+    # Wrapper tail enters the earlier CALL, not its public.
+    code = body + bytes((0xeb, (len(prefix)-len(body)-2)&255))
+    blob = record(0x96, b'\x05_TEXT\x04CODE\x04' + (b'FLAT' if flat else b'FALT'))
+    blob += record(0x99, b'\x69' + len(code).to_bytes(4, 'little') + b'\x01\x02\x00')
+    blob += record(0x9a, b'\x03')
+    blob += record(0x8c, bytes((len(callee),)) + callee + b'\x00')
+    blob += record(0xa1, b'\x01' + bytes(4) + code)
+    public = b'\x07wrapper' + len(body).to_bytes(4, 'little') + b'\x00'
+    blob += record(0x91, b'\x00\x01\x04test' + bytes(5) + public)
+    if relocated:
+        blob += record(0x9d, bytes((0xa4, len(prefix)+1, 0x16, 1, 1)))
+    return blob
+
+
 class MarkerRetryTests(unittest.TestCase):
     def test_instruction_bodies_get_distinct_end_markers(self):
         source = (
@@ -42,6 +61,40 @@ class MarkerRetryTests(unittest.TestCase):
         self.assertEqual(compare(ordinary, ordinary, 'wrapper'), (2, 0, [], [], 0))
         with self.assertRaisesRegex(ValueError, 'Instruction changed'):
             compare(ordinary, wrong_target, 'wrapper')
+
+    def test_shared_tail_external_call_survives_marker_shift_before_target(self):
+        ordinary = shared_call_object()
+        self.assertEqual(compare(ordinary, ordinary, 'wrapper'), (2, 0, [], [], 0))
+        self.assertEqual(compare(ordinary, shared_call_object(True), 'wrapper'), (2, 0, [], [], 0))
+
+    def test_shared_tail_rejects_changed_external_callee(self):
+        with self.assertRaisesRegex(ValueError, 'Instruction changed'):
+            compare(shared_call_object(), shared_call_object(True, callee=b'other'), 'wrapper')
+
+    def test_shared_tail_rejects_changed_external_addend(self):
+        with self.assertRaisesRegex(ValueError, 'Instruction changed'):
+            compare(shared_call_object(), shared_call_object(True, addend=1), 'wrapper')
+
+    def test_shared_tail_rejects_unrelocated_call_even_when_bytes_match(self):
+        ordinary = shared_call_object(relocated=False)
+        with self.assertRaisesRegex(ValueError, 'Instruction changed'):
+            compare(ordinary, ordinary, 'wrapper')
+
+    def test_shared_tail_rejects_call_without_verified_flat_frame(self):
+        ordinary = shared_call_object(flat=False)
+        with self.assertRaisesRegex(ValueError, 'Instruction changed'):
+            compare(ordinary, ordinary, 'wrapper')
+
+    def test_shared_tail_external_call_rejects_unchecked_fallthrough(self):
+        ordinary = shared_call_object(terminal_return=False)
+        with self.assertRaisesRegex(ValueError, 'Instruction changed'):
+            compare(ordinary, shared_call_object(True, terminal_return=False), 'wrapper')
+
+    def test_shared_tail_external_call_rejects_indirect_transfers(self):
+        for transfer in (b'\xff\xe0', b'\xff\xd0'):
+            with self.subTest(transfer=transfer.hex()), self.assertRaisesRegex(ValueError, 'Instruction changed'):
+                ordinary = shared_call_object(indirect=transfer)
+                compare(ordinary, shared_call_object(True, indirect=transfer), 'wrapper')
 
     def test_fixed_external_short_branch_must_keep_the_original_encoding(self):
         ordinary = object_with_code(b'\xeb\x7f')
