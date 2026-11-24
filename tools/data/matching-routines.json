@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1447,
-  "unique_code_bytes": 193340,
-  "le_pointers": 10530,
+  "routines": 1463,
+  "unique_code_bytes": 193751,
+  "le_pointers": 10536,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -6138,6 +6138,166 @@
       "loaded_address": "0x43b28",
       "bytes": 73,
       "le_pointers": 0
+    },
+    {
+      "symbol": "map_video_memory_at_000_",
+      "object": "vmapctx.obj",
+      "object_sha256": "5ce0745c4df4b3b70d9059f1b94c2d8702237b1a0261ea9f5595ee516f5b4ccc",
+      "sha256": "3b0f62e90a45da34c2fa219479f5fc2230882fa3011f727986e6ebb0d006a213",
+      "raw_offset": "0x69171",
+      "loaded_address": "0x43b71",
+      "bytes": 82,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "map_video_memory_at_052_",
+      "object": "vmapctx.obj",
+      "object_sha256": "5ce0745c4df4b3b70d9059f1b94c2d8702237b1a0261ea9f5595ee516f5b4ccc",
+      "sha256": "735847eca32e7f30b083657f49e17dc860ae3bdc4bd88c5e7b8dbc93440da6b7",
+      "raw_offset": "0x691c3",
+      "loaded_address": "0x43bc3",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "map_video_memory_at_054_",
+      "object": "vmapctx.obj",
+      "object_sha256": "5ce0745c4df4b3b70d9059f1b94c2d8702237b1a0261ea9f5595ee516f5b4ccc",
+      "sha256": "07da0b176e80afd9779a094eb848879d2a9616427d8b594a261bcad1c56bb18d",
+      "raw_offset": "0x691c5",
+      "loaded_address": "0x43bc5",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "map_video_memory_at_056_",
+      "object": "vmapctx.obj",
+      "object_sha256": "5ce0745c4df4b3b70d9059f1b94c2d8702237b1a0261ea9f5595ee516f5b4ccc",
+      "sha256": "2843f35f9977a803a8da9911c5986f5cad5afbdc45b536af70aeed00e877d2ac",
+      "raw_offset": "0x691c7",
+      "loaded_address": "0x43bc7",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "map_video_memory_at_058_",
+      "object": "vmapctx.obj",
+      "object_sha256": "5ce0745c4df4b3b70d9059f1b94c2d8702237b1a0261ea9f5595ee516f5b4ccc",
+      "sha256": "51a998863cb63c6b58bc73775fcc643dc644f0c7859e1a1df45cf7bf523a1387",
+      "raw_offset": "0x691c9",
+      "loaded_address": "0x43bc9",
+      "bytes": 4,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "map_video_memory_at_05c_",
+      "object": "vmapctx.obj",
+      "object_sha256": "5ce0745c4df4b3b70d9059f1b94c2d8702237b1a0261ea9f5595ee516f5b4ccc",
+      "sha256": "f005352fa56912d78c23b1c21bbe3610dec188f677b5f741bcf5ea4d1ffb6d64",
+      "raw_offset": "0x691cd",
+      "loaded_address": "0x43bcd",
+      "bytes": 10,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "map_video_memory_at_066_",
+      "object": "vmapctx.obj",
+      "object_sha256": "5ce0745c4df4b3b70d9059f1b94c2d8702237b1a0261ea9f5595ee516f5b4ccc",
+      "sha256": "194d90a6dd7b74f532c15780a8cb897230ec357fc2b638c518384adf6a63d6b7",
+      "raw_offset": "0x691d7",
+      "loaded_address": "0x43bd7",
+      "bytes": 4,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "map_video_memory_at_06a_",
+      "object": "vmapctx.obj",
+      "object_sha256": "5ce0745c4df4b3b70d9059f1b94c2d8702237b1a0261ea9f5595ee516f5b4ccc",
+      "sha256": "c0b6bea4593e31c00f5eaaf51f55cc7d538f03cec539fe0f3a79a5291fbdf967",
+      "raw_offset": "0x691db",
+      "loaded_address": "0x43bdb",
+      "bytes": 107,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "map_video_memory_at_0d5_",
+      "object": "vmapctx.obj",
+      "object_sha256": "5ce0745c4df4b3b70d9059f1b94c2d8702237b1a0261ea9f5595ee516f5b4ccc",
+      "sha256": "331a86c467c7d8a55a68f2a21615621ca73923c3a2ccdb3162dd3d53cd1dc290",
+      "raw_offset": "0x69246",
+      "loaded_address": "0x43c46",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "map_video_memory_at_0da_",
+      "object": "vmapctx.obj",
+      "object_sha256": "5ce0745c4df4b3b70d9059f1b94c2d8702237b1a0261ea9f5595ee516f5b4ccc",
+      "sha256": "7647777c227d53512d0ca616b868156458792b05694ebae60f82d4396cc5e7e7",
+      "raw_offset": "0x6924b",
+      "loaded_address": "0x43c4b",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "map_video_memory_at_0dc_",
+      "object": "vmapctx.obj",
+      "object_sha256": "5ce0745c4df4b3b70d9059f1b94c2d8702237b1a0261ea9f5595ee516f5b4ccc",
+      "sha256": "9049874485a8f1709b4aa7781f23c996ed839962afe8fcb8276292bb538b79b8",
+      "raw_offset": "0x6924d",
+      "loaded_address": "0x43c4d",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "map_video_memory_at_0de_",
+      "object": "vmapctx.obj",
+      "object_sha256": "5ce0745c4df4b3b70d9059f1b94c2d8702237b1a0261ea9f5595ee516f5b4ccc",
+      "sha256": "24788f74638c08ed2400f236d016f8375204484fe3b3ad0f884394c315cc1262",
+      "raw_offset": "0x6924f",
+      "loaded_address": "0x43c4f",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "map_video_memory_at_0e3_",
+      "object": "vmapctx.obj",
+      "object_sha256": "5ce0745c4df4b3b70d9059f1b94c2d8702237b1a0261ea9f5595ee516f5b4ccc",
+      "sha256": "ea1abc163aeb794d1a8b6538459985a2aa00ad3a8ca81731508b09c52d7b539c",
+      "raw_offset": "0x69254",
+      "loaded_address": "0x43c54",
+      "bytes": 8,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "map_video_memory_at_0eb_",
+      "object": "vmapctx.obj",
+      "object_sha256": "5ce0745c4df4b3b70d9059f1b94c2d8702237b1a0261ea9f5595ee516f5b4ccc",
+      "sha256": "194d90a6dd7b74f532c15780a8cb897230ec357fc2b638c518384adf6a63d6b7",
+      "raw_offset": "0x6925c",
+      "loaded_address": "0x43c5c",
+      "bytes": 4,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "map_video_memory_at_0ef_",
+      "object": "vmapctx.obj",
+      "object_sha256": "5ce0745c4df4b3b70d9059f1b94c2d8702237b1a0261ea9f5595ee516f5b4ccc",
+      "sha256": "5f155fdb97b94287edb2e7d16f0dc5330c4ef0df014990c256e0ce9783195f14",
+      "raw_offset": "0x69260",
+      "loaded_address": "0x43c60",
+      "bytes": 10,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "map_video_memory_at_0f9_",
+      "object": "vmapctx.obj",
+      "object_sha256": "5ce0745c4df4b3b70d9059f1b94c2d8702237b1a0261ea9f5595ee516f5b4ccc",
+      "sha256": "c695c6392bb971d95e87bd7315b381d1232270f5ffa5421e39f66d0749d39859",
+      "raw_offset": "0x6926a",
+      "loaded_address": "0x43c6a",
+      "bytes": 162,
+      "le_pointers": 3
     },
     {
       "symbol": "set_vesa_dac_width_",

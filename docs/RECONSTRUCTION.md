@@ -40,11 +40,11 @@ from reconstructed operands.
 ## Build inventories and evidence
 
 <!-- restoration-coverage:start -->
-- [C CODE inventory](../tools/data/matching-routines.json) covers 1,447 routines
-  and compiler-generated tables, totaling 193,340 bytes (46.63% of CODE).
+- [C CODE inventory](../tools/data/matching-routines.json) covers 1,463 routines
+  and compiler-generated tables, totaling 193,751 bytes (46.73% of CODE).
   This includes mixed C/inline-assembly objects, not just assembly-free C.
 - [Assembly CODE inventory](../tools/data/matching-assembly.json) covers
-  221,299 bytes (53.37% of CODE).
+  220,888 bytes (53.27% of CODE).
 - [Source DATA inventory](../tools/data/matching-initialized.json) covers
   95,547 stored bytes.
 - [Watcom font dependency](../tools/data/matching-graphics-font-dependency.json) supplies

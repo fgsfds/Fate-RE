@@ -482,3 +482,12 @@ original full-frame epilogues when its register-save order, local size
 and EAX return convention agree. Prove the stack layout and all restored
 registers. If the function entry now comes from C, retained NASM must use
 its first remaining virtual address; keep the original entry as an EQU.
+
+
+When composing an unsigned address from two 16-bit halves, constraining the
+high and low operands to EDX and EBX does not alone select the ADD destination:
+Watcom can commute the addition and keep its result in EBX. A truthful empty
+identity for the completed unsigned sum, with EDX as both input and output,
+also fixes the following store and high-word shift registers. Compare the
+emitted instructions and fixups; when selecting reordered phases, prove every
+register, memory and flag dependency and retain each compiler instruction once.

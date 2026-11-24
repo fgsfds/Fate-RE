@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 481,
-  "unique_code_bytes": 221299,
-  "le_pointers": 12019,
+  "routines": 480,
+  "unique_code_bytes": 220888,
+  "le_pointers": 12013,
   "non_routine_code_spans": [
     {
       "symbol": "setgamemode_save_tail",
@@ -1808,18 +1808,6 @@
       "public_entry": "0x43b06",
       "binary_offset": 0,
       "le_pointers": 0
-    },
-    {
-      "symbol": "map_video_memory",
-      "source": "src/fate/map_video_memory.asm",
-      "binary": "map_video_memory.bin",
-      "sha256": "222dabacde9b8244f375ddd62ab33637b963d9495b8a4fd9e1b7725ba0363e02",
-      "bytes": 411,
-      "raw_offset": "0x69171",
-      "loaded_address": "0x43b71",
-      "public_entry": "0x43b71",
-      "binary_offset": 0,
-      "le_pointers": 6
     },
     {
       "symbol": "initialize_vesa_mode",

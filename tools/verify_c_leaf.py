@@ -5060,6 +5060,7 @@ DATA_OFFSETS.update({'_save_restore_words': 0x1a234, '_save_status_length': 0x7f
 DATA_OFFSETS.update({'_video_dos_allocation_error': 0x1944, '_video_dos_real_segment': 0x286b80})
 FUNCTION_ADDRESSES.update({'dpmi_real_mode_far_call_': 0x438f9, '_fmemcpy_': 0x63272})
 CODE_OFFSETS['free_video_dos_memory_'] = 0x33a1d
+DATA_OFFSETS.update({'_mapped_video_base': 2648920, '_video_selector_allocation_error': 6495, '_video_physical_mapping_error': 6525, '_video_selector_base_error': 6561, '_video_selector_limit_error': 6593})
 CONTROLLER_PREFIX_LAYOUT = json.loads((Path(__file__).parent/'data/controller-prefix-layout.json').read_text(encoding='utf-8'))
 COMPILER_CONTEXT_OBJECTS = SAVE_DYNAMIC_LAYOUT['objects'] + CONTROLLER_PREFIX_LAYOUT['objects']
 COMPILER_CONTEXT_PHASES = SAVE_DYNAMIC_LAYOUT['phases'] + CONTROLLER_PREFIX_LAYOUT['phases']

@@ -1188,6 +1188,143 @@
           }
         }
       ]
+    },
+    {
+      "object": "vmapctx",
+      "source": "fate/map_video_memory",
+      "size": 411,
+      "contexts": [
+        {
+          "public": "map_video_memory_",
+          "start": 0,
+          "size": 411,
+          "sha256": "59e56f12a5a358fa6be0c59777ece16f67db54d6837ca7e689f6e61324998a50",
+          "fixups": {
+            "35": [
+              "int386_",
+              true,
+              0
+            ],
+            "53": [
+              "_video_selector_allocation_error",
+              false,
+              0
+            ],
+            "58": [
+              "printf_",
+              true,
+              0
+            ],
+            "68": [
+              "runtime_exit_",
+              true,
+              0
+            ],
+            "112": [
+              "int386_",
+              true,
+              0
+            ],
+            "176": [
+              "int386_",
+              true,
+              0
+            ],
+            "194": [
+              "_video_physical_mapping_error",
+              false,
+              0
+            ],
+            "199": [
+              "printf_",
+              true,
+              0
+            ],
+            "209": [
+              "runtime_exit_",
+              true,
+              0
+            ],
+            "241": [
+              "_mapped_video_base",
+              false,
+              0
+            ],
+            "254": [
+              "_mapped_video_base",
+              false,
+              0
+            ],
+            "281": [
+              "int386_",
+              true,
+              0
+            ],
+            "299": [
+              "_video_selector_base_error",
+              false,
+              0
+            ],
+            "304": [
+              "printf_",
+              true,
+              0
+            ],
+            "314": [
+              "runtime_exit_",
+              true,
+              0
+            ],
+            "362": [
+              "int386_",
+              true,
+              0
+            ],
+            "380": [
+              "_video_selector_limit_error",
+              false,
+              0
+            ],
+            "385": [
+              "printf_",
+              true,
+              0
+            ],
+            "395": [
+              "runtime_exit_",
+              true,
+              0
+            ]
+          },
+          "branches": {
+            "public_address": 277361,
+            "compiler_size": 411,
+            "placed_size": 411,
+            "sites": {
+              "50": [
+                "74",
+                72,
+                72
+              ],
+              "191": [
+                "74",
+                213,
+                213
+              ],
+              "296": [
+                "74",
+                318,
+                318
+              ],
+              "377": [
+                "74",
+                399,
+                399
+              ]
+            }
+          }
+        }
+      ]
     }
   ],
   "phases": [
@@ -1500,6 +1637,166 @@
       "address": 277285,
       "routine": "allocate_video_dos_memory",
       "le_sites": 0
+    },
+    {
+      "phase": "map_video_memory_at_000_",
+      "public": "map_video_memory_",
+      "object": "vmapctx",
+      "begin": 0,
+      "end": 82,
+      "address": 277361,
+      "routine": "map_video_memory",
+      "le_sites": 1
+    },
+    {
+      "phase": "map_video_memory_at_052_",
+      "public": "map_video_memory_",
+      "object": "vmapctx",
+      "begin": 84,
+      "end": 86,
+      "address": 277443,
+      "routine": "map_video_memory",
+      "le_sites": 0
+    },
+    {
+      "phase": "map_video_memory_at_054_",
+      "public": "map_video_memory_",
+      "object": "vmapctx",
+      "begin": 82,
+      "end": 84,
+      "address": 277445,
+      "routine": "map_video_memory",
+      "le_sites": 0
+    },
+    {
+      "phase": "map_video_memory_at_056_",
+      "public": "map_video_memory_",
+      "object": "vmapctx",
+      "begin": 90,
+      "end": 92,
+      "address": 277447,
+      "routine": "map_video_memory",
+      "le_sites": 0
+    },
+    {
+      "phase": "map_video_memory_at_058_",
+      "public": "map_video_memory_",
+      "object": "vmapctx",
+      "begin": 86,
+      "end": 90,
+      "address": 277449,
+      "routine": "map_video_memory",
+      "le_sites": 0
+    },
+    {
+      "phase": "map_video_memory_at_05c_",
+      "public": "map_video_memory_",
+      "object": "vmapctx",
+      "begin": 96,
+      "end": 106,
+      "address": 277453,
+      "routine": "map_video_memory",
+      "le_sites": 0
+    },
+    {
+      "phase": "map_video_memory_at_066_",
+      "public": "map_video_memory_",
+      "object": "vmapctx",
+      "begin": 92,
+      "end": 96,
+      "address": 277463,
+      "routine": "map_video_memory",
+      "le_sites": 0
+    },
+    {
+      "phase": "map_video_memory_at_06a_",
+      "public": "map_video_memory_",
+      "object": "vmapctx",
+      "begin": 106,
+      "end": 213,
+      "address": 277467,
+      "routine": "map_video_memory",
+      "le_sites": 1
+    },
+    {
+      "phase": "map_video_memory_at_0d5_",
+      "public": "map_video_memory_",
+      "object": "vmapctx",
+      "begin": 230,
+      "end": 235,
+      "address": 277574,
+      "routine": "map_video_memory",
+      "le_sites": 0
+    },
+    {
+      "phase": "map_video_memory_at_0da_",
+      "public": "map_video_memory_",
+      "object": "vmapctx",
+      "begin": 213,
+      "end": 215,
+      "address": 277579,
+      "routine": "map_video_memory",
+      "le_sites": 0
+    },
+    {
+      "phase": "map_video_memory_at_0dc_",
+      "public": "map_video_memory_",
+      "object": "vmapctx",
+      "begin": 220,
+      "end": 222,
+      "address": 277581,
+      "routine": "map_video_memory",
+      "le_sites": 0
+    },
+    {
+      "phase": "map_video_memory_at_0de_",
+      "public": "map_video_memory_",
+      "object": "vmapctx",
+      "begin": 215,
+      "end": 220,
+      "address": 277583,
+      "routine": "map_video_memory",
+      "le_sites": 0
+    },
+    {
+      "phase": "map_video_memory_at_0e3_",
+      "public": "map_video_memory_",
+      "object": "vmapctx",
+      "begin": 222,
+      "end": 230,
+      "address": 277588,
+      "routine": "map_video_memory",
+      "le_sites": 0
+    },
+    {
+      "phase": "map_video_memory_at_0eb_",
+      "public": "map_video_memory_",
+      "object": "vmapctx",
+      "begin": 245,
+      "end": 249,
+      "address": 277596,
+      "routine": "map_video_memory",
+      "le_sites": 0
+    },
+    {
+      "phase": "map_video_memory_at_0ef_",
+      "public": "map_video_memory_",
+      "object": "vmapctx",
+      "begin": 235,
+      "end": 245,
+      "address": 277600,
+      "routine": "map_video_memory",
+      "le_sites": 1
+    },
+    {
+      "phase": "map_video_memory_at_0f9_",
+      "public": "map_video_memory_",
+      "object": "vmapctx",
+      "begin": 249,
+      "end": 411,
+      "address": 277610,
+      "routine": "map_video_memory",
+      "le_sites": 3
     }
   ]
 }
