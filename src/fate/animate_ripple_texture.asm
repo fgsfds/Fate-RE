@@ -105,50 +105,31 @@ section .after_border_columns align=1 vstart=0x2ed19 follows=.after_mask_row
     xor ebp, ebp
     jmp short .branch_2ed4c
 
-.branch_2ed1d:
-    mov ebx, ebp
-    shl ebx, byte 0x7
-    mov al, [edx + ebx + 0x7f]
-    and al, 0x1f
+.branch_2ed1d equ 0x2ed1d
+; C head and tail surround the original row-counter increment.
+section .vertical_row_step align=1 vstart=0x2ed28 follows=.after_border_columns
     inc ebp
-    mov [esp + 0x10], al
-    mov eax, ebp
-    shl eax, byte 0x5
-    add eax, ebp
-    mov cl, [esp + 0x10]
-    mov [nosplit eax*4 + ripple_buffer], cl
-    mov bl, [edx + ebx]
-    and bl, 0x1f
-    mov [nosplit eax*4 + frame_state_6339d], bl
-
+section .vertical_row_guard align=1 vstart=0x2ed4c follows=.vertical_row_step
 .branch_2ed4c:
     cmp ebp, strict dword 0x80
     jl short .branch_2ed1d
 ; C supplies all four corner reads, masks and stores.
-section .corners_output_pointer align=1 vstart=0x2ed7a follows=.after_border_columns
+section .corners_output_pointer align=1 vstart=0x2ed7a follows=.vertical_row_guard
     mov esi, edx
 section .corners_output_row align=1 vstart=0x2ed7e follows=.corners_output_pointer
     xor ebp, ebp
 section .after_corners align=1 vstart=0x2ed85 follows=.corners_output_row
     jmp near .branch_2ee92
 
-.branch_2ed8a:
-    lea edx, [ebp + 0x1]
-    mov eax, edx
-    shl eax, byte 0x5
-    add eax, edx
-    shl eax, byte 0x2
-    inc eax
-    add eax, ripple_buffer
-    lea edx, [eax + 0x80]
-    mov [esp + 0x4], edx
-    mov ecx, eax
+.branch_2ed8a equ 0x2ed8a
+; C computes the output row and shared end-pointer slot.
+section .output_row_jump align=1 vstart=0x2eda9 follows=.after_corners
     jmp near .branch_2ee87
 
 .branch_2edae:
     mov ebx, ecx
 ; Compiler-generated C supplies this seven-neighbor sum.
-section .after_sum1 align=1 vstart=0x2edd6 follows=.after_corners
+section .after_sum1 align=1 vstart=0x2edd6 follows=.output_row_jump
     lea ebx, [ecx + 0x1]
     mov edi, eax
 ; Compiler-generated C supplies this seven-neighbor sum.
@@ -161,11 +142,8 @@ section .pack_third_next align=1 vstart=0x2ee45 follows=.pack_two_next
     lea ebx, [ecx + 0x3]
 ; Compiler-generated C supplies this seven-neighbor sum.
 ; C adds and biases the fourth lane.
-section .after_sum4 align=1 vstart=0x2ee7f follows=.pack_third_next
-    add ecx, 0x4
-    mov [esi], eax
-    add esi, 0x4
-
+; C stores the packed word and advances both pointers.
+section .after_output_store align=1 vstart=0x2ee87 follows=.pack_third_next
 .branch_2ee87:
     cmp ecx, [esp + 0x4]
     jl near .branch_2edae

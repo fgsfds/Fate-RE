@@ -4833,6 +4833,19 @@ LEAF_CODE_SLICES['ripple_pack_fourth_phase_'] = ('ripple_pack_fourth_', 0, 15, 1
 LEAF_CONTEXT_SUFFIXES['ripple_pack_fourth_'] = b'\xc3'
 DATA_OFFSETS['_ripple_speed'] = 0x630fc
 
+LEAVES['ripple_vertical_head_phase_'] = (0x5431d, 11)
+LEAF_CODE_SLICES['ripple_vertical_head_phase_'] = ('ripple_vertical_head_', 0, 11, 12)
+LEAF_CONTEXT_SUFFIXES['ripple_vertical_head_'] = b'\xc3'
+LEAVES['ripple_vertical_tail_phase_'] = (0x54329, 35)
+LEAF_CODE_SLICES['ripple_vertical_tail_phase_'] = ('ripple_vertical_tail_', 0, 35, 36)
+LEAF_CONTEXT_SUFFIXES['ripple_vertical_tail_'] = b'\xc3'
+LEAVES['ripple_output_row_phase_'] = (0x5438a, 31)
+LEAF_CODE_SLICES['ripple_output_row_phase_'] = ('ripple_output_row_', 0, 31, 32)
+LEAF_CONTEXT_SUFFIXES['ripple_output_row_'] = b'\xc3'
+LEAVES['ripple_store_output_phase_'] = (0x5447f, 8)
+LEAF_CODE_SLICES['ripple_store_output_phase_'] = ('ripple_store_output_', 0, 8, 9)
+LEAF_CONTEXT_SUFFIXES['ripple_store_output_'] = b'\xc3'
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

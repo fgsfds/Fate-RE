@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1304,
-  "unique_code_bytes": 181893,
-  "le_pointers": 10001,
+  "routines": 1308,
+  "unique_code_bytes": 181978,
+  "le_pointers": 10004,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1830,6 +1830,26 @@
       "le_pointers": 2
     },
     {
+      "symbol": "ripple_vertical_head_phase_",
+      "object": "ripbord.obj",
+      "object_sha256": "68b0ce7ad6839e46254b838dd9acd07824f1cf7a15ca2b6a8e72c9f056b65e63",
+      "sha256": "f5d6cfd35196f75bb3b97c90e69299a8d63fb6fddfc585bdde4735704ae7ef26",
+      "raw_offset": "0x5431d",
+      "loaded_address": "0x2ed1d",
+      "bytes": 11,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "ripple_vertical_tail_phase_",
+      "object": "ripbord.obj",
+      "object_sha256": "68b0ce7ad6839e46254b838dd9acd07824f1cf7a15ca2b6a8e72c9f056b65e63",
+      "sha256": "cb437af3fb303cbeec186c7ec457b12e2adac203a1b92a90d0fcaee640b256c2",
+      "raw_offset": "0x54329",
+      "loaded_address": "0x2ed29",
+      "bytes": 35,
+      "le_pointers": 2
+    },
+    {
       "symbol": "ripple_corners_load_",
       "object": "ripbord.obj",
       "object_sha256": "3bc2ede6b758be1ce9b1ec15cf200804245b9b72fad1b49bbb6c7d39e4eea257",
@@ -1857,6 +1877,16 @@
       "raw_offset": "0x54380",
       "loaded_address": "0x2ed80",
       "bytes": 5,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "ripple_output_row_phase_",
+      "object": "ripout.obj",
+      "object_sha256": "3164ceb4437b23e4ac051712bec60eb1867d849b48ae79f07c833ecbe062376e",
+      "sha256": "7563b73a44fd17b44ab6d0dd8507bfccceff6e299ef24dcd21f93bac34a06635",
+      "raw_offset": "0x5438a",
+      "loaded_address": "0x2ed8a",
+      "bytes": 31,
       "le_pointers": 1
     },
     {
@@ -1947,6 +1977,16 @@
       "raw_offset": "0x54470",
       "loaded_address": "0x2ee70",
       "bytes": 15,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "ripple_store_output_phase_",
+      "object": "ripout.obj",
+      "object_sha256": "3164ceb4437b23e4ac051712bec60eb1867d849b48ae79f07c833ecbe062376e",
+      "sha256": "463f48335029c33cb0cbfddaecee5321afca4f41f33e2f9c0463f9c4b040b127",
+      "raw_offset": "0x5447f",
+      "loaded_address": "0x2ee7f",
+      "bytes": 8,
       "le_pointers": 0
     },
     {

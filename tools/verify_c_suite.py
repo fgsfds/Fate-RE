@@ -1531,6 +1531,9 @@ def verify_compiler_groups(exe, directory, names=None):
                                ('puzact', 929, 'puzzle_activation_context_')):
         if selected(name):
             verify_group_layout((directory/(name+'.obj')).read_bytes(), size, [(public, 0)])
+    if selected('ripout'):
+        verify_group_layout((directory/'ripout.obj').read_bytes(), 41,
+                            [('ripple_output_row_', 0), ('ripple_store_output_', 32)])
     if selected('riprad'):
         verify_group_layout((directory/'riprad.obj').read_bytes(), 109,
                             [('ripple_radial_sample_', 0), ('ripple_radial_setup_', 53)])
@@ -1543,8 +1546,9 @@ def verify_compiler_groups(exe, directory, names=None):
                             [('ripple_store_y_slot_', 0), ('ripple_floor_pixel_', 34),
                              ('ripple_advance_radius_', 49), ('ripple_store_x_slot_', 123)])
     if selected('ripbord'):
-        verify_group_layout((directory/'ripbord.obj').read_bytes(), 93,
-                            [('ripple_border_columns_', 0), ('ripple_border_corners_', 47)])
+        verify_group_layout((directory/'ripbord.obj').read_bytes(), 141,
+                            [('ripple_border_columns_', 0), ('ripple_border_corners_', 47),
+                             ('ripple_vertical_head_', 93), ('ripple_vertical_tail_', 105)])
     if selected('ripctl'):
         verify_group_layout((directory/'ripctl.obj').read_bytes(), 56,
                             [('ripple_spawn_limit_', 0), ('ripple_mask_row_', 23)])
@@ -1626,6 +1630,11 @@ OBJECT_NAMES['ripple_pack_two_add_'] = 'rippack'
 OBJECT_NAMES['ripple_pack_third_bits_'] = 'rippack'
 OBJECT_NAMES['ripple_pack_third_add_'] = 'rippack'
 OBJECT_NAMES['ripple_pack_fourth_phase_'] = 'rippack'
+
+OBJECT_NAMES['ripple_vertical_head_phase_'] = 'ripbord'
+OBJECT_NAMES['ripple_vertical_tail_phase_'] = 'ripbord'
+OBJECT_NAMES['ripple_output_row_phase_'] = 'ripout'
+OBJECT_NAMES['ripple_store_output_phase_'] = 'ripout'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

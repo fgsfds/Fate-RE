@@ -532,3 +532,4 @@ fate/ripple_border ripbord
 fate/ripple_particles rippart
 fate/ripple_radial riprad
 fate/ripple_packing rippack
+fate/ripple_output ripout

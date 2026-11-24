@@ -296,3 +296,11 @@ the original stores. The original EBP assignments remain outside these
 leaves and supply the slot and Y getter contracts. Compatible 4096-word
 radial table declarations permit aligned scalar C loads while retaining
 the initializer's existing exact stores.
+
+The vertical row can split around its original INC EBP: one C leaf reads
+the old row and last-column pixel, then another reads the advanced row,
+stores the one-byte scratch formal at ESP+16, and writes both borders.
+This avoids forcing a C function to modify EBP through an unsupported
+auxiliary declaration. Output setup similarly uses a caller-stack pointer
+formal at +4; an empty two-input handoff keeps both updated word/cursor
+pointers in their original registers.
