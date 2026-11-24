@@ -20,7 +20,7 @@ void __far *allocate_dos_memory(short size)
     return 0;
 }
 
-extern unsigned short video_dos_allocation;
+extern unsigned video_dos_allocation;
 extern void restore_dos_segments(void);
 #pragma aux restore_dos_segments = "cld" "mov ax, ds" "mov es, ax" modify exact [eax];
 
@@ -31,7 +31,7 @@ void free_video_dos_memory(void)
         unsigned short word[14];
     } packet;
     packet.word[0] = 0x101;
-    packet.word[6] = video_dos_allocation;
+    packet.word[6] = (unsigned short)video_dos_allocation;
     int386(0x31, &packet.registers, &packet.registers);
     restore_dos_segments();
 }

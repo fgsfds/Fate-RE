@@ -836,3 +836,16 @@ context with the original incoming EBX live through the phase, testing register
 availability rather than another union spelling. Sources and reports:
 `work/spawn-attributes-research/` and
 `work/spawn-attributes-v1/` through `work/spawn-attributes-v3/`.
+
+### Video DOS transfer continuation
+
+`allocate_video_dos_memory`, Watcom 10.5 `/4r /s /or /bt=dos`: the accepted
+127-byte entry/allocation prefix has 121 native bytes, six existing inline bytes
+and six LE sites. The 89-byte far-copy/BIOS continuation remains assembly.
+Whole contexts add GS saves and a defined real-mode DS initializer, so neither
+232-/230-byte public matches all 216 bytes. Keep protected selector frame+0x24
+separate from helper DS+0x22. Next isolate the native DS-to-stack store and
+far-copy register lifetimes without adding selector zero-extension or the
+saved-length spill seen with five scalar arguments. Frozen evidence:
+`work/video-dos-alloc-research/qualified-prefix.json` and
+`work/palette-loop-check/video-dos-allocation.json`.

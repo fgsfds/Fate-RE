@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
   "routines": 481,
-  "unique_code_bytes": 221510,
-  "le_pointers": 12028,
+  "unique_code_bytes": 221383,
+  "le_pointers": 12022,
   "non_routine_code_spans": [
     {
       "symbol": "setgamemode_save_tail",
@@ -1798,16 +1798,16 @@
   "c_inventory_used_only_for_overlap_check": true,
   "spans": [
     {
-      "symbol": "allocate_video_dos_memory",
+      "symbol": "allocate_video_dos_memory_tail",
       "source": "src/fate/allocate_video_dos_memory.asm",
       "binary": "allocate_video_dos_memory.bin",
-      "sha256": "2527d364d51a7c969af78ad6366aecf89fd3e4dbfad7514741cfb4605f32e16b",
-      "bytes": 216,
-      "raw_offset": "0x69050",
-      "loaded_address": "0x43a50",
-      "public_entry": "0x43a50",
+      "sha256": "cf1ba51361182fe14e396833d762a1941912dad65d42eac4359b87e6d4366009",
+      "bytes": 89,
+      "raw_offset": "0x690cf",
+      "loaded_address": "0x43acf",
+      "public_entry": "0x43acf",
       "binary_offset": 0,
-      "le_pointers": 9
+      "le_pointers": 3
     },
     {
       "symbol": "map_video_memory",

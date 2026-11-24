@@ -553,3 +553,5 @@ fate/save_status_message svmsg
 fate/save_slot_open svoread /4r /s /or /bt=dos /dSAVE_OPEN_READ
 fate/save_slot_open svowrite
 fate/save_finish_stream svfinish
+fate/video_dos_allocation vdosio
+fate/video_dos_allocation vbufret /4r /s /or /bt=dos /dVIDEO_RETURN_BUFFER

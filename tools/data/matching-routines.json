@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1431,
-  "unique_code_bytes": 193129,
-  "le_pointers": 10521,
+  "routines": 1434,
+  "unique_code_bytes": 193256,
+  "le_pointers": 10527,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -5968,6 +5968,36 @@
       "loaded_address": "0x43a1d",
       "bytes": 51,
       "le_pointers": 1
+    },
+    {
+      "symbol": "video_dos_entry_save_phase_",
+      "object": "vbufret.obj",
+      "object_sha256": "92c9f206b646bc6bd324b206cd2d329efa8e68c81d0de08ec577db93a1d81fb7",
+      "sha256": "529b57f0e0db6cc6316c779bf36649119534a3668abe4e1a85018ca3234d99e2",
+      "raw_offset": "0x69050",
+      "loaded_address": "0x43a50",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "video_dos_entry_edi_phase_",
+      "object": "vdosio.obj",
+      "object_sha256": "0e690a1250518d6a9872fe540f8f5dd3fe8226fd06c1c064cd49d53045731b75",
+      "sha256": "fcb5f40df9be6bae66c1d77a6c15968866a9e6cbd7314ca432b019d17392f6f4",
+      "raw_offset": "0x69052",
+      "loaded_address": "0x43a52",
+      "bytes": 1,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "video_dos_allocate_phase_",
+      "object": "vbufret.obj",
+      "object_sha256": "92c9f206b646bc6bd324b206cd2d329efa8e68c81d0de08ec577db93a1d81fb7",
+      "sha256": "71cb79f636fd264e7280c19604fd393ea030091c4f3cf97fc0199f1e7618ad53",
+      "raw_offset": "0x69053",
+      "loaded_address": "0x43a53",
+      "bytes": 124,
+      "le_pointers": 6
     },
     {
       "symbol": "query_vesa_mode_",
