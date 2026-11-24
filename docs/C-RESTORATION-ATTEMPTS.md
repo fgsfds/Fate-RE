@@ -869,20 +869,21 @@ availability rather than another union spelling. Sources and reports:
 `work/spawn-attributes-research/` and
 `work/spawn-attributes-v1/` through `work/spawn-attributes-v3/`.
 
-### Ripple animation: pixel carrier and packed output lifetimes
+### Ripple animation: creation-loop count lifetime
 
-Watcom 10.5 `/4r /s /or /bt=dos`: the full C reconstruction passes 32
-independent-oracle cases; the closest full candidate is 865 bytes versus
-855 with the original 20-byte frame. Isolating creation and radial updates
-produces 372- and 389-byte callable contexts, each passing 32 phase cases.
-The first keeps the frame but copies EDX pixels into EBP; binding competing
-values moves that copy to a stack spill and grows the effective frame to
-28 bytes. Neither complete control context matches. The count clamp,
-masked row copy and four stencil sums are integrated as ordinary C leaves;
-649 assembly bytes and 36 LE sites remain. Next isolate the creation loop's
-remaining-count lifetime across the second RNG call, keeping the existing
-ESI step and EDI next-count values distinct; do not repeat broad EDX
-reassertions, which preserve a redundant pixel copy. Frozen sources,
-hashes, first mismatches and phase evidence:
-`work/ripple-control-research/semantic-notes.md`,
-`work/ripple-v6/`, and `work/ripple-v9/`.
+Watcom 10.5 `/4r /s /or /bt=dos`: the closest full C candidate is 865
+bytes versus 855. A creation-only context with explicit preserved RNG
+register inputs passes 32 isolated cases but grows the 93-byte window
+to a 154-byte function, spilling pending count at ESP+1C and preserving
+incoming EDX/EDI on the stack. Declaring EBP in the function's modified
+register list is rejected with E1122, as are EBP input auxiliaries.
+The count clamp, masked row, top/bottom borders and four stencil sums
+are now integrated; 609 bytes and 34 LE sites remain assembly.
+Next isolate the post-Y EAX/ESI slot update at `0x2eba4..0x2ebc5`,
+which is independent of the EBP countdown, pixel pointer and frame.
+Creation sources, register-oracle cases, hashes and first mismatches:
+`work/ripple-create-research/semantic-notes.md` and
+`work/ripple-v16/`, `work/ripple-v19/`. The broader preparation
+contexts still copy the pixel pointer or spill the row counter;
+their frozen sources/reports remain in `work/ripple-border-probe/`
+and `work/ripple-v13/` through `work/ripple-v15/`.

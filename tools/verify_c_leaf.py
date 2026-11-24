@@ -3952,6 +3952,12 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
     if (public_name == 'encounter_spawn_loop_context_'
             and code[0x161:0x164] != bytes.fromhex('0fbfdb')):
         raise ValueError('Unlinked spawn index extension differs')
+    # The selected border loop already receives the original pixel pointer
+    # in EDX. Its excluded MOV EDX,ESI only repeats the private entry copy.
+    if (public_name == 'ripple_border_columns_'
+            and (code[:3] != bytes.fromhex('5689d6')
+                 or code[5:7] != bytes.fromhex('89f2'))):
+        raise ValueError('Unlinked ripple pixel copy differs')
     context_fixups = LEAF_CONTEXT_FIXUPS.get(public_name)
     if context_fixups is not None:
         observed = [f for f in fixups if f.segment == seg and start <= f.offset < end]
@@ -4762,6 +4768,17 @@ FUNCTION_ADDRESSES.update({'ripple_spawn_limit_': 0x2eb62, 'ripple_mask_row_': 0
 LEAF_SECTION_BRANCHES['ripple_spawn_limit_'] = (23, 23, {15: (b'\x7c', 22, 22)})
 LEAF_SECTION_BRANCHES['ripple_mask_row_'] = (33, 33, {
     5: (b'\xeb', 23, 23), 28: (b'\x7f', 7, 7)})
+
+LEAVES['ripple_border_initialize_'] = (0x542f1, 2)
+LEAF_CODE_SLICES['ripple_border_initialize_'] = ('ripple_border_columns_', 3, 5, 47)
+LEAVES['ripple_border_loop_'] = (0x542f3, 38)
+LEAF_CODE_SLICES['ripple_border_loop_'] = ('ripple_border_columns_', 7, 45, 47)
+LEAF_CONTEXT_SUFFIXES['ripple_border_columns_'] = bytes.fromhex('5ec3')
+# The loop is placed two bytes earlier after omitting the identity copy.
+FUNCTION_ADDRESSES['ripple_border_columns_'] = 0x2ecec
+DATA_OFFSETS['_ripple_buffer'] = 0x6331c
+LEAF_SECTION_BRANCHES['ripple_border_columns_'] = (47, 47, {
+    7: (b'\xeb', 37, 37), 43: (b'\x7c', 9, 9)})
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

@@ -263,3 +263,12 @@ retained outer loop consumes that handoff. The pointer return keeps all
 inline instruction. Destination arithmetic uses a byte pointer into the
 entire assembly-owned raw bordered plane; packed word accesses cover the
 unaligned stores, and the source advances through exactly 32 packed words.
+
+For the top/bottom border loop, an empty full-pointer EDX identity fixes
+the memory-base allocation. Watcom privately saves ESI, homes the incoming
+EDX pointer there, then repeats it into EDX. The production caller already
+has that exact pointer in EDX throughout the masked-row phase. Two slices
+therefore retain the ECX initialization and loop, excluding the guarded
+private save/copy/restore and flag-neutral identity copy. The isolated
+fixture starts ESI with unrelated poison and checks that the linked code
+preserves both EDX and ESI, all source bytes, and every untouched plane byte.

@@ -148,21 +148,8 @@ section .after_mask_row align=1 vstart=0x2ece8 follows=.control
 .branch_2ece9:
     cmp ebp, strict dword 0x80
     jl short .branch_2ecc8
-    xor ecx, ecx
-    jmp short .branch_2ed11
-
-.branch_2ecf5:
-    mov bl, [ecx + edx + 0x3f80]
-    and bl, 0x1f
-    mov [ecx + frame_state_6331d], bl
-    mov al, [ecx + edx]
-    inc ecx
-    and al, 0x1f
-    mov [ecx + frame_state_675a0], al
-
-.branch_2ed11:
-    cmp ecx, strict dword 0x80
-    jl short .branch_2ecf5
+; C supplies the counter initialization and top/bottom border loop.
+section .after_border_columns align=1 vstart=0x2ed19 follows=.after_mask_row
     xor ebp, ebp
     jmp short .branch_2ed4c
 
@@ -217,7 +204,7 @@ section .after_mask_row align=1 vstart=0x2ece8 follows=.control
 .branch_2edae:
     mov ebx, ecx
 ; Compiler-generated C supplies this seven-neighbor sum.
-section .after_sum1 align=1 vstart=0x2edd6 follows=.after_mask_row
+section .after_sum1 align=1 vstart=0x2edd6 follows=.after_border_columns
     lea ebx, [ecx + 0x1]
     mov edi, eax
 ; Compiler-generated C supplies this seven-neighbor sum.

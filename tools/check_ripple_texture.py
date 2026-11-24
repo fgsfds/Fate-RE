@@ -7,8 +7,9 @@ from unicorn import Uc, UC_ARCH_X86, UC_MODE_32, UC_HOOK_CODE
 from unicorn.x86_const import *
 from check_start_hook import DS, image
 from le_fixups import read_le_fixups
+from match_objects import index as omf_index
 from verify_c_leaf import (DATA_OFFSETS, FUNCTION_ADDRESSES, LEAVES,
-                           bind_leaf_details, verify_leaf_relocations)
+                           bind_leaf_details, verify_leaf_relocations, parsed_leaf_object)
 
 ENTRY, STOP, STACK, TEXTURE = 0x2eb57, 0x3fff00, 0x3ff000, 0x380000
 COUNT, FRAME, RADII, SPEED = 0x770e0, 0x770f4, 0x62fcc, 0x630fc
@@ -182,6 +183,65 @@ def check_control_leaf(code, kind, value, alignment=0):
         assert cpu.mem_read(source - 16, 160) == b'\xcc' * 16 + pixels + b'\xdd' * 16
 
 
+
+def check_border(code, seed, alignment):
+    cpu = Uc(UC_ARCH_X86, UC_MODE_32)
+    cpu.mem_map(0, 0x400000)
+    entry, source = 0x2ecf1, 0x300000 + alignment
+    cpu.mem_write(entry, code + b'\xc3')
+    pixels = bytes((i * (seed + 1) + (i // 128) * 7 + seed * 41) & 255
+                   for i in range(16384))
+    cpu.mem_write(source - 16, b'\xcc' * 16 + pixels + b'\xdd' * 16)
+    cpu.mem_write(DS + BUFFER - 1, b'\xa7' * 17162)
+    cpu.mem_write(STACK, struct.pack('<I', STOP) + b'\xa5' * 16)
+    cpu.reg_write(UC_X86_REG_ESP, STACK)
+    for i, reg in enumerate(REGS):
+        cpu.reg_write(reg, 0xabc00000 + i)
+    cpu.reg_write(UC_X86_REG_EAX, 0x11223344)
+    cpu.reg_write(UC_X86_REG_EBX, 0x55667788)
+    cpu.reg_write(UC_X86_REG_EDX, source)
+    cpu.emu_start(entry, STOP, count=5000)
+    assert cpu.reg_read(UC_X86_REG_EIP) == STOP
+    assert cpu.reg_read(UC_X86_REG_ESP) == STACK + 4
+    assert cpu.mem_read(STACK + 4, 16) == b'\xa5' * 16
+    assert cpu.reg_read(UC_X86_REG_EAX) == 0x11223300 | (pixels[127] & 31)
+    assert cpu.reg_read(UC_X86_REG_EBX) == 0x55667700 | (pixels[16383] & 31)
+    assert cpu.reg_read(UC_X86_REG_ECX) == 128
+    assert cpu.reg_read(UC_X86_REG_EDX) == source
+    for reg, value in ((UC_X86_REG_ESI, 0xabc00003), (UC_X86_REG_EDI, 0xabc00004),
+                       (UC_X86_REG_EBP, 0xabc00005)):
+        assert cpu.reg_read(reg) == value
+    expected_plane = bytearray(b'\xa7' * 17160)
+    for i in range(128):
+        expected_plane[1 + i] = pixels[16256 + i] & 31
+        expected_plane[17029 + i] = pixels[i] & 31
+    assert cpu.mem_read(DS + BUFFER - 1, 17162) == b'\xa7' + expected_plane + b'\xa7'
+    assert cpu.mem_read(source - 16, 16416) == b'\xcc' * 16 + pixels + b'\xdd' * 16
+
+
+def mutate_border_guard(blob, relative):
+    _, publics, *_ = parsed_leaf_object(blob)
+    segment, public_start, _ = next(row for row in publics if row[2] == 'ripple_border_columns_')
+    target, changed, cursor = public_start + relative, bytearray(blob), 0
+    while cursor < len(blob):
+        kind = blob[cursor]
+        length = int.from_bytes(blob[cursor + 1:cursor + 3], 'little')
+        end = cursor + 3 + length
+        if kind in (0xa0, 0xa1):
+            data = blob[cursor + 3:end - 1]
+            seg, position = omf_index(data, 0)
+            width = 4 if kind == 0xa1 else 2
+            origin = int.from_bytes(data[position:position + width], 'little')
+            payload = position + width
+            if seg == segment and origin <= target < origin + len(data) - payload:
+                changed[cursor + 3 + payload + target - origin] ^= 1
+                changed[end - 1] = 0
+                changed[end - 1] = (-sum(changed[cursor:end])) & 255
+                return bytes(changed)
+        cursor = end
+    raise AssertionError('Missing compiler border-copy guard bytes')
+
+
 def require_rejected(action):
     try:
         action()
@@ -245,6 +305,40 @@ def main():
     assert altered[28] == 0x7f
     altered[28] = 0x7e
     require_rejected(lambda: check_control_leaf(bytes(altered), 'row', 1))
+    border_obj = (args.build / 'ripbord.obj').read_bytes()
+    border_code = b''
+    for symbol in ('ripple_border_initialize_', 'ripple_border_loop_'):
+        raw, size = LEAVES[symbol]
+        body, bindings = bind_leaf_details(border_obj, symbol, DATA_OFFSETS,
+                                           address=raw - 0x25600,
+                                           functions=FUNCTION_ADDRESSES)
+        assert body == executable[raw:raw + size]
+        verify_leaf_relocations(body, bindings, read_le_fixups(executable)['pointers'],
+                                raw - 0x25600)
+        relocated, _ = bind_leaf_details(
+            border_obj, symbol, {name: DS + off for name, off in DATA_OFFSETS.items()},
+            address=raw - 0x25600, functions=FUNCTION_ADDRESSES)
+        border_code += relocated
+    for seed in range(4):
+        for alignment in range(4):
+            check_border(border_code, seed, alignment)
+    for offset in (0, 5):
+        altered_obj = mutate_border_guard(border_obj, offset)
+        try:
+            bind_leaf_details(altered_obj, 'ripple_border_initialize_', DATA_OFFSETS,
+                              address=0x2ecf1, functions=FUNCTION_ADDRESSES)
+        except ValueError as error:
+            assert str(error) == 'Unlinked ripple pixel copy differs'
+        else:
+            raise AssertionError('Unlinked border guard mutation escaped')
+    altered = bytearray(border_code)
+    assert altered[13] == 0x1f
+    altered[13] = 0x1e
+    require_rejected(lambda: check_border(bytes(altered), 0, 0))
+    altered = bytearray(border_code)
+    assert altered[38] == 0x7c
+    altered[38] = 0x7e
+    require_rejected(lambda: check_border(bytes(altered), 0, 0))
     for count in (0, 1, 4, 28, 29, 30, 31, 32):
         for seed in range(4):
             exercise(memory, count, seed)
@@ -264,10 +358,12 @@ def main():
     altered_image[0x2edb0 + 36:0x2edb0 + 38] = b'\x90\x90'
     require_rejected(lambda: exercise(bytes(altered_image), 32, 2))
     result = dict(status='PASS', parent_cases=32, leaf_cases=len(samples),
-                  mutation_controls=6, spawn_limit_cases=33, masked_row_cases=16,
-                  linked_c_bytes=206,
-                  unique_compiler_body_bytes=92, unlinked_return_bytes=3,
-                  le_sites=1)
+                  mutation_controls=8, spawn_limit_cases=33, masked_row_cases=16,
+                  border_cases=16, unlinked_border_guard_controls=2,
+                  linked_c_bytes=246,
+                  unique_compiler_body_bytes=132, unlinked_return_bytes=4,
+                  unlinked_border_context_bytes=7,
+                  le_sites=3)
     if args.output:
         args.output.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
     print(json.dumps(result))

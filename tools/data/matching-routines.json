@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1286,
-  "unique_code_bytes": 181520,
-  "le_pointers": 9972,
+  "routines": 1288,
+  "unique_code_bytes": 181560,
+  "le_pointers": 9974,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1728,6 +1728,26 @@
       "loaded_address": "0x2ecc8",
       "bytes": 32,
       "le_pointers": 0
+    },
+    {
+      "symbol": "ripple_border_initialize_",
+      "object": "ripbord.obj",
+      "object_sha256": "8c177ced5bbeeb1d35b8313ce7b3c770f5e51f1eb7ad63d3bd2b342185754472",
+      "sha256": "07da0b176e80afd9779a094eb848879d2a9616427d8b594a261bcad1c56bb18d",
+      "raw_offset": "0x542f1",
+      "loaded_address": "0x2ecf1",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "ripple_border_loop_",
+      "object": "ripbord.obj",
+      "object_sha256": "8c177ced5bbeeb1d35b8313ce7b3c770f5e51f1eb7ad63d3bd2b342185754472",
+      "sha256": "089024dd5304f104707ce6e9e1bbac22d407cbe55941200f17eddb43e59954b0",
+      "raw_offset": "0x542f3",
+      "loaded_address": "0x2ecf3",
+      "bytes": 38,
+      "le_pointers": 2
     },
     {
       "symbol": "ripple_sum_first_",

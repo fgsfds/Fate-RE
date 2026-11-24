@@ -4211,16 +4211,17 @@ _ripple_data = DATA_POINTER_SITES.pop('animate_ripple_texture')
 for _symbol, _begin, _end, _binary in (
         ('animate_ripple_entry', 0, 0xb, 0),
         ('animate_ripple_control', 0x21, 0x171, 11),
-        ('animate_ripple_border', 0x191, 0x259, 347),
-        ('animate_ripple_second_setup', 0x27f, 0x284, 547),
-        ('animate_ripple_pack_second', 0x2aa, 0x2c0, 552),
-        ('animate_ripple_pack_third', 0x2e6, 0x2f3, 574),
-        ('animate_ripple_pack_fourth', 0x319, 855, 587)):
+        ('animate_ripple_mask_guard', 0x191, 0x19a, 347),
+        ('animate_ripple_border', 0x1c2, 0x259, 356),
+        ('animate_ripple_second_setup', 0x27f, 0x284, 507),
+        ('animate_ripple_pack_second', 0x2aa, 0x2c0, 512),
+        ('animate_ripple_pack_third', 0x2e6, 0x2f3, 534),
+        ('animate_ripple_pack_fourth', 0x319, 855, 547)):
     ROUTINES.append((_symbol, _ripple_original[1], _ripple_original[2],
                      _ripple_original[3] + _begin, _end - _begin,
                      {site - _begin: target for site, target in _ripple_original[5].items()
                       if _begin <= site < _end}))
-    GROUP_SLICES[_symbol] = (_binary, 649)
+    GROUP_SLICES[_symbol] = (_binary, 609)
     DATA_POINTER_SITES[_symbol] = tuple(site - _begin for site in _ripple_data
                                        if _begin <= site < _end)
 

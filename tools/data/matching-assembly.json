@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 493,
-  "unique_code_bytes": 233119,
-  "le_pointers": 12577,
+  "routines": 494,
+  "unique_code_bytes": 233079,
+  "le_pointers": 12575,
   "non_routine_code_spans": [
     {
       "symbol": "setgamemode_save_tail",
@@ -7654,16 +7654,28 @@
       "le_pointers": 26
     },
     {
-      "symbol": "animate_ripple_border",
+      "symbol": "animate_ripple_mask_guard",
       "source": "src/fate/animate_ripple_texture.asm",
       "binary": "animate_ripple_texture.bin",
-      "sha256": "52e2dd4cff093c39d41b9c68325eb65fc44ad471f7c28ca8af7bd83aaae36c7a",
-      "bytes": 200,
+      "sha256": "732a451d8c5e141ff07eb9d11ab0604b7aba07a1c82aa4407dd98b426c75eedc",
+      "bytes": 9,
       "raw_offset": "0x542e8",
       "loaded_address": "0x2ece8",
       "public_entry": "0x2ece8",
       "binary_offset": 347,
-      "le_pointers": 9
+      "le_pointers": 0
+    },
+    {
+      "symbol": "animate_ripple_border",
+      "source": "src/fate/animate_ripple_texture.asm",
+      "binary": "animate_ripple_texture.bin",
+      "sha256": "b5bf12c6f6ecbf316fee3021651a78787203394ac167b9510e87d83ad5a2c7e6",
+      "bytes": 151,
+      "raw_offset": "0x54319",
+      "loaded_address": "0x2ed19",
+      "public_entry": "0x2ed19",
+      "binary_offset": 356,
+      "le_pointers": 7
     },
     {
       "symbol": "animate_ripple_second_setup",
@@ -7674,7 +7686,7 @@
       "raw_offset": "0x543d6",
       "loaded_address": "0x2edd6",
       "public_entry": "0x2edd6",
-      "binary_offset": 547,
+      "binary_offset": 507,
       "le_pointers": 0
     },
     {
@@ -7686,7 +7698,7 @@
       "raw_offset": "0x54401",
       "loaded_address": "0x2ee01",
       "public_entry": "0x2ee01",
-      "binary_offset": 552,
+      "binary_offset": 512,
       "le_pointers": 0
     },
     {
@@ -7698,7 +7710,7 @@
       "raw_offset": "0x5443d",
       "loaded_address": "0x2ee3d",
       "public_entry": "0x2ee3d",
-      "binary_offset": 574,
+      "binary_offset": 534,
       "le_pointers": 0
     },
     {
@@ -7710,7 +7722,7 @@
       "raw_offset": "0x54470",
       "loaded_address": "0x2ee70",
       "public_entry": "0x2ee70",
-      "binary_offset": 587,
+      "binary_offset": 547,
       "le_pointers": 1
     }
   ]
