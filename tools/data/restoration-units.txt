@@ -546,4 +546,6 @@ fate/save_sized_transfer svwall /4r /s /or /bt=dos /dSAVE_DYNAMIC_WALLS
 fate/save_restore_steps svstep
 fate/save_status_completion svstat
 fate/save_status_message svmsg
-fate/save_slot_open svopen
+fate/save_slot_open svoread /4r /s /or /bt=dos /dSAVE_OPEN_READ
+fate/save_slot_open svowrite
+fate/save_finish_stream svfinish

@@ -108,6 +108,20 @@ def main():
   assert code==exe[address+0x25600:address+0x25600+size]
   v.verify_leaf_relocations(code,refs,pointers,address)
   placed[address]=v.bind_leaf_details(blob,phase['phase'],bindings(),address=address,functions=v.FUNCTION_ADDRESSES)[0]
+ # Overlay every completion supplier, including the interleaved crusher/close calls.
+ finish_blob=(a.build/'svfinish.obj').read_bytes()
+ for phase in v.SAVE_DYNAMIC_LAYOUT['phases']:
+  if phase['object']!='svfinish':continue
+  address=phase['address'];size=phase['end']-phase['begin']
+  code,refs=v.bind_leaf_details(finish_blob,phase['phase'],v.DATA_OFFSETS,address=address,functions=v.FUNCTION_ADDRESSES)
+  assert code==exe[address+0x25600:address+0x25600+size]
+  v.verify_leaf_relocations(code,refs,pointers,address)
+  placed[address]=code
+ spans=sorted((address,address+len(code)) for address,code in placed.items() if 0x31e73<=address<0x31e98)
+ cursor=0x31e73
+ for begin,end in spans:
+  assert begin==cursor;cursor=end
+ assert cursor==0x31e98
  private=private_image(blob,obj);cases={'placed_read':0,'placed_write':0,'private_read':0,'private_write':0}
  for reading,size,source in ((True,13,0x5ef),(False,12,0x60f)):
   context=next(row for row in obj['contexts'] if row['public']==('save_copy_loaded_message_' if reading else 'save_copy_saved_message_'))

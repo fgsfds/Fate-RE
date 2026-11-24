@@ -14,18 +14,31 @@ PRIVATE,STREAM,STACK,STOP=0x400000,0x4f8000,0x4ff000,0x4fff00
 REGS=(UC_X86_REG_EAX,UC_X86_REG_EBX,UC_X86_REG_ECX,UC_X86_REG_EDX,
       UC_X86_REG_ESI,UC_X86_REG_EDI,UC_X86_REG_EBP)
 NAMES=('load_slot_format','save_slot_format','load_basename','save_basename',
-       'load_mode','save_mode','player_count','local_player')
+       'load_mode','save_mode','player_count','local_player','first_player',
+       'next_player','player_x','player_y')
 
 def bindings():
  return dict(v.DATA_OFFSETS,**{'_'+name:DS+v.DATA_OFFSETS['_'+name] for name in NAMES})
+
+def private_limits(reading):
+ records=[(0x13ce0,2),(0x13ce2,2),(0x19028a,2),(0x18fd78,32),(0x5ad9c,64)]
+ if not reading:records.append((0x5ad5c,64))
+ total=sum(size for _,size in records);values={0,1,total,total-1};cursor=0
+ for _,size in records:
+  cursor+=size
+  values.update(max(0,min(total,cursor+d)) for d in (-1,0,1))
+ return tuple(sorted(values))
 
 def private_image(blob,obj):
  segments,pubs,*_=v.parsed_leaf_object(blob);result=bytearray(segments[pubs[0][0]]['data'])
  for context in obj['contexts']:
   alias=context['public']+'opening_private_check'
   v.LEAF_CODE_SLICES[alias]=(context['public'],0,context['size'],context['size'])
+  branch=v.LEAF_SECTION_BRANCHES.pop(context['public'],None)
   try:code,_=v.bind_leaf_details(blob,alias,bindings(),address=PRIVATE+context['start'],functions=v.FUNCTION_ADDRESSES)
-  finally:del v.LEAF_CODE_SLICES[alias]
+  finally:
+   del v.LEAF_CODE_SLICES[alias]
+   if branch is not None:v.LEAF_SECTION_BRANCHES[context['public']]=branch
   result[context['start']:context['start']+context['size']]=code
  return bytes(result)
 
@@ -60,7 +73,16 @@ def exercise(memory,placed,private,obj,context,reading,slot,opened,limit,seed,fu
  expected_local=bytearray(b'\xa5'*20);expected_local[12:17]=suffix
  expected_local[:13]=filename
  base=bytearray(memory[DS:DS+EXTENT])
- struct.pack_into('<HH',base,0x13ce0,0x93b1+seed,0x1e70+seed)
+ records=[(0x13ce0,2),(0x13ce2,2),(0x19028a,2),(0x18fd78,32),(0x5ad9c,64)]
+ if not reading:records.append((0x5ad5c,64))
+ total=sum(size for _,size in records)
+ initial=0 if seed==0 else 15;incoming=15 if seed==0 else 0
+ struct.pack_into('<HH',base,0x13ce0,1,initial)
+ struct.pack_into('<h',base,0x19028a,initial)
+ struct.pack_into('<16h',base,0x18fd78,*([-1]*16))
+ header=bytearray(total);struct.pack_into('<HHh',header,0,2,incoming,incoming)
+ header[6:]=bytes((0x31+i*71+seed)&255 for i in range(total-6))
+ struct.pack_into('<16h',header,6,*([-1]*16))
  expected=bytearray(base);cpu.mem_write(DS-16,b'\x5a'*16+bytes(base)+b'\xa5'*16)
  cpu.mem_write(STACK-256,b'\xa5'*512)
  frame=struct.pack('<I',STOP)+b'\xcc'*60;cpu.mem_write(STACK,frame)
@@ -72,11 +94,20 @@ def exercise(memory,placed,private,obj,context,reading,slot,opened,limit,seed,fu
  format_address=DS+v.DATA_OFFSETS['_'+direction+'_slot_format']
  mode_address=DS+v.DATA_OFFSETS['_'+direction+'_mode']
  basename_address=DS+v.DATA_OFFSETS['_'+direction+'_basename']
- close_context,close_site=next((row,int(site)) for row in obj['contexts'] for site,spec in row['fixups'].items() if spec[0]=='fclose_')
- close_return=PRIVATE+close_context['start']+close_site+4
  io_target=0x60638 if reading else 0x60944
  io_count=cursor=0;trace=[];output=bytearray();last=0
- payload=bytes((0x31+i*71+seed)&255 for i in range(4))
+ payload=bytes(header)
+ io_returns=sorted(PRIVATE+context['start']+int(site)+4 for site,spec in context['fixups'].items() if spec[0]==('fread_' if reading else 'fwrite_'))
+ close_site=next(int(site) for site,spec in context['fixups'].items() if spec[0]=='fclose_')
+ close_return=PRIVATE+context['start']+close_site+4
+ init_return=next((PRIVATE+context['start']+int(site)+4 for site,spec in context['fixups'].items() if spec[0]=='initialize_board_entry_'),None)
+ # Independently model the serialized records and partial input before execution.
+ remaining=limit;payload_cursor=0;expected_output=bytearray()
+ for offset,size in (records if full_private else records[:1]):
+  amount=min(size,max(0,remaining));remaining-=amount
+  if reading:expected[offset:offset+amount]=payload[payload_cursor:payload_cursor+amount]
+  else:expected_output.extend(base[offset:offset+amount])
+  payload_cursor+=amount
  def complete_call(machine,esp,ret):
   machine.reg_write(UC_X86_REG_ESP,esp+4);machine.reg_write(UC_X86_REG_EIP,ret)
  def hook(machine,address,instruction_size,user):
@@ -117,37 +148,45 @@ def exercise(memory,placed,private,obj,context,reading,slot,opened,limit,seed,fu
    machine.reg_write(UC_X86_REG_EFLAGS,0x8d7)
    trace.append('open');complete_call(machine,esp,ret)
   elif address==io_target:
-   assert opened and io_count<(2 if full_private else 1)
-   offset=0x13ce0+2*io_count
+   assert opened and io_count<(len(records) if full_private else 1)
+   record_index=io_count if full_private else 0
+   offset,size=records[record_index]
    args=tuple(machine.reg_read(reg) for reg in (UC_X86_REG_EAX,UC_X86_REG_EDX,UC_X86_REG_EBX,UC_X86_REG_ECX))
-   assert args==(DS+offset,2,1,STREAM)
-   assert machine.reg_read(UC_X86_REG_ESI)==STREAM and machine.reg_read(UC_X86_REG_EDI)==STREAM
-   assert esp==local-4 and ret==(entry+(99 if io_count==0 else 121) if full_private else original+102)
-   amount=min(2,max(0,limit-cursor));last=int(amount==2)
+   assert args==(DS+offset,size,1,STREAM)
+   assert machine.reg_read(UC_X86_REG_ESI)==STREAM
+   assert machine.reg_read(UC_X86_REG_EDI)==(0xffffffff if reading and io_count==4 else STREAM)
+   assert esp==local-4 and ret==(io_returns[io_count] if full_private else original+102)
+   amount=min(size,max(0,limit-cursor));last=int(amount==size)
    if reading:
     if amount:machine.mem_write(DS+offset,payload[cursor:cursor+amount])
-    expected[offset:offset+amount]=payload[cursor:cursor+amount]
    else:output.extend(base[offset:offset+amount])
    cursor+=amount
    for reg,value in ((UC_X86_REG_EAX,last),(UC_X86_REG_EBX,0xb0000000+io_count),
                      (UC_X86_REG_ECX,0xc0000000+io_count),(UC_X86_REG_EDX,0xd0000000+io_count)):
     machine.reg_write(reg,value)
    trace.append('transfer');io_count+=1;complete_call(machine,esp,ret)
+  elif address==0x2e14f:
+   player=struct.unpack_from('<h',expected,0x19028a)[0]
+   assert full_private and reading and io_count==4 and machine.reg_read(UC_X86_REG_EAX)==player
+   assert machine.reg_read(UC_X86_REG_EDI)==player and machine.reg_read(UC_X86_REG_ESI)==STREAM
+   assert esp==local-4 and ret==init_return
+   trace.append('initialize');machine.reg_write(UC_X86_REG_EAX,0xa0000000+player);complete_call(machine,esp,ret)
   else:
-   assert address==0x60802 and full_private and opened and io_count==2
+   assert address==0x60802 and full_private and opened and io_count==len(records)
    assert machine.reg_read(UC_X86_REG_EAX)==STREAM and machine.reg_read(UC_X86_REG_ESI)==STREAM
    assert esp==local-4 and ret==close_return
    machine.reg_write(UC_X86_REG_EAX,0xffffffff if seed else 0)
    trace.append('close');complete_call(machine,esp,ret)
- for address in (0x601f3,0x60223,0x605a2,io_target,0x60802,entry+68):
+ for address in (0x601f3,0x60223,0x605a2,io_target,0x2e14f,0x60802,entry+68):
   cpu.hook_add(UC_HOOK_CODE,hook,begin=address,end=address)
  cpu.emu_start(entry,end,count=1000)
  expected_trace=['format','append','open','test']
- if opened:expected_trace+=['transfer']*(2 if full_private else 1)
+ if opened:
+  expected_trace+=(['transfer']*4+['initialize','transfer'] if full_private and reading else ['transfer']*(len(records) if full_private else 1))
  if opened and full_private:expected_trace+=['close']
  assert trace==expected_trace
  assert cpu.mem_read(DS-16,EXTENT+32)==b'\x5a'*16+bytes(expected)+b'\xa5'*16
- if not reading:assert output==base[0x13ce0:0x13ce0+min(limit,4 if full_private else 2)]
+ if not reading:assert output==expected_output
  assert cpu.mem_read(STACK,64)==frame and cpu.mem_read(STACK-256,160)==b'\xa5'*160
  assert cpu.mem_read(local,20)==expected_local
  if full_private or not opened:
@@ -166,44 +205,60 @@ def main():
  p.add_argument('--exe',type=Path,required=True);p.add_argument('--build',type=Path,required=True)
  p.add_argument('--output',type=Path,required=True);a=p.parse_args()
  exe=a.exe.read_bytes();memory=image(exe);pointers=read_le_fixups(exe)['pointers']
- blob=(a.build/'svopen.obj').read_bytes()
- obj=next(row for row in v.SAVE_DYNAMIC_LAYOUT['objects'] if row['object']=='svopen')
- phases=[row for row in v.SAVE_DYNAMIC_LAYOUT['phases'] if row['object']=='svopen'];placed={}
- for phase in phases:
-  address=phase['address'];size=phase['end']-phase['begin']
-  code,refs=v.bind_leaf_details(blob,phase['phase'],v.DATA_OFFSETS,address=address,functions=v.FUNCTION_ADDRESSES)
-  assert code==exe[address+0x25600:address+0x25600+size]
-  v.verify_leaf_relocations(code,refs,pointers,address)
-  placed[address]=v.bind_leaf_details(blob,phase['phase'],bindings(),address=address,functions=v.FUNCTION_ADDRESSES)[0]
- private=private_image(blob,obj);counts={'placed_success':0,'placed_failure':0,'private_success':0,'private_failure':0}
+ phases=[row for row in v.SAVE_DYNAMIC_LAYOUT['phases'] if row['object'] in ('svoread','svowrite')]
+ placed={};objects={}
+ for name in ('svoread','svowrite'):
+  blob=(a.build/f'{name}.obj').read_bytes()
+  obj=next(row for row in v.SAVE_DYNAMIC_LAYOUT['objects'] if row['object']==name);objects[name]=obj
+  assert len(obj['contexts'])==1 and obj['contexts'][0]['start']==0
+  priv=private_image(blob,obj)
+  for phase in (row for row in phases if row['object']==name):
+   address=phase['address'];size=phase['end']-phase['begin']
+   code,refs=v.bind_leaf_details(blob,phase['phase'],v.DATA_OFFSETS,address=address,functions=v.FUNCTION_ADDRESSES)
+   assert code==exe[address+0x25600:address+0x25600+size]
+   v.verify_leaf_relocations(code,refs,pointers,address)
+   placed[address]=v.bind_leaf_details(blob,phase['phase'],bindings(),address=address,functions=v.FUNCTION_ADDRESSES)[0]
+  objects[name]=dict(obj,private_image=priv,blob=blob)
+ private_by_name={name:row['private_image'] for name,row in objects.items()}
+ for start,cleanup in ((0x2f46b,0x3099a),(0x309a3,0x31ebb)):
+  spans=sorted((address,address+len(code)) for address,code in placed.items() if start<=address<start+102)
+  cursor=start
+  for begin,end in spans:
+   assert begin==cursor;cursor=end
+  assert cursor==start+102 and len(placed[cleanup])==9
+ counts={'placed_success':0,'placed_failure':0,'private_success':0,'private_failure':0}
  cleanup_cases=0
  for address in (0x3099a,0x31ebb):
   for result in (0,1,0xffffffff):cleanup_case(address,placed[address],result);cleanup_cases+=1
  for reading in (True,False):
+  obj=objects['svoread' if reading else 'svowrite'];private=private_by_name['svoread' if reading else 'svowrite']
   context=next(row for row in obj['contexts'] if row['public']==('save_open_read_slot_' if reading else 'save_open_write_slot_'))
   for slot in range(10):
    for seed in (0,1):
     for full_private in (False,True):
      for opened in (False,True):
-      for limit in (range(5 if full_private else 3) if opened else (0,)):
+      limits=private_limits(reading) if full_private and opened else ((0,1,2) if opened else (0,))
+      for limit in limits:
        exercise(memory,placed,private,obj,context,reading,slot,opened,limit,seed,full_private)
        counts[('private_' if full_private else 'placed_')+('success' if opened else 'failure')]+=1
  controls=0;phase=next(row for row in phases if row['phase']=='save_read_path_phase_')
+ obj=objects['svoread'];blob=obj['blob'];context=obj['contexts'][0]
  def rejected(bad,message='context'):
   nonlocal controls
   try:v.bind_leaf_details(bad,phase['phase'],v.DATA_OFFSETS,address=phase['address'],functions=v.FUNCTION_ADDRESSES)
   except ValueError as exc:
    assert message in str(exc).lower(),str(exc);controls+=1
   else:raise AssertionError('Slot opening context mutation escaped')
- rejected(mutate_public_byte(blob,phase['public'],68))
- rejected(mutate_public_byte(blob,phase['public'],136))
+ rejected(mutate_public_byte(blob,phase['public'],102))
+ rejected(mutate_public_byte(blob,phase['public'],context['size']-1))
  rejected(rename_external(blob,b'strcat_',b'strcam_'),'fixup')
  digest=v.LEAF_CONTEXT_SHA256.pop(phase['public'])
- try:rejected(mutate_public_byte(blob,phase['public'],110),'addend')
+ site=next(int(site) for site,spec in context['fixups'].items() if int(site)>=102 and not spec[1])
+ try:rejected(mutate_public_byte(blob,phase['public'],site),'addend')
  finally:v.LEAF_CONTEXT_SHA256[phase['public']]=digest
  result=dict(status='PASS',**counts,slots=10,native_overlapping_append_cases=sum(counts.values()),
              cleanup_cases=cleanup_cases,full_context_controls=controls,format_open_header_close_abi_stubs=True,
-             retained_failure_branch_and_c_cleanup_placed=True,complete_data_and_frame_guards=True)
+             fully_c_failure_and_cleanup_placed=True,complete_data_and_frame_guards=True)
  a.output.write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8');print(json.dumps(result))
 
 if __name__=='__main__':main()

@@ -1,4 +1,3 @@
-
 typedef struct RuntimeStream RuntimeStream;
 
 extern const char load_slot_format[], save_slot_format[];
@@ -36,12 +35,6 @@ int save_open_read_slot(int slot);
 
 int save_open_write_slot(int slot);
 #pragma aux save_open_write_slot parm [eax] value [eax] modify exact [eax];
-
-
-
-
-
-
 typedef struct {
     char text[9];
 } SlotBasename;
@@ -58,16 +51,24 @@ typedef char SlotFilenameLayout[
 
 extern const SlotBasename load_basename, save_basename;
 
-/* Menu slots are 0..9. Formatting fits the 8-byte suffix and forward append
- * fits the complete 20-byte object. The private second transfer and close
- * retain real stream lifetimes beyond the selected opening/count phases. */
+extern short first_player, next_player[16];
+extern long player_x[16], player_y[16];
+extern void open_initialize_player(int);
+#pragma aux open_initialize_player "initialize_board_entry_" parm [eax] modify exact [eax];
+extern void open_set_player(int);
+#pragma aux open_set_player = "" parm [edi] modify exact [edi];
+extern int open_player(void);
+#pragma aux open_player = "" value [edi] modify exact [];
+
+/* These contexts process the real serialized header prefix. The reader
+ * initializes connection-list players before loading their coordinates.
+ * All nonterminal links are valid indices 0..15 and the chain terminates.
+ * Suffix formatting fits its 8-byte member for menu slots 0..9. */
+#ifdef SAVE_OPEN_READ
 int save_open_read_slot(int slot)
 {
     SlotFilename filename;
-    RuntimeStream *stream;
-    RuntimeStream *header_stream;
-    RuntimeStream *file_stream;
-
+    RuntimeStream *stream, *header_stream, *file_stream;
     format_slot_suffix(filename.suffix, load_slot_format, slot);
     filename.basename = load_basename;
     append_slot_suffix((char *)&filename, filename.suffix);
@@ -78,16 +79,24 @@ int save_open_read_slot(int slot)
         return -1;
     read_slot_header(&player_count, sizeof(player_count), 1, stream);
     read_slot_header(&local_player, sizeof(local_player), 1, header_stream);
+    read_slot_header(&first_player, sizeof(first_player), 1, header_stream);
+    read_slot_header(next_player, sizeof(next_player), 1, header_stream);
+    open_set_player(first_player);
+    goto check;
+visit:
+    open_initialize_player((int)(short)open_player());
+    open_set_player(next_player[open_player()]);
+check:
+    if (open_player() >= 0)
+        goto visit;
+    read_slot_header(player_x, sizeof(player_x), 1, file_stream);
     return close_slot_file(file_stream);
 }
-
+#else
 int save_open_write_slot(int slot)
 {
     SlotFilename filename;
-    RuntimeStream *stream;
-    RuntimeStream *header_stream;
-    RuntimeStream *file_stream;
-
+    RuntimeStream *stream, *header_stream, *file_stream;
     format_slot_suffix(filename.suffix, save_slot_format, slot);
     filename.basename = save_basename;
     append_slot_suffix((char *)&filename, filename.suffix);
@@ -98,6 +107,10 @@ int save_open_write_slot(int slot)
         return -1;
     write_slot_header(&player_count, sizeof(player_count), 1, stream);
     write_slot_header(&local_player, sizeof(local_player), 1, header_stream);
+    write_slot_header(&first_player, sizeof(first_player), 1, header_stream);
+    write_slot_header(next_player, sizeof(next_player), 1, header_stream);
+    write_slot_header(player_x, sizeof(player_x), 1, header_stream);
+    write_slot_header(player_y, sizeof(player_y), 1, header_stream);
     return close_slot_file(file_stream);
 }
-
+#endif
