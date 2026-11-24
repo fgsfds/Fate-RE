@@ -3,7 +3,7 @@ from pathlib import Path
 import struct
 import argparse
 import json
-from unicorn import Uc, UC_ARCH_X86, UC_MODE_32, UC_HOOK_CODE
+from unicorn import Uc, UC_ARCH_X86, UC_MODE_32, UC_HOOK_CODE, UC_HOOK_MEM_WRITE
 from unicorn.x86_const import *
 from check_start_hook import DS, image
 from le_fixups import read_le_fixups
@@ -242,6 +242,97 @@ def mutate_border_guard(blob, relative):
     raise AssertionError('Missing compiler border-copy guard bytes')
 
 
+
+def particle_cpu(code, entry):
+    cpu = Uc(UC_ARCH_X86, UC_MODE_32)
+    cpu.mem_map(0, 0x400000)
+    cpu.mem_write(entry, code + b'\xc3')
+    cpu.mem_write(STACK, struct.pack('<I', STOP) + b'\xa5' * 16)
+    cpu.reg_write(UC_X86_REG_ESP, STACK)
+    cpu.reg_write(UC_X86_REG_EAX, 0x11223344)
+    for i, reg in enumerate(REGS):
+        cpu.reg_write(reg, 0xabc00000 + i)
+    return cpu
+
+
+def finish_particle(cpu, entry):
+    cpu.emu_start(entry, STOP, count=200)
+    assert cpu.reg_read(UC_X86_REG_EIP) == STOP
+    assert cpu.reg_read(UC_X86_REG_ESP) == STACK + 4
+    assert cpu.mem_read(STACK + 4, 16) == b'\xa5' * 16
+
+
+def check_floor(code, value):
+    entry, target = 0x2ec50, 0x300000 + (value & 15)
+    cpu = particle_cpu(code, entry)
+    cpu.mem_write(target - 16, b'\xa7' * 16 + bytes([value]) + b'\x5a' * 16)
+    cpu.reg_write(UC_X86_REG_ECX, target)
+    writes = []
+    cpu.hook_add(UC_HOOK_MEM_WRITE,
+                 lambda uc, access, address, size, data, user: writes.append((address, size, data)))
+    finish_particle(cpu, entry)
+    assert cpu.mem_read(target - 16, 33) == (
+        b'\xa7' * 16 + bytes([max(192, value)]) + b'\x5a' * 16)
+    assert cpu.reg_read(UC_X86_REG_EAX) == value
+    assert cpu.reg_read(UC_X86_REG_ECX) == target
+    assert all(cpu.reg_read(reg) == 0xabc00000 + i
+               for i, reg in enumerate(REGS) if reg != UC_X86_REG_ECX)
+    assert writes == ([(target, 1, 192)] if value < 192 else [])
+
+
+def check_particle(code, kind, count, slot=0, age=1, draw=0):
+    entry = 0x2eba4 if kind == 'slot' else 0x2ec66
+    cpu = particle_cpu(code, entry)
+    radii = [1 + i % 10 for i in range(32)]
+    xs = [-0x70000000 + i * 0x01010101 for i in range(32)]
+    ys = [0x60000000 - i * 0x00102030 for i in range(32)]
+    if kind == 'radius':
+        radii[slot] = age
+    pack_array = lambda values: struct.pack('<32i', *values)
+    cpu.mem_write(DS + RADII - 16, b'\xaa' * 16 + pack_array(radii) + b'\xbb' * 16)
+    cpu.mem_write(DS + ORIGIN_Y - 16,
+                  b'\xcc' * 16 + pack_array(ys) + pack_array(xs) + b'\xdd' * 16)
+    cpu.mem_write(DS + COUNT - 16, b'\x33' * 16 + struct.pack('<i', count) + b'\x77' * 16)
+    writes, expected_writes = [], []
+    cpu.hook_add(UC_HOOK_MEM_WRITE,
+                 lambda uc, access, address, size, value, user: writes.append((address, size, value)))
+    expected_regs = {reg: 0xabc00000 + i for i, reg in enumerate(REGS)}
+    if kind == 'slot':
+        slot = count
+        cpu.reg_write(UC_X86_REG_EAX, draw & 0xffffffff)
+        cpu.reg_write(UC_X86_REG_ESI, 1)
+        radii[slot], ys[slot], next_count = 1, draw & 127, count + 1
+        expected_regs.update({UC_X86_REG_EAX: slot, UC_X86_REG_EBX: ys[slot],
+                              UC_X86_REG_EDI: next_count, UC_X86_REG_ESI: 1})
+        expected_writes = [(DS + ORIGIN_Y + slot * 4, 4, ys[slot]),
+                           (DS + RADII + slot * 4, 4, 1),
+                           (DS + COUNT, 4, next_count)]
+    else:
+        cpu.reg_write(UC_X86_REG_EAX, slot)
+        radii[slot] += 1
+        next_count = count
+        expected_regs.update({UC_X86_REG_EAX: slot * 4, UC_X86_REG_EBX: radii[slot]})
+        expected_writes.append((DS + RADII + slot * 4, 4, radii[slot]))
+        if radii[slot] > 10:
+            next_count -= 1
+            replacement = xs[next_count], ys[next_count], radii[next_count]
+            xs[slot], ys[slot], radii[slot] = replacement
+            expected_regs.update({UC_X86_REG_EBX: replacement[2],
+                                  UC_X86_REG_ECX: replacement[1], UC_X86_REG_ESI: next_count})
+            expected_writes += [(DS + COUNT, 4, next_count),
+                                (DS + ORIGIN_X + slot * 4, 4, xs[slot] & 0xffffffff),
+                                (DS + RADII + slot * 4, 4, radii[slot]),
+                                (DS + ORIGIN_Y + slot * 4, 4, ys[slot])]
+    finish_particle(cpu, entry)
+    assert all(cpu.reg_read(reg) == value & 0xffffffff for reg, value in expected_regs.items())
+    assert cpu.mem_read(DS + RADII - 16, 160) == b'\xaa' * 16 + pack_array(radii) + b'\xbb' * 16
+    assert cpu.mem_read(DS + ORIGIN_Y - 16, 288) == (
+        b'\xcc' * 16 + pack_array(ys) + pack_array(xs) + b'\xdd' * 16)
+    assert cpu.mem_read(DS + COUNT - 16, 36) == (
+        b'\x33' * 16 + struct.pack('<i', next_count) + b'\x77' * 16)
+    assert writes == expected_writes, 'Particle publication write order differs'
+
+
 def require_rejected(action):
     try:
         action()
@@ -339,6 +430,53 @@ def main():
     assert altered[38] == 0x7c
     altered[38] = 0x7e
     require_rejected(lambda: check_border(bytes(altered), 0, 0))
+    particle_obj = (args.build / 'rippart.obj').read_bytes()
+    particles = {}
+    for symbol, kind in (('ripple_store_y_phase_', 'slot'),
+                         ('ripple_floor_phase_', 'floor'),
+                         ('ripple_advance_radius_phase_', 'radius')):
+        raw, size = LEAVES[symbol]
+        body, bindings = bind_leaf_details(particle_obj, symbol, DATA_OFFSETS,
+                                           address=raw - 0x25600,
+                                           functions=FUNCTION_ADDRESSES)
+        assert body == executable[raw:raw + size]
+        verify_leaf_relocations(body, bindings, read_le_fixups(executable)['pointers'],
+                                raw - 0x25600)
+        particles[kind], _ = bind_leaf_details(
+            particle_obj, symbol, {name: DS + off for name, off in DATA_OFFSETS.items()},
+            address=raw - 0x25600, functions=FUNCTION_ADDRESSES)
+    for value in range(256):
+        check_floor(particles['floor'], value)
+    for slot in range(32):
+        for draw in (0, 1, 127, 128, 0xffffffff, 0x80000155):
+            check_particle(particles['slot'], 'slot', slot, draw=draw)
+    radius_cases = 0
+    for count in range(1, 33):
+        for slot in range(count):
+            for age in (1, 9, 10):
+                check_particle(particles['radius'], 'radius', count, slot, age)
+                radius_cases += 1
+    altered = bytearray(particles['slot'])
+    assert altered[9] == 127
+    altered[9] = 126
+    require_rejected(lambda: check_particle(bytes(altered), 'slot', 0, draw=127))
+    altered = bytearray(particles['floor'])
+    assert altered[13] == 192
+    altered[13] = 193
+    require_rejected(lambda: check_floor(bytes(altered), 0))
+    altered = bytearray(particles['radius'])
+    assert altered[18] == 10
+    altered[18] = 9
+    require_rejected(lambda: check_particle(bytes(altered), 'radius', 2, 0, 9))
+    altered = bytearray(particles['radius'])
+    assert altered[42:44] == b'\x89\x35' and altered[48:50] == b'\x89\x88'
+    altered[42:48], altered[48:54] = altered[48:54], altered[42:48]
+    try:
+        check_particle(bytes(altered), 'radius', 2, 0, 10)
+    except AssertionError as error:
+        assert str(error) == 'Particle publication write order differs'
+    else:
+        raise AssertionError('Reordered removal publication escaped the oracle')
     for count in (0, 1, 4, 28, 29, 30, 31, 32):
         for seed in range(4):
             exercise(memory, count, seed)
@@ -358,12 +496,13 @@ def main():
     altered_image[0x2edb0 + 36:0x2edb0 + 38] = b'\x90\x90'
     require_rejected(lambda: exercise(bytes(altered_image), 32, 2))
     result = dict(status='PASS', parent_cases=32, leaf_cases=len(samples),
-                  mutation_controls=8, spawn_limit_cases=33, masked_row_cases=16,
+                  mutation_controls=12, spawn_limit_cases=33, masked_row_cases=16,
                   border_cases=16, unlinked_border_guard_controls=2,
-                  linked_c_bytes=246,
-                  unique_compiler_body_bytes=132, unlinked_return_bytes=4,
+                  slot_cases=192, pixel_floor_cases=256, radius_cases=radius_cases,
+                  linked_c_bytes=366,
+                  unique_compiler_body_bytes=252, unlinked_return_bytes=7,
                   unlinked_border_context_bytes=7,
-                  le_sites=3)
+                  le_sites=17)
     if args.output:
         args.output.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
     print(json.dumps(result))

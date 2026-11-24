@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1288,
-  "unique_code_bytes": 181560,
-  "le_pointers": 9974,
+  "routines": 1291,
+  "unique_code_bytes": 181680,
+  "le_pointers": 9988,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1718,6 +1718,36 @@
       "loaded_address": "0x2eb62",
       "bytes": 22,
       "le_pointers": 1
+    },
+    {
+      "symbol": "ripple_store_y_phase_",
+      "object": "rippart.obj",
+      "object_sha256": "69919ea3597f0e321086572f855055822ed42cee7720acc7152b68b2d82ad62d",
+      "sha256": "6b9dca7cf40c5435a773de49da8df5842283bd46ba9143bb4f48b31296d7b94d",
+      "raw_offset": "0x541a4",
+      "loaded_address": "0x2eba4",
+      "bytes": 33,
+      "le_pointers": 4
+    },
+    {
+      "symbol": "ripple_floor_phase_",
+      "object": "rippart.obj",
+      "object_sha256": "69919ea3597f0e321086572f855055822ed42cee7720acc7152b68b2d82ad62d",
+      "sha256": "40f471dd2bdeca147eb43e67b549716bcefd67c42e9def48aff3560dbcbb4908",
+      "raw_offset": "0x54250",
+      "loaded_address": "0x2ec50",
+      "bytes": 14,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "ripple_advance_radius_phase_",
+      "object": "rippart.obj",
+      "object_sha256": "69919ea3597f0e321086572f855055822ed42cee7720acc7152b68b2d82ad62d",
+      "sha256": "114a072e1bfb6fc14fb52081aa83d380f20e00b6fdb6e66dded43f8be6288db4",
+      "raw_offset": "0x54266",
+      "loaded_address": "0x2ec66",
+      "bytes": 73,
+      "le_pointers": 10
     },
     {
       "symbol": "ripple_mask_row_phase_",

@@ -272,3 +272,11 @@ therefore retain the ECX initialization and loop, excluding the guarded
 private save/copy/restore and flag-neutral identity copy. The isolated
 fixture starts ESI with unrelated poison and checks that the linked code
 preserves both EDX and ESI, all source bytes, and every untouched plane byte.
+
+The radius-removal leaf publishes the decremented count before copying
+the replacement X coordinate, then reads Y and stores radius/Y. Qualifying
+the count store, X store and Y read as volatile lvalue accesses retains
+that order without changing the external declarations. The independent
+oracle records write order and rejects swapped count/X stores even when
+all final state agrees. Self-removal copies the radius after its increment,
+so the inactive last slot retains 11 as in the reference.

@@ -46,13 +46,8 @@ section .control align=1 vstart=0x2eb78 follows=.text
     mov [nosplit eax*4 + ripple_origin_x], ebx
     call random_value
     mov [esp], ebp
-    mov ebx, eax
-    mov eax, [ripple_count]
-    and ebx, 0x7f
-    lea edi, [eax + esi]
-    mov [nosplit eax*4 + ripple_origin_y], ebx
-    mov [nosplit eax*4 + ripple_radius], esi
-    mov [ripple_count], edi
+; C stores the Y draw, radius and updated count.
+section .after_spawn_slot align=1 vstart=0x2ebc5 follows=.control
 
 .branch_2ebc5:
     mov ecx, [esp]
@@ -99,11 +94,8 @@ section .control align=1 vstart=0x2eb78 follows=.text
     lea ecx, [edx + eax]
     mov al, [esp + 0x8]
     add [ecx], al
-    xor eax, eax
-    mov al, [ecx]
-    cmp eax, strict dword 0xc0
-    jnl short .branch_2ec5e
-    mov byte [ecx], 0xc0
+; C clamps the updated pixel to the original floor.
+section .after_pixel_floor align=1 vstart=0x2ec5e follows=.after_spawn_slot
 
 .branch_2ec5e:
     dec esi
@@ -112,21 +104,8 @@ section .control align=1 vstart=0x2eb78 follows=.text
     test esi, esi
     jnl short .branch_2ec1c
     mov eax, [esp]
-    shl eax, byte 0x2
-    mov ebx, [eax + ripple_radius]
-    inc ebx
-    mov [eax + ripple_radius], ebx
-    cmp ebx, 0xa
-    jng short .branch_2ecaf
-    mov esi, [ripple_count]
-    dec esi
-    mov ecx, [nosplit esi*4 + ripple_origin_x]
-    mov ebx, [nosplit esi*4 + ripple_radius]
-    mov [ripple_count], esi
-    mov [eax + ripple_origin_x], ecx
-    mov ecx, [nosplit esi*4 + ripple_origin_y]
-    mov [eax + ripple_radius], ebx
-    mov [eax + ripple_origin_y], ecx
+; C advances the radius and removes expired rings.
+section .after_radius_update align=1 vstart=0x2ecaf follows=.after_pixel_floor
 
 .branch_2ecaf:
     dec dword [esp]
@@ -142,7 +121,7 @@ section .control align=1 vstart=0x2eb78 follows=.text
 
 .branch_2ecc8 equ 0x2ecc8
 ; C copies and masks one 128-byte row, returning the next row in EAX.
-section .after_mask_row align=1 vstart=0x2ece8 follows=.control
+section .after_mask_row align=1 vstart=0x2ece8 follows=.after_radius_update
     inc ebp
 
 .branch_2ece9:

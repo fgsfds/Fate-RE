@@ -1,37 +1,38 @@
 # Exact C restoration progress
 
-The current saved attribution audit covers all 414,639 CODE bytes and includes 551 compiler units. Saved full validation passed 398 tests and 131 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
+The current saved attribution audit covers all 414,639 CODE bytes and includes 552 compiler units. Saved full validation passed 398 tests and 131 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 155,842 | 37.585% |
+| Compiler-generated instructions | 155,962 | 37.614% |
 | Inline assembly instructions in C objects | 24,311 | 5.863% |
-| Standalone assembly | 233,079 | 56.213% |
+| Standalone assembly | 232,959 | 56.184% |
 | Unattributed instructions and non-routine tables | 1,407 | 0.339% |
 
-The unattributed category contains 1,038 instruction bytes in 22 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 257,390 bytes (62.08%). C-object inventory covers 181,560 bytes (43.79%) and 1,288 C routine spans; the assembly inventory has 494 spans.
+The unattributed category contains 1,038 instruction bytes in 22 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 257,270 bytes (62.05%). C-object inventory covers 181,680 bytes (43.82%) and 1,291 C routine spans; the assembly inventory has 497 spans.
 
 The accepted executable is 741,347 bytes, SHA-256 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.
 
-Ripple animation now links 246 compiler-generated image bytes: the
-22-byte creation-count clamp, the 32-byte masked row copy, the 40-byte
-top/bottom border pass, and 152 bytes at four seven-neighbor stencil sites.
-The sums reuse one 38-byte compiler body; distinct selected compiler
-instructions total 132 bytes. Four compiler RETs remain unlinked and guarded.
-The border context also excludes its private ESI save/copy/restore and an
-identity EDX copy. The retained caller already supplies the pixel pointer
-in EDX, and the selected loop preserves ESI. Prefix, gap and suffix guards
-cover every excluded context byte. The C phases contain three LE sites
-and no inline instructions; 609 assembly bytes and 34 LE sites remain.
+Ripple animation now links 366 compiler-generated image bytes (42.81%
+of its 855-byte routine): count clamp 22, masked row 32, top/bottom border
+40, Y-slot update 33, pixel floor 14, radius advance/removal 73, and four
+stencil sums totaling 152. The sums reuse one 38-byte compiler body;
+distinct selected compiler instructions total 252 bytes. Seven compiler
+RETs remain unlinked and guarded. The border context also excludes its
+private ESI save/copy/restore and identity EDX copy. The C phases have
+17 LE sites and no inline instructions; 489 assembly bytes and 20 LE sites remain.
 The independent toroidal oracle passes 32 synthetic full-routine cases,
 including creation/removal, the entire bordered buffer and padding guards,
-counter wraparound, and preserved registers. Isolated fixtures add 33 count
-cases, 16 masked-row cases, 16 border cases, and 68 sum cases with poisoned
-upper registers. Row and border tests cover all four pointer alignments.
-Eight machine mutations and two valid-checksum OMF guard mutations are rejected.
-The row checks destination +132 and source +128 pointer handoffs; the border
-checks EDX/ESI preservation and the upper 24 bits of EAX/EBX while AL/BL
-receive results. Every plane byte, source byte and boundary guard is checked.
+counter wraparound, and preserved general-purpose registers. Isolated
+fixtures cover 33 count cases, 16 masked rows, 16 border cases, 68 sums,
+192 Y-slot cases, all 256 pixel values, and 1,584 radius cases (all active
+count/slot pairs at radii 1/9/10). Self-removal copies the incremented
+radius as in the reference. The radius oracle records the ordered count,
+X, radius and Y writes; swapping count/X stores must fail that exact
+assertion even though final state agrees. Twelve machine controls and two
+valid-checksum OMF guard controls are rejected. Source, whole-array/plane,
+padding, stack, pointer handoffs, and live general-purpose register outputs
+are checked by the relevant cases.
 
 `update_level_sector_puzzle_` is restored in readable C: 932 bytes and 59 LE sites, with no inline instructions. One C translation unit compiles twice into three selected phases (410/64/458 bytes); five existing branch edges change displacement only. Neither full compiler public matches by itself. Its differential fixture passes 128 cases and rejects both activation-tag and exit-destination code mutations.
 
@@ -59,7 +60,7 @@ The saved full validation and audit artifacts verify the pinned image:
 - Encounter frame behavior: `work/encounter-frame-build/encounter-frame-behavior.json`.
 - Video initialization handoff: `work/setmode-display-handoff.json`.
 - Ripple parent and C sum behavior: `work/palette-loop-check/ripple-texture-behavior.json`.
-- Attribution audit: `work/ripple-border-audit.json`.
+- Attribution audit: `work/ripple-particles-audit.json`.
 - Unit test log: `work/palette-loop-check/logs/unit-tests.log`.
 - Encounter loop setup and position phase: `work/encounter-loop-build/behavior.json`.
 - Encounter trigger/sector/clock phase: `work/encounter-spawn-build/behavior.json`.

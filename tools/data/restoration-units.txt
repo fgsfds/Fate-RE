@@ -529,3 +529,4 @@ fate/encounter_exit encloop /4r /s /or /bt=dos /dENCOUNTER_SPAWN_CONTEXT=1 /dENC
 fate/ripple_neighbor_sum ripsum
 fate/ripple_control ripctl
 fate/ripple_border ripbord
+fate/ripple_particles rippart

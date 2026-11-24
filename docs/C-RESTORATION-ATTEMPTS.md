@@ -878,9 +878,11 @@ to a 154-byte function, spilling pending count at ESP+1C and preserving
 incoming EDX/EDI on the stack. Declaring EBP in the function's modified
 register list is rejected with E1122, as are EBP input auxiliaries.
 The count clamp, masked row, top/bottom borders and four stencil sums
-are now integrated; 609 bytes and 34 LE sites remain assembly.
-Next isolate the post-Y EAX/ESI slot update at `0x2eba4..0x2ebc5`,
-which is independent of the EBP countdown, pixel pointer and frame.
+are now integrated; 489 bytes and 20 LE sites remain assembly.
+The post-Y slot update, pixel floor and radius removal now match as
+separate C leaves. Next isolate the masked X store across the retained
+MOV EBP,ECX / SUB EBP,ESI countdown bookkeeping, keeping that live state
+separate from the global slot write.
 Creation sources, register-oracle cases, hashes and first mismatches:
 `work/ripple-create-research/semantic-notes.md` and
 `work/ripple-v16/`, `work/ripple-v19/`. The broader preparation

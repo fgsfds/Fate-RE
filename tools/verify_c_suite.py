@@ -1531,6 +1531,10 @@ def verify_compiler_groups(exe, directory, names=None):
                                ('puzact', 929, 'puzzle_activation_context_')):
         if selected(name):
             verify_group_layout((directory/(name+'.obj')).read_bytes(), size, [(public, 0)])
+    if selected('rippart'):
+        verify_group_layout((directory/'rippart.obj').read_bytes(), 123,
+                            [('ripple_store_y_slot_', 0), ('ripple_floor_pixel_', 34),
+                             ('ripple_advance_radius_', 49)])
     if selected('ripbord'):
         verify_group_layout((directory/'ripbord.obj').read_bytes(), 47,
                             [('ripple_border_columns_', 0)])
@@ -1599,6 +1603,9 @@ OBJECT_NAMES['ripple_mask_row_phase_'] = 'ripctl'
 
 OBJECT_NAMES['ripple_border_initialize_'] = 'ripbord'
 OBJECT_NAMES['ripple_border_loop_'] = 'ripbord'
+
+for _name in ('ripple_store_y_phase_', 'ripple_floor_phase_', 'ripple_advance_radius_phase_'):
+    OBJECT_NAMES[_name] = 'rippart'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

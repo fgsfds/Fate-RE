@@ -4780,6 +4780,19 @@ DATA_OFFSETS['_ripple_buffer'] = 0x6331c
 LEAF_SECTION_BRANCHES['ripple_border_columns_'] = (47, 47, {
     7: (b'\xeb', 37, 37), 43: (b'\x7c', 9, 9)})
 
+for _alias, _raw, _length, _public in (
+        ('ripple_store_y_phase_', 0x541a4, 33, 'ripple_store_y_slot_'),
+        ('ripple_floor_phase_', 0x54250, 14, 'ripple_floor_pixel_'),
+        ('ripple_advance_radius_phase_', 0x54266, 73, 'ripple_advance_radius_')):
+    LEAVES[_alias] = (_raw, _length)
+    LEAF_CODE_SLICES[_alias] = (_public, 0, _length, _length + 1)
+    LEAF_CONTEXT_SUFFIXES[_public] = b'\xc3'
+    FUNCTION_ADDRESSES[_public] = _raw - 0x25600
+DATA_OFFSETS.update({'_ripple_origin_y': 0x6773c, '_ripple_origin_x': 0x677bc,
+                     '_ripple_radius': 0x62fcc})
+LEAF_SECTION_BRANCHES['ripple_floor_pixel_'] = (15, 15, {9: (b'\x7d', 14, 14)})
+LEAF_SECTION_BRANCHES['ripple_advance_radius_'] = (74, 74, {19: (b'\x7e', 73, 73)})
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)
