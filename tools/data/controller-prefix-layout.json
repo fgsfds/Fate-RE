@@ -2294,6 +2294,377 @@
           }
         }
       ]
+    },
+    {
+      "object": "vbehdr",
+      "source": "fate/initialize_vesa_mode",
+      "size": 1161,
+      "contexts": [
+        {
+          "public": "vesa_init_header_context_",
+          "start": 0,
+          "size": 1161,
+          "sha256": "881ec3b1a0fc45bb857c5b5cf4d2b8bf04705f5945c1a3c7def98c00a813afaf",
+          "fixups": {
+            "17": [
+              "_vesa_probe_attempted",
+              false,
+              0
+            ],
+            "36": [
+              "_vesa_controller_info",
+              false,
+              0
+            ],
+            "42": [
+              "_vesa_probe_attempted",
+              false,
+              0
+            ],
+            "47": [
+              "_vesa_request_signature",
+              false,
+              0
+            ],
+            "52": [
+              "strncpy_",
+              true,
+              0
+            ],
+            "124": [
+              "_vesa_controller_info",
+              false,
+              0
+            ],
+            "129": [
+              "get_vesa_mode_info_",
+              true,
+              0
+            ],
+            "154": [
+              "_vesa_reply_signature",
+              false,
+              0
+            ],
+            "159": [
+              "_vesa_controller_info",
+              false,
+              0
+            ],
+            "164": [
+              "strncmp_",
+              true,
+              0
+            ],
+            "173": [
+              "_vesa_not_supported_message",
+              false,
+              0
+            ],
+            "178": [
+              "printf_",
+              true,
+              0
+            ],
+            "191": [
+              "_vesa_controller_info",
+              false,
+              14
+            ],
+            "197": [
+              "_vesa_controller_info",
+              false,
+              14
+            ],
+            "216": [
+              "_vesa_mode_list",
+              false,
+              0
+            ],
+            "248": [
+              "_vesa_mode_list",
+              false,
+              0
+            ],
+            "254": [
+              "_video_width",
+              false,
+              0
+            ],
+            "260": [
+              "_video_height",
+              false,
+              0
+            ],
+            "272": [
+              "query_vesa_mode_",
+              true,
+              0
+            ],
+            "361": [
+              "_video_pitch",
+              false,
+              0
+            ],
+            "383": [
+              "_video_page_count",
+              false,
+              0
+            ],
+            "484": [
+              "dpmi_real_mode_interrupt_",
+              true,
+              0
+            ],
+            "563": [
+              "dpmi_real_mode_far_call_",
+              true,
+              0
+            ],
+            "613": [
+              "_vesa_pm_set_window",
+              false,
+              0
+            ],
+            "624": [
+              "_vesa_pm_set_display_start",
+              false,
+              0
+            ],
+            "654": [
+              "map_video_memory_",
+              true,
+              0
+            ],
+            "660": [
+              "_video_page_count",
+              false,
+              0
+            ],
+            "667": [
+              "_framebuffer_selector",
+              false,
+              0
+            ],
+            "672": [
+              "_framebuffer_offset",
+              false,
+              0
+            ],
+            "678": [
+              "_linear_framebuffer_enabled",
+              false,
+              0
+            ],
+            "694": [
+              "_video_height",
+              false,
+              0
+            ],
+            "699": [
+              "_use_software_framebuffer",
+              false,
+              0
+            ],
+            "704": [
+              "_video_pitch",
+              false,
+              0
+            ],
+            "713": [
+              "_video_page_count",
+              false,
+              0
+            ],
+            "720": [
+              "_video_page_size",
+              false,
+              0
+            ],
+            "725": [
+              "_mapped_video_base",
+              false,
+              0
+            ],
+            "732": [
+              "_draw_page_address",
+              false,
+              0
+            ],
+            "737": [
+              "_video_page_size",
+              false,
+              0
+            ],
+            "745": [
+              "_mapped_video_base",
+              false,
+              0
+            ],
+            "757": [
+              "_linear_page_addresses",
+              false,
+              4294967292
+            ],
+            "841": [
+              "_bank_shift",
+              false,
+              0
+            ],
+            "849": [
+              "_bank_shift",
+              false,
+              0
+            ],
+            "861": [
+              "_bank_shift",
+              false,
+              0
+            ],
+            "873": [
+              "_bank_shift",
+              false,
+              0
+            ],
+            "885": [
+              "_bank_shift",
+              false,
+              0
+            ],
+            "897": [
+              "_bank_shift",
+              false,
+              0
+            ],
+            "909": [
+              "_bank_shift",
+              false,
+              0
+            ],
+            "921": [
+              "_linear_framebuffer_enabled",
+              false,
+              0
+            ],
+            "943": [
+              "_video_page_count",
+              false,
+              0
+            ],
+            "962": [
+              "_use_software_framebuffer",
+              false,
+              0
+            ],
+            "967": [
+              "_video_page_size",
+              false,
+              0
+            ],
+            "973": [
+              "_draw_page_address",
+              false,
+              0
+            ],
+            "980": [
+              "_video_pitch",
+              false,
+              0
+            ],
+            "987": [
+              "_video_height",
+              false,
+              0
+            ],
+            "997": [
+              "_video_page_size",
+              false,
+              0
+            ],
+            "1002": [
+              "_software_framebuffer",
+              false,
+              0
+            ],
+            "1008": [
+              "_use_software_framebuffer",
+              false,
+              0
+            ],
+            "1013": [
+              "_draw_page_address",
+              false,
+              0
+            ],
+            "1019": [
+              "_video_page_count",
+              false,
+              0
+            ],
+            "1028": [
+              "_use_software_framebuffer",
+              false,
+              0
+            ],
+            "1037": [
+              "_skip_bank_switch",
+              false,
+              0
+            ],
+            "1052": [
+              "_video_pitch",
+              false,
+              0
+            ],
+            "1059": [
+              "divide_vesa_offset_",
+              true,
+              0
+            ],
+            "1073": [
+              "_video_page_size",
+              false,
+              0
+            ],
+            "1081": [
+              "_page_offsets",
+              false,
+              0
+            ],
+            "1098": [
+              "_page_offsets",
+              false,
+              2
+            ],
+            "1104": [
+              "_video_page_count",
+              false,
+              0
+            ],
+            "1130": [
+              "_vesa_mode_not_found_message",
+              false,
+              0
+            ],
+            "1135": [
+              "printf_",
+              true,
+              0
+            ],
+            "1145": [
+              "runtime_exit_",
+              true,
+              0
+            ]
+          },
+          "branches": {
+            "public_address": 277772,
+            "compiler_size": 1161,
+            "placed_size": 1072,
+            "sites": {}
+          }
+        }
+      ]
     }
   ],
   "phases": [
@@ -3056,6 +3427,66 @@
       "address": 278680,
       "routine": "initialize_vesa_mode",
       "le_sites": 2
+    },
+    {
+      "phase": "vesa_init_list_read_phase_",
+      "public": "vesa_init_header_context_",
+      "object": "vbehdr",
+      "begin": 195,
+      "end": 204,
+      "address": 277925,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 1
+    },
+    {
+      "phase": "vesa_init_list_offset_phase_",
+      "public": "vesa_init_header_context_",
+      "object": "vbehdr",
+      "begin": 207,
+      "end": 213,
+      "address": 277934,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_list_segment_phase_",
+      "public": "vesa_init_header_context_",
+      "object": "vbehdr",
+      "begin": 204,
+      "end": 207,
+      "address": 277940,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_linear_predicate_phase_",
+      "public": "vesa_init_header_context_",
+      "object": "vbehdr",
+      "begin": 628,
+      "end": 638,
+      "address": 278308,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_fallback_enable_phase_",
+      "public": "vesa_init_header_context_",
+      "object": "vbehdr",
+      "begin": 991,
+      "end": 996,
+      "address": 278675,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_fallback_store_phase_",
+      "public": "vesa_init_header_context_",
+      "object": "vbehdr",
+      "begin": 1006,
+      "end": 1012,
+      "address": 278690,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 1
     }
   ]
 }

@@ -12,6 +12,7 @@ import verify_c_leaf as v
 from check_ripple_control import rename_external
 from check_ripple_stack import mutate_public_byte
 from le_fixups import read_le_fixups
+from capstone import Cs,CS_ARCH_X86,CS_MODE_32
 
 DS,SIZE,S,STOP,ENTRY=0x80000,0x28a300,0x4ff000,0x4fff00,0x43d0c
 F=S-308
@@ -38,6 +39,10 @@ class Case:
     pm_segment:int=0x6200
     pm_offset:int=0x20
     pm_entries:tuple=(-4,8)
+    list_segment:int=0x6000
+    list_offset:int=0x20
+    window_attributes:int=0x81ce
+    attributes_extra:int=0x1201
 
 def run(memory,c,code=None,private=False):
     cpu=Uc(UC_ARCH_X86,UC_MODE_32);cpu.mem_map(0,0x500000);cpu.mem_write(0,memory)
@@ -60,17 +65,21 @@ def run(memory,c,code=None,private=False):
     reasons=list(c.rejects)+(['valid'] if c.accepted else [])
     modes=list(range(0x101,0x101+len(reasons)))
     listbytes=pack('<'+'H'*(len(modes)+1),*modes,0xffff)
-    cpu.mem_write(0x60020,listbytes)
+    source_address=(c.list_segment<<4)+c.list_offset
+    assert source_address%2==0
     table=(c.pm_segment<<4)+c.pm_offset
     table_bytes=pack('<hh',*c.pm_entries)
-    assert table%2==0 and not (0x60020<=table<0x60020+len(listbytes))
+    assert table%2==0 and not (table<source_address+len(listbytes) and source_address<table+4)
     if DS<=table and table+4<=DS+SIZE:
         data[table-DS:table-DS+4]=table_bytes;expected[table-DS:table-DS+4]=table_bytes
+    if DS<=source_address and source_address+len(listbytes)<=DS+SIZE:
+        data[source_address-DS:source_address-DS+len(listbytes)]=listbytes;expected[source_address-DS:source_address-DS+len(listbytes)]=listbytes
     if c.attempted:data[0x1ec720:0x1ec720+len(listbytes)]=listbytes;expected[0x1ec720:0x1ec720+len(listbytes)]=listbytes
     controller=bytearray(pattern(512,0x73));controller[:4]=b'BAD!' if c.unsupported==2 else bytes(data[0x19e7:0x19eb])
-    pack_into('<I',controller,14,0x60000020)
+    pack_into('<I',controller,14,(c.list_segment<<16)|c.list_offset)
     cpu.mem_write(DS-16,b'\x5a'*16+data+b'\xa6'*16)
     cpu.mem_write(table,table_bytes)
+    cpu.mem_write(source_address,listbytes)
     if not c.attempted:
         expect(0x13ff4,'B',1);expected[0x1ec2a0:0x1ec2a0+512]=controller
         if not c.unsupported:expected[0x1ec720:0x1ec720+len(listbytes)]=listbytes
@@ -123,7 +132,7 @@ def run(memory,c,code=None,private=False):
             emu.mem_write(DS+0x1ec2a0,bytes(controller));emu.mem_write(F+0x100,pack('<7H',0 if c.unsupported==1 else 0x4f,0x1111,0x2222,0x3333,0x4444,0x5555,0))
         elif name=='query':
             index=len(queries);reason=reasons[index];assert reg(AX)==modes[index] and reg(DX)==F
-            info=bytearray(pattern(256,0x24+index));pack_into('<HH',info,0,0x1201|int(c.linear)*0x80,0x81ce);pack_into('<H',info,4,c.gran)
+            info=bytearray(pattern(256,0x24+index));pack_into('<HH',info,0,(c.attributes_extra&~0x80)|int(c.linear)*0x80,c.window_attributes);pack_into('<H',info,4,c.gran)
             pack_into('<hhh',info,0x10,c.pitch,c.width,c.height)
             for off,val in [(0x18,1),(0x19,8),(0x1b,4),(0x1d,c.pages)]:info[off]=val
             pack_into('<I',info,0x28,0xe0000000)
@@ -180,6 +189,9 @@ def all_cases():
         for value in (0,0x7f,0x80,0xff):
             cases.extend([Case(name=f'reject-{reason}-{value}',rejects=(reason,),accepted=False,reject_value=value),Case(name=f'skip-{reason}-{value}',rejects=(reason,),reject_value=value)])
     cases.extend([Case(name='pm-zero-segment',pm_segment=0,pm_offset=0x7000,pm_entries=(-4096,32767)),Case(name='pm-high-segment',pm_segment=0xfabc,pm_offset=0x122,pm_entries=(-32768,32767)),Case(name='pm-cross-64k',pm_segment=0x6000,pm_offset=0xfffe,pm_entries=(-128,255))])
+    cases.extend([Case(name='list-zero-segment',attempted=0,list_segment=0,list_offset=0x7000),Case(name='list-cross-64k',attempted=0,list_segment=0x6000,list_offset=0xfffe,rejects=('model','width')),Case(name='list-over-1m',attempted=0,list_segment=0xfabc,list_offset=0xfffe)])
+    for word in (0,1,0x7fff,0x8000,0xffff):
+        for linear in (False,True):cases.append(Case(name=f'header-{word}-{int(linear)}',window_attributes=word,attributes_extra=0xff7f,linear=linear))
     return [replace(c,seed=i) for i,c in enumerate(cases)]
 
 PHASES=(
@@ -194,8 +206,10 @@ PUBLIC,OBJECT,CONTEXT_SIZE="initialize_vesa_mode_","vbeinit",1133
 
 SECONDARY_PHASES=(('vesa_init_secondary_at_03d_', 118, 123, 61), ('vesa_init_secondary_at_042_', 61, 68, 66), ('vesa_init_secondary_at_049_', 70, 78, 73), ('vesa_init_secondary_at_051_', 123, 128, 81), ('vesa_init_secondary_at_05b_', 133, 146, 91), ('vesa_init_secondary_at_0f2_', 279, 318, 242), ('vesa_init_secondary_at_159_', 382, 408, 345), ('vesa_init_secondary_at_173_', 410, 417, 371), ('vesa_init_secondary_at_17a_', 408, 410, 378), ('vesa_init_secondary_at_17c_', 466, 471, 380), ('vesa_init_secondary_at_181_', 417, 425, 385), ('vesa_init_secondary_at_189_', 427, 434, 393), ('vesa_init_secondary_at_190_', 471, 478, 400), ('vesa_init_secondary_at_19c_', 483, 505, 412), ('vesa_init_secondary_at_1b2_', 521, 529, 434), ('vesa_init_secondary_at_1ba_', 513, 521, 442), ('vesa_init_secondary_at_1c2_', 505, 513, 450), ('vesa_init_secondary_at_1ca_', 545, 557, 458), ('vesa_init_secondary_at_1db_', 562, 579, 475), ('vesa_init_secondary_at_1ec_', 587, 589, 492), ('vesa_init_secondary_at_1ee_', 579, 587, 494), ('vesa_init_secondary_at_1f6_', 589, 623, 502), ('vesa_init_secondary_at_38c_', 989, 999, 908))
 
+HEADER_PHASES=(('vesa_init_list_read_phase_', 195, 204, 153), ('vesa_init_list_offset_phase_', 207, 213, 162), ('vesa_init_list_segment_phase_', 204, 207, 168), ('vesa_init_linear_predicate_phase_', 628, 638, 536), ('vesa_init_fallback_enable_phase_', 991, 996, 903), ('vesa_init_fallback_store_phase_', 1006, 1012, 918))
+
 def programs(executable,memory,build):
-    specs=[(PUBLIC,OBJECT,CONTEXT_SIZE,'85ceaf5218b0e913fa06077c69c347cfcf6e75227f48d25771ef3d6fdbb8a54a',44,PHASES),('vesa_init_predicate_context_','vbeprdc',1154,'45c1a3471decfdf2aacded073df706841341eb0432a04b83507083e6b3b7693b',3,SECONDARY_PHASES)]
+    specs=[(PUBLIC,OBJECT,CONTEXT_SIZE,'85ceaf5218b0e913fa06077c69c347cfcf6e75227f48d25771ef3d6fdbb8a54a',44,PHASES),('vesa_init_predicate_context_','vbeprdc',1154,'45c1a3471decfdf2aacded073df706841341eb0432a04b83507083e6b3b7693b',3,SECONDARY_PHASES),('vesa_init_header_context_','vbehdr',1161,'881ec3b1a0fc45bb857c5b5cf4d2b8bf04705f5945c1a3c7def98c00a813afaf',0,HEADER_PHASES)]
     layout=v.CONTROLLER_PREFIX_LAYOUT
     metadata={r['phase']:r for r in layout['phases'] if r['routine']=='initialize_vesa_mode'}
     assert set(metadata)=={r[0] for spec in specs for r in spec[5]}
@@ -208,7 +222,7 @@ def programs(executable,memory,build):
         [obj]=[r for r in layout['objects'] if r['object']==objname]
         [context]=obj['contexts']
         assert (context['public'],context['size'],context['start'],context['sha256'])==(public,size,0,digest)
-        assert len(context['fixups'])==69 and len(context['branches']['sites'])==branch_count
+        assert len(context['fixups'])==(70 if objname=='vbehdr' else 69) and len(context['branches']['sites'])==branch_count
         if objname=='vbeprdc':assert v.LEAF_SECTION_BRANCHES[public][2]=={0x120:(b'\x0f\x85',0x451,0x400),0x12f:(b'\x0f\x85',0x451,0x400),0x23f:(b'\x75',0x26f,0x218)}
         used=set()
         def bind(phase,candidate=blob,loaded=False):
@@ -224,9 +238,10 @@ def programs(executable,memory,build):
             code,refs=bind(phase)
             assert code==executable[ENTRY+0x25600+offset:ENTRY+0x25600+offset+len(code)]
             v.verify_leaf_relocations(code,refs,pointers,ENTRY+offset)
+            if objname=='vbehdr':assert not any(ins.mnemonic.startswith('j') or ins.mnemonic=='call' for ins in Cs(CS_ARCH_X86,CS_MODE_32).disasm(code,ENTRY+offset))
             le_count+=len(refs);call_count+=sum(begin<=int(k)<end and spec[1] for k,spec in context['fixups'].items())
             loaded,_=bind(phase,loaded=True);placed[offset:offset+len(code)]=loaded
-        assert len(used)==(745 if objname==OBJECT else 268)
+        assert len(used)=={'vbeinit':745,'vbeprdc':268,'vbehdr':39}[objname]
         alias=public+'fixture_private_'
         assert alias not in v.LEAF_CODE_SLICES
         branch_guard=v.LEAF_SECTION_BRANCHES.pop(public)
@@ -247,17 +262,18 @@ def programs(executable,memory,build):
         context_digest=v.LEAF_CONTEXT_SHA256.pop(public)
         try:rejected(mutate_public_byte(blob,public,data_site),'addend')
         finally:v.LEAF_CONTEXT_SHA256[public]=context_digest
-        n,m,branches=branch_guard;site=min(branches);op,old,new=branches[site]
-        branch_phase=next(phase for phase in phases if phase[1]<=site<phase[2])
-        try:
-            v.LEAF_SECTION_BRANCHES[public]=(n,m,branches|{site:(op,old-1,new)})
-            rejected(blob,'compiler target',branch_phase)
-            v.LEAF_SECTION_BRANCHES[public]=(n,m,branches|{site:(op,old,new-1)})
-            bad,_=bind(branch_phase)
-            raw=ENTRY+0x25600+branch_phase[3]
-            assert bad!=executable[raw:raw+len(bad)]
-        finally:v.LEAF_SECTION_BRANCHES[public]=branch_guard
-    assert (len(destinations),le_count,call_count)==(1013,57,8)
+        if branch_count:
+            n,m,branches=branch_guard;site=min(branches);op,old,new=branches[site]
+            branch_phase=next(phase for phase in phases if phase[1]<=site<phase[2])
+            try:
+                v.LEAF_SECTION_BRANCHES[public]=(n,m,branches|{site:(op,old-1,new)})
+                rejected(blob,'compiler target',branch_phase)
+                v.LEAF_SECTION_BRANCHES[public]=(n,m,branches|{site:(op,old,new-1)})
+                bad,_=bind(branch_phase)
+                raw=ENTRY+0x25600+branch_phase[3]
+                assert bad!=executable[raw:raw+len(bad)]
+            finally:v.LEAF_SECTION_BRANCHES[public]=branch_guard
+    assert (len(destinations),le_count,call_count)==(1052,59,8)
     # All direct calls with unproven BIOS inputs stay original assembly.
     for site,target in ((0x43d62,0x43a50),(0x43ea3,0x4380a),(0x43ee2,0x438f9)):
         assert not destinations.intersection(range(site-ENTRY,site-ENTRY+5))
@@ -269,6 +285,6 @@ def main():
     executable=a.exe.read_bytes();memory=image(executable)
     modes=programs(executable,memory,a.build)
     results=[dict(mode=mode,**run(memory,c,code,private)) for mode,code,private in modes for c in all_cases()]
-    report=dict(status='PASS',cases=len(results),cases_per_mode=len(all_cases()),full_data_checks=len(results),selected_native_bytes=1013,selected_le_sites=57,retained_assembly_bytes=59,guarded_branches=47,guarded_raw_fixups=138,mutation_controls=10,native_callees=['strncpy','strncmp','signed_division'],reference_and_placed_shared_epilogue=True,primitive_stubs=list(TARGETS.values()),fixture_sha256=sha256(Path(__file__).read_bytes()).hexdigest(),results=results)
+    report=dict(status='PASS',cases=len(results),cases_per_mode=len(all_cases()),full_data_checks=len(results),selected_native_bytes=1052,selected_le_sites=59,retained_assembly_bytes=20,guarded_branches=47,guarded_raw_fixups=208,mutation_controls=13,native_callees=['strncpy','strncmp','signed_division'],reference_and_placed_shared_epilogue=True,primitive_stubs=list(TARGETS.values()),fixture_sha256=sha256(Path(__file__).read_bytes()).hexdigest(),results=results)
     a.output.write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8');print(json.dumps({k:v for k,v in report.items() if k!='results'}))
 if __name__=='__main__':main()

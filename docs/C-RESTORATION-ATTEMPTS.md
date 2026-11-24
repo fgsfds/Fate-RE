@@ -852,24 +852,21 @@ assembly call and withhold a whole-defined-C claim. Frozen evidence:
 `work/palette-loop-check/video-dos-allocation.json`.
 
 
-### VESA initializer input and register phases
+### VESA initializer BIOS inputs and shared return
 
-`initialize_vesa_mode`, Watcom 10.5 `/4r /s /or /bt=dos` (secondary context
-also `/dVESA_PREDICATE_CONTEXT`): 29 guarded phases supply 1,013 native
-bytes and 57 LE sites. The remaining 59 bytes and two sites contain three
-legacy BIOS calls, the repeated far-list load/conversion, attributes-bit test,
-EDI software-flag handoff, and shared return jump. Probe 54 register identities
-still merge the two controller-pointer reads and move the high half through
-EBX. Next test a volatile-qualified view of the actual controller record to
-retain its two observed dword reads, then check the high/low register order.
-The attributes test still uses a direct byte TEST rather than the original
-dword/AL/AH/CWDE sequence; the fallback uses EBP where the original sets EDI.
+`initialize_vesa_mode`, Watcom 10.5 `/4r /s /or /bt=dos` with predicate/header
+context defines: 35 guarded phases supply 1,052 native bytes and all 59 LE sites.
+Only 20 bytes remain assembly: three BIOS calls and the five-byte jump to the
+shared register restore at 0x50347. The private contexts use their own compiler
+epilogues; no matching transfer with the original saved-slot contract is proven.
+A continuation model must account for the five saved registers and caller return
+address, rather than declaring the restore as an ordinary zero-argument callee.
 
 Original calls 0x43d62, 0x43ea3 and 0x43ee2 remain assembly. On cached probing,
 4f02 has no dominating writes to CX/DX/SI/DI; 4f0a reads unwritten ES/DS at
 frame+0x110/+0x116. The selected query call also retains its existing wrapper's
 unresolved inner BIOS boundary. Prove an incoming contract or exact opaque
 primitive boundary before selecting these calls; keep the private initializers.
-Frozen coverage/dependency evidence: `work/vesa-init-research/probe55.json`
+Frozen coverage/dependency evidence: `work/vesa-init-research/probe60.json`
 and `work/vesa-init-research/notes.md`; production context fixture:
 `work/palette-loop-check/vesa-mode-initialization.json`.

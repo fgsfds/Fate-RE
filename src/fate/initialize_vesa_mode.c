@@ -1,7 +1,6 @@
-/* Checked compiler contexts share the complete VESA algorithm. The default
- * supplies mode/framebuffer/page phases; VESA_PREDICATE_CONTEXT also supplies
- * widened predicates and BIOS argument/PM lookup phases. Private BIOS inputs
- * are initialized here, while unproven original calls remain assembly. */
+/* Checked contexts share the complete VESA algorithm. Default, predicate,
+ * and header configurations supply its guarded compiler phases. Private BIOS
+ * inputs are initialized here; unproven original calls remain assembly. */
 #include "dpmiregs.h"
 
 #pragma pack(push, 1)
@@ -12,9 +11,24 @@ typedef struct {
     unsigned char remaining[512 - 18];
 } VesaController;
 
+typedef union {
+    unsigned long raw;
+    struct {
+        unsigned short attributes;
+        unsigned char window_a_attributes, window_b_attributes;
+    } fields;
+    struct {
+        unsigned char low, high, window_a_attributes, window_b_attributes;
+    } bytes;
+} VesaModeHeader;
+
 typedef struct {
+#ifdef VESA_HEADER_CONTEXT
+    VesaModeHeader header;
+#else
     unsigned short attributes;
     unsigned char window_a_attributes, window_b_attributes;
+#endif
     unsigned short window_granularity, window_size;
     unsigned short window_a_segment, window_b_segment;
     unsigned long window_function;
@@ -100,8 +114,7 @@ extern long width_in_esi(long);
 extern long height_in_edi(long);
 #pragma aux height_in_edi = parm [edi] value [edi] modify exact [];
 
-#ifdef VESA_PREDICATE_CONTEXT
-#define VESA_INIT_CONTEXT vesa_init_predicate_context
+#if defined(VESA_PREDICATE_CONTEXT) || defined(VESA_HEADER_CONTEXT)
 /* Compare zero-extended BIOS and mode words in the ABI's result register. */
 extern unsigned vesa_value_in_eax(unsigned);
 #pragma aux vesa_value_in_eax = parm [eax] value [eax] modify exact [];
@@ -110,13 +123,35 @@ extern unsigned vesa_value_in_eax(unsigned);
 extern unsigned vesa_value_in_ebx(unsigned);
 #pragma aux vesa_value_in_ebx = parm [ebx] value [ebx] modify exact [];
 
-#pragma aux vesa_init_predicate_context parm routine [eax] [edx] modify exact [eax edx];
-
 #else
-#define VESA_INIT_CONTEXT initialize_vesa_mode
 #define vesa_value_in_eax(value) (value)
 #define vesa_value_in_ebx(value) (value)
+#endif
+
+#ifdef VESA_HEADER_CONTEXT
+extern unsigned long list_bits_in_eax(unsigned long);
+#pragma aux list_bits_in_eax = parm [eax] value [eax] modify exact [];
+extern unsigned long list_bits_in_edx(unsigned long);
+#pragma aux list_bits_in_edx = parm [edx] value [edx] modify exact [];
+
+extern long fallback_use_in_edi(long);
+#pragma aux fallback_use_in_edi = parm [edi] value [edi] modify exact [];
+
+extern int vesa_signed_in_eax(int);
+#pragma aux vesa_signed_in_eax = parm [eax] value [eax] modify exact [];
+
+#define VESA_INIT_CONTEXT vesa_init_header_context
+#define VESA_MODE_ATTRIBUTES(mode) ((mode).header.fields.attributes)
+#pragma aux vesa_init_header_context parm routine [eax] [edx] modify exact [eax edx];
+#else
+#define VESA_MODE_ATTRIBUTES(mode) ((mode).attributes)
+#ifdef VESA_PREDICATE_CONTEXT
+#define VESA_INIT_CONTEXT vesa_init_predicate_context
+#pragma aux vesa_init_predicate_context parm routine [eax] [edx] modify exact [eax edx];
+#else
+#define VESA_INIT_CONTEXT initialize_vesa_mode
 #pragma aux initialize_vesa_mode parm routine [eax] [edx] modify exact [eax edx];
+#endif
 #endif
 
 void VESA_INIT_CONTEXT(long, long);
@@ -129,13 +164,21 @@ void VESA_INIT_CONTEXT(long requested_width, long requested_height)
     unsigned long page_address;
     long page, page_count;
     VesaFarPointer mapping;
+#ifdef VESA_HEADER_CONTEXT
+    unsigned linear_header;
+#endif
     long width = width_in_esi(requested_width);
     long height = height_in_edi(requested_height);
 
     if (!vesa_probe_attempted) {
         const short *source_modes;
         short *destination_modes;
+#ifdef VESA_HEADER_CONTEXT
+        const volatile VesaController *controller = &vesa_controller_info;
+        unsigned long segment_bits, offset_bits;
+#else
         unsigned long far_list;
+#endif
 
         vesa_probe_attempted = 1;
         strncpy(vesa_controller_info.signature, vesa_request_signature, 4);
@@ -148,9 +191,17 @@ void VESA_INIT_CONTEXT(long requested_width, long requested_height)
             printf(vesa_not_supported_message);
             return;
         }
+#ifdef VESA_HEADER_CONTEXT
+        segment_bits = list_bits_in_eax(controller->mode_list);
+        offset_bits = list_bits_in_edx(controller->mode_list);
+        source_modes = (const short *)list_bits_in_eax(
+            list_bits_in_eax((segment_bits & 0xffff0000UL) >> 12) +
+            list_bits_in_edx(offset_bits & 0xffffUL));
+#else
         far_list = vesa_controller_info.mode_list;
         source_modes = (const short *)(((far_list & 0xffff0000UL) >> 12) +
                                       (far_list & 0xffffUL));
+#endif
         destination_modes = vesa_mode_list;
         while (*source_modes != -1)
             *destination_modes++ = *source_modes++;
@@ -162,7 +213,7 @@ void VESA_INIT_CONTEXT(long requested_width, long requested_height)
     mode = vesa_mode_list;
     goto check_mode;
     do {
-        if (!query_vesa_mode_from_ax(mode_number, &frame.mode.attributes) ||
+        if (!query_vesa_mode_from_ax(mode_number, &VESA_MODE_ATTRIBUTES(frame.mode)) ||
             vesa_value_in_eax(frame.mode.memory_model) != 4 || vesa_value_in_eax(frame.mode.bits_per_pixel) != 8 ||
             vesa_value_in_eax(frame.mode.planes) != 1 || frame.mode.width != width ||
             frame.mode.height != height)
@@ -174,7 +225,7 @@ void VESA_INIT_CONTEXT(long requested_width, long requested_height)
         video_page_count = page_count;
 
         frame.bios.ax = 0x4f02;
-        frame.bios.bx = (unsigned short)*mode | ((frame.mode.attributes & 0x80) << 7);
+        frame.bios.bx = (unsigned short)*mode | ((VESA_MODE_ATTRIBUTES(frame.mode) & 0x80) << 7);
         /* Define all input words the DPMI wrapper reads in this C context. */
         frame.bios.cx = frame.bios.dx = frame.bios.si = frame.bios.di = 0;
         dpmi_real_mode_interrupt(0x10, &frame.bios, &frame.bios);
@@ -193,7 +244,14 @@ void VESA_INIT_CONTEXT(long requested_width, long requested_height)
                 table_address + vesa_value_in_eax((unsigned long)(long)table[1]));
         }
 
-        if (frame.mode.attributes & 0x80) {
+#ifdef VESA_HEADER_CONTEXT
+        linear_header = vesa_value_in_eax(frame.mode.header.raw);
+        linear_header = vesa_value_in_eax(linear_header & 0xffff00ffU);
+        linear_header = vesa_value_in_eax(linear_header & 0xffffff80U);
+        if (vesa_signed_in_eax((short)linear_header)) {
+#else
+        if (VESA_MODE_ATTRIBUTES(frame.mode) & 0x80) {
+#endif
             mapping.pointer = map_video_memory(frame.mode.physical_address);
             framebuffer_selector = mapping.address.selector;
             framebuffer_offset = mapping.address.offset;
@@ -224,7 +282,11 @@ void VESA_INIT_CONTEXT(long requested_width, long requested_height)
                 draw_page_address = (void *)0xa0000;
             } else {
                 video_page_size = (unsigned long)video_pitch * (unsigned long)video_height;
+#ifdef VESA_HEADER_CONTEXT
+                use_software_framebuffer = fallback_use_in_edi(1);
+#else
                 use_software_framebuffer = 1;
+#endif
                 draw_page_address = software_framebuffer;
             }
             video_page_count = 1;

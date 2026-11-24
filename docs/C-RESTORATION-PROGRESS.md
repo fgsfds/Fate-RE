@@ -1,15 +1,15 @@
 # Exact C restoration progress
 
-The current saved attribution audit covers all 414,639 CODE bytes and includes 581 compiler units. Saved full validation passed 405 tests and 148 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
+The current saved attribution audit covers all 414,639 CODE bytes and includes 582 compiler units. Saved full validation passed 405 tests and 148 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 169,171 | 40.800% |
+| Compiler-generated instructions | 169,210 | 40.809% |
 | Inline assembly instructions in C objects | 24,342 | 5.871% |
-| Standalone assembly | 219,875 | 53.028% |
+| Standalone assembly | 219,836 | 53.019% |
 | Unattributed instructions and non-routine tables | 1,251 | 0.302% |
 
-The unattributed category contains 882 instruction bytes in 16 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 244,217 bytes (58.90%). C-object inventory covers 194,764 bytes (46.97%) and 1,492 C routine spans; the assembly inventory has 487 spans.
+The unattributed category contains 882 instruction bytes in 16 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 244,178 bytes (58.89%). C-object inventory covers 194,803 bytes (46.98%) and 1,498 C routine spans; the assembly inventory has 483 spans.
 
 The accepted executable is 741,347 bytes, SHA-256 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.
 
@@ -131,35 +131,38 @@ unlinked footer bytes; two additional mutation controls cover footer and
 player-context returns. This checkpoint replaces the last 110 assembly bytes
 in the two save/load routines.
 
-VESA-mode initialization supplies 1,013 of its 1,072 bytes (94.50%) from
-29 checked compiler phases, all native C, with 57 LE sites. The remaining
-59 bytes and two LE sites stay in eight compact assembly sections, including
-all three direct BIOS input boundaries. One readable algorithm compiles into
-two private contexts of 1,133 and 1,154 bytes. Empty EAX identities retain
-zero-extended status/predicate comparisons; EBX and EAX identities preserve
-the callback-table base and entry-offset arithmetic. Both contexts initialize
-their BIOS inputs, but the private stores and legacy calls are excluded from
-the placed selection. Full raw hashes and all 138 fixups guard both contexts;
-47 compiler/placed branch destinations and eight selected calls are checked.
-Each selected instruction is used once. Independent preparations and segment
-stores retain their original scheduling through checked phase placement.
-This is bounded restoration through C contexts, not a whole-defined-C claim.
-The contract requires accessible terminated mode lists, fitting tables and
-positive pitch. The query alias consumes the low AX word already loaded for
-the signed sentinel check. Width and height retain the original ESI/EDI ABI.
+VESA-mode initialization supplies 1,052 of its 1,072 bytes (98.13%) from
+35 checked compiler phases, all native C, with all 59 LE sites. The remaining
+20 bytes have no LE sites: three direct BIOS calls and the shared restore jump
+stay in four compact assembly sections. One readable algorithm compiles into
+three private contexts of 1,133, 1,154 and 1,161 bytes. Empty register identities
+retain widened status/predicate comparisons and the callback-table arithmetic.
+The header context preserves both observed controller-pointer reads through a
+qualified volatile view. Independent mask/shift placement retains their order
+and the unsigned sum. A packed four-byte header and unsigned masks reproduce
+the original AH/AL/CWDE/TEST sequence and its ZF handoff. All contexts initialize
+their BIOS inputs, but the private stores and legacy calls stay unlinked.
+Full raw hashes and all 208 fixups guard the contexts; 47 compiler/placed branch
+destinations and eight selected calls are checked. Each selected instruction is
+used once. This is bounded restoration through C contexts, not a whole-defined-C
+claim. The contract requires accessible terminated mode lists, fitting tables
+and positive pitch. The query alias consumes the low AX word already loaded
+for the signed sentinel check. Width and height retain the ESI/EDI ABI.
 
-The initializer fixture passes 232 cases: 58 each for reference, placed and
-two private contexts. It covers fresh/cached probing, both controller failures,
+The initializer fixture passes 355 cases: 71 each for reference, placed and
+three private contexts. It covers fresh/cached probing, both controller failures,
 all six rejection predicates, skipped modes, all seven bank granularities plus
 an unknown value, linear page counts through the 64-page cap, the special
-320x200 banked path, and both protected-mode callback results. Additional
-predicate values 0/0x7f/0x80/0xff check widening; PM cases cover high selector
-words, signed offset extrema and a table crossing a 64 KiB boundary. Full
-DATA, caller/lower stack guards and preserved registers are checked. Native
-bounded string operations and signed division execute; BIOS, query, mapping
-and error primitives use ABI stubs. Private-only assertions check every added
-BIOS input initialization. Ten mutation controls cover unselected context,
-fixup target/addend and compiler/placed branch guards.
+320x200 banked path, and both protected-mode callback results. Predicate values
+0/0x7f/0x80/0xff check widening; PM cases cover high selector words, signed offset
+extrema and a table crossing a 64 KiB boundary. Far-list cases include segment
+zero, a 64 KiB crossing and the full flat address 0x10abbe. Header cases vary
+neighboring words through 0xffff with poisoned AH in both banked and linear
+paths. Full DATA, caller/lower stack guards and preserved registers are checked.
+Native bounded string operations and signed division execute; BIOS, query,
+mapping and error primitives use ABI stubs. Private-only assertions check every
+added BIOS input initialization. Thirteen mutation controls cover unselected
+context, fixup target/addend and compiler/placed branch guards.
 
 Video-memory mapping now supplies all 411 bytes from a complete C context:
 381 compiler-generated bytes and 30 bytes from the existing segment-restoration
@@ -372,7 +375,7 @@ The saved full validation and audit artifacts verify the pinned image:
 - Video DOS allocation and continuation: `work/palette-loop-check/video-dos-allocation.json`.
 - Complete video-memory mapping: `work/palette-loop-check/video-memory-mapping.json`.
 - VESA initialization contexts: `work/palette-loop-check/vesa-mode-initialization.json`.
-- Attribution audit: `work/vesa-init55-audit.json`.
+- Attribution audit: `work/vesa-init60-audit.json`.
 - Unit test log: `work/palette-loop-check/logs/unit-tests.log`.
 - Encounter loop setup and position phase: `work/encounter-loop-build/behavior.json`.
 - Encounter trigger/sector/clock phase: `work/encounter-spawn-build/behavior.json`.

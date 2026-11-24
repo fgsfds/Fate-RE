@@ -510,3 +510,14 @@ code. For an ES:DI callback table, constrain the summed table base to EBX and
 the signed entry offsets and completed sums to EAX. An independent XOR EBX
 can move before a MOV AX only after proving BX is not yet used and subsequent
 SHL/ADD replace its flags; guard the complete source and each placed phase.
+
+
+When original code reads a BIOS controller field twice, a single C local can
+merge the reads and change the mask registers. Read the actual packed field
+through a const volatile-qualified view in separate full expressions, then
+constrain both the masked/shifted components and their sum. For a packed header,
+unsigned masks 0xffff00ff and 0xffffff80 select AH clearing and AL masking
+without union byte-store merge code. A full-EAX identity between stages and
+Watcom's low-word signed conversion retain CWDE and the final full-register
+TEST. Preserve the initialized four-byte object and verify its high neighbor
+bytes as well as the predicate bit.

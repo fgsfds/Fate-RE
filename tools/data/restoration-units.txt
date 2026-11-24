@@ -559,3 +559,4 @@ fate/video_dos_scalar vbufscal
 fate/map_video_memory vmapctx
 fate/initialize_vesa_mode vbeinit
 fate/initialize_vesa_mode vbeprdc /4r /s /or /bt=dos /dVESA_PREDICATE_CONTEXT
+fate/initialize_vesa_mode vbehdr /4r /s /or /bt=dos /dVESA_HEADER_CONTEXT

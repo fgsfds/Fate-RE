@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1492,
-  "unique_code_bytes": 194764,
-  "le_pointers": 10593,
+  "routines": 1498,
+  "unique_code_bytes": 194803,
+  "le_pointers": 10595,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -6370,6 +6370,36 @@
       "le_pointers": 4
     },
     {
+      "symbol": "vesa_init_list_read_phase_",
+      "object": "vbehdr.obj",
+      "object_sha256": "304d8918cdd1edaeb2b734b9043257cc0039fdd4788d0c7263464575e01220cf",
+      "sha256": "5dcd1e521781d8310430b36e364755305abb16b23b62bf7b0969a8d6764c82cb",
+      "raw_offset": "0x693a5",
+      "loaded_address": "0x43da5",
+      "bytes": 9,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "vesa_init_list_offset_phase_",
+      "object": "vbehdr.obj",
+      "object_sha256": "304d8918cdd1edaeb2b734b9043257cc0039fdd4788d0c7263464575e01220cf",
+      "sha256": "fe5e9d9cffe1a05f1b8b79033f32cfe85c612c26cd5be9e315a12fb5c08f9f35",
+      "raw_offset": "0x693ae",
+      "loaded_address": "0x43dae",
+      "bytes": 6,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "vesa_init_list_segment_phase_",
+      "object": "vbehdr.obj",
+      "object_sha256": "304d8918cdd1edaeb2b734b9043257cc0039fdd4788d0c7263464575e01220cf",
+      "sha256": "40454e712f80cca281764d2f82379b5063450a866d692eff4f2da4781650622b",
+      "raw_offset": "0x693b4",
+      "loaded_address": "0x43db4",
+      "bytes": 3,
+      "le_pointers": 0
+    },
+    {
       "symbol": "vesa_init_mode_query_phase_",
       "object": "vbeinit.obj",
       "object_sha256": "ec371ca497d7cb8662374debb6fdc2b0a496cc733f03190201fd18947c69fb5c",
@@ -6560,6 +6590,16 @@
       "le_pointers": 2
     },
     {
+      "symbol": "vesa_init_linear_predicate_phase_",
+      "object": "vbehdr.obj",
+      "object_sha256": "304d8918cdd1edaeb2b734b9043257cc0039fdd4788d0c7263464575e01220cf",
+      "sha256": "725c5c8054b49430f7fab980a3e0def55d0d32fbf2fb683f29aaebd7e2bcd614",
+      "raw_offset": "0x69524",
+      "loaded_address": "0x43f24",
+      "bytes": 10,
+      "le_pointers": 0
+    },
+    {
       "symbol": "vesa_init_framebuffer_phase_",
       "object": "vbeinit.obj",
       "object_sha256": "ec371ca497d7cb8662374debb6fdc2b0a496cc733f03190201fd18947c69fb5c",
@@ -6570,6 +6610,16 @@
       "le_pointers": 28
     },
     {
+      "symbol": "vesa_init_fallback_enable_phase_",
+      "object": "vbehdr.obj",
+      "object_sha256": "304d8918cdd1edaeb2b734b9043257cc0039fdd4788d0c7263464575e01220cf",
+      "sha256": "b9d7f44bf15b9548c00ba1847adfd13bedfcfeac25bd22374209ef912e52ee18",
+      "raw_offset": "0x69693",
+      "loaded_address": "0x44093",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
       "symbol": "vesa_init_secondary_at_38c_",
       "object": "vbeprdc.obj",
       "object_sha256": "1b40b6ea74211319577248c3653c4ea51a195d898c607fa8840247f4b8e2fecb",
@@ -6578,6 +6628,16 @@
       "loaded_address": "0x44098",
       "bytes": 10,
       "le_pointers": 2
+    },
+    {
+      "symbol": "vesa_init_fallback_store_phase_",
+      "object": "vbehdr.obj",
+      "object_sha256": "304d8918cdd1edaeb2b734b9043257cc0039fdd4788d0c7263464575e01220cf",
+      "sha256": "c64d640066f430eb6251db33135cf2f92fb602c87e8c64ea23ce908a4212fb18",
+      "raw_offset": "0x696a2",
+      "loaded_address": "0x440a2",
+      "bytes": 6,
+      "le_pointers": 1
     },
     {
       "symbol": "vesa_init_pages_and_scan_tail_phase_",
