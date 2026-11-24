@@ -304,3 +304,16 @@ This avoids forcing a C function to modify EBP through an unsupported
 auxiliary declaration. Output setup similarly uses a caller-stack pointer
 formal at +4; an empty two-input handoff keeps both updated word/cursor
 pointers in their original registers.
+
+A public function may return a value in EBP even though EBP input and
+modify declarations are rejected. With a true EBP getter and a 0..127
+row contract, returning `row + 1` emits `INC EBP; RET`; the increment now
+replaces all three ripple row steps. This is an explicit output contract,
+not an automatically preserved EBP value. An `aborts` continuation can
+produce the original near conditional jump directly from a signed guard.
+Keep a guard's private RET separately guarded: combining functions may
+cause Watcom to share a preceding RET and invert the conditional branch.
+The ripple word guard starts its own translation unit to retain the exact
+layout. A conservative clobber on an empty identity may also constrain
+scheduling without adding instructions; the ripple EAX destination
+handoff invalidates ESI before binding its tile pointer.

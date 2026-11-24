@@ -87,15 +87,15 @@ section .after_radius_update align=1 vstart=0x2ecaf follows=.after_pixel_floor
     mov eax, [esp]
     test eax, eax
     jnl near .branch_2ebda
-    mov eax, frame_state_633a1
-    mov esi, edx
+; C establishes the masked-row destination and tile input.
+section .mask_row_counter align=1 vstart=0x2ecc4 follows=.after_radius_update
     xor ebp, ebp
     jmp short .branch_2ece9
 
 .branch_2ecc8 equ 0x2ecc8
 ; C copies and masks one 128-byte row, returning the next row in EAX.
-section .after_mask_row align=1 vstart=0x2ece8 follows=.after_radius_update
-    inc ebp
+; C advances the shared EBP row counter.
+section .after_mask_row align=1 vstart=0x2ece9 follows=.mask_row_counter
 
 .branch_2ece9:
     cmp ebp, strict dword 0x80
@@ -106,10 +106,8 @@ section .after_border_columns align=1 vstart=0x2ed19 follows=.after_mask_row
     jmp short .branch_2ed4c
 
 .branch_2ed1d equ 0x2ed1d
-; C head and tail surround the original row-counter increment.
-section .vertical_row_step align=1 vstart=0x2ed28 follows=.after_border_columns
-    inc ebp
-section .vertical_row_guard align=1 vstart=0x2ed4c follows=.vertical_row_step
+; C head, counter increment and tail share the caller's row state.
+section .vertical_row_guard align=1 vstart=0x2ed4c follows=.after_border_columns
 .branch_2ed4c:
     cmp ebp, strict dword 0x80
     jl short .branch_2ed1d
@@ -143,16 +141,10 @@ section .pack_third_next align=1 vstart=0x2ee45 follows=.pack_two_next
 ; Compiler-generated C supplies this seven-neighbor sum.
 ; C adds and biases the fourth lane.
 ; C stores the packed word and advances both pointers.
-section .after_output_store align=1 vstart=0x2ee87 follows=.pack_third_next
-.branch_2ee87:
-    cmp ecx, [esp + 0x4]
-    jl near .branch_2edae
-    inc ebp
-
-.branch_2ee92:
-    cmp ebp, strict dword 0x80
-    jl near .branch_2ed8a
-    inc dword [ripple_frame]
+; C supplies both signed loop guards, the row increment and frame advance.
+.branch_2ee87 equ 0x2ee87
+.branch_2ee92 equ 0x2ee92
+section .output_epilogue align=1 vstart=0x2eea4 follows=.pack_third_next
     add esp, 0x14
     pop ebp
     pop edi

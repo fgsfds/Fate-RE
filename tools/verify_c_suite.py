@@ -1532,8 +1532,13 @@ def verify_compiler_groups(exe, directory, names=None):
         if selected(name):
             verify_group_layout((directory/(name+'.obj')).read_bytes(), size, [(public, 0)])
     if selected('ripout'):
-        verify_group_layout((directory/'ripout.obj').read_bytes(), 41,
-                            [('ripple_output_row_', 0), ('ripple_store_output_', 32)])
+        verify_group_layout((directory/'ripout.obj').read_bytes(), 49,
+                            [('ripple_output_row_', 0), ('ripple_store_output_', 32),
+                             ('ripple_mask_begin_', 41)])
+    if selected('riploop'):
+        verify_group_layout((directory/'riploop.obj').read_bytes(), 32,
+                            [('ripple_output_word_guard_', 0),
+                             ('ripple_output_row_increment_', 11), ('ripple_output_row_guard_', 13)])
     if selected('riprad'):
         verify_group_layout((directory/'riprad.obj').read_bytes(), 109,
                             [('ripple_radial_sample_', 0), ('ripple_radial_setup_', 53)])
@@ -1635,6 +1640,12 @@ OBJECT_NAMES['ripple_vertical_head_phase_'] = 'ripbord'
 OBJECT_NAMES['ripple_vertical_tail_phase_'] = 'ripbord'
 OBJECT_NAMES['ripple_output_row_phase_'] = 'ripout'
 OBJECT_NAMES['ripple_store_output_phase_'] = 'ripout'
+OBJECT_NAMES['ripple_mask_begin_phase_'] = 'ripout'
+OBJECT_NAMES['ripple_output_word_guard_phase_'] = 'riploop'
+OBJECT_NAMES['ripple_output_row_increment_phase_'] = 'riploop'
+OBJECT_NAMES['ripple_mask_row_increment_phase_'] = 'riploop'
+OBJECT_NAMES['ripple_vertical_row_increment_phase_'] = 'riploop'
+OBJECT_NAMES['ripple_output_row_guard_phase_'] = 'riploop'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

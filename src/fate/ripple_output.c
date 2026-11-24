@@ -48,3 +48,19 @@ RippleWord *ripple_store_output(unsigned long value, RippleWord *output, const u
     output=store_output_esi(output+1);
     return store_handoff(output,cursor);
 }
+
+/* Conservatively invalidate ESI at the EAX handoff so its tile binding
+ * is scheduled afterward. The empty identity itself preserves all registers. */
+extern unsigned char *begin_eax(unsigned char *);
+#pragma aux begin_eax = "" parm [eax] value [eax] modify exact [esi];
+extern const unsigned char *begin_esi(const unsigned char *);
+#pragma aux begin_esi = "" parm [esi] value [esi] modify exact [];
+extern unsigned char *begin_handoff(unsigned char *, const unsigned char *);
+#pragma aux begin_handoff = "" parm [eax] [esi] value [eax] modify exact [];
+unsigned char *ripple_mask_begin(const unsigned char *);
+#pragma aux ripple_mask_begin parm [edx] value [eax] modify exact [eax esi];
+unsigned char *ripple_mask_begin(const unsigned char *tile)
+{
+    unsigned char *start=begin_eax((unsigned char *)&ripple_buffer+133);
+    return begin_handoff(start,begin_esi(tile));
+}

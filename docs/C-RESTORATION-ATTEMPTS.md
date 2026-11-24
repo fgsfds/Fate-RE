@@ -878,18 +878,23 @@ to a 154-byte function, spilling pending count at ESP+1C and preserving
 incoming EDX/EDI on the stack. Declaring EBP in the function's modified
 register list is rejected with E1122, as are EBP input auxiliaries.
 The count clamp, masked row, top/bottom borders and four stencil sums
-are now integrated; 191 bytes and 4 LE sites remain assembly.
+are now integrated; 153 bytes and 2 LE sites remain assembly.
 Both coordinate stores, the pixel floor, radius removal and all corner
 stores now match as selected C leaves. The X and corner phases preserve
 the independent EBP/ESI bookkeeping between their selected slices.
 Radial setup/sample and output lane packing now match as C leaves.
 Caller-cleanup stack formals preserve the original +8/+12 frame fields;
 retained EBP assignments establish slot and Y getter preconditions.
-The vertical row body now matches around the retained INC EBP, and
+The vertical row body now matches around a shared C INC EBP, and
 caller-stack output setup preserves the +4 end-pointer field. The packed
-word store hands off both incremented pointers. Next consolidate loop
-control and frame operations without introducing an EBP input auxiliary;
-the accepted getter bodies rely on the retained row-counter assignments.
+word store hands off both incremented pointers. A public EBP return
+matches all three row increments; signed output guards with `aborts`
+continuations and the unsigned frame advance also match. Combining the
+word guard after an existing RET changes it to a JGE/shared-RET plus JMP;
+a separate loop unit retains its exact near JL. Next consolidate the
+creation countdown and remaining loop ingress without an EBP input
+auxiliary; accepted getters rely on retained row-counter initialization.
+Frozen loop evidence: `work/ripple-loop-research/RESULTS.md`.
 Creation sources, register-oracle cases, hashes and first mismatches:
 `work/ripple-create-research/semantic-notes.md` and
 `work/ripple-v16/`, `work/ripple-v19/`. The broader preparation

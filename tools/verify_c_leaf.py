@@ -4846,6 +4846,25 @@ LEAVES['ripple_store_output_phase_'] = (0x5447f, 8)
 LEAF_CODE_SLICES['ripple_store_output_phase_'] = ('ripple_store_output_', 0, 8, 9)
 LEAF_CONTEXT_SUFFIXES['ripple_store_output_'] = b'\xc3'
 
+FUNCTION_ADDRESSES['ripple_output_more_words_'] = 0x2edae
+FUNCTION_ADDRESSES['ripple_output_more_rows_'] = 0x2ed8a
+LEAVES['ripple_mask_begin_phase_'] = (0x542bd, 7)
+LEAF_CODE_SLICES['ripple_mask_begin_phase_'] = ('ripple_mask_begin_', 0, 7, 8)
+LEAF_CONTEXT_SUFFIXES['ripple_mask_begin_'] = b'\xc3'
+LEAVES['ripple_output_word_guard_phase_'] = (0x54487, 10)
+LEAF_CODE_SLICES['ripple_output_word_guard_phase_'] = ('ripple_output_word_guard_', 0, 10, 11)
+LEAF_CONTEXT_SUFFIXES['ripple_output_word_guard_'] = b'\xc3'
+LEAVES['ripple_output_row_increment_phase_'] = (0x54491, 1)
+LEAF_CODE_SLICES['ripple_output_row_increment_phase_'] = ('ripple_output_row_increment_', 0, 1, 2)
+LEAF_CONTEXT_SUFFIXES['ripple_output_row_increment_'] = b'\xc3'
+LEAVES['ripple_mask_row_increment_phase_'] = (0x542e8, 1)
+LEAF_CODE_SLICES['ripple_mask_row_increment_phase_'] = ('ripple_output_row_increment_', 0, 1, 2)
+LEAVES['ripple_vertical_row_increment_phase_'] = (0x54328, 1)
+LEAF_CODE_SLICES['ripple_vertical_row_increment_phase_'] = ('ripple_output_row_increment_', 0, 1, 2)
+LEAVES['ripple_output_row_guard_phase_'] = (0x54492, 18)
+LEAF_CODE_SLICES['ripple_output_row_guard_phase_'] = ('ripple_output_row_guard_', 0, 18, 19)
+LEAF_CONTEXT_SUFFIXES['ripple_output_row_guard_'] = b'\xc3'
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

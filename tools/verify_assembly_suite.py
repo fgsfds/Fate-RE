@@ -4217,25 +4217,25 @@ for _symbol, _begin, _end, _binary in (
         ('animate_ripple_radial', 0x6e, 0x85, 38),
         ('animate_ripple_radial_1', 0xbc, 0xc5, 61),
         ('animate_ripple_radial_guard', 0x107, 0x10f, 70),
-        ('animate_ripple_control_finish', 0x158, 0x171, 78),
-        ('animate_ripple_mask_guard', 0x191, 0x19a, 103),
-        ('animate_ripple_border', 0x1c2, 0x1c6, 112),
-        ('animate_ripple_border_1', 0x1d1, 0x1d2, 116),
-        ('animate_ripple_border_2', 0x1f5, 0x1fd, 117),
-        ('animate_ripple_corners_output_pointer', 0x223, 0x225, 125),
-        ('animate_ripple_corners_output_row', 0x227, 0x229, 127),
-        ('animate_ripple_output_setup', 0x22e, 0x233, 129),
-        ('animate_ripple_output_setup_1', 0x252, 0x259, 134),
-        ('animate_ripple_second_setup', 0x27f, 0x284, 141),
-        ('animate_ripple_pack_second', 0x2bb, 0x2be, 146),
-        ('animate_ripple_pack_third', 0x2ee, 0x2f1, 149),
-        ('animate_ripple_pack_fourth', 0x330, 0x357, 152),
+        ('animate_ripple_control_finish', 0x158, 0x166, 78),
+        ('animate_ripple_control_finish_tail', 0x16d, 0x171, 92),
+        ('animate_ripple_mask_guard', 0x192, 0x19a, 96),
+        ('animate_ripple_border', 0x1c2, 0x1c6, 104),
+        ('animate_ripple_border_2', 0x1f5, 0x1fd, 108),
+        ('animate_ripple_corners_output_pointer', 0x223, 0x225, 116),
+        ('animate_ripple_corners_output_row', 0x227, 0x229, 118),
+        ('animate_ripple_output_setup', 0x22e, 0x233, 120),
+        ('animate_ripple_output_setup_1', 0x252, 0x259, 125),
+        ('animate_ripple_second_setup', 0x27f, 0x284, 132),
+        ('animate_ripple_pack_second', 0x2bb, 0x2be, 137),
+        ('animate_ripple_pack_third', 0x2ee, 0x2f1, 140),
+        ('animate_ripple_pack_fourth', 0x34d, 0x357, 143),
 ):
     ROUTINES.append((_symbol, _ripple_original[1], _ripple_original[2],
                      _ripple_original[3] + _begin, _end - _begin,
                      {site - _begin: target for site, target in _ripple_original[5].items()
                       if _begin <= site < _end}))
-    GROUP_SLICES[_symbol] = (_binary, 191)
+    GROUP_SLICES[_symbol] = (_binary, 153)
     DATA_POINTER_SITES[_symbol] = tuple(site - _begin for site in _ripple_data
                                        if _begin <= site < _end)
 
