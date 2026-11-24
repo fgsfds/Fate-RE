@@ -1,21 +1,25 @@
 # Exact C restoration progress
 
-The current saved attribution audit covers all 414,639 CODE bytes and includes 558 compiler units. Saved full validation passed 398 tests and 137 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
+The current saved attribution audit covers all 414,639 CODE bytes and includes 569 compiler units. Saved full validation passed 406 tests and 144 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 156,105 | 37.648% |
+| Compiler-generated instructions | 167,102 | 40.301% |
 | Inline assembly instructions in C objects | 24,311 | 5.863% |
-| Standalone assembly | 232,784 | 56.141% |
-| Unattributed instructions and non-routine tables | 1,439 | 0.347% |
+| Standalone assembly | 221,943 | 53.527% |
+| Unattributed instructions and non-routine tables | 1,283 | 0.309% |
 
-The unattributed category contains 1,038 instruction bytes in 22 unknown routines and 401 non-routine table bytes. Tables are recorded as data, and the unknown instruction bytes remain uncredited. Combined remaining assembly, including inline assembly: 257,095 bytes (62.005%). C-object inventory covers 181,855 bytes (43.86%) and 1,367 C routine spans; the assembly inventory has 483 spans.
+The unattributed category contains 882 instruction bytes in 16 unknown routines and 401 non-routine table bytes. Tables are recorded as data, and the unknown instruction bytes remain uncredited. Combined remaining assembly, including inline assembly: 246,254 bytes (59.390%). C-object inventory covers 192,696 bytes (46.47%) and 1,422 C routine spans; the assembly inventory has 481 spans.
 
 The accepted executable is 741,347 bytes, SHA-256 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.
 
 `update_level_sector_puzzle_` is restored in readable C: 932 bytes and 59 LE sites, with no inline instructions. One C translation unit compiles twice into three selected phases (410/64/458 bytes); five existing branch edges change displacement only. Neither full compiler public matches by itself. Its differential fixture passes 128 cases and rejects both activation-tag and exit-destination code mutations.
 
 `level_encounter_exit_`, its tile latch, frame operations, and second actor update contribute 569 exact native C body bytes and 37 LE sites from one C source compiled in two private contexts, with no inline assembly. The exit phase is 261 bytes; the latch phases total 138 bytes. The latch fixture passes 360 cases and rejects the state and sound machine-code mutations. It compares natural compiler order with linked order; the index and zero phases commute. The frame fixture covers four cases and rejects a typed CODE pointer mutation and a POP EDI mutation. Its 56 bytes span four aliases of 5/39/6/6 bytes with two typed CODE fields. The original 184-byte frame and six saves remain; PUSH/POP EBP are two retained ASM instructions, and the 13-byte return path is stitched from a C release, ASM POP EBP, and C register restore. The second actor update adds 114 bytes and seven LE sites from the existing latch context. The encounter retains 694 assembly body bytes and 160 assembly table bytes. The private publics are 1,225 and 1,249 bytes, each preceded by a separate 160-byte literal prefix; only selected exact slices are linked, with no C credit for those prefixes or tables.
+
+Save and load are fully compiler-generated C: 5,432 load bytes with 254 LE sites and 5,409 save bytes with 253 LE sites. All 10,841 original instruction bytes link from 55 checked C spans, with no inline instructions. Both assembly sources are removed. A bounded character view of the complete DATA object preserves the serialized field order and widths; pointer-table conversions use unsigned 32-bit address arithmetic. Complete private-context hashes, fixup forms/addends and branch destinations are guarded. The attribution checker also verifies 156 pre-existing native C bytes that were previously unmeasured; those are separate from the 10,841 assembly bytes replaced here.
+
+The seven save/load fixtures cover 465 literal field records, dynamic lengths, all 512 pointer-table indices, status fields/messages, slot opening, player chains and frame returns. They test partial/empty transfers, caller-clobber poison, complete DATA/frame guards, native forward-overlapping append and native string lengths. Primitive stream operations and player initialization are modeled where hooked. The four round trips concern pointer-word conversion only; these fixtures do not establish end-to-end DOS save/load or malformed-file handling. Shared-tail marker classification requires matching relocated E8 callees, operands, FLAT frames/addends and a terminal near RET; regression tests reject indirect and unverified LOOP-family transfers.
 
 `animate_ripple_texture` is entirely compiler-generated C: 855 bytes, 37 LE sites and no inline instructions. Its 81 linked C spans cover the complete routine. A readable 865-byte full-algorithm context supplies the final 43 save/restore and control-transfer bytes; raw context bytes, all 39 fixup forms/targets/addends, compiler branch targets and placed destinations are guarded. Packed row and tile types preserve the original unaligned four-pixel operations. The initializer's offset-array declarations now agree with the unsigned dword readers while retaining its existing store code.
 
@@ -43,7 +47,7 @@ The palette lookup clearing loop contributes 19 compiler-generated bytes and one
 
 The saved full validation and audit artifacts verify the pinned image:
 
-- Full validation and 137 fixtures: `work/reset-82ae95d/validation.json`.
+- Full validation and 144 fixtures: `work/reset-82ae95d/validation.json`.
 - Encounter frame behavior: `work/encounter-frame-build/encounter-frame-behavior.json`.
 - Video initialization handoff: `work/setmode-display-handoff.json`.
 - Video setup and allocation behavior: `work/reset-82ae95d/setgamemode-init-behavior.json`.
@@ -51,7 +55,11 @@ The saved full validation and audit artifacts verify the pinned image:
 - Dispatch and generated table: `work/reset-82ae95d/setgamemode-dispatch-behavior.json`.
 - Ripple control and full-routine replay: `work/reset-82ae95d/ripple-control.json`.
 - Ripple texture oracle: `work/reset-82ae95d/ripple-texture-behavior.json`.
-- Attribution audit: `work/ripple-resume-next/audit.json`.
+- Save field transfers: `work/reset-82ae95d/save-field-io.json`.
+- Save pointer conversions: `work/reset-82ae95d/save-restore-steps.json`.
+- Save slot opening and frames: `work/reset-82ae95d/save-slot-open.json`.
+- Save player and finish paths: `work/reset-82ae95d/save-players-finish.json`.
+- Attribution audit: `work/saveio-resume-next/audit.json`.
 - Unit test log: `work/reset-82ae95d/logs/unit-tests.log`.
 - Encounter latch behavior: `work/encounter-latch-build/encounter-latch-behavior.json`.
 - Puzzle exact slices, relocations, and behavior: `work/sector-puzzle-build/sector-puzzle-behavior.json`.

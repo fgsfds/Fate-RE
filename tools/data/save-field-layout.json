@@ -1,0 +1,3196 @@
+{
+  "schema_version": 1,
+  "reference_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
+  "binding": {
+    "code_loaded_address_to_file_offset_delta": 153088,
+    "data_external": "_save_data_image",
+    "data_le_object": 2,
+    "data_loaded_base": 524288,
+    "data_extent": 2663168,
+    "data_base_object_offset": 0,
+    "record_bytes": 22,
+    "data_operand_offset": 11,
+    "relative_call_operand_offset": 18,
+    "count": 1,
+    "relative_targets": {
+      "fread_": 394808,
+      "fwrite_": 395588
+    }
+  },
+  "record_count": 443,
+  "code_bytes": 9746,
+  "routines": [
+    {
+      "symbol": "read_game_data",
+      "source": "src/fate/read_game_data.asm",
+      "loaded_address": 193643,
+      "file_offset": 346731,
+      "size": 5432,
+      "record_count": 221,
+      "stream_register_counts": {
+        "edi": 3,
+        "esi": 218
+      },
+      "runs": [
+        {
+          "start_address": 193745,
+          "end_address": 193811,
+          "start_file_offset": 346833,
+          "stream_register": "edi",
+          "call_target": 394808,
+          "records": [
+            {
+              "address": 193745,
+              "data_offset": 81122,
+              "size": 2,
+              "name": "local_player"
+            },
+            {
+              "address": 193767,
+              "data_offset": 1639050,
+              "size": 2,
+              "name": "first_player"
+            },
+            {
+              "address": 193789,
+              "data_offset": 1637752,
+              "size": 32,
+              "name": "next_player"
+            }
+          ],
+          "public": "save_read_fields_0_",
+          "public_start": 0,
+          "public_size": 77,
+          "body_start": 0,
+          "body_size": 66,
+          "private_prefix": "",
+          "private_suffix": "bb78fd1800c1e00501c3c3",
+          "private_bytes": 11,
+          "context_sha256": "4f7224f1b936782218b69ce9024f0ee6b26c43f920e02ee98d91157437698cc0",
+          "phase": "save_read_fields_0_phase_",
+          "private_fixups": {
+            "67": [
+              "_save_data_image",
+              false,
+              1637752
+            ]
+          }
+        },
+        {
+          "start_address": 193840,
+          "end_address": 194324,
+          "start_file_offset": 346928,
+          "stream_register": "esi",
+          "call_target": 394808,
+          "records": [
+            {
+              "address": 193840,
+              "data_offset": 372124,
+              "size": 64,
+              "name": "player_x"
+            },
+            {
+              "address": 193862,
+              "data_offset": 372060,
+              "size": 64,
+              "name": "player_y"
+            },
+            {
+              "address": 193884,
+              "data_offset": 371996,
+              "size": 64,
+              "name": "player_z"
+            },
+            {
+              "address": 193906,
+              "data_offset": 405388,
+              "size": 64,
+              "name": "player_horizon"
+            },
+            {
+              "address": 193928,
+              "data_offset": 372252,
+              "size": 64,
+              "name": "board_state_5ae1c"
+            },
+            {
+              "address": 193950,
+              "data_offset": 405324,
+              "size": 64,
+              "name": "motion_state_62f4c"
+            },
+            {
+              "address": 193972,
+              "data_offset": 405644,
+              "size": 32,
+              "name": "player_angle"
+            },
+            {
+              "address": 193994,
+              "data_offset": 371964,
+              "size": 32,
+              "name": "player_sector"
+            },
+            {
+              "address": 194016,
+              "data_offset": 371932,
+              "size": 32,
+              "name": "previous_player_sector"
+            },
+            {
+              "address": 194038,
+              "data_offset": 405292,
+              "size": 32,
+              "name": "board_state_62f2c"
+            },
+            {
+              "address": 194060,
+              "data_offset": 405884,
+              "size": 32,
+              "name": "board_state_6317c"
+            },
+            {
+              "address": 194082,
+              "data_offset": 405692,
+              "size": 64,
+              "name": "board_state_630bc"
+            },
+            {
+              "address": 194104,
+              "data_offset": 405916,
+              "size": 64,
+              "name": "status_right_tenths"
+            },
+            {
+              "address": 194126,
+              "data_offset": 405580,
+              "size": 32,
+              "name": "board_state_6304c"
+            },
+            {
+              "address": 194148,
+              "data_offset": 405612,
+              "size": 32,
+              "name": "motion_state_6306c"
+            },
+            {
+              "address": 194170,
+              "data_offset": 405276,
+              "size": 16,
+              "name": "player_mode"
+            },
+            {
+              "address": 194192,
+              "data_offset": 405676,
+              "size": 16,
+              "name": "motion_state_630ac"
+            },
+            {
+              "address": 194214,
+              "data_offset": 372188,
+              "size": 32,
+              "name": "save_state_5addc"
+            },
+            {
+              "address": 194236,
+              "data_offset": 372220,
+              "size": 32,
+              "name": "save_state_5adfc"
+            },
+            {
+              "address": 194258,
+              "data_offset": 371644,
+              "size": 64,
+              "name": "save_state_5abbc"
+            },
+            {
+              "address": 194280,
+              "data_offset": 371708,
+              "size": 64,
+              "name": "save_state_5abfc"
+            },
+            {
+              "address": 194302,
+              "data_offset": 2658644,
+              "size": 2,
+              "name": "numsectors"
+            }
+          ],
+          "public": "save_read_fields_1_",
+          "public_start": 77,
+          "public_size": 494,
+          "body_start": 0,
+          "body_size": 484,
+          "private_prefix": "",
+          "private_suffix": "bb5491280001c001c3c3",
+          "private_bytes": 10,
+          "context_sha256": "c1eb2a265024a9a9908b8b8b91d827e305a978d95de45b99477b873f83144a88",
+          "phase": "save_read_fields_1_phase_",
+          "private_fixups": {
+            "485": [
+              "_save_data_image",
+              false,
+              2658644
+            ]
+          }
+        },
+        {
+          "start_address": 194358,
+          "end_address": 194380,
+          "start_file_offset": 347446,
+          "stream_register": "esi",
+          "call_target": 394808,
+          "records": [
+            {
+              "address": 194358,
+              "data_offset": 2658642,
+              "size": 2,
+              "name": "numwalls"
+            }
+          ],
+          "public": "save_read_fields_2_",
+          "public_start": 571,
+          "public_size": 32,
+          "body_start": 0,
+          "body_size": 22,
+          "private_prefix": "",
+          "private_suffix": "bb5291280001c001c3c3",
+          "private_bytes": 10,
+          "context_sha256": "d54c5b43106419490970acd0cc886ce0491af26790ffe7f126ce33deb0da8469",
+          "phase": "save_read_fields_2_phase_",
+          "private_fixups": {
+            "23": [
+              "_save_data_image",
+              false,
+              2658642
+            ]
+          }
+        },
+        {
+          "start_address": 194407,
+          "end_address": 194649,
+          "start_file_offset": 347495,
+          "stream_register": "esi",
+          "call_target": 394808,
+          "records": [
+            {
+              "address": 194407,
+              "data_offset": 2113696,
+              "size": 180224,
+              "name": "sprite"
+            },
+            {
+              "address": 194429,
+              "data_offset": 2656542,
+              "size": 2050,
+              "name": "engine_28891e"
+            },
+            {
+              "address": 194451,
+              "data_offset": 2056224,
+              "size": 8192,
+              "name": "save_state_1f6020"
+            },
+            {
+              "address": 194473,
+              "data_offset": 2071712,
+              "size": 8192,
+              "name": "engine_1f9ca0"
+            },
+            {
+              "address": 194495,
+              "data_offset": 2654492,
+              "size": 2050,
+              "name": "hit_sprite_list_head"
+            },
+            {
+              "address": 194517,
+              "data_offset": 2088096,
+              "size": 8192,
+              "name": "save_state_1fdca0"
+            },
+            {
+              "address": 194539,
+              "data_offset": 2079904,
+              "size": 8192,
+              "name": "next_sprite_stat"
+            },
+            {
+              "address": 194561,
+              "data_offset": 487656,
+              "size": 4,
+              "name": "keyboard_forward"
+            },
+            {
+              "address": 194583,
+              "data_offset": 487652,
+              "size": 4,
+              "name": "keyboard_strafe"
+            },
+            {
+              "address": 194605,
+              "data_offset": 487660,
+              "size": 4,
+              "name": "keyboard_turn"
+            },
+            {
+              "address": 194627,
+              "data_offset": 487624,
+              "size": 4,
+              "name": "selection"
+            }
+          ],
+          "public": "save_read_fields_3_",
+          "public_start": 603,
+          "public_size": 253,
+          "body_start": 0,
+          "body_size": 242,
+          "private_prefix": "",
+          "private_suffix": "bbc8700700c1e00201c3c3",
+          "private_bytes": 11,
+          "context_sha256": "96dc0566277ef90ce506e82b229510b06ab999b17abfcc4138d3111bd3c561a8",
+          "phase": "save_read_fields_3_phase_",
+          "private_fixups": {
+            "243": [
+              "_save_data_image",
+              false,
+              487624
+            ]
+          }
+        },
+        {
+          "start_address": 194763,
+          "end_address": 196259,
+          "start_file_offset": 347851,
+          "stream_register": "esi",
+          "call_target": 394808,
+          "records": [
+            {
+              "address": 194763,
+              "data_offset": 515836,
+              "size": 2,
+              "name": "input_actions"
+            },
+            {
+              "address": 194785,
+              "data_offset": 515831,
+              "size": 2,
+              "name": "board_state_7def7"
+            },
+            {
+              "address": 194807,
+              "data_offset": 487616,
+              "size": 4,
+              "name": "second_player_selection"
+            },
+            {
+              "address": 194829,
+              "data_offset": 515838,
+              "size": 5,
+              "name": "second_player_input"
+            },
+            {
+              "address": 194851,
+              "data_offset": 371852,
+              "size": 80,
+              "name": "board_state_5ac8c"
+            },
+            {
+              "address": 194873,
+              "data_offset": 351084,
+              "size": 80,
+              "name": "previous_input"
+            },
+            {
+              "address": 194895,
+              "data_offset": 124332,
+              "size": 80,
+              "name": "board_filename"
+            },
+            {
+              "address": 194917,
+              "data_offset": 15610,
+              "size": 2,
+              "name": "listener_index"
+            },
+            {
+              "address": 194939,
+              "data_offset": 15612,
+              "size": 2,
+              "name": "saved_mouse_buttons"
+            },
+            {
+              "address": 194961,
+              "data_offset": 15614,
+              "size": 2,
+              "name": "brightness"
+            },
+            {
+              "address": 194983,
+              "data_offset": 515794,
+              "size": 2,
+              "name": "near_sector"
+            },
+            {
+              "address": 195005,
+              "data_offset": 515798,
+              "size": 2,
+              "name": "near_sprite"
+            },
+            {
+              "address": 195027,
+              "data_offset": 515796,
+              "size": 2,
+              "name": "near_wall"
+            },
+            {
+              "address": 195049,
+              "data_offset": 487608,
+              "size": 4,
+              "name": "actor_clock"
+            },
+            {
+              "address": 195071,
+              "data_offset": 487596,
+              "size": 4,
+              "name": "save_state_770ac"
+            },
+            {
+              "address": 195093,
+              "data_offset": 487584,
+              "size": 4,
+              "name": "near_tag_distance"
+            },
+            {
+              "address": 195115,
+              "data_offset": 118636,
+              "size": 32,
+              "name": "board_state_1cf6c"
+            },
+            {
+              "address": 195137,
+              "data_offset": 515786,
+              "size": 2,
+              "name": "board_state_7deca"
+            },
+            {
+              "address": 195159,
+              "data_offset": 117932,
+              "size": 32,
+              "name": "board_state_1ccac"
+            },
+            {
+              "address": 195181,
+              "data_offset": 515790,
+              "size": 2,
+              "name": "board_state_7dece"
+            },
+            {
+              "address": 195203,
+              "data_offset": 117900,
+              "size": 32,
+              "name": "board_state_1cc8c"
+            },
+            {
+              "address": 195225,
+              "data_offset": 515780,
+              "size": 2,
+              "name": "board_state_7dec4"
+            },
+            {
+              "address": 195247,
+              "data_offset": 118508,
+              "size": 128,
+              "name": "board_state_1ceec"
+            },
+            {
+              "address": 195269,
+              "data_offset": 515788,
+              "size": 2,
+              "name": "board_state_7decc"
+            },
+            {
+              "address": 195291,
+              "data_offset": 118924,
+              "size": 128,
+              "name": "board_state_1d08c"
+            },
+            {
+              "address": 195313,
+              "data_offset": 515778,
+              "size": 2,
+              "name": "board_state_7dec2"
+            },
+            {
+              "address": 195335,
+              "data_offset": 119052,
+              "size": 32,
+              "name": "board_state_1d10c"
+            },
+            {
+              "address": 195357,
+              "data_offset": 117836,
+              "size": 32,
+              "name": "board_state_1cc4c"
+            },
+            {
+              "address": 195379,
+              "data_offset": 117868,
+              "size": 32,
+              "name": "board_state_1cc6c"
+            },
+            {
+              "address": 195401,
+              "data_offset": 515782,
+              "size": 2,
+              "name": "board_state_7dec6"
+            },
+            {
+              "address": 195423,
+              "data_offset": 118316,
+              "size": 64,
+              "name": "board_state_1ce2c"
+            },
+            {
+              "address": 195445,
+              "data_offset": 118444,
+              "size": 64,
+              "name": "board_state_1ceac"
+            },
+            {
+              "address": 195467,
+              "data_offset": 118252,
+              "size": 64,
+              "name": "board_state_1cdec"
+            },
+            {
+              "address": 195489,
+              "data_offset": 118380,
+              "size": 64,
+              "name": "board_state_1ce6c"
+            },
+            {
+              "address": 195511,
+              "data_offset": 118060,
+              "size": 64,
+              "name": "board_state_1cd2c"
+            },
+            {
+              "address": 195533,
+              "data_offset": 515774,
+              "size": 2,
+              "name": "board_state_7debe"
+            },
+            {
+              "address": 195555,
+              "data_offset": 113468,
+              "size": 320,
+              "name": "board_state_1bb3c"
+            },
+            {
+              "address": 195577,
+              "data_offset": 113788,
+              "size": 64,
+              "name": "board_state_1bc7c"
+            },
+            {
+              "address": 195599,
+              "data_offset": 113340,
+              "size": 64,
+              "name": "board_state_1babc"
+            },
+            {
+              "address": 195621,
+              "data_offset": 113852,
+              "size": 64,
+              "name": "board_state_1bcbc"
+            },
+            {
+              "address": 195643,
+              "data_offset": 115708,
+              "size": 64,
+              "name": "board_state_1c3fc"
+            },
+            {
+              "address": 195665,
+              "data_offset": 114988,
+              "size": 64,
+              "name": "board_state_1c12c"
+            },
+            {
+              "address": 195687,
+              "data_offset": 113404,
+              "size": 64,
+              "name": "board_state_1bafc"
+            },
+            {
+              "address": 195709,
+              "data_offset": 115772,
+              "size": 1024,
+              "name": "board_state_1c43c"
+            },
+            {
+              "address": 195731,
+              "data_offset": 116796,
+              "size": 1024,
+              "name": "board_state_1c83c"
+            },
+            {
+              "address": 195753,
+              "data_offset": 113332,
+              "size": 8,
+              "name": "board_state_1bab4"
+            },
+            {
+              "address": 195775,
+              "data_offset": 117828,
+              "size": 8,
+              "name": "board_state_1cc44"
+            },
+            {
+              "address": 195797,
+              "data_offset": 515776,
+              "size": 2,
+              "name": "board_state_7dec0"
+            },
+            {
+              "address": 195819,
+              "data_offset": 115452,
+              "size": 256,
+              "name": "board_state_1c2fc"
+            },
+            {
+              "address": 195841,
+              "data_offset": 115196,
+              "size": 256,
+              "name": "board_state_1c1fc"
+            },
+            {
+              "address": 195863,
+              "data_offset": 113316,
+              "size": 16,
+              "name": "board_state_1baa4"
+            },
+            {
+              "address": 195885,
+              "data_offset": 113300,
+              "size": 16,
+              "name": "board_state_1ba94"
+            },
+            {
+              "address": 195907,
+              "data_offset": 113948,
+              "size": 1024,
+              "name": "board_state_1bd1c"
+            },
+            {
+              "address": 195929,
+              "data_offset": 117820,
+              "size": 8,
+              "name": "board_state_1cc3c"
+            },
+            {
+              "address": 195951,
+              "data_offset": 515772,
+              "size": 2,
+              "name": "board_state_7debc"
+            },
+            {
+              "address": 195973,
+              "data_offset": 115068,
+              "size": 128,
+              "name": "board_state_1c17c"
+            },
+            {
+              "address": 195995,
+              "data_offset": 115052,
+              "size": 16,
+              "name": "board_state_1c16c"
+            },
+            {
+              "address": 196017,
+              "data_offset": 113932,
+              "size": 16,
+              "name": "board_state_1bd0c"
+            },
+            {
+              "address": 196039,
+              "data_offset": 114972,
+              "size": 16,
+              "name": "board_state_1c11c"
+            },
+            {
+              "address": 196061,
+              "data_offset": 113916,
+              "size": 16,
+              "name": "board_state_1bcfc"
+            },
+            {
+              "address": 196083,
+              "data_offset": 107028,
+              "size": 16,
+              "name": "board_state_1a214"
+            },
+            {
+              "address": 196105,
+              "data_offset": 113204,
+              "size": 16,
+              "name": "board_state_1ba34"
+            },
+            {
+              "address": 196127,
+              "data_offset": 107044,
+              "size": 16,
+              "name": "board_state_1a224"
+            },
+            {
+              "address": 196149,
+              "data_offset": 107012,
+              "size": 16,
+              "name": "board_state_1a204"
+            },
+            {
+              "address": 196171,
+              "data_offset": 113284,
+              "size": 16,
+              "name": "board_state_1ba84"
+            },
+            {
+              "address": 196193,
+              "data_offset": 104932,
+              "size": 32,
+              "name": "fini_table_end"
+            },
+            {
+              "address": 196215,
+              "data_offset": 113220,
+              "size": 32,
+              "name": "board_state_1ba44"
+            },
+            {
+              "address": 196237,
+              "data_offset": 113252,
+              "size": 32,
+              "name": "board_state_1ba64"
+            }
+          ],
+          "public": "save_read_fields_4_",
+          "public_start": 856,
+          "public_size": 1506,
+          "body_start": 0,
+          "body_size": 1496,
+          "private_prefix": "",
+          "private_suffix": "bb64ba0100e90df7ffff",
+          "private_bytes": 10,
+          "context_sha256": "d9d1c784f3e913020b235af4aabebafd11c1308b20be250bae370a195362d174",
+          "phase": "save_read_fields_4_phase_",
+          "private_fixups": {
+            "1497": [
+              "_save_data_image",
+              false,
+              113252
+            ]
+          }
+        },
+        {
+          "start_address": 196317,
+          "end_address": 196559,
+          "start_file_offset": 349405,
+          "stream_register": "esi",
+          "call_target": 394808,
+          "records": [
+            {
+              "address": 196317,
+              "data_offset": 111156,
+              "size": 2048,
+              "name": "restore_values"
+            },
+            {
+              "address": 196339,
+              "data_offset": 109108,
+              "size": 2048,
+              "name": "activation_state_1aa34"
+            },
+            {
+              "address": 196361,
+              "data_offset": 104964,
+              "size": 2048,
+              "name": "save_state_19a04"
+            },
+            {
+              "address": 196383,
+              "data_offset": 15876,
+              "size": 4,
+              "name": "restore_count"
+            },
+            {
+              "address": 196405,
+              "data_offset": 2653832,
+              "size": 4,
+              "name": "totalclock"
+            },
+            {
+              "address": 196427,
+              "data_offset": 15594,
+              "size": 4,
+              "name": "last_tick"
+            },
+            {
+              "address": 196449,
+              "data_offset": 2653812,
+              "size": 4,
+              "name": "save_state_287e74"
+            },
+            {
+              "address": 196471,
+              "data_offset": 2653816,
+              "size": 4,
+              "name": "board_state_287e78"
+            },
+            {
+              "address": 196493,
+              "data_offset": 2658646,
+              "size": 2,
+              "name": "numpalookups"
+            },
+            {
+              "address": 196515,
+              "data_offset": 2649000,
+              "size": 4,
+              "name": "engine_286ba8"
+            },
+            {
+              "address": 196537,
+              "data_offset": 2648992,
+              "size": 4,
+              "name": "engine_286ba0"
+            }
+          ],
+          "public": "save_read_fields_5_",
+          "public_start": 2362,
+          "public_size": 252,
+          "body_start": 0,
+          "body_size": 242,
+          "private_prefix": "",
+          "private_suffix": "bba06b2800e91cf9ffff",
+          "private_bytes": 10,
+          "context_sha256": "e0cf07c30f97ff5d3b9f92c2ae20555e99adc5410c8e10788b7178ada1ef0a98",
+          "phase": "save_read_fields_5_phase_",
+          "private_fixups": {
+            "243": [
+              "_save_data_image",
+              false,
+              2648992
+            ]
+          }
+        },
+        {
+          "start_address": 196578,
+          "end_address": 196996,
+          "start_file_offset": 349666,
+          "stream_register": "esi",
+          "call_target": 394808,
+          "records": [
+            {
+              "address": 196578,
+              "data_offset": 2648968,
+              "size": 4,
+              "name": "engine_286b88"
+            },
+            {
+              "address": 196600,
+              "data_offset": 2019744,
+              "size": 512,
+              "name": "engine_1ed1a0"
+            },
+            {
+              "address": 196622,
+              "data_offset": 2658640,
+              "size": 2,
+              "name": "engine_289150"
+            },
+            {
+              "address": 196644,
+              "data_offset": 8236,
+              "size": 4,
+              "name": "save_state_202c"
+            },
+            {
+              "address": 196666,
+              "data_offset": 8240,
+              "size": 4,
+              "name": "last_sequence_clock"
+            },
+            {
+              "address": 196688,
+              "data_offset": 8244,
+              "size": 4,
+              "name": "last_frame_tick"
+            },
+            {
+              "address": 196710,
+              "data_offset": 502332,
+              "size": 52,
+              "name": "level_sector_count"
+            },
+            {
+              "address": 196732,
+              "data_offset": 484252,
+              "size": 3328,
+              "name": "level_sector_ids"
+            },
+            {
+              "address": 196754,
+              "data_offset": 477596,
+              "size": 6656,
+              "name": "level_sector_x"
+            },
+            {
+              "address": 196776,
+              "data_offset": 502176,
+              "size": 156,
+              "name": "level_left_icon"
+            },
+            {
+              "address": 196798,
+              "data_offset": 8248,
+              "size": 2,
+              "name": "left_icon"
+            },
+            {
+              "address": 196820,
+              "data_offset": 8250,
+              "size": 2,
+              "name": "middle_icon"
+            },
+            {
+              "address": 196842,
+              "data_offset": 8252,
+              "size": 2,
+              "name": "right_icon"
+            },
+            {
+              "address": 196864,
+              "data_offset": 515824,
+              "size": 2,
+              "name": "activation_sprite_count"
+            },
+            {
+              "address": 196886,
+              "data_offset": 477564,
+              "size": 32,
+              "name": "activation_sprite_index"
+            },
+            {
+              "address": 196908,
+              "data_offset": 477548,
+              "size": 16,
+              "name": "activation_counter"
+            },
+            {
+              "address": 196930,
+              "data_offset": 515826,
+              "size": 2,
+              "name": "smoothed_mouse_dx"
+            },
+            {
+              "address": 196952,
+              "data_offset": 8254,
+              "size": 2,
+              "name": "toggled_word"
+            },
+            {
+              "address": 196974,
+              "data_offset": 515746,
+              "size": 26,
+              "name": "modified_levels"
+            }
+          ],
+          "public": "save_read_fields_6_",
+          "public_start": 2614,
+          "public_size": 429,
+          "body_start": 0,
+          "body_size": 418,
+          "private_prefix": "",
+          "private_suffix": "6bc01abba2de070001c3c3",
+          "private_bytes": 11,
+          "context_sha256": "7a6e43ba32f430885a702209c80ff75584f699a25806f52a53c76223396715d7",
+          "phase": "save_read_fields_6_phase_",
+          "private_fixups": {
+            "422": [
+              "_save_data_image",
+              false,
+              515746
+            ]
+          }
+        },
+        {
+          "start_address": 197053,
+          "end_address": 198857,
+          "start_file_offset": 350141,
+          "stream_register": "esi",
+          "call_target": 394808,
+          "records": [
+            {
+              "address": 197053,
+              "data_offset": 502168,
+              "size": 4,
+              "name": "destination_x"
+            },
+            {
+              "address": 197075,
+              "data_offset": 502172,
+              "size": 4,
+              "name": "destination_y"
+            },
+            {
+              "address": 197097,
+              "data_offset": 515822,
+              "size": 2,
+              "name": "destination_entry"
+            },
+            {
+              "address": 197119,
+              "data_offset": 8257,
+              "size": 540,
+              "name": "level_names"
+            },
+            {
+              "address": 197141,
+              "data_offset": 515820,
+              "size": 2,
+              "name": "difficulty_divisor"
+            },
+            {
+              "address": 197163,
+              "data_offset": 8797,
+              "size": 2,
+              "name": "effect_count"
+            },
+            {
+              "address": 197185,
+              "data_offset": 8799,
+              "size": 2,
+              "name": "effect_speed"
+            },
+            {
+              "address": 197207,
+              "data_offset": 8801,
+              "size": 2,
+              "name": "status_flag"
+            },
+            {
+              "address": 197229,
+              "data_offset": 8803,
+              "size": 2,
+              "name": "interaction_state_2263"
+            },
+            {
+              "address": 197251,
+              "data_offset": 8805,
+              "size": 2,
+              "name": "toggled_mode"
+            },
+            {
+              "address": 197273,
+              "data_offset": 8807,
+              "size": 16,
+              "name": "item_enabled"
+            },
+            {
+              "address": 197295,
+              "data_offset": 8823,
+              "size": 16,
+              "name": "item_stock"
+            },
+            {
+              "address": 197317,
+              "data_offset": 8839,
+              "size": 16,
+              "name": "item_alternate_stock"
+            },
+            {
+              "address": 197339,
+              "data_offset": 8855,
+              "size": 2,
+              "name": "player_action"
+            },
+            {
+              "address": 197361,
+              "data_offset": 8857,
+              "size": 2,
+              "name": "save_state_2299"
+            },
+            {
+              "address": 197383,
+              "data_offset": 502164,
+              "size": 4,
+              "name": "ticks_per_step"
+            },
+            {
+              "address": 197405,
+              "data_offset": 502160,
+              "size": 4,
+              "name": "last_step_clock"
+            },
+            {
+              "address": 197427,
+              "data_offset": 8859,
+              "size": 2,
+              "name": "advance_clock"
+            },
+            {
+              "address": 197449,
+              "data_offset": 477516,
+              "size": 32,
+              "name": "board_state_7494c"
+            },
+            {
+              "address": 197471,
+              "data_offset": 469468,
+              "size": 32,
+              "name": "interaction_state_729dc"
+            },
+            {
+              "address": 197493,
+              "data_offset": 461276,
+              "size": 8192,
+              "name": "sprite_actor_index"
+            },
+            {
+              "address": 197515,
+              "data_offset": 514744,
+              "size": 1002,
+              "name": "actor_sprite_index"
+            },
+            {
+              "address": 197537,
+              "data_offset": 518849,
+              "size": 501,
+              "name": "actor_board"
+            },
+            {
+              "address": 197559,
+              "data_offset": 488132,
+              "size": 6012,
+              "name": "saved_actor_x"
+            },
+            {
+              "address": 197581,
+              "data_offset": 519350,
+              "size": 501,
+              "name": "actor_enabled"
+            },
+            {
+              "address": 197603,
+              "data_offset": 513742,
+              "size": 1002,
+              "name": "saved_actor_lotag"
+            },
+            {
+              "address": 197625,
+              "data_offset": 517346,
+              "size": 501,
+              "name": "actor_sequence_initial"
+            },
+            {
+              "address": 197647,
+              "data_offset": 511738,
+              "size": 1002,
+              "name": "actor_health"
+            },
+            {
+              "address": 197669,
+              "data_offset": 496148,
+              "size": 2004,
+              "name": "actor_z_offset"
+            },
+            {
+              "address": 197691,
+              "data_offset": 519851,
+              "size": 501,
+              "name": "actor_projectile_type"
+            },
+            {
+              "address": 197713,
+              "data_offset": 520853,
+              "size": 501,
+              "name": "actor_recovery_counter"
+            },
+            {
+              "address": 197735,
+              "data_offset": 521354,
+              "size": 501,
+              "name": "actor_visibility_timer"
+            },
+            {
+              "address": 197757,
+              "data_offset": 516845,
+              "size": 501,
+              "name": "actor_state"
+            },
+            {
+              "address": 197779,
+              "data_offset": 517847,
+              "size": 501,
+              "name": "actor_frame"
+            },
+            {
+              "address": 197801,
+              "data_offset": 516344,
+              "size": 501,
+              "name": "actor_state_byte"
+            },
+            {
+              "address": 197823,
+              "data_offset": 498152,
+              "size": 2004,
+              "name": "actor_x"
+            },
+            {
+              "address": 197845,
+              "data_offset": 500156,
+              "size": 2004,
+              "name": "actor_y"
+            },
+            {
+              "address": 197867,
+              "data_offset": 512740,
+              "size": 1002,
+              "name": "actor_sector"
+            },
+            {
+              "address": 197889,
+              "data_offset": 494144,
+              "size": 2004,
+              "name": "actor_first_waypoint"
+            },
+            {
+              "address": 197911,
+              "data_offset": 8861,
+              "size": 2048,
+              "name": "waypoint_x"
+            },
+            {
+              "address": 197933,
+              "data_offset": 469500,
+              "size": 8016,
+              "name": "actor_destination_x"
+            },
+            {
+              "address": 197955,
+              "data_offset": 520352,
+              "size": 501,
+              "name": "actor_kind"
+            },
+            {
+              "address": 197977,
+              "data_offset": 521855,
+              "size": 501,
+              "name": "actor_mode"
+            },
+            {
+              "address": 197999,
+              "data_offset": 518348,
+              "size": 501,
+              "name": "actor_profile"
+            },
+            {
+              "address": 198021,
+              "data_offset": 502720,
+              "size": 9018,
+              "name": "actor_tiles"
+            },
+            {
+              "address": 198043,
+              "data_offset": 515843,
+              "size": 501,
+              "name": "actor_delay_byte"
+            },
+            {
+              "address": 198065,
+              "data_offset": 10909,
+              "size": 319,
+              "name": "template_cstat"
+            },
+            {
+              "address": 198087,
+              "data_offset": 11228,
+              "size": 2,
+              "name": "weapon_action"
+            },
+            {
+              "address": 198109,
+              "data_offset": 11230,
+              "size": 2,
+              "name": "weapon_animation_state"
+            },
+            {
+              "address": 198131,
+              "data_offset": 11232,
+              "size": 2,
+              "name": "selected_weapon"
+            },
+            {
+              "address": 198153,
+              "data_offset": 11234,
+              "size": 2,
+              "name": "selected_weapon_2be2"
+            },
+            {
+              "address": 198175,
+              "data_offset": 11236,
+              "size": 2,
+              "name": "weapon_tile"
+            },
+            {
+              "address": 198197,
+              "data_offset": 515816,
+              "size": 2,
+              "name": "weapon_x_offset"
+            },
+            {
+              "address": 198219,
+              "data_offset": 515818,
+              "size": 2,
+              "name": "weapon_y_offset"
+            },
+            {
+              "address": 198241,
+              "data_offset": 11238,
+              "size": 2,
+              "name": "close_hit_tile"
+            },
+            {
+              "address": 198263,
+              "data_offset": 515814,
+              "size": 2,
+              "name": "alternate_fire_requested"
+            },
+            {
+              "address": 198285,
+              "data_offset": 456828,
+              "size": 32,
+              "name": "force_attack_frame"
+            },
+            {
+              "address": 198307,
+              "data_offset": 461244,
+              "size": 32,
+              "name": "defer_mode_change"
+            },
+            {
+              "address": 198329,
+              "data_offset": 456860,
+              "size": 32,
+              "name": "player_hit_timer"
+            },
+            {
+              "address": 198351,
+              "data_offset": 461180,
+              "size": 64,
+              "name": "player_hit_x"
+            },
+            {
+              "address": 198373,
+              "data_offset": 461116,
+              "size": 64,
+              "name": "player_hit_y"
+            },
+            {
+              "address": 198395,
+              "data_offset": 11240,
+              "size": 2,
+              "name": "moving_sprite_count"
+            },
+            {
+              "address": 198417,
+              "data_offset": 457916,
+              "size": 2048,
+              "name": "moving_sprites"
+            },
+            {
+              "address": 198439,
+              "data_offset": 11242,
+              "size": 2,
+              "name": "pan_sector_count"
+            },
+            {
+              "address": 198461,
+              "data_offset": 459964,
+              "size": 128,
+              "name": "pan_sectors"
+            },
+            {
+              "address": 198483,
+              "data_offset": 11244,
+              "size": 2,
+              "name": "float_sprite_count"
+            },
+            {
+              "address": 198505,
+              "data_offset": 456892,
+              "size": 1024,
+              "name": "float_sprite_list"
+            },
+            {
+              "address": 198527,
+              "data_offset": 11246,
+              "size": 2,
+              "name": "projectile_count"
+            },
+            {
+              "address": 198549,
+              "data_offset": 460092,
+              "size": 1024,
+              "name": "projectile_list"
+            },
+            {
+              "address": 198571,
+              "data_offset": 515808,
+              "size": 2,
+              "name": "active"
+            },
+            {
+              "address": 198593,
+              "data_offset": 424508,
+              "size": 1024,
+              "name": "list"
+            },
+            {
+              "address": 198615,
+              "data_offset": 11248,
+              "size": 2,
+              "name": "map_x"
+            },
+            {
+              "address": 198637,
+              "data_offset": 11250,
+              "size": 2,
+              "name": "map_scale_or_y"
+            },
+            {
+              "address": 198659,
+              "data_offset": 11252,
+              "size": 2,
+              "name": "map_offset_y"
+            },
+            {
+              "address": 198681,
+              "data_offset": 515810,
+              "size": 2,
+              "name": "mouse_buttons"
+            },
+            {
+              "address": 198703,
+              "data_offset": 515802,
+              "size": 2,
+              "name": "mouse_dx"
+            },
+            {
+              "address": 198725,
+              "data_offset": 515804,
+              "size": 2,
+              "name": "mouse_dy"
+            },
+            {
+              "address": 198747,
+              "data_offset": 11254,
+              "size": 2,
+              "name": "button_latch_disabled"
+            },
+            {
+              "address": 198769,
+              "data_offset": 11256,
+              "size": 2,
+              "name": "held_sprite"
+            },
+            {
+              "address": 198791,
+              "data_offset": 11258,
+              "size": 2,
+              "name": "map_mode"
+            },
+            {
+              "address": 198813,
+              "data_offset": 11260,
+              "size": 2,
+              "name": "mouse_motion_disabled"
+            },
+            {
+              "address": 198835,
+              "data_offset": 15261,
+              "size": 72,
+              "name": "inventory_grid"
+            }
+          ],
+          "public": "save_read_fields_7_",
+          "public_start": 3043,
+          "public_size": 1824,
+          "body_start": 1,
+          "body_size": 1804,
+          "private_prefix": "56",
+          "private_suffix": "89c6c1e60301c6bb9d3b0000c1e60301f35ec3",
+          "private_bytes": 20,
+          "context_sha256": "94c00fa11a254ff4b9d13959971181af229ba342c248d0ccce287bcc6adaf918",
+          "phase": "save_read_fields_7_phase_",
+          "private_fixups": {
+            "1813": [
+              "_save_data_image",
+              false,
+              15261
+            ]
+          }
+        },
+        {
+          "start_address": 198876,
+          "end_address": 198964,
+          "start_file_offset": 351964,
+          "stream_register": "esi",
+          "call_target": 394808,
+          "records": [
+            {
+              "address": 198876,
+              "data_offset": 515806,
+              "size": 2,
+              "name": "actor_target"
+            },
+            {
+              "address": 198898,
+              "data_offset": 515812,
+              "size": 2,
+              "name": "special_sector"
+            },
+            {
+              "address": 198920,
+              "data_offset": 15334,
+              "size": 2,
+              "name": "trigger_count"
+            },
+            {
+              "address": 198942,
+              "data_offset": 487716,
+              "size": 404,
+              "name": "trigger_sprite"
+            }
+          ],
+          "public": "save_read_fields_8_",
+          "public_start": 4867,
+          "public_size": 102,
+          "body_start": 0,
+          "body_size": 88,
+          "private_prefix": "",
+          "private_suffix": "69c094010000bb2471070001c3c3",
+          "private_bytes": 14,
+          "context_sha256": "a24e1a148ff9c9bcf02d86cc716ad99386ff732537b692442d5337269bcdf592",
+          "phase": "save_read_fields_8_phase_",
+          "private_fixups": {
+            "95": [
+              "_save_data_image",
+              false,
+              487716
+            ]
+          }
+        }
+      ],
+      "object": "svread",
+      "asm_slices": [],
+      "retained_bytes": 0,
+      "additional_c_layouts": [
+        "save-byte-layout.json",
+        "save-dynamic-layout.json"
+      ],
+      "assembly_retired": true,
+      "historical_assembly_revision": "b4159482bf5c115ad46304c98ab0f02c68921626"
+    },
+    {
+      "symbol": "write_game_data",
+      "source": "src/fate/write_game_data.asm",
+      "loaded_address": 199075,
+      "file_offset": 352163,
+      "size": 5409,
+      "record_count": 222,
+      "stream_register_counts": {
+        "edi": 105,
+        "esi": 117
+      },
+      "runs": [
+        {
+          "start_address": 199177,
+          "end_address": 199727,
+          "start_file_offset": 352265,
+          "stream_register": "edi",
+          "call_target": 395588,
+          "records": [
+            {
+              "address": 199177,
+              "data_offset": 81122,
+              "size": 2,
+              "name": "local_player"
+            },
+            {
+              "address": 199199,
+              "data_offset": 1639050,
+              "size": 2,
+              "name": "first_player"
+            },
+            {
+              "address": 199221,
+              "data_offset": 1637752,
+              "size": 32,
+              "name": "next_player"
+            },
+            {
+              "address": 199243,
+              "data_offset": 372124,
+              "size": 64,
+              "name": "player_x"
+            },
+            {
+              "address": 199265,
+              "data_offset": 372060,
+              "size": 64,
+              "name": "player_y"
+            },
+            {
+              "address": 199287,
+              "data_offset": 371996,
+              "size": 64,
+              "name": "player_z"
+            },
+            {
+              "address": 199309,
+              "data_offset": 405388,
+              "size": 64,
+              "name": "player_horizon"
+            },
+            {
+              "address": 199331,
+              "data_offset": 372252,
+              "size": 64,
+              "name": "board_state_5ae1c"
+            },
+            {
+              "address": 199353,
+              "data_offset": 405324,
+              "size": 64,
+              "name": "motion_state_62f4c"
+            },
+            {
+              "address": 199375,
+              "data_offset": 405644,
+              "size": 32,
+              "name": "player_angle"
+            },
+            {
+              "address": 199397,
+              "data_offset": 371964,
+              "size": 32,
+              "name": "player_sector"
+            },
+            {
+              "address": 199419,
+              "data_offset": 371932,
+              "size": 32,
+              "name": "previous_player_sector"
+            },
+            {
+              "address": 199441,
+              "data_offset": 405292,
+              "size": 32,
+              "name": "board_state_62f2c"
+            },
+            {
+              "address": 199463,
+              "data_offset": 405884,
+              "size": 32,
+              "name": "board_state_6317c"
+            },
+            {
+              "address": 199485,
+              "data_offset": 405692,
+              "size": 64,
+              "name": "board_state_630bc"
+            },
+            {
+              "address": 199507,
+              "data_offset": 405916,
+              "size": 64,
+              "name": "status_right_tenths"
+            },
+            {
+              "address": 199529,
+              "data_offset": 405580,
+              "size": 32,
+              "name": "board_state_6304c"
+            },
+            {
+              "address": 199551,
+              "data_offset": 405612,
+              "size": 32,
+              "name": "motion_state_6306c"
+            },
+            {
+              "address": 199573,
+              "data_offset": 405276,
+              "size": 16,
+              "name": "player_mode"
+            },
+            {
+              "address": 199595,
+              "data_offset": 405676,
+              "size": 16,
+              "name": "motion_state_630ac"
+            },
+            {
+              "address": 199617,
+              "data_offset": 372188,
+              "size": 32,
+              "name": "save_state_5addc"
+            },
+            {
+              "address": 199639,
+              "data_offset": 372220,
+              "size": 32,
+              "name": "save_state_5adfc"
+            },
+            {
+              "address": 199661,
+              "data_offset": 371644,
+              "size": 64,
+              "name": "save_state_5abbc"
+            },
+            {
+              "address": 199683,
+              "data_offset": 371708,
+              "size": 64,
+              "name": "save_state_5abfc"
+            },
+            {
+              "address": 199705,
+              "data_offset": 2658644,
+              "size": 2,
+              "name": "numsectors"
+            }
+          ],
+          "public": "save_write_fields_0_",
+          "public_start": 0,
+          "public_size": 560,
+          "body_start": 0,
+          "body_size": 550,
+          "private_prefix": "",
+          "private_suffix": "bb5491280001c001c3c3",
+          "private_bytes": 10,
+          "context_sha256": "841546a475618bdf85347e50ceaec9e551e9a85eb09413630ec9a51c65cf8bba",
+          "phase": "save_write_fields_0_phase_",
+          "private_fixups": {
+            "551": [
+              "_save_data_image",
+              false,
+              2658644
+            ]
+          }
+        },
+        {
+          "start_address": 199761,
+          "end_address": 199783,
+          "start_file_offset": 352849,
+          "stream_register": "edi",
+          "call_target": 395588,
+          "records": [
+            {
+              "address": 199761,
+              "data_offset": 2658642,
+              "size": 2,
+              "name": "numwalls"
+            }
+          ],
+          "public": "save_write_fields_1_",
+          "public_start": 560,
+          "public_size": 32,
+          "body_start": 0,
+          "body_size": 22,
+          "private_prefix": "",
+          "private_suffix": "bb5291280001c001c3c3",
+          "private_bytes": 10,
+          "context_sha256": "28adf3a0ba754432fbf1d66099723c36078cd36219ae344eaa0251953aa9c93f",
+          "phase": "save_write_fields_1_phase_",
+          "private_fixups": {
+            "23": [
+              "_save_data_image",
+              false,
+              2658642
+            ]
+          }
+        },
+        {
+          "start_address": 199810,
+          "end_address": 200052,
+          "start_file_offset": 352898,
+          "stream_register": "edi",
+          "call_target": 395588,
+          "records": [
+            {
+              "address": 199810,
+              "data_offset": 2113696,
+              "size": 180224,
+              "name": "sprite"
+            },
+            {
+              "address": 199832,
+              "data_offset": 2656542,
+              "size": 2050,
+              "name": "engine_28891e"
+            },
+            {
+              "address": 199854,
+              "data_offset": 2056224,
+              "size": 8192,
+              "name": "save_state_1f6020"
+            },
+            {
+              "address": 199876,
+              "data_offset": 2071712,
+              "size": 8192,
+              "name": "engine_1f9ca0"
+            },
+            {
+              "address": 199898,
+              "data_offset": 2654492,
+              "size": 2050,
+              "name": "hit_sprite_list_head"
+            },
+            {
+              "address": 199920,
+              "data_offset": 2088096,
+              "size": 8192,
+              "name": "save_state_1fdca0"
+            },
+            {
+              "address": 199942,
+              "data_offset": 2079904,
+              "size": 8192,
+              "name": "next_sprite_stat"
+            },
+            {
+              "address": 199964,
+              "data_offset": 487656,
+              "size": 4,
+              "name": "keyboard_forward"
+            },
+            {
+              "address": 199986,
+              "data_offset": 487652,
+              "size": 4,
+              "name": "keyboard_strafe"
+            },
+            {
+              "address": 200008,
+              "data_offset": 487660,
+              "size": 4,
+              "name": "keyboard_turn"
+            },
+            {
+              "address": 200030,
+              "data_offset": 487624,
+              "size": 4,
+              "name": "selection"
+            }
+          ],
+          "public": "save_write_fields_2_",
+          "public_start": 592,
+          "public_size": 253,
+          "body_start": 0,
+          "body_size": 242,
+          "private_prefix": "",
+          "private_suffix": "bbc8700700c1e00201c3c3",
+          "private_bytes": 11,
+          "context_sha256": "ad784b8114ca1e029530d2c69ec3b4577d1c738316a68bc11e6809e5f5e1abf9",
+          "phase": "save_write_fields_2_phase_",
+          "private_fixups": {
+            "243": [
+              "_save_data_image",
+              false,
+              487624
+            ]
+          }
+        },
+        {
+          "start_address": 200166,
+          "end_address": 201662,
+          "start_file_offset": 353254,
+          "stream_register": "edi",
+          "call_target": 395588,
+          "records": [
+            {
+              "address": 200166,
+              "data_offset": 515836,
+              "size": 2,
+              "name": "input_actions"
+            },
+            {
+              "address": 200188,
+              "data_offset": 515831,
+              "size": 2,
+              "name": "board_state_7def7"
+            },
+            {
+              "address": 200210,
+              "data_offset": 487616,
+              "size": 4,
+              "name": "second_player_selection"
+            },
+            {
+              "address": 200232,
+              "data_offset": 515838,
+              "size": 5,
+              "name": "second_player_input"
+            },
+            {
+              "address": 200254,
+              "data_offset": 371852,
+              "size": 80,
+              "name": "board_state_5ac8c"
+            },
+            {
+              "address": 200276,
+              "data_offset": 351084,
+              "size": 80,
+              "name": "previous_input"
+            },
+            {
+              "address": 200298,
+              "data_offset": 124332,
+              "size": 80,
+              "name": "board_filename"
+            },
+            {
+              "address": 200320,
+              "data_offset": 15610,
+              "size": 2,
+              "name": "listener_index"
+            },
+            {
+              "address": 200342,
+              "data_offset": 15612,
+              "size": 2,
+              "name": "saved_mouse_buttons"
+            },
+            {
+              "address": 200364,
+              "data_offset": 15614,
+              "size": 2,
+              "name": "brightness"
+            },
+            {
+              "address": 200386,
+              "data_offset": 515794,
+              "size": 2,
+              "name": "near_sector"
+            },
+            {
+              "address": 200408,
+              "data_offset": 515798,
+              "size": 2,
+              "name": "near_sprite"
+            },
+            {
+              "address": 200430,
+              "data_offset": 515796,
+              "size": 2,
+              "name": "near_wall"
+            },
+            {
+              "address": 200452,
+              "data_offset": 487608,
+              "size": 4,
+              "name": "actor_clock"
+            },
+            {
+              "address": 200474,
+              "data_offset": 487596,
+              "size": 4,
+              "name": "save_state_770ac"
+            },
+            {
+              "address": 200496,
+              "data_offset": 487584,
+              "size": 4,
+              "name": "near_tag_distance"
+            },
+            {
+              "address": 200518,
+              "data_offset": 118636,
+              "size": 32,
+              "name": "board_state_1cf6c"
+            },
+            {
+              "address": 200540,
+              "data_offset": 515786,
+              "size": 2,
+              "name": "board_state_7deca"
+            },
+            {
+              "address": 200562,
+              "data_offset": 117932,
+              "size": 32,
+              "name": "board_state_1ccac"
+            },
+            {
+              "address": 200584,
+              "data_offset": 515790,
+              "size": 2,
+              "name": "board_state_7dece"
+            },
+            {
+              "address": 200606,
+              "data_offset": 117900,
+              "size": 32,
+              "name": "board_state_1cc8c"
+            },
+            {
+              "address": 200628,
+              "data_offset": 515780,
+              "size": 2,
+              "name": "board_state_7dec4"
+            },
+            {
+              "address": 200650,
+              "data_offset": 118508,
+              "size": 128,
+              "name": "board_state_1ceec"
+            },
+            {
+              "address": 200672,
+              "data_offset": 515788,
+              "size": 2,
+              "name": "board_state_7decc"
+            },
+            {
+              "address": 200694,
+              "data_offset": 118924,
+              "size": 128,
+              "name": "board_state_1d08c"
+            },
+            {
+              "address": 200716,
+              "data_offset": 515778,
+              "size": 2,
+              "name": "board_state_7dec2"
+            },
+            {
+              "address": 200738,
+              "data_offset": 119052,
+              "size": 32,
+              "name": "board_state_1d10c"
+            },
+            {
+              "address": 200760,
+              "data_offset": 117836,
+              "size": 32,
+              "name": "board_state_1cc4c"
+            },
+            {
+              "address": 200782,
+              "data_offset": 117868,
+              "size": 32,
+              "name": "board_state_1cc6c"
+            },
+            {
+              "address": 200804,
+              "data_offset": 515782,
+              "size": 2,
+              "name": "board_state_7dec6"
+            },
+            {
+              "address": 200826,
+              "data_offset": 118316,
+              "size": 64,
+              "name": "board_state_1ce2c"
+            },
+            {
+              "address": 200848,
+              "data_offset": 118444,
+              "size": 64,
+              "name": "board_state_1ceac"
+            },
+            {
+              "address": 200870,
+              "data_offset": 118252,
+              "size": 64,
+              "name": "board_state_1cdec"
+            },
+            {
+              "address": 200892,
+              "data_offset": 118380,
+              "size": 64,
+              "name": "board_state_1ce6c"
+            },
+            {
+              "address": 200914,
+              "data_offset": 118060,
+              "size": 64,
+              "name": "board_state_1cd2c"
+            },
+            {
+              "address": 200936,
+              "data_offset": 515774,
+              "size": 2,
+              "name": "board_state_7debe"
+            },
+            {
+              "address": 200958,
+              "data_offset": 113468,
+              "size": 320,
+              "name": "board_state_1bb3c"
+            },
+            {
+              "address": 200980,
+              "data_offset": 113788,
+              "size": 64,
+              "name": "board_state_1bc7c"
+            },
+            {
+              "address": 201002,
+              "data_offset": 113340,
+              "size": 64,
+              "name": "board_state_1babc"
+            },
+            {
+              "address": 201024,
+              "data_offset": 113852,
+              "size": 64,
+              "name": "board_state_1bcbc"
+            },
+            {
+              "address": 201046,
+              "data_offset": 115708,
+              "size": 64,
+              "name": "board_state_1c3fc"
+            },
+            {
+              "address": 201068,
+              "data_offset": 114988,
+              "size": 64,
+              "name": "board_state_1c12c"
+            },
+            {
+              "address": 201090,
+              "data_offset": 113404,
+              "size": 64,
+              "name": "board_state_1bafc"
+            },
+            {
+              "address": 201112,
+              "data_offset": 115772,
+              "size": 1024,
+              "name": "board_state_1c43c"
+            },
+            {
+              "address": 201134,
+              "data_offset": 116796,
+              "size": 1024,
+              "name": "board_state_1c83c"
+            },
+            {
+              "address": 201156,
+              "data_offset": 113332,
+              "size": 8,
+              "name": "board_state_1bab4"
+            },
+            {
+              "address": 201178,
+              "data_offset": 117828,
+              "size": 8,
+              "name": "board_state_1cc44"
+            },
+            {
+              "address": 201200,
+              "data_offset": 515776,
+              "size": 2,
+              "name": "board_state_7dec0"
+            },
+            {
+              "address": 201222,
+              "data_offset": 115452,
+              "size": 256,
+              "name": "board_state_1c2fc"
+            },
+            {
+              "address": 201244,
+              "data_offset": 115196,
+              "size": 256,
+              "name": "board_state_1c1fc"
+            },
+            {
+              "address": 201266,
+              "data_offset": 113316,
+              "size": 16,
+              "name": "board_state_1baa4"
+            },
+            {
+              "address": 201288,
+              "data_offset": 113300,
+              "size": 16,
+              "name": "board_state_1ba94"
+            },
+            {
+              "address": 201310,
+              "data_offset": 113948,
+              "size": 1024,
+              "name": "board_state_1bd1c"
+            },
+            {
+              "address": 201332,
+              "data_offset": 117820,
+              "size": 8,
+              "name": "board_state_1cc3c"
+            },
+            {
+              "address": 201354,
+              "data_offset": 515772,
+              "size": 2,
+              "name": "board_state_7debc"
+            },
+            {
+              "address": 201376,
+              "data_offset": 115068,
+              "size": 128,
+              "name": "board_state_1c17c"
+            },
+            {
+              "address": 201398,
+              "data_offset": 115052,
+              "size": 16,
+              "name": "board_state_1c16c"
+            },
+            {
+              "address": 201420,
+              "data_offset": 113932,
+              "size": 16,
+              "name": "board_state_1bd0c"
+            },
+            {
+              "address": 201442,
+              "data_offset": 114972,
+              "size": 16,
+              "name": "board_state_1c11c"
+            },
+            {
+              "address": 201464,
+              "data_offset": 113916,
+              "size": 16,
+              "name": "board_state_1bcfc"
+            },
+            {
+              "address": 201486,
+              "data_offset": 107028,
+              "size": 16,
+              "name": "board_state_1a214"
+            },
+            {
+              "address": 201508,
+              "data_offset": 113204,
+              "size": 16,
+              "name": "board_state_1ba34"
+            },
+            {
+              "address": 201530,
+              "data_offset": 107044,
+              "size": 16,
+              "name": "board_state_1a224"
+            },
+            {
+              "address": 201552,
+              "data_offset": 107012,
+              "size": 16,
+              "name": "board_state_1a204"
+            },
+            {
+              "address": 201574,
+              "data_offset": 113284,
+              "size": 16,
+              "name": "board_state_1ba84"
+            },
+            {
+              "address": 201596,
+              "data_offset": 104932,
+              "size": 32,
+              "name": "fini_table_end"
+            },
+            {
+              "address": 201618,
+              "data_offset": 113220,
+              "size": 32,
+              "name": "board_state_1ba44"
+            },
+            {
+              "address": 201640,
+              "data_offset": 113252,
+              "size": 32,
+              "name": "board_state_1ba64"
+            }
+          ],
+          "public": "save_write_fields_3_",
+          "public_start": 845,
+          "public_size": 1507,
+          "body_start": 0,
+          "body_size": 1496,
+          "private_prefix": "",
+          "private_suffix": "bb64ba0100c1e00501c3c3",
+          "private_bytes": 11,
+          "context_sha256": "28a9ee2b133ab98ee3097cc348612180edcbb754ded3e464592ce49b88abf8a1",
+          "phase": "save_write_fields_3_phase_",
+          "private_fixups": {
+            "1497": [
+              "_save_data_image",
+              false,
+              113252
+            ]
+          }
+        },
+        {
+          "start_address": 201698,
+          "end_address": 201720,
+          "start_file_offset": 354786,
+          "stream_register": "esi",
+          "call_target": 395588,
+          "records": [
+            {
+              "address": 201698,
+              "data_offset": 107060,
+              "size": 2048,
+              "name": "restore_addresses"
+            }
+          ],
+          "public": "save_write_fields_4_",
+          "public_start": 2352,
+          "public_size": 33,
+          "body_start": 0,
+          "body_size": 22,
+          "private_prefix": "",
+          "private_suffix": "bb34a20100c1e00b01c3c3",
+          "private_bytes": 11,
+          "context_sha256": "7332cb923a48149e74882e17e4a37f9b8e63295332ec16cf26fb696616caa694",
+          "phase": "save_write_fields_4_phase_",
+          "private_fixups": {
+            "23": [
+              "_save_data_image",
+              false,
+              107060
+            ]
+          }
+        },
+        {
+          "start_address": 201756,
+          "end_address": 201998,
+          "start_file_offset": 354844,
+          "stream_register": "esi",
+          "call_target": 395588,
+          "records": [
+            {
+              "address": 201756,
+              "data_offset": 111156,
+              "size": 2048,
+              "name": "restore_values"
+            },
+            {
+              "address": 201778,
+              "data_offset": 109108,
+              "size": 2048,
+              "name": "activation_state_1aa34"
+            },
+            {
+              "address": 201800,
+              "data_offset": 104964,
+              "size": 2048,
+              "name": "save_state_19a04"
+            },
+            {
+              "address": 201822,
+              "data_offset": 15876,
+              "size": 4,
+              "name": "restore_count"
+            },
+            {
+              "address": 201844,
+              "data_offset": 2653832,
+              "size": 4,
+              "name": "totalclock"
+            },
+            {
+              "address": 201866,
+              "data_offset": 15594,
+              "size": 4,
+              "name": "last_tick"
+            },
+            {
+              "address": 201888,
+              "data_offset": 2653812,
+              "size": 4,
+              "name": "save_state_287e74"
+            },
+            {
+              "address": 201910,
+              "data_offset": 2653816,
+              "size": 4,
+              "name": "board_state_287e78"
+            },
+            {
+              "address": 201932,
+              "data_offset": 2658646,
+              "size": 2,
+              "name": "numpalookups"
+            },
+            {
+              "address": 201954,
+              "data_offset": 2649000,
+              "size": 4,
+              "name": "engine_286ba8"
+            },
+            {
+              "address": 201976,
+              "data_offset": 2648992,
+              "size": 4,
+              "name": "engine_286ba0"
+            }
+          ],
+          "public": "save_write_fields_5_",
+          "public_start": 2385,
+          "public_size": 252,
+          "body_start": 0,
+          "body_size": 242,
+          "private_prefix": "",
+          "private_suffix": "bba06b2800e9faf8ffff",
+          "private_bytes": 10,
+          "context_sha256": "abb6b8829db7c23bc726128ca13f8ca0d37ae3fc7e8e0aa21c7f7cb347152c78",
+          "phase": "save_write_fields_5_phase_",
+          "private_fixups": {
+            "243": [
+              "_save_data_image",
+              false,
+              2648992
+            ]
+          }
+        },
+        {
+          "start_address": 202017,
+          "end_address": 202435,
+          "start_file_offset": 355105,
+          "stream_register": "esi",
+          "call_target": 395588,
+          "records": [
+            {
+              "address": 202017,
+              "data_offset": 2648968,
+              "size": 4,
+              "name": "engine_286b88"
+            },
+            {
+              "address": 202039,
+              "data_offset": 2019744,
+              "size": 512,
+              "name": "engine_1ed1a0"
+            },
+            {
+              "address": 202061,
+              "data_offset": 2658640,
+              "size": 2,
+              "name": "engine_289150"
+            },
+            {
+              "address": 202083,
+              "data_offset": 8236,
+              "size": 4,
+              "name": "save_state_202c"
+            },
+            {
+              "address": 202105,
+              "data_offset": 8240,
+              "size": 4,
+              "name": "last_sequence_clock"
+            },
+            {
+              "address": 202127,
+              "data_offset": 8244,
+              "size": 4,
+              "name": "last_frame_tick"
+            },
+            {
+              "address": 202149,
+              "data_offset": 502332,
+              "size": 52,
+              "name": "level_sector_count"
+            },
+            {
+              "address": 202171,
+              "data_offset": 484252,
+              "size": 3328,
+              "name": "level_sector_ids"
+            },
+            {
+              "address": 202193,
+              "data_offset": 477596,
+              "size": 6656,
+              "name": "level_sector_x"
+            },
+            {
+              "address": 202215,
+              "data_offset": 502176,
+              "size": 156,
+              "name": "level_left_icon"
+            },
+            {
+              "address": 202237,
+              "data_offset": 8248,
+              "size": 2,
+              "name": "left_icon"
+            },
+            {
+              "address": 202259,
+              "data_offset": 8250,
+              "size": 2,
+              "name": "middle_icon"
+            },
+            {
+              "address": 202281,
+              "data_offset": 8252,
+              "size": 2,
+              "name": "right_icon"
+            },
+            {
+              "address": 202303,
+              "data_offset": 515824,
+              "size": 2,
+              "name": "activation_sprite_count"
+            },
+            {
+              "address": 202325,
+              "data_offset": 477564,
+              "size": 32,
+              "name": "activation_sprite_index"
+            },
+            {
+              "address": 202347,
+              "data_offset": 477548,
+              "size": 16,
+              "name": "activation_counter"
+            },
+            {
+              "address": 202369,
+              "data_offset": 515826,
+              "size": 2,
+              "name": "smoothed_mouse_dx"
+            },
+            {
+              "address": 202391,
+              "data_offset": 8254,
+              "size": 2,
+              "name": "toggled_word"
+            },
+            {
+              "address": 202413,
+              "data_offset": 515746,
+              "size": 26,
+              "name": "modified_levels"
+            }
+          ],
+          "public": "save_write_fields_6_",
+          "public_start": 2637,
+          "public_size": 429,
+          "body_start": 0,
+          "body_size": 418,
+          "private_prefix": "",
+          "private_suffix": "6bc01abba2de070001c3c3",
+          "private_bytes": 11,
+          "context_sha256": "7a6e43ba32f430885a702209c80ff75584f699a25806f52a53c76223396715d7",
+          "phase": "save_write_fields_6_phase_",
+          "private_fixups": {
+            "422": [
+              "_save_data_image",
+              false,
+              515746
+            ]
+          }
+        },
+        {
+          "start_address": 202492,
+          "end_address": 204296,
+          "start_file_offset": 355580,
+          "stream_register": "esi",
+          "call_target": 395588,
+          "records": [
+            {
+              "address": 202492,
+              "data_offset": 502168,
+              "size": 4,
+              "name": "destination_x"
+            },
+            {
+              "address": 202514,
+              "data_offset": 502172,
+              "size": 4,
+              "name": "destination_y"
+            },
+            {
+              "address": 202536,
+              "data_offset": 515822,
+              "size": 2,
+              "name": "destination_entry"
+            },
+            {
+              "address": 202558,
+              "data_offset": 8257,
+              "size": 540,
+              "name": "level_names"
+            },
+            {
+              "address": 202580,
+              "data_offset": 515820,
+              "size": 2,
+              "name": "difficulty_divisor"
+            },
+            {
+              "address": 202602,
+              "data_offset": 8797,
+              "size": 2,
+              "name": "effect_count"
+            },
+            {
+              "address": 202624,
+              "data_offset": 8799,
+              "size": 2,
+              "name": "effect_speed"
+            },
+            {
+              "address": 202646,
+              "data_offset": 8801,
+              "size": 2,
+              "name": "status_flag"
+            },
+            {
+              "address": 202668,
+              "data_offset": 8803,
+              "size": 2,
+              "name": "interaction_state_2263"
+            },
+            {
+              "address": 202690,
+              "data_offset": 8805,
+              "size": 2,
+              "name": "toggled_mode"
+            },
+            {
+              "address": 202712,
+              "data_offset": 8807,
+              "size": 16,
+              "name": "item_enabled"
+            },
+            {
+              "address": 202734,
+              "data_offset": 8823,
+              "size": 16,
+              "name": "item_stock"
+            },
+            {
+              "address": 202756,
+              "data_offset": 8839,
+              "size": 16,
+              "name": "item_alternate_stock"
+            },
+            {
+              "address": 202778,
+              "data_offset": 8855,
+              "size": 2,
+              "name": "player_action"
+            },
+            {
+              "address": 202800,
+              "data_offset": 8857,
+              "size": 2,
+              "name": "save_state_2299"
+            },
+            {
+              "address": 202822,
+              "data_offset": 502164,
+              "size": 4,
+              "name": "ticks_per_step"
+            },
+            {
+              "address": 202844,
+              "data_offset": 502160,
+              "size": 4,
+              "name": "last_step_clock"
+            },
+            {
+              "address": 202866,
+              "data_offset": 8859,
+              "size": 2,
+              "name": "advance_clock"
+            },
+            {
+              "address": 202888,
+              "data_offset": 477516,
+              "size": 32,
+              "name": "board_state_7494c"
+            },
+            {
+              "address": 202910,
+              "data_offset": 469468,
+              "size": 32,
+              "name": "interaction_state_729dc"
+            },
+            {
+              "address": 202932,
+              "data_offset": 461276,
+              "size": 8192,
+              "name": "sprite_actor_index"
+            },
+            {
+              "address": 202954,
+              "data_offset": 514744,
+              "size": 1002,
+              "name": "actor_sprite_index"
+            },
+            {
+              "address": 202976,
+              "data_offset": 518849,
+              "size": 501,
+              "name": "actor_board"
+            },
+            {
+              "address": 202998,
+              "data_offset": 488132,
+              "size": 6012,
+              "name": "saved_actor_x"
+            },
+            {
+              "address": 203020,
+              "data_offset": 519350,
+              "size": 501,
+              "name": "actor_enabled"
+            },
+            {
+              "address": 203042,
+              "data_offset": 513742,
+              "size": 1002,
+              "name": "saved_actor_lotag"
+            },
+            {
+              "address": 203064,
+              "data_offset": 517346,
+              "size": 501,
+              "name": "actor_sequence_initial"
+            },
+            {
+              "address": 203086,
+              "data_offset": 511738,
+              "size": 1002,
+              "name": "actor_health"
+            },
+            {
+              "address": 203108,
+              "data_offset": 496148,
+              "size": 2004,
+              "name": "actor_z_offset"
+            },
+            {
+              "address": 203130,
+              "data_offset": 519851,
+              "size": 501,
+              "name": "actor_projectile_type"
+            },
+            {
+              "address": 203152,
+              "data_offset": 520853,
+              "size": 501,
+              "name": "actor_recovery_counter"
+            },
+            {
+              "address": 203174,
+              "data_offset": 521354,
+              "size": 501,
+              "name": "actor_visibility_timer"
+            },
+            {
+              "address": 203196,
+              "data_offset": 516845,
+              "size": 501,
+              "name": "actor_state"
+            },
+            {
+              "address": 203218,
+              "data_offset": 517847,
+              "size": 501,
+              "name": "actor_frame"
+            },
+            {
+              "address": 203240,
+              "data_offset": 516344,
+              "size": 501,
+              "name": "actor_state_byte"
+            },
+            {
+              "address": 203262,
+              "data_offset": 498152,
+              "size": 2004,
+              "name": "actor_x"
+            },
+            {
+              "address": 203284,
+              "data_offset": 500156,
+              "size": 2004,
+              "name": "actor_y"
+            },
+            {
+              "address": 203306,
+              "data_offset": 512740,
+              "size": 1002,
+              "name": "actor_sector"
+            },
+            {
+              "address": 203328,
+              "data_offset": 494144,
+              "size": 2004,
+              "name": "actor_first_waypoint"
+            },
+            {
+              "address": 203350,
+              "data_offset": 8861,
+              "size": 2048,
+              "name": "waypoint_x"
+            },
+            {
+              "address": 203372,
+              "data_offset": 469500,
+              "size": 8016,
+              "name": "actor_destination_x"
+            },
+            {
+              "address": 203394,
+              "data_offset": 520352,
+              "size": 501,
+              "name": "actor_kind"
+            },
+            {
+              "address": 203416,
+              "data_offset": 521855,
+              "size": 501,
+              "name": "actor_mode"
+            },
+            {
+              "address": 203438,
+              "data_offset": 518348,
+              "size": 501,
+              "name": "actor_profile"
+            },
+            {
+              "address": 203460,
+              "data_offset": 502720,
+              "size": 9018,
+              "name": "actor_tiles"
+            },
+            {
+              "address": 203482,
+              "data_offset": 515843,
+              "size": 501,
+              "name": "actor_delay_byte"
+            },
+            {
+              "address": 203504,
+              "data_offset": 10909,
+              "size": 319,
+              "name": "template_cstat"
+            },
+            {
+              "address": 203526,
+              "data_offset": 11228,
+              "size": 2,
+              "name": "weapon_action"
+            },
+            {
+              "address": 203548,
+              "data_offset": 11230,
+              "size": 2,
+              "name": "weapon_animation_state"
+            },
+            {
+              "address": 203570,
+              "data_offset": 11232,
+              "size": 2,
+              "name": "selected_weapon"
+            },
+            {
+              "address": 203592,
+              "data_offset": 11234,
+              "size": 2,
+              "name": "selected_weapon_2be2"
+            },
+            {
+              "address": 203614,
+              "data_offset": 11236,
+              "size": 2,
+              "name": "weapon_tile"
+            },
+            {
+              "address": 203636,
+              "data_offset": 515816,
+              "size": 2,
+              "name": "weapon_x_offset"
+            },
+            {
+              "address": 203658,
+              "data_offset": 515818,
+              "size": 2,
+              "name": "weapon_y_offset"
+            },
+            {
+              "address": 203680,
+              "data_offset": 11238,
+              "size": 2,
+              "name": "close_hit_tile"
+            },
+            {
+              "address": 203702,
+              "data_offset": 515814,
+              "size": 2,
+              "name": "alternate_fire_requested"
+            },
+            {
+              "address": 203724,
+              "data_offset": 456828,
+              "size": 32,
+              "name": "force_attack_frame"
+            },
+            {
+              "address": 203746,
+              "data_offset": 461244,
+              "size": 32,
+              "name": "defer_mode_change"
+            },
+            {
+              "address": 203768,
+              "data_offset": 456860,
+              "size": 32,
+              "name": "player_hit_timer"
+            },
+            {
+              "address": 203790,
+              "data_offset": 461180,
+              "size": 64,
+              "name": "player_hit_x"
+            },
+            {
+              "address": 203812,
+              "data_offset": 461116,
+              "size": 64,
+              "name": "player_hit_y"
+            },
+            {
+              "address": 203834,
+              "data_offset": 11240,
+              "size": 2,
+              "name": "moving_sprite_count"
+            },
+            {
+              "address": 203856,
+              "data_offset": 457916,
+              "size": 2048,
+              "name": "moving_sprites"
+            },
+            {
+              "address": 203878,
+              "data_offset": 11242,
+              "size": 2,
+              "name": "pan_sector_count"
+            },
+            {
+              "address": 203900,
+              "data_offset": 459964,
+              "size": 128,
+              "name": "pan_sectors"
+            },
+            {
+              "address": 203922,
+              "data_offset": 11244,
+              "size": 2,
+              "name": "float_sprite_count"
+            },
+            {
+              "address": 203944,
+              "data_offset": 456892,
+              "size": 1024,
+              "name": "float_sprite_list"
+            },
+            {
+              "address": 203966,
+              "data_offset": 11246,
+              "size": 2,
+              "name": "projectile_count"
+            },
+            {
+              "address": 203988,
+              "data_offset": 460092,
+              "size": 1024,
+              "name": "projectile_list"
+            },
+            {
+              "address": 204010,
+              "data_offset": 515808,
+              "size": 2,
+              "name": "active"
+            },
+            {
+              "address": 204032,
+              "data_offset": 424508,
+              "size": 1024,
+              "name": "list"
+            },
+            {
+              "address": 204054,
+              "data_offset": 11248,
+              "size": 2,
+              "name": "map_x"
+            },
+            {
+              "address": 204076,
+              "data_offset": 11250,
+              "size": 2,
+              "name": "map_scale_or_y"
+            },
+            {
+              "address": 204098,
+              "data_offset": 11252,
+              "size": 2,
+              "name": "map_offset_y"
+            },
+            {
+              "address": 204120,
+              "data_offset": 515810,
+              "size": 2,
+              "name": "mouse_buttons"
+            },
+            {
+              "address": 204142,
+              "data_offset": 515802,
+              "size": 2,
+              "name": "mouse_dx"
+            },
+            {
+              "address": 204164,
+              "data_offset": 515804,
+              "size": 2,
+              "name": "mouse_dy"
+            },
+            {
+              "address": 204186,
+              "data_offset": 11254,
+              "size": 2,
+              "name": "button_latch_disabled"
+            },
+            {
+              "address": 204208,
+              "data_offset": 11256,
+              "size": 2,
+              "name": "held_sprite"
+            },
+            {
+              "address": 204230,
+              "data_offset": 11258,
+              "size": 2,
+              "name": "map_mode"
+            },
+            {
+              "address": 204252,
+              "data_offset": 11260,
+              "size": 2,
+              "name": "mouse_motion_disabled"
+            },
+            {
+              "address": 204274,
+              "data_offset": 15261,
+              "size": 72,
+              "name": "inventory_grid"
+            }
+          ],
+          "public": "save_write_fields_7_",
+          "public_start": 3066,
+          "public_size": 1824,
+          "body_start": 1,
+          "body_size": 1804,
+          "private_prefix": "56",
+          "private_suffix": "89c6c1e60301c6bb9d3b0000c1e60301f35ec3",
+          "private_bytes": 20,
+          "context_sha256": "94c00fa11a254ff4b9d13959971181af229ba342c248d0ccce287bcc6adaf918",
+          "phase": "save_write_fields_7_phase_",
+          "private_fixups": {
+            "1813": [
+              "_save_data_image",
+              false,
+              15261
+            ]
+          }
+        },
+        {
+          "start_address": 204315,
+          "end_address": 204403,
+          "start_file_offset": 357403,
+          "stream_register": "esi",
+          "call_target": 395588,
+          "records": [
+            {
+              "address": 204315,
+              "data_offset": 515806,
+              "size": 2,
+              "name": "actor_target"
+            },
+            {
+              "address": 204337,
+              "data_offset": 515812,
+              "size": 2,
+              "name": "special_sector"
+            },
+            {
+              "address": 204359,
+              "data_offset": 15334,
+              "size": 2,
+              "name": "trigger_count"
+            },
+            {
+              "address": 204381,
+              "data_offset": 487716,
+              "size": 404,
+              "name": "trigger_sprite"
+            }
+          ],
+          "public": "save_write_fields_8_",
+          "public_start": 4890,
+          "public_size": 102,
+          "body_start": 0,
+          "body_size": 88,
+          "private_prefix": "",
+          "private_suffix": "69c094010000bb2471070001c3c3",
+          "private_bytes": 14,
+          "context_sha256": "a24e1a148ff9c9bcf02d86cc716ad99386ff732537b692442d5337269bcdf592",
+          "phase": "save_write_fields_8_phase_",
+          "private_fixups": {
+            "95": [
+              "_save_data_image",
+              false,
+              487716
+            ]
+          }
+        }
+      ],
+      "object": "svwrite",
+      "asm_slices": [],
+      "retained_bytes": 0,
+      "additional_c_layouts": [
+        "save-byte-layout.json",
+        "save-dynamic-layout.json"
+      ],
+      "assembly_retired": true,
+      "historical_assembly_revision": "b4159482bf5c115ad46304c98ab0f02c68921626"
+    }
+  ]
+}

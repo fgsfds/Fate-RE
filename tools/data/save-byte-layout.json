@@ -1,0 +1,378 @@
+{
+  "reference_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
+  "data_extent": 2663168,
+  "record_bytes": 19,
+  "routines": [
+    {
+      "symbol": "read_game_data",
+      "source": "src/fate/read_game_data.asm",
+      "loaded_address": 193643,
+      "file_offset": 346731,
+      "size": 5432,
+      "object": "svbytes",
+      "runs": [
+        {
+          "start_address": 194649,
+          "end_address": 194763,
+          "start_file_offset": 347737,
+          "stream_register": "esi",
+          "call_target": 394808,
+          "record_bytes": 19,
+          "records": [
+            {
+              "address": 194649,
+              "data_offset": 515833,
+              "size": 1,
+              "name": "input_forward"
+            },
+            {
+              "address": 194668,
+              "data_offset": 515828,
+              "size": 1,
+              "name": "previous_local_input"
+            },
+            {
+              "address": 194687,
+              "data_offset": 515834,
+              "size": 1,
+              "name": "input_strafe"
+            },
+            {
+              "address": 194706,
+              "data_offset": 515829,
+              "size": 1,
+              "name": "board_state_7def5"
+            },
+            {
+              "address": 194725,
+              "data_offset": 515835,
+              "size": 1,
+              "name": "input_turn"
+            },
+            {
+              "address": 194744,
+              "data_offset": 515830,
+              "size": 1,
+              "name": "board_state_7def6"
+            }
+          ],
+          "public": "save_read_bytes_0_",
+          "phase": "save_read_bytes_0_phase_",
+          "public_start": 0,
+          "public_size": 122,
+          "body_start": 0,
+          "body_size": 114,
+          "private_prefix": "",
+          "private_suffix": "bbf6de070001c3c3",
+          "context_sha256": "a35f3a161055397a6c1db12f2cc49d3118706165b9681073b063da82e36598c3",
+          "private_fixups": {
+            "115": [
+              "_save_data_image",
+              false,
+              515830
+            ]
+          }
+        },
+        {
+          "start_address": 196559,
+          "end_address": 196578,
+          "start_file_offset": 349647,
+          "stream_register": "esi",
+          "call_target": 394808,
+          "record_bytes": 19,
+          "records": [
+            {
+              "address": 196559,
+              "data_offset": 2658778,
+              "size": 1,
+              "name": "engine_2891da"
+            }
+          ],
+          "public": "save_read_bytes_1_",
+          "phase": "save_read_bytes_1_phase_",
+          "public_start": 122,
+          "public_size": 27,
+          "body_start": 0,
+          "body_size": 19,
+          "private_prefix": "",
+          "private_suffix": "bbda91280001c3c3",
+          "context_sha256": "fd613e3ff39aaa7ee17e464ce1024d84e6c6a1e1bf19817fbe9c5fcef31c9d3b",
+          "private_fixups": {
+            "20": [
+              "_save_data_image",
+              false,
+              2658778
+            ]
+          }
+        },
+        {
+          "start_address": 196996,
+          "end_address": 197053,
+          "start_file_offset": 350084,
+          "stream_register": "esi",
+          "call_target": 394808,
+          "record_bytes": 19,
+          "records": [
+            {
+              "address": 196996,
+              "data_offset": 522365,
+              "size": 1,
+              "name": "loaded_level"
+            },
+            {
+              "address": 197015,
+              "data_offset": 522366,
+              "size": 1,
+              "name": "current_board"
+            },
+            {
+              "address": 197034,
+              "data_offset": 8256,
+              "size": 1,
+              "name": "destination_level"
+            }
+          ],
+          "public": "save_read_bytes_2_",
+          "phase": "save_read_bytes_2_phase_",
+          "public_start": 149,
+          "public_size": 65,
+          "body_start": 0,
+          "body_size": 57,
+          "private_prefix": "",
+          "private_suffix": "bb4020000001c3c3",
+          "context_sha256": "e856a6fea003b007481ef269187e4502074f23194da7e1dfefc6648b0c88a859",
+          "private_fixups": {
+            "58": [
+              "_save_data_image",
+              false,
+              8256
+            ]
+          }
+        },
+        {
+          "start_address": 198857,
+          "end_address": 198876,
+          "start_file_offset": 351945,
+          "stream_register": "esi",
+          "call_target": 394808,
+          "record_bytes": 19,
+          "records": [
+            {
+              "address": 198857,
+              "data_offset": 15333,
+              "size": 1,
+              "name": "cursor_mode"
+            }
+          ],
+          "public": "save_read_bytes_3_",
+          "phase": "save_read_bytes_3_phase_",
+          "public_start": 214,
+          "public_size": 27,
+          "body_start": 0,
+          "body_size": 19,
+          "private_prefix": "",
+          "private_suffix": "bbe53b000001c3c3",
+          "context_sha256": "7928f057307ec7e46a08c895b2eadd9baaa748094b5e9901f17404dda385c7fc",
+          "private_fixups": {
+            "20": [
+              "_save_data_image",
+              false,
+              15333
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "write_game_data",
+      "source": "src/fate/write_game_data.asm",
+      "loaded_address": 199075,
+      "file_offset": 352163,
+      "size": 5409,
+      "object": "svbytes",
+      "runs": [
+        {
+          "start_address": 200052,
+          "end_address": 200166,
+          "start_file_offset": 353140,
+          "stream_register": "edi",
+          "call_target": 395588,
+          "record_bytes": 19,
+          "records": [
+            {
+              "address": 200052,
+              "data_offset": 515833,
+              "size": 1,
+              "name": "input_forward"
+            },
+            {
+              "address": 200071,
+              "data_offset": 515828,
+              "size": 1,
+              "name": "previous_local_input"
+            },
+            {
+              "address": 200090,
+              "data_offset": 515834,
+              "size": 1,
+              "name": "input_strafe"
+            },
+            {
+              "address": 200109,
+              "data_offset": 515829,
+              "size": 1,
+              "name": "board_state_7def5"
+            },
+            {
+              "address": 200128,
+              "data_offset": 515835,
+              "size": 1,
+              "name": "input_turn"
+            },
+            {
+              "address": 200147,
+              "data_offset": 515830,
+              "size": 1,
+              "name": "board_state_7def6"
+            }
+          ],
+          "public": "save_write_bytes_0_",
+          "phase": "save_write_bytes_0_phase_",
+          "public_start": 241,
+          "public_size": 119,
+          "body_start": 0,
+          "body_size": 114,
+          "private_prefix": "",
+          "private_suffix": "e90affffff",
+          "context_sha256": "f6fa25025317c386dc96346cd6a6132d83bd786bbb2f22cc5f1a48f5677f8dff",
+          "private_fixups": {}
+        },
+        {
+          "start_address": 201998,
+          "end_address": 202017,
+          "start_file_offset": 355086,
+          "stream_register": "esi",
+          "call_target": 395588,
+          "record_bytes": 19,
+          "records": [
+            {
+              "address": 201998,
+              "data_offset": 2658778,
+              "size": 1,
+              "name": "engine_2891da"
+            }
+          ],
+          "public": "save_write_bytes_1_",
+          "phase": "save_write_bytes_1_phase_",
+          "public_start": 360,
+          "public_size": 24,
+          "body_start": 0,
+          "body_size": 19,
+          "private_prefix": "",
+          "private_suffix": "e90dffffff",
+          "context_sha256": "13132eeb5a62c20780d875de6080e0cf904684075b8b4831f6e7df41a8e523fb",
+          "private_fixups": {}
+        },
+        {
+          "start_address": 202435,
+          "end_address": 202492,
+          "start_file_offset": 355523,
+          "stream_register": "esi",
+          "call_target": 395588,
+          "record_bytes": 19,
+          "records": [
+            {
+              "address": 202435,
+              "data_offset": 522365,
+              "size": 1,
+              "name": "loaded_level"
+            },
+            {
+              "address": 202454,
+              "data_offset": 522366,
+              "size": 1,
+              "name": "current_board"
+            },
+            {
+              "address": 202473,
+              "data_offset": 8256,
+              "size": 1,
+              "name": "destination_level"
+            }
+          ],
+          "public": "save_write_bytes_2_",
+          "phase": "save_write_bytes_2_phase_",
+          "public_start": 384,
+          "public_size": 62,
+          "body_start": 0,
+          "body_size": 57,
+          "private_prefix": "",
+          "private_suffix": "e910ffffff",
+          "context_sha256": "7ba7d45c44b5fdc5ecedb8b7c74e81bfef23d8a54e5fd000f9466c7b732f8d60",
+          "private_fixups": {}
+        },
+        {
+          "start_address": 204296,
+          "end_address": 204315,
+          "start_file_offset": 357384,
+          "stream_register": "esi",
+          "call_target": 395588,
+          "record_bytes": 19,
+          "records": [
+            {
+              "address": 204296,
+              "data_offset": 15333,
+              "size": 1,
+              "name": "cursor_mode"
+            }
+          ],
+          "public": "save_write_bytes_3_",
+          "phase": "save_write_bytes_3_phase_",
+          "public_start": 446,
+          "public_size": 24,
+          "body_start": 0,
+          "body_size": 19,
+          "private_prefix": "",
+          "private_suffix": "e913ffffff",
+          "context_sha256": "c67ee4b7d0fe4a499a0a0e82c67bc7e1217179559faff96d1104ea841ae59e8d",
+          "private_fixups": {}
+        }
+      ]
+    }
+  ],
+  "public_layout": [
+    [
+      "save_read_bytes_0_",
+      0
+    ],
+    [
+      "save_read_bytes_1_",
+      122
+    ],
+    [
+      "save_read_bytes_2_",
+      149
+    ],
+    [
+      "save_read_bytes_3_",
+      214
+    ],
+    [
+      "save_write_bytes_0_",
+      241
+    ],
+    [
+      "save_write_bytes_1_",
+      360
+    ],
+    [
+      "save_write_bytes_2_",
+      384
+    ],
+    [
+      "save_write_bytes_3_",
+      446
+    ]
+  ],
+  "object_size": 470
+}

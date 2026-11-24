@@ -149,3 +149,17 @@ check_ripple_output --exe {exe} --build {build} --output {build}/ripple-output.j
 check_ripple_stack --exe {exe} --build {build} --output {build}/ripple-stack.json | ripidx riptest riploop
 
 check_ripple_control --exe {exe} --build {build} --output {build}/ripple-control.json | ripflow ripsum ripctl ripbord rippart riprad rippack ripout riploop ripbook ripidx riptest
+
+check_save_field_io --exe {exe} --build {build} --output {build}/save-field-io.json | svread svwrite svbytes
+
+check_save_dynamic_io --exe {exe} --build {build} --output {build}/save-dynamic-io.json | svsect svwall svstep
+
+check_save_restore_steps --exe {exe} --build {build} --output {build}/save-restore-steps.json | svstep
+
+check_save_status_completion --exe {exe} --build {build} --output {build}/save-status-completion.json | svstat
+
+check_save_status_message --exe {exe} --build {build} --output {build}/save-status-message.json | svmsg svfinish crushio stdwrap rtstrlen
+
+check_save_slot_open --exe {exe} --build {build} --output {build}/save-slot-open.json | svoread svowrite
+
+check_save_players_finish --exe {exe} --build {build} --output {build}/save-players-finish.json | svoread svfinish crushio

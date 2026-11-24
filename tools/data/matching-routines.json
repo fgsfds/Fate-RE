@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1367,
-  "unique_code_bytes": 181855,
-  "le_pointers": 10015,
+  "routines": 1422,
+  "unique_code_bytes": 192696,
+  "le_pointers": 10522,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -2458,6 +2458,556 @@
       "loaded_address": "0x2f3ce",
       "bytes": 157,
       "le_pointers": 6
+    },
+    {
+      "symbol": "save_read_path_phase_",
+      "object": "svoread.obj",
+      "object_sha256": "da23adefb0f48efa08c91afbd60f8bd6ebcd8c9e879a1c991790fc23ef70b598",
+      "sha256": "27d3573a17b71646d5c955ea7aa90546e243038b6770785af34b89d0a4c146fa",
+      "raw_offset": "0x54a6b",
+      "loaded_address": "0x2f46b",
+      "bytes": 80,
+      "le_pointers": 3
+    },
+    {
+      "symbol": "save_read_count_phase_",
+      "object": "svoread.obj",
+      "object_sha256": "da23adefb0f48efa08c91afbd60f8bd6ebcd8c9e879a1c991790fc23ef70b598",
+      "sha256": "09fb4c2f03304efb397d1d486e8ae059419e557edd5583ed2bb9b293980d177a",
+      "raw_offset": "0x54abb",
+      "loaded_address": "0x2f4bb",
+      "bytes": 22,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "save_read_fields_0_phase_",
+      "object": "svread.obj",
+      "object_sha256": "214ed9241e42df4213730c8a8c0d87b81206d13d4dd8d60fdc5651a932df378e",
+      "sha256": "bcb7acf5baa2aba5fdbc14379989d742d9fbf79527799706f2d191a9709bff6c",
+      "raw_offset": "0x54ad1",
+      "loaded_address": "0x2f4d1",
+      "bytes": 66,
+      "le_pointers": 3
+    },
+    {
+      "symbol": "save_players_before_phase_",
+      "object": "svoread.obj",
+      "object_sha256": "da23adefb0f48efa08c91afbd60f8bd6ebcd8c9e879a1c991790fc23ef70b598",
+      "sha256": "bfa9cb1881a5d11ac13acd1532cef05fcb781e9d048e18557d62af584f7383c7",
+      "raw_offset": "0x54b13",
+      "loaded_address": "0x2f513",
+      "bytes": 29,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "save_read_fields_1_phase_",
+      "object": "svread.obj",
+      "object_sha256": "214ed9241e42df4213730c8a8c0d87b81206d13d4dd8d60fdc5651a932df378e",
+      "sha256": "42bce8ed74fcc971082b0e297f3af9b4c7651ae5f9d8981e93645e1e769670d0",
+      "raw_offset": "0x54b30",
+      "loaded_address": "0x2f530",
+      "bytes": 484,
+      "le_pointers": 22
+    },
+    {
+      "symbol": "save_read_sectors_phase_",
+      "object": "svsect.obj",
+      "object_sha256": "2b82bb528e8b8cc3946bdb0d3c108eef5d775262902cf1a6cdd4bafc75145074",
+      "sha256": "bd50acba873d18819bf9a900c8f32d7b1c7a349579544f101c40e593f37a5514",
+      "raw_offset": "0x54d14",
+      "loaded_address": "0x2f714",
+      "bytes": 34,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "save_read_fields_2_phase_",
+      "object": "svread.obj",
+      "object_sha256": "214ed9241e42df4213730c8a8c0d87b81206d13d4dd8d60fdc5651a932df378e",
+      "sha256": "81569c1aa9d95e092378c67ec2015be1a81fd8c0306fd6d31db9ff17b1732d4e",
+      "raw_offset": "0x54d36",
+      "loaded_address": "0x2f736",
+      "bytes": 22,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "save_read_walls_phase_",
+      "object": "svwall.obj",
+      "object_sha256": "359526ddbd844374813555ec29980cfbb70bc56662466c8c19bf36c2e5c8b904",
+      "sha256": "8a371be7dc5c630a596cdd4e63155bdf0ebe31d1132d8f9e078618146c61aa58",
+      "raw_offset": "0x54d4c",
+      "loaded_address": "0x2f74c",
+      "bytes": 27,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "save_read_fields_3_phase_",
+      "object": "svread.obj",
+      "object_sha256": "214ed9241e42df4213730c8a8c0d87b81206d13d4dd8d60fdc5651a932df378e",
+      "sha256": "1e9dc3bf451f6382d8de6c26d4def3464b883e31178473df6d6eba84d4807a5d",
+      "raw_offset": "0x54d67",
+      "loaded_address": "0x2f767",
+      "bytes": 242,
+      "le_pointers": 11
+    },
+    {
+      "symbol": "save_read_bytes_0_phase_",
+      "object": "svbytes.obj",
+      "object_sha256": "6f3cde20df9ae528371743fcb5fe71bd8e57db575a83d62a1cd1efd8ba79f84b",
+      "sha256": "06a7f2fe2f0c92a0e42164479d296351eca1dba3e5020b1239fa34cc46c6d7b3",
+      "raw_offset": "0x54e59",
+      "loaded_address": "0x2f859",
+      "bytes": 114,
+      "le_pointers": 6
+    },
+    {
+      "symbol": "save_read_fields_4_phase_",
+      "object": "svread.obj",
+      "object_sha256": "214ed9241e42df4213730c8a8c0d87b81206d13d4dd8d60fdc5651a932df378e",
+      "sha256": "85c4ed1a89d783172dfb3678e1a1a9031c613ccd51e8a69b2b059c07113ad3ac",
+      "raw_offset": "0x54ecb",
+      "loaded_address": "0x2f8cb",
+      "bytes": 1496,
+      "le_pointers": 68
+    },
+    {
+      "symbol": "save_restore_read_loop_phase_",
+      "object": "svstep.obj",
+      "object_sha256": "d4ecf9f54dfe25a8d1829bcd82d14d0e419fca4fe71e66d68e4a9ec28c677fc6",
+      "sha256": "df81685ef30586e744b828c7cf15ad53a89dd9695acea330f7fc1b8aa7cde6cc",
+      "raw_offset": "0x554a3",
+      "loaded_address": "0x2fea3",
+      "bytes": 58,
+      "le_pointers": 4
+    },
+    {
+      "symbol": "save_read_fields_5_phase_",
+      "object": "svread.obj",
+      "object_sha256": "214ed9241e42df4213730c8a8c0d87b81206d13d4dd8d60fdc5651a932df378e",
+      "sha256": "24728c06e22deabf9b066ae6c8fc3e2dc570bfc859b857c49e6a7b7e4df35d38",
+      "raw_offset": "0x554dd",
+      "loaded_address": "0x2fedd",
+      "bytes": 242,
+      "le_pointers": 11
+    },
+    {
+      "symbol": "save_read_bytes_1_phase_",
+      "object": "svbytes.obj",
+      "object_sha256": "6f3cde20df9ae528371743fcb5fe71bd8e57db575a83d62a1cd1efd8ba79f84b",
+      "sha256": "ae0e7ca142d5e87dfdd84f69a448777ef88819ab356f0fbc24766a2fe9bc2380",
+      "raw_offset": "0x555cf",
+      "loaded_address": "0x2ffcf",
+      "bytes": 19,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "save_read_fields_6_phase_",
+      "object": "svread.obj",
+      "object_sha256": "214ed9241e42df4213730c8a8c0d87b81206d13d4dd8d60fdc5651a932df378e",
+      "sha256": "77dc1c823b20dfd55ab414fbd836bacf14d9cd44ee02cebc4a9993b3a8f951ed",
+      "raw_offset": "0x555e2",
+      "loaded_address": "0x2ffe2",
+      "bytes": 418,
+      "le_pointers": 19
+    },
+    {
+      "symbol": "save_read_bytes_2_phase_",
+      "object": "svbytes.obj",
+      "object_sha256": "6f3cde20df9ae528371743fcb5fe71bd8e57db575a83d62a1cd1efd8ba79f84b",
+      "sha256": "0b055dac6b5d0c6b4ba8754444b96cb3c0c6f9a68ea199d180549a6cd4a328f5",
+      "raw_offset": "0x55784",
+      "loaded_address": "0x30184",
+      "bytes": 57,
+      "le_pointers": 3
+    },
+    {
+      "symbol": "save_read_fields_7_phase_",
+      "object": "svread.obj",
+      "object_sha256": "214ed9241e42df4213730c8a8c0d87b81206d13d4dd8d60fdc5651a932df378e",
+      "sha256": "6cda71103a39b1e4f736252235ab7cd7f5bfc432e96b851209f809fbe5acefec",
+      "raw_offset": "0x557bd",
+      "loaded_address": "0x301bd",
+      "bytes": 1804,
+      "le_pointers": 82
+    },
+    {
+      "symbol": "save_read_bytes_3_phase_",
+      "object": "svbytes.obj",
+      "object_sha256": "6f3cde20df9ae528371743fcb5fe71bd8e57db575a83d62a1cd1efd8ba79f84b",
+      "sha256": "531aad0a79e8a232d8971264cb4bc8e61a7bf0b00fa55a4dd79f98bc416231ff",
+      "raw_offset": "0x55ec9",
+      "loaded_address": "0x308c9",
+      "bytes": 19,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "save_read_fields_8_phase_",
+      "object": "svread.obj",
+      "object_sha256": "214ed9241e42df4213730c8a8c0d87b81206d13d4dd8d60fdc5651a932df378e",
+      "sha256": "0c265c3d7e1b3b8f0e161b576e1828700e97af6631cfc8a01dd597c29241434a",
+      "raw_offset": "0x55edc",
+      "loaded_address": "0x308dc",
+      "bytes": 88,
+      "le_pointers": 4
+    },
+    {
+      "symbol": "save_finish_read_phase_",
+      "object": "svfinish.obj",
+      "object_sha256": "190af11ea2b5a3d44546a1d21f7772696f3c0e0b3d2ec2c1b0efdd30cdbf3402",
+      "sha256": "fa5022b37959b19b1789ab37dfb5b4c992a589174c872927aef34e4c3daf0a34",
+      "raw_offset": "0x55f34",
+      "loaded_address": "0x30934",
+      "bytes": 14,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "save_players_after_phase_",
+      "object": "svoread.obj",
+      "object_sha256": "da23adefb0f48efa08c91afbd60f8bd6ebcd8c9e879a1c991790fc23ef70b598",
+      "sha256": "c4513b8f924f86c7acdf907e60764fcda7280bc430c06326ea005ae8814fae48",
+      "raw_offset": "0x55f42",
+      "loaded_address": "0x30942",
+      "bytes": 29,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "save_read_message_phase_",
+      "object": "svmsg.obj",
+      "object_sha256": "c7cd0267ca9f5eff6db71b5d8e64321dcc599c55f9ec1fcabca49280f7bcc171",
+      "sha256": "dbd155c2db85c3fff8fec27f298e9fb84f7716e164323f3e5a3b87dbe73f2cf0",
+      "raw_offset": "0x55f5f",
+      "loaded_address": "0x3095f",
+      "bytes": 24,
+      "le_pointers": 3
+    },
+    {
+      "symbol": "save_read_status_phase_",
+      "object": "svstat.obj",
+      "object_sha256": "e708bf1399c3af6000236b8c5253c3a1e00612047f6856ea8b39fae79546ad80",
+      "sha256": "033e3ae9e067f11a4841757881289f0abaff4b027c27e3b17f76c77c24452562",
+      "raw_offset": "0x55f77",
+      "loaded_address": "0x30977",
+      "bytes": 35,
+      "le_pointers": 3
+    },
+    {
+      "symbol": "save_read_frame_return_phase_",
+      "object": "svoread.obj",
+      "object_sha256": "da23adefb0f48efa08c91afbd60f8bd6ebcd8c9e879a1c991790fc23ef70b598",
+      "sha256": "242caad0d5cd73c9db7fcbe8facab178050b243566816c64ec886d8e92d52d9b",
+      "raw_offset": "0x55f9a",
+      "loaded_address": "0x3099a",
+      "bytes": 9,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "save_write_path_phase_",
+      "object": "svowrite.obj",
+      "object_sha256": "cda931d4243e69c71b428153e723b1ad70d7739131fa77cf12854bd3a4fac33a",
+      "sha256": "44eaede0c337fb69be8420b97e7aa5f45548d654c9f5f17b87b061296091b25e",
+      "raw_offset": "0x55fa3",
+      "loaded_address": "0x309a3",
+      "bytes": 80,
+      "le_pointers": 3
+    },
+    {
+      "symbol": "save_write_count_phase_",
+      "object": "svowrite.obj",
+      "object_sha256": "cda931d4243e69c71b428153e723b1ad70d7739131fa77cf12854bd3a4fac33a",
+      "sha256": "aae2ce63a99a73c998a43fdf6d71e39cfce8e30c3e3e7770c90c1944b340ab64",
+      "raw_offset": "0x55ff3",
+      "loaded_address": "0x309f3",
+      "bytes": 22,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "save_write_fields_0_phase_",
+      "object": "svwrite.obj",
+      "object_sha256": "67ff9d9267170a2d1f6dd62c3e0834bdbf0544683a669c471ae64f3297c2f2f6",
+      "sha256": "149a14cf00b6f1760764eb0084d24e3bc267f5826fcc23e84e5df14e67c22fa0",
+      "raw_offset": "0x56009",
+      "loaded_address": "0x30a09",
+      "bytes": 550,
+      "le_pointers": 25
+    },
+    {
+      "symbol": "save_write_sectors_phase_",
+      "object": "svsect.obj",
+      "object_sha256": "2b82bb528e8b8cc3946bdb0d3c108eef5d775262902cf1a6cdd4bafc75145074",
+      "sha256": "6eb63b819feb66a6cb0b70284c68896b8bc7e965f0f845a2fbd016287a6e5e39",
+      "raw_offset": "0x5622f",
+      "loaded_address": "0x30c2f",
+      "bytes": 34,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "save_write_fields_1_phase_",
+      "object": "svwrite.obj",
+      "object_sha256": "67ff9d9267170a2d1f6dd62c3e0834bdbf0544683a669c471ae64f3297c2f2f6",
+      "sha256": "b07c9109dfd20a46ffad48527837350f30fa02a176734cef641179dff948bd98",
+      "raw_offset": "0x56251",
+      "loaded_address": "0x30c51",
+      "bytes": 22,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "save_write_walls_phase_",
+      "object": "svwall.obj",
+      "object_sha256": "359526ddbd844374813555ec29980cfbb70bc56662466c8c19bf36c2e5c8b904",
+      "sha256": "9a07da5a3d0a547747a79516673bb569ee58a8f7871c2e180d1c183c5e6ad97b",
+      "raw_offset": "0x56267",
+      "loaded_address": "0x30c67",
+      "bytes": 27,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "save_write_fields_2_phase_",
+      "object": "svwrite.obj",
+      "object_sha256": "67ff9d9267170a2d1f6dd62c3e0834bdbf0544683a669c471ae64f3297c2f2f6",
+      "sha256": "3785b34784004fb7dcfbd68920a5777bd713c768899e4fc1d18d7dde78eeb5bc",
+      "raw_offset": "0x56282",
+      "loaded_address": "0x30c82",
+      "bytes": 242,
+      "le_pointers": 11
+    },
+    {
+      "symbol": "save_write_bytes_0_phase_",
+      "object": "svbytes.obj",
+      "object_sha256": "6f3cde20df9ae528371743fcb5fe71bd8e57db575a83d62a1cd1efd8ba79f84b",
+      "sha256": "09273854373a6307ad84a5b3ca33d8089e2fbf68faf6d3d2d14d6819f6ad61f2",
+      "raw_offset": "0x56374",
+      "loaded_address": "0x30d74",
+      "bytes": 114,
+      "le_pointers": 6
+    },
+    {
+      "symbol": "save_write_fields_3_phase_",
+      "object": "svwrite.obj",
+      "object_sha256": "67ff9d9267170a2d1f6dd62c3e0834bdbf0544683a669c471ae64f3297c2f2f6",
+      "sha256": "820126843820d98c2795df83bf8d398d232a7c3ed0eca76e5342487420ca5e85",
+      "raw_offset": "0x563e6",
+      "loaded_address": "0x30de6",
+      "bytes": 1496,
+      "le_pointers": 68
+    },
+    {
+      "symbol": "save_restore_offset_prefix_phase_",
+      "object": "svstep.obj",
+      "object_sha256": "d4ecf9f54dfe25a8d1829bcd82d14d0e419fca4fe71e66d68e4a9ec28c677fc6",
+      "sha256": "7e386552fabcc6e06b50655733d0dfcc0b4a981e6e499b67152a237042de2d32",
+      "raw_offset": "0x569be",
+      "loaded_address": "0x313be",
+      "bytes": 12,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "save_restore_offset_word_phase_",
+      "object": "svstep.obj",
+      "object_sha256": "d4ecf9f54dfe25a8d1829bcd82d14d0e419fca4fe71e66d68e4a9ec28c677fc6",
+      "sha256": "c8298fd63da4bb8ccaab29756c139e30a86f75e53de3f2a67a58574298de4d4a",
+      "raw_offset": "0x569ca",
+      "loaded_address": "0x313ca",
+      "bytes": 7,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "save_restore_offset_suffix_phase_",
+      "object": "svstep.obj",
+      "object_sha256": "d4ecf9f54dfe25a8d1829bcd82d14d0e419fca4fe71e66d68e4a9ec28c677fc6",
+      "sha256": "eca9850ddaed2a33a90658971195a8178c6281e6a0748459d786856b9e3c9ba6",
+      "raw_offset": "0x569d1",
+      "loaded_address": "0x313d1",
+      "bytes": 17,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "save_write_fields_4_phase_",
+      "object": "svwrite.obj",
+      "object_sha256": "67ff9d9267170a2d1f6dd62c3e0834bdbf0544683a669c471ae64f3297c2f2f6",
+      "sha256": "35e6f8e93e517c78c805aac918d53f44521440421ae422f73c3d32f6202d3093",
+      "raw_offset": "0x569e2",
+      "loaded_address": "0x313e2",
+      "bytes": 22,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "save_restore_address_loop_phase_",
+      "object": "svstep.obj",
+      "object_sha256": "d4ecf9f54dfe25a8d1829bcd82d14d0e419fca4fe71e66d68e4a9ec28c677fc6",
+      "sha256": "44c52d8380e7b4a25276c7835c7a40108aac9b03468f25ec05fed310860fcc7f",
+      "raw_offset": "0x569f8",
+      "loaded_address": "0x313f8",
+      "bytes": 36,
+      "le_pointers": 3
+    },
+    {
+      "symbol": "save_write_fields_5_phase_",
+      "object": "svwrite.obj",
+      "object_sha256": "67ff9d9267170a2d1f6dd62c3e0834bdbf0544683a669c471ae64f3297c2f2f6",
+      "sha256": "e28a44dbb0b4bd3de4b9bc5a109a840b3d6ec13cd910e05e2444b89ffdb62b63",
+      "raw_offset": "0x56a1c",
+      "loaded_address": "0x3141c",
+      "bytes": 242,
+      "le_pointers": 11
+    },
+    {
+      "symbol": "save_write_bytes_1_phase_",
+      "object": "svbytes.obj",
+      "object_sha256": "6f3cde20df9ae528371743fcb5fe71bd8e57db575a83d62a1cd1efd8ba79f84b",
+      "sha256": "45148c778a430d775e6417986f7b7a231a81dd837befba80e17e733f71ae6596",
+      "raw_offset": "0x56b0e",
+      "loaded_address": "0x3150e",
+      "bytes": 19,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "save_write_fields_6_phase_",
+      "object": "svwrite.obj",
+      "object_sha256": "67ff9d9267170a2d1f6dd62c3e0834bdbf0544683a669c471ae64f3297c2f2f6",
+      "sha256": "7ac227d05b98a307e2099cfe880f9d9084430f30918c2008e09b67f5d92544ea",
+      "raw_offset": "0x56b21",
+      "loaded_address": "0x31521",
+      "bytes": 418,
+      "le_pointers": 19
+    },
+    {
+      "symbol": "save_write_bytes_2_phase_",
+      "object": "svbytes.obj",
+      "object_sha256": "6f3cde20df9ae528371743fcb5fe71bd8e57db575a83d62a1cd1efd8ba79f84b",
+      "sha256": "5f41b74ac28b343b384748c598faa37e0f2e1541b1f67e55d09f71e246c06c4e",
+      "raw_offset": "0x56cc3",
+      "loaded_address": "0x316c3",
+      "bytes": 57,
+      "le_pointers": 3
+    },
+    {
+      "symbol": "save_write_fields_7_phase_",
+      "object": "svwrite.obj",
+      "object_sha256": "67ff9d9267170a2d1f6dd62c3e0834bdbf0544683a669c471ae64f3297c2f2f6",
+      "sha256": "d4c3cb884d874cacf27bd6326e829ab70cd4c716d500527bfa6c349d1601fbbf",
+      "raw_offset": "0x56cfc",
+      "loaded_address": "0x316fc",
+      "bytes": 1804,
+      "le_pointers": 82
+    },
+    {
+      "symbol": "save_write_bytes_3_phase_",
+      "object": "svbytes.obj",
+      "object_sha256": "6f3cde20df9ae528371743fcb5fe71bd8e57db575a83d62a1cd1efd8ba79f84b",
+      "sha256": "b03e2553dc3eceaa9751f582bc2318133eb00724afa9db8095a8d155005c8f30",
+      "raw_offset": "0x57408",
+      "loaded_address": "0x31e08",
+      "bytes": 19,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "save_write_fields_8_phase_",
+      "object": "svwrite.obj",
+      "object_sha256": "67ff9d9267170a2d1f6dd62c3e0834bdbf0544683a669c471ae64f3297c2f2f6",
+      "sha256": "cc9870be6df737c194ab9b6125226da144893fce95384be0ff475e10047f055e",
+      "raw_offset": "0x5741b",
+      "loaded_address": "0x31e1b",
+      "bytes": 88,
+      "le_pointers": 4
+    },
+    {
+      "symbol": "save_finish_write_arg_phase_",
+      "object": "svfinish.obj",
+      "object_sha256": "190af11ea2b5a3d44546a1d21f7772696f3c0e0b3d2ec2c1b0efdd30cdbf3402",
+      "sha256": "8d9d44369f1ef04570f76164ee6a9eb18b5c14d4a849b9cbec43a4aba7c96e41",
+      "raw_offset": "0x57473",
+      "loaded_address": "0x31e73",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "save_saved_destination_message_phase_",
+      "object": "svmsg.obj",
+      "object_sha256": "c7cd0267ca9f5eff6db71b5d8e64321dcc599c55f9ec1fcabca49280f7bcc171",
+      "sha256": "978854d2e8bc3f41b2e703da3d6eba4bc7086c1be2e9b698daea4e7b4070399d",
+      "raw_offset": "0x57475",
+      "loaded_address": "0x31e75",
+      "bytes": 5,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "save_finish_write_call_phase_",
+      "object": "svfinish.obj",
+      "object_sha256": "190af11ea2b5a3d44546a1d21f7772696f3c0e0b3d2ec2c1b0efdd30cdbf3402",
+      "sha256": "d226ae3f711b66cc80ebf13ab1a28ac2a8ccfb69a098060a25b70a7ee27e8a75",
+      "raw_offset": "0x5747a",
+      "loaded_address": "0x31e7a",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "save_finish_close_arg_phase_",
+      "object": "svfinish.obj",
+      "object_sha256": "190af11ea2b5a3d44546a1d21f7772696f3c0e0b3d2ec2c1b0efdd30cdbf3402",
+      "sha256": "8d9d44369f1ef04570f76164ee6a9eb18b5c14d4a849b9cbec43a4aba7c96e41",
+      "raw_offset": "0x5747f",
+      "loaded_address": "0x31e7f",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "save_saved_source_message_phase_",
+      "object": "svmsg.obj",
+      "object_sha256": "c7cd0267ca9f5eff6db71b5d8e64321dcc599c55f9ec1fcabca49280f7bcc171",
+      "sha256": "a52026f4df1c3b76ab9e8b9ee2f22e8c7ce9be52069f783ae3ce5554d97c29c5",
+      "raw_offset": "0x57481",
+      "loaded_address": "0x31e81",
+      "bytes": 5,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "save_finish_close_call_phase_",
+      "object": "svfinish.obj",
+      "object_sha256": "190af11ea2b5a3d44546a1d21f7772696f3c0e0b3d2ec2c1b0efdd30cdbf3402",
+      "sha256": "d25ec2750f7a0b6a9db47175ec1abc213793051b634b5ae1dcde01e3263ea879",
+      "raw_offset": "0x57486",
+      "loaded_address": "0x31e86",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "save_saved_copy_message_phase_",
+      "object": "svmsg.obj",
+      "object_sha256": "c7cd0267ca9f5eff6db71b5d8e64321dcc599c55f9ec1fcabca49280f7bcc171",
+      "sha256": "d2bd1a912e33c710f5f01de94a4fab528a257aff6f9de3042c70115f00fb5bc3",
+      "raw_offset": "0x5748b",
+      "loaded_address": "0x31e8b",
+      "bytes": 8,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "save_saved_length_message_phase_",
+      "object": "svmsg.obj",
+      "object_sha256": "c7cd0267ca9f5eff6db71b5d8e64321dcc599c55f9ec1fcabca49280f7bcc171",
+      "sha256": "ce2c627c95981ebd0189909fd61c8bc405cffdb36d5eaf4232f4040f4c99030f",
+      "raw_offset": "0x57493",
+      "loaded_address": "0x31e93",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "save_write_status_phase_",
+      "object": "svstat.obj",
+      "object_sha256": "e708bf1399c3af6000236b8c5253c3a1e00612047f6856ea8b39fae79546ad80",
+      "sha256": "033e3ae9e067f11a4841757881289f0abaff4b027c27e3b17f76c77c24452562",
+      "raw_offset": "0x57498",
+      "loaded_address": "0x31e98",
+      "bytes": 35,
+      "le_pointers": 3
+    },
+    {
+      "symbol": "save_write_frame_return_phase_",
+      "object": "svowrite.obj",
+      "object_sha256": "cda931d4243e69c71b428153e723b1ad70d7739131fa77cf12854bd3a4fac33a",
+      "sha256": "242caad0d5cd73c9db7fcbe8facab178050b243566816c64ec886d8e92d52d9b",
+      "raw_offset": "0x574bb",
+      "loaded_address": "0x31ebb",
+      "bytes": 9,
+      "le_pointers": 0
     },
     {
       "symbol": "receive_packets_entry_",

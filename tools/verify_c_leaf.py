@@ -7,6 +7,7 @@ Relative operands are checked by exact bytes, not LE pointer records.
 """
 import argparse
 import hashlib
+import json
 from functools import lru_cache
 from pathlib import Path
 from types import MappingProxyType
@@ -4984,6 +4985,57 @@ LEAF_CONTEXT_SHA256['ripple_flow_context_'] = 'c0078b4844f0f1b673fface7613e70ce1
 LEAF_CONTEXT_SUFFIXES['ripple_flow_context_'] = b'\xc3'
 LEAF_CONTEXT_FIXUPS['ripple_flow_context_'] = {20: ('_ripple_count', False, 0), 50: ('random_value_', True, 0), 57: ('_ripple_count', False, 0), 69: ('_ripple_origin_x', False, 0), 74: ('random_value_', True, 0), 84: ('_ripple_count', False, 0), 94: ('_ripple_origin_y', False, 0), 101: ('_ripple_radius', False, 0), 108: ('_ripple_count', False, 0), 120: ('_ripple_count', False, 0), 136: ('_ripple_radius', False, 0), 148: ('_ripple_speed', False, 0), 159: ('_ripple_radius', False, 0), 166: ('_radial_sample_count', False, 0), 180: ('_ripple_origin_x', False, 0), 191: ('_ripple_origin_y', False, 0), 215: ('_radial_x_offsets', False, 0), 223: ('_radial_y_offsets', False, 0), 270: ('_ripple_radius', False, 0), 277: ('_ripple_radius', False, 0), 288: ('_ripple_count', False, 0), 296: ('_ripple_origin_x', False, 0), 303: ('_ripple_radius', False, 0), 310: ('_ripple_origin_y', False, 0), 316: ('_ripple_count', False, 0), 322: ('_ripple_origin_x', False, 0), 328: ('_ripple_radius', False, 0), 334: ('_ripple_origin_y', False, 0), 355: ('_ripple_buffer', False, 133), 424: ('_ripple_buffer', False, 1), 436: ('_ripple_buffer', False, 17028), 485: ('_ripple_buffer', False, 0), 496: ('_ripple_buffer', False, 129), 517: ('_ripple_buffer', False, 0), 530: ('_ripple_buffer', False, 129), 540: ('_ripple_buffer', False, 17028), 556: ('_ripple_buffer', False, 17159), 579: ('_ripple_buffer', False, 0), 851: ('_ripple_frame', False, 0)}
 LEAF_SECTION_BRANCHES['ripple_flow_context_'] = (865, 855, {47: (b'\xeb', 112, 110), 117: (b'}', 49, 43), 128: (b'\xe9', 341, 347), 195: (b'\xeb', 258, 264), 260: (b'}', 197, 197), 365: (b'\xeb', 400, 402), 406: (b'|', 367, 369), 450: (b'\xeb', 500, 501), 506: (b'|', 452, 454), 560: (b'\xe9', 837, 827), 595: (b'\xe9', 826, 816)})
+
+# Fixed-size game-state I/O fields, audited against the pinned save format.
+SAVE_FIELD_LAYOUT = json.loads((Path(__file__).parent/'data/save-field-layout.json').read_text(encoding='utf-8'))
+SAVE_BYTE_LAYOUT = json.loads((Path(__file__).parent/'data/save-byte-layout.json').read_text(encoding='utf-8'))
+SAVE_IO_ROUTINES = SAVE_FIELD_LAYOUT['routines'] + SAVE_BYTE_LAYOUT['routines']
+DATA_OFFSETS['_save_data_image'] = 0
+for _routine in SAVE_IO_ROUTINES:
+    _target = 'fread_' if _routine['symbol'] == 'read_game_data' else 'fwrite_'
+    for _run in _routine['runs']:
+        _public, _phase = _run['public'], _run['phase']
+        _start, _size = _run['body_start'], _run['body_size']
+        LEAVES[_phase] = (_run['start_file_offset'], _size)
+        LEAF_CODE_SLICES[_phase] = (_public, _start, _start+_size, _run['public_size'])
+        LEAF_CONTEXT_SHA256[_public] = _run['context_sha256']
+        LEAF_CONTEXT_SUFFIXES[_public] = bytes.fromhex(_run['private_suffix'])
+        _refs = {int(site): tuple(spec) for site, spec in _run['private_fixups'].items()}
+        _stride = _run.get('record_bytes', 22)
+        _buffer_site, _call_site = (6, 15) if _stride == 19 else (11, 18)
+        for _index, _field in enumerate(_run['records']):
+            _refs[_start+_stride*_index+_buffer_site] = ('_save_data_image', False, _field['data_offset'])
+            _refs[_start+_stride*_index+_call_site] = (_target, True)
+        LEAF_CONTEXT_FIXUPS[_public] = _refs
+
+# Dynamic records and unsigned pointer restoration in the same save format.
+SAVE_DYNAMIC_LAYOUT = json.loads((Path(__file__).parent/'data/save-dynamic-layout.json').read_text(encoding='utf-8'))
+FUNCTION_ADDRESSES.update({'sprintf_': 0x601f3, 'strcat_': 0x60223,
+                           'fopen_': 0x605a2, 'fclose_': 0x60802,
+                           'read_crusher_state_': 0x40354, 'write_crusher_state_': 0x4032e})
+DATA_OFFSETS.update({'_save_restore_words': 0x1a234, '_save_status_length': 0x7f874,
+                     '_save_status_clock': 0x287e88, '_save_status_expiration': 0x7709c,
+                     '_save_loaded_status': 0x7aa70, '_save_saved_status': 0x7aa70,
+                     '_save_loaded_message': 0x5ef, '_save_saved_message': 0x60f,
+                     '_load_slot_format': 0x5dc, '_save_slot_format': 0x5fc,
+                     '_load_basename': 0x5e3, '_save_basename': 0x603,
+                     '_load_mode': 0x5ec, '_save_mode': 0x60c,
+                     '_player_count': 0x13ce0, '_local_player': 0x13ce2,
+                     '_first_player': 0x19028a, '_next_player': 0x18fd78,
+                     '_player_x': 0x5ad9c, '_player_y': 0x5ad5c})
+for _object in SAVE_DYNAMIC_LAYOUT['objects']:
+    for _context in _object['contexts']:
+        LEAF_CONTEXT_SHA256[_context['public']] = _context['sha256']
+        LEAF_CONTEXT_FIXUPS[_context['public']] = {int(site): tuple(spec) for site, spec in _context['fixups'].items()}
+        if 'branches' in _context:
+            _branch = _context['branches']
+            FUNCTION_ADDRESSES[_context['public']] = _branch['public_address']
+            LEAF_SECTION_BRANCHES[_context['public']] = (_branch['compiler_size'], _branch['placed_size'],
+                {int(site): (bytes.fromhex(spec[0]), spec[1], spec[2]) for site, spec in _branch['sites'].items()})
+for _phase in SAVE_DYNAMIC_LAYOUT['phases']:
+    _context = next(row for obj in SAVE_DYNAMIC_LAYOUT['objects'] for row in obj['contexts'] if row['public'] == _phase['public'])
+    LEAVES[_phase['phase']] = (_phase['address']+0x25600, _phase['end']-_phase['begin'])
+    LEAF_CODE_SLICES[_phase['phase']] = (_phase['public'], _phase['begin'], _phase['end'], _context['size'])
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

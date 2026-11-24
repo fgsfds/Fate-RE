@@ -4,7 +4,8 @@ from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
 
-from capstone import CS_ARCH_X86, CS_MODE_32, CS_GRP_CALL, CS_GRP_JUMP, Cs
+from capstone import (CS_ARCH_X86, CS_MODE_32, CS_GRP_CALL, CS_GRP_JUMP,
+                      CS_GRP_BRANCH_RELATIVE, Cs)
 from capstone.x86_const import X86_OP_IMM
 
 from match_objects import read_object
@@ -267,14 +268,32 @@ def branch_target_pair(ordinary, marked, symbol, base, probe, before, after,
     suffix_b = owner_b.instructions[index_b:]
     if not suffix_a or len(suffix_a) != len(suffix_b):
         return False
+    external_call = False
+    unverified_transfer = False
     for i, (a, b) in enumerate(zip(suffix_a, suffix_b), index_a):
         if a.bytes != b.bytes or owner_a.references.get(i) != owner_b.references.get(i):
             return False
-        # Only accept a verified straight-line tail. Other cross-public
-        # transfers require a section-wide branch/relocation model.
+        if (a.group(CS_GRP_CALL) or a.group(CS_GRP_JUMP)
+                or a.group(CS_GRP_BRANCH_RELATIVE)) and not direct_branch(a):
+            # LOOP-family instructions may have only BRANCH_RELATIVE, so
+            # equal displacement bytes do not prove equal marker targets.
+            unverified_transfer = True
+        # A relocated external CALL has an independently identical callee,
+        # operand/addend and return path. Unrelocated calls and other transfers
+        # still require a section-wide branch/relocation model.
         if direct_branch(a):
-            return False
-    return True
+            refs = owner_a.references.get(i, ())
+            if not (a.group(CS_GRP_CALL) and bytes(a.bytes[:1]) == b'\xe8'
+                    and a.imm_offset == 1 and a.imm_size == 4
+                    and len(refs) == 1 and refs[0][:4] == (1, 4, 9, True)
+                    and refs[0][4][0] == 1 and isinstance(refs[0][5], str)
+                    and refs[0][4][1] in flat_frame_groups(ordinary)
+                    and refs[0][4][1] in flat_frame_groups(marked)):
+                return False
+            external_call = True
+    # A newly accepted call must return through the verified suffix rather
+    # than fall through into an adjacent public that was not compared here.
+    return not external_call or (not unverified_transfer and bytes(suffix_a[-1].bytes) == b'\xc3')
 
 
 def compare(ordinary, marked, symbol, verified_tables=(), *, invocation_ranges=None):

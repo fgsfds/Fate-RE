@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 483,
-  "unique_code_bytes": 232784,
-  "le_pointers": 12534,
+  "routines": 481,
+  "unique_code_bytes": 221943,
+  "le_pointers": 12027,
   "non_routine_code_spans": [
     {
       "symbol": "capture_after_open",
@@ -1928,30 +1928,6 @@
       "public_entry": "0x3279b",
       "binary_offset": 0,
       "le_pointers": 108
-    },
-    {
-      "symbol": "read_game_data",
-      "source": "src/fate/read_game_data.asm",
-      "binary": "read_game_data.bin",
-      "sha256": "616e6d8239b58c7791bed7daa820a549cbe4abca293fb32ea8cd87e89c2d0aa7",
-      "bytes": 5432,
-      "raw_offset": "0x54a6b",
-      "loaded_address": "0x2f46b",
-      "public_entry": "0x2f46b",
-      "binary_offset": 0,
-      "le_pointers": 254
-    },
-    {
-      "symbol": "write_game_data",
-      "source": "src/fate/write_game_data.asm",
-      "binary": "write_game_data.bin",
-      "sha256": "b23028ede23d522ff2c945bfdc2417756ec0f144356c4f49acebb3e2d662ec5b",
-      "bytes": 5409,
-      "raw_offset": "0x55fa3",
-      "loaded_address": "0x309a3",
-      "public_entry": "0x309a3",
-      "binary_offset": 0,
-      "le_pointers": 253
     },
     {
       "symbol": "keyboard_interrupt",

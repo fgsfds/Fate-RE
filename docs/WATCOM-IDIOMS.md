@@ -364,3 +364,116 @@ zero raw addend; an optional third field pins a nonzero DATA addend.
 This protects unlinked symbolic references even when selected spans have
 no LE sites. The ripple fixture rejects a changed private opcode/return,
 external name, addend, compiler target and production destination.
+
+
+### Serialized field transfers and guarded stream contexts
+
+For literal `fread`/`fwrite` records, conservative clobbers on empty
+identities preserve the original EBX-count, EDX-size, EAX-buffer and
+ECX-stream preparation order. The actual stream callees preserve
+ESI/EDI/EBP and may clobber all four argument registers. Model raw saved
+state as the bounded character representation of the original LE DATA
+object, rather than inventing incompatible typed global declarations.
+Pin its real extent/base and every record's address, size and LE target.
+
+A void final transfer becomes a tail JMP. Returning its actual item
+count in EBX preserves CALL in a two-function probe, but multiple
+same-callee contexts may still share the entire final call/return tail.
+Returning the last complete item's bounded end cursor gives each run
+a meaningful distinct suffix and keeps every required CALL. The cursor
+is private: select only the field calls and guard all prefix/suffix
+bytes and fixups. A non-power-of-two final size can introduce PUSH ESI
+for private cursor arithmetic; exclude it when the placed body uses
+only register arguments and the caller's existing stack. For private
+behavior tests, keep the compiler object's full layout so shared tails
+still reach their original targets. Check both empty/short I/O and
+complete-item cursor semantics, not just successful transfers.
+
+
+For one-byte save fields, the original size uses `MOV EDX,EBX` after
+the stream copy instead of a second literal load. Carry the real count
+through an empty EDX identity and conservatively clobber EDX on the
+stream identity. This preserves the shared value without new inline
+instructions. Contexts in one object may share private cursor tails
+across read/write directions: bind every public in that object before
+emulating a full private context, and guard each tail and addend.
+
+
+For a retained pointer-table loop, a single-step C context can read its
+physical incoming index through an empty ABI getter and return the new
+index in that same register. Conservative index clobbers on a value
+identity force a fresh getter after the compiler's base shift; the actual
+empty identity preserves the index. Bound entry indices to 0..511 and
+decrement as signed int, then store at index+1. Convert the flat pointer
+to unsigned and use unsigned shifts/add/sub for the address words.
+
+An exact indexed load from an addition context may also supply the same
+load in the subtraction loop: prove matching input/output registers,
+memory operand, flags and LE target before composing it with the actual
+subtraction suffix. Credit only the placed instruction, retain full
+context hashes/fixup guards, and exercise all indices plus complete loops.
+If emulation reuses an address for different private contexts, invalidate
+Unicorn's translated-code cache after writing new instructions.
+
+
+To extend a register-getter step into a complete pointer loop, keep its
+initialization in the C context and read the physical index again in
+the condition. This preserves the preheader, original TEST register and
+short back edge without a loop-carried C shadow variable. The reader's
+table transfer supplies the same EDI initialization as the writer's
+explicit setter. Bind a shortened subtraction context with the existing
+section-branch metadata: check raw opcode/target first, then calculate
+the original placed displacement. Private emulation must temporarily
+suppress that placement mapping and restore it in finally. Require full
+C coverage of loop test ranges and exercise both complete placed paths
+and private contexts, including partial table reads.
+
+
+For a saved status length, truncate to unsigned char before scaling in
+unsigned arithmetic. Empty identities can keep the scaled value in EAX
+while the clock and sum stay in EDX, preserving the original mask/shift,
+clock load, two additions and final store. Return the actual zero result
+to preserve the final XOR. Test poisoned upper length bits and clocks
+around wrap and exact zero; XOR leaves AF undefined, so exclude AF from
+the defined-flag oracle. Keep DF and IF preservation separate.
+
+
+Fixed character-only structures of 13 and 12 bytes produce three MOVSDs
+plus an optional MOVSB under the pinned flags. Structure assignment copies
+bytes after NUL too; measure the resulting string separately. A meaningful
+EBX length result prevents a final tail transfer, but another context may
+share that CALL/return tail. Keep the complete object layout for private
+emulation and select only the actual placed instructions. Calls between
+pointer setup and copy require proven ESI/EDI preservation. Native strlen
+loads ES, so initialize a flat GDT and DS/ES/SS in the fixture.
+
+For marker comparisons of a shared suffix, an external E8 CALL can be
+compared by identical complete suffix instructions and normalized fixups.
+Require a relative dword external FLAT relocation and matching addend,
+reject indirect transfers and unverified PC-relative branches, and require a terminal near RET to exclude an
+unchecked fall-through into another public. Keep unsupported transfers
+unknown; a matching printed target alone is insufficient.
+
+
+A 20-byte filename structure with a nine-byte basename, three-byte gap
+and eight-byte suffix selects the original two MOVSDs and MOVSB. Format
+into its suffix, assign the basename, then pass the complete structure's
+character representation to the audited forward-append runtime alias.
+An intrinsic memcpy probe instead used a counted copy. ISO strcat's
+overlap contract is unsuitable when the appended NUL reaches the suffix;
+document and test the target routine's exact forward-copy behavior.
+
+Bind the real header and file stream consumers to EDI/ESI before the
+null test. This keeps both original copies and the TEST live for retained
+control flow. The compiler's private return cleanup can supply the
+original full-frame epilogues when its register-save order, local size
+and EAX return convention agree. Prove the stack layout and all restored
+registers. If the function entry now comes from C, retained NASM must use
+its first remaining virtual address; keep the original entry as an EQU.
+
+Capstone may classify LOOP/LOOPE/LOOPNE only as BRANCH_RELATIVE. In a
+shared external-call tail, reject those unverified transfers even when their
+encoded displacements match: marker insertion can change the destination.
+The regression uses the same rel8 byte to reach an ordinary NOP and a
+marked end marker. Relocated E8 calls remain subject to complete target,
+operand, addend, frame and return-path checks.
