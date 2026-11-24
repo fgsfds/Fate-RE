@@ -812,16 +812,6 @@ row) and `sptarg23` (selected trace) as future merge references.
 Production assembly remains; no C coverage is credited. Evidence:
 `work/sprite-path-target-next/evidence.json`.
 
-### Status-panel entry prefix
-
-`draw_status_panel_`, Watcom 10.5 `/4r /s /or /bt=dos`: the 608-byte body
-and 36 LE sites match; the 84-byte entry and its 5 LE sites remain assembly.
-The first full-function divergence at `0x10683` hoists `mov edx,4` before
-clipping. Keep the named `first_top` lifetime and its empty EDX identity;
-recover initial drawing-argument scheduling without changing the exact body.
-Probe: `work/status-panel-next/initial_top_lifetime.c`. Accepted evidence:
-`work/status-panel-build/validation.json` and `work/status-panel-audit.json`.
-
 ### Sound playback: entry and scheduling blocker
 
 `play_sound_`, Watcom 10.5 `/4r /s /or /bt=dos`: the closest whole-C

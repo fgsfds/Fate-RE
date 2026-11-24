@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1422,
-  "unique_code_bytes": 192696,
-  "le_pointers": 10522,
+  "routines": 1430,
+  "unique_code_bytes": 192798,
+  "le_pointers": 10528,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -228,6 +228,76 @@
       "loaded_address": "0x10645",
       "bytes": 53,
       "le_pointers": 2
+    },
+    {
+      "symbol": "draw_status_panel_entry_setup_",
+      "object": "statpent.obj",
+      "object_sha256": "b40cf02b668b6bf2799e1f5975b133e941c41fa65c14f69860daea71d6e3aa0a",
+      "sha256": "be1602d2d2f1983d1e8c4623dbbabe787027cde5f3fc321c538ce273f6599150",
+      "raw_offset": "0x35c7a",
+      "loaded_address": "0x1067a",
+      "bytes": 56,
+      "le_pointers": 4
+    },
+    {
+      "symbol": "draw_status_panel_entry_store_top_",
+      "object": "statpan.obj",
+      "object_sha256": "29b14bfc5902979477b161b5c05cd155e5e31059d534ce3de008fc33190714c5",
+      "sha256": "dd6efe2ce23d423d8d2381a47eee5589a20cbf20879fff103aa38a98a32ab29f",
+      "raw_offset": "0x35cb2",
+      "loaded_address": "0x106b2",
+      "bytes": 6,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "draw_status_panel_entry_scale_",
+      "object": "statpent.obj",
+      "object_sha256": "b40cf02b668b6bf2799e1f5975b133e941c41fa65c14f69860daea71d6e3aa0a",
+      "sha256": "2117fb6edcb12ad86250eef51a8de3f086211ef8ccb110757e6280bf7c8e8a78",
+      "raw_offset": "0x35cb8",
+      "loaded_address": "0x106b8",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "draw_status_panel_entry_tile_",
+      "object": "statpent.obj",
+      "object_sha256": "b40cf02b668b6bf2799e1f5975b133e941c41fa65c14f69860daea71d6e3aa0a",
+      "sha256": "d5ff4116eacf0d1c0f20ec760e6f4c67c92ab1ec3ec838c2aeb3227b4ee69408",
+      "raw_offset": "0x35cbd",
+      "loaded_address": "0x106bd",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "draw_status_panel_entry_y_",
+      "object": "statpent.obj",
+      "object_sha256": "b40cf02b668b6bf2799e1f5975b133e941c41fa65c14f69860daea71d6e3aa0a",
+      "sha256": "a339f72049804ff4e5b7b1296d15f1b55a9f55e8d5449500a7c61135ac24a857",
+      "raw_offset": "0x35cc2",
+      "loaded_address": "0x106c2",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "draw_status_panel_entry_angle_",
+      "object": "statpent.obj",
+      "object_sha256": "b40cf02b668b6bf2799e1f5975b133e941c41fa65c14f69860daea71d6e3aa0a",
+      "sha256": "07da0b176e80afd9779a094eb848879d2a9616427d8b594a261bcad1c56bb18d",
+      "raw_offset": "0x35cc7",
+      "loaded_address": "0x106c7",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "draw_status_panel_entry_draw_",
+      "object": "statpent.obj",
+      "object_sha256": "b40cf02b668b6bf2799e1f5975b133e941c41fa65c14f69860daea71d6e3aa0a",
+      "sha256": "6a41439cc36772c5add7b6ca43ec740b6b322c5b53e4be53eb91043722662551",
+      "raw_offset": "0x35cc9",
+      "loaded_address": "0x106c9",
+      "bytes": 5,
+      "le_pointers": 0
     },
     {
       "symbol": "draw_status_panel_",
@@ -508,6 +578,16 @@
       "loaded_address": "0x14133",
       "bytes": 550,
       "le_pointers": 59
+    },
+    {
+      "symbol": "update_gameplay_row_setup_",
+      "object": "gamrow.obj",
+      "object_sha256": "2af669dd9f8b088a45885bb48f8a3cda9357d320ab225cb39a0fe6a64ce0260a",
+      "sha256": "c55ae2c25ef9e3cf7d35b61a4b21a812d463c1341ad15edbc94a2392e71f7d26",
+      "raw_offset": "0x39959",
+      "loaded_address": "0x14359",
+      "bytes": 18,
+      "le_pointers": 1
     },
     {
       "symbol": "update_gameplay_tail_",

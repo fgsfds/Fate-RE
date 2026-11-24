@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 481,
-  "unique_code_bytes": 221943,
-  "le_pointers": 12027,
+  "routines": 479,
+  "unique_code_bytes": 221841,
+  "le_pointers": 12021,
   "non_routine_code_spans": [
     {
       "symbol": "capture_after_open",
@@ -6154,18 +6154,6 @@
       "le_pointers": 25
     },
     {
-      "symbol": "draw_status_panel",
-      "source": "src/fate/status_panel.asm",
-      "binary": "status_panel.bin",
-      "sha256": "9467567deadcb7f8898275373d7d87ef86fb3945321e81382bfbceca9450e73f",
-      "bytes": 84,
-      "raw_offset": "0x35c7a",
-      "loaded_address": "0x1067a",
-      "public_entry": "0x1067a",
-      "binary_offset": 0,
-      "le_pointers": 5
-    },
-    {
       "symbol": "update_mouse_held_sprite",
       "source": "src/fate/mouse_held_sprite.asm",
       "binary": "mouse_held_sprite.bin",
@@ -6224,18 +6212,6 @@
       "public_entry": "0x13860",
       "binary_offset": 0,
       "le_pointers": 80
-    },
-    {
-      "symbol": "update_gameplay_row_setup",
-      "source": "src/fate/gameplay_update.asm",
-      "binary": "gameplay_update.bin",
-      "sha256": "c55ae2c25ef9e3cf7d35b61a4b21a812d463c1341ad15edbc94a2392e71f7d26",
-      "bytes": 18,
-      "raw_offset": "0x39959",
-      "loaded_address": "0x14359",
-      "public_entry": "0x14359",
-      "binary_offset": 0,
-      "le_pointers": 1
     },
     {
       "symbol": "update_actor_profile_two_mode_one",

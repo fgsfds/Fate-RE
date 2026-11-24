@@ -1,17 +1,21 @@
 # Exact C restoration progress
 
-The current saved attribution audit covers all 414,639 CODE bytes and includes 569 compiler units. Saved full validation passed 406 tests and 144 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
+The current saved attribution audit covers all 414,639 CODE bytes and includes 571 compiler units. Saved full validation passed 406 tests and 144 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 167,102 | 40.301% |
+| Compiler-generated instructions | 167,204 | 40.325% |
 | Inline assembly instructions in C objects | 24,311 | 5.863% |
-| Standalone assembly | 221,943 | 53.527% |
+| Standalone assembly | 221,841 | 53.502% |
 | Unattributed instructions and non-routine tables | 1,283 | 0.309% |
 
-The unattributed category contains 882 instruction bytes in 16 unknown routines and 401 non-routine table bytes. Tables are recorded as data, and the unknown instruction bytes remain uncredited. Combined remaining assembly, including inline assembly: 246,254 bytes (59.390%). C-object inventory covers 192,696 bytes (46.47%) and 1,422 C routine spans; the assembly inventory has 481 spans.
+The unattributed category contains 882 instruction bytes in 16 unknown routines and 401 non-routine table bytes. Tables are recorded as data, and the unknown instruction bytes remain uncredited. Combined remaining assembly, including inline assembly: 246,152 bytes (59.365%). C-object inventory covers 192,798 bytes (46.50%) and 1,430 C routine spans; the assembly inventory has 479 spans.
 
 The accepted executable is 741,347 bytes, SHA-256 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.
+
+The bounded agent trial completes the remaining gameplay row setup (18 bytes, one LE site) and status-panel entry (84 bytes, five LE sites). Both routines now link entirely from compiler-generated C, with no inline instructions; their assembly sources are removed. Full private-context hashes and fixup identities guard all selected and excluded code. Empty register identities and independent setup slices preserve the original handoffs without emitting handwritten instructions. These are preserved C candidates requalified against current tools, not a measurement of fresh rewrite speed. The gameplay fixture covers the complete controller and 256 placed/private row handoffs; the panel fixture covers 40 placed and 80 private-context cases. Drawing, formatting and controller callees are modeled by fixture callbacks.
+
+The revised agent trial used a bounded Luna probe and an independent Sol review. The probe freshly compiled both candidates with zero cache hits and passed exact checks in 3.70 seconds (2.59 seconds compiling), after one parent correction for a premature script-path blocker. Review accepted without corrective intervention. The full parent gate passed 406 tests and 144 fixtures. Three overlapping helper roles were removed; short mechanical tasks stay with the integrator. Per-agent token counters are unavailable, so this trial establishes no token-saving percentage or fresh-rewrite speedup. The broader restoration goal remains paused.
 
 `update_level_sector_puzzle_` is restored in readable C: 932 bytes and 59 LE sites, with no inline instructions. One C translation unit compiles twice into three selected phases (410/64/458 bytes); five existing branch edges change displacement only. Neither full compiler public matches by itself. Its differential fixture passes 128 cases and rejects both activation-tag and exit-destination code mutations.
 
@@ -59,7 +63,10 @@ The saved full validation and audit artifacts verify the pinned image:
 - Save pointer conversions: `work/reset-82ae95d/save-restore-steps.json`.
 - Save slot opening and frames: `work/reset-82ae95d/save-slot-open.json`.
 - Save player and finish paths: `work/reset-82ae95d/save-players-finish.json`.
-- Attribution audit: `work/saveio-resume-next/audit.json`.
+- Trial agent outcomes: `work/agent-role-trial/outcomes.json`.
+- Gameplay row and controller: `work/reset-82ae95d/gameplay-update-behavior.json`.
+- Status-panel placed and private contexts: `work/reset-82ae95d/status-panel-behavior.json`.
+- Attribution audit: `work/agent-role-trial/audit.json`.
 - Unit test log: `work/reset-82ae95d/logs/unit-tests.log`.
 - Encounter latch behavior: `work/encounter-latch-build/encounter-latch-behavior.json`.
 - Puzzle exact slices, relocations, and behavior: `work/sector-puzzle-build/sector-puzzle-behavior.json`.

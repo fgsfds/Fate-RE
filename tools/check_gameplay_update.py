@@ -1,4 +1,4 @@
-"""Verify both exact gameplay-update C slices, retained ASM, and 32 behavior cases.
+"""Verify the complete C gameplay controller, row handoff, and 32 behavior cases.
 
 Bindings below are independent constants captured from the original ASM equates.
 This checker reads existing build products and never invokes a compiler.
@@ -20,7 +20,7 @@ from le_fixups import read_le_fixups, pointer_range
 ENTRY, SIZE, DS, DATA_SIZE = 0x14133, 1245, 0x80000, 0x360000
 STACK, STOP = 0x3f0000, 0x3fff00
 SOURCE = ROOT / 'src/fate/gameplay_update.c'
-ASM_SOURCE = ROOT / 'src/fate/gameplay_update.asm'
+ROW_SOURCE = ROOT / 'src/fate/gameplay_row.c'
 GAP_START, GAP_END = 550, 568
 EXPECTED_LE_SITES = 113
 CALL_NAMES = (
@@ -304,37 +304,92 @@ def check_reference(case, observation):
     assert state('special_sector', 'H') == (4 if case['special'] else 99)
 
 
-def bind_integrated(executable, obj, assembly):
-    """Check actual build bytes and exact LE sites before loading the hybrid body."""
-    if len(assembly) != GAP_END - GAP_START:
-        raise ValueError('Retained gameplay assembly must contain exactly 18 bytes')
-    raw = ENTRY + 0x25600
-    if assembly != executable[raw + GAP_START:raw + GAP_END]:
-        raise ValueError('Actual retained ASM differs from the pinned reference')
+def bind_integrated(executable, obj, row_obj):
+    """Check every compiler supplier and LE site before loading the complete body."""
     pointers = read_le_fixups(executable)['pointers']
     all_sites = pointer_range(pointers, ENTRY, SIZE)
     if len(all_sites) != EXPECTED_LE_SITES:
         raise ValueError('Unexpected gameplay-update reference LE count')
-    gap_sites = pointer_range(pointers, ENTRY + GAP_START, len(assembly))
+    gap_sites = pointer_range(pointers, ENTRY + GAP_START, GAP_END-GAP_START)
     if gap_sites != {14: DS + A['level_sector_ids']}:
-        raise ValueError(f'Unexpected retained ASM LE sites/targets: {gap_sites}')
+        raise ValueError(f'Unexpected row LE sites/targets: {gap_sites}')
     head_reference, head, head_fixups = bind_bodies(executable, obj,
         'update_gameplay_head_', ENTRY, GAP_START, DATA, FUNCTIONS, data_base=DS)
     tail_reference, tail, tail_fixups = bind_bodies(executable, obj,
         'update_gameplay_tail_', ENTRY + GAP_END, SIZE - GAP_END, DATA, FUNCTIONS,
         data_base=DS)
-    loaded_gap = bytearray(assembly)
-    for site, target in gap_sites.items():
-        if site + 4 > len(loaded_gap):
-            raise ValueError('Retained ASM LE crosses its boundary')
-        loaded_gap[site:site + 4] = pack('<I', target - 0x80000 + DS)
-    reference = head_reference + bytes(loaded_gap) + tail_reference
-    candidate = head + bytes(loaded_gap) + tail
+    row_reference, row, row_fixups = bind_bodies(executable, row_obj,
+        'update_gameplay_row_setup_', ENTRY+GAP_START, GAP_END-GAP_START,
+        DATA, FUNCTIONS, data_base=DS)
+    reference = head_reference + row_reference + tail_reference
+    candidate = head + row + tail
     if len(reference) != SIZE or len(candidate) != SIZE:
-        raise ValueError('Assembled hybrid span has the wrong size')
-    if head_fixups + tail_fixups + len(gap_sites) != EXPECTED_LE_SITES:
-        raise ValueError('Combined C/ASM LE count differs')
-    return reference, candidate, dict(head=head_fixups, retained_asm=len(gap_sites), tail=tail_fixups)
+        raise ValueError('Complete C span has the wrong size')
+    if head_fixups + tail_fixups + row_fixups != EXPECTED_LE_SITES:
+        raise ValueError('Combined C LE count differs')
+    return reference, candidate, dict(head=head_fixups, row=row_fixups, tail=tail_fixups)
+
+
+def check_row_handoff(blob):
+    """Independent word/offset oracle, including the private return contract."""
+    from unicorn import Uc, UC_ARCH_X86, UC_MODE_32
+    from unicorn.x86_const import (UC_X86_REG_EAX, UC_X86_REG_EBX, UC_X86_REG_ECX,
+        UC_X86_REG_EDX, UC_X86_REG_ESI, UC_X86_REG_EDI, UC_X86_REG_EBP,
+        UC_X86_REG_ESP, UC_X86_REG_EIP, UC_X86_REG_EFLAGS)
+    import verify_c_leaf as v
+    from check_ripple_stack import mutate_public_byte
+    from check_ripple_control import rename_external
+    registers=(UC_X86_REG_EAX,UC_X86_REG_EBX,UC_X86_REG_ECX,UC_X86_REG_EDX,
+               UC_X86_REG_ESI,UC_X86_REG_EDI,UC_X86_REG_EBP)
+    address=0x400000
+    full='gameplay_row_private_check_'
+    v.LEAF_CODE_SLICES[full]=('gameplay_row_word_',0,19,19)
+    try:
+        placed=v.bind_leaf_details(blob,'update_gameplay_row_setup_',{'_level_sector_ids':DS+A['level_sector_ids']},address=address)[0]
+        private=v.bind_leaf_details(blob,full,{'_level_sector_ids':DS+A['level_sector_ids']},address=address)[0]
+    finally:del v.LEAF_CODE_SLICES[full]
+    cases=0
+    base=bytes(range(256))*(DATA_SIZE//256)
+    for row in (0,1,12,25):
+        for column in (0,1,15,31):
+            for word in (-32768,-1,0,32767):
+                for poison in (0x12340000,0xfedc0000):
+                    for is_private,code in ((False,placed),(True,private)):
+                        cpu=Uc(UC_ARCH_X86,UC_MODE_32);cpu.mem_map(0,0x500000)
+                        expected=bytearray(base)
+                        site=A['level_sector_ids']+row*128+column*4
+                        expected[site:site+2]=pack('<h',word)
+                        cpu.mem_write(DS,bytes(expected));cpu.mem_write(address,code)
+                        frame=pack('<I',STOP)+b'\xa5'*60
+                        cpu.mem_write(STACK,frame);cpu.mem_write(STACK-128,b'\x6c'*128)
+                        want={r:0xabc00000+i for i,r in enumerate(registers)}
+                        want.update({UC_X86_REG_ESI:poison|column,UC_X86_REG_EDX:row})
+                        for r,value in want.items():cpu.reg_write(r,value)
+                        cpu.reg_write(UC_X86_REG_ESP,STACK);cpu.reg_write(UC_X86_REG_EFLAGS,0x8d7)
+                        end=STOP if is_private else address+18
+                        cpu.emu_start(address,end,count=10)
+                        want.update({UC_X86_REG_EAX:word&0xffff,UC_X86_REG_ECX:column,UC_X86_REG_EBP:row*128})
+                        assert all(cpu.reg_read(r)==value for r,value in want.items())
+                        assert cpu.reg_read(UC_X86_REG_ESP)==STACK+(4 if is_private else 0)
+                        assert cpu.reg_read(UC_X86_REG_EIP)==end
+                        assert cpu.mem_read(DS,DATA_SIZE)==expected
+                        assert cpu.mem_read(STACK,len(frame))==frame and cpu.mem_read(STACK-128,128)==b'\x6c'*128
+                        flags=(0x40 if row==0 else 0)|(4 if row%2==0 else 0)
+                        assert cpu.reg_read(UC_X86_REG_EFLAGS)&0xc5==flags
+                        cases+=1
+    controls=0
+    def rejected(bad,message):
+        nonlocal controls
+        try:v.bind_leaf_details(bad,'update_gameplay_row_setup_',DATA,address=ENTRY+GAP_START)
+        except ValueError as error:
+            assert message in str(error).lower();controls+=1
+        else:raise AssertionError('Row context mutation escaped')
+    rejected(mutate_public_byte(blob,'gameplay_row_word_',18),'context')
+    rejected(rename_external(blob,b'_level_sector_ids',b'_level_sector_idt'),'fixup')
+    digest=v.LEAF_CONTEXT_SHA256.pop('gameplay_row_word_')
+    try:rejected(mutate_public_byte(blob,'gameplay_row_word_',14),'addend')
+    finally:v.LEAF_CONTEXT_SHA256['gameplay_row_word_']=digest
+    return cases,controls
 
 
 def negative_controls(reference):
@@ -378,19 +433,19 @@ def main():
     args = parser.parse_args()
     output = args.output or args.build / 'gameplay-update-behavior.json'
     obj_path = args.build / 'gamup.obj'
-    asm_path = args.build / 'asm/gameplay_update.bin'
+    row_path = args.build / 'gamrow.obj'
     inputs = {name: path.read_bytes() for name, path in
               [('source', SOURCE), ('object', obj_path), ('reference', args.exe),
-               ('asm', asm_path), ('asm_source', ASM_SOURCE)]}
-    reference, candidate, fixups = bind_integrated(inputs['reference'], inputs['object'], inputs['asm'])
+               ('row_object', row_path), ('row_source', ROW_SOURCE)]}
+    reference, candidate, fixups = bind_integrated(inputs['reference'], inputs['object'], inputs['row_object'])
+    row_cases,row_controls=check_row_handoff(inputs['row_object'])
     report = dict(fixture='gameplay-update', mode='exact-and-behavior', exact_verified=True,
         inventory_eligible=False, status='FAIL', source=str(SOURCE), object=str(obj_path.resolve()),
         source_sha256=sha(inputs['source']), object_sha256=sha(inputs['object']),
-        reference_sha256=sha(inputs['reference']), asm_sha256=sha(inputs['asm']),
-        asm_source_sha256=sha(inputs['asm_source']), reference_bytes=len(reference),
-        candidate_bytes=len(candidate), restored_c_bytes=SIZE - len(inputs['asm']),
-        retained_asm_bytes=len(inputs['asm']), retained_asm_public_range=[GAP_START, GAP_END],
-        retained_asm_le_offset=14, reference_body_sha256=sha(reference),
+        reference_sha256=sha(inputs['reference']), row_object_sha256=sha(inputs['row_object']),
+        row_source_sha256=sha(inputs['row_source']), reference_bytes=len(reference),
+        candidate_bytes=len(candidate), restored_c_bytes=SIZE, retained_asm_bytes=0,
+        row_handoff_cases=row_cases,row_context_controls=row_controls,reference_body_sha256=sha(reference),
         candidate_body_sha256=sha(candidate), absolute_fixups=fixups,
         data_base=DS, data_bytes_compared=DATA_SIZE,
         preserved_registers=list(CONTRACT.preserved), stack_cleanup=4,
@@ -421,7 +476,7 @@ def main():
         output.write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
     print(f"PASS: gameplay-update: {len(report['cases'])}/32 cases, "
           f"{len(report['negative_controls_detected'])} negative controls; "
-          f"exact C slices/ASM/113 LE sites, all {DATA_SIZE:,} DS bytes, calls and ABI")
+          f"complete C body/113 LE sites, {row_cases} row handoffs; all {DATA_SIZE:,} DS bytes, calls and ABI")
     return 0
 
 

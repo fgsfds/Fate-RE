@@ -572,3 +572,5 @@ fate/save_slot_open svoread /4r /s /or /bt=dos /dSAVE_OPEN_READ
 fate/save_slot_open svowrite
 
 fate/save_finish_stream svfinish
+fate/status_panel_entry statpent
+fate/gameplay_row gamrow

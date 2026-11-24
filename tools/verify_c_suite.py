@@ -3,7 +3,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
-from verify_c_leaf import SAVE_FIELD_LAYOUT, SAVE_BYTE_LAYOUT, SAVE_IO_ROUTINES, SAVE_DYNAMIC_LAYOUT
+from verify_c_leaf import SAVE_FIELD_LAYOUT, SAVE_BYTE_LAYOUT, SAVE_IO_ROUTINES, SAVE_DYNAMIC_LAYOUT, COMPILER_CONTEXT_OBJECTS, COMPILER_CONTEXT_PHASES
 from functools import lru_cache
 from verification_diagnostics import code_mismatch
 from restoration_registry import switch_groups
@@ -1537,7 +1537,7 @@ def verify_compiler_groups(exe, directory, names=None):
     if selected('svbytes'):
         verify_group_layout((directory/'svbytes.obj').read_bytes(),
                             SAVE_BYTE_LAYOUT['object_size'], SAVE_BYTE_LAYOUT['public_layout'])
-    for _object in SAVE_DYNAMIC_LAYOUT['objects']:
+    for _object in COMPILER_CONTEXT_OBJECTS:
         if selected(_object['object']):
             verify_group_layout((directory/(_object['object']+'.obj')).read_bytes(),
                                 _object['size'], [(row['public'],row['start']) for row in _object['contexts']])
@@ -1710,7 +1710,7 @@ for _routine in SAVE_IO_ROUTINES:
     for _run in _routine['runs']:
         OBJECT_NAMES[_run['phase']] = _routine['object']
 
-for _phase in SAVE_DYNAMIC_LAYOUT['phases']:
+for _phase in COMPILER_CONTEXT_PHASES:
     OBJECT_NAMES[_phase['phase']] = _phase['object']
 
 if __name__ == '__main__':

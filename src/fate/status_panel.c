@@ -1,6 +1,5 @@
-/* The build retains the original 84-byte entry/first draw from status_panel.asm.
- * This complete C function models the same frame and state; only its matching
- * 608-byte tail is used. The empty auxiliary emits no instructions. */
+/* The matching 608-byte tail and initial top store supply production C
+ * phases. The entry setup comes from status_panel_entry.c. */
 /* Draw the fixed status panel and its numeric fields and optional icons. */
 extern const char number_format[];
 extern short show_left_icon, show_middle_icon, show_right_icon;
