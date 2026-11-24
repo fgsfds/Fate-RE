@@ -6,8 +6,6 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 ROUTES = {
-    'ci-monitor': ('gpt-6-luna', 'low'),
-    'probe': ('gpt-6-luna', 'medium'),
     'research': ('gpt-6.2-sol', 'high'),
     'review': ('gpt-6.2-sol', 'medium'),
 }

@@ -61,7 +61,8 @@ for sources and the distinction between interactive analysis and exact acceptanc
 - Stop at the first useful result and preserve its source/hash before another
   experiment. Use an existing qualified context before repeating its research.
 - Try small standalone idioms before repeatedly perturbing a large function.
-  Delegate a fully specified matrix to fate-probe; keep ambiguous research here.
+  Run a specified matrix directly within the current compiler lease; delegate
+  only an independent unresolved hypothesis, not the execution of a ready script.
 - After three failed distinct variants, stop and summarize unless the parent
   explicitly budgets more research. Do not repeat equivalent expression
   spellings or previously rejected flag matrices.
