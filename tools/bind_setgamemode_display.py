@@ -1,4 +1,4 @@
-"""Select the video display reset while excluding its private switch table."""
+"""Select checked display setup phases, excluding the private switch table."""
 from hashlib import sha256
 
 from bind_melee_group import bind_switch_group
@@ -10,6 +10,7 @@ ALIAS = 'setgamemode_display_reset_'
 ADDRESS = 0x4b150
 PREFIX = 32
 PUBLIC_SIZE = 851
+CONTEXT_SHA256 = '5a19fae4fbd6dadde25cda2fad891a4f06b9beda98b516509e0ff570d60b86be'
 SIZE = 129
 TABLE_TARGETS = (0x1b8, 0x246, 0x26c, 0x28d, 0x28d, 0x28d, 0x29c, 0x304)
 DATA = {
@@ -76,6 +77,9 @@ def bind_display_reset(blob, address):
         data_targets=DATA, call_targets=CALLS)
     if len(code) != PREFIX + PUBLIC_SIZE:
         raise ValueError('Display context public extent differs')
+    # Guard the complete compiler context, including unlinked state and branches.
+    if sha256(code).hexdigest() != CONTEXT_SHA256:
+        raise ValueError('Display context code digest differs')
     if (tuple(pointers[site] - (BASE - 0x10000) for site in range(0, PREFIX, 4)) != TABLE_TARGETS
             or set(pointers) != {*range(0, PREFIX, 4), 0x1b4}
             or code[0x1b0:0x1b4] != bytes.fromhex('2eff2485')):
@@ -92,12 +96,95 @@ def bind_display_reset(blob, address):
     return code[start:end], selected_data
 
 
+def bind_backend_geometry(blob, address):
+    if address != 0x4b1f3:
+        raise ValueError('Backend geometry requires its original placement')
+    # Validate the shared context and its switch before selecting another phase.
+    bind_display_reset(blob, ADDRESS)
+    code, data, _, calls = bind_switch_group(
+        blob, base=BASE, loaded=False, symbol=PUBLIC, prefix_size=PREFIX,
+        data_targets=DATA, call_targets=CALLS)
+    start, end = 0x1c4, 0x203
+    _, _, _, _, fixups = parsed_leaf_object(bytes(blob))
+    if any(f.offset < cut < f.offset + f.width for f in fixups for cut in (start, end)):
+        raise ValueError('Backend geometry fixup crosses the selected slice')
+    selected = {site - start: value for site, value in data.items() if start <= site < end}
+    if (tuple(sorted(selected)) != (0xb, 0x1f, 0x28, 0x33, 0x3a)
+            or any(start <= site < end for site in calls)):
+        raise ValueError('Backend geometry fixup inventory differs')
+    return code[start:end], selected
+
+
+ALLOCATION_PHASES = {
+    'setgamemode_save_tail_': (0x22, 0x24, 0x4b050),
+    'setgamemode_backend_guard_': (0x1a3, 0x1ab, 0x4b1d1),
+    'setgamemode_stereo_join_': (0x302, 0x304, 0x4b31e),
+    'setgamemode_padded_width_': (0x246, 0x24b, 0x4b275),
+    'setgamemode_finish_return_': (0x369, 0x373, 0x4b386),
+    'setgamemode_allocate_planar_': (0x203, 0x246, 0x4b232),
+    'setgamemode_allocate_padded_': (0x251, 0x26c, 0x4b27a),
+    'setgamemode_allocate_linear_': (0x278, 0x28d, 0x4b295),
+    'setgamemode_direct_frame_': (0x28d, 0x29c, 0x4b2aa),
+    'setgamemode_allocate_stereo_': (0x29c, 0x2c3, 0x4b2b9),
+    'setgamemode_allocate_stereo_double_': (0x304, 0x32b, 0x4b320),
+}
+ALLOCATION_BRANCHES = {
+    0x1a5: (b'\x0f\x87', 0x369, 0x4b386),
+    0x302: (b'\xeb', 0x369, 0x4b386),
+    0x203: (b'\x0f\x85', 0x369, 0x4b386),
+    0x221: (b'\x75', 0x237, 0x4b266),
+    0x241: (b'\xe9', 0x369, 0x4b386),
+    0x263: (b'\x75', 0x237, 0x4b266),
+    0x26a: (b'\xeb', 0x228, 0x4b257),
+    0x284: (b'\x75', 0x237, 0x4b266),
+    0x28b: (b'\xeb', 0x228, 0x4b257),
+    0x297: (b'\xe9', 0x369, 0x4b386),
+    0x2ad: (b'\x75', 0x2c3, 0x4b2e0),
+    0x315: (b'\x75', 0x32b, 0x4b347),
+}
+
+
+def bind_allocation_phase(blob, symbol, address):
+    start, end, expected_address = ALLOCATION_PHASES[symbol]
+    if address != expected_address:
+        raise ValueError('Video allocation phase requires its original placement')
+    bind_display_reset(blob, ADDRESS)
+    code, data, pointers, calls = bind_switch_group(
+        blob, base=address - start, loaded=False, symbol=PUBLIC, prefix_size=PREFIX,
+        data_targets=DATA, call_targets=CALLS)
+    _, _, _, _, fixups = parsed_leaf_object(bytes(blob))
+    if any(f.offset < cut < f.offset + f.width for f in fixups for cut in (start, end)):
+        raise ValueError('Video allocation fixup crosses the selected slice')
+    if any(start <= site < end for site in pointers):
+        raise ValueError('Video allocation unexpectedly includes a CODE pointer')
+    code = bytearray(code)
+    for site, (opcode, target, placed) in ALLOCATION_BRANCHES.items():
+        if not start <= site < end:
+            continue
+        width = 4 if len(opcode) == 2 or opcode == b'\xe9' else 1
+        operand, next_instruction = site + len(opcode), site + len(opcode) + width
+        if (code[site:operand] != opcode or next_instruction > end
+                or next_instruction + int.from_bytes(code[operand:next_instruction],
+                                                       'little', signed=True) != target):
+            raise ValueError('Video allocation compiler branch differs')
+        code[operand:next_instruction] = (placed - (address + next_instruction - start)).to_bytes(
+            width, 'little', signed=True)
+    return bytes(code[start:end]), {site - start: value for site, value in data.items()
+                                   if start <= site < end}
+
+
 def verified_context_tables(blob, rows):
-    if len(rows) != 1 or rows[0]['symbol'] != ALIAS:
-        raise ValueError('Display reset attribution inventory differs')
-    row = rows[0]
-    code, refs = bind_display_reset(blob, ADDRESS)
-    if (int(row['raw_offset'], 16) != ADDRESS + 0x25600 or row['bytes'] != SIZE
-            or row['sha256'] != sha256(code).hexdigest() or row['le_pointers'] != len(refs)):
-        raise ValueError('Display reset attribution linked slice differs')
+    phases = {ALIAS: (ADDRESS, SIZE, bind_display_reset),
+              'setgamemode_backend_geometry_': (0x4b1f3, 63, bind_backend_geometry)}
+    for symbol, (start, end, address) in ALLOCATION_PHASES.items():
+        phases[symbol] = (address, end - start,
+                          lambda blob, address, symbol=symbol: bind_allocation_phase(blob, symbol, address))
+    if len(rows) != len(phases) or {row['symbol'] for row in rows} != set(phases):
+        raise ValueError('Display context attribution inventory differs')
+    for row in rows:
+        address, size, binder = phases[row['symbol']]
+        code, refs = binder(blob, address)
+        if (int(row['raw_offset'], 16) != address + 0x25600 or row['bytes'] != size
+                or row['sha256'] != sha256(code).hexdigest() or row['le_pointers'] != len(refs)):
+            raise ValueError('Display context attribution linked slice differs')
     return ((1, 0, PREFIX),)

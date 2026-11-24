@@ -843,3 +843,16 @@ With `/4r /s /or /bt=dos`,
 peer-ID arithmetic. Using EBX as the identity for joint5 disrupts other
 lifetimes. Next retain the interrupt prefix and isolate partial-sum lifetimes. Comparison:
 `work/serial-init-next/compiler/joint4.report.json`.
+
+
+### Video-mode dispatch: index and pixel-product lifetimes
+
+The historical full display context, Watcom 10.5 `/4r /s /or /bt=dos`,
+emits the exact mode guard, but then masks EAX and dispatches before loading
+case-specific dimensions. The retained 26-byte block at `0x4b1d9` instead
+zeroes EDX, loads height into EBX, transfers AL to DL, computes EAX pixels,
+and dispatches through EDX. Next test an initialized EDX byte union and
+explicit EBX-height/EAX-product lifetimes across the real eight-case switch.
+Pinned bytes, three LE sites and original table destinations:
+`work/video-dispatch-next/reference.txt`; static plan:
+`work/video-dispatch-next/plan.md`. No new dispatch variant has compiled yet.

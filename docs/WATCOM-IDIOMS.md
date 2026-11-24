@@ -217,3 +217,20 @@ keep the incoming EBX value live through a standalone C loop. Watcom 10.5
 `inc eax` before `xor ecx,ecx`, matching the original 19-byte loop. Constraining
 the zero through an ECX identity alone schedules the XOR before the increment.
 The checked public has one extra private RET, excluded by the leaf slice.
+
+
+### Byte-register identities and natural EBP constant allocation
+
+Empty identities can bind CH/CL as byte values while preserving the other bits
+of ECX. In the stereo mode-6 state context, holding the unchanged EBX/ESI/EDI
+values live makes Watcom allocate page-flip constant 1 to EBP without an EBP
+input auxiliary (which fails E1122). The enclosing routine already owns the
+saved EBP slot; the private context's PUSH/POP EBP and RET stay unlinked and
+are covered by the complete raw-context digest. Mode 7 excludes only RET.
+
+Use ordinary global accesses when independently scheduled instructions must
+be linked in their original order. Every reordered pair must have disjoint
+register/flag/memory dependencies. The stereo fixture compares original,
+placed and natural compiler order, including poisoned byte-register upper
+bits and shared return restoration. Do not reorder volatile accesses to make
+this proof: volatile access order is part of that C program's semantics.

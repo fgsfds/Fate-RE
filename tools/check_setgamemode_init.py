@@ -8,11 +8,13 @@ import struct
 from unicorn import Uc, UC_ARCH_X86, UC_MODE_32, UC_HOOK_CODE
 from unicorn.x86_const import (
     UC_X86_REG_EAX, UC_X86_REG_EBX, UC_X86_REG_ECX, UC_X86_REG_EDX,
-    UC_X86_REG_EBP, UC_X86_REG_EDI, UC_X86_REG_EIP, UC_X86_REG_ESI, UC_X86_REG_ESP,
+    UC_X86_REG_EFLAGS, UC_X86_REG_EBP, UC_X86_REG_EDI, UC_X86_REG_EIP, UC_X86_REG_ESI, UC_X86_REG_ESP,
 )
 
 from check_start_hook import DS, image
 from compare_exe import TARGET_SHA256
+from match_objects import index
+from bind_setgamemode_display import bind_display_reset, ADDRESS
 
 ENTRY, STOP, STACK = 0x4b04e, 0x4b149, 0x3ff000
 BACKEND, MALLOC, DIAGNOSTIC, EXIT = 0x4a294, 0x4478c, 0x40bb4, 0x60353
@@ -107,6 +109,9 @@ def check_display_reset(memory, mode, fill):
     cpu.mem_write(0, memory)
     cpu.reg_write(UC_X86_REG_ESP, STACK)
     cpu.mem_write(DS + 0x2891db, bytes((mode,)))
+    stereo_fields = (0x286b24, 0x286b40, 0x286b44, 0x14014)
+    for offset in stereo_fields:
+        cpu.mem_write(DS + offset, b'\xa5' * 4)
     buffers = ((0x1ffca0, 4096 * 4), (0x1ec6a0, 32 * 4),
                (0x1ecfa0, 128 * 4), (0x1ec920, 256 * 4))
     before_call = ((0x2891d8, 'B', 0), (0x28913a, 'h', 0),
@@ -170,14 +175,159 @@ def check_palette_lookup(memory, first):
         raise AssertionError('Palette lookup register or stack handoff differs')
 
 
+def check_backend_geometry(memory, pixels, chain):
+    cpu = Uc(UC_ARCH_X86, UC_MODE_32)
+    cpu.mem_map(0, len(memory))
+    cpu.mem_write(0, memory)
+    cpu.reg_write(UC_X86_REG_EAX, pixels)
+    cpu.reg_write(UC_X86_REG_ESP, STACK)
+    cpu.mem_write(DS + 0x14003, bytes((chain,)))
+    cpu.emu_start(0x4b1f3, 0x4b232, count=30)
+    if cpu.reg_read(UC_X86_REG_EIP) != 0x4b232:
+        raise AssertionError('Backend geometry did not reach the allocation decision')
+    size = ((pixels >> 2) + 255) & ~255
+    pages, remainder = divmod(65536, size)
+    expected = ((0x286b48, size), (0x286b4c, 0xa0000), (0x14004, pages))
+    for offset, value in expected:
+        if cpu.mem_read(DS + offset, 4) != struct.pack('<I', value):
+            raise AssertionError('Backend geometry output differs')
+    if cpu.mem_read(DS + 0x14003, 1) != bytes((1 if pages >= 2 else chain,)):
+        raise AssertionError('Backend geometry chain flag differs')
+    if tuple(cpu.reg_read(reg) for reg in (UC_X86_REG_EAX, UC_X86_REG_EBX,
+                                         UC_X86_REG_EDX, UC_X86_REG_ESP)) != (pages, size, remainder, STACK):
+        raise AssertionError('Backend geometry register handoff differs')
+    if bool(cpu.reg_read(UC_X86_REG_EFLAGS) & 0x40) != (pages == 1):
+        raise AssertionError('Backend geometry zero flag differs')
+
+
+def check_backend_allocation(memory, mode, fail, width=320, height=480):
+    cpu = Uc(UC_ARCH_X86, UC_MODE_32)
+    cpu.mem_map(0, len(memory))
+    cpu.mem_write(0, memory)
+    allocation = 0 if fail else 0x301000
+    for offset, value in ((0x287e90, width), (0x287e8c, height), (0x286b74, 0x12345678)):
+        cpu.mem_write(DS + offset, struct.pack('<I', value))
+    cpu.mem_write(DS + 0x2891db, bytes((mode,)))
+    stereo_fields = (0x286b24, 0x286b40, 0x286b44, 0x14014)
+    for offset in stereo_fields:
+        cpu.mem_write(DS + offset, b'\xa5' * 4)
+    cpu.reg_write(UC_X86_REG_EAX, mode)
+    cpu.reg_write(UC_X86_REG_ESP, STACK)
+    requests, diagnostics = [], []
+    messages = {0: 0x1b08, 1: 0x1b31, 2: 0x1b5a, 6: 0x1b83, 7: 0x1bac}
+
+    def intercept(emu, address, size, data):
+        sp = emu.reg_read(UC_X86_REG_ESP)
+        if address == EXIT:
+            if emu.reg_read(UC_X86_REG_EAX) != 0:
+                raise AssertionError('Allocation error exit status differs')
+            emu.emu_stop()
+            return
+        if address == MALLOC:
+            requests.append(emu.reg_read(UC_X86_REG_EAX))
+            emu.reg_write(UC_X86_REG_EAX, allocation)
+        else:
+            diagnostics.append(struct.unpack('<I', emu.mem_read(sp + 4, 4))[0])
+        ret, = struct.unpack('<I', emu.mem_read(sp, 4))
+        emu.reg_write(UC_X86_REG_ESP, sp + 4)
+        emu.reg_write(UC_X86_REG_EIP, ret)
+
+    for address in (MALLOC, DIAGNOSTIC, EXIT):
+        cpu.hook_add(UC_HOOK_CODE, intercept, begin=address, end=address)
+    cpu.emu_start(0x4b1d1, 0x4b386, count=150)
+    expected_request = {0: width * height, 1: (width + 8) * height,
+                        2: width * height, 6: 65536, 7: 131072}.get(mode)
+    if mode == 0 and 65536 // (((width * height >> 2) + 255) & ~255) != 1:
+        expected_request = None
+    if requests != ([] if expected_request is None else [expected_request]):
+        raise AssertionError('Backend allocator request differs')
+    if fail:
+        if diagnostics != [DS + messages[mode]] or cpu.reg_read(UC_X86_REG_EIP) != EXIT:
+            raise AssertionError('Backend allocation failure path differs')
+        return
+    expected_frame = (allocation if expected_request is not None else
+                      0xa0000 if 3 <= mode <= 5 else 0x12345678)
+    if (cpu.mem_read(DS + 0x286b74, 4) != struct.pack('<I', expected_frame)
+            or diagnostics or cpu.reg_read(UC_X86_REG_EIP) != 0x4b386
+            or cpu.reg_read(UC_X86_REG_ESP) != STACK):
+        raise AssertionError('Backend allocation success handoff differs')
+    expected_stereo = (mode, 32768, 32, 1) if mode in (6, 7) else (0xa5a5a5a5,) * 4
+    if (tuple(struct.unpack('<I', cpu.mem_read(DS + offset, 4))[0]
+              for offset in stereo_fields) != expected_stereo
+            or cpu.mem_read(DS + 0x2891db, 1) != bytes((2 if mode in (6, 7) else mode,))):
+        raise AssertionError('Stereo state width, pixel, mode or page-flip fields differ')
+
+
+def check_video_return(memory, values):
+    cpu = Uc(UC_ARCH_X86, UC_MODE_32)
+    cpu.mem_map(0, len(memory))
+    cpu.mem_write(0, memory)
+    stop = 0x90000
+    cpu.mem_write(STACK, struct.pack('<5I', *values, stop))
+    cpu.reg_write(UC_X86_REG_ESP, STACK)
+    calls = []
+
+    def intercept(emu, address, size, data):
+        calls.append(address)
+        sp = emu.reg_read(UC_X86_REG_ESP)
+        if sp != STACK - 4:
+            raise AssertionError('Video finish call stack differs')
+        ret, = struct.unpack('<I', emu.mem_read(sp, 4))
+        emu.reg_write(UC_X86_REG_ESP, sp + 4)
+        emu.reg_write(UC_X86_REG_EIP, ret)
+
+    cpu.hook_add(UC_HOOK_CODE, intercept, begin=0x4a367, end=0x4a367)
+    cpu.emu_start(0x4b386, stop, count=20)
+    if (cpu.reg_read(UC_X86_REG_EIP) != stop or calls != [0x4a367] or tuple(cpu.reg_read(reg) for reg in SAVES) != values
+            or cpu.reg_read(UC_X86_REG_ESP) != STACK + 20):
+        raise AssertionError('Video return register or stack restoration differs')
+
+
+def mutate_context_byte(blob, target):
+    """Change one CODE LEDATA byte while preserving its OMF checksum."""
+    mutant = bytearray(blob)
+    offset = 0
+    while offset < len(mutant):
+        kind = mutant[offset]
+        length = int.from_bytes(mutant[offset + 1:offset + 3], 'little')
+        end = offset + 3 + length
+        if kind in (0xa0, 0xa1):
+            payload = mutant[offset + 3:end - 1]
+            segment, cursor = index(payload, 0)
+            width = 4 if kind & 1 else 2
+            start = int.from_bytes(payload[cursor:cursor + width], 'little')
+            data = offset + 3 + cursor + width
+            if segment == 1 and start <= target < start + end - 1 - data:
+                mutant[data + target - start] ^= 1
+                mutant[end - 1] = (-sum(mutant[offset:end - 1])) & 255
+                return bytes(mutant)
+        offset = end
+    raise AssertionError('Context mutation did not find its LEDATA byte')
+
+
+def check_context_guards(blob):
+    bind_display_reset(blob, ADDRESS)
+    # Check a table entry, an unlinked stereo instruction and a selected branch.
+    for target in (0, 0x2d0, 0x203):
+        try:
+            bind_display_reset(mutate_context_byte(blob, target), ADDRESS)
+        except ValueError as exc:
+            if 'Display context code digest differs' not in str(exc):
+                raise AssertionError('Context mutation did not reach the digest guard') from exc
+        else:
+            raise AssertionError('Display context accepted a changed compiler byte')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--exe', required=True, type=Path)
+    parser.add_argument('--object', required=True, type=Path)
     parser.add_argument('--output', required=True, type=Path)
     args = parser.parse_args()
     blob = args.exe.read_bytes()
     if sha256(blob).hexdigest() != TARGET_SHA256:
         raise ValueError('Unsupported executable SHA-256')
+    check_context_guards(args.object.read_bytes())
     memory = image(blob)
     for case in CASES:
         check(memory, *case)
@@ -195,7 +345,44 @@ def main():
             pass
         else:
             raise AssertionError('Palette lookup oracle accepted a code or pointer mutation')
-    result = {'palette_lookup_mutation_controls': 2, 'palette_lookup_cases': 3, 'status': 'PASS', 'cases': len(CASES) + len(display_cases) + 3,
+    for pixels in (320 * 200, 320 * 350, 640 * 480, 1024 * 1024):
+        for chain in (0, 1):
+            check_backend_geometry(memory, pixels, chain)
+    for offset in (0x4b1f5, 0x4b21b):
+        mutant = bytearray(memory)
+        mutant[offset] ^= 1
+        try:
+            check_backend_geometry(bytes(mutant), 320 * 200, 0)
+        except AssertionError:
+            pass
+        else:
+            raise AssertionError('Geometry oracle accepted a code or pointer mutation')
+    for mode in range(9):
+        check_backend_allocation(memory, mode, False)
+    for width, height in ((320, 200), (1024, 1024)):
+        check_backend_allocation(memory, 0, False, width, height)
+    for mode in (0, 1, 2, 6, 7):
+        check_backend_allocation(memory, mode, True)
+    for offset, mode in ((0x4b24a, 0), (0x4b2ba, 6)):
+        mutant = bytearray(memory)
+        mutant[offset] ^= 1
+        try:
+            check_backend_allocation(bytes(mutant), mode, False)
+        except AssertionError:
+            pass
+        else:
+            raise AssertionError('Allocation oracle accepted a pointer or request mutation')
+    for values in (SAVED_VALUES, (0xffffffff, 0x12345678, 0x89abcdef, 0)):
+        check_video_return(memory, values)
+    mutant = bytearray(memory)
+    mutant[0x4b38b] = 0x5b
+    try:
+        check_video_return(bytes(mutant), SAVED_VALUES)
+    except AssertionError:
+        pass
+    else:
+        raise AssertionError('Video return oracle accepted a POP register mutation')
+    result = {'context_mutation_controls': 3, 'video_return_cases': 2, 'video_return_mutation_controls': 1, 'backend_allocation_mutation_controls': 2, 'backend_allocation_cases': 16, 'backend_geometry_mutation_controls': 2, 'backend_geometry_cases': 8, 'palette_lookup_mutation_controls': 2, 'palette_lookup_cases': 3, 'status': 'PASS', 'cases': len(CASES) + len(display_cases) + 29,
               'allocator_failure_cases': 2, 'display_reset_cases': len(display_cases)}
     args.output.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
     print(json.dumps(result))

@@ -954,6 +954,19 @@ OBJECT_NAMES.update({'capture_open_body_': 'capopen', 'capture_close_success_': 
 OBJECT_NAMES.update(dict.fromkeys(('capture_palette_compare_', 'capture_palette_color_',
                                   'capture_palette_zero_'), 'pcxstep'))
 OBJECT_NAMES.update(dict.fromkeys(('setgamemode_init_save_', 'setgamemode_init_body_'), 'setinit'))
+OBJECT_NAMES.update(dict.fromkeys(('setgamemode_save_tail_', 'setgamemode_backend_guard_',
+                                  'setgamemode_stereo_join_'), 'setdisp'))
+OBJECT_NAMES['setgamemode_padded_width_'] = 'setdisp'
+OBJECT_NAMES['setgamemode_finish_return_'] = 'setdisp'
+OBJECT_NAMES['setgamemode_allocate_planar_'] = 'setdisp'
+OBJECT_NAMES['setgamemode_allocate_padded_'] = 'setdisp'
+OBJECT_NAMES['setgamemode_allocate_linear_'] = 'setdisp'
+OBJECT_NAMES['setgamemode_direct_frame_'] = 'setdisp'
+OBJECT_NAMES['setgamemode_allocate_stereo_'] = 'setdisp'
+OBJECT_NAMES['setgamemode_allocate_stereo_double_'] = 'setdisp'
+OBJECT_NAMES['setgamemode_backend_geometry_'] = 'setdisp'
+from bind_setgamemode_stereo import PHASES as STEREO_PHASES
+OBJECT_NAMES.update(dict.fromkeys(STEREO_PHASES, 'ststate'))
 OBJECT_NAMES['palette_lookup_'] = 'plook'
 OBJECT_NAMES['setgamemode_display_reset_'] = 'setdisp'
 OBJECT_NAMES['drawmasks_projection_'] = 'drawproj'

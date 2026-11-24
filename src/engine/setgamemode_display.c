@@ -2,8 +2,9 @@
 // Ken Silverman's official web site: "http://www.advsys.net/ken"
 // See the included license file "BUILDLIC.TXT" for license info.
 // This file has been modified from Ken Silverman's original release.
-/* Historical context for the display-buffer and automap reset. Only that
- * checked slice links. The remaining assembly uses its original switch. */
+/* Historical context for display reset, planar geometry, framebuffer
+ * allocation and the shared return. Only checked phases link; retained
+ * assembly supplies the original switch dispatch. */
 #define MAXTILES 4096
 #define MAXPALOOKUPS 256
 

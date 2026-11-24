@@ -2777,14 +2777,7 @@ ROUTINES = [
     ('faketimerhandler_', 'fate/faketimerhandler.asm', 'faketimerhandler.bin',
      0x31ec4, 1347, TIMER_CALLBACK_POINTERS),
     ('__CHP', 'runtime/chp.asm', 'chp.bin', 0x60304, 29, {}),
-    ('setgamemode_backend_dispatch', 'engine/setgamemode.asm', 'setgamemode.bin', 0x4b1d1, 447,
-     {12: 0x307e8c, 19: 0x307e90, 30: 0x4b02e, 45: 0x306b48, 65: 0x306b4c, 74: 0x94004,
-      85: 0x94003, 92: 0x94004, 104: 0x307e90, 111: 0x307e8c, 121: 0x93ff0, 130: 0x81b08,
-      150: 0x93ff0, 155: 0x306b74, 165: 0x307e90, 181: 0x93ff0, 190: 0x81b31, 202: 0x93ff0,
-      211: 0x81b5a, 219: 0x306b74, 243: 0x93ff0, 252: 0x81b83, 279: 0x93ff0, 289: 0x306b74,
-      297: 0x94014, 302: 0x3091db, 308: 0x306b44, 313: 0x306b24, 324: 0x3091db, 329: 0x306b40,
-      346: 0x93ff0, 355: 0x81bac, 382: 0x93ff0, 392: 0x306b74, 398: 0x306b40, 406: 0x306b44,
-      411: 0x3091db, 417: 0x3091db, 427: 0x306b24, 433: 0x94014}),
+    ('setgamemode_backend_dispatch', 'engine/setgamemode.asm', 'setgamemode.bin', 0x4b1d9, 26, {4: 3178124, 11: 3178128, 22: 307246}),
     ('nextpage_', 'engine/nextpage.asm', 'nextpage.bin', 0x4b496, 1655,
      {10: 0x940ba, 23: 0x306a74, 76: 0x94014, 85: 0x306b24, 94: 0x93ff0, 99: 0x306b38, 110: 0x306b38,
       122: 0x306b38, 131: 0x93ff0, 137: 0x306b44, 182: 0x940cf, 203: 0x211763, 224: 0x211763,
@@ -2838,7 +2831,6 @@ ROUTINES = [
      {24: 0x306aa4, 36: 0x306aa8}),
 ]
 NON_ROUTINE_UNITS = [
-    ('setgamemode_save_tail', 'engine/setgamemode.asm', 'setgamemode.bin', 0x4b050, 2, {}),
     ('capture_after_open', 'engine/screencapture.asm', 'screencapture.bin', 0x4c402, 13, {}),
     ('capture_header_join', 'engine/screencapture.asm', 'screencapture.bin', 0x4c4a9, 2, {}),
     ('capture_palette_choose', 'engine/screencapture.asm', 'screencapture.bin', 0x4c803, 2, {}),
@@ -3148,8 +3140,7 @@ NON_ROUTINE_KINDS.update({
 })
 
 GROUP_SLICES = {
-    'setgamemode_save_tail': (0, 449),
-    'setgamemode_backend_dispatch': (2, 449),
+    'setgamemode_backend_dispatch': (0, 26),
     'screencapture_': (0, 874),
     'capture_after_open': (14, 874),
     'capture_header_join': (27, 874),
@@ -3694,7 +3685,7 @@ DATA_POINTER_SITES = {
      295, 306, 311, 323, 349, 355, 362, 367, 374, 400, 406, 413, 419, 435, 440, 447, 472, 483, 533,
      551, 556, 563, 589, 595, 636, 654, 659, 664, 677, 683, 694, 712, 718, 727, 732, 739, 749, 764,
      771, 782, 792, 798, 823, 828, 839, 847, 852, 857, 864, 870,),
-    'setgamemode_backend_dispatch': (12, 19, 45, 65, 74, 85, 92, 104, 111, 121, 130, 150, 155, 165, 181, 190, 202, 211, 219, 243, 252, 279, 289, 297, 302, 308, 313, 324, 329, 346, 355, 382, 392, 398, 406, 411, 417, 427, 433),
+    'setgamemode_backend_dispatch': (4, 11),
     'nextpage_': (10, 23, 76, 85, 94, 99, 110, 122, 131, 137, 182, 203, 224, 233, 253, 260, 267, 274, 283, 292, 300,
      306, 314, 321, 328, 334, 352, 363, 380, 400, 408, 428, 434, 444, 457, 467, 526, 553, 653, 750,
      849, 934, 950, 975, 991, 1002, 1011, 1017, 1036, 1042, 1047, 1053, 1060, 1066, 1078, 1083,

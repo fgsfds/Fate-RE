@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1257,
-  "unique_code_bytes": 180519,
-  "le_pointers": 9930,
+  "routines": 1284,
+  "unique_code_bytes": 180942,
+  "le_pointers": 9967,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -4920,6 +4920,16 @@
       "le_pointers": 0
     },
     {
+      "symbol": "setgamemode_save_tail_",
+      "object": "setdisp.obj",
+      "object_sha256": "bcb23065717e3a5948d62db0a0d0c2c4e60110a9c3bb772a65b34f9079b6317e",
+      "sha256": "ecaea711b93a6536547728f771657ad6952e1aeabbc706d04901f3502137b715",
+      "raw_offset": "0x70650",
+      "loaded_address": "0x4b050",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
       "symbol": "setgamemode_init_body_",
       "object": "setinit.obj",
       "object_sha256": "e922b15cd584142fcea1b73fae10690058394e099d29f2e6a9212553589b969f",
@@ -4948,6 +4958,266 @@
       "loaded_address": "0x4b150",
       "bytes": 129,
       "le_pointers": 13
+    },
+    {
+      "symbol": "setgamemode_backend_guard_",
+      "object": "setdisp.obj",
+      "object_sha256": "bcb23065717e3a5948d62db0a0d0c2c4e60110a9c3bb772a65b34f9079b6317e",
+      "sha256": "fe57ee6234d6366bf1e69b83ab56b7e2c335ea94e6bd3ab07498a1cb7d27cf86",
+      "raw_offset": "0x707d1",
+      "loaded_address": "0x4b1d1",
+      "bytes": 8,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "setgamemode_backend_geometry_",
+      "object": "setdisp.obj",
+      "object_sha256": "7d9be4f38716a08fd00e5ff3e0955c149d9cdd9502610d05c617fdae844715fd",
+      "sha256": "16976916343238566bdd1bfe69ec11e2538351e6f3df803a5263db1127610575",
+      "raw_offset": "0x707f3",
+      "loaded_address": "0x4b1f3",
+      "bytes": 63,
+      "le_pointers": 5
+    },
+    {
+      "symbol": "setgamemode_allocate_planar_",
+      "object": "setdisp.obj",
+      "object_sha256": "7d9be4f38716a08fd00e5ff3e0955c149d9cdd9502610d05c617fdae844715fd",
+      "sha256": "257bac76f85cfda343ded904ee3470683f47ab9278c59f1429778cbd4d39144b",
+      "raw_offset": "0x70832",
+      "loaded_address": "0x4b232",
+      "bytes": 67,
+      "le_pointers": 6
+    },
+    {
+      "symbol": "setgamemode_padded_width_",
+      "object": "setdisp.obj",
+      "object_sha256": "7d9be4f38716a08fd00e5ff3e0955c149d9cdd9502610d05c617fdae844715fd",
+      "sha256": "d40c94c95583906f62f5cedf19487886e50560aa4933dc79a828de020820a2f6",
+      "raw_offset": "0x70875",
+      "loaded_address": "0x4b275",
+      "bytes": 5,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "setgamemode_allocate_padded_",
+      "object": "setdisp.obj",
+      "object_sha256": "7d9be4f38716a08fd00e5ff3e0955c149d9cdd9502610d05c617fdae844715fd",
+      "sha256": "2168cc2c29956b4383e20e6697a1a0c1b565683b4e98a41dc37e81079dd123b9",
+      "raw_offset": "0x7087a",
+      "loaded_address": "0x4b27a",
+      "bytes": 27,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "setgamemode_allocate_linear_",
+      "object": "setdisp.obj",
+      "object_sha256": "7d9be4f38716a08fd00e5ff3e0955c149d9cdd9502610d05c617fdae844715fd",
+      "sha256": "bfeb1c1b910cdcded94ea9e30a538bf5f927028298724e258cedd04921a36513",
+      "raw_offset": "0x70895",
+      "loaded_address": "0x4b295",
+      "bytes": 21,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "setgamemode_direct_frame_",
+      "object": "setdisp.obj",
+      "object_sha256": "7d9be4f38716a08fd00e5ff3e0955c149d9cdd9502610d05c617fdae844715fd",
+      "sha256": "84eee26ef1cd3164031bd55e4d696e25e67b5f61dc96879d652fd2cee06869ca",
+      "raw_offset": "0x708aa",
+      "loaded_address": "0x4b2aa",
+      "bytes": 15,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "setgamemode_allocate_stereo_",
+      "object": "setdisp.obj",
+      "object_sha256": "7d9be4f38716a08fd00e5ff3e0955c149d9cdd9502610d05c617fdae844715fd",
+      "sha256": "da80509001eef7f68222227193587e79f394abc22baa7b621ebf07560e350610",
+      "raw_offset": "0x708b9",
+      "loaded_address": "0x4b2b9",
+      "bytes": 39,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "setgamemode_stereo_backend_byte_",
+      "object": "ststate.obj",
+      "object_sha256": "b57668fa365a1d0358193c3cfb8b1cb789836086b3c5b13dce763bdc8d2b0e18",
+      "sha256": "a98b23cf3eb7565debeb2bace22e5e68b19df060f96876a3f5c433bec815e2a4",
+      "raw_offset": "0x708e0",
+      "loaded_address": "0x4b2e0",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "setgamemode_stereo_flip_value_",
+      "object": "ststate.obj",
+      "object_sha256": "b57668fa365a1d0358193c3cfb8b1cb789836086b3c5b13dce763bdc8d2b0e18",
+      "sha256": "d791468a4770d36d6f8519c2cdd9fb0ee19a89a1b1bf0b17b92a859fff90bbc9",
+      "raw_offset": "0x708e2",
+      "loaded_address": "0x4b2e2",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "setgamemode_stereo_frame_",
+      "object": "ststate.obj",
+      "object_sha256": "b57668fa365a1d0358193c3cfb8b1cb789836086b3c5b13dce763bdc8d2b0e18",
+      "sha256": "41ae93a28eeccdbd77cd422fcd1752f116bcbe161b548b16d02f0a0f1e2e4416",
+      "raw_offset": "0x708e7",
+      "loaded_address": "0x4b2e7",
+      "bytes": 17,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "setgamemode_stereo_flip_",
+      "object": "ststate.obj",
+      "object_sha256": "b57668fa365a1d0358193c3cfb8b1cb789836086b3c5b13dce763bdc8d2b0e18",
+      "sha256": "941ab153a5ee32ce85f8cb5a422f88d9e549941e498130671ee6eca631b78f9e",
+      "raw_offset": "0x708f8",
+      "loaded_address": "0x4b2f8",
+      "bytes": 6,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "setgamemode_stereo_mode_byte_",
+      "object": "ststate.obj",
+      "object_sha256": "b57668fa365a1d0358193c3cfb8b1cb789836086b3c5b13dce763bdc8d2b0e18",
+      "sha256": "6fb883ff682a21e52f0d6800f73c79f16814dd832b55fdf4046cd6303ff501bb",
+      "raw_offset": "0x708fe",
+      "loaded_address": "0x4b2fe",
+      "bytes": 5,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "setgamemode_stereo_pixel_",
+      "object": "ststate.obj",
+      "object_sha256": "b57668fa365a1d0358193c3cfb8b1cb789836086b3c5b13dce763bdc8d2b0e18",
+      "sha256": "da61275860e09cde42c4d5dae6c6b58d045bcf956d61ace8d266f116b55c3ba6",
+      "raw_offset": "0x70903",
+      "loaded_address": "0x4b303",
+      "bytes": 6,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "setgamemode_stereo_mode_width_",
+      "object": "ststate.obj",
+      "object_sha256": "b57668fa365a1d0358193c3cfb8b1cb789836086b3c5b13dce763bdc8d2b0e18",
+      "sha256": "b267c0c4fe31767cf0d9962f11124b6d4f9cbcec75fd252498cf7f0887047b6e",
+      "raw_offset": "0x70909",
+      "loaded_address": "0x4b309",
+      "bytes": 10,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "setgamemode_stereo_backend_width_",
+      "object": "ststate.obj",
+      "object_sha256": "b57668fa365a1d0358193c3cfb8b1cb789836086b3c5b13dce763bdc8d2b0e18",
+      "sha256": "bd57bb2586e395069e3a4fe39226502f76e42d8b68bd84fc176882a758b1a456",
+      "raw_offset": "0x70913",
+      "loaded_address": "0x4b313",
+      "bytes": 11,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "setgamemode_stereo_join_",
+      "object": "setdisp.obj",
+      "object_sha256": "bcb23065717e3a5948d62db0a0d0c2c4e60110a9c3bb772a65b34f9079b6317e",
+      "sha256": "cada30fcbed91bd85889509967d8e2a6cf64b432ee1177b4807bd8a894af1d1d",
+      "raw_offset": "0x7091e",
+      "loaded_address": "0x4b31e",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "setgamemode_allocate_stereo_double_",
+      "object": "setdisp.obj",
+      "object_sha256": "7d9be4f38716a08fd00e5ff3e0955c149d9cdd9502610d05c617fdae844715fd",
+      "sha256": "fbbe0d0233ec517b0bc33782ca5dfd32f8180d746fdbe78dd31239a4a9cb991c",
+      "raw_offset": "0x70920",
+      "loaded_address": "0x4b320",
+      "bytes": 39,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "setgamemode_stereo_double_frame_",
+      "object": "ststate.obj",
+      "object_sha256": "b57668fa365a1d0358193c3cfb8b1cb789836086b3c5b13dce763bdc8d2b0e18",
+      "sha256": "b442f558d88ca82e6b0cd809c74c190616d58050b855ddf799a85116db317953",
+      "raw_offset": "0x70947",
+      "loaded_address": "0x4b347",
+      "bytes": 22,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "setgamemode_stereo_double_width_",
+      "object": "ststate.obj",
+      "object_sha256": "b57668fa365a1d0358193c3cfb8b1cb789836086b3c5b13dce763bdc8d2b0e18",
+      "sha256": "771cc1a0b606315ca896d47ced2e6d60609e9f80935e07ebde635c2bb71642a9",
+      "raw_offset": "0x7095d",
+      "loaded_address": "0x4b35d",
+      "bytes": 6,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "setgamemode_stereo_double_zero_",
+      "object": "ststate.obj",
+      "object_sha256": "b57668fa365a1d0358193c3cfb8b1cb789836086b3c5b13dce763bdc8d2b0e18",
+      "sha256": "8359c8f2ab7af5c7569d43a68ce42c771d8e5c6e1349821ed39c1c0234f3785d",
+      "raw_offset": "0x70963",
+      "loaded_address": "0x4b363",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "setgamemode_stereo_double_pixel_",
+      "object": "ststate.obj",
+      "object_sha256": "b57668fa365a1d0358193c3cfb8b1cb789836086b3c5b13dce763bdc8d2b0e18",
+      "sha256": "e03573c3a16c3edb2f96301b642bea74f299f64f88198fa0827e4806e71574ec",
+      "raw_offset": "0x70965",
+      "loaded_address": "0x4b365",
+      "bytes": 6,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "setgamemode_stereo_double_mode_byte_",
+      "object": "ststate.obj",
+      "object_sha256": "b57668fa365a1d0358193c3cfb8b1cb789836086b3c5b13dce763bdc8d2b0e18",
+      "sha256": "6fb883ff682a21e52f0d6800f73c79f16814dd832b55fdf4046cd6303ff501bb",
+      "raw_offset": "0x7096b",
+      "loaded_address": "0x4b36b",
+      "bytes": 5,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "setgamemode_stereo_double_backend_",
+      "object": "ststate.obj",
+      "object_sha256": "b57668fa365a1d0358193c3cfb8b1cb789836086b3c5b13dce763bdc8d2b0e18",
+      "sha256": "fb18248632162709e2d198b04d59d7f6bcb8ad19f8e3c09681fbfecebac4a3ed",
+      "raw_offset": "0x70970",
+      "loaded_address": "0x4b370",
+      "bytes": 11,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "setgamemode_stereo_double_mode_flip_",
+      "object": "ststate.obj",
+      "object_sha256": "b57668fa365a1d0358193c3cfb8b1cb789836086b3c5b13dce763bdc8d2b0e18",
+      "sha256": "86df299d95e23625d038f94da4854828f082f963a1ae39859336ed72e0765382",
+      "raw_offset": "0x7097b",
+      "loaded_address": "0x4b37b",
+      "bytes": 11,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "setgamemode_finish_return_",
+      "object": "setdisp.obj",
+      "object_sha256": "7d9be4f38716a08fd00e5ff3e0955c149d9cdd9502610d05c617fdae844715fd",
+      "sha256": "3c960381818341ef982ade4e77c1d2465d503c1fd0fb6aacee7d9667498738f3",
+      "raw_offset": "0x70986",
+      "loaded_address": "0x4b386",
+      "bytes": 10,
+      "le_pointers": 0
     },
     {
       "symbol": "shutdown_video_engine_",

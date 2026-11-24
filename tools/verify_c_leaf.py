@@ -3916,6 +3916,15 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
         raise ValueError('CODE binding output must be an empty dict; stale metadata rejected')
     segments, publics, externals, flat_groups, fixups = parsed_leaf_object(bytes(blob))
     public_name = leaf_public_name(symbol)
+    from bind_setgamemode_stereo import CONTEXTS as stereo_contexts, verify_context
+    if public_name in stereo_contexts:
+        verify_context(blob)
+    from bind_setgamemode_display import ALLOCATION_PHASES, bind_allocation_phase
+    if symbol in ALLOCATION_PHASES:
+        return bind_allocation_phase(blob, symbol, address)
+    if symbol == 'setgamemode_backend_geometry_':
+        from bind_setgamemode_display import bind_backend_geometry
+        return bind_backend_geometry(blob, address)
     if symbol == 'setgamemode_display_reset_':
         from bind_setgamemode_display import bind_display_reset
         return bind_display_reset(blob, address)
@@ -4652,11 +4661,46 @@ FUNCTION_ADDRESSES.update({
     '_print_diagnostic': 0x40bb4,
 })
 
+LEAVES['setgamemode_save_tail_'] = (0x70650, 2)
+LEAF_CODE_SLICES['setgamemode_save_tail_'] = ('setgamemode_display_context_', 2, 4, 851)
+LEAVES['setgamemode_backend_guard_'] = (0x707d1, 8)
+LEAF_CODE_SLICES['setgamemode_backend_guard_'] = ('setgamemode_display_context_', 0x183, 0x18b, 851)
+LEAVES['setgamemode_stereo_join_'] = (0x7091e, 2)
+LEAF_CODE_SLICES['setgamemode_stereo_join_'] = ('setgamemode_display_context_', 0x2e2, 0x2e4, 851)
+
+LEAVES['setgamemode_padded_width_'] = (0x70875, 5)
+LEAF_CODE_SLICES['setgamemode_padded_width_'] = ('setgamemode_display_context_', 0x226, 0x22b, 851)
+LEAVES['setgamemode_finish_return_'] = (0x70986, 10)
+LEAF_CODE_SLICES['setgamemode_finish_return_'] = ('setgamemode_display_context_', 0x349, 0x353, 851)
+
+LEAVES['setgamemode_allocate_planar_'] = (0x70832, 67)
+LEAF_CODE_SLICES['setgamemode_allocate_planar_'] = ('setgamemode_display_context_', 0x1e3, 0x226, 851)
+LEAVES['setgamemode_allocate_padded_'] = (0x7087a, 27)
+LEAF_CODE_SLICES['setgamemode_allocate_padded_'] = ('setgamemode_display_context_', 0x231, 0x24c, 851)
+LEAVES['setgamemode_allocate_linear_'] = (0x70895, 21)
+LEAF_CODE_SLICES['setgamemode_allocate_linear_'] = ('setgamemode_display_context_', 0x258, 0x26d, 851)
+LEAVES['setgamemode_direct_frame_'] = (0x708aa, 15)
+LEAF_CODE_SLICES['setgamemode_direct_frame_'] = ('setgamemode_display_context_', 0x26d, 0x27c, 851)
+LEAVES['setgamemode_allocate_stereo_'] = (0x708b9, 39)
+LEAF_CODE_SLICES['setgamemode_allocate_stereo_'] = ('setgamemode_display_context_', 0x27c, 0x2a3, 851)
+LEAVES['setgamemode_allocate_stereo_double_'] = (0x70920, 39)
+LEAF_CODE_SLICES['setgamemode_allocate_stereo_double_'] = ('setgamemode_display_context_', 0x2e4, 0x30b, 851)
+
+LEAVES['setgamemode_backend_geometry_'] = (0x707f3, 63)
+LEAF_CODE_SLICES['setgamemode_backend_geometry_'] = ('setgamemode_display_context_', 0x1a4, 0x1e3, 851)
+
 LEAVES['palette_lookup_'] = (0x7073d, 19)
 LEAF_CODE_SLICES['palette_lookup_'] = ('palette_lookup_', 0, 19, 20)
 
 LEAVES['setgamemode_display_reset_'] = (0x70750, 129)
 LEAF_CODE_SLICES['setgamemode_display_reset_'] = ('setgamemode_display_context_', 0x102, 0x183, 851)
+
+from bind_setgamemode_stereo import PHASES as STEREO_PHASES, CONTEXTS as STEREO_CONTEXTS, DATA as STEREO_DATA
+for _symbol, (_public, _start, _size, _address) in STEREO_PHASES.items():
+    LEAVES[_symbol] = (_address + 0x25600, _size)
+    LEAF_CODE_SLICES[_symbol] = (_public, _start, _start + _size,
+                               STEREO_CONTEXTS[_public][1])
+DATA_OFFSETS.update(STEREO_DATA)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
