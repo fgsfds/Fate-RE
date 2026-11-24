@@ -590,6 +590,271 @@
           }
         }
       ]
+    },
+    {
+      "object": "menuloop",
+      "source": "fate/run_menu_loop",
+      "size": 283,
+      "contexts": [
+        {
+          "public": "run_menu_loop_",
+          "start": 0,
+          "size": 283,
+          "sha256": "95ae72e4e3dfc8e9e6173ee6598ffe9f6c8aebeb6ce8648f1a2dd8c445a429de",
+          "fixups": {
+            "28": [
+              "_menu_selection_storage",
+              false,
+              0
+            ],
+            "34": [
+              "_menu_loop_state",
+              false,
+              0
+            ],
+            "47": [
+              "_menu_selection",
+              false,
+              0
+            ],
+            "56": [
+              "_enabled_menu_entries",
+              false,
+              0
+            ],
+            "61": [
+              "_menu_entry_count",
+              false,
+              0
+            ],
+            "77": [
+              "_active_menu_entries",
+              false,
+              0
+            ],
+            "95": [
+              "_enabled_menu_entries",
+              false,
+              0
+            ],
+            "105": [
+              "_enabled_menu_entries",
+              false,
+              0
+            ],
+            "116": [
+              "presentation_reset_",
+              true,
+              0
+            ],
+            "122": [
+              "_menu_loop_state",
+              false,
+              0
+            ],
+            "137": [
+              "_demo_entries",
+              false,
+              0
+            ],
+            "144": [
+              "_menu_selection",
+              false,
+              0
+            ],
+            "172": [
+              "_menu_entry_count",
+              false,
+              0
+            ],
+            "177": [
+              "_menu_selection",
+              false,
+              0
+            ],
+            "188": [
+              "draw_menu_frame_",
+              true,
+              0
+            ],
+            "193": [
+              "update_menu_selection_",
+              true,
+              0
+            ],
+            "199": [
+              "_save_slot_menu_rows",
+              false,
+              0
+            ],
+            "211": [
+              "_menu_selection",
+              false,
+              0
+            ],
+            "220": [
+              "_save_slot_preview_enabled",
+              false,
+              0
+            ],
+            "230": [
+              "_menu_selection",
+              false,
+              0
+            ],
+            "235": [
+              "read_save_slot_preview_",
+              true,
+              0
+            ],
+            "240": [
+              "_menu_selection",
+              false,
+              0
+            ],
+            "264": [
+              "_menu_loop_state",
+              false,
+              0
+            ],
+            "279": [
+              "small_text_return_",
+              true,
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "object": "mnuret",
+      "source": "fate/run_menu_loop",
+      "size": 284,
+      "contexts": [
+        {
+          "public": "menu_loop_context_",
+          "start": 0,
+          "size": 284,
+          "sha256": "ae37ec833fe9b7b3d16a98a6fd3de2b961539c4ca0fdde7ea2f0f3922b49beb5",
+          "fixups": {
+            "28": [
+              "_menu_selection_storage",
+              false,
+              0
+            ],
+            "34": [
+              "_menu_loop_state",
+              false,
+              0
+            ],
+            "47": [
+              "_menu_selection",
+              false,
+              0
+            ],
+            "56": [
+              "_enabled_menu_entries",
+              false,
+              0
+            ],
+            "61": [
+              "_menu_entry_count",
+              false,
+              0
+            ],
+            "77": [
+              "_active_menu_entries",
+              false,
+              0
+            ],
+            "95": [
+              "_enabled_menu_entries",
+              false,
+              0
+            ],
+            "105": [
+              "_enabled_menu_entries",
+              false,
+              0
+            ],
+            "116": [
+              "presentation_reset_",
+              true,
+              0
+            ],
+            "122": [
+              "_menu_loop_state",
+              false,
+              0
+            ],
+            "137": [
+              "_demo_entries",
+              false,
+              0
+            ],
+            "144": [
+              "_menu_selection",
+              false,
+              0
+            ],
+            "172": [
+              "_menu_entry_count",
+              false,
+              0
+            ],
+            "177": [
+              "_menu_selection",
+              false,
+              0
+            ],
+            "188": [
+              "draw_menu_frame_",
+              true,
+              0
+            ],
+            "193": [
+              "update_menu_selection_",
+              true,
+              0
+            ],
+            "199": [
+              "_save_slot_menu_rows",
+              false,
+              0
+            ],
+            "211": [
+              "_menu_selection",
+              false,
+              0
+            ],
+            "220": [
+              "_save_slot_preview_enabled",
+              false,
+              0
+            ],
+            "230": [
+              "_menu_selection",
+              false,
+              0
+            ],
+            "235": [
+              "read_save_slot_preview_",
+              true,
+              0
+            ],
+            "240": [
+              "_menu_selection",
+              false,
+              0
+            ],
+            "264": [
+              "_menu_loop_state",
+              false,
+              0
+            ]
+          }
+        }
+      ]
     }
   ],
   "phases": [
@@ -672,6 +937,56 @@
       "address": 82777,
       "routine": "update_gameplay",
       "le_sites": 1
+    },
+    {
+      "phase": "run_menu_entry_frame_phase_",
+      "public": "run_menu_loop_",
+      "object": "menuloop",
+      "begin": 0,
+      "end": 10,
+      "address": 235067,
+      "routine": "run_menu_loop",
+      "le_sites": 0
+    },
+    {
+      "phase": "run_menu_entry_count_phase_",
+      "public": "run_menu_loop_",
+      "object": "menuloop",
+      "begin": 14,
+      "end": 17,
+      "address": 235077,
+      "routine": "run_menu_loop",
+      "le_sites": 0
+    },
+    {
+      "phase": "run_menu_entry_arguments_phase_",
+      "public": "run_menu_loop_",
+      "object": "menuloop",
+      "begin": 10,
+      "end": 14,
+      "address": 235080,
+      "routine": "run_menu_loop",
+      "le_sites": 0
+    },
+    {
+      "phase": "run_menu_stack_release_phase_",
+      "public": "menu_loop_context_",
+      "object": "mnuret",
+      "begin": 275,
+      "end": 278,
+      "address": 235342,
+      "routine": "run_menu_loop",
+      "le_sites": 0
+    },
+    {
+      "phase": "run_menu_shared_return_phase_",
+      "public": "run_menu_loop_",
+      "object": "menuloop",
+      "begin": 278,
+      "end": 283,
+      "address": 235345,
+      "routine": "run_menu_loop",
+      "le_sites": 0
     }
   ]
 }

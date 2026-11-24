@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 482,
-  "unique_code_bytes": 221527,
+  "routines": 481,
+  "unique_code_bytes": 221510,
   "le_pointers": 12028,
   "non_routine_code_spans": [
     {
@@ -1880,18 +1880,6 @@
       "public_entry": "0x39a02",
       "binary_offset": 0,
       "le_pointers": 51
-    },
-    {
-      "symbol": "run_menu_loop_entry",
-      "source": "src/fate/run_menu_loop.asm",
-      "binary": "run_menu_loop.bin",
-      "sha256": "2f058bf1298b94332c52ae567710300c6d8426f41297d27dd185b0272211f0ed",
-      "bytes": 17,
-      "raw_offset": "0x5ec3b",
-      "loaded_address": "0x3963b",
-      "public_entry": "0x3963b",
-      "binary_offset": 0,
-      "le_pointers": 0
     },
     {
       "symbol": "draw_menu_entries",

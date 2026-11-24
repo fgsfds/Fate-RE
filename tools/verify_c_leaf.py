@@ -917,7 +917,7 @@ LEAVES['prepwall_last_column_'] = (0x6cdc0, 245)
 LEAVES['transmaskwallscan_'] = (0x6f3d1, 440)
 LEAVES['completemirror_'] = (0x82f1e, 1192)
 LEAVES.update({'init_fpu_callbacks_': (0x89c00, 49), 'check_fpu_callbacks_': (0x89c31, 10)})
-LEAVES['run_menu_loop_'] = (0x5ec4c, 266)
+LEAVES['run_menu_loop_'] = (0x5ec4c, 258)
 LEAVES['wallfront_'] = (0x6a913, 5)
 LEAVES['wallfront_geometry_'] = (0x6a918, 527)
 LEAVES['cansee_'] = (0x76333, 482)
@@ -3660,9 +3660,9 @@ LEAVES.update({'update_gameplay_head_': (0x39733, 550),
 FUNCTION_ADDRESSES.update({'select_item_': 229592, 'refresh_inventory_': 169035, 'check_teleport_terminals_': 81311, 'absolute_long_': 393923, 'activate_sector_': 165648, 'update_sector_events_': 171220, 'update_periodic_sequences_': 74710, 'update_proximity_sprites_': 66250, 'update_float_sprites_': 79535, 'update_moving_sprite_physics_': 79968, 'update_projectiles_': 78391, 'update_sector_panning_': 73358, 'update_fall_triggers_': 68495, 'update_level_effects_': 263778, 'save_level_and_load_board_': 81645, 'initialize_destination_': 158250, 'update_actor_states_': 124848, 'update_gameplay_': 82227})
 DATA_OFFSETS.update({'_inventory_override_request': 424318, '_inventory_override': 19732, '_previous_override': 19734, '_status_right_tenths': 405916, '_saved_status_right': 19736, '_item_enabled': 8807, '_item_stock': 8823, '_item_alternate_stock': 8839, '_saved_item_enabled': 522574, '_saved_item_stock': 522558, '_saved_item_alternate_stock': 522542, '_left_icon': 8248, '_middle_icon': 8250, '_right_icon': 8252, '_effect_count': 8797, '_status_flag': 8801, '_saved_left_icon': 522540, '_saved_middle_icon': 522538, '_saved_right_icon': 522536, '_saved_effect_count': 522534, '_saved_status_flag': 522532, '_game_clock': 2653832, '_last_step_clock': 502160, '_advance_clock': 8859, '_level_sector_ids': 484252, '_level_sector_active': 484254, '_sector_hitag': 2606020, '_level_sector_x': 477596, '_level_sector_y': 477600, '_player_x': 372124, '_player_y': 372060, '_actor_active': 519350, '_actor_level': 518849, '_actor_sprite': 514744, '_sprite_x': 2113696, '_sprite_y': 2113700, '_current_level': 522366, '_level_sector_count': 502332, '_player_sector': 371964, '_special_sector': 515812, '_last_sequence_clock': 8240, '_destination_level': 8256, '_loaded_level': 522365, '_level_left_icon': 502176, '_level_middle_icon': 502178, '_level_right_icon': 502180, '_modified_levels': 515746, '_mod_extension': 720, '_destination_entry': 515822, '_destination_x': 502168, '_destination_y': 502172})
 
-# These main-public entries are supplied separately: menu-loop assembly and
-# status-panel compiler contexts. Keep their original main-public tails.
-LEAF_ENTRY_PREFIXES = {'run_menu_loop_': 17, 'draw_status_panel_': 84}
+# These main-public entries are supplied by separate compiler phases.
+# Keep the original main-public bodies under their existing public names.
+LEAF_ENTRY_PREFIXES = {'draw_status_panel_': 84}
 # Only these compiler-prefix references may be excluded from the main-public
 # tail. Independently verified entry suppliers own the production operands.
 LEAF_ENTRY_PREFIX_FIXUPS = {
@@ -3711,6 +3711,7 @@ LEAF_CONTEXT_FIXUPS = {
 }
 
 LEAF_CODE_SLICES = {
+    'run_menu_loop_': ('run_menu_loop_', 17, 275, 283),
     'main_menu_resume_guard_': ('dispatch_main_menu_', 0x1d1, 0x1de, 497),
     'main_menu_save_': ('dispatch_main_menu_', 0, 17, 497),
     'main_menu_tick_': ('dispatch_main_menu_', 19, 25, 497),

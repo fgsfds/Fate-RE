@@ -1528,7 +1528,6 @@ ROUTINES = [
       0xa09fc, 327: 0xf70bc, 346: 0xa09fc, 355: 0x83cfa, 363: 0xdacfc, 396: 0x82be4, 406: 0xfdeea, 414: 0xfdee8,
       421: 0x83cfa, 436: 0xdac8f, 448: 0xdac8c, 458: 0xdac8e, 465: 0xdac8d, 475: 0xdacfc, 494: 0x2fc3bc, 501:
       0x82be4, 513: 0x83cfa, 521: 0xe2f2c, 530: 0x2840ad, 546: 0x1f3fc0, 560: 0x1f3fc0}),
-    ('run_menu_loop_entry', 'fate/run_menu_loop.asm', 'run_menu_loop.bin', 0x3963b, 17, {}),
     ('draw_menu_entries', 'fate/draw_menu_entries.asm', 'draw_menu_entries.bin', 0x38ac0, 1532,
      {48: 0x307e8c, 55: 0x307e90, 122: 0x1f4010, 140: 0x1f45d0, 155: 0x1f455c, 170: 0x1f456c, 185: 0x1f3fe8,
       200: 0x1f40d0, 208: 0x1f45bc, 216: 0x1f45b0, 229: 0x307e8c, 237: 0x307e90, 320: 0x92e00, 337: 0x92e00,

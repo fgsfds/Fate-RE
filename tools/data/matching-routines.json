@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1424,
-  "unique_code_bytes": 193112,
+  "routines": 1429,
+  "unique_code_bytes": 193129,
   "le_pointers": 10521,
   "non_routine_code_spans": [
     {
@@ -4740,14 +4740,64 @@
       "le_pointers": 8
     },
     {
+      "symbol": "run_menu_entry_frame_phase_",
+      "object": "menuloop.obj",
+      "object_sha256": "ee4a1adf2ed2f69ef5a2f364a93785522927b8ab60d216391d32c01fd95e2c90",
+      "sha256": "274f0487eecb0fc2c8291f504e0ce62228ec6998aaa74863aeeaf6d72542de24",
+      "raw_offset": "0x5ec3b",
+      "loaded_address": "0x3963b",
+      "bytes": 10,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "run_menu_entry_count_phase_",
+      "object": "menuloop.obj",
+      "object_sha256": "ee4a1adf2ed2f69ef5a2f364a93785522927b8ab60d216391d32c01fd95e2c90",
+      "sha256": "396027f4b36ef0ce2df275d1d20f70209a1fcc403b52ce48616eea2eaa12f2bf",
+      "raw_offset": "0x5ec45",
+      "loaded_address": "0x39645",
+      "bytes": 3,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "run_menu_entry_arguments_phase_",
+      "object": "menuloop.obj",
+      "object_sha256": "ee4a1adf2ed2f69ef5a2f364a93785522927b8ab60d216391d32c01fd95e2c90",
+      "sha256": "1ef3afff8db5bf599e7edcb3dd75420ac6e511996c743d72408dcf6797aed1cc",
+      "raw_offset": "0x5ec48",
+      "loaded_address": "0x39648",
+      "bytes": 4,
+      "le_pointers": 0
+    },
+    {
       "symbol": "run_menu_loop_",
       "object": "menuloop.obj",
-      "object_sha256": "2a572ae6e427bf26f46e66b2a5199801164c9e910fcc57f5e4d7ef6c23d23142",
-      "sha256": "dd8da6062c783e684f22c40952f8620021235bacc0689de80068a64635e015e3",
+      "object_sha256": "ee4a1adf2ed2f69ef5a2f364a93785522927b8ab60d216391d32c01fd95e2c90",
+      "sha256": "14d7a366eb8a1d874a160595979443c7d6fd06aabfb79def79d60124356ed469",
       "raw_offset": "0x5ec4c",
       "loaded_address": "0x3964c",
-      "bytes": 266,
+      "bytes": 258,
       "le_pointers": 19
+    },
+    {
+      "symbol": "run_menu_stack_release_phase_",
+      "object": "mnuret.obj",
+      "object_sha256": "aacbc3b2e34fcab0f5430e37e06ce723d828d3984a41777511ab66a92c850c77",
+      "sha256": "0922bc23817866b17b5ce11bd7b21428d78ba7564e9b0024637ae34d2a05b017",
+      "raw_offset": "0x5ed4e",
+      "loaded_address": "0x3974e",
+      "bytes": 3,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "run_menu_shared_return_phase_",
+      "object": "menuloop.obj",
+      "object_sha256": "ee4a1adf2ed2f69ef5a2f364a93785522927b8ab60d216391d32c01fd95e2c90",
+      "sha256": "067715ca61656e004f15b53521accf48658c32d7202ce9d050284b5097547f87",
+      "raw_offset": "0x5ed51",
+      "loaded_address": "0x39751",
+      "bytes": 5,
+      "le_pointers": 0
     },
     {
       "symbol": "run_settings_menu_",

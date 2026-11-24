@@ -381,6 +381,7 @@ fate/load_build_map loadmap
 fate/level_script_dispatch brdsp
 fate/edit_save_slot_name savename
 fate/run_menu_loop menuloop
+fate/run_menu_loop mnuret /4r /s /or /bt=dos /dMENU_LOOP_NORMAL_RETURN
 fate/run_save_game_menu savmenu
 fate/run_load_game_menu loadmenu
 engine/slope_height slphgt

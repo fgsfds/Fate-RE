@@ -1,15 +1,17 @@
 """Exercise the menu-loop machine code with deterministic frame and input stubs."""
 import argparse
+import json
 from pathlib import Path
 from struct import pack, unpack
 
 from check_start_hook import image
 from le_fixups import read_le_fixups
 from verify_c_leaf import DATA_OFFSETS, FUNCTION_ADDRESSES, bind_leaf_details, verify_leaf_relocations
+import verify_c_leaf as v
 from unicorn import Uc, UC_ARCH_X86, UC_HOOK_CODE, UC_MODE_32
 from unicorn.x86_const import (
     UC_X86_REG_EAX, UC_X86_REG_EBP, UC_X86_REG_EBX, UC_X86_REG_ECX, UC_X86_REG_EDI,
-    UC_X86_REG_EDX, UC_X86_REG_EIP, UC_X86_REG_ESI, UC_X86_REG_ESP,
+    UC_X86_REG_EDX, UC_X86_REG_EIP, UC_X86_REG_ESI, UC_X86_REG_ESP, UC_X86_REG_EFLAGS,
 )
 
 ADDRESS, SIZE, ENTRY_SIZE = 0x3963b, 283, 17
@@ -95,11 +97,57 @@ def exercise(body, shared_tail, rows, start, updates):
     return events, engine.reg_read(UC_X86_REG_EAX), read_dword(DATA_BASE + STATE)
 
 
+def frame_oracle(entry,cleanup):
+    """Check the actual entry/cleanup against independent register and frame rules."""
+    cases=0
+    registers=(UC_X86_REG_EAX,UC_X86_REG_EBX,UC_X86_REG_ECX,UC_X86_REG_EDX,
+               UC_X86_REG_ESI,UC_X86_REG_EDI,UC_X86_REG_EBP)
+    for seed in range(4):
+        for count in (0,1,32,0xfffffff0):
+            for flags in (0x202,0x8d7):
+                cpu=Uc(UC_ARCH_X86,UC_MODE_32);cpu.mem_map(0,0x400000)
+                cpu.mem_write(ADDRESS,entry)
+                want={r:0xabc00000+seed*0x101+i for i,r in enumerate(registers)}
+                want[UC_X86_REG_EDX]=count
+                incoming=dict(want);rows=0x320000+seed*16
+                frame=bytearray(bytes((i*73+seed)&255 for i in range(256))*2)
+                frame[256:264]=pack('<II',RETURN,rows)
+                cpu.mem_write(STACK-256,bytes(frame));expected=bytearray(frame)
+                for offset,reg in ((252,UC_X86_REG_ESI),(248,UC_X86_REG_EDI),(244,UC_X86_REG_EBP)):
+                    expected[offset:offset+4]=pack('<I',incoming[reg])
+                expected[236:240]=pack('<I',count)
+                for r,value in incoming.items():cpu.reg_write(r,value)
+                cpu.reg_write(UC_X86_REG_ESP,STACK);cpu.reg_write(UC_X86_REG_EFLAGS,flags)
+                cpu.emu_start(ADDRESS,ADDRESS+17,count=20)
+                want.update({UC_X86_REG_ESI:rows,UC_X86_REG_EDI:incoming[UC_X86_REG_EBX],UC_X86_REG_EBP:incoming[UC_X86_REG_ECX]})
+                assert all(cpu.reg_read(r)==value for r,value in want.items())
+                assert cpu.reg_read(UC_X86_REG_ESP)==STACK-20
+                assert cpu.reg_read(UC_X86_REG_EIP)==ADDRESS+17
+                assert cpu.reg_read(UC_X86_REG_EFLAGS)&0xed5==0x10|(flags&0x600)
+                assert cpu.mem_read(STACK-256,512)==expected
+                cases+=1
+    for result in (0,1,0xffffffff):
+        cpu=Uc(UC_ARCH_X86,UC_MODE_32);cpu.mem_map(0,0x400000)
+        address=ADDRESS+275;cpu.mem_write(address,cleanup)
+        want={r:0xabc00000+i for i,r in enumerate(registers)};want[UC_X86_REG_EAX]=result
+        for r,value in want.items():cpu.reg_write(r,value)
+        frame=b'\xa5'*512;cpu.mem_write(STACK-256,frame)
+        cpu.reg_write(UC_X86_REG_ESP,STACK-20);cpu.reg_write(UC_X86_REG_EFLAGS,0x8d7)
+        cpu.emu_start(address,address+3,count=2)
+        assert cpu.reg_read(UC_X86_REG_ESP)==STACK-12
+        assert cpu.reg_read(UC_X86_REG_EIP)==address+3
+        assert all(cpu.reg_read(r)==value for r,value in want.items())
+        assert cpu.reg_read(UC_X86_REG_EFLAGS)&0xed5==0x10
+        assert cpu.mem_read(STACK-256,512)==frame
+    return cases,3
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)
     parser.add_argument('object', type=Path)
-    parser.add_argument('entry', type=Path, help='assembled 17-byte menu entry')
+    parser.add_argument('return_object', type=Path, help='normal-return compiler context')
+    parser.add_argument('--output',type=Path)
     args = parser.parse_args()
 
     executable = args.executable.read_bytes()
@@ -107,14 +155,50 @@ def main():
     unrelocated, refs = bind_leaf_details(
         obj, 'run_menu_loop_', DATA_OFFSETS, address=ADDRESS + ENTRY_SIZE, functions=FUNCTION_ADDRESSES)
     verify_leaf_relocations(unrelocated, refs, read_le_fixups(executable)['pointers'], ADDRESS + ENTRY_SIZE)
-    entry = args.entry.read_bytes()
-    assert len(entry) == ENTRY_SIZE
-    assert len(unrelocated) == SIZE - ENTRY_SIZE and len(refs) == 19
-    assert entry + unrelocated == executable[0x25600 + ADDRESS:0x25600 + ADDRESS + SIZE]
+    assert len(unrelocated) == 258 and len(refs) == 19
     compiled, _ = bind_leaf_details(
         obj, 'run_menu_loop_', {name: DATA_BASE + offset for name, offset in DATA_OFFSETS.items()},
         address=ADDRESS + ENTRY_SIZE, functions=FUNCTION_ADDRESSES)
-    compiled = entry + compiled
+    placed=bytearray(SIZE);canonical=bytearray(SIZE);covered=set(range(17,275))
+    canonical[17:275]=unrelocated;placed[17:275]=compiled
+    return_obj=args.return_object.read_bytes();objects={'menuloop':obj,'mnuret':return_obj}
+    phases=[r for r in v.CONTROLLER_PREFIX_LAYOUT['phases'] if r['routine']=='run_menu_loop']
+    for phase in phases:
+        address=phase['address'];offset=address-ADDRESS;size=phase['end']-phase['begin']
+        sites=set(range(offset,offset+size));assert not covered&sites;covered|=sites
+        raw,bindings=bind_leaf_details(objects[phase['object']],phase['phase'],DATA_OFFSETS,address=address,functions=FUNCTION_ADDRESSES)
+        verify_leaf_relocations(raw,bindings,read_le_fixups(executable)['pointers'],address)
+        canonical[offset:offset+size]=raw
+        code,_=bind_leaf_details(objects[phase['object']],phase['phase'],{name:DATA_BASE+value for name,value in DATA_OFFSETS.items()},address=address,functions=FUNCTION_ADDRESSES)
+        placed[offset:offset+size]=code
+    assert covered==set(range(SIZE))
+    assert canonical==executable[0x25600+ADDRESS:0x25600+ADDRESS+SIZE]
+    compiled=bytes(placed)
+    entry_cases,cleanup_cases=frame_oracle(compiled[:17],compiled[275:278])
+    private=[]
+    for public,blob,size in (('run_menu_loop_',obj,283),('menu_loop_context_',return_obj,284)):
+        alias=public+'complete_private_check'
+        v.LEAF_CODE_SLICES[alias]=(public,0,size,size)
+        try:code,_=bind_leaf_details(blob,alias,{name:DATA_BASE+value for name,value in DATA_OFFSETS.items()},address=ADDRESS,functions=FUNCTION_ADDRESSES)
+        finally:del v.LEAF_CODE_SLICES[alias]
+        private.append(code)
+    from check_ripple_stack import mutate_public_byte
+    from check_ripple_control import rename_external
+    controls=0
+    def rejected(blob,phase,message):
+        nonlocal controls
+        try:bind_leaf_details(blob,phase['phase'],DATA_OFFSETS,address=phase['address'],functions=FUNCTION_ADDRESSES)
+        except ValueError as error:
+            assert message in str(error).lower();controls+=1
+        else:raise AssertionError('Menu private context mutation escaped')
+    first=next(r for r in phases if r['phase']=='run_menu_entry_frame_phase_')
+    cleanup=next(r for r in phases if r['object']=='mnuret')
+    rejected(mutate_public_byte(obj,'run_menu_loop_',275),first,'context')
+    rejected(mutate_public_byte(return_obj,'menu_loop_context_',283),cleanup,'context')
+    rejected(rename_external(obj,b'presentation_reset_',b'presentation_reseu_'),first,'fixup')
+    digest=v.LEAF_CONTEXT_SHA256.pop('menu_loop_context_')
+    try:rejected(mutate_public_byte(return_obj,'menu_loop_context_',28),cleanup,'addend')
+    finally:v.LEAF_CONTEXT_SHA256['menu_loop_context_']=digest
     linked = image(executable)
     cases = (
         (NORMAL_ROWS, 2, ((1, -1, 1),),
@@ -127,9 +211,14 @@ def main():
           0, 0)),
     )
     for rows, initial, updates, expected in cases:
-        for body in (linked[ADDRESS:ADDRESS + SIZE], compiled):
+        for body in (linked[ADDRESS:ADDRESS + SIZE], compiled,*private):
             assert exercise(body, linked[TAIL:TAIL + 6], rows, initial, updates) == expected
-    print(f'{len(cases)} menu-loop scenarios and {len(refs)} LE relocations passed.')
+    result=dict(status='PASS',scenarios=len(cases),reference_executions=len(cases),placed_executions=len(cases),
+                private_executions=len(cases)*len(private),entry_frame_cases=entry_cases,cleanup_cases=cleanup_cases,
+                context_controls=controls,le_sites=len(refs),c_object_bytes=283,retained_assembly_bytes=0)
+    output=args.output or args.object.parent/'menu-loop.json'
+    output.write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
+    print(json.dumps(result))
 
 
 if __name__ == '__main__':

@@ -64,8 +64,13 @@ extern long count_in_eax(long);
 extern void keep_selection_and_state(unsigned *, long);
 #pragma aux keep_selection_and_state = "" parm [eax] [ebx] modify exact [];
 
-/* The original assembly entry initializes the frame in historical instruction order.
- * The build uses the Watcom output from byte 17 onward. */
+/* Production selects the frame setup and count store in original order.
+ * The normal-return variant supplies the compiler-generated stack release;
+ * the original context supplies the shared return jump and remaining body. */
+#ifdef MENU_LOOP_NORMAL_RETURN
+#pragma aux menu_loop_context parm routine [eax] [edx] [ebx] [ecx] modify exact [eax edx ebx ecx];
+#define run_menu_loop menu_loop_context
+#endif
 int run_menu_loop(unsigned *selection, int count, short background, const char *title, MenuRecord **rows)
 {
     struct {
@@ -138,6 +143,10 @@ int run_menu_loop(unsigned *selection, int count, short background, const char *
     } else {
         result = 1;
     }
+#ifdef MENU_LOOP_NORMAL_RETURN
+    return result;
+#else
     release_menu_loop_frame();
     return menu_loop_return(result);
+#endif
 }

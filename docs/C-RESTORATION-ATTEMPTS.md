@@ -339,17 +339,10 @@ The bitmap addresses and dword counts can now come from C. A further
 attempt needs a compiler-recognized dword fill that preserves
 the register state across the next read.
 
-### Menu loop entry
 
-The 17-byte entry still comes from assembly. Watcom schedules the argument
-copies into EDI and EBP before storing the count. A volatile parameter
-variant instead stores the count before loading the ESI row pointer.
-Disabling scheduling moves the EDI copy ahead of the ESI load. The
-original loads ESI, stores the count, then copies the other arguments.
+### Menu loop mask shift
 
-### Menu entry mask shift
-
-Replacing the inline shift with a C expression using a byte count added
+`run_menu_loop_`: replacing the inline shift with a C expression using a byte count added
 an AND ECX, 255. Reading the full shift register and masking to the x86
 five-bit count instead added an AND ECX, 31. The target shifts directly
 by CL, so the inline shift remains.
