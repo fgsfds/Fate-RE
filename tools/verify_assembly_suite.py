@@ -1660,12 +1660,6 @@ ROUTINES = [
       0xe793c, 184: 0xff875, 192: 0xe793c, 199: 0xff878, 205: 0xff875, 211: 0xe78fc, 218: 0xff878, 228: 0xe78fc,
       235: 0xff876, 243: 0xff879, 250: 0xff875, 257: 0xff875, 265: 0xe793c, 272: 0xff878, 278: 0xff875, 284:
       0xe78fc, 291: 0xff878, 303: 0xe78fc, 308: 0xff878, 317: 0xff878, 324: 0xff879}),
-    ('animate_ripple_texture', 'fate/animate_ripple_texture.asm', 'animate_ripple_texture.bin', 0x2eb57, 855,
-     {18: 0xf70e0, 53: 0xf70e0, 65: 0xe77bc, 80: 0xf70e0, 93: 0xe773c, 100: 0xe2fcc, 106: 0xf70e0, 118: 0xf70e0,
-      141: 0xe2fcc, 150: 0xe30fc, 161: 0xe2fcc, 168: 0xdae5c, 179: 0xe77bc, 191: 0xe773c, 215: 0xdaedc, 223:
-      0xdeedc, 276: 0xe2fcc, 283: 0xe2fcc, 294: 0xf70e0, 302: 0xe77bc, 309: 0xe2fcc, 315: 0xf70e0, 321: 0xe77bc,
-      328: 0xe773c, 334: 0xe2fcc, 340: 0xe773c, 359: 0xe33a1, 426: 0xe331d, 438: 0xe75a0, 484: 0xe331c, 497:
-      0xe339d, 518: 0xe331c, 531: 0xe339d, 541: 0xe75a0, 554: 0xe7623, 578: 0xe331c, 841: 0xf70f4}),
     ('render_gameplay_frame', 'fate/gameplay_frame.asm', 'gameplay_frame.bin', 0x2c48d, 3376,
      {53: 0xf70bc, 70: 0xdad9c, 77: 0xacaac, 83: 0xf70bc, 98: 0xacaac, 105: 0xacaec, 114: 0xdad5c, 120: 0xf70bc,
       139: 0xacaec, 146: 0xaca6c, 155: 0xdad1c, 161: 0xf70bc, 180: 0xaca6c, 193: 0xe2f8c, 200: 0xaca2c, 206:
@@ -3778,8 +3772,6 @@ DATA_POINTER_SITES = {
      5144, 5166, 5188, 5210, 5227, 5251, 5273, 5295, 5317, 5331, 5343, 5353, 5366, 5380, 5394),
     'keyboard_interrupt': (24, 29, 40, 51, 56, 69, 82, 102, 113, 119, 130, 144, 150, 157, 164, 170, 184, 192,
      199, 205, 211, 218, 228, 235, 243, 250, 257, 265, 272, 278, 284, 291, 303, 308, 317, 324,),
-    'animate_ripple_texture': (18, 53, 65, 80, 93, 100, 106, 118, 141, 150, 161, 168, 179, 191, 215, 223, 276,
-     283, 294, 302, 309, 315, 321, 328, 334, 340, 359, 426, 438, 484, 497, 518, 531, 541, 554, 578, 841,),
     'render_gameplay_frame': (53, 70, 77, 83, 98, 105, 114, 120, 139, 146, 155, 161, 180, 193, 200, 206, 221,
      228, 237, 243, 262, 272, 289, 302, 321, 331, 351, 366, 380, 396, 406, 414, 428, 436, 443, 454, 483, 494,
      516, 523, 600, 606, 612, 620, 626, 634, 640, 650, 658, 666, 672, 694, 709, 718, 728, 738, 746, 768, 780,
@@ -4202,34 +4194,6 @@ DATA_POINTER_SITES = {
                       'faketimerhandler_': TIMER_CALLBACK_POINTERS.keys(),
                       'start_sequence_': START_SEQUENCE_POINTERS.keys(), 'clipmove_': CLIPMOVE_POINTERS.keys(), 'slopevlin2_': {16, 22, 51, 63}, 'hlineasm4_': {37, 71, 104, 77, 110, 182, 152, 31}, 'mvlineasm4_': {2, 8, 141, 147, 24, 153, 30, 159, 171, 46, 52, 68, 74, 338, 90, 350, 96, 356, 362, 368, 116, 122}, 'vlineasm4_': {2, 8, 140, 24, 153, 30, 159, 165, 171, 46, 307, 52, 313, 319, 68, 325, 74, 90, 96, 112, 118}, 'tvlineasm2_': {10, 32, 274, 280}, 'mhline_': {16, 46, 61}, 'mhlineskipmodify_': {22, 34},
                       'thline_': {16, 36, 51}, 'thlineskipmodify_': {24, 36}}
-
-
-# Four 38-byte stencil bodies now come from one verified C leaf.
-_ripple_original = next(row for row in ROUTINES if row[0] == 'animate_ripple_texture')
-ROUTINES.remove(_ripple_original)
-_ripple_data = DATA_POINTER_SITES.pop('animate_ripple_texture')
-for _symbol, _begin, _end, _binary in (
-        ('animate_ripple_entry', 0x0, 0x6, 0),
-        ('animate_ripple_create', 0x29, 0x2b, 6),
-        ('animate_ripple_radial', 0x73, 0x75, 8),
-        ('animate_ripple_radial_tail', 0x7e, 0x83, 10),
-        ('animate_ripple_radial_1', 0xc3, 0xc5, 15),
-        ('animate_ripple_radial_guard', 0x10a, 0x10c, 17),
-        ('animate_ripple_control_finish_tail', 0x16f, 0x171, 19),
-        ('animate_ripple_mask_guard', 0x198, 0x19a, 21),
-        ('animate_ripple_border', 0x1c4, 0x1c6, 23),
-        ('animate_ripple_border_2', 0x1fb, 0x1fd, 25),
-        ('animate_ripple_output_setup', 0x22e, 0x233, 27),
-        ('animate_ripple_output_setup_1', 0x252, 0x257, 32),
-        ('animate_ripple_pack_fourth', 0x350, 0x356, 37),
-):
-    ROUTINES.append((_symbol, _ripple_original[1], _ripple_original[2],
-                     _ripple_original[3] + _begin, _end - _begin,
-                     {site - _begin: target for site, target in _ripple_original[5].items()
-                      if _begin <= site < _end}))
-    GROUP_SLICES[_symbol] = (_binary, 43)
-    DATA_POINTER_SITES[_symbol] = tuple(site - _begin for site in _ripple_data
-                                       if _begin <= site < _end)
 
 
 def verify_pointer_operands(code, expected, data_sites=()):

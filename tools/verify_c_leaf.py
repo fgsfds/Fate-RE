@@ -3697,6 +3697,8 @@ LEAF_CONTEXT_LITERALS = {}
 
 # Complete private contexts, including unlinked stack wrappers and shared tails.
 LEAF_CONTEXT_BYTES = {}
+# Digest guards keep larger complete contexts compact.
+LEAF_CONTEXT_SHA256 = {}
 
 LEAF_CONTEXT_FIXUPS = {
     'main_caption_setup_': {2: ('_loading_caption_columns', False),
@@ -3950,6 +3952,9 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
     expected_context = LEAF_CONTEXT_BYTES.get(public_name)
     if expected_context is not None and bytes(code) != expected_context:
         raise ValueError('Compiler private context bytes differ')
+    expected_digest = LEAF_CONTEXT_SHA256.get(public_name)
+    if expected_digest is not None and hashlib.sha256(code).hexdigest() != expected_digest:
+        raise ValueError('Compiler private context digest differs')
     suffix = LEAF_CONTEXT_SUFFIXES.get(public_name, b'')
     if suffix and not code.endswith(suffix):
         raise ValueError('Unlinked compiler context suffix differs')
@@ -3970,11 +3975,18 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
         if len(observed) != len(context_fixups) or {f.offset-start for f in observed} != context_fixups.keys():
             raise ValueError('Compiler context fixup inventory differs')
         for f in observed:
-            if (f.location != 9 or f.width != 4 or f.target[0] != 2
+            expected = context_fixups[f.offset-start]
+            if len(expected) not in (2, 3):
+                raise ValueError('Invalid compiler context fixup metadata')
+            name, relative = expected[:2]
+            addend = expected[2] if len(expected) == 3 else 0
+            if (type(addend) is not int or not 0 <= addend <= 0xffffffff
+                    or f.location != 9 or f.width != 4 or f.target[0] != 2
                     or not 0 < f.target[1] < len(externals)
                     or f.frame[0] != 1 or f.frame[1] not in flat_groups
-                    or f.displacement or code[f.offset-start:f.offset-start+4] != bytes(4)
-                    or (externals[f.target[1]], f.relative) != context_fixups[f.offset-start]):
+                    or f.displacement
+                    or int.from_bytes(code[f.offset-start:f.offset-start+4], 'little') != addend
+                    or (externals[f.target[1]], f.relative) != (name, relative)):
                 raise ValueError('Compiler context fixup target/form/addend differs')
     literal = LEAF_CONTEXT_LITERALS.get(public_name)
     literal_sites = {} if literal is None else literal[2]
@@ -4973,6 +4985,38 @@ LEAF_CONTEXT_FIXUPS['ripple_sample_guard_'] = {5: ('ripple_sample_continue_', Tr
 LEAF_CONTEXT_FIXUPS['ripple_spawn_guard_'] = {5: ('ripple_spawn_continue_', True)}
 LEAF_CONTEXT_FIXUPS['ripple_last_slot_'] = {1: ('_ripple_count', False)}
 LEAF_CONTEXT_FIXUPS['ripple_random_draw_'] = {1: ('random_value_', True)}
+
+FUNCTION_ADDRESSES['ripple_flow_context_'] = 0x2eb57
+LEAVES['ripple_control_saved_registers_phase_'] = (0x54157, 6)
+LEAF_CODE_SLICES['ripple_control_saved_registers_phase_'] = ('ripple_flow_context_', 0, 6, 865)
+LEAVES['ripple_control_branch_2eb80_phase_'] = (0x54180, 2)
+LEAF_CODE_SLICES['ripple_control_branch_2eb80_phase_'] = ('ripple_flow_context_', 47, 49, 865)
+LEAVES['ripple_control_branch_2ebca_phase_'] = (0x541ca, 2)
+LEAF_CODE_SLICES['ripple_control_branch_2ebca_phase_'] = ('ripple_flow_context_', 117, 119, 865)
+LEAVES['ripple_control_branch_2ebd5_phase_'] = (0x541d5, 5)
+LEAF_CODE_SLICES['ripple_control_branch_2ebd5_phase_'] = ('ripple_flow_context_', 128, 133, 865)
+LEAVES['ripple_control_branch_2ec1a_phase_'] = (0x5421a, 2)
+LEAF_CODE_SLICES['ripple_control_branch_2ec1a_phase_'] = ('ripple_flow_context_', 195, 197, 865)
+LEAVES['ripple_control_branch_2ec61_phase_'] = (0x54261, 2)
+LEAF_CODE_SLICES['ripple_control_branch_2ec61_phase_'] = ('ripple_flow_context_', 260, 262, 865)
+LEAVES['ripple_control_branch_2ecc6_phase_'] = (0x542c6, 2)
+LEAF_CODE_SLICES['ripple_control_branch_2ecc6_phase_'] = ('ripple_flow_context_', 365, 367, 865)
+LEAVES['ripple_control_branch_2ecef_phase_'] = (0x542ef, 2)
+LEAF_CODE_SLICES['ripple_control_branch_2ecef_phase_'] = ('ripple_flow_context_', 406, 408, 865)
+LEAVES['ripple_control_branch_2ed1b_phase_'] = (0x5431b, 2)
+LEAF_CODE_SLICES['ripple_control_branch_2ed1b_phase_'] = ('ripple_flow_context_', 450, 452, 865)
+LEAVES['ripple_control_branch_2ed52_phase_'] = (0x54352, 2)
+LEAF_CODE_SLICES['ripple_control_branch_2ed52_phase_'] = ('ripple_flow_context_', 506, 508, 865)
+LEAVES['ripple_control_branch_2ed85_phase_'] = (0x54385, 5)
+LEAF_CODE_SLICES['ripple_control_branch_2ed85_phase_'] = ('ripple_flow_context_', 560, 565, 865)
+LEAVES['ripple_control_branch_2eda9_phase_'] = (0x543a9, 5)
+LEAF_CODE_SLICES['ripple_control_branch_2eda9_phase_'] = ('ripple_flow_context_', 595, 600, 865)
+LEAVES['ripple_control_restored_registers_phase_'] = (0x544a7, 6)
+LEAF_CODE_SLICES['ripple_control_restored_registers_phase_'] = ('ripple_flow_context_', 858, 864, 865)
+LEAF_CONTEXT_SHA256['ripple_flow_context_'] = 'c0078b4844f0f1b673fface7613e70ce1b16493b64bdf03b0d8473702665305b'
+LEAF_CONTEXT_SUFFIXES['ripple_flow_context_'] = b'\xc3'
+LEAF_CONTEXT_FIXUPS['ripple_flow_context_'] = {20: ('_ripple_count', False, 0), 50: ('random_value_', True, 0), 57: ('_ripple_count', False, 0), 69: ('_ripple_origin_x', False, 0), 74: ('random_value_', True, 0), 84: ('_ripple_count', False, 0), 94: ('_ripple_origin_y', False, 0), 101: ('_ripple_radius', False, 0), 108: ('_ripple_count', False, 0), 120: ('_ripple_count', False, 0), 136: ('_ripple_radius', False, 0), 148: ('_ripple_speed', False, 0), 159: ('_ripple_radius', False, 0), 166: ('_radial_sample_count', False, 0), 180: ('_ripple_origin_x', False, 0), 191: ('_ripple_origin_y', False, 0), 215: ('_radial_x_offsets', False, 0), 223: ('_radial_y_offsets', False, 0), 270: ('_ripple_radius', False, 0), 277: ('_ripple_radius', False, 0), 288: ('_ripple_count', False, 0), 296: ('_ripple_origin_x', False, 0), 303: ('_ripple_radius', False, 0), 310: ('_ripple_origin_y', False, 0), 316: ('_ripple_count', False, 0), 322: ('_ripple_origin_x', False, 0), 328: ('_ripple_radius', False, 0), 334: ('_ripple_origin_y', False, 0), 355: ('_ripple_buffer', False, 133), 424: ('_ripple_buffer', False, 1), 436: ('_ripple_buffer', False, 17028), 485: ('_ripple_buffer', False, 0), 496: ('_ripple_buffer', False, 129), 517: ('_ripple_buffer', False, 0), 530: ('_ripple_buffer', False, 129), 540: ('_ripple_buffer', False, 17028), 556: ('_ripple_buffer', False, 17159), 579: ('_ripple_buffer', False, 0), 851: ('_ripple_frame', False, 0)}
+LEAF_SECTION_BRANCHES['ripple_flow_context_'] = (865, 855, {47: (b'\xeb', 112, 110), 117: (b'}', 49, 43), 128: (b'\xe9', 341, 347), 195: (b'\xeb', 258, 264), 260: (b'}', 197, 197), 365: (b'\xeb', 400, 402), 406: (b'|', 367, 369), 450: (b'\xeb', 500, 501), 506: (b'|', 452, 454), 560: (b'\xe9', 837, 827), 595: (b'\xe9', 826, 816)})
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

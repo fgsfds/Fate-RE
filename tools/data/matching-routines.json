@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1348,
-  "unique_code_bytes": 182126,
+  "routines": 1361,
+  "unique_code_bytes": 182169,
   "le_pointers": 10008,
   "non_routine_code_spans": [
     {
@@ -1710,6 +1710,16 @@
       "le_pointers": 8
     },
     {
+      "symbol": "ripple_control_saved_registers_phase_",
+      "object": "ripflow.obj",
+      "object_sha256": "3f559edb50b0dd1c12f12b8b676f8e67a2f97d451f77fc5564bfeac3ba15ddb7",
+      "sha256": "21f784e92e3fbe130cfc5c00c283283d3177b7e09bff21d535b1c31bda8ea6ec",
+      "raw_offset": "0x54157",
+      "loaded_address": "0x2eb57",
+      "bytes": 6,
+      "le_pointers": 0
+    },
+    {
       "symbol": "ripple_frame_allocate_phase_",
       "object": "ripidx.obj",
       "object_sha256": "62e4788c513d0a945ea62e212b0ee451b37f8b031e683e0820e8edcff5c1e2a6",
@@ -1757,6 +1767,16 @@
       "raw_offset": "0x5417d",
       "loaded_address": "0x2eb7d",
       "bytes": 3,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "ripple_control_branch_2eb80_phase_",
+      "object": "ripflow.obj",
+      "object_sha256": "3f559edb50b0dd1c12f12b8b676f8e67a2f97d451f77fc5564bfeac3ba15ddb7",
+      "sha256": "4f355d25287a883af80e0a1fcd4fe8422b018375033943fd5c15da969e1cb664",
+      "raw_offset": "0x54180",
+      "loaded_address": "0x2eb80",
+      "bytes": 2,
       "le_pointers": 0
     },
     {
@@ -1870,6 +1890,16 @@
       "le_pointers": 0
     },
     {
+      "symbol": "ripple_control_branch_2ebca_phase_",
+      "object": "ripflow.obj",
+      "object_sha256": "3f559edb50b0dd1c12f12b8b676f8e67a2f97d451f77fc5564bfeac3ba15ddb7",
+      "sha256": "030399778310018e272a5ece266701d7a8e55f7b7cf6081dc89400d11670b7c4",
+      "raw_offset": "0x541ca",
+      "loaded_address": "0x2ebca",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
       "symbol": "ripple_last_slot_phase_",
       "object": "riptest.obj",
       "object_sha256": "3355e33ba9f94ace876a38947eb31bab16067f22367091af428f5c17ac6aab15",
@@ -1887,6 +1917,16 @@
       "raw_offset": "0x541d2",
       "loaded_address": "0x2ebd2",
       "bytes": 3,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "ripple_control_branch_2ebd5_phase_",
+      "object": "ripflow.obj",
+      "object_sha256": "3f559edb50b0dd1c12f12b8b676f8e67a2f97d451f77fc5564bfeac3ba15ddb7",
+      "sha256": "a56bce192c7c41a9fad3a7e8a0213dd21287df8e3c5de774ed89b14030ce8397",
+      "raw_offset": "0x541d5",
+      "loaded_address": "0x2ebd5",
+      "bytes": 5,
       "le_pointers": 0
     },
     {
@@ -1918,6 +1958,16 @@
       "loaded_address": "0x2ec13",
       "bytes": 7,
       "le_pointers": 1
+    },
+    {
+      "symbol": "ripple_control_branch_2ec1a_phase_",
+      "object": "ripflow.obj",
+      "object_sha256": "3f559edb50b0dd1c12f12b8b676f8e67a2f97d451f77fc5564bfeac3ba15ddb7",
+      "sha256": "4f355d25287a883af80e0a1fcd4fe8422b018375033943fd5c15da969e1cb664",
+      "raw_offset": "0x5421a",
+      "loaded_address": "0x2ec1a",
+      "bytes": 2,
+      "le_pointers": 0
     },
     {
       "symbol": "ripple_radial_sample_phase_",
@@ -1956,6 +2006,16 @@
       "sha256": "8ab1132e0f39300a69111599262ce5db7c26e24b7eb3cc9ae866e97c67ff49bd",
       "raw_offset": "0x5425f",
       "loaded_address": "0x2ec5f",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "ripple_control_branch_2ec61_phase_",
+      "object": "ripflow.obj",
+      "object_sha256": "3f559edb50b0dd1c12f12b8b676f8e67a2f97d451f77fc5564bfeac3ba15ddb7",
+      "sha256": "96a00576308d54044497eefcb47d3b557b58eb7b2e9d4bd2d8d031e868c9ec82",
+      "raw_offset": "0x54261",
+      "loaded_address": "0x2ec61",
       "bytes": 2,
       "le_pointers": 0
     },
@@ -2030,6 +2090,16 @@
       "le_pointers": 0
     },
     {
+      "symbol": "ripple_control_branch_2ecc6_phase_",
+      "object": "ripflow.obj",
+      "object_sha256": "3f559edb50b0dd1c12f12b8b676f8e67a2f97d451f77fc5564bfeac3ba15ddb7",
+      "sha256": "9e012a3091d94ebfe8cb1b4cf85bab776ee446a1254df377dc6c881406b1fc7d",
+      "raw_offset": "0x542c6",
+      "loaded_address": "0x2ecc6",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
       "symbol": "ripple_mask_row_phase_",
       "object": "ripctl.obj",
       "object_sha256": "7e3de68f99191ae2085323e1bc61b2f42117bbd26b79614db6dc642490e96b31",
@@ -2060,6 +2130,16 @@
       "le_pointers": 0
     },
     {
+      "symbol": "ripple_control_branch_2ecef_phase_",
+      "object": "ripflow.obj",
+      "object_sha256": "3f559edb50b0dd1c12f12b8b676f8e67a2f97d451f77fc5564bfeac3ba15ddb7",
+      "sha256": "62629152af4c58961d9e0dbac6f92db1aa226bc583adb70ba076c90237b78477",
+      "raw_offset": "0x542ef",
+      "loaded_address": "0x2ecef",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
       "symbol": "ripple_border_initialize_",
       "object": "ripbord.obj",
       "object_sha256": "8c177ced5bbeeb1d35b8313ce7b3c770f5e51f1eb7ad63d3bd2b342185754472",
@@ -2086,6 +2166,16 @@
       "sha256": "fbcf9936508635c7a3d17b1975fbb99ba24f608bddef85f3cf7d69cff6d95d2b",
       "raw_offset": "0x54319",
       "loaded_address": "0x2ed19",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "ripple_control_branch_2ed1b_phase_",
+      "object": "ripflow.obj",
+      "object_sha256": "3f559edb50b0dd1c12f12b8b676f8e67a2f97d451f77fc5564bfeac3ba15ddb7",
+      "sha256": "304c9bf8d28eb0d8c6e40bebae8ee1e04890d94c03c76fe18d08a25846f130ce",
+      "raw_offset": "0x5431b",
+      "loaded_address": "0x2ed1b",
       "bytes": 2,
       "le_pointers": 0
     },
@@ -2127,6 +2217,16 @@
       "raw_offset": "0x5434c",
       "loaded_address": "0x2ed4c",
       "bytes": 6,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "ripple_control_branch_2ed52_phase_",
+      "object": "ripflow.obj",
+      "object_sha256": "3f559edb50b0dd1c12f12b8b676f8e67a2f97d451f77fc5564bfeac3ba15ddb7",
+      "sha256": "1142afa66c368e64653dbf681afaab7f00d8ad1eb47b1757e4cf7ec44ef9f764",
+      "raw_offset": "0x54352",
+      "loaded_address": "0x2ed52",
+      "bytes": 2,
       "le_pointers": 0
     },
     {
@@ -2180,6 +2280,16 @@
       "le_pointers": 1
     },
     {
+      "symbol": "ripple_control_branch_2ed85_phase_",
+      "object": "ripflow.obj",
+      "object_sha256": "3f559edb50b0dd1c12f12b8b676f8e67a2f97d451f77fc5564bfeac3ba15ddb7",
+      "sha256": "f58ed3948e5a25baec375db28cd6c911bf01a06d74e7c6a3e80aec51f1b4dd13",
+      "raw_offset": "0x54385",
+      "loaded_address": "0x2ed85",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
       "symbol": "ripple_output_row_phase_",
       "object": "ripout.obj",
       "object_sha256": "3164ceb4437b23e4ac051712bec60eb1867d849b48ae79f07c833ecbe062376e",
@@ -2188,6 +2298,16 @@
       "loaded_address": "0x2ed8a",
       "bytes": 31,
       "le_pointers": 1
+    },
+    {
+      "symbol": "ripple_control_branch_2eda9_phase_",
+      "object": "ripflow.obj",
+      "object_sha256": "3f559edb50b0dd1c12f12b8b676f8e67a2f97d451f77fc5564bfeac3ba15ddb7",
+      "sha256": "2251af1caf4d07c83df072f3b5793bec6f61b3ea2775813ea701b071bc228467",
+      "raw_offset": "0x543a9",
+      "loaded_address": "0x2eda9",
+      "bytes": 5,
+      "le_pointers": 0
     },
     {
       "symbol": "ripple_stencil_center_phase_",
@@ -2377,6 +2497,16 @@
       "raw_offset": "0x544a4",
       "loaded_address": "0x2eea4",
       "bytes": 3,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "ripple_control_restored_registers_phase_",
+      "object": "ripflow.obj",
+      "object_sha256": "3f559edb50b0dd1c12f12b8b676f8e67a2f97d451f77fc5564bfeac3ba15ddb7",
+      "sha256": "bb1c54d60968c9301cc4ac1e93c10c03ec5a7e03048de8011b0a40e763882b1e",
+      "raw_offset": "0x544a7",
+      "loaded_address": "0x2eea7",
+      "bytes": 6,
       "le_pointers": 0
     },
     {

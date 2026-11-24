@@ -337,3 +337,22 @@ copy and RET rather than a tail JMP. The ripple build links the CALL
 twice; existing coordinate phases perform the result copy. Guard the
 unlinked copy/RET and the relative-call symbol, and test the actual call
 stack before relying on the selected instruction alone.
+
+
+The remaining ripple control layout comes from a complete readable C
+algorithm context. Its 865-byte compiler function supplies 43 matching
+save/restore/transfer bytes to the 855-byte production routine; exact C
+phase contexts supply the other 812. Register allocation may differ in
+unlinked producers, so verify the logical predicate and actual placed
+flag producer for each selected conditional branch. Preserve the compiler
+opcode and width, check its original internal target, then remap only its
+displacement to the corresponding production label. Check all edges and
+save/restore order independently, and execute both the private whole C
+model and the final routine against the toroidal oracle.
+
+Guard large private contexts with the raw CODE SHA-256 as well as a
+complete fixup inventory. Two-field context fixup metadata requires a
+zero raw addend; an optional third field pins a nonzero DATA addend.
+This protects unlinked symbolic references even when selected spans have
+no LE sites. The ripple fixture rejects a changed private opcode/return,
+external name, addend, compiler target and production destination.

@@ -1535,6 +1535,8 @@ def verify_compiler_groups(exe, directory, names=None):
         verify_group_layout((directory/'ripout.obj').read_bytes(), 49,
                             [('ripple_output_row_', 0), ('ripple_store_output_', 32),
                              ('ripple_mask_begin_', 41)])
+    if selected('ripflow'):
+        verify_group_layout((directory/'ripflow.obj').read_bytes(), 865, [('ripple_flow_context_', 0)])
     if selected('ripidx'):
         verify_group_layout((directory/'ripidx.obj').read_bytes(), 37,
                             [('ripple_seed_and_read_ecx_', 0), ('ripple_commit_and_read_eax_', 13),
@@ -1653,6 +1655,19 @@ OBJECT_NAMES['ripple_vertical_tail_phase_'] = 'ripbord'
 OBJECT_NAMES['ripple_output_row_phase_'] = 'ripout'
 OBJECT_NAMES['ripple_store_output_phase_'] = 'ripout'
 OBJECT_NAMES['ripple_mask_begin_phase_'] = 'ripout'
+OBJECT_NAMES['ripple_control_saved_registers_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2eb80_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2ebca_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2ebd5_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2ec1a_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2ec61_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2ecc6_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2ecef_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2ed1b_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2ed52_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2ed85_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2eda9_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_restored_registers_phase_'] = 'ripflow'
 OBJECT_NAMES['ripple_frame_allocate_phase_'] = 'ripidx'
 OBJECT_NAMES['ripple_index_seed_phase_'] = 'ripidx'
 OBJECT_NAMES['ripple_index_commit_phase_'] = 'ripidx'

@@ -1,28 +1,29 @@
 # Exact C restoration progress
 
-The current saved attribution audit covers all 414,639 CODE bytes and includes 559 compiler units. Saved full validation passed 398 tests and 137 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
+The current saved attribution audit covers all 414,639 CODE bytes and includes 560 compiler units. Saved full validation passed 398 tests and 138 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 156,408 | 37.721% |
+| Compiler-generated instructions | 156,451 | 37.732% |
 | Inline assembly instructions in C objects | 24,311 | 5.863% |
-| Standalone assembly | 232,513 | 56.076% |
+| Standalone assembly | 232,470 | 56.066% |
 | Unattributed instructions and non-routine tables | 1,407 | 0.339% |
 
-The unattributed category contains 1,038 instruction bytes in 22 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 256,824 bytes (61.94%). C-object inventory covers 182,126 bytes (43.92%) and 1,348 C routine spans; the assembly inventory has 499 spans.
+The unattributed category contains 1,038 instruction bytes in 22 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 256,781 bytes (61.93%). C-object inventory covers 182,169 bytes (43.93%) and 1,361 C routine spans; the assembly inventory has 486 spans.
 
 The accepted executable is 741,347 bytes, SHA-256 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.
 
-Ripple animation now links 812 compiler-generated image bytes (94.97%
-of its 855-byte routine): count clamp 22, masked row 32, top/bottom border
+Ripple animation is entirely compiler-generated C: all 855 image bytes
+(100% of the routine), including count clamp 22, masked row 32, top/bottom border
 40, corner stores 45, X-slot update 17, Y-slot update 33, pixel floor 14,
 radius advance/removal 73, and four
 stencil sums totaling 152. The sums reuse one 38-byte compiler body;
-distinct selected compiler instructions total 669 bytes. Thirty-nine compiler
+distinct selected compiler instructions total 712 bytes. Forty compiler
 RETs remain unlinked and guarded. The border context also excludes its
 private ESI save/copy/restore and identity EDX copy. The C phases have
-37 LE sites and no inline instructions; 43 assembly bytes and no LE sites remain.
-The new radial setup/sample contribute 107 bytes and seven LE sites; packing
+37 LE sites, no inline instructions and no remaining assembly bytes.
+The assembly source and its production registration have been removed.
+Radial setup/sample contribute 107 bytes and seven LE sites; packing
 adds 44 bytes without relocations. The radial fixtures check 9,600 setup and
 7,680 sample cases, including raw unsigned arithmetic and the original frame
 fields. Packing checks 18,432 bounded ABI cases with exhaustive low bytes
@@ -43,8 +44,18 @@ last-slot initialization 6 and two RNG calls 10. Complete context-byte
 and zero-fixup guards preserve the local frame and private shared tails.
 The new stack fixture passes 248 register/frame/flag/continuation cases
 and rejects six valid-checksum OMF mutations to private compiler context.
-Only twelve register saves/restores and eleven transfers remain assembly;
-all pixel/state operations and LE sites come from C.
+The final 43 bytes cover twelve register saves/restores and eleven
+transfers from a complete, readable C algorithm context. Its 865-byte
+public supplies only those selected bytes; exact phase contexts supply
+the other 812 production bytes. The private 822 context bytes receive no
+coverage credit. A raw CODE digest and all 39 fixup targets/addends guard
+the context; the verifier pins compiler branch targets and places their
+displacements without changing opcode widths. This is a restoration via
+selected C contexts, not a standalone 855-byte compiler public.
+The final control fixture checks 399 edge cases and two save/restore
+cases, and executes 32 private-model plus 32 production cases against
+the same independent toroidal oracle. Six mutation controls cover private
+code, symbolic references, addends and compiler/production destinations.
 The vertical fixture passes 516 mixed-context
 cases. Output checks all 128 row/end-pointer states, 64 aligned/unaligned
 word stores, 32 branch/increment/handoff cases, and two handoff mutations. Both output modes compare the entire
@@ -89,12 +100,13 @@ The receiver has 916 native C bytes, 0 retained ASM bytes, and 65 LE sites, with
 
 The saved full validation and audit artifacts verify the pinned image:
 
-- Full validation and 137 fixtures: `work/palette-loop-check/validation.json`.
+- Full validation and 138 fixtures: `work/palette-loop-check/validation.json`.
 - Encounter frame behavior: `work/encounter-frame-build/encounter-frame-behavior.json`.
 - Video initialization handoff: `work/setmode-display-handoff.json`.
 - Ripple parent and C sum behavior: `work/palette-loop-check/ripple-texture-behavior.json`.
 - Ripple stack/control ABI: `work/palette-loop-check/ripple-stack.json`.
-- Attribution audit: `work/ripple-stack-audit.json`.
+- Complete ripple control/model: `work/palette-loop-check/ripple-control.json`.
+- Attribution audit: `work/ripple-complete-audit.json`.
 - Unit test log: `work/palette-loop-check/logs/unit-tests.log`.
 - Encounter loop setup and position phase: `work/encounter-loop-build/behavior.json`.
 - Encounter trigger/sector/clock phase: `work/encounter-spawn-build/behavior.json`.

@@ -868,21 +868,3 @@ context with the original incoming EBX live through the phase, testing register
 availability rather than another union spelling. Sources and reports:
 `work/spawn-attributes-research/` and
 `work/spawn-attributes-v1/` through `work/spawn-attributes-v3/`.
-
-### Ripple animation: final control/frame consolidation
-
-Watcom 10.5 `/4r /s /or /bt=dos`: the closest whole C candidate remains
-865 bytes versus 855. Its first meaningful mismatch is an extra
-MOV EBP,EAX at +0xB, preserving the texture pointer where the original
-keeps EDX. Selected C contexts now supply 812 image bytes, all 37 LE
-sites, frame allocation/release, stack-index operations, RNG calls and
-guard predicates. The remaining 43 assembly bytes are six saved-register
-pushes, six pops and eleven control transfers. Initialized volatile
-20-byte local contexts resolve the old stack-index spills; complete raw
-contexts and absent fixups guard their private wrappers and shared tails.
-A direct ESP getter instead homes the pointer in EAX and adds wrappers
-(`work/ripple-v47/`); the accepted local model is `work/ripple-v48/`.
-Next consolidate the saved-register and control layout around the matched
-EDX/EBP lifetimes. Whole source/report: `work/ripple-research/animate_ripple_texture_v2.c`
-and `work/ripple-v2/`; accepted frame/control evidence:
-`work/ripple-stack-check/` and `work/palette-loop-check/ripple-stack.json`.
