@@ -18,8 +18,10 @@ and small edits directly; no worker quota.
   honest fixture scope and separate native/inline/table attribution. A focused
   review may finish while final parent gates are pending.
 - Observe exact-SHA CI directly using the guide's paginated push-run/job routes.
-  Retain live handles; use actual clock deadlines. Pending/absent checks and an
-  observation timeout are not terminal success.
+  Retain live handles; use actual clock deadlines. Pending/absent required checks
+  and observation timeouts are unverified. An empty aggregate status list is not
+  a pending required check. Report extra failures and resolve their policy before
+  claiming overall CI success; distinguish required-gate success from all checks.
 - Compare complete outputs and end-to-end wall time, including parent corrections.
   Saved candidates do not measure fresh rewrite speed; absent token counters do
   not establish token savings.

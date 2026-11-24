@@ -54,6 +54,12 @@ with actual clock timestamps, not a guessed number of tool calls. Pending, absen
 or skipped required checks are unverified; observation timeouts do not terminate
 jobs. Do not retry/cancel jobs or post comments as part of observation.
 
+Judge required gates separately from additional checks. A combined `pending`
+status with zero status contexts does not itself identify a pending required
+check. Always report additional failures. If their required/optional policy is
+unknown, determine it before claiming overall CI success; report the established
+required-gate result and the outstanding policy separately.
+
 ## Scope and measurement
 
 An existing broader-goal pause permits subsequently requested configuration work

@@ -100,3 +100,47 @@ Raw local evidence (ignored, not required to understand this report):
 - `work/workflow-direct-b/experiment.json`.
 - `work/workflow-comparison/review/contract.md`, `candidate-a.c`, `candidate-b.c`.
 - `work/workflow-ub-probe/negative-control.json`.
+
+## Second retest — 2026-11-24
+
+Fresh research and review workers received new frozen scenarios without expected
+verdicts. The research assignment was analytic only, with no compiler lease;
+it completed and saved the requested artifact without a corrective follow-up.
+This tests bounded reasoning/ownership, not novel compiler allocation speed.
+
+| Case | Observed result |
+| --- | --- |
+| R1: load/store may alias | Unsafe; concrete witness changes live EBX from 1 to 2 |
+| R2: distinct ordinary objects | Safe; registers, flags and memory effects commute |
+| R3: distinct volatile objects | Unsafe; required access order changes despite equal final machine state |
+| C1: word getter declared as full EAX result | Block; arbitrary upper register bits can escape |
+| C2: word getter declared unsigned short in AX | Source-level accept; conversion zero-extends the word |
+| I1: run-list pagination incomplete | Unverified; fetch remaining pages |
+| I2: prior attempt passed, current job pending | Unverified; observe current attempt and reconcile run/job state |
+| I3: required build passed, zero status contexts, aggregate pending | Required gates verified; no pending status context was identified |
+| I4: success belongs to a different SHA | Unverified; query the assigned SHA |
+| I5: required build passed, extra lint failure, unknown lint policy | Required build verified; report lint failure and resolve policy before overall CI success |
+
+All ten case judgments matched the contracts. The reviewer found a wording
+ambiguity: root/skill instructions called pending or absent checks unverified
+without distinguishing required checks from an empty aggregate or unknown
+additional-check policy. Root instructions, the coordination skill and routing
+guide now make that distinction. The same reviewer re-read the amended passages,
+re-evaluated I3/I5 and found no remaining contradiction affecting those cases.
+The two-role split required no further change.
+
+A direct fresh two-object probe passed again with **zero cache hits**, all three
+output files and no parent correction: **5.21 s** observed call time, **4.31 s**
+saved script time and **2.26 s** compiler time. These are preserved candidates;
+no new production restoration or token-saving claim follows from the run.
+
+The three skills passed official validation, all 12 routing/skill links exist,
+and the three profile/routing tests passed. `restore.py doctor` confirmed the
+existing full 406-test/144-fixture report remains current and the accepted pinned
+executable is unchanged. That full suite was not rerun for instruction-only
+edits. Publication CI is checked separately for the exact resulting SHA.
+
+Raw additional evidence: `work/workflow-retest-2/` contains the scenario packets,
+`research-result.json` and `results.json`; the direct probe report is
+`work/workflow-direct-c/experiment.json`. Only the CI wording required correction;
+the retained workers completed their assigned judgments without repair.
