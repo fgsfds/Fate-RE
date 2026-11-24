@@ -25,4 +25,16 @@ extern unsigned char *save_io_buffer(unsigned char *);
     unsigned char *buffer=save_io_buffer(save_data_image+(offset)); \
     result=transfer(buffer,size,count,stream); \
 } while(0)
+extern RuntimeStream *save_byte_stream(RuntimeStream *);
+#pragma aux save_byte_stream = "" parm [ecx] value [ecx] modify exact [edx];
+extern unsigned save_byte_size(unsigned);
+#pragma aux save_byte_size = "" parm [edx] value [edx] modify exact [];
+#define SAVE_BYTE(transfer, offset) do { \
+    typedef char SaveByteFits[((offset)<sizeof(save_data_image))?1:-1]; \
+    unsigned count=save_io_count(1); \
+    unsigned char *buffer=save_io_buffer(save_data_image+(offset)); \
+    RuntimeStream *input=save_byte_stream(stream); \
+    unsigned size=save_byte_size(count); \
+    result=transfer(buffer,size,count,input); \
+} while(0)
 #endif

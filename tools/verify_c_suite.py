@@ -3,7 +3,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
-from verify_c_leaf import SAVE_FIELD_LAYOUT
+from verify_c_leaf import SAVE_FIELD_LAYOUT, SAVE_BYTE_LAYOUT, SAVE_IO_ROUTINES
 from functools import lru_cache
 from verification_diagnostics import code_mismatch
 from restoration_registry import switch_groups
@@ -1542,6 +1542,9 @@ def verify_compiler_groups(exe, directory, names=None):
             verify_group_layout((directory/(_routine['object']+'.obj')).read_bytes(),
                                 sum(row['public_size'] for row in _runs),
                                 [(row['public'], row['public_start']) for row in _runs])
+    if selected('svbytes'):
+        verify_group_layout((directory/'svbytes.obj').read_bytes(),
+                            SAVE_BYTE_LAYOUT['object_size'], SAVE_BYTE_LAYOUT['public_layout'])
     if selected('ripflow'):
         verify_group_layout((directory/'ripflow.obj').read_bytes(), 865, [('ripple_flow_context_', 0)])
     if selected('ripidx'):
@@ -1715,7 +1718,7 @@ OBJECT_NAMES['ripple_mask_row_increment_phase_'] = 'riploop'
 OBJECT_NAMES['ripple_vertical_row_increment_phase_'] = 'riploop'
 OBJECT_NAMES['ripple_output_row_guard_phase_'] = 'riploop'
 
-for _routine in SAVE_FIELD_LAYOUT['routines']:
+for _routine in SAVE_IO_ROUTINES:
     for _run in _routine['runs']:
         OBJECT_NAMES[_run['phase']] = _routine['object']
 

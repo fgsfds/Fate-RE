@@ -540,3 +540,4 @@ fate/ripple_loop_control riptest
 fate/ripple_flow_context ripflow
 fate/save_read_fields svread
 fate/save_write_fields svwrite
+fate/save_byte_fields svbytes

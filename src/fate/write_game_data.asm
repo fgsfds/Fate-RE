@@ -321,40 +321,7 @@ section .retained_2 align=1 vstart=0x30c67 follows=.retained_1
     call fwrite
 
 ; C field run 2 ends here.
-section .retained_3 align=1 vstart=0x30d74 follows=.retained_2
-    mov ebx, 0x1
-    mov eax, input_forward
-    mov ecx, edi
-    mov edx, ebx
-    call fwrite
-    mov ebx, 0x1
-    mov eax, previous_local_input
-    mov ecx, edi
-    mov edx, ebx
-    call fwrite
-    mov ebx, 0x1
-    mov eax, input_strafe
-    mov ecx, edi
-    mov edx, ebx
-    call fwrite
-    mov ebx, 0x1
-    mov eax, board_state_7def5
-    mov ecx, edi
-    mov edx, ebx
-    call fwrite
-    mov ebx, 0x1
-    mov eax, input_turn
-    mov ecx, edi
-    mov edx, ebx
-    call fwrite
-    mov ebx, 0x1
-    mov eax, board_state_7def6
-    mov ecx, edi
-    mov edx, ebx
-    call fwrite
-
-; C field run 3 ends here.
-section .retained_4 align=1 vstart=0x313be follows=.retained_3
+section .retained_3 align=1 vstart=0x313be follows=.retained_2
     mov eax, 0x1ff
     jmp short .branch_313de
     mov edx, sectors
@@ -366,8 +333,8 @@ section .retained_4 align=1 vstart=0x313be follows=.retained_3
     test eax, eax
     jnl short .branch_313c5
 
-; C field run 4 ends here.
-section .retained_5 align=1 vstart=0x313f8 follows=.retained_4
+; C field run 3 ends here.
+section .retained_4 align=1 vstart=0x313f8 follows=.retained_3
     mov eax, 0x1ff
     jmp short .branch_31418
     mov edx, sectors
@@ -379,42 +346,8 @@ section .retained_5 align=1 vstart=0x313f8 follows=.retained_4
     test eax, eax
     jnl short .branch_313ff
 
-; C field run 5 ends here.
-section .retained_6 align=1 vstart=0x3150e follows=.retained_5
-    mov ebx, 0x1
-    mov eax, engine_2891da
-    mov ecx, esi
-    mov edx, ebx
-    call fwrite
-
-; C field run 6 ends here.
-section .retained_7 align=1 vstart=0x316c3 follows=.retained_6
-    mov ebx, 0x1
-    mov eax, loaded_level
-    mov ecx, esi
-    mov edx, ebx
-    call fwrite
-    mov ebx, 0x1
-    mov eax, current_board
-    mov ecx, esi
-    mov edx, ebx
-    call fwrite
-    mov ebx, 0x1
-    mov eax, destination_level
-    mov ecx, esi
-    mov edx, ebx
-    call fwrite
-
-; C field run 7 ends here.
-section .retained_8 align=1 vstart=0x31e08 follows=.retained_7
-    mov ebx, 0x1
-    mov eax, cursor_mode
-    mov ecx, esi
-    mov edx, ebx
-    call fwrite
-
-; C field run 8 ends here.
-section .retained_9 align=1 vstart=0x31e73 follows=.retained_8
+; C field run 4 ends here.
+section .retained_5 align=1 vstart=0x31e73 follows=.retained_4
     mov eax, esi
     mov edi, status_text
     call sub_4032e

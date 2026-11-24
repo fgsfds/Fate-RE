@@ -378,3 +378,12 @@ only register arguments and the caller's existing stack. For private
 behavior tests, keep the compiler object's full layout so shared tails
 still reach their original targets. Check both empty/short I/O and
 complete-item cursor semantics, not just successful transfers.
+
+
+For one-byte save fields, the original size uses `MOV EDX,EBX` after
+the stream copy instead of a second literal load. Carry the real count
+through an empty EDX identity and conservatively clobber EDX on the
+stream identity. This preserves the shared value without new inline
+instructions. Contexts in one object may share private cursor tails
+across read/write directions: bind every public in that object before
+emulating a full private context, and guard each tail and addend.

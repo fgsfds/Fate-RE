@@ -54,7 +54,7 @@ def exercise(run,code,reading,seed,limit,private=None):
   pushes=0 if private is None else len(bytes.fromhex(run['private_prefix']))
   assert esp==STACK-4-4*pushes,'Transfer must be CALL with only the guarded private saves'
   ret,=struct.unpack('<I',machine.mem_read(esp,4))
-  assert ret==entry+(0 if private is None else run['body_start'])+22*(calls+1)
+  assert ret==entry+(0 if private is None else run['body_start'])+run.get('record_bytes',22)*(calls+1)
   if reading:
    if amount:machine.mem_write(ptr,payload[cursor:cursor+amount])
   else:output.extend(machine.mem_read(ptr,amount))
@@ -98,27 +98,36 @@ def main():
  p=argparse.ArgumentParser(description=__doc__)
  p.add_argument('--exe',type=Path,required=True);p.add_argument('--build',type=Path,required=True)
  p.add_argument('--output',type=Path,required=True);a=p.parse_args()
- exe=a.exe.read_bytes();image(exe);pointers=read_le_fixups(exe)['pointers'];layout=v.SAVE_FIELD_LAYOUT
+ exe=a.exe.read_bytes();image(exe);pointers=read_le_fixups(exe)['pointers'];layout=dict(routines=v.SAVE_IO_ROUTINES)
  h=struct.unpack_from('<I',exe,60)[0];objects=struct.unpack_from('<I',exe,h+0x40)[0]
  assert struct.unpack_from('<II',exe,h+objects+24)==(EXTENT,DS)
  body_cases=private_cases=fields=native=0
  for routine in layout['routines']:
-  blob=(a.build/(routine['object']+'.obj')).read_bytes();private=private_image(blob,routine)
+  blob=(a.build/(routine['object']+'.obj')).read_bytes()
+  context_runs=[run for owner in layout['routines'] if owner['object']==routine['object'] for run in owner['runs']]
+  private=private_image(blob,dict(runs=context_runs))
   reading=routine['symbol']=='read_game_data'
   for run in routine['runs']:
    address=run['start_address'];raw=run['start_file_offset'];size=run['body_size']
-   assert size==len(run['records'])*22
+   stride=run.get('record_bytes',22)
+   assert size==len(run['records'])*stride
    code,refs=v.bind_leaf_details(blob,run['phase'],v.DATA_OFFSETS,address=address,functions=v.FUNCTION_ADDRESSES)
    assert code==exe[raw:raw+size]
    v.verify_leaf_relocations(code,refs,pointers,address);assert len(refs)==len(run['records'])
    for i,row in enumerate(run['records']):
-    assert row['address']==address+22*i
-    observed=exe[raw+22*i:raw+22*i+22]
-    assert observed[:6]==b'\xbb\x01\0\0\0\xba' and observed[10]==0xb8 and observed[17]==0xe8
-    assert int.from_bytes(observed[6:10],'little')==row['size']
-    assert int.from_bytes(observed[11:15],'little')==row['data_offset']
-    assert observed[15:17]==(b'\x89\xf1' if run['stream_register']=='esi' else b'\x89\xf9')
-    assert address+22*i+22+int.from_bytes(observed[18:22],'little',signed=True)==run['call_target']
+    assert row['address']==address+stride*i
+    observed=exe[raw+stride*i:raw+stride*(i+1)]
+    if stride==19:
+     assert row['size']==1 and observed[:6]==b'\xbb\x01\0\0\0\xb8'
+     assert observed[12:15]==b'\x89\xda\xe8'
+     buffer_site,stream_site,call_site=6,10,15
+    else:
+     assert observed[:6]==b'\xbb\x01\0\0\0\xba' and observed[10]==0xb8 and observed[17]==0xe8
+     assert int.from_bytes(observed[6:10],'little')==row['size']
+     buffer_site,stream_site,call_site=11,15,18
+    assert int.from_bytes(observed[buffer_site:buffer_site+4],'little')==row['data_offset']
+    assert observed[stream_site:stream_site+2]==(b'\x89\xf1' if run['stream_register']=='esi' else b'\x89\xf9')
+    assert address+stride*(i+1)+int.from_bytes(observed[call_site:call_site+4],'little',signed=True)==run['call_target']
    loaded,_=v.bind_leaf_details(blob,run['phase'],dict(v.DATA_OFFSETS,_save_data_image=DS),address=address,functions=v.FUNCTION_ADDRESSES)
    total=sum(row['size'] for row in run['records'])
    for seed in (0,1):
@@ -144,10 +153,25 @@ def main():
  finally:
   v.LEAF_CONTEXT_SHA256[run['public']]=digest
   v.LEAF_CONTEXT_SUFFIXES[run['public']]=suffix
- assert (fields,native)==(443,9746)
- result=dict(status='PASS',runs=18,fields=fields,native_bytes=native,le_sites=fields,
+ # The byte contexts share compiler-generated cursor tails across directions.
+ byte_read,byte_write=v.SAVE_BYTE_LAYOUT['routines']
+ blob=(a.build/'svbytes.obj').read_bytes();run=byte_read['runs'][0]
+ rejected(mutate_public_byte(blob,run['public'],run['body_size']),row=run)
+ shared=byte_write['runs'][-1]
+ rejected(mutate_public_byte(blob,shared['public'],shared['public_size']-1),row=shared)
+ rejected(rename_external(blob,b'_save_data_image',b'_save_data_imagf'),row=run,message='fixup')
+ digest=v.LEAF_CONTEXT_SHA256.pop(run['public'])
+ suffix=v.LEAF_CONTEXT_SUFFIXES.pop(run['public'])
+ try:
+  site=int(next(iter(run['private_fixups'])))
+  rejected(mutate_public_byte(blob,run['public'],site),row=run,message='addend')
+ finally:
+  v.LEAF_CONTEXT_SHA256[run['public']]=digest
+  v.LEAF_CONTEXT_SUFFIXES[run['public']]=suffix
+ assert (fields,native)==(465,10164)
+ result=dict(status='PASS',runs=26,fields=fields,native_bytes=native,le_sites=fields,
              body_cases=body_cases,private_cursor_cases=private_cases,
-             partial_and_empty_transfers=True,private_context_controls=4)
+             partial_and_empty_transfers=True,private_context_controls=8)
  a.output.write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8');print(json.dumps(result))
 
 if __name__=='__main__':main()

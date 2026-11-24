@@ -334,40 +334,7 @@ section .retained_3 align=1 vstart=0x2f74c follows=.retained_2
     call fread
 
 ; C field run 3 ends here.
-section .retained_4 align=1 vstart=0x2f859 follows=.retained_3
-    mov ebx, 0x1
-    mov eax, input_forward
-    mov ecx, esi
-    mov edx, ebx
-    call fread
-    mov ebx, 0x1
-    mov eax, previous_local_input
-    mov ecx, esi
-    mov edx, ebx
-    call fread
-    mov ebx, 0x1
-    mov eax, input_strafe
-    mov ecx, esi
-    mov edx, ebx
-    call fread
-    mov ebx, 0x1
-    mov eax, board_state_7def5
-    mov ecx, esi
-    mov edx, ebx
-    call fread
-    mov ebx, 0x1
-    mov eax, input_turn
-    mov ecx, esi
-    mov edx, ebx
-    call fread
-    mov ebx, 0x1
-    mov eax, board_state_7def6
-    mov ecx, esi
-    mov edx, ebx
-    call fread
-
-; C field run 4 ends here.
-section .retained_5 align=1 vstart=0x2fea3 follows=.retained_4
+section .retained_4 align=1 vstart=0x2fea3 follows=.retained_3
     mov ebx, 0x1
     mov edx, 0x800
     mov eax, restore_addresses
@@ -384,42 +351,8 @@ section .retained_5 align=1 vstart=0x2fea3 follows=.retained_4
     test edi, edi
     jnl short .branch_2fec0
 
-; C field run 5 ends here.
-section .retained_6 align=1 vstart=0x2ffcf follows=.retained_5
-    mov ebx, 0x1
-    mov eax, engine_2891da
-    mov ecx, esi
-    mov edx, ebx
-    call fread
-
-; C field run 6 ends here.
-section .retained_7 align=1 vstart=0x30184 follows=.retained_6
-    mov ebx, 0x1
-    mov eax, loaded_level
-    mov ecx, esi
-    mov edx, ebx
-    call fread
-    mov ebx, 0x1
-    mov eax, current_board
-    mov ecx, esi
-    mov edx, ebx
-    call fread
-    mov ebx, 0x1
-    mov eax, destination_level
-    mov ecx, esi
-    mov edx, ebx
-    call fread
-
-; C field run 7 ends here.
-section .retained_8 align=1 vstart=0x308c9 follows=.retained_7
-    mov ebx, 0x1
-    mov eax, cursor_mode
-    mov ecx, esi
-    mov edx, ebx
-    call fread
-
-; C field run 8 ends here.
-section .retained_9 align=1 vstart=0x30934 follows=.retained_8
+; C field run 4 ends here.
+section .retained_5 align=1 vstart=0x30934 follows=.retained_4
     mov eax, esi
     call sub_40354
     mov eax, esi

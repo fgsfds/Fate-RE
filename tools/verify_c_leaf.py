@@ -5021,8 +5021,10 @@ LEAF_SECTION_BRANCHES['ripple_flow_context_'] = (865, 855, {47: (b'\xeb', 112, 1
 
 # Fixed-size game-state I/O fields, audited against the pinned save format.
 SAVE_FIELD_LAYOUT = json.loads((Path(__file__).parent/'data/save-field-layout.json').read_text(encoding='utf-8'))
+SAVE_BYTE_LAYOUT = json.loads((Path(__file__).parent/'data/save-byte-layout.json').read_text(encoding='utf-8'))
+SAVE_IO_ROUTINES = SAVE_FIELD_LAYOUT['routines'] + SAVE_BYTE_LAYOUT['routines']
 DATA_OFFSETS['_save_data_image'] = 0
-for _routine in SAVE_FIELD_LAYOUT['routines']:
+for _routine in SAVE_IO_ROUTINES:
     _target = 'fread_' if _routine['symbol'] == 'read_game_data' else 'fwrite_'
     for _run in _routine['runs']:
         _public, _phase = _run['public'], _run['phase']
@@ -5032,9 +5034,11 @@ for _routine in SAVE_FIELD_LAYOUT['routines']:
         LEAF_CONTEXT_SHA256[_public] = _run['context_sha256']
         LEAF_CONTEXT_SUFFIXES[_public] = bytes.fromhex(_run['private_suffix'])
         _refs = {int(site): tuple(spec) for site, spec in _run['private_fixups'].items()}
+        _stride = _run.get('record_bytes', 22)
+        _buffer_site, _call_site = (6, 15) if _stride == 19 else (11, 18)
         for _index, _field in enumerate(_run['records']):
-            _refs[_start+22*_index+11] = ('_save_data_image', False, _field['data_offset'])
-            _refs[_start+22*_index+18] = (_target, True)
+            _refs[_start+_stride*_index+_buffer_site] = ('_save_data_image', False, _field['data_offset'])
+            _refs[_start+_stride*_index+_call_site] = (_target, True)
         LEAF_CONTEXT_FIXUPS[_public] = _refs
 
 if __name__ == '__main__':

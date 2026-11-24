@@ -1616,37 +1616,18 @@
           "binary_offset": 165
         },
         {
-          "begin": 1006,
-          "end": 1120,
-          "binary_offset": 192
-        },
-        {
           "begin": 2616,
           "end": 2674,
-          "binary_offset": 306
-        },
-        {
-          "begin": 2916,
-          "end": 2935,
-          "binary_offset": 364
-        },
-        {
-          "begin": 3353,
-          "end": 3410,
-          "binary_offset": 383
-        },
-        {
-          "begin": 5214,
-          "end": 5233,
-          "binary_offset": 440
+          "binary_offset": 192
         },
         {
           "begin": 5321,
           "end": 5432,
-          "binary_offset": 459
+          "binary_offset": 250
         }
       ],
-      "retained_bytes": 570
+      "retained_bytes": 361,
+      "additional_c_layout": "save-byte-layout.json"
     },
     {
       "symbol": "write_game_data",
@@ -3245,42 +3226,23 @@
           "binary_offset": 136
         },
         {
-          "begin": 977,
-          "end": 1091,
-          "binary_offset": 163
-        },
-        {
           "begin": 2587,
           "end": 2623,
-          "binary_offset": 277
+          "binary_offset": 163
         },
         {
           "begin": 2645,
           "end": 2681,
-          "binary_offset": 313
-        },
-        {
-          "begin": 2923,
-          "end": 2942,
-          "binary_offset": 349
-        },
-        {
-          "begin": 3360,
-          "end": 3417,
-          "binary_offset": 368
-        },
-        {
-          "begin": 5221,
-          "end": 5240,
-          "binary_offset": 425
+          "binary_offset": 199
         },
         {
           "begin": 5328,
           "end": 5409,
-          "binary_offset": 444
+          "binary_offset": 235
         }
       ],
-      "retained_bytes": 525
+      "retained_bytes": 316,
+      "additional_c_layout": "save-byte-layout.json"
     }
   ]
 }
