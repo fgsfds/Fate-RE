@@ -521,3 +521,4 @@ engine/capture_close capclose
 engine/capture_palette_byte pcxstep
 engine/setgamemode_init setinit
 engine/setgamemode_display setdisp
+engine/palette_lookup plook

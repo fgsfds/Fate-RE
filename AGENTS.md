@@ -1,6 +1,7 @@
 # Fate-RE agent instructions
 
 - Keep repository instructions, restoration notes, and reports in English.
+- For subagent work, select the configured profile that matches the assignment and follow its model, reasoning effort, instructions, and restrictions: [fate-scout](.codex/agents/fate-scout.toml), [fate-probe](.codex/agents/fate-probe.toml), [fate-verify](.codex/agents/fate-verify.toml), [fate-ci-monitor](.codex/agents/fate-ci-monitor.toml), [fate-writer](.codex/agents/fate-writer.toml), [fate-research](.codex/agents/fate-research.toml), and [fate-review](.codex/agents/fate-review.toml). The integrator owns production integration, builds, inventories, acceptance, and commits.
 - For exact C restoration, use the [fate-exact-restoration skill](.agents/skills/fate-exact-restoration/SKILL.md). Read it once per task and use the linked references only as needed.
 - Work on the requested restoration branch. When asked to commit and push, use fgsfds <4870330+fgsfds@users.noreply.github.com>, sign with key 141D19E46490A9B1, and push the current restoration branch.
 - Keep probes under ignored `work/` directories. If delegating, assign disjoint routines and scratch directories. The integrator owns the shared build, inventories, and commit.

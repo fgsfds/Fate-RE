@@ -4652,6 +4652,9 @@ FUNCTION_ADDRESSES.update({
     '_print_diagnostic': 0x40bb4,
 })
 
+LEAVES['palette_lookup_'] = (0x7073d, 19)
+LEAF_CODE_SLICES['palette_lookup_'] = ('palette_lookup_', 0, 19, 20)
+
 LEAVES['setgamemode_display_reset_'] = (0x70750, 129)
 LEAF_CODE_SLICES['setgamemode_display_reset_'] = ('setgamemode_display_context_', 0x102, 0x183, 851)
 

@@ -207,3 +207,13 @@ are not sufficient evidence.
 ## Reusable receiver ABI lesson
 
 Declare function formals at their full ECX/EDX width, then narrow them inside the body; narrow formals can change Watcom's register/stack ABI. A sender stored in a 12-byte struct has its field at offset 8; with the 4-byte return address, it is at ESP+12. Keep suffix guards when selecting spans that share a return tail. The RET-suffix guard and the separate send-tail JMP guard protect different excluded contexts. For packet receiver branch selection, preserve both applicable guards and validate branch opcode/width, compiled target, placement, and overlap; exact routine bytes and LE targets remain required.
+
+
+## Preserve a live register while matching a loop
+
+`src/engine/palette_lookup.c` uses empty EBX getter/consumer declarations to
+keep the incoming EBX value live through a standalone C loop. Watcom 10.5
+`/4r /s /or /bt=dos` then assigns the per-iteration zero to ECX and emits
+`inc eax` before `xor ecx,ecx`, matching the original 19-byte loop. Constraining
+the zero through an ECX identity alone schedules the XOR before the increment.
+The checked public has one extra private RET, excluded by the leaf slice.
