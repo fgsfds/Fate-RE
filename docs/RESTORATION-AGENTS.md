@@ -1,53 +1,86 @@
 # Restoration agents
 
-Use the shared [.agents skills](../.agents/skills/) and the configured role presets below. This is configuration guidance; it does not resume a paused restoration. Explicit configuration work may continue while restoration is paused.
+Use these four authoritative profiles only when their work can proceed
+independently. Configuration changes do not resume paused restoration.
 
-| Role | Route | Assignment |
+| Profile | Model and reasoning | Use |
 | --- | --- | --- |
-| `fate-scout` | GPT-6 Luna, low | Read-only candidate triage |
-| `fate-probe` | GPT-6 Luna, medium | Only specified transformations or experiments; escalate a novel ABI question to research |
-| `fate-verify` | GPT-6 Luna, low | Check frozen artifacts and attribution |
-| `fate-ci-monitor` | GPT-6 Luna, low | Watch exact pushed SHAs; report failed jobs and actionable diagnostics to the integrator |
-| `fate-writer` | GPT-6 Luna, medium | Edit assigned docs, READMEs, scripts, or tests from frozen evidence |
-| `fate-research` | GPT-6.2 Sol, high | Investigate ABI and compiler hypotheses |
-| `fate-review` | GPT-6.2 Sol, medium; high only for hard ABI or undefined-behavior cases | Independent review of C validity and evidence |
+| [fate-research](../.codex/agents/fate-research.toml) | GPT-6.2 Sol, high | One novel Watcom, ABI or allocation hypothesis |
+| [fate-review](../.codex/agents/fate-review.toml) | GPT-6.2 Sol, medium | Independent C/ABI or verifier counterexample review; high only for a concrete hard ambiguity |
+| [fate-probe](../.codex/agents/fate-probe.toml) | GPT-6 Luna, medium | A ready script or specified compiler matrix in owned scratch |
+| [fate-ci-monitor](../.codex/agents/fate-ci-monitor.toml) | GPT-6 Luna, low | Exact published-SHA workflow/check monitoring |
 
-The authoritative profiles are the TOML files in [`.codex/agents/`](../.codex/agents/). Start Codex in this checkout and edit those profiles directly.
+The integrator handles short triage, file copying, packet preparation,
+deterministic report extraction and small documentation updates. The former
+scout, verifier and writer roles are consolidated into that work. A small task
+that needs no independent judgment or meaningful overlap rarely merits a child.
+There is no worker quota; use zero to two useful children within the host limit.
 
-Default to zero to two useful children. Add an independent review only when useful and within the host limit. Do not create busywork or maintain a fixed worker count. Keep jobs disjoint, sources frozen or isolated, and scratch under a unique ignored `work/` directory. A pause stops restoration work and replenishment; an explicit configuration task remains allowed.
+## Assignment and completion
 
-Start Codex children with `fork_turns="none"` and a bounded task packet. Send a task packet of at most 150 words plus paths. Save routine context to a file and provide only bounded relevant context; never send full history. Changing a role label does not change a running worker's model: spawn a fresh worker when changing tiers. Parent supplies frozen evidence such as final audit/build reports, hashes, and model details. Derive metrics from JSON, never memory; exclude failed-then-resolved stories and report at most one blocker per routine.
+Start a fresh child with `fork_turns="none"` and the selected profile's supported
+model/reasoning. Reuse a worker only for the same role/routine with relevant
+context. Supply at most 150 words plus paths: task status (active, configuration
+only, or bounded trial), absolute repo cwd/runtime, one question or executable
+plan, owned paths, frozen inputs, variant/watch budget, expected output files,
+acceptance and stop rule. Link focused evidence; avoid full histories and
+inventories. Give read-only roles excerpts if file APIs are unavailable.
 
-All DOSBox compilation is serialized and owned by the parent unless an exclusive lease is granted. A writer changes only assigned docs, READMEs, scripts, or tests from frozen evidence. Writers do no game research, compiler work, registry or inventory work, commits, pushes, or new hypotheses. Parent reviews artifact claims and scripts.
+A reply length limit does not limit execution. All requested artifacts must
+exist before a completion report. Return partial work only for an explicit
+budget/stop rule, pause, or a concrete missing input/tool/permission, with the
+remaining artifact and blocker named. Resolve cwd/path discovery using the
+provided absolute path. If a mechanical assignment returns a plan without its
+outputs, inspect the cause; repair its packet once or finish it directly rather
+than starting a repeated parent/child relay. Novel research gets a new hypothesis
+before another probe budget, not a blind retry or automatic model upgrade.
+
+## Ownership and validation
+
+Workers own only assigned scratch or an isolated checkout. Separate scratch
+directories do not isolate shared production files. The integrator owns source
+integration, registries, inventories, build acceptance, metrics and commits.
+Exactly one DOSBox compiler lease may run, including parent jobs; windowless,
+no game smoke. Freeze production inputs while gates run. A source/hash change
+invalidates its earlier evidence. Stop after the first useful experiment result.
+
+Review source/ABI evidence independently while integration proceeds. The reviewer
+checks the frozen assigned portion and states which final gates remain; pending
+report updates do not invalidate an otherwise sound source review. The integrator
+checks current freshness with `restore.py doctor` and can create a compact saved
+evidence packet with `restoration_handoff.py`. Read relevant JSON fields directly
+instead of assigning an agent merely to copy them. Neither helper replaces the
+fresh exact whole-image gate. See the [exact skill](../.agents/skills/fate-exact-restoration/SKILL.md).
 
 ## Pipeline monitoring
 
-After each push during active work, assign `fate-ci-monitor` the repository,
-branch, exact SHA, run IDs/attempts, previous findings and a bounded watch budget.
-It reports failures immediately with run/job links and a small relevant error
-excerpt. It uses read-only GitHub access, accounts for push-triggered workflows,
-and treats pending or absent runs as unverified. The integrator fixes failures,
-pushes a correction and has its new SHA checked. No monitor-driven retries,
-workflow changes or public comments. Stop the monitor on pause; configuration
-changes alone do not start it or resume restoration.
+Assign the repository, branch, exact SHA, known run/attempt IDs, expected push workflow/check names and a five-minute
+watch budget after an authorized push. Monitor every push workflow/check and
+follow pagination. Pending, absent and skipped required checks are unverified.
+Use live handles, 30-60-second bounded polls and notifications; no unchanged status
+narration, retries or public comments. The parent owns fixes and the new SHA.
+A timeout observing a job is not proof that the job stopped.
 
-## Assignment and return
+## Measuring effectiveness and pause state
 
-State the pause/active status, role, one bounded goal, owned paths, scratch path, frozen inputs, budget, and acceptance evidence. Return no more than 150 words (research/review: 200) plus artifact paths. Identify the first meaningful mismatch and report paths, not full logs. Avoid progress pings unless blocked. The parent owns production integration, builds, inventories, and commits.
+Record observable task results: completed artifacts, bounded compiler experiments,
+parent correction/follow-up count, acceptance results and wall time where useful.
+Record per-agent token usage only if the host exposes it. Cumulative goal tokens
+cannot establish per-agent savings or a before/after speedup. Distinguish preserved
+candidate requalification, newly converted assembly, newly attributed existing C,
+and compiler-generated table data. More output tokens and lower model cost are
+different quantities; do not claim either improved without measurements.
 
-See the [coordination skill](../.agents/skills/fate-restoration-coordination/SKILL.md), [workflow](RESTORATION-WORKFLOW.md), and [progress report](C-RESTORATION-PROGRESS.md) for operating commands and measured coverage.
+Keep the parent focused on the critical path. An existing pause of the broader goal does not cancel a subsequent explicit
+configuration task or bounded trial. That request authorizes only its stated
+scope and acceptance; publication follows existing user authorization and is
+not an additional permission conferred by the trial. Leave the broader goal
+paused afterward unless the user resumes it.
 
-## Evidence handoff
-
-After the parent checks current freshness with `restore.py doctor`, create a
-compact packet for the writer instead of copying inventories into chat:
-
-```powershell
-python tools/restoration_handoff.py work/palette-clear-build --audit work/palette-clear-audit.json --output work/writer-evidence.json
-```
-
-The helper checks saved executable, inventory and object identities, then derives
-percentages. Its output describes saved artifacts; it does not replace the
-current-source freshness check or prove a new restoration candidate is exact.
-Read only selected fields and routine rows from larger reports. Keep detailed
-logs in scratch and let the writer update only the named final artifacts.
+A new pause/stop instruction halts new hypotheses, assignments and launches in
+the affected task. Observe an already running compiler through its live handle;
+never treat an observation timeout as termination. Save its actual status and
+artifacts, and release the compiler lease only after DOSBox is confirmed absent.
+If observation cannot finish, return the live handle to the integrator. Finish
+an already authorized checkpoint only when the user's pause instruction permits
+it; do not turn that into a new restoration batch.

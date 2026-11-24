@@ -58,6 +58,8 @@ for sources and the distinction between interactive analysis and exact acceptanc
 - Separate algorithm differences from ABI, allocation, scheduling, and encoding
   differences. Inspect the first meaningful instruction/LE mismatch, not merely
   an earlier changed branch displacement.
+- Stop at the first useful result and preserve its source/hash before another
+  experiment. Use an existing qualified context before repeating its research.
 - Try small standalone idioms before repeatedly perturbing a large function.
   Delegate a fully specified matrix to fate-probe; keep ambiguous research here.
 - After three failed distinct variants, stop and summarize unless the parent
@@ -78,6 +80,8 @@ for sources and the distinction between interactive analysis and exact acceptanc
 - Treat EBP constraints, partial-register writes, outgoing arguments, custom
   stack cleanup, nonreturning continuations, and shared returns as explicit ABI
   questions. Do not substitute a private return for an external continuation.
+- When slices change order, prove register, flags and memory independence.
+  Do not add volatile ordering and then discard it during placement.
 - Compiler-generated instructions must replace handwritten ones in the real
   production path, not in a separate C-only executable.
 
@@ -95,4 +99,4 @@ for sources and the distinction between interactive analysis and exact acceptanc
 5. Return either a stable exact patch or the restored baseline. Include source
    stability, measured versus estimated inline savings, and novel failed clues.
    Parent integration owns whole-image acceptance, marker attribution,
-   inventories, documentation, and signed pushes.
+   inventories, documentation, and unsigned pushes unless the user requests otherwise.

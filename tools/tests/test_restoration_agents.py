@@ -1,15 +1,13 @@
 """Guard the authoritative Codex agent routes and supported capabilities."""
 from pathlib import Path
+import re
 import tomllib
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 ROUTES = {
-    'scout': ('gpt-6-luna', 'low'),
     'ci-monitor': ('gpt-6-luna', 'low'),
     'probe': ('gpt-6-luna', 'medium'),
-    'verify': ('gpt-6-luna', 'low'),
-    'writer': ('gpt-6-luna', 'medium'),
     'research': ('gpt-6.2-sol', 'high'),
     'review': ('gpt-6.2-sol', 'medium'),
 }
@@ -34,7 +32,7 @@ class RestorationAgentTests(unittest.TestCase):
                 self.assertTrue(profile['developer_instructions'].strip())
 
     def test_file_only_roles_disable_shell_access(self):
-        for role in ('scout', 'review'):
+        for role in ('review',):
             with self.subTest(role=role):
                 self.assertIs(self.profiles['fate-' + role]['features']['shell_tool'], False)
 
@@ -43,8 +41,10 @@ class RestorationAgentTests(unittest.TestCase):
         rows = {}
         for line in text.splitlines():
             columns = [column.strip() for column in line.split('|')]
-            if len(columns) == 5 and columns[1].startswith('`fate-'):
-                rows[columns[1].strip('`')] = columns[2]
+            if len(columns) == 5:
+                match = re.fullmatch(r'\[(fate-[a-z-]+)\]\([^)]+\)', columns[1])
+                if match:
+                    rows[match[1]] = columns[2]
         self.assertEqual(set(rows), set(self.profiles))
         model_names = {'gpt-6-luna': 'GPT-6 Luna', 'gpt-6.2-sol': 'GPT-6.2 Sol'}
         for name, profile in self.profiles.items():

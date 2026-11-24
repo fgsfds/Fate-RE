@@ -5,7 +5,7 @@ description: Restore Fate-RE assembly routines to C with the pinned Watcom 10.5 
 
 For parallel work, also load `fate-restoration-coordination`; for new compiler/ABI
 hypotheses, load `fate-compiler-research`. The configured cost-tiered project agents and
-their ownership/handoff rules are documented in `docs/RESTORATION-AGENTS.md`.
+their ownership and bounded completion rules are documented in `docs/RESTORATION-AGENTS.md`.
 Adding or loading these profiles does not resume paused restoration.
 
 1. Check the branch and working tree. Run `python tools/restore.py context <routine>` for bounded routine-specific metadata, source locations, neighbors, fixtures, and failed attempts. Follow only the relevant references; do not read complete registries or inventories. See `docs/RESTORATION-WORKFLOW.md` as needed.
@@ -22,3 +22,18 @@ Adding or loading these profiles does not resume paused restoration.
 
    Default validation (`--exact` is an alias) builds current C/NASM with content-checked caches, pins inputs, checks compiler freshness and snapshot stability, and links production `FATE.EXE`. The packer checks its pinned whole-file hash, including relocations. An optional reference is hash-checked before building, must differ from the output path, and is compared directly to the result. Merely hashing a stale executable is insufficient. Exact acceptance does not run all unit tests, the idiom suite, per-span inventory reports, coverage-docs, behavioral fixtures, emulator dependencies, or game smoke. Use `validate --full` for tooling changes or periodic broad regression checkpoints: it adds unit tests, idioms, per-span inventory/coverage checks, and fixtures, but not game smoke. `--smoke` is allowed only with explicit `--full`; skip game smoke for the current task. Exact or full `--clean --build work/<new-name>` requires a new directory and uses no compiler/NASM caches. `doctor --build work/restoration-build` accepts current exact or full reports and verifies artifact hashes. For direct fixtures and unittest discovery, put `tools` and the verified dependency-cache directory on `PYTHONPATH`.
 6. Run `python tools/refresh_code_inventory.py <build> <verified-reference.exe>` when registrations, inventories, or coverage change, not after every source-only edit. It checks the pinned reference, compiler freshness, and whole linked image, then generates inventories and the coverage overview in `docs/RECONSTRUCTION.md`; `python tools/restoration_coverage.py --check` detects drift. Attribution and marker audits remain separate and are required to report C/assembly percentages honestly, especially when inline attribution changes. Report changed routines, bytes and LE sites, whole-image verification, and percentages for standalone assembly spans and measured inline assembly. Keep mixed C objects separate from assembly-free C in coverage claims. OMF timestamps can change object hashes between clean builds. Compare linked code and fixups before investigating an object hash difference.
+
+## Context and attribution checks
+
+For selected compiler slices, guard the complete private context and all fixup
+forms, names and addends, including excluded wrappers and tails. Bind CODE and
+DATA with distinct metadata; counts alone do not prove correct targets. A
+translated compiler table needs a checked slot-to-entry map and replay with the
+placed table installed. Table bytes remain data in instruction attribution.
+
+Report newly replaced assembly separately from previously unmeasured C that an
+improved audit can now classify. Preserve unknown bytes. State whether fixture
+primitives are stubbed; address-word round trips are not end-to-end DOS saves.
+Saved historical C candidates can be requalified with current source/cache
+provenance and exact gates, but their throughput does not measure fresh rewrite
+speed. Keep all existing acceptance gates when changing agent orchestration.
