@@ -4196,6 +4196,24 @@ DATA_POINTER_SITES = {
                       'thline_': {16, 36, 51}, 'thlineskipmodify_': {24, 36}}
 
 
+# Contiguous fixed-size game-state field calls now link from C.
+_state_io_layout = json.loads((Path(__file__).parent/'data/save-field-layout.json').read_text(encoding='utf-8'))
+for _state_io in _state_io_layout['routines']:
+    _original = next(row for row in ROUTINES if row[0] == _state_io['symbol'])
+    ROUTINES.remove(_original)
+    _data_sites = DATA_POINTER_SITES.pop(_state_io['symbol'])
+    for _index, _slice in enumerate(_state_io['asm_slices']):
+        _symbol = _state_io['symbol']+'_asm_'+str(_index)
+        _begin, _end = _slice['begin'], _slice['end']
+        ROUTINES.append((_symbol, _original[1], _original[2],
+                         _original[3]+_begin, _end-_begin,
+                         {site-_begin: target for site,target in _original[5].items()
+                          if _begin <= site < _end}))
+        GROUP_SLICES[_symbol] = (_slice['binary_offset'], _state_io['retained_bytes'])
+        DATA_POINTER_SITES[_symbol] = tuple(site-_begin for site in _data_sites
+                                           if _begin <= site < _end)
+
+
 def verify_pointer_operands(code, expected, data_sites=()):
     """Validate raw fields independently of the loaded-target comparison."""
     if not set(data_sites).issubset(expected):

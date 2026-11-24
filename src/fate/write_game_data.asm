@@ -255,15 +255,15 @@ numpalookups equ 0x289156
 engine_2891da equ 0x2891da
 
 ; One record per call. Field order and size are part of the save format.
-%macro fwrite_field 2
-    mov ebx, 1
-    mov edx, %2
-    mov eax, %1
-    mov ecx, edi
-    call fwrite
-%endmacro
-
+; Fixed-size field transfers are supplied by the matching C contexts.
+section .text align=1
 write_game_data:
+.write_player_count equ 0x309f3
+.branch_313c5 equ 0x313c5
+.branch_313de equ 0x313de
+.branch_313ff equ 0x313ff
+.branch_31418 equ 0x31418
+.return equ 0x31ebb
     push ebx
     push ecx
     push edx
@@ -293,38 +293,14 @@ write_game_data:
     jnz short .write_player_count
     mov eax, 0xffffffff
     jmp near .return
-
-.write_player_count:
     mov ebx, 0x1
     mov edx, 0x2
     mov ecx, eax
     mov eax, player_count
     call fwrite
-    fwrite_field local_player, 0x2
-    fwrite_field first_player, 0x2
-    fwrite_field next_player, 0x20
-    fwrite_field player_x, 0x40
-    fwrite_field player_y, 0x40
-    fwrite_field player_z, 0x40
-    fwrite_field player_horizon, 0x40
-    fwrite_field board_state_5ae1c, 0x40
-    fwrite_field motion_state_62f4c, 0x40
-    fwrite_field player_angle, 0x20
-    fwrite_field player_sector, 0x20
-    fwrite_field previous_player_sector, 0x20
-    fwrite_field board_state_62f2c, 0x20
-    fwrite_field board_state_6317c, 0x20
-    fwrite_field board_state_630bc, 0x40
-    fwrite_field status_right_tenths, 0x40
-    fwrite_field board_state_6304c, 0x20
-    fwrite_field motion_state_6306c, 0x20
-    fwrite_field player_mode, 0x10
-    fwrite_field motion_state_630ac, 0x10
-    fwrite_field save_state_5addc, 0x20
-    fwrite_field save_state_5adfc, 0x20
-    fwrite_field save_state_5abbc, 0x40
-    fwrite_field save_state_5abfc, 0x40
-    fwrite_field numsectors, 0x2
+
+; C field run 0 ends here.
+section .retained_1 align=1 vstart=0x30c2f follows=.text
     movsx edx, word [numsectors]
     mov eax, edx
     mov ebx, 0x1
@@ -334,24 +310,18 @@ write_game_data:
     mov eax, sectors
     shl edx, byte 0x3
     call fwrite
-    fwrite_field numwalls, 0x2
+
+; C field run 1 ends here.
+section .retained_2 align=1 vstart=0x30c67 follows=.retained_1
     mov ebx, 0x1
     mov eax, walls
     movsx edx, word [numwalls]
     mov ecx, edi
     shl edx, byte 0x5
     call fwrite
-    fwrite_field sprite, 0x2c000
-    fwrite_field engine_28891e, 0x802
-    fwrite_field save_state_1f6020, 0x2000
-    fwrite_field engine_1f9ca0, 0x2000
-    fwrite_field hit_sprite_list_head, 0x802
-    fwrite_field save_state_1fdca0, 0x2000
-    fwrite_field next_sprite_stat, 0x2000
-    fwrite_field keyboard_forward, 0x4
-    fwrite_field keyboard_strafe, 0x4
-    fwrite_field keyboard_turn, 0x4
-    fwrite_field selection, 0x4
+
+; C field run 2 ends here.
+section .retained_3 align=1 vstart=0x30d74 follows=.retained_2
     mov ebx, 0x1
     mov eax, input_forward
     mov ecx, edi
@@ -382,262 +352,43 @@ write_game_data:
     mov ecx, edi
     mov edx, ebx
     call fwrite
-    fwrite_field input_actions, 0x2
-    fwrite_field board_state_7def7, 0x2
-    fwrite_field second_player_selection, 0x4
-    fwrite_field second_player_input, 0x5
-    fwrite_field board_state_5ac8c, 0x50
-    fwrite_field previous_input, 0x50
-    fwrite_field board_filename, 0x50
-    fwrite_field listener_index, 0x2
-    fwrite_field saved_mouse_buttons, 0x2
-    fwrite_field brightness, 0x2
-    fwrite_field near_sector, 0x2
-    fwrite_field near_sprite, 0x2
-    fwrite_field near_wall, 0x2
-    fwrite_field actor_clock, 0x4
-    fwrite_field save_state_770ac, 0x4
-    fwrite_field near_tag_distance, 0x4
-    fwrite_field board_state_1cf6c, 0x20
-    fwrite_field board_state_7deca, 0x2
-    fwrite_field board_state_1ccac, 0x20
-    fwrite_field board_state_7dece, 0x2
-    fwrite_field board_state_1cc8c, 0x20
-    fwrite_field board_state_7dec4, 0x2
-    fwrite_field board_state_1ceec, 0x80
-    fwrite_field board_state_7decc, 0x2
-    fwrite_field board_state_1d08c, 0x80
-    fwrite_field board_state_7dec2, 0x2
-    fwrite_field board_state_1d10c, 0x20
-    fwrite_field board_state_1cc4c, 0x20
-    fwrite_field board_state_1cc6c, 0x20
-    fwrite_field board_state_7dec6, 0x2
-    fwrite_field board_state_1ce2c, 0x40
-    fwrite_field board_state_1ceac, 0x40
-    fwrite_field board_state_1cdec, 0x40
-    fwrite_field board_state_1ce6c, 0x40
-    fwrite_field board_state_1cd2c, 0x40
-    fwrite_field board_state_7debe, 0x2
-    fwrite_field board_state_1bb3c, 0x140
-    fwrite_field board_state_1bc7c, 0x40
-    fwrite_field board_state_1babc, 0x40
-    fwrite_field board_state_1bcbc, 0x40
-    fwrite_field board_state_1c3fc, 0x40
-    fwrite_field board_state_1c12c, 0x40
-    fwrite_field board_state_1bafc, 0x40
-    fwrite_field board_state_1c43c, 0x400
-    fwrite_field board_state_1c83c, 0x400
-    fwrite_field board_state_1bab4, 0x8
-    fwrite_field board_state_1cc44, 0x8
-    fwrite_field board_state_7dec0, 0x2
-    fwrite_field board_state_1c2fc, 0x100
-    fwrite_field board_state_1c1fc, 0x100
-    fwrite_field board_state_1baa4, 0x10
-    fwrite_field board_state_1ba94, 0x10
-    fwrite_field board_state_1bd1c, 0x400
-    fwrite_field board_state_1cc3c, 0x8
-    fwrite_field board_state_7debc, 0x2
-    fwrite_field board_state_1c17c, 0x80
-    fwrite_field board_state_1c16c, 0x10
-    fwrite_field board_state_1bd0c, 0x10
-    fwrite_field board_state_1c11c, 0x10
-    fwrite_field board_state_1bcfc, 0x10
-    fwrite_field board_state_1a214, 0x10
-    fwrite_field board_state_1ba34, 0x10
-    fwrite_field board_state_1a224, 0x10
-    fwrite_field board_state_1a204, 0x10
-    fwrite_field board_state_1ba84, 0x10
-    fwrite_field fini_table_end, 0x20
-    fwrite_field board_state_1ba44, 0x20
-    fwrite_field board_state_1ba64, 0x20
+
+; C field run 3 ends here.
+section .retained_4 align=1 vstart=0x313be follows=.retained_3
     mov eax, 0x1ff
     jmp short .branch_313de
-
-.branch_313c5:
     mov edx, sectors
     mov ebx, [nosplit eax*4 + restore_addresses]
     shl edx, byte 0x2
     dec eax
     sub ebx, edx
     mov [nosplit eax*4 + save_state_1a238], ebx
-
-.branch_313de:
     test eax, eax
     jnl short .branch_313c5
-    mov ebx, 0x1
-    mov edx, 0x800
-    mov eax, restore_addresses
-    mov ecx, esi
-    call fwrite
+
+; C field run 4 ends here.
+section .retained_5 align=1 vstart=0x313f8 follows=.retained_4
     mov eax, 0x1ff
     jmp short .branch_31418
-
-.branch_313ff:
     mov edx, sectors
     mov ebx, [nosplit eax*4 + restore_addresses]
     shl edx, byte 0x2
     dec eax
     add edx, ebx
     mov [nosplit eax*4 + save_state_1a238], edx
-
-.branch_31418:
     test eax, eax
     jnl short .branch_313ff
-    mov ebx, 0x1
-    mov edx, 0x800
-    mov eax, restore_values
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x800
-    mov eax, activation_state_1aa34
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x800
-    mov eax, save_state_19a04
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x4
-    mov eax, restore_count
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x4
-    mov eax, totalclock
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x4
-    mov eax, last_tick
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x4
-    mov eax, save_state_287e74
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x4
-    mov eax, board_state_287e78
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, numpalookups
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x4
-    mov eax, engine_286ba8
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x4
-    mov eax, engine_286ba0
-    mov ecx, esi
-    call fwrite
+
+; C field run 5 ends here.
+section .retained_6 align=1 vstart=0x3150e follows=.retained_5
     mov ebx, 0x1
     mov eax, engine_2891da
     mov ecx, esi
     mov edx, ebx
     call fwrite
-    mov ebx, 0x1
-    mov edx, 0x4
-    mov eax, engine_286b88
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x200
-    mov eax, engine_1ed1a0
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, engine_289150
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x4
-    mov eax, save_state_202c
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x4
-    mov eax, last_sequence_clock
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x4
-    mov eax, last_frame_tick
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x34
-    mov eax, level_sector_count
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0xd00
-    mov eax, level_sector_ids
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x1a00
-    mov eax, level_sector_x
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x9c
-    mov eax, level_left_icon
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, left_icon
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, middle_icon
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, right_icon
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, activation_sprite_count
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x20
-    mov eax, activation_sprite_index
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x10
-    mov eax, activation_counter
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, smoothed_mouse_dx
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, toggled_word
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x1a
-    mov eax, modified_levels
-    mov ecx, esi
-    call fwrite
+
+; C field run 6 ends here.
+section .retained_7 align=1 vstart=0x316c3 follows=.retained_6
     mov ebx, 0x1
     mov eax, loaded_level
     mov ecx, esi
@@ -653,441 +404,17 @@ write_game_data:
     mov ecx, esi
     mov edx, ebx
     call fwrite
-    mov ebx, 0x1
-    mov edx, 0x4
-    mov eax, destination_x
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x4
-    mov eax, destination_y
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, destination_entry
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x21c
-    mov eax, level_names
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, difficulty_divisor
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, effect_count
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, effect_speed
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, status_flag
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, interaction_state_2263
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, toggled_mode
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x10
-    mov eax, item_enabled
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x10
-    mov eax, item_stock
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x10
-    mov eax, item_alternate_stock
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, player_action
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, save_state_2299
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x4
-    mov eax, ticks_per_step
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x4
-    mov eax, last_step_clock
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, advance_clock
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x20
-    mov eax, board_state_7494c
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x20
-    mov eax, interaction_state_729dc
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2000
-    mov eax, sprite_actor_index
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x3ea
-    mov eax, actor_sprite_index
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x1f5
-    mov eax, actor_board
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x177c
-    mov eax, saved_actor_x
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x1f5
-    mov eax, actor_enabled
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x3ea
-    mov eax, saved_actor_lotag
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x1f5
-    mov eax, actor_sequence_initial
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x3ea
-    mov eax, actor_health
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x7d4
-    mov eax, actor_z_offset
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x1f5
-    mov eax, actor_projectile_type
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x1f5
-    mov eax, actor_recovery_counter
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x1f5
-    mov eax, actor_visibility_timer
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x1f5
-    mov eax, actor_state
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x1f5
-    mov eax, actor_frame
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x1f5
-    mov eax, actor_state_byte
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x7d4
-    mov eax, actor_x
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x7d4
-    mov eax, actor_y
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x3ea
-    mov eax, actor_sector
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x7d4
-    mov eax, actor_first_waypoint
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x800
-    mov eax, waypoint_x
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x1f50
-    mov eax, actor_destination_x
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x1f5
-    mov eax, actor_kind
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x1f5
-    mov eax, actor_mode
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x1f5
-    mov eax, actor_profile
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x233a
-    mov eax, actor_tiles
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x1f5
-    mov eax, actor_delay_byte
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x13f
-    mov eax, template_cstat
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, weapon_action
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, weapon_animation_state
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, selected_weapon
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, selected_weapon_2be2
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, weapon_tile
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, weapon_x_offset
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, weapon_y_offset
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, close_hit_tile
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, alternate_fire_requested
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x20
-    mov eax, force_attack_frame
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x20
-    mov eax, defer_mode_change
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x20
-    mov eax, player_hit_timer
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x40
-    mov eax, player_hit_x
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x40
-    mov eax, player_hit_y
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, moving_sprite_count
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x800
-    mov eax, moving_sprites
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, pan_sector_count
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x80
-    mov eax, pan_sectors
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, float_sprite_count
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x400
-    mov eax, float_sprite_list
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, projectile_count
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x400
-    mov eax, projectile_list
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, active
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x400
-    mov eax, list
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, map_x
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, map_scale_or_y
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, map_offset_y
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, mouse_buttons
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, mouse_dx
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, mouse_dy
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, button_latch_disabled
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, held_sprite
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, map_mode
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, mouse_motion_disabled
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x48
-    mov eax, inventory_grid
-    mov ecx, esi
-    call fwrite
+
+; C field run 7 ends here.
+section .retained_8 align=1 vstart=0x31e08 follows=.retained_7
     mov ebx, 0x1
     mov eax, cursor_mode
     mov ecx, esi
     mov edx, ebx
     call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, actor_target
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, special_sector
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, trigger_count
-    mov ecx, esi
-    call fwrite
-    mov ebx, 0x1
-    mov edx, 0x194
-    mov eax, trigger_sprite
-    mov ecx, esi
-    call fwrite
+
+; C field run 8 ends here.
+section .retained_9 align=1 vstart=0x31e73 follows=.retained_8
     mov eax, esi
     mov edi, status_text
     call sub_4032e
@@ -1107,8 +434,6 @@ write_game_data:
     add edx, eax
     mov [status_expiration], edx
     xor eax, eax
-
-.return:
     add esp, 0x14
     pop edi
     pop esi

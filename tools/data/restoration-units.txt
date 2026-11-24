@@ -538,3 +538,5 @@ fate/ripple_bookkeeping ripbook
 fate/ripple_index_frame ripidx
 fate/ripple_loop_control riptest
 fate/ripple_flow_context ripflow
+fate/save_read_fields svread
+fate/save_write_fields svwrite

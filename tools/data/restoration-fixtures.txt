@@ -140,3 +140,4 @@ check_ripple_vertical --exe {exe} --build {build} --output {build}/ripple-vertic
 check_ripple_output --exe {exe} --build {build} --output {build}/ripple-output.json | ripout riploop ripidx riptest
 check_ripple_stack --exe {exe} --build {build} --output {build}/ripple-stack.json | ripidx riptest riploop
 check_ripple_control --exe {exe} --build {build} --output {build}/ripple-control.json | ripflow ripsum ripctl ripbord rippart riprad rippack ripout riploop ripbook ripidx riptest
+check_save_field_io --exe {exe} --build {build} --output {build}/save-field-io.json | svread svwrite

@@ -256,15 +256,17 @@ numpalookups equ 0x289156
 engine_2891da equ 0x2891da
 
 ; One record per call. Field order and size are part of the save format.
-%macro fread_field 2
-    mov ebx, 1
-    mov edx, %2
-    mov eax, %1
-    mov ecx, esi
-    call fread
-%endmacro
-
+; Fixed-size field transfers are supplied by the matching C contexts.
+section .text align=1
 read_game_data:
+.read_player_count equ 0x2f4bb
+.initialize_player_before_restore equ 0x2f51c
+.branch_2f52c equ 0x2f52c
+.branch_2fec0 equ 0x2fec0
+.branch_2fed9 equ 0x2fed9
+.initialize_player_after_restore equ 0x3094b
+.branch_3095b equ 0x3095b
+.return equ 0x3099a
     push ebx
     push ecx
     push edx
@@ -294,61 +296,24 @@ read_game_data:
     jnz short .read_player_count
     mov eax, 0xffffffff
     jmp near .return
-
-.read_player_count:
     mov ebx, 0x1
     mov edx, 0x2
     mov ecx, eax
     mov eax, player_count
     call fread
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, local_player
-    mov ecx, edi
-    call fread
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov eax, first_player
-    mov ecx, edi
-    call fread
-    mov ebx, 0x1
-    mov edx, 0x20
-    mov eax, next_player
-    mov ecx, edi
-    call fread
+
+; C field run 0 ends here.
+section .retained_1 align=1 vstart=0x2f513 follows=.text
     movsx edi, word [first_player]
     jmp short .branch_2f52c
-
-.initialize_player_before_restore:
     movsx eax, di
     call initialize_board_entry
     movsx edi, word [nosplit edi*2 + next_player]
-
-.branch_2f52c:
     test edi, edi
     jnl short .initialize_player_before_restore
-    fread_field player_x, 0x40
-    fread_field player_y, 0x40
-    fread_field player_z, 0x40
-    fread_field player_horizon, 0x40
-    fread_field board_state_5ae1c, 0x40
-    fread_field motion_state_62f4c, 0x40
-    fread_field player_angle, 0x20
-    fread_field player_sector, 0x20
-    fread_field previous_player_sector, 0x20
-    fread_field board_state_62f2c, 0x20
-    fread_field board_state_6317c, 0x20
-    fread_field board_state_630bc, 0x40
-    fread_field status_right_tenths, 0x40
-    fread_field board_state_6304c, 0x20
-    fread_field motion_state_6306c, 0x20
-    fread_field player_mode, 0x10
-    fread_field motion_state_630ac, 0x10
-    fread_field save_state_5addc, 0x20
-    fread_field save_state_5adfc, 0x20
-    fread_field save_state_5abbc, 0x40
-    fread_field save_state_5abfc, 0x40
-    fread_field numsectors, 0x2
+
+; C field run 1 ends here.
+section .retained_2 align=1 vstart=0x2f714 follows=.retained_1
     movsx edx, word [numsectors]
     mov eax, edx
     mov ebx, 0x1
@@ -358,24 +323,18 @@ read_game_data:
     mov eax, sectors
     shl edx, byte 0x3
     call fread
-    fread_field numwalls, 0x2
+
+; C field run 2 ends here.
+section .retained_3 align=1 vstart=0x2f74c follows=.retained_2
     mov ebx, 0x1
     mov eax, walls
     movsx edx, word [numwalls]
     mov ecx, esi
     shl edx, byte 0x5
     call fread
-    fread_field sprite, 0x2c000
-    fread_field engine_28891e, 0x802
-    fread_field save_state_1f6020, 0x2000
-    fread_field engine_1f9ca0, 0x2000
-    fread_field hit_sprite_list_head, 0x802
-    fread_field save_state_1fdca0, 0x2000
-    fread_field next_sprite_stat, 0x2000
-    fread_field keyboard_forward, 0x4
-    fread_field keyboard_strafe, 0x4
-    fread_field keyboard_turn, 0x4
-    fread_field selection, 0x4
+
+; C field run 3 ends here.
+section .retained_4 align=1 vstart=0x2f859 follows=.retained_3
     mov ebx, 0x1
     mov eax, input_forward
     mov ecx, esi
@@ -406,74 +365,9 @@ read_game_data:
     mov ecx, esi
     mov edx, ebx
     call fread
-    fread_field input_actions, 0x2
-    fread_field board_state_7def7, 0x2
-    fread_field second_player_selection, 0x4
-    fread_field second_player_input, 0x5
-    fread_field board_state_5ac8c, 0x50
-    fread_field previous_input, 0x50
-    fread_field board_filename, 0x50
-    fread_field listener_index, 0x2
-    fread_field saved_mouse_buttons, 0x2
-    fread_field brightness, 0x2
-    fread_field near_sector, 0x2
-    fread_field near_sprite, 0x2
-    fread_field near_wall, 0x2
-    fread_field actor_clock, 0x4
-    fread_field save_state_770ac, 0x4
-    fread_field near_tag_distance, 0x4
-    fread_field board_state_1cf6c, 0x20
-    fread_field board_state_7deca, 0x2
-    fread_field board_state_1ccac, 0x20
-    fread_field board_state_7dece, 0x2
-    fread_field board_state_1cc8c, 0x20
-    fread_field board_state_7dec4, 0x2
-    fread_field board_state_1ceec, 0x80
-    fread_field board_state_7decc, 0x2
-    fread_field board_state_1d08c, 0x80
-    fread_field board_state_7dec2, 0x2
-    fread_field board_state_1d10c, 0x20
-    fread_field board_state_1cc4c, 0x20
-    fread_field board_state_1cc6c, 0x20
-    fread_field board_state_7dec6, 0x2
-    fread_field board_state_1ce2c, 0x40
-    fread_field board_state_1ceac, 0x40
-    fread_field board_state_1cdec, 0x40
-    fread_field board_state_1ce6c, 0x40
-    fread_field board_state_1cd2c, 0x40
-    fread_field board_state_7debe, 0x2
-    fread_field board_state_1bb3c, 0x140
-    fread_field board_state_1bc7c, 0x40
-    fread_field board_state_1babc, 0x40
-    fread_field board_state_1bcbc, 0x40
-    fread_field board_state_1c3fc, 0x40
-    fread_field board_state_1c12c, 0x40
-    fread_field board_state_1bafc, 0x40
-    fread_field board_state_1c43c, 0x400
-    fread_field board_state_1c83c, 0x400
-    fread_field board_state_1bab4, 0x8
-    fread_field board_state_1cc44, 0x8
-    fread_field board_state_7dec0, 0x2
-    fread_field board_state_1c2fc, 0x100
-    fread_field board_state_1c1fc, 0x100
-    fread_field board_state_1baa4, 0x10
-    fread_field board_state_1ba94, 0x10
-    fread_field board_state_1bd1c, 0x400
-    fread_field board_state_1cc3c, 0x8
-    fread_field board_state_7debc, 0x2
-    fread_field board_state_1c17c, 0x80
-    fread_field board_state_1c16c, 0x10
-    fread_field board_state_1bd0c, 0x10
-    fread_field board_state_1c11c, 0x10
-    fread_field board_state_1bcfc, 0x10
-    fread_field board_state_1a214, 0x10
-    fread_field board_state_1ba34, 0x10
-    fread_field board_state_1a224, 0x10
-    fread_field board_state_1a204, 0x10
-    fread_field board_state_1ba84, 0x10
-    fread_field fini_table_end, 0x20
-    fread_field board_state_1ba44, 0x20
-    fread_field board_state_1ba64, 0x20
+
+; C field run 4 ends here.
+section .retained_5 align=1 vstart=0x2fea3 follows=.retained_4
     mov ebx, 0x1
     mov edx, 0x800
     mov eax, restore_addresses
@@ -481,53 +375,25 @@ read_game_data:
     mov edi, 0x1ff
     call fread
     jmp short .branch_2fed9
-
-.branch_2fec0:
     mov ebx, sectors
     mov edx, [nosplit edi*4 + restore_addresses]
     shl ebx, byte 0x2
     dec edi
     add edx, ebx
     mov [nosplit edi*4 + save_state_1a238], edx
-
-.branch_2fed9:
     test edi, edi
     jnl short .branch_2fec0
-    fread_field restore_values, 0x800
-    fread_field activation_state_1aa34, 0x800
-    fread_field save_state_19a04, 0x800
-    fread_field restore_count, 0x4
-    fread_field totalclock, 0x4
-    fread_field last_tick, 0x4
-    fread_field save_state_287e74, 0x4
-    fread_field board_state_287e78, 0x4
-    fread_field numpalookups, 0x2
-    fread_field engine_286ba8, 0x4
-    fread_field engine_286ba0, 0x4
+
+; C field run 5 ends here.
+section .retained_6 align=1 vstart=0x2ffcf follows=.retained_5
     mov ebx, 0x1
     mov eax, engine_2891da
     mov ecx, esi
     mov edx, ebx
     call fread
-    fread_field engine_286b88, 0x4
-    fread_field engine_1ed1a0, 0x200
-    fread_field engine_289150, 0x2
-    fread_field save_state_202c, 0x4
-    fread_field last_sequence_clock, 0x4
-    fread_field last_frame_tick, 0x4
-    fread_field level_sector_count, 0x34
-    fread_field level_sector_ids, 0xd00
-    fread_field level_sector_x, 0x1a00
-    fread_field level_left_icon, 0x9c
-    fread_field left_icon, 0x2
-    fread_field middle_icon, 0x2
-    fread_field right_icon, 0x2
-    fread_field activation_sprite_count, 0x2
-    fread_field activation_sprite_index, 0x20
-    fread_field activation_counter, 0x10
-    fread_field smoothed_mouse_dx, 0x2
-    fread_field toggled_word, 0x2
-    fread_field modified_levels, 0x1a
+
+; C field run 6 ends here.
+section .retained_7 align=1 vstart=0x30184 follows=.retained_6
     mov ebx, 0x1
     mov eax, loaded_level
     mov ecx, esi
@@ -543,110 +409,26 @@ read_game_data:
     mov ecx, esi
     mov edx, ebx
     call fread
-    fread_field destination_x, 0x4
-    fread_field destination_y, 0x4
-    fread_field destination_entry, 0x2
-    fread_field level_names, 0x21c
-    fread_field difficulty_divisor, 0x2
-    fread_field effect_count, 0x2
-    fread_field effect_speed, 0x2
-    fread_field status_flag, 0x2
-    fread_field interaction_state_2263, 0x2
-    fread_field toggled_mode, 0x2
-    fread_field item_enabled, 0x10
-    fread_field item_stock, 0x10
-    fread_field item_alternate_stock, 0x10
-    fread_field player_action, 0x2
-    fread_field save_state_2299, 0x2
-    fread_field ticks_per_step, 0x4
-    fread_field last_step_clock, 0x4
-    fread_field advance_clock, 0x2
-    fread_field board_state_7494c, 0x20
-    fread_field interaction_state_729dc, 0x20
-    fread_field sprite_actor_index, 0x2000
-    fread_field actor_sprite_index, 0x3ea
-    fread_field actor_board, 0x1f5
-    fread_field saved_actor_x, 0x177c
-    fread_field actor_enabled, 0x1f5
-    fread_field saved_actor_lotag, 0x3ea
-    fread_field actor_sequence_initial, 0x1f5
-    fread_field actor_health, 0x3ea
-    fread_field actor_z_offset, 0x7d4
-    fread_field actor_projectile_type, 0x1f5
-    fread_field actor_recovery_counter, 0x1f5
-    fread_field actor_visibility_timer, 0x1f5
-    fread_field actor_state, 0x1f5
-    fread_field actor_frame, 0x1f5
-    fread_field actor_state_byte, 0x1f5
-    fread_field actor_x, 0x7d4
-    fread_field actor_y, 0x7d4
-    fread_field actor_sector, 0x3ea
-    fread_field actor_first_waypoint, 0x7d4
-    fread_field waypoint_x, 0x800
-    fread_field actor_destination_x, 0x1f50
-    fread_field actor_kind, 0x1f5
-    fread_field actor_mode, 0x1f5
-    fread_field actor_profile, 0x1f5
-    fread_field actor_tiles, 0x233a
-    fread_field actor_delay_byte, 0x1f5
-    fread_field template_cstat, 0x13f
-    fread_field weapon_action, 0x2
-    fread_field weapon_animation_state, 0x2
-    fread_field selected_weapon, 0x2
-    fread_field selected_weapon_2be2, 0x2
-    fread_field weapon_tile, 0x2
-    fread_field weapon_x_offset, 0x2
-    fread_field weapon_y_offset, 0x2
-    fread_field close_hit_tile, 0x2
-    fread_field alternate_fire_requested, 0x2
-    fread_field force_attack_frame, 0x20
-    fread_field defer_mode_change, 0x20
-    fread_field player_hit_timer, 0x20
-    fread_field player_hit_x, 0x40
-    fread_field player_hit_y, 0x40
-    fread_field moving_sprite_count, 0x2
-    fread_field moving_sprites, 0x800
-    fread_field pan_sector_count, 0x2
-    fread_field pan_sectors, 0x80
-    fread_field float_sprite_count, 0x2
-    fread_field float_sprite_list, 0x400
-    fread_field projectile_count, 0x2
-    fread_field projectile_list, 0x400
-    fread_field active, 0x2
-    fread_field list, 0x400
-    fread_field map_x, 0x2
-    fread_field map_scale_or_y, 0x2
-    fread_field map_offset_y, 0x2
-    fread_field mouse_buttons, 0x2
-    fread_field mouse_dx, 0x2
-    fread_field mouse_dy, 0x2
-    fread_field button_latch_disabled, 0x2
-    fread_field held_sprite, 0x2
-    fread_field map_mode, 0x2
-    fread_field mouse_motion_disabled, 0x2
-    fread_field inventory_grid, 0x48
+
+; C field run 7 ends here.
+section .retained_8 align=1 vstart=0x308c9 follows=.retained_7
     mov ebx, 0x1
     mov eax, cursor_mode
     mov ecx, esi
     mov edx, ebx
     call fread
-    fread_field actor_target, 0x2
-    fread_field special_sector, 0x2
-    fread_field trigger_count, 0x2
-    fread_field trigger_sprite, 0x194
+
+; C field run 8 ends here.
+section .retained_9 align=1 vstart=0x30934 follows=.retained_8
     mov eax, esi
     call sub_40354
     mov eax, esi
     call fclose
     movsx edi, word [first_player]
     jmp short .branch_3095b
-
-.initialize_player_after_restore:
     movsx eax, di
     call initialize_board_entry
     movsx edi, word [nosplit edi*2 + next_player]
-
-.branch_3095b:
     test edi, edi
     jnl short .initialize_player_after_restore
     mov edi, status_text
@@ -665,8 +447,6 @@ read_game_data:
     add edx, eax
     mov [status_expiration], edx
     xor eax, eax
-
-.return:
     add esp, 0x14
     pop edi
     pop esi

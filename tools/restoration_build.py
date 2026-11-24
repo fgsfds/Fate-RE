@@ -22,7 +22,7 @@ COMPILERS = {
 RUNNER_HASH = 'f3b2864d171319728baaf95c1188e7b98d5b9ce2bb13768b5272e3ec5c94f4f4'
 DOSBOX_HASH = 'dcfd46fa521f5ce89dce3bf026056f3a1d15533f80321ee887403e30d7949f5e'
 HEADERS = ('fate/copybuf.h fate/menurec.h fate/menucall.h fate/cfgabi.h fate/dosio.h '
-           'fate/navdata.h fate/sndslot.h fate/levmods.h fate/dpmiregs.h runtime/rtstream.h').split()
+           'fate/navdata.h fate/sndslot.h fate/levmods.h fate/dpmiregs.h fate/saveio.h runtime/rtstream.h').split()
 INCLUDES = dict(zip(
     'ceilhl cacheglo msgconst line256 line16 lines modes16 clear2d grid2d'.split(),
     ('engine/ceilhl cache/globals cache/messages_const engine/drawline256 engine/drawline16 '

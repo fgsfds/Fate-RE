@@ -356,3 +356,25 @@ zero raw addend; an optional third field pins a nonzero DATA addend.
 This protects unlinked symbolic references even when selected spans have
 no LE sites. The ripple fixture rejects a changed private opcode/return,
 external name, addend, compiler target and production destination.
+
+
+For literal `fread`/`fwrite` records, conservative clobbers on empty
+identities preserve the original EBX-count, EDX-size, EAX-buffer and
+ECX-stream preparation order. The actual stream callees preserve
+ESI/EDI/EBP and may clobber all four argument registers. Model raw saved
+state as the bounded character representation of the original LE DATA
+object, rather than inventing incompatible typed global declarations.
+Pin its real extent/base and every record's address, size and LE target.
+
+A void final transfer becomes a tail JMP. Returning its actual item
+count in EBX preserves CALL in a two-function probe, but multiple
+same-callee contexts may still share the entire final call/return tail.
+Returning the last complete item's bounded end cursor gives each run
+a meaningful distinct suffix and keeps every required CALL. The cursor
+is private: select only the field calls and guard all prefix/suffix
+bytes and fixups. A non-power-of-two final size can introduce PUSH ESI
+for private cursor arithmetic; exclude it when the placed body uses
+only register arguments and the caller's existing stack. For private
+behavior tests, keep the compiler object's full layout so shared tails
+still reach their original targets. Check both empty/short I/O and
+complete-item cursor semantics, not just successful transfers.

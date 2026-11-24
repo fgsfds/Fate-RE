@@ -7,6 +7,7 @@ Relative operands are checked by exact bytes, not LE pointer records.
 """
 import argparse
 import hashlib
+import json
 from functools import lru_cache
 from pathlib import Path
 from types import MappingProxyType
@@ -5017,6 +5018,24 @@ LEAF_CONTEXT_SHA256['ripple_flow_context_'] = 'c0078b4844f0f1b673fface7613e70ce1
 LEAF_CONTEXT_SUFFIXES['ripple_flow_context_'] = b'\xc3'
 LEAF_CONTEXT_FIXUPS['ripple_flow_context_'] = {20: ('_ripple_count', False, 0), 50: ('random_value_', True, 0), 57: ('_ripple_count', False, 0), 69: ('_ripple_origin_x', False, 0), 74: ('random_value_', True, 0), 84: ('_ripple_count', False, 0), 94: ('_ripple_origin_y', False, 0), 101: ('_ripple_radius', False, 0), 108: ('_ripple_count', False, 0), 120: ('_ripple_count', False, 0), 136: ('_ripple_radius', False, 0), 148: ('_ripple_speed', False, 0), 159: ('_ripple_radius', False, 0), 166: ('_radial_sample_count', False, 0), 180: ('_ripple_origin_x', False, 0), 191: ('_ripple_origin_y', False, 0), 215: ('_radial_x_offsets', False, 0), 223: ('_radial_y_offsets', False, 0), 270: ('_ripple_radius', False, 0), 277: ('_ripple_radius', False, 0), 288: ('_ripple_count', False, 0), 296: ('_ripple_origin_x', False, 0), 303: ('_ripple_radius', False, 0), 310: ('_ripple_origin_y', False, 0), 316: ('_ripple_count', False, 0), 322: ('_ripple_origin_x', False, 0), 328: ('_ripple_radius', False, 0), 334: ('_ripple_origin_y', False, 0), 355: ('_ripple_buffer', False, 133), 424: ('_ripple_buffer', False, 1), 436: ('_ripple_buffer', False, 17028), 485: ('_ripple_buffer', False, 0), 496: ('_ripple_buffer', False, 129), 517: ('_ripple_buffer', False, 0), 530: ('_ripple_buffer', False, 129), 540: ('_ripple_buffer', False, 17028), 556: ('_ripple_buffer', False, 17159), 579: ('_ripple_buffer', False, 0), 851: ('_ripple_frame', False, 0)}
 LEAF_SECTION_BRANCHES['ripple_flow_context_'] = (865, 855, {47: (b'\xeb', 112, 110), 117: (b'}', 49, 43), 128: (b'\xe9', 341, 347), 195: (b'\xeb', 258, 264), 260: (b'}', 197, 197), 365: (b'\xeb', 400, 402), 406: (b'|', 367, 369), 450: (b'\xeb', 500, 501), 506: (b'|', 452, 454), 560: (b'\xe9', 837, 827), 595: (b'\xe9', 826, 816)})
+
+# Fixed-size game-state I/O fields, audited against the pinned save format.
+SAVE_FIELD_LAYOUT = json.loads((Path(__file__).parent/'data/save-field-layout.json').read_text(encoding='utf-8'))
+DATA_OFFSETS['_save_data_image'] = 0
+for _routine in SAVE_FIELD_LAYOUT['routines']:
+    _target = 'fread_' if _routine['symbol'] == 'read_game_data' else 'fwrite_'
+    for _run in _routine['runs']:
+        _public, _phase = _run['public'], _run['phase']
+        _start, _size = _run['body_start'], _run['body_size']
+        LEAVES[_phase] = (_run['start_file_offset'], _size)
+        LEAF_CODE_SLICES[_phase] = (_public, _start, _start+_size, _run['public_size'])
+        LEAF_CONTEXT_SHA256[_public] = _run['context_sha256']
+        LEAF_CONTEXT_SUFFIXES[_public] = bytes.fromhex(_run['private_suffix'])
+        _refs = {int(site): tuple(spec) for site, spec in _run['private_fixups'].items()}
+        for _index, _field in enumerate(_run['records']):
+            _refs[_start+22*_index+11] = ('_save_data_image', False, _field['data_offset'])
+            _refs[_start+22*_index+18] = (_target, True)
+        LEAF_CONTEXT_FIXUPS[_public] = _refs
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
