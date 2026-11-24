@@ -854,19 +854,22 @@ assembly call and withhold a whole-defined-C claim. Frozen evidence:
 
 ### VESA initializer input and register phases
 
-`initialize_vesa_mode`, Watcom 10.5 `/4r /s /or /bt=dos`: six guarded C
-phases supply 745 native bytes and 52 LE sites; 327 bytes and seven sites
-remain assembly. The private 1,133-byte context has a matching 0x120 frame
-but defines BIOS words that the original leaves unwritten. Its first remaining
-difference at compiler +0x3d is the frame LEA instead of MOV EBX,512 before
-those private initializers. Original calls 0x43d62, 0x43ea3 and 0x43ee2 remain
-assembly: on cached probing, 4f02 has no dominating writes to CX/DX/SI/DI,
-and 4f0a reads unwritten ES/DS at frame+0x110/+0x116. The selected query call
-also retains its existing wrapper's unresolved inner BIOS boundary.
-Next isolate the widened byte predicates and callback-table address phases
-with truthful full-register consumers; prove an incoming input contract or
-opaque primitive boundary before selecting any legacy BIOS call. Do not
-remove private initializers solely because the hardware ignores a register.
-Frozen probes and dependency notes: `work/vesa-init-research/probe52.json`
+`initialize_vesa_mode`, Watcom 10.5 `/4r /s /or /bt=dos` (secondary context
+also `/dVESA_PREDICATE_CONTEXT`): 29 guarded phases supply 1,013 native
+bytes and 57 LE sites. The remaining 59 bytes and two sites contain three
+legacy BIOS calls, the repeated far-list load/conversion, attributes-bit test,
+EDI software-flag handoff, and shared return jump. Probe 54 register identities
+still merge the two controller-pointer reads and move the high half through
+EBX. Next test a volatile-qualified view of the actual controller record to
+retain its two observed dword reads, then check the high/low register order.
+The attributes test still uses a direct byte TEST rather than the original
+dword/AL/AH/CWDE sequence; the fallback uses EBP where the original sets EDI.
+
+Original calls 0x43d62, 0x43ea3 and 0x43ee2 remain assembly. On cached probing,
+4f02 has no dominating writes to CX/DX/SI/DI; 4f0a reads unwritten ES/DS at
+frame+0x110/+0x116. The selected query call also retains its existing wrapper's
+unresolved inner BIOS boundary. Prove an incoming contract or exact opaque
+primitive boundary before selecting these calls; keep the private initializers.
+Frozen coverage/dependency evidence: `work/vesa-init-research/probe55.json`
 and `work/vesa-init-research/notes.md`; production context fixture:
 `work/palette-loop-check/vesa-mode-initialization.json`.

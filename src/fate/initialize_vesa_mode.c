@@ -1,7 +1,7 @@
-/* Six checked compiler phases supply mode selection, framebuffer and page
- * calculations. Private BIOS inputs are initialized here; the original BIOS
- * boundaries and unmatched instructions remain assembly. See the progress
- * report for the bounded VBE memory and positive-pitch contracts. */
+/* Checked compiler contexts share the complete VESA algorithm. The default
+ * supplies mode/framebuffer/page phases; VESA_PREDICATE_CONTEXT also supplies
+ * widened predicates and BIOS argument/PM lookup phases. Private BIOS inputs
+ * are initialized here, while unproven original calls remain assembly. */
 #include "dpmiregs.h"
 
 #pragma pack(push, 1)
@@ -100,10 +100,28 @@ extern long width_in_esi(long);
 extern long height_in_edi(long);
 #pragma aux height_in_edi = parm [edi] value [edi] modify exact [];
 
-void initialize_vesa_mode(long, long);
-#pragma aux initialize_vesa_mode parm routine [eax] [edx] modify exact [eax edx];
+#ifdef VESA_PREDICATE_CONTEXT
+#define VESA_INIT_CONTEXT vesa_init_predicate_context
+/* Compare zero-extended BIOS and mode words in the ABI's result register. */
+extern unsigned vesa_value_in_eax(unsigned);
+#pragma aux vesa_value_in_eax = parm [eax] value [eax] modify exact [];
 
-void initialize_vesa_mode(long requested_width, long requested_height)
+/* Keep the table base available across both entry-offset reads. */
+extern unsigned vesa_value_in_ebx(unsigned);
+#pragma aux vesa_value_in_ebx = parm [ebx] value [ebx] modify exact [];
+
+#pragma aux vesa_init_predicate_context parm routine [eax] [edx] modify exact [eax edx];
+
+#else
+#define VESA_INIT_CONTEXT initialize_vesa_mode
+#define vesa_value_in_eax(value) (value)
+#define vesa_value_in_ebx(value) (value)
+#pragma aux initialize_vesa_mode parm routine [eax] [edx] modify exact [eax edx];
+#endif
+
+void VESA_INIT_CONTEXT(long, long);
+
+void VESA_INIT_CONTEXT(long requested_width, long requested_height)
 {
     VesaFrame frame;
     short *mode;
@@ -125,7 +143,7 @@ void initialize_vesa_mode(long requested_width, long requested_height)
         frame.bios.bx = frame.bios.cx = frame.bios.dx = 0;
         frame.bios.si = frame.bios.di = 0;
         get_vesa_mode_info(&frame.bios, &vesa_controller_info, 512);
-        if (frame.bios.ax != 0x004f ||
+        if (vesa_value_in_eax(frame.bios.ax) != 0x004f ||
             strncmp(vesa_controller_info.signature, vesa_reply_signature, 4) != 0) {
             printf(vesa_not_supported_message);
             return;
@@ -145,8 +163,8 @@ void initialize_vesa_mode(long requested_width, long requested_height)
     goto check_mode;
     do {
         if (!query_vesa_mode_from_ax(mode_number, &frame.mode.attributes) ||
-            frame.mode.memory_model != 4 || frame.mode.bits_per_pixel != 8 ||
-            frame.mode.planes != 1 || frame.mode.width != width ||
+            vesa_value_in_eax(frame.mode.memory_model) != 4 || vesa_value_in_eax(frame.mode.bits_per_pixel) != 8 ||
+            vesa_value_in_eax(frame.mode.planes) != 1 || frame.mode.width != width ||
             frame.mode.height != height)
             goto next_mode;
         video_pitch = frame.mode.pitch;
@@ -164,12 +182,15 @@ void initialize_vesa_mode(long requested_width, long requested_height)
         frame.bios.bx = frame.bios.cx = frame.bios.dx = 0;
         frame.tail.segments.es = frame.tail.segments.ds = 0;
         dpmi_real_mode_far_call(0x10, &frame.bios, &frame.bios, &frame.tail.segments);
-        if (frame.bios.ax == 0x004f) {
-            unsigned long table_address = ((unsigned long)frame.tail.segments.es << 4)
-                + frame.bios.di;
+        if (vesa_value_in_eax(frame.bios.ax) == 0x004f) {
+            unsigned long table_address = vesa_value_in_ebx(
+                ((unsigned long)vesa_value_in_eax(frame.tail.segments.es) << 4)
+                + vesa_value_in_ebx(frame.bios.di));
             const short *table = (const short *)table_address;
-            vesa_pm_set_window = (VesaEntry)(table_address + (long)table[0]);
-            vesa_pm_set_display_start = (VesaEntry)(table_address + (long)table[1]);
+            vesa_pm_set_window = (VesaEntry)vesa_value_in_eax(
+                table_address + vesa_value_in_eax((unsigned long)(long)table[0]));
+            vesa_pm_set_display_start = (VesaEntry)vesa_value_in_eax(
+                table_address + vesa_value_in_eax((unsigned long)(long)table[1]));
         }
 
         if (frame.mode.attributes & 0x80) {

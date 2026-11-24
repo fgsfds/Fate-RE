@@ -1912,6 +1912,388 @@
           }
         }
       ]
+    },
+    {
+      "object": "vbeprdc",
+      "source": "fate/initialize_vesa_mode",
+      "size": 1154,
+      "contexts": [
+        {
+          "public": "vesa_init_predicate_context_",
+          "start": 0,
+          "size": 1154,
+          "sha256": "45c1a3471decfdf2aacded073df706841341eb0432a04b83507083e6b3b7693b",
+          "fixups": {
+            "17": [
+              "_vesa_probe_attempted",
+              false,
+              0
+            ],
+            "36": [
+              "_vesa_controller_info",
+              false,
+              0
+            ],
+            "42": [
+              "_vesa_probe_attempted",
+              false,
+              0
+            ],
+            "47": [
+              "_vesa_request_signature",
+              false,
+              0
+            ],
+            "52": [
+              "strncpy_",
+              true,
+              0
+            ],
+            "124": [
+              "_vesa_controller_info",
+              false,
+              0
+            ],
+            "129": [
+              "get_vesa_mode_info_",
+              true,
+              0
+            ],
+            "154": [
+              "_vesa_reply_signature",
+              false,
+              0
+            ],
+            "159": [
+              "_vesa_controller_info",
+              false,
+              0
+            ],
+            "164": [
+              "strncmp_",
+              true,
+              0
+            ],
+            "173": [
+              "_vesa_not_supported_message",
+              false,
+              0
+            ],
+            "178": [
+              "printf_",
+              true,
+              0
+            ],
+            "191": [
+              "_vesa_controller_info",
+              false,
+              14
+            ],
+            "211": [
+              "_vesa_mode_list",
+              false,
+              0
+            ],
+            "243": [
+              "_vesa_mode_list",
+              false,
+              0
+            ],
+            "249": [
+              "_video_width",
+              false,
+              0
+            ],
+            "255": [
+              "_video_height",
+              false,
+              0
+            ],
+            "267": [
+              "query_vesa_mode_",
+              true,
+              0
+            ],
+            "356": [
+              "_video_pitch",
+              false,
+              0
+            ],
+            "378": [
+              "_video_page_count",
+              false,
+              0
+            ],
+            "479": [
+              "dpmi_real_mode_interrupt_",
+              true,
+              0
+            ],
+            "558": [
+              "dpmi_real_mode_far_call_",
+              true,
+              0
+            ],
+            "608": [
+              "_vesa_pm_set_window",
+              false,
+              0
+            ],
+            "619": [
+              "_vesa_pm_set_display_start",
+              false,
+              0
+            ],
+            "643": [
+              "map_video_memory_",
+              true,
+              0
+            ],
+            "649": [
+              "_video_page_count",
+              false,
+              0
+            ],
+            "656": [
+              "_framebuffer_selector",
+              false,
+              0
+            ],
+            "661": [
+              "_framebuffer_offset",
+              false,
+              0
+            ],
+            "667": [
+              "_linear_framebuffer_enabled",
+              false,
+              0
+            ],
+            "683": [
+              "_video_height",
+              false,
+              0
+            ],
+            "688": [
+              "_use_software_framebuffer",
+              false,
+              0
+            ],
+            "693": [
+              "_video_pitch",
+              false,
+              0
+            ],
+            "703": [
+              "_video_page_size",
+              false,
+              0
+            ],
+            "708": [
+              "_mapped_video_base",
+              false,
+              0
+            ],
+            "715": [
+              "_draw_page_address",
+              false,
+              0
+            ],
+            "720": [
+              "_video_page_count",
+              false,
+              0
+            ],
+            "728": [
+              "_mapped_video_base",
+              false,
+              0
+            ],
+            "737": [
+              "_linear_page_addresses",
+              false,
+              0
+            ],
+            "743": [
+              "_video_page_size",
+              false,
+              0
+            ],
+            "833": [
+              "_bank_shift",
+              false,
+              0
+            ],
+            "841": [
+              "_bank_shift",
+              false,
+              0
+            ],
+            "853": [
+              "_bank_shift",
+              false,
+              0
+            ],
+            "865": [
+              "_bank_shift",
+              false,
+              0
+            ],
+            "877": [
+              "_bank_shift",
+              false,
+              0
+            ],
+            "889": [
+              "_bank_shift",
+              false,
+              0
+            ],
+            "901": [
+              "_bank_shift",
+              false,
+              0
+            ],
+            "913": [
+              "_linear_framebuffer_enabled",
+              false,
+              0
+            ],
+            "935": [
+              "_video_page_count",
+              false,
+              0
+            ],
+            "954": [
+              "_use_software_framebuffer",
+              false,
+              0
+            ],
+            "960": [
+              "_video_page_size",
+              false,
+              0
+            ],
+            "966": [
+              "_draw_page_address",
+              false,
+              0
+            ],
+            "973": [
+              "_video_pitch",
+              false,
+              0
+            ],
+            "980": [
+              "_video_height",
+              false,
+              0
+            ],
+            "990": [
+              "_video_page_size",
+              false,
+              0
+            ],
+            "995": [
+              "_software_framebuffer",
+              false,
+              0
+            ],
+            "1001": [
+              "_use_software_framebuffer",
+              false,
+              0
+            ],
+            "1006": [
+              "_draw_page_address",
+              false,
+              0
+            ],
+            "1012": [
+              "_video_page_count",
+              false,
+              0
+            ],
+            "1021": [
+              "_use_software_framebuffer",
+              false,
+              0
+            ],
+            "1030": [
+              "_skip_bank_switch",
+              false,
+              0
+            ],
+            "1045": [
+              "_video_pitch",
+              false,
+              0
+            ],
+            "1052": [
+              "divide_vesa_offset_",
+              true,
+              0
+            ],
+            "1066": [
+              "_video_page_size",
+              false,
+              0
+            ],
+            "1074": [
+              "_page_offsets",
+              false,
+              0
+            ],
+            "1091": [
+              "_page_offsets",
+              false,
+              2
+            ],
+            "1097": [
+              "_video_page_count",
+              false,
+              0
+            ],
+            "1123": [
+              "_vesa_mode_not_found_message",
+              false,
+              0
+            ],
+            "1128": [
+              "printf_",
+              true,
+              0
+            ],
+            "1138": [
+              "runtime_exit_",
+              true,
+              0
+            ]
+          },
+          "branches": {
+            "public_address": 277772,
+            "compiler_size": 1154,
+            "placed_size": 1072,
+            "sites": {
+              "288": [
+                "0f85",
+                1105,
+                1024
+              ],
+              "303": [
+                "0f85",
+                1105,
+                1024
+              ],
+              "575": [
+                "75",
+                623,
+                536
+              ]
+            }
+          }
+        }
+      ]
     }
   ],
   "phases": [
@@ -2444,6 +2826,236 @@
       "address": 278696,
       "routine": "initialize_vesa_mode",
       "le_sites": 10
+    },
+    {
+      "phase": "vesa_init_secondary_at_03d_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 118,
+      "end": 123,
+      "address": 277833,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_secondary_at_042_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 61,
+      "end": 68,
+      "address": 277838,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_secondary_at_049_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 70,
+      "end": 78,
+      "address": 277845,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_secondary_at_051_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 123,
+      "end": 128,
+      "address": 277853,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 1
+    },
+    {
+      "phase": "vesa_init_secondary_at_05b_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 133,
+      "end": 146,
+      "address": 277863,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_secondary_at_0f2_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 279,
+      "end": 318,
+      "address": 278014,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_secondary_at_159_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 382,
+      "end": 408,
+      "address": 278117,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_secondary_at_173_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 410,
+      "end": 417,
+      "address": 278143,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_secondary_at_17a_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 408,
+      "end": 410,
+      "address": 278150,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_secondary_at_17c_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 466,
+      "end": 471,
+      "address": 278152,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_secondary_at_181_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 417,
+      "end": 425,
+      "address": 278157,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_secondary_at_189_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 427,
+      "end": 434,
+      "address": 278165,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_secondary_at_190_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 471,
+      "end": 478,
+      "address": 278172,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_secondary_at_19c_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 483,
+      "end": 505,
+      "address": 278184,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_secondary_at_1b2_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 521,
+      "end": 529,
+      "address": 278206,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_secondary_at_1ba_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 513,
+      "end": 521,
+      "address": 278214,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_secondary_at_1c2_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 505,
+      "end": 513,
+      "address": 278222,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_secondary_at_1ca_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 545,
+      "end": 557,
+      "address": 278230,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_secondary_at_1db_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 562,
+      "end": 579,
+      "address": 278247,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_secondary_at_1ec_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 587,
+      "end": 589,
+      "address": 278264,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_secondary_at_1ee_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 579,
+      "end": 587,
+      "address": 278266,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 0
+    },
+    {
+      "phase": "vesa_init_secondary_at_1f6_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 589,
+      "end": 623,
+      "address": 278274,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 2
+    },
+    {
+      "phase": "vesa_init_secondary_at_38c_",
+      "public": "vesa_init_predicate_context_",
+      "object": "vbeprdc",
+      "begin": 989,
+      "end": 999,
+      "address": 278680,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 2
     }
   ]
 }

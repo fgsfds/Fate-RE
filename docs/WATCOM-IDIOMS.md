@@ -500,3 +500,13 @@ width and height with truthful empty ESI/EDI identities when loop rotation
 otherwise swaps their allocation. Preserve the callee's actual low-word
 contract, and check both signed sentinel flow and the complete frame rather
 than assuming source argument types determine the machine ABI.
+
+
+A direct byte or word comparison may compile as a memory-width CMP even when
+historical code zero-extends into EAX first. Pass the unsigned value through a
+truthful empty full-EAX identity to retain the widened comparison. Keep this
+in a separate guarded context when its register pressure changes surrounding
+code. For an ES:DI callback table, constrain the summed table base to EBX and
+the signed entry offsets and completed sums to EAX. An independent XOR EBX
+can move before a MOV AX only after proving BX is not yet used and subsequent
+SHL/ADD replace its flags; guard the complete source and each placed phase.
