@@ -1,4 +1,4 @@
-"""Verify the retained status-panel entry and exact C tail against the game.
+"""Verify the complete C status panel and both guarded compiler contexts.
 
 Uses 40 independent bounded cases, full DS comparisons, live callback mutations,
 and the original six-register preservation contract. The decimal-format helper
@@ -19,7 +19,7 @@ from le_fixups import read_le_fixups, pointer_range
 ENTRY, SIZE, RAW = 0x1067a, 692, 0x35c7a
 DS, DATA_SIZE, STACK, STOP = 0x80000, 0x300000, 0x3f0000, 0x3fff00
 REFERENCE_SHA = '61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f'
-ASM = ROOT / 'src/fate/status_panel.asm'
+ENTRY_SOURCE = ROOT / 'src/fate/status_panel_entry.c'
 PREFIX_SIZE = 84
 SOURCE = ROOT / 'src/fate/status_panel.c'
 A = dict(number_format=0xe4, show_left_icon=0x2038, show_middle_icon=0x203a,
@@ -203,31 +203,62 @@ def main():
     exe = args.exe.read_bytes()
     reference = reference_body(exe)
     object_path = args.build / 'statpan.obj'
-    prefix_path = args.build / 'asm/status_panel.bin'
-    obj, prefix = object_path.read_bytes(), prefix_path.read_bytes()
-    assert len(prefix) == PREFIX_SIZE, 'retained assembly entry must be exactly 84 bytes'
-    assert prefix == exe[RAW:RAW + PREFIX_SIZE], 'actual assembled entry differs from reference'
-    pointers = pointer_range(read_le_fixups(exe)['pointers'], ENTRY, PREFIX_SIZE)
-    assert len(pointers) == 5, 'retained assembly entry must have five LE operands'
-    loaded_prefix = bytearray(prefix)
-    for site, target in pointers.items():
-        assert site + 4 <= PREFIX_SIZE, 'partial assembly-prefix LE operand'
-        loaded_prefix[site:site + 4] = pack('<I', target)
+    import verify_c_leaf as v
+    from check_ripple_stack import mutate_public_byte
+    from check_ripple_control import rename_external
+    obj = object_path.read_bytes()
+    entry_obj = (args.build/'statpent.obj').read_bytes()
+    objects={'statpan':obj,'statpent':entry_obj}
+    data={'_'+name:offset for name,offset in A.items()}
+    phases=sorted((r for r in v.CONTROLLER_PREFIX_LAYOUT['phases'] if r['routine']=='draw_status_panel'),key=lambda r:r['address'])
+    loaded_prefix=bytearray();prefix_fixups=0;cursor=ENTRY
+    for phase in phases:
+        assert phase['address']==cursor
+        size=phase['end']-phase['begin']
+        ref,code,count=bind_bodies(exe,objects[phase['object']],phase['phase'],cursor,size,data,FUNCTIONS,data_base=DS)
+        assert ref==reference[cursor-ENTRY:cursor-ENTRY+size]
+        loaded_prefix.extend(code);prefix_fixups+=count;cursor+=size
+    assert cursor==ENTRY+PREFIX_SIZE and prefix_fixups==5
     reference_tail, candidate_tail, fixups = bind_bodies(
         exe, obj, 'draw_status_panel_', ENTRY + PREFIX_SIZE, SIZE - PREFIX_SIZE,
-        {'_' + name: offset for name, offset in A.items()}, FUNCTIONS,
+        data, FUNCTIONS,
         data_base=DS, behavior_only=False, execution_functions=FUNCTIONS)
     assert len(candidate_tail) == SIZE - PREFIX_SIZE == 608
     assert fixups == 36, 'C tail must have exactly 36 LE operands'
     assert reference[PREFIX_SIZE:] == reference_tail, 'tail reference rebasing differs'
     candidate = bytes(loaded_prefix) + candidate_tail
     assert len(candidate) == SIZE
+    private_contexts=[]
+    for public,blob,size in (('draw_status_panel_',obj,692),('draw_status_panel_entry_',entry_obj,693)):
+        alias=public+'full_private_check'
+        v.LEAF_CODE_SLICES[alias]=(public,0,size,size)
+        try:
+            code,_=v.bind_leaf_details(blob,alias,{name:DS+offset for name,offset in data.items()},address=ENTRY,functions=FUNCTIONS)
+        finally:del v.LEAF_CODE_SLICES[alias]
+        private_contexts.append(code)
+    context_controls=0
+    def rejected(blob,phase,message):
+        nonlocal context_controls
+        try:v.bind_leaf_details(blob,phase['phase'],data,address=phase['address'],functions=FUNCTIONS)
+        except ValueError as error:
+            assert message in str(error).lower();context_controls+=1
+        else:raise AssertionError('Panel context mutation escaped')
+    first=phases[0];store=next(r for r in phases if r['object']=='statpan')
+    rejected(mutate_public_byte(obj,'draw_status_panel_',0),store,'context')
+    rejected(mutate_public_byte(entry_obj,'draw_status_panel_entry_',692),first,'context')
+    rejected(rename_external(entry_obj,b'draw_tile_',b'draw_tilf_'),first,'fixup')
+    public='draw_status_panel_entry_'
+    context=next(c for o in v.CONTROLLER_PREFIX_LAYOUT['objects'] for c in o['contexts'] if c['public']==public)
+    site=next(int(site) for site,spec in context['fixups'].items() if int(site)>=84 and not spec[1])
+    digest=v.LEAF_CONTEXT_SHA256.pop(public)
+    try:rejected(mutate_public_byte(entry_obj,public,site),first,'addend')
+    finally:v.LEAF_CONTEXT_SHA256[public]=digest
     output = args.output or args.build / 'status-panel-behavior.json'
     report = dict(fixture='status-panel', status='FAIL', exact_verified=True, inventory_eligible=False,
-        mode='exact-and-behavior', reference_sha256=sha(exe), asm_sha256=sha(ASM.read_bytes()),
+        mode='exact-and-behavior', reference_sha256=sha(exe), entry_source_sha256=sha(ENTRY_SOURCE.read_bytes()),
         source_sha256=sha(SOURCE.read_bytes()), object_sha256=sha(obj),
-        assembly_prefix_sha256=sha(prefix), assembly_prefix_bytes=len(prefix),
-        assembly_prefix_le_fixups=len(pointers), c_tail_bytes=len(candidate_tail),
+        entry_object_sha256=sha(entry_obj),c_prefix_sha256=sha(loaded_prefix),c_prefix_bytes=len(loaded_prefix),
+        c_prefix_le_fixups=prefix_fixups,retained_asm_bytes=0,c_tail_bytes=len(candidate_tail),
         c_tail_le_fixups=fixups, reference_body_sha256=sha(reference),
         candidate_body_sha256=sha(candidate), candidate_bytes=len(candidate),
         reference_le_fixups=41, data_base=DS, data_bytes_compared=DATA_SIZE, stack_cleanup=4,
@@ -235,7 +266,8 @@ def main():
         format_fixture_limit='clamped decimal values 0..999; four bytes including NUL',
         helper_contracts={'format_string':'caller cleans 3 stack args; EAX only; %3d NUL, 0..999',
                           'draw_number_text':'4 register args + one stack arg; RET 4; clobbers EAX EBX ECX EDX',
-                          'draw_tile':'4 register args + eight stack args; RET 32; clobbers EAX EBX ECX EDX'}, cases=[])
+                          'draw_tile':'4 register args + eight stack args; RET 32; clobbers EAX EBX ECX EDX'},
+        private_context_cases=0,context_controls=context_controls,cases=[])
     try:
         for case in cases():
             expected = exercise(reference, case)
@@ -248,6 +280,11 @@ def main():
                 reference_ds_sha256=sha(expected.memory['DS']), candidate_ds_sha256=sha(actual.memory['DS'])))
             if difference:
                 raise AssertionError(f"{case['name']}: {difference}")
+            for private in private_contexts:
+                private_result=exercise(private,case)
+                difference=first_difference(expected,private_result)
+                assert not difference,(case['name'],difference)
+                report['private_context_cases']+=1
         changed_tile = bytearray(reference)
         site = changed_tile.index(pack('<I', 0x828))
         changed_tile[site:site + 4] = pack('<I', 0x829)
@@ -263,7 +300,7 @@ def main():
         report['case_count'] = len(cases())
         report['cases_passed'] = sum(c['status'] == 'PASS' for c in report['cases'])
         output.write_text(json.dumps(report, indent=2) + '\n', encoding='utf-8')
-    print(f"PASS: {report['cases_passed']}/{report['case_count']} cases; full DS, independent calls, ABI, callback mutations; 84-byte ASM entry + 608-byte exact C tail, 41 LE operands")
+    print(f"PASS: {report['cases_passed']}/{report['case_count']} placed and {report['private_context_cases']} private cases; full DS, independent calls, ABI, callback mutations; complete 692-byte C routine, 41 LE operands")
 
 
 if __name__ == '__main__':

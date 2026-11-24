@@ -1,15 +1,15 @@
 # Exact C restoration progress
 
-The current saved attribution audit covers all 414,639 CODE bytes and includes 571 compiler units. Saved full validation passed 405 tests and 145 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
+The current saved attribution audit covers all 414,639 CODE bytes and includes 573 compiler units. Saved full validation passed 405 tests and 145 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 167,448 | 40.384% |
+| Compiler-generated instructions | 167,550 | 40.409% |
 | Inline assembly instructions in C objects | 24,311 | 5.863% |
-| Standalone assembly | 221,629 | 53.451% |
+| Standalone assembly | 221,527 | 53.426% |
 | Unattributed instructions and non-routine tables | 1,251 | 0.302% |
 
-The unattributed category contains 882 instruction bytes in 16 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 245,940 bytes (59.31%). C-object inventory covers 193,010 bytes (46.55%) and 1,416 C routine spans; the assembly inventory has 484 spans.
+The unattributed category contains 882 instruction bytes in 16 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 245,838 bytes (59.29%). C-object inventory covers 193,112 bytes (46.57%) and 1,424 C routine spans; the assembly inventory has 482 spans.
 
 The accepted executable is 741,347 bytes, SHA-256 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.
 
@@ -131,6 +131,33 @@ unlinked footer bytes; two additional mutation controls cover footer and
 player-context returns. This checkpoint replaces the last 110 assembly bytes
 in the two save/load routines.
 
+The gameplay controller is entirely compiler-generated C: all 1,245 bytes
+and 113 LE sites. Its final 18-byte row setup comes from a genuine C context
+that returns `row * 128` in EBP while handing the loaded sector word to AX.
+The table has 26 rows of 32 four-byte records; the valid domain is rows 0..25
+and columns 0..31. A real EBP result coalesces the scaled address temporary
+without an unsupported EBP input or modify declaration. Full context hashes
+and the complete fixup inventory guard the private RET. The fixture passes
+32 complete-controller cases and seven behavioral controls plus 256 placed
+and private row handoffs with three context controls. Row cases poison input
+upper bits and compare all GPRs, defined shift flags, complete DATA and caller
+frames. The former row assembly source and registration have been removed.
+
+The status panel is also entirely compiler-generated C: all 692 image bytes
+and 41 LE sites. Seven entry phases contribute the final 84 bytes, from a
+genuine first-draw context and the original C context's top store. Truthful
+empty clip identities preserve the initial values in EBX/ECX/ESI/EDI. The
+placed sequence stores top=4 before loading fixed drawing arguments and
+clearing the angle. The existing 608-byte C body reloads live clip/state
+values after drawing callbacks. Full hashes and all 54 fixups guard each of
+the 692-/693-byte compiler contexts, including unlinked code. This is a
+restoration through selected C contexts, not one matching compiler public.
+The fixture passes 40 complete placed cases and 80 complete private-context
+cases, checking independent call/state expectations, callbacks that change
+clips, full DATA, stack cleanup and six preserved registers. Four context
+controls and two behavioral controls pass. The entry assembly source and its
+registration have been removed. Together these routines add 102 native C bytes.
+
 Ripple animation is entirely compiler-generated C: all 855 image bytes
 (100% of the routine), including count clamp 22, masked row 32, top/bottom border
 40, corner stores 45, X-slot update 17, Y-slot update 33, pixel floor 14,
@@ -230,7 +257,9 @@ The saved full validation and audit artifacts verify the pinned image:
 - Save/load status completion: `work/palette-loop-check/save-status-completion.json`.
 - Save/load status messages: `work/palette-loop-check/save-status-message.json`.
 - Save/load slot opening: `work/palette-loop-check/save-slot-open.json`.
-- Attribution audit: `work/save-complete-audit.json`.
+- Gameplay controller and row handoffs: `work/palette-loop-check/gameplay-update-behavior.json`.
+- Complete status-panel contexts: `work/palette-loop-check/status-panel-behavior.json`.
+- Attribution audit: `work/controller-entry-audit.json`.
 - Unit test log: `work/palette-loop-check/logs/unit-tests.log`.
 - Encounter loop setup and position phase: `work/encounter-loop-build/behavior.json`.
 - Encounter trigger/sector/clock phase: `work/encounter-spawn-build/behavior.json`.

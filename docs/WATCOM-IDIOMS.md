@@ -313,6 +313,13 @@ not an automatically preserved EBP value. The same public output contract
 also supports an EAX slot identity, ECX-minus-ESI countdown and indexed Y load through a true EBP getter.
 The countdown's copy and subtraction can link around an independent
 coordinate phase that preserves ECX, ESI and the pending EBP value.
+A genuine `row * 128` EBP result can also coalesce with a typed record-row
+address. Compute that scalar before extending the column, use the original
+typed two-dimensional array for the load, and hand the short result to AX.
+This yields MOV EBP,EDX / MOVSX ECX,SI / SHL EBP,7 without an EBP input or
+modify declaration. A short formal uses the full `[esi]` argument register;
+`[si]` instead leaves the argument on the stack in this Watcom ABI. Keep the
+table bounds and four-byte record width explicit and guard the private RET.
 An `aborts` continuation can produce the original near conditional jump directly from a signed guard.
 Keep a guard's private RET separately guarded: combining functions may
 cause Watcom to share a preceding RET and invert the conditional branch.

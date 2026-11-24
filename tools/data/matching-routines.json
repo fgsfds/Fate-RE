@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1416,
-  "unique_code_bytes": 193010,
-  "le_pointers": 10515,
+  "routines": 1424,
+  "unique_code_bytes": 193112,
+  "le_pointers": 10521,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -218,6 +218,76 @@
       "loaded_address": "0x10645",
       "bytes": 53,
       "le_pointers": 2
+    },
+    {
+      "symbol": "draw_status_panel_entry_setup_",
+      "object": "statpent.obj",
+      "object_sha256": "e9e9da49e5b5c87f4af476557c613b262813928bf039a92641f885bf7d945705",
+      "sha256": "be1602d2d2f1983d1e8c4623dbbabe787027cde5f3fc321c538ce273f6599150",
+      "raw_offset": "0x35c7a",
+      "loaded_address": "0x1067a",
+      "bytes": 56,
+      "le_pointers": 4
+    },
+    {
+      "symbol": "draw_status_panel_entry_store_top_",
+      "object": "statpan.obj",
+      "object_sha256": "9b7c9e5026fb77977e5396ba781fe742ae7f2a2bc32dd9652e1ea7fc0751585a",
+      "sha256": "dd6efe2ce23d423d8d2381a47eee5589a20cbf20879fff103aa38a98a32ab29f",
+      "raw_offset": "0x35cb2",
+      "loaded_address": "0x106b2",
+      "bytes": 6,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "draw_status_panel_entry_scale_",
+      "object": "statpent.obj",
+      "object_sha256": "e9e9da49e5b5c87f4af476557c613b262813928bf039a92641f885bf7d945705",
+      "sha256": "2117fb6edcb12ad86250eef51a8de3f086211ef8ccb110757e6280bf7c8e8a78",
+      "raw_offset": "0x35cb8",
+      "loaded_address": "0x106b8",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "draw_status_panel_entry_tile_",
+      "object": "statpent.obj",
+      "object_sha256": "e9e9da49e5b5c87f4af476557c613b262813928bf039a92641f885bf7d945705",
+      "sha256": "d5ff4116eacf0d1c0f20ec760e6f4c67c92ab1ec3ec838c2aeb3227b4ee69408",
+      "raw_offset": "0x35cbd",
+      "loaded_address": "0x106bd",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "draw_status_panel_entry_y_",
+      "object": "statpent.obj",
+      "object_sha256": "e9e9da49e5b5c87f4af476557c613b262813928bf039a92641f885bf7d945705",
+      "sha256": "a339f72049804ff4e5b7b1296d15f1b55a9f55e8d5449500a7c61135ac24a857",
+      "raw_offset": "0x35cc2",
+      "loaded_address": "0x106c2",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "draw_status_panel_entry_angle_",
+      "object": "statpent.obj",
+      "object_sha256": "e9e9da49e5b5c87f4af476557c613b262813928bf039a92641f885bf7d945705",
+      "sha256": "07da0b176e80afd9779a094eb848879d2a9616427d8b594a261bcad1c56bb18d",
+      "raw_offset": "0x35cc7",
+      "loaded_address": "0x106c7",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "draw_status_panel_entry_draw_",
+      "object": "statpent.obj",
+      "object_sha256": "e9e9da49e5b5c87f4af476557c613b262813928bf039a92641f885bf7d945705",
+      "sha256": "6a41439cc36772c5add7b6ca43ec740b6b322c5b53e4be53eb91043722662551",
+      "raw_offset": "0x35cc9",
+      "loaded_address": "0x106c9",
+      "bytes": 5,
+      "le_pointers": 0
     },
     {
       "symbol": "draw_status_panel_",
@@ -498,6 +568,16 @@
       "loaded_address": "0x14133",
       "bytes": 550,
       "le_pointers": 59
+    },
+    {
+      "symbol": "update_gameplay_row_setup_",
+      "object": "gamrow.obj",
+      "object_sha256": "1a89c5ded9ecb4820ac6cfd481c0b2060d115cec6679088f7bb46b1f049c74cc",
+      "sha256": "c55ae2c25ef9e3cf7d35b61a4b21a812d463c1341ad15edbc94a2392e71f7d26",
+      "raw_offset": "0x39959",
+      "loaded_address": "0x14359",
+      "bytes": 18,
+      "le_pointers": 1
     },
     {
       "symbol": "update_gameplay_tail_",

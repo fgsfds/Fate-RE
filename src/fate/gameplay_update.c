@@ -1,6 +1,5 @@
-/* The build uses compiler bytes 0..550 and 568..1245 unchanged.
- * The intervening row-address setup remains in gameplay_update.asm until its
- * EBP allocation matches; no machine instructions are patched in this C output. */
+/* Two unchanged compiler sections surround the C row setup from
+ * gameplay_row.c. Every byte of the production controller comes from C. */
 /* Apply inventory overrides, advance gameplay, and carry out level transitions. */
 typedef unsigned long GameplayWord;
 #pragma pack(push, 1)

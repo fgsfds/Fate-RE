@@ -79,16 +79,6 @@ original keeps EDI until the flush decision and loads the descriptor from the
 capture frame. Recover that frame and the offset lifetime together before
 linking the flush. Scratch: `work/pcx-palette-next/pcxpal2.dis`.
 
-### Gameplay update controller row-offset allocation
-
-`update_gameplay_`, Watcom 10.5 `/4r /s /or /bt=dos`, now keeps only the
-18-byte row-address setup at `0x14359` in assembly. The two C sections match
-1,227 bytes and 112 LE sites; the retained setup has one LE site. The full C
-output still differs in three operand bytes, choosing EBX instead of EBP.
-Next investigate coalescing the row-offset temporary with the later EBP
-sector/Y scalar; do not relax clobber declarations (see `WATCOM-IDIOMS.md`).
-Evidence: `work/gameplay-controller-build/validation.json` and
-`work/gameplay-controller-audit.json`.
 
 ### Startup option-prefix pointer increment
 
@@ -804,15 +794,6 @@ row) and `sptarg23` (selected trace) as future merge references.
 Production assembly remains; no C coverage is credited. Evidence:
 `work/sprite-path-target-next/evidence.json`.
 
-### Status-panel entry prefix
-
-`draw_status_panel_`, Watcom 10.5 `/4r /s /or /bt=dos`: the 608-byte body
-and 36 LE sites match; the 84-byte entry and its 5 LE sites remain assembly.
-The first full-function divergence at `0x10683` hoists `mov edx,4` before
-clipping. Keep the named `first_top` lifetime and its empty EDX identity;
-recover initial drawing-argument scheduling without changing the exact body.
-Probe: `work/status-panel-next/initial_top_lifetime.c`. Accepted evidence:
-`work/status-panel-build/validation.json` and `work/status-panel-audit.json`.
 
 ### Sound playback: entry and scheduling blocker
 

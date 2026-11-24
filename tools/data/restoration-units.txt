@@ -496,7 +496,9 @@ fate/process_gameplay_frame procfram /4r /s /or /bt=dos
 fate/checksum_gameplay_state gamesum /4r /s /or /bt=dos
 
 fate/status_panel statpan
+fate/status_panel_entry statpent
 fate/gameplay_update gamup
+fate/gameplay_row gamrow
 network/netsend netsend
 network/sendpacket sendpack
 network/serialin serialin
