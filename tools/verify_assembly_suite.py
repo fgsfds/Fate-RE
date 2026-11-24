@@ -1488,17 +1488,12 @@ BOARD_ACTOR_INITIALIZATION_FIXUPS = {
 
 ROUTINES = [
     ('allocate_video_dos_memory_bios_call', 'fate/allocate_video_dos_memory.asm', 'allocate_video_dos_memory.bin', 0x43b06, 5, {}),
-    ('initialize_vesa_mode', 'fate/initialize_vesa_mode.asm', 'initialize_vesa_mode.bin', 0x43d0c, 1072,
-     {17: 0x93ff4, 36: 0x26c2a0, 42: 0x93ff4, 47: 0x819e2, 82: 0x26c2a0, 112: 0x819e7, 117: 0x26c2a0,
-      131: 0x819ec, 149: 0x26c2ae, 155: 0x26c2ae, 174: 0x26c720, 206: 0x26c720, 212: 0x306b68,
-      218: 0x306b7c, 319: 0x306b64, 341: 0x306b78, 521: 0x93ff5, 532: 0x93ff9, 568: 0x306b78,
-      575: 0x30811a, 580: 0x308116, 586: 0x306b60, 602: 0x306b7c, 607: 0x306b84, 612: 0x306b64,
-      622: 0x306b70, 627: 0x306b58, 634: 0x306b74, 639: 0x306b78, 647: 0x306b58, 656: 0x26c5a0,
-      662: 0x306b70, 752: 0x306b5c, 760: 0x306b5c, 772: 0x306b5c, 784: 0x306b5c, 796: 0x306b5c,
-      808: 0x306b5c, 820: 0x306b5c, 832: 0x306b60, 854: 0x306b78, 873: 0x306b84, 879: 0x306b70,
-      885: 0x306b74, 892: 0x306b64, 899: 0x306b7c, 909: 0x306b70, 914: 0x93ff0, 920: 0x306b84,
-      925: 0x306b74, 931: 0x306b78, 940: 0x306b84, 949: 0x306b54, 964: 0x306b64, 985: 0x306b70,
-      993: 0x26c49c, 1010: 0x26c49e, 1016: 0x306b78, 1042: 0x819fd}),
+    ('vesa_init_probe_inputs', 'fate/initialize_vesa_mode.asm', 'initialize_vesa_mode.bin', 277833, 43, {21: 2540192}),
+    ('vesa_init_list_address', 'fate/initialize_vesa_mode.asm', 'initialize_vesa_mode.bin', 277925, 18, {2: 2540206}),
+    ('vesa_init_mode_predicates', 'fate/initialize_vesa_mode.asm', 'initialize_vesa_mode.bin', 278014, 39, {}),
+    ('vesa_init_bios_and_pm', 'fate/initialize_vesa_mode.asm', 'initialize_vesa_mode.bin', 278117, 201, {176: 606197, 187: 606201}),
+    ('vesa_init_software_fallback', 'fate/initialize_vesa_mode.asm', 'initialize_vesa_mode.bin', 278675, 21, {6: 3173232, 11: 606192, 17: 3173252}),
+    ('vesa_init_shared_return', 'fate/initialize_vesa_mode.asm', 'initialize_vesa_mode.bin', 278839, 5, {}),
     ('initialize_ipx', 'fate/initialize_ipx.asm', 'initialize_ipx.bin', 0x41694, 945,
      {61: 0x20fdc0, 70: 0x818fe, 84: 0x20fdc0, 90: 0x20fde4, 99: 0x20fde0, 108: 0x20fdd4, 117: 0x20fdac, 126:
       0x20fda0, 138: 0x20fd98, 150: 0x20fda4, 164: 0x20fd9c, 172: 0x20fdc0, 178: 0x20fdb0, 193: 0x20fdb8, 201:
@@ -3046,6 +3041,12 @@ NON_ROUTINE_KINDS.update({
 })
 
 GROUP_SLICES = {
+    'vesa_init_probe_inputs': (0, 327),
+    'vesa_init_list_address': (43, 327),
+    'vesa_init_mode_predicates': (61, 327),
+    'vesa_init_bios_and_pm': (100, 327),
+    'vesa_init_software_fallback': (301, 327),
+    'vesa_init_shared_return': (322, 327),
     'setgamemode_save_tail': (0, 163),
     'setgamemode_backend_dispatch': (2, 163),
     'setgamemode_stereo_state': (36, 163),
@@ -3624,10 +3625,12 @@ DATA_POINTER_SITES = {
      5796, 5808, 5828, 5834, 5846, 5892, 5907, 5913, 5925, 5942, 5948, 5960, 6161, 6167, 6173,
      6251, 6284, 6541, 6547, 6553, 6585, 6591, 6603, 6629, 6635, 6647, 6867, 6878, 6925, 6948,
      7181, 7255, 7260, 7284, 7290, 7474, 7497, 7524, 7536, 7541,),
-    'initialize_vesa_mode': (17, 36, 42, 47, 82, 112, 117, 131, 149, 155, 174, 206, 212, 218, 319, 341, 521, 532, 568, 575, 580,
-     586, 602, 607, 612, 622, 627, 634, 639, 647, 656, 662, 752, 760, 772, 784, 796, 808, 820, 832,
-     854, 873, 879, 885, 892, 899, 909, 914, 920, 925, 931, 940, 949, 964, 985, 993, 1010, 1016,
-     1042,),
+    'vesa_init_probe_inputs': (21,),
+    'vesa_init_list_address': (2,),
+    'vesa_init_mode_predicates': (),
+    'vesa_init_bios_and_pm': (176, 187),
+    'vesa_init_software_fallback': (6, 11, 17),
+    'vesa_init_shared_return': (),
     'initialize_ipx': (61, 70, 84, 90, 99, 108, 117, 126, 138, 150, 164, 172, 178, 193, 201, 207, 215, 221, 226,
      245, 261, 289, 321, 327, 337, 342, 349, 357, 362, 404, 414, 422, 432, 441, 450, 460, 481, 487, 507, 528,
      536, 555, 574, 590, 596, 601, 611, 617, 627, 635, 641, 650, 655, 666, 672, 682, 692, 700, 709, 719, 725,

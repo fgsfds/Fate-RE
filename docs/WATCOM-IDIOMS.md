@@ -491,3 +491,12 @@ identity for the completed unsigned sum, with EDX as both input and output,
 also fixes the following store and high-word shift registers. Compare the
 emitted instructions and fixups; when selecting reordered phases, prove every
 register, memory and flag dependency and retain each compiler instruction once.
+
+
+For a bottom-tested signed mode list, keep the sentinel load as a real full
+register value and pass that value through an explicitly audited low-AX ABI
+alias. This avoids a second narrowing reload before the query. Bind requested
+width and height with truthful empty ESI/EDI identities when loop rotation
+otherwise swaps their allocation. Preserve the callee's actual low-word
+contract, and check both signed sentinel flow and the complete frame rather
+than assuming source argument types determine the machine ABI.

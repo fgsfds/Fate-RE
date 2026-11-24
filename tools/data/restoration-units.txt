@@ -557,3 +557,4 @@ fate/video_dos_allocation vdosio
 fate/video_dos_allocation vbufret /4r /s /or /bt=dos /dVIDEO_RETURN_BUFFER
 fate/video_dos_scalar vbufscal
 fate/map_video_memory vmapctx
+fate/initialize_vesa_mode vbeinit

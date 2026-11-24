@@ -1325,6 +1325,593 @@
           }
         }
       ]
+    },
+    {
+      "object": "vbeinit",
+      "source": "fate/initialize_vesa_mode",
+      "size": 1133,
+      "contexts": [
+        {
+          "public": "initialize_vesa_mode_",
+          "start": 0,
+          "size": 1133,
+          "sha256": "85ceaf5218b0e913fa06077c69c347cfcf6e75227f48d25771ef3d6fdbb8a54a",
+          "fixups": {
+            "17": [
+              "_vesa_probe_attempted",
+              false,
+              0
+            ],
+            "36": [
+              "_vesa_controller_info",
+              false,
+              0
+            ],
+            "42": [
+              "_vesa_probe_attempted",
+              false,
+              0
+            ],
+            "47": [
+              "_vesa_request_signature",
+              false,
+              0
+            ],
+            "52": [
+              "strncpy_",
+              true,
+              0
+            ],
+            "124": [
+              "_vesa_controller_info",
+              false,
+              0
+            ],
+            "129": [
+              "get_vesa_mode_info_",
+              true,
+              0
+            ],
+            "150": [
+              "_vesa_reply_signature",
+              false,
+              0
+            ],
+            "155": [
+              "_vesa_controller_info",
+              false,
+              0
+            ],
+            "160": [
+              "strncmp_",
+              true,
+              0
+            ],
+            "169": [
+              "_vesa_not_supported_message",
+              false,
+              0
+            ],
+            "174": [
+              "printf_",
+              true,
+              0
+            ],
+            "187": [
+              "_vesa_controller_info",
+              false,
+              14
+            ],
+            "207": [
+              "_vesa_mode_list",
+              false,
+              0
+            ],
+            "239": [
+              "_vesa_mode_list",
+              false,
+              0
+            ],
+            "245": [
+              "_video_width",
+              false,
+              0
+            ],
+            "251": [
+              "_video_height",
+              false,
+              0
+            ],
+            "263": [
+              "query_vesa_mode_",
+              true,
+              0
+            ],
+            "340": [
+              "_video_pitch",
+              false,
+              0
+            ],
+            "362": [
+              "_video_page_count",
+              false,
+              0
+            ],
+            "460": [
+              "dpmi_real_mode_interrupt_",
+              true,
+              0
+            ],
+            "539": [
+              "dpmi_real_mode_far_call_",
+              true,
+              0
+            ],
+            "587": [
+              "_vesa_pm_set_window",
+              false,
+              0
+            ],
+            "598": [
+              "_vesa_pm_set_display_start",
+              false,
+              0
+            ],
+            "622": [
+              "map_video_memory_",
+              true,
+              0
+            ],
+            "628": [
+              "_video_page_count",
+              false,
+              0
+            ],
+            "635": [
+              "_framebuffer_selector",
+              false,
+              0
+            ],
+            "640": [
+              "_framebuffer_offset",
+              false,
+              0
+            ],
+            "646": [
+              "_linear_framebuffer_enabled",
+              false,
+              0
+            ],
+            "662": [
+              "_video_height",
+              false,
+              0
+            ],
+            "667": [
+              "_use_software_framebuffer",
+              false,
+              0
+            ],
+            "672": [
+              "_video_pitch",
+              false,
+              0
+            ],
+            "682": [
+              "_video_page_size",
+              false,
+              0
+            ],
+            "687": [
+              "_mapped_video_base",
+              false,
+              0
+            ],
+            "694": [
+              "_draw_page_address",
+              false,
+              0
+            ],
+            "699": [
+              "_video_page_count",
+              false,
+              0
+            ],
+            "707": [
+              "_mapped_video_base",
+              false,
+              0
+            ],
+            "716": [
+              "_linear_page_addresses",
+              false,
+              0
+            ],
+            "722": [
+              "_video_page_size",
+              false,
+              0
+            ],
+            "812": [
+              "_bank_shift",
+              false,
+              0
+            ],
+            "820": [
+              "_bank_shift",
+              false,
+              0
+            ],
+            "832": [
+              "_bank_shift",
+              false,
+              0
+            ],
+            "844": [
+              "_bank_shift",
+              false,
+              0
+            ],
+            "856": [
+              "_bank_shift",
+              false,
+              0
+            ],
+            "868": [
+              "_bank_shift",
+              false,
+              0
+            ],
+            "880": [
+              "_bank_shift",
+              false,
+              0
+            ],
+            "892": [
+              "_linear_framebuffer_enabled",
+              false,
+              0
+            ],
+            "914": [
+              "_video_page_count",
+              false,
+              0
+            ],
+            "933": [
+              "_use_software_framebuffer",
+              false,
+              0
+            ],
+            "939": [
+              "_video_page_size",
+              false,
+              0
+            ],
+            "945": [
+              "_draw_page_address",
+              false,
+              0
+            ],
+            "952": [
+              "_video_pitch",
+              false,
+              0
+            ],
+            "959": [
+              "_video_height",
+              false,
+              0
+            ],
+            "969": [
+              "_video_page_size",
+              false,
+              0
+            ],
+            "974": [
+              "_software_framebuffer",
+              false,
+              0
+            ],
+            "980": [
+              "_use_software_framebuffer",
+              false,
+              0
+            ],
+            "985": [
+              "_draw_page_address",
+              false,
+              0
+            ],
+            "991": [
+              "_video_page_count",
+              false,
+              0
+            ],
+            "1000": [
+              "_use_software_framebuffer",
+              false,
+              0
+            ],
+            "1009": [
+              "_skip_bank_switch",
+              false,
+              0
+            ],
+            "1024": [
+              "_video_pitch",
+              false,
+              0
+            ],
+            "1031": [
+              "divide_vesa_offset_",
+              true,
+              0
+            ],
+            "1045": [
+              "_video_page_size",
+              false,
+              0
+            ],
+            "1053": [
+              "_page_offsets",
+              false,
+              0
+            ],
+            "1070": [
+              "_page_offsets",
+              false,
+              2
+            ],
+            "1076": [
+              "_video_page_count",
+              false,
+              0
+            ],
+            "1102": [
+              "_vesa_mode_not_found_message",
+              false,
+              0
+            ],
+            "1107": [
+              "printf_",
+              true,
+              0
+            ],
+            "1117": [
+              "runtime_exit_",
+              true,
+              0
+            ]
+          },
+          "branches": {
+            "public_address": 277772,
+            "compiler_size": 1133,
+            "placed_size": 1072,
+            "sites": {
+              "22": [
+                "0f85",
+                238,
+                205
+              ],
+              "142": [
+                "75",
+                168,
+                130
+              ],
+              "166": [
+                "74",
+                186,
+                148
+              ],
+              "181": [
+                "e9",
+                1121,
+                1061
+              ],
+              "217": [
+                "74",
+                233,
+                200
+              ],
+              "231": [
+                "eb",
+                211,
+                178
+              ],
+              "255": [
+                "e9",
+                1087,
+                1027
+              ],
+              "269": [
+                "0f84",
+                1084,
+                1024
+              ],
+              "302": [
+                "0f85",
+                1084,
+                1024
+              ],
+              "315": [
+                "0f85",
+                1084,
+                1024
+              ],
+              "328": [
+                "0f85",
+                1084,
+                1024
+              ],
+              "354": [
+                "7c",
+                361,
+                340
+              ],
+              "606": [
+                "0f84",
+                738,
+                678
+              ],
+              "703": [
+                "eb",
+                729,
+                669
+              ],
+              "731": [
+                "7c",
+                705,
+                645
+              ],
+              "733": [
+                "e9",
+                999,
+                939
+              ],
+              "746": [
+                "72",
+                784,
+                724
+              ],
+              "748": [
+                "0f86",
+                842,
+                782
+              ],
+              "758": [
+                "72",
+                773,
+                713
+              ],
+              "760": [
+                "76",
+                818,
+                758
+              ],
+              "766": [
+                "74",
+                808,
+                748
+              ],
+              "768": [
+                "e9",
+                888,
+                828
+              ],
+              "777": [
+                "74",
+                830,
+                770
+              ],
+              "779": [
+                "e9",
+                888,
+                828
+              ],
+              "788": [
+                "72",
+                800,
+                740
+              ],
+              "790": [
+                "76",
+                866,
+                806
+              ],
+              "796": [
+                "74",
+                854,
+                794
+              ],
+              "798": [
+                "eb",
+                888,
+                828
+              ],
+              "804": [
+                "74",
+                878,
+                818
+              ],
+              "806": [
+                "eb",
+                888,
+                828
+              ],
+              "816": [
+                "eb",
+                888,
+                828
+              ],
+              "828": [
+                "eb",
+                888,
+                828
+              ],
+              "840": [
+                "eb",
+                888,
+                828
+              ],
+              "852": [
+                "eb",
+                888,
+                828
+              ],
+              "864": [
+                "eb",
+                888,
+                828
+              ],
+              "876": [
+                "eb",
+                888,
+                828
+              ],
+              "902": [
+                "75",
+                951,
+                891
+              ],
+              "910": [
+                "75",
+                951,
+                891
+              ],
+              "919": [
+                "7c",
+                951,
+                891
+              ],
+              "949": [
+                "eb",
+                989,
+                929
+              ],
+              "1013": [
+                "eb",
+                1074,
+                1014
+              ],
+              "1080": [
+                "7c",
+                1015,
+                955
+              ],
+              "1082": [
+                "eb",
+                1121,
+                1061
+              ],
+              "1093": [
+                "0f85",
+                260,
+                227
+              ]
+            }
+          }
+        }
+      ]
     }
   ],
   "phases": [
@@ -1797,6 +2384,66 @@
       "address": 277610,
       "routine": "map_video_memory",
       "le_sites": 3
+    },
+    {
+      "phase": "vesa_init_probe_prelude_phase_",
+      "public": "initialize_vesa_mode_",
+      "object": "vbeinit",
+      "begin": 0,
+      "end": 61,
+      "address": 277772,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 4
+    },
+    {
+      "phase": "vesa_init_controller_reply_phase_",
+      "public": "initialize_vesa_mode_",
+      "object": "vbeinit",
+      "begin": 142,
+      "end": 191,
+      "address": 277876,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 4
+    },
+    {
+      "phase": "vesa_init_mode_query_phase_",
+      "public": "initialize_vesa_mode_",
+      "object": "vbeinit",
+      "begin": 204,
+      "end": 275,
+      "address": 277943,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 4
+    },
+    {
+      "phase": "vesa_init_mode_dimensions_phase_",
+      "public": "initialize_vesa_mode_",
+      "object": "vbeinit",
+      "begin": 302,
+      "end": 366,
+      "address": 278053,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 2
+    },
+    {
+      "phase": "vesa_init_framebuffer_phase_",
+      "public": "initialize_vesa_mode_",
+      "object": "vbeinit",
+      "begin": 606,
+      "end": 963,
+      "address": 278318,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 28
+    },
+    {
+      "phase": "vesa_init_pages_and_scan_tail_phase_",
+      "public": "initialize_vesa_mode_",
+      "object": "vbeinit",
+      "begin": 984,
+      "end": 1127,
+      "address": 278696,
+      "routine": "initialize_vesa_mode",
+      "le_sites": 10
     }
   ]
 }

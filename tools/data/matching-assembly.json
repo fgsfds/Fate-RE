@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 480,
-  "unique_code_bytes": 220888,
-  "le_pointers": 12013,
+  "routines": 485,
+  "unique_code_bytes": 220143,
+  "le_pointers": 11961,
   "non_routine_code_spans": [
     {
       "symbol": "setgamemode_save_tail",
@@ -1810,16 +1810,76 @@
       "le_pointers": 0
     },
     {
-      "symbol": "initialize_vesa_mode",
+      "symbol": "vesa_init_probe_inputs",
       "source": "src/fate/initialize_vesa_mode.asm",
       "binary": "initialize_vesa_mode.bin",
-      "sha256": "d7c220817333122cbcbb60b71b09d6f1de28dc108b1e53f1e3f181f182055df3",
-      "bytes": 1072,
-      "raw_offset": "0x6930c",
-      "loaded_address": "0x43d0c",
-      "public_entry": "0x43d0c",
+      "sha256": "9b1aed464d16b581b8e911e40f0fc90af797c47f91a621132e892e6d3795f5b4",
+      "bytes": 43,
+      "raw_offset": "0x69349",
+      "loaded_address": "0x43d49",
+      "public_entry": "0x43d49",
       "binary_offset": 0,
-      "le_pointers": 59
+      "le_pointers": 1
+    },
+    {
+      "symbol": "vesa_init_list_address",
+      "source": "src/fate/initialize_vesa_mode.asm",
+      "binary": "initialize_vesa_mode.bin",
+      "sha256": "cd0849483ddfbfcbb81b90c7d847050b940e8ff085b216efd8ffd8fa6c4a3cf8",
+      "bytes": 18,
+      "raw_offset": "0x693a5",
+      "loaded_address": "0x43da5",
+      "public_entry": "0x43da5",
+      "binary_offset": 43,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "vesa_init_mode_predicates",
+      "source": "src/fate/initialize_vesa_mode.asm",
+      "binary": "initialize_vesa_mode.bin",
+      "sha256": "0068fdf120f00b3b8df38182b47152d664aaaede4ae50a780fb9fa8b4e6c930a",
+      "bytes": 39,
+      "raw_offset": "0x693fe",
+      "loaded_address": "0x43dfe",
+      "public_entry": "0x43dfe",
+      "binary_offset": 61,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "vesa_init_bios_and_pm",
+      "source": "src/fate/initialize_vesa_mode.asm",
+      "binary": "initialize_vesa_mode.bin",
+      "sha256": "2199534f875f7abd2c3d7ee07ec83ed4a6bc8044eddaee4bc433650a5cca7fee",
+      "bytes": 201,
+      "raw_offset": "0x69465",
+      "loaded_address": "0x43e65",
+      "public_entry": "0x43e65",
+      "binary_offset": 100,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "vesa_init_software_fallback",
+      "source": "src/fate/initialize_vesa_mode.asm",
+      "binary": "initialize_vesa_mode.bin",
+      "sha256": "86d9f203f51275d3f157863e1737808862297dd54b1188913508cedf504984bb",
+      "bytes": 21,
+      "raw_offset": "0x69693",
+      "loaded_address": "0x44093",
+      "public_entry": "0x44093",
+      "binary_offset": 301,
+      "le_pointers": 3
+    },
+    {
+      "symbol": "vesa_init_shared_return",
+      "source": "src/fate/initialize_vesa_mode.asm",
+      "binary": "initialize_vesa_mode.bin",
+      "sha256": "41706b860bb0da18672c1e7459b59bda6365218d06a7ce8f6b94e65cf8c13096",
+      "bytes": 5,
+      "raw_offset": "0x69737",
+      "loaded_address": "0x44137",
+      "public_entry": "0x44137",
+      "binary_offset": 322,
+      "le_pointers": 0
     },
     {
       "symbol": "initialize_ipx",

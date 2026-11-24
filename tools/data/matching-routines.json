@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1463,
-  "unique_code_bytes": 193751,
-  "le_pointers": 10536,
+  "routines": 1469,
+  "unique_code_bytes": 194496,
+  "le_pointers": 10588,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -6298,6 +6298,66 @@
       "loaded_address": "0x43c6a",
       "bytes": 162,
       "le_pointers": 3
+    },
+    {
+      "symbol": "vesa_init_probe_prelude_phase_",
+      "object": "vbeinit.obj",
+      "object_sha256": "ec371ca497d7cb8662374debb6fdc2b0a496cc733f03190201fd18947c69fb5c",
+      "sha256": "ebd775faf0923ef4590b8f22dec85d8448f3580f9da50a6e29628d95c097cb1a",
+      "raw_offset": "0x6930c",
+      "loaded_address": "0x43d0c",
+      "bytes": 61,
+      "le_pointers": 4
+    },
+    {
+      "symbol": "vesa_init_controller_reply_phase_",
+      "object": "vbeinit.obj",
+      "object_sha256": "ec371ca497d7cb8662374debb6fdc2b0a496cc733f03190201fd18947c69fb5c",
+      "sha256": "cf065ec130dd0a1af39042f5f570dd26010a1b9aa7eedcab3e08fd7cfd327383",
+      "raw_offset": "0x69374",
+      "loaded_address": "0x43d74",
+      "bytes": 49,
+      "le_pointers": 4
+    },
+    {
+      "symbol": "vesa_init_mode_query_phase_",
+      "object": "vbeinit.obj",
+      "object_sha256": "ec371ca497d7cb8662374debb6fdc2b0a496cc733f03190201fd18947c69fb5c",
+      "sha256": "bc794a4eb73516ee8f4f785f272e83aed593524d627fd6d1bf26e5dd3a1d575c",
+      "raw_offset": "0x693b7",
+      "loaded_address": "0x43db7",
+      "bytes": 71,
+      "le_pointers": 4
+    },
+    {
+      "symbol": "vesa_init_mode_dimensions_phase_",
+      "object": "vbeinit.obj",
+      "object_sha256": "ec371ca497d7cb8662374debb6fdc2b0a496cc733f03190201fd18947c69fb5c",
+      "sha256": "d0978e8d88629b89a2aab3d0ce96100cd43016efa32f49c1d0db9842dc37b16f",
+      "raw_offset": "0x69425",
+      "loaded_address": "0x43e25",
+      "bytes": 64,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "vesa_init_framebuffer_phase_",
+      "object": "vbeinit.obj",
+      "object_sha256": "ec371ca497d7cb8662374debb6fdc2b0a496cc733f03190201fd18947c69fb5c",
+      "sha256": "e499e0445cee5ea64de5a9fe69c13b0ea003f05230c6ccd4a4c7baa5c1810b49",
+      "raw_offset": "0x6952e",
+      "loaded_address": "0x43f2e",
+      "bytes": 357,
+      "le_pointers": 28
+    },
+    {
+      "symbol": "vesa_init_pages_and_scan_tail_phase_",
+      "object": "vbeinit.obj",
+      "object_sha256": "ec371ca497d7cb8662374debb6fdc2b0a496cc733f03190201fd18947c69fb5c",
+      "sha256": "5ad2389cba0a20b874ba1539ddb2a4dff2a268545be97aa5568952eabc69baa9",
+      "raw_offset": "0x696a8",
+      "loaded_address": "0x440a8",
+      "bytes": 143,
+      "le_pointers": 10
     },
     {
       "symbol": "set_vesa_dac_width_",
