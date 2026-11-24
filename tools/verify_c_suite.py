@@ -1532,12 +1532,12 @@ def verify_compiler_groups(exe, directory, names=None):
         if selected(name):
             verify_group_layout((directory/(name+'.obj')).read_bytes(), size, [(public, 0)])
     if selected('rippart'):
-        verify_group_layout((directory/'rippart.obj').read_bytes(), 123,
+        verify_group_layout((directory/'rippart.obj').read_bytes(), 141,
                             [('ripple_store_y_slot_', 0), ('ripple_floor_pixel_', 34),
-                             ('ripple_advance_radius_', 49)])
+                             ('ripple_advance_radius_', 49), ('ripple_store_x_slot_', 123)])
     if selected('ripbord'):
-        verify_group_layout((directory/'ripbord.obj').read_bytes(), 47,
-                            [('ripple_border_columns_', 0)])
+        verify_group_layout((directory/'ripbord.obj').read_bytes(), 93,
+                            [('ripple_border_columns_', 0), ('ripple_border_corners_', 47)])
     if selected('ripctl'):
         verify_group_layout((directory/'ripctl.obj').read_bytes(), 56,
                             [('ripple_spawn_limit_', 0), ('ripple_mask_row_', 23)])
@@ -1606,6 +1606,11 @@ OBJECT_NAMES['ripple_border_loop_'] = 'ripbord'
 
 for _name in ('ripple_store_y_phase_', 'ripple_floor_phase_', 'ripple_advance_radius_phase_'):
     OBJECT_NAMES[_name] = 'rippart'
+
+for _name in ('ripple_x_draw_', 'ripple_x_index_', 'ripple_x_store_'):
+    OBJECT_NAMES[_name] = 'rippart'
+for _name in ('ripple_corners_load_', 'ripple_corners_mask_', 'ripple_corners_store_'):
+    OBJECT_NAMES[_name] = 'ripbord'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

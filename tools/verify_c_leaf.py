@@ -4793,6 +4793,23 @@ DATA_OFFSETS.update({'_ripple_origin_y': 0x6773c, '_ripple_origin_x': 0x677bc,
 LEAF_SECTION_BRANCHES['ripple_floor_pixel_'] = (15, 15, {9: (b'\x7d', 14, 14)})
 LEAF_SECTION_BRANCHES['ripple_advance_radius_'] = (74, 74, {19: (b'\x7e', 73, 73)})
 
+for _alias, _raw, _begin, _end in (
+        ('ripple_x_draw_', 0x54187, 0, 2),
+        ('ripple_x_index_', 0x5418b, 2, 10),
+        ('ripple_x_store_', 0x54195, 10, 17)):
+    LEAVES[_alias] = (_raw, _end - _begin)
+    LEAF_CODE_SLICES[_alias] = ('ripple_store_x_slot_', _begin, _end, 18)
+LEAF_CONTEXT_SUFFIXES['ripple_store_x_slot_'] = b'\xc3'
+FUNCTION_ADDRESSES['ripple_store_x_slot_'] = 0x2eb87
+for _alias, _raw, _begin, _end in (
+        ('ripple_corners_load_', 0x54354, 0, 38),
+        ('ripple_corners_mask_', 0x5437c, 38, 40),
+        ('ripple_corners_store_', 0x54380, 40, 45)):
+    LEAVES[_alias] = (_raw, _end - _begin)
+    LEAF_CODE_SLICES[_alias] = ('ripple_border_corners_', _begin, _end, 46)
+LEAF_CONTEXT_SUFFIXES['ripple_border_corners_'] = b'\xc3'
+FUNCTION_ADDRESSES['ripple_border_corners_'] = 0x2ed54
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

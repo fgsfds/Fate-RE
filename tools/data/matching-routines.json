@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1291,
-  "unique_code_bytes": 181680,
-  "le_pointers": 9988,
+  "routines": 1297,
+  "unique_code_bytes": 181742,
+  "le_pointers": 9994,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1720,6 +1720,36 @@
       "le_pointers": 1
     },
     {
+      "symbol": "ripple_x_draw_",
+      "object": "rippart.obj",
+      "object_sha256": "4f3b72d5d7f2b845a82970604b36371be5805dd6cad9e23a3c8bcdda695008e7",
+      "sha256": "59c3ff3b5508dff4125aa5d1f346b64fba779a271c5d8a02cd964dd9edb49f4b",
+      "raw_offset": "0x54187",
+      "loaded_address": "0x2eb87",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "ripple_x_index_",
+      "object": "rippart.obj",
+      "object_sha256": "4f3b72d5d7f2b845a82970604b36371be5805dd6cad9e23a3c8bcdda695008e7",
+      "sha256": "79f49f3aa1f3b14e46ed2d5acb10fc4a701afed12d8fe51676bf55a38a3251f2",
+      "raw_offset": "0x5418b",
+      "loaded_address": "0x2eb8b",
+      "bytes": 8,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "ripple_x_store_",
+      "object": "rippart.obj",
+      "object_sha256": "4f3b72d5d7f2b845a82970604b36371be5805dd6cad9e23a3c8bcdda695008e7",
+      "sha256": "4b10ad4efbcb0f85e7bfbea4622c226cd65ff3ac13170625a4c949860341a1ee",
+      "raw_offset": "0x54195",
+      "loaded_address": "0x2eb95",
+      "bytes": 7,
+      "le_pointers": 1
+    },
+    {
       "symbol": "ripple_store_y_phase_",
       "object": "rippart.obj",
       "object_sha256": "69919ea3597f0e321086572f855055822ed42cee7720acc7152b68b2d82ad62d",
@@ -1778,6 +1808,36 @@
       "loaded_address": "0x2ecf3",
       "bytes": 38,
       "le_pointers": 2
+    },
+    {
+      "symbol": "ripple_corners_load_",
+      "object": "ripbord.obj",
+      "object_sha256": "3bc2ede6b758be1ce9b1ec15cf200804245b9b72fad1b49bbb6c7d39e4eea257",
+      "sha256": "a46646b716a11ef6e5148677c0fcbdc5b2197273015f7c2d8f8515172a4f5307",
+      "raw_offset": "0x54354",
+      "loaded_address": "0x2ed54",
+      "bytes": 38,
+      "le_pointers": 3
+    },
+    {
+      "symbol": "ripple_corners_mask_",
+      "object": "ripbord.obj",
+      "object_sha256": "3bc2ede6b758be1ce9b1ec15cf200804245b9b72fad1b49bbb6c7d39e4eea257",
+      "sha256": "b9b3cebc750a91ce73996334c251a956dd82b153a0f8b673bad7fd1c866378d4",
+      "raw_offset": "0x5437c",
+      "loaded_address": "0x2ed7c",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "ripple_corners_store_",
+      "object": "ripbord.obj",
+      "object_sha256": "3bc2ede6b758be1ce9b1ec15cf200804245b9b72fad1b49bbb6c7d39e4eea257",
+      "sha256": "cca32f4ed219c4e47b36af355723a7f262f280012eebcbb043eda5131ab98cb8",
+      "raw_offset": "0x54380",
+      "loaded_address": "0x2ed80",
+      "bytes": 5,
+      "le_pointers": 1
     },
     {
       "symbol": "ripple_sum_first_",

@@ -280,8 +280,8 @@ def check_floor(code, value):
     assert writes == ([(target, 1, 192)] if value < 192 else [])
 
 
-def check_particle(code, kind, count, slot=0, age=1, draw=0):
-    entry = 0x2eba4 if kind == 'slot' else 0x2ec66
+def check_particle(code, kind, count, slot=0, age=1, draw=0, remaining=None):
+    entry = {'slot': 0x2eba4, 'xslot': 0x2eb87, 'radius': 0x2ec66}[kind]
     cpu = particle_cpu(code, entry)
     radii = [1 + i % 10 for i in range(32)]
     xs = [-0x70000000 + i * 0x01010101 for i in range(32)]
@@ -307,6 +307,17 @@ def check_particle(code, kind, count, slot=0, age=1, draw=0):
         expected_writes = [(DS + ORIGIN_Y + slot * 4, 4, ys[slot]),
                            (DS + RADII + slot * 4, 4, 1),
                            (DS + COUNT, 4, next_count)]
+    elif kind == 'xslot':
+        slot = count
+        cpu.reg_write(UC_X86_REG_EAX, draw & 0xffffffff)
+        xs[slot], next_count = draw & 127, count
+        expected_regs.update({UC_X86_REG_EAX: slot, UC_X86_REG_EBX: xs[slot]})
+        expected_writes = [(DS + ORIGIN_X + slot * 4, 4, xs[slot])]
+        if remaining is not None:
+            cpu.reg_write(UC_X86_REG_ECX, remaining)
+            cpu.reg_write(UC_X86_REG_ESI, 1)
+            expected_regs.update({UC_X86_REG_ECX: remaining, UC_X86_REG_ESI: 1,
+                                  UC_X86_REG_EBP: (remaining - 1) & 0xffffffff})
     else:
         cpu.reg_write(UC_X86_REG_EAX, slot)
         radii[slot] += 1
@@ -331,6 +342,36 @@ def check_particle(code, kind, count, slot=0, age=1, draw=0):
     assert cpu.mem_read(DS + COUNT - 16, 36) == (
         b'\x33' * 16 + struct.pack('<i', next_count) + b'\x77' * 16)
     assert writes == expected_writes, 'Particle publication write order differs'
+
+
+
+def check_corners(code, seed, alignment, interleaved=False):
+    entry, source = 0x2ed54, 0x300000 + alignment
+    cpu = particle_cpu(code, entry)
+    pixels = bytearray((i * (seed + 1) + seed * 41) & 255 for i in range(16384))
+    for i, position in enumerate((16383, 16256, 127, 0)):
+        pixels[position] = (seed * 53 + i * 71) & 255
+    cpu.mem_write(source - 16, b'\xcc' * 16 + bytes(pixels) + b'\xdd' * 16)
+    cpu.mem_write(DS + BUFFER - 1, b'\xa7' * 17162)
+    cpu.reg_write(UC_X86_REG_EDX, source)
+    writes = []
+    cpu.hook_add(UC_HOOK_MEM_WRITE,
+                 lambda uc, access, address, size, value, user: writes.append((address, size, value)))
+    finish_particle(cpu, entry)
+    expected = bytearray(b'\xa7' * 17160)
+    expected_writes = []
+    for destination, position in ((0, 16383), (129, 16256), (17028, 127), (17159, 0)):
+        expected[destination] = pixels[position] & 31
+        expected_writes.append((DS + BUFFER + destination, 1, pixels[position] & 31))
+    assert cpu.mem_read(DS + BUFFER - 1, 17162) == b'\xa7' + expected + b'\xa7'
+    assert cpu.mem_read(source - 16, 16416) == b'\xcc' * 16 + bytes(pixels) + b'\xdd' * 16
+    assert cpu.reg_read(UC_X86_REG_EAX) == 0x11223300 | (pixels[0] & 31)
+    expected_regs = {reg: 0xabc00000 + i for i, reg in enumerate(REGS)}
+    expected_regs[UC_X86_REG_EDX] = source
+    if interleaved:
+        expected_regs.update({UC_X86_REG_ESI: source, UC_X86_REG_EBP: 0})
+    assert all(cpu.reg_read(reg) == value for reg, value in expected_regs.items())
+    assert writes == expected_writes
 
 
 def require_rejected(action):
@@ -477,6 +518,69 @@ def main():
         assert str(error) == 'Particle publication write order differs'
     else:
         raise AssertionError('Reordered removal publication escaped the oracle')
+    x_pieces = []
+    for symbol in ('ripple_x_draw_', 'ripple_x_index_', 'ripple_x_store_'):
+        raw, size = LEAVES[symbol]
+        body, bindings = bind_leaf_details(particle_obj, symbol, DATA_OFFSETS,
+                                           address=raw - 0x25600,
+                                           functions=FUNCTION_ADDRESSES)
+        assert body == executable[raw:raw + size]
+        verify_leaf_relocations(body, bindings, read_le_fixups(executable)['pointers'],
+                                raw - 0x25600)
+        relocated, _ = bind_leaf_details(
+            particle_obj, symbol, {name: DS + off for name, off in DATA_OFFSETS.items()},
+            address=raw - 0x25600, functions=FUNCTION_ADDRESSES)
+        x_pieces.append(relocated)
+    x_natural = b''.join(x_pieces)
+    x_ordered = x_pieces[0] + b'\x89\xcd' + x_pieces[1] + b'\x29\xf5' + x_pieces[2]
+    assert executable[0x54189:0x5418b] == b'\x89\xcd'
+    assert executable[0x54193:0x54195] == b'\x29\xf5'
+    draws = (0, 1, 127, 128, 0xffffffff, 0x80000155)
+    for slot in range(32):
+        for draw in draws:
+            check_particle(x_natural, 'xslot', slot, draw=draw)
+    for slot in (0, 1, 15, 28):
+        for remaining in range(4):
+            for draw in draws:
+                check_particle(x_ordered, 'xslot', slot, draw=draw, remaining=remaining)
+    altered = bytearray(x_natural)
+    assert altered[9] == 127
+    altered[9] = 126
+    require_rejected(lambda: check_particle(bytes(altered), 'xslot', 0, draw=127))
+    altered = bytearray(x_ordered)
+    assert altered[12:14] == b'\x29\xf5'
+    altered[12] = 0x01
+    require_rejected(lambda: check_particle(bytes(altered), 'xslot', 0, draw=127, remaining=0))
+    corner_pieces = []
+    for symbol in ('ripple_corners_load_', 'ripple_corners_mask_', 'ripple_corners_store_'):
+        raw, size = LEAVES[symbol]
+        body, bindings = bind_leaf_details(border_obj, symbol, DATA_OFFSETS,
+                                           address=raw - 0x25600,
+                                           functions=FUNCTION_ADDRESSES)
+        assert body == executable[raw:raw + size]
+        verify_leaf_relocations(body, bindings, read_le_fixups(executable)['pointers'],
+                                raw - 0x25600)
+        relocated, _ = bind_leaf_details(
+            border_obj, symbol, {name: DS + off for name, off in DATA_OFFSETS.items()},
+            address=raw - 0x25600, functions=FUNCTION_ADDRESSES)
+        corner_pieces.append(relocated)
+    corner_natural = b''.join(corner_pieces)
+    corner_ordered = (corner_pieces[0] + b'\x89\xd6' + corner_pieces[1]
+                      + b'\x31\xed' + corner_pieces[2])
+    assert executable[0x5437a:0x5437c] == b'\x89\xd6'
+    assert executable[0x5437e:0x54380] == b'\x31\xed'
+    for seed in range(4):
+        for alignment in range(4):
+            check_corners(corner_natural, seed, alignment)
+            check_corners(corner_ordered, seed, alignment, interleaved=True)
+    altered = bytearray(corner_natural)
+    assert altered[40] == 0xa2
+    altered[41:45] = (int.from_bytes(altered[41:45], 'little') - 2).to_bytes(4, 'little')
+    require_rejected(lambda: check_corners(bytes(altered), 0, 0))
+    altered = bytearray(corner_ordered)
+    assert altered[42:44] == b'\x31\xed'
+    altered[42:44] = b'\x90\x90'
+    require_rejected(lambda: check_corners(bytes(altered), 0, 0, interleaved=True))
     for count in (0, 1, 4, 28, 29, 30, 31, 32):
         for seed in range(4):
             exercise(memory, count, seed)
@@ -496,13 +600,14 @@ def main():
     altered_image[0x2edb0 + 36:0x2edb0 + 38] = b'\x90\x90'
     require_rejected(lambda: exercise(bytes(altered_image), 32, 2))
     result = dict(status='PASS', parent_cases=32, leaf_cases=len(samples),
-                  mutation_controls=12, spawn_limit_cases=33, masked_row_cases=16,
+                  mutation_controls=16, spawn_limit_cases=33, masked_row_cases=16,
                   border_cases=16, unlinked_border_guard_controls=2,
                   slot_cases=192, pixel_floor_cases=256, radius_cases=radius_cases,
-                  linked_c_bytes=366,
-                  unique_compiler_body_bytes=252, unlinked_return_bytes=7,
+                  x_slot_cases=192, x_interleaving_cases=96, corner_cases=16,
+                  corner_interleaving_cases=16, linked_c_bytes=428,
+                  unique_compiler_body_bytes=314, unlinked_return_bytes=9,
                   unlinked_border_context_bytes=7,
-                  le_sites=17)
+                  le_sites=23)
     if args.output:
         args.output.write_text(json.dumps(result, indent=2) + '\n', encoding='utf-8')
     print(json.dumps(result))

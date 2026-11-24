@@ -38,16 +38,16 @@ section .control align=1 vstart=0x2eb78 follows=.text
 
 .branch_2eb82:
     call random_value
-    mov ebx, eax
+; C copies the X draw, reads the slot, masks it, and stores the coordinate.
+section .x_countdown_copy align=1 vstart=0x2eb89 follows=.control
     mov ebp, ecx
-    mov eax, [ripple_count]
-    and ebx, 0x7f
+section .x_countdown_step align=1 vstart=0x2eb93 follows=.x_countdown_copy
     sub ebp, esi
-    mov [nosplit eax*4 + ripple_origin_x], ebx
+section .after_x_store align=1 vstart=0x2eb9c follows=.x_countdown_step
     call random_value
     mov [esp], ebp
 ; C stores the Y draw, radius and updated count.
-section .after_spawn_slot align=1 vstart=0x2ebc5 follows=.control
+section .after_spawn_slot align=1 vstart=0x2ebc5 follows=.after_x_store
 
 .branch_2ebc5:
     mov ecx, [esp]
@@ -151,20 +151,12 @@ section .after_border_columns align=1 vstart=0x2ed19 follows=.after_mask_row
 .branch_2ed4c:
     cmp ebp, strict dword 0x80
     jl short .branch_2ed1d
-    mov al, [edx + 0x3fff]
-    and al, 0x1f
-    mov [ripple_buffer], al
-    mov al, [edx + 0x3f80]
-    and al, 0x1f
-    mov [frame_state_6339d], al
-    mov al, [edx + 0x7f]
-    and al, 0x1f
-    mov [frame_state_675a0], al
-    mov al, [edx]
+; C supplies all four corner reads, masks and stores.
+section .corners_output_pointer align=1 vstart=0x2ed7a follows=.after_border_columns
     mov esi, edx
-    and al, 0x1f
+section .corners_output_row align=1 vstart=0x2ed7e follows=.corners_output_pointer
     xor ebp, ebp
-    mov [frame_state_67623], al
+section .after_corners align=1 vstart=0x2ed85 follows=.corners_output_row
     jmp near .branch_2ee92
 
 .branch_2ed8a:
@@ -183,7 +175,7 @@ section .after_border_columns align=1 vstart=0x2ed19 follows=.after_mask_row
 .branch_2edae:
     mov ebx, ecx
 ; Compiler-generated C supplies this seven-neighbor sum.
-section .after_sum1 align=1 vstart=0x2edd6 follows=.after_border_columns
+section .after_sum1 align=1 vstart=0x2edd6 follows=.after_corners
     lea ebx, [ecx + 0x1]
     mov edi, eax
 ; Compiler-generated C supplies this seven-neighbor sum.

@@ -68,3 +68,15 @@ void ripple_advance_radius(int slot)
         ripple_origin_y[slot] = last_y;
     }
 }
+
+/* This phase surrounds independent retained EBP countdown bookkeeping. */
+int ripple_store_x_slot(unsigned int draw);
+#pragma aux ripple_store_x_slot parm [eax] value [eax] modify exact [eax ebx];
+int ripple_store_x_slot(unsigned int draw)
+{
+    unsigned int x = slot_draw_ebx(draw);
+    int slot = slot_index_eax(*(const volatile int *)&ripple_count);
+    x = slot_draw_ebx(x & 127U);
+    ((volatile int *)ripple_origin_x)[slot] = x;
+    return slot;
+}

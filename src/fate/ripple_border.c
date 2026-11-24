@@ -38,3 +38,15 @@ void ripple_border_columns(const unsigned char *pixels)
         ;
     } while (column < 128);
 }
+
+/* Preserve the original final-padding-byte corner destination. */
+void ripple_border_corners(const unsigned char *);
+#pragma aux ripple_border_corners parm [edx] modify exact [eax edx];
+void ripple_border_corners(const unsigned char *pixels)
+{
+    pixels = border_pointer_edx(pixels);
+    PLANE[0] = border_al(pixels[16383] & 31);
+    PLANE[129] = border_al(pixels[16256] & 31);
+    PLANE[17028] = border_al(pixels[127] & 31);
+    PLANE[17159] = border_al(pixels[0] & 31);
+}

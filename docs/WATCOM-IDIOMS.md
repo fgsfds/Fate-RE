@@ -280,3 +280,11 @@ that order without changing the external declarations. The independent
 oracle records write order and rejects swapped count/X stores even when
 all final state agrees. Self-removal copies the radius after its increment,
 so the inactive last slot retains 11 as in the reference.
+
+The X-slot store and four corner stores can retain their compiler order
+while independent assembly register bookkeeping runs between slices.
+MOV EBP,ECX / SUB EBP,ESI only affect the X countdown; MOV ESI,EDX /
+XOR EBP,EBP prepare output after the corner reads. Separate natural and
+interleaved oracles check the distinct register handoffs. Their final
+EFLAGS need not agree; the whole-image byte comparison verifies the
+production flag behavior.
