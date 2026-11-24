@@ -4209,33 +4209,26 @@ _ripple_original = next(row for row in ROUTINES if row[0] == 'animate_ripple_tex
 ROUTINES.remove(_ripple_original)
 _ripple_data = DATA_POINTER_SITES.pop('animate_ripple_texture')
 for _symbol, _begin, _end, _binary in (
-        ('animate_ripple_entry', 0x0, 0xb, 0),
-        ('animate_ripple_create', 0x21, 0x30, 11),
-        ('animate_ripple_x_countdown_copy', 0x32, 0x34, 26),
-        ('animate_ripple_x_countdown_step', 0x3c, 0x3e, 28),
-        ('animate_ripple_create_finish', 0x45, 0x4d, 30),
-        ('animate_ripple_radial', 0x6e, 0x85, 38),
-        ('animate_ripple_radial_1', 0xbc, 0xc5, 61),
-        ('animate_ripple_radial_guard', 0x107, 0x10f, 70),
-        ('animate_ripple_control_finish', 0x158, 0x166, 78),
-        ('animate_ripple_control_finish_tail', 0x16d, 0x171, 92),
-        ('animate_ripple_mask_guard', 0x192, 0x19a, 96),
-        ('animate_ripple_border', 0x1c2, 0x1c6, 104),
-        ('animate_ripple_border_2', 0x1f5, 0x1fd, 108),
-        ('animate_ripple_corners_output_pointer', 0x223, 0x225, 116),
-        ('animate_ripple_corners_output_row', 0x227, 0x229, 118),
-        ('animate_ripple_output_setup', 0x22e, 0x233, 120),
-        ('animate_ripple_output_setup_1', 0x252, 0x259, 125),
-        ('animate_ripple_second_setup', 0x27f, 0x284, 132),
-        ('animate_ripple_pack_second', 0x2bb, 0x2be, 137),
-        ('animate_ripple_pack_third', 0x2ee, 0x2f1, 140),
-        ('animate_ripple_pack_fourth', 0x34d, 0x357, 143),
+        ('animate_ripple_entry', 0x0, 0x9, 0),
+        ('animate_ripple_create', 0x26, 0x30, 9),
+        ('animate_ripple_create_finish', 0x45, 0x4d, 19),
+        ('animate_ripple_radial', 0x6e, 0x83, 27),
+        ('animate_ripple_radial_1', 0xc3, 0xc5, 48),
+        ('animate_ripple_radial_guard', 0x107, 0x10f, 50),
+        ('animate_ripple_control_finish', 0x158, 0x166, 58),
+        ('animate_ripple_control_finish_tail', 0x16f, 0x171, 72),
+        ('animate_ripple_mask_guard', 0x192, 0x19a, 74),
+        ('animate_ripple_border', 0x1c4, 0x1c6, 82),
+        ('animate_ripple_border_2', 0x1f5, 0x1fd, 84),
+        ('animate_ripple_output_setup', 0x22e, 0x233, 92),
+        ('animate_ripple_output_setup_1', 0x252, 0x257, 97),
+        ('animate_ripple_pack_fourth', 0x34d, 0x357, 102),
 ):
     ROUTINES.append((_symbol, _ripple_original[1], _ripple_original[2],
                      _ripple_original[3] + _begin, _end - _begin,
                      {site - _begin: target for site, target in _ripple_original[5].items()
                       if _begin <= site < _end}))
-    GROUP_SLICES[_symbol] = (_binary, 153)
+    GROUP_SLICES[_symbol] = (_binary, 112)
     DATA_POINTER_SITES[_symbol] = tuple(site - _begin for site in _ripple_data
                                        if _begin <= site < _end)
 

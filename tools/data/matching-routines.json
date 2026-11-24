@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1314,
-  "unique_code_bytes": 182016,
-  "le_pointers": 10006,
+  "routines": 1329,
+  "unique_code_bytes": 182057,
+  "le_pointers": 10007,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1710,6 +1710,16 @@
       "le_pointers": 8
     },
     {
+      "symbol": "ripple_tile_register_phase_",
+      "object": "ripbook.obj",
+      "object_sha256": "1a274e8a20af356100b4328488cd804f551b89f984485609ea58097a972f77a6",
+      "sha256": "253aa00c2dbbb117d146347fbacae9ee27e47b32bcdef68e72f244258330c351",
+      "raw_offset": "0x54160",
+      "loaded_address": "0x2eb60",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
       "symbol": "ripple_spawn_limit_phase_",
       "object": "ripctl.obj",
       "object_sha256": "7e3de68f99191ae2085323e1bc61b2f42117bbd26b79614db6dc642490e96b31",
@@ -1718,6 +1728,16 @@
       "loaded_address": "0x2eb62",
       "bytes": 22,
       "le_pointers": 1
+    },
+    {
+      "symbol": "ripple_spawn_step_phase_",
+      "object": "ripbook.obj",
+      "object_sha256": "1a274e8a20af356100b4328488cd804f551b89f984485609ea58097a972f77a6",
+      "sha256": "bce257e988d5cf159b57a7b1e2b2a4d627f25434f74ae88d7e83a2d9560a38b9",
+      "raw_offset": "0x54178",
+      "loaded_address": "0x2eb78",
+      "bytes": 5,
+      "le_pointers": 0
     },
     {
       "symbol": "ripple_x_draw_",
@@ -1730,6 +1750,16 @@
       "le_pointers": 0
     },
     {
+      "symbol": "ripple_spawn_count_copy_phase_",
+      "object": "ripbook.obj",
+      "object_sha256": "1a274e8a20af356100b4328488cd804f551b89f984485609ea58097a972f77a6",
+      "sha256": "da1edeeccaaa853fa61dc1fb9689cfb6a7eaf4d9321c4d34eedeeca775e8ee1c",
+      "raw_offset": "0x54189",
+      "loaded_address": "0x2eb89",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
       "symbol": "ripple_x_index_",
       "object": "rippart.obj",
       "object_sha256": "4f3b72d5d7f2b845a82970604b36371be5805dd6cad9e23a3c8bcdda695008e7",
@@ -1738,6 +1768,16 @@
       "loaded_address": "0x2eb8b",
       "bytes": 8,
       "le_pointers": 1
+    },
+    {
+      "symbol": "ripple_spawn_count_step_phase_",
+      "object": "ripbook.obj",
+      "object_sha256": "1a274e8a20af356100b4328488cd804f551b89f984485609ea58097a972f77a6",
+      "sha256": "1a2cce0e97a8b5878665108ad191c3aa31a440569c17ea1798b2470ab20add78",
+      "raw_offset": "0x54193",
+      "loaded_address": "0x2eb93",
+      "bytes": 2,
+      "le_pointers": 0
     },
     {
       "symbol": "ripple_x_store_",
@@ -1760,6 +1800,16 @@
       "le_pointers": 4
     },
     {
+      "symbol": "ripple_radial_set_slot_phase_",
+      "object": "ripbook.obj",
+      "object_sha256": "1a274e8a20af356100b4328488cd804f551b89f984485609ea58097a972f77a6",
+      "sha256": "758333d621152fd781558263d62f8904dbf707af29faff9d9adb9641d787bd27",
+      "raw_offset": "0x541da",
+      "loaded_address": "0x2ebda",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
       "symbol": "ripple_radial_setup_phase_",
       "object": "riprad.obj",
       "object_sha256": "7889010e1c44f2971ee7bd2cb7ffe380e5e67e3a2b3a289effcc1f3604fef34a",
@@ -1768,6 +1818,16 @@
       "loaded_address": "0x2ebdc",
       "bytes": 55,
       "le_pointers": 5
+    },
+    {
+      "symbol": "ripple_radial_load_y_phase_",
+      "object": "ripbook.obj",
+      "object_sha256": "1a274e8a20af356100b4328488cd804f551b89f984485609ea58097a972f77a6",
+      "sha256": "831045d421175c5cd47824efc955693749a9d11a6ede286fc0f2a04db38be21d",
+      "raw_offset": "0x54213",
+      "loaded_address": "0x2ec13",
+      "bytes": 7,
+      "le_pointers": 1
     },
     {
       "symbol": "ripple_radial_sample_phase_",
@@ -1810,6 +1870,16 @@
       "le_pointers": 1
     },
     {
+      "symbol": "ripple_mask_row_reset_phase_",
+      "object": "ripbook.obj",
+      "object_sha256": "1a274e8a20af356100b4328488cd804f551b89f984485609ea58097a972f77a6",
+      "sha256": "fbcf9936508635c7a3d17b1975fbb99ba24f608bddef85f3cf7d69cff6d95d2b",
+      "raw_offset": "0x542c4",
+      "loaded_address": "0x2ecc4",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
       "symbol": "ripple_mask_row_phase_",
       "object": "ripctl.obj",
       "object_sha256": "7e3de68f99191ae2085323e1bc61b2f42117bbd26b79614db6dc642490e96b31",
@@ -1848,6 +1918,16 @@
       "loaded_address": "0x2ecf3",
       "bytes": 38,
       "le_pointers": 2
+    },
+    {
+      "symbol": "ripple_vertical_row_reset_phase_",
+      "object": "ripbook.obj",
+      "object_sha256": "1a274e8a20af356100b4328488cd804f551b89f984485609ea58097a972f77a6",
+      "sha256": "fbcf9936508635c7a3d17b1975fbb99ba24f608bddef85f3cf7d69cff6d95d2b",
+      "raw_offset": "0x54319",
+      "loaded_address": "0x2ed19",
+      "bytes": 2,
+      "le_pointers": 0
     },
     {
       "symbol": "ripple_vertical_head_phase_",
@@ -1890,12 +1970,32 @@
       "le_pointers": 3
     },
     {
+      "symbol": "ripple_output_tile_phase_",
+      "object": "ripbook.obj",
+      "object_sha256": "1a274e8a20af356100b4328488cd804f551b89f984485609ea58097a972f77a6",
+      "sha256": "726f1d8bc207725f2225623f300b9e78d20685406c4096f97ac8a2c864bd52b4",
+      "raw_offset": "0x5437a",
+      "loaded_address": "0x2ed7a",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
       "symbol": "ripple_corners_mask_",
       "object": "ripbord.obj",
       "object_sha256": "3bc2ede6b758be1ce9b1ec15cf200804245b9b72fad1b49bbb6c7d39e4eea257",
       "sha256": "b9b3cebc750a91ce73996334c251a956dd82b153a0f8b673bad7fd1c866378d4",
       "raw_offset": "0x5437c",
       "loaded_address": "0x2ed7c",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "ripple_output_row_reset_phase_",
+      "object": "ripbook.obj",
+      "object_sha256": "1a274e8a20af356100b4328488cd804f551b89f984485609ea58097a972f77a6",
+      "sha256": "fbcf9936508635c7a3d17b1975fbb99ba24f608bddef85f3cf7d69cff6d95d2b",
+      "raw_offset": "0x5437e",
+      "loaded_address": "0x2ed7e",
       "bytes": 2,
       "le_pointers": 0
     },
@@ -1920,6 +2020,16 @@
       "le_pointers": 1
     },
     {
+      "symbol": "ripple_stencil_center_phase_",
+      "object": "ripbook.obj",
+      "object_sha256": "1a274e8a20af356100b4328488cd804f551b89f984485609ea58097a972f77a6",
+      "sha256": "14736876481e0cf1f2e1a7758057b288d5300b04f4980356d071bd989d22645e",
+      "raw_offset": "0x543ae",
+      "loaded_address": "0x2edae",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
       "symbol": "ripple_sum_first_",
       "object": "ripsum.obj",
       "object_sha256": "505785eae51bffe4762d2cf61cc652041e3f2d5363fb474af79aed00ddd12acd",
@@ -1927,6 +2037,26 @@
       "raw_offset": "0x543b0",
       "loaded_address": "0x2edb0",
       "bytes": 38,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "ripple_stencil_next1_phase_",
+      "object": "ripbook.obj",
+      "object_sha256": "1a274e8a20af356100b4328488cd804f551b89f984485609ea58097a972f77a6",
+      "sha256": "a7f8fb6e242eeb42eec0bd8f04ceb1c4d3202664b763f17433035cead0fc22ad",
+      "raw_offset": "0x543d6",
+      "loaded_address": "0x2edd6",
+      "bytes": 3,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "ripple_first_lane_phase_",
+      "object": "ripbook.obj",
+      "object_sha256": "1a274e8a20af356100b4328488cd804f551b89f984485609ea58097a972f77a6",
+      "sha256": "d2bd2152477cbaa9a78f100a02805ad38939027500988fec3d31729570bb484c",
+      "raw_offset": "0x543d9",
+      "loaded_address": "0x2edd9",
+      "bytes": 2,
       "le_pointers": 0
     },
     {
@@ -1947,6 +2077,16 @@
       "raw_offset": "0x54401",
       "loaded_address": "0x2ee01",
       "bytes": 17,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "ripple_stencil_next2_phase_",
+      "object": "ripbook.obj",
+      "object_sha256": "1a274e8a20af356100b4328488cd804f551b89f984485609ea58097a972f77a6",
+      "sha256": "171d854151fb530b02d8647627264c2ad6cc9bea2b9840fcbf97a0e0e5d4a1aa",
+      "raw_offset": "0x54412",
+      "loaded_address": "0x2ee12",
+      "bytes": 3,
       "le_pointers": 0
     },
     {
@@ -1977,6 +2117,16 @@
       "raw_offset": "0x5443d",
       "loaded_address": "0x2ee3d",
       "bytes": 8,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "ripple_stencil_next3_phase_",
+      "object": "ripbook.obj",
+      "object_sha256": "1a274e8a20af356100b4328488cd804f551b89f984485609ea58097a972f77a6",
+      "sha256": "e3e87a28b85c21c421d103d0de03069c40dc91712c4109bd0dd21020bc8b8a9d",
+      "raw_offset": "0x54445",
+      "loaded_address": "0x2ee45",
+      "bytes": 3,
       "le_pointers": 0
     },
     {

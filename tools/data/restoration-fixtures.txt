@@ -132,9 +132,9 @@ check_setgamemode_init --exe {exe} --output {build}/setgamemode-init-behavior.js
 check_encounter_actor --exe {exe} --output {build}/encounter-actor-behavior.json | encact encreset
 check_encounter_spawn --exe {exe} --build {build} --output {build}/encounter-spawn-behavior.json | encspawn
 check_encounter_spawn_loop --exe {exe} --build {build} --output {build}/encounter-spawn-loop-behavior.json | encloop
-check_ripple_texture --exe {exe} --build {build} --output {build}/ripple-texture-behavior.json | ripsum ripctl ripbord rippart ripout riploop
-check_ripple_radial_sample --exe {exe} --build {build} --output {build}/ripple-radial-sample.json | riprad ripinit
-check_ripple_radial_setup --exe {exe} --build {build} --output {build}/ripple-radial-setup.json | riprad ripinit
+check_ripple_texture --exe {exe} --build {build} --output {build}/ripple-texture-behavior.json | ripsum ripctl ripbord rippart ripout riploop ripbook
+check_ripple_radial_sample --exe {exe} --build {build} --output {build}/ripple-radial-sample.json | riprad ripinit ripbook
+check_ripple_radial_setup --exe {exe} --build {build} --output {build}/ripple-radial-setup.json | riprad ripinit ripbook
 check_ripple_packing --exe {exe} --build {build} --output {build}/ripple-packing.json | rippack
-check_ripple_vertical --exe {exe} --build {build} --output {build}/ripple-vertical.json | ripbord
+check_ripple_vertical --exe {exe} --build {build} --output {build}/ripple-vertical.json | ripbord ripbook
 check_ripple_output --exe {exe} --build {build} --output {build}/ripple-output.json | ripout riploop

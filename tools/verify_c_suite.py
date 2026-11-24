@@ -1535,6 +1535,9 @@ def verify_compiler_groups(exe, directory, names=None):
         verify_group_layout((directory/'ripout.obj').read_bytes(), 49,
                             [('ripple_output_row_', 0), ('ripple_store_output_', 32),
                              ('ripple_mask_begin_', 41)])
+    if selected('ripbook'):
+        verify_group_layout((directory/'ripbook.obj').read_bytes(), 49,
+                            [('ripple_spawn_countdown_', 0), ('ripple_radial_set_slot_', 5), ('ripple_radial_load_y_', 8), ('ripple_row_reset_', 16), ('ripple_tile_register_', 19), ('ripple_spawn_step_', 22), ('ripple_output_tile_', 28), ('ripple_stencil_center_', 31), ('ripple_stencil_next1_', 34), ('ripple_first_lane_', 38), ('ripple_stencil_next2_', 41), ('ripple_stencil_next3_', 45)])
     if selected('riploop'):
         verify_group_layout((directory/'riploop.obj').read_bytes(), 32,
                             [('ripple_output_word_guard_', 0),
@@ -1641,6 +1644,21 @@ OBJECT_NAMES['ripple_vertical_tail_phase_'] = 'ripbord'
 OBJECT_NAMES['ripple_output_row_phase_'] = 'ripout'
 OBJECT_NAMES['ripple_store_output_phase_'] = 'ripout'
 OBJECT_NAMES['ripple_mask_begin_phase_'] = 'ripout'
+OBJECT_NAMES['ripple_spawn_count_copy_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_spawn_count_step_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_radial_set_slot_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_radial_load_y_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_mask_row_reset_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_vertical_row_reset_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_output_row_reset_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_tile_register_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_spawn_step_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_output_tile_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_stencil_center_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_stencil_next1_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_first_lane_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_stencil_next2_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_stencil_next3_phase_'] = 'ripbook'
 OBJECT_NAMES['ripple_output_word_guard_phase_'] = 'riploop'
 OBJECT_NAMES['ripple_output_row_increment_phase_'] = 'riploop'
 OBJECT_NAMES['ripple_mask_row_increment_phase_'] = 'riploop'

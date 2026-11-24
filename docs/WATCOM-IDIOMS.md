@@ -309,8 +309,11 @@ A public function may return a value in EBP even though EBP input and
 modify declarations are rejected. With a true EBP getter and a 0..127
 row contract, returning `row + 1` emits `INC EBP; RET`; the increment now
 replaces all three ripple row steps. This is an explicit output contract,
-not an automatically preserved EBP value. An `aborts` continuation can
-produce the original near conditional jump directly from a signed guard.
+not an automatically preserved EBP value. The same public output contract
+also supports an EAX slot identity, ECX-minus-ESI countdown and indexed Y load through a true EBP getter.
+The countdown's copy and subtraction can link around an independent
+coordinate phase that preserves ECX, ESI and the pending EBP value.
+An `aborts` continuation can produce the original near conditional jump directly from a signed guard.
 Keep a guard's private RET separately guarded: combining functions may
 cause Watcom to share a preceding RET and invert the conditional branch.
 The ripple word guard starts its own translation unit to retain the exact

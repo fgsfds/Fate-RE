@@ -28,22 +28,17 @@ animate_ripple_texture:
     push edi
     push ebp
     sub esp, 0x14
-    mov edx, eax
 ; C computes and clamps the creation count in EAX.
-section .control align=1 vstart=0x2eb78 follows=.text
-.branch_2eb78:
-    mov esi, 0x1
+; C establishes the tile register and the creation step.
+section .control align=1 vstart=0x2eb7d follows=.text
     mov [esp], eax
     jmp short .branch_2ebc5
 
 .branch_2eb82:
     call random_value
 ; C copies the X draw, reads the slot, masks it, and stores the coordinate.
-section .x_countdown_copy align=1 vstart=0x2eb89 follows=.control
-    mov ebp, ecx
-section .x_countdown_step align=1 vstart=0x2eb93 follows=.x_countdown_copy
-    sub ebp, esi
-section .after_x_store align=1 vstart=0x2eb9c follows=.x_countdown_step
+; Its EBP countdown handoffs surround the selected X instructions.
+section .after_x_store align=1 vstart=0x2eb9c follows=.control
     call random_value
     mov [esp], ebp
 ; C stores the Y draw, radius and updated count.
@@ -59,10 +54,8 @@ section .after_spawn_slot align=1 vstart=0x2ebc5 follows=.after_x_store
     jmp near .branch_2ecb2
 
 .branch_2ebda:
-    mov ebp, eax
-; C supplies radial setup.
-section .after_radial_setup align=1 vstart=0x2ec13 follows=.after_spawn_slot
-    mov ebp, [nosplit ebp*4 + ripple_origin_y]
+; C supplies the slot handoff, radial setup and Y-origin handoff.
+section .after_radial_setup align=1 vstart=0x2ec1a follows=.after_spawn_slot
     jmp short .branch_2ec5f
 
 .branch_2ec1c equ 0x2ec1c
@@ -88,8 +81,8 @@ section .after_radius_update align=1 vstart=0x2ecaf follows=.after_pixel_floor
     test eax, eax
     jnl near .branch_2ebda
 ; C establishes the masked-row destination and tile input.
-section .mask_row_counter align=1 vstart=0x2ecc4 follows=.after_radius_update
-    xor ebp, ebp
+; C resets the row counter at each pass ingress.
+section .mask_row_counter align=1 vstart=0x2ecc6 follows=.after_radius_update
     jmp short .branch_2ece9
 
 .branch_2ecc8 equ 0x2ecc8
@@ -101,8 +94,7 @@ section .after_mask_row align=1 vstart=0x2ece9 follows=.mask_row_counter
     cmp ebp, strict dword 0x80
     jl short .branch_2ecc8
 ; C supplies the counter initialization and top/bottom border loop.
-section .after_border_columns align=1 vstart=0x2ed19 follows=.after_mask_row
-    xor ebp, ebp
+section .after_border_columns align=1 vstart=0x2ed1b follows=.after_mask_row
     jmp short .branch_2ed4c
 
 .branch_2ed1d equ 0x2ed1d
@@ -112,11 +104,8 @@ section .vertical_row_guard align=1 vstart=0x2ed4c follows=.after_border_columns
     cmp ebp, strict dword 0x80
     jl short .branch_2ed1d
 ; C supplies all four corner reads, masks and stores.
-section .corners_output_pointer align=1 vstart=0x2ed7a follows=.vertical_row_guard
-    mov esi, edx
-section .corners_output_row align=1 vstart=0x2ed7e follows=.corners_output_pointer
-    xor ebp, ebp
-section .after_corners align=1 vstart=0x2ed85 follows=.corners_output_row
+; C also supplies the output tile pointer and row reset.
+section .after_corners align=1 vstart=0x2ed85 follows=.vertical_row_guard
     jmp near .branch_2ee92
 
 .branch_2ed8a equ 0x2ed8a
@@ -125,26 +114,12 @@ section .output_row_jump align=1 vstart=0x2eda9 follows=.after_corners
     jmp near .branch_2ee87
 
 .branch_2edae:
-    mov ebx, ecx
-; Compiler-generated C supplies this seven-neighbor sum.
-section .after_sum1 align=1 vstart=0x2edd6 follows=.output_row_jump
-    lea ebx, [ecx + 0x1]
-    mov edi, eax
-; Compiler-generated C supplies this seven-neighbor sum.
-; C packs the first two lanes around the next-pointer LEA.
-section .pack_two_next align=1 vstart=0x2ee12 follows=.after_sum1
-    lea ebx, [ecx + 0x2]
-; Compiler-generated C supplies this seven-neighbor sum.
-; C adds the third lane.
-section .pack_third_next align=1 vstart=0x2ee45 follows=.pack_two_next
-    lea ebx, [ecx + 0x3]
-; Compiler-generated C supplies this seven-neighbor sum.
-; C adds and biases the fourth lane.
+; C supplies all stencil pointers, four sums and packed-lane handoffs.
 ; C stores the packed word and advances both pointers.
 ; C supplies both signed loop guards, the row increment and frame advance.
 .branch_2ee87 equ 0x2ee87
 .branch_2ee92 equ 0x2ee92
-section .output_epilogue align=1 vstart=0x2eea4 follows=.pack_third_next
+section .output_epilogue align=1 vstart=0x2eea4 follows=.output_row_jump
     add esp, 0x14
     pop ebp
     pop edi

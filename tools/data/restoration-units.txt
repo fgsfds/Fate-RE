@@ -534,3 +534,4 @@ fate/ripple_radial riprad
 fate/ripple_packing rippack
 fate/ripple_output ripout
 fate/ripple_output_loop riploop
+fate/ripple_bookkeeping ripbook
