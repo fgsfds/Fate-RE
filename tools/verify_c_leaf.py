@@ -4810,6 +4810,29 @@ for _alias, _raw, _begin, _end in (
 LEAF_CONTEXT_SUFFIXES['ripple_border_corners_'] = b'\xc3'
 FUNCTION_ADDRESSES['ripple_border_corners_'] = 0x2ed54
 
+LEAVES['ripple_radial_setup_phase_'] = (0x541dc, 55)
+LEAF_CODE_SLICES['ripple_radial_setup_phase_'] = ('ripple_radial_setup_', 0, 55, 56)
+LEAF_CONTEXT_SUFFIXES['ripple_radial_setup_'] = b'\xc3'
+LEAVES['ripple_radial_sample_phase_'] = (0x5421c, 52)
+LEAF_CODE_SLICES['ripple_radial_sample_phase_'] = ('ripple_radial_sample_', 0, 52, 53)
+LEAF_CONTEXT_SUFFIXES['ripple_radial_sample_'] = b'\xc3'
+LEAVES['ripple_pack_two_bits_'] = (0x54401, 17)
+LEAF_CODE_SLICES['ripple_pack_two_bits_'] = ('ripple_pack_two_', 0, 17, 20)
+LEAF_CONTEXT_SUFFIXES['ripple_pack_two_'] = b'\xc3'
+LEAVES['ripple_pack_two_add_'] = (0x54415, 2)
+LEAF_CODE_SLICES['ripple_pack_two_add_'] = ('ripple_pack_two_', 17, 19, 20)
+LEAF_CONTEXT_SUFFIXES['ripple_pack_two_'] = b'\xc3'
+LEAVES['ripple_pack_third_bits_'] = (0x5443d, 8)
+LEAF_CODE_SLICES['ripple_pack_third_bits_'] = ('ripple_pack_third_', 0, 8, 11)
+LEAF_CONTEXT_SUFFIXES['ripple_pack_third_'] = b'\xc3'
+LEAVES['ripple_pack_third_add_'] = (0x54448, 2)
+LEAF_CODE_SLICES['ripple_pack_third_add_'] = ('ripple_pack_third_', 8, 10, 11)
+LEAF_CONTEXT_SUFFIXES['ripple_pack_third_'] = b'\xc3'
+LEAVES['ripple_pack_fourth_phase_'] = (0x54470, 15)
+LEAF_CODE_SLICES['ripple_pack_fourth_phase_'] = ('ripple_pack_fourth_', 0, 15, 16)
+LEAF_CONTEXT_SUFFIXES['ripple_pack_fourth_'] = b'\xc3'
+DATA_OFFSETS['_ripple_speed'] = 0x630fc
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

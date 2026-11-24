@@ -288,3 +288,11 @@ XOR EBP,EBP prepare output after the corner reads. Separate natural and
 interleaved oracles check the distinct register handoffs. Their final
 EFLAGS need not agree; the whole-image byte comparison verifies the
 production flag behavior.
+
+Caller-cleanup stack formals can model in-place frame fields without
+introducing a competing local frame: the ripple radial leaves use an
+unused +4 formal and amplitude/X at +8/+12. Volatile setup formals retain
+the original stores. The original EBP assignments remain outside these
+leaves and supply the slot and Y getter contracts. Compatible 4096-word
+radial table declarations permit aligned scalar C loads while retaining
+the initializer's existing exact stores.

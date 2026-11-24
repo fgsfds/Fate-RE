@@ -60,42 +60,15 @@ section .after_spawn_slot align=1 vstart=0x2ebc5 follows=.after_x_store
 
 .branch_2ebda:
     mov ebp, eax
-    mov ebx, ebp
-    and ebx, 0x1
-    mov eax, [nosplit eax*4 + ripple_radius]
-    add ebx, ebx
-    mov eax, [nosplit eax*4 + frame_state_630fc]
-    dec ebx
-    imul eax, ebx
-    mov edi, [nosplit ebp*4 + ripple_radius]
-    mov esi, [nosplit edi*4 + radial_sample_count]
-    mov [esp + 0x8], eax
-    mov eax, [nosplit ebp*4 + ripple_origin_x]
-    dec esi
-    mov [esp + 0xc], eax
+; C supplies radial setup.
+section .after_radial_setup align=1 vstart=0x2ec13 follows=.after_spawn_slot
     mov ebp, [nosplit ebp*4 + ripple_origin_y]
     jmp short .branch_2ec5f
 
-.branch_2ec1c:
-    mov eax, edi
-    mov ecx, esi
-    shl eax, byte 0x9
-    shl ecx, byte 0x2
-    add ecx, eax
-    mov ebx, [esp + 0xc]
-    mov eax, [ecx + radial_x_offsets]
-    add eax, ebx
-    mov ebx, [ecx + radial_y_offsets]
-    and eax, 0x7f
-    add ebx, ebp
-    shl eax, byte 0x7
-    and ebx, 0x7f
-    add eax, ebx
-    lea ecx, [edx + eax]
-    mov al, [esp + 0x8]
-    add [ecx], al
+.branch_2ec1c equ 0x2ec1c
+; C supplies sample coordinate selection and byte addition.
 ; C clamps the updated pixel to the original floor.
-section .after_pixel_floor align=1 vstart=0x2ec5e follows=.after_spawn_slot
+section .after_pixel_floor align=1 vstart=0x2ec5e follows=.after_radial_setup
 
 .branch_2ec5e:
     dec esi
@@ -179,25 +152,16 @@ section .after_sum1 align=1 vstart=0x2edd6 follows=.after_corners
     lea ebx, [ecx + 0x1]
     mov edi, eax
 ; Compiler-generated C supplies this seven-neighbor sum.
-section .after_sum2 align=1 vstart=0x2ee01 follows=.after_sum1
-    and edi, strict dword 0xf8
-    and eax, strict dword 0xf8
-    sar edi, byte 0x3
-    shl eax, byte 0x5
+; C packs the first two lanes around the next-pointer LEA.
+section .pack_two_next align=1 vstart=0x2ee12 follows=.after_sum1
     lea ebx, [ecx + 0x2]
-    add edi, eax
 ; Compiler-generated C supplies this seven-neighbor sum.
-section .after_sum3 align=1 vstart=0x2ee3d follows=.after_sum2
-    and eax, strict dword 0xf8
-    shl eax, byte 0xd
+; C adds the third lane.
+section .pack_third_next align=1 vstart=0x2ee45 follows=.pack_two_next
     lea ebx, [ecx + 0x3]
-    add edi, eax
 ; Compiler-generated C supplies this seven-neighbor sum.
-section .after_sum4 align=1 vstart=0x2ee70 follows=.after_sum3
-    and eax, strict dword 0xf8
-    shl eax, byte 0x15
-    add eax, edi
-    sub eax, strict dword 0x3d3d3d3e
+; C adds and biases the fourth lane.
+section .after_sum4 align=1 vstart=0x2ee7f follows=.pack_third_next
     add ecx, 0x4
     mov [esi], eax
     add esi, 0x4

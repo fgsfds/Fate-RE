@@ -1,5 +1,5 @@
 extern int radial_sample_count[];
-extern unsigned char radial_x_offsets[], radial_y_offsets[];
+extern unsigned int radial_x_offsets[32 * 128], radial_y_offsets[32 * 128];
 extern int ripple_speed[];
 extern unsigned char ripple_wave[];
 extern int ripple_count, ripple_frame;

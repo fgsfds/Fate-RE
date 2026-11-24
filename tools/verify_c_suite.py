@@ -1531,6 +1531,13 @@ def verify_compiler_groups(exe, directory, names=None):
                                ('puzact', 929, 'puzzle_activation_context_')):
         if selected(name):
             verify_group_layout((directory/(name+'.obj')).read_bytes(), size, [(public, 0)])
+    if selected('riprad'):
+        verify_group_layout((directory/'riprad.obj').read_bytes(), 109,
+                            [('ripple_radial_sample_', 0), ('ripple_radial_setup_', 53)])
+    if selected('rippack'):
+        verify_group_layout((directory/'rippack.obj').read_bytes(), 47,
+                            [('ripple_pack_two_', 0), ('ripple_pack_third_', 20),
+                             ('ripple_pack_fourth_', 31)])
     if selected('rippart'):
         verify_group_layout((directory/'rippart.obj').read_bytes(), 141,
                             [('ripple_store_y_slot_', 0), ('ripple_floor_pixel_', 34),
@@ -1611,6 +1618,14 @@ for _name in ('ripple_x_draw_', 'ripple_x_index_', 'ripple_x_store_'):
     OBJECT_NAMES[_name] = 'rippart'
 for _name in ('ripple_corners_load_', 'ripple_corners_mask_', 'ripple_corners_store_'):
     OBJECT_NAMES[_name] = 'ripbord'
+
+OBJECT_NAMES['ripple_radial_setup_phase_'] = 'riprad'
+OBJECT_NAMES['ripple_radial_sample_phase_'] = 'riprad'
+OBJECT_NAMES['ripple_pack_two_bits_'] = 'rippack'
+OBJECT_NAMES['ripple_pack_two_add_'] = 'rippack'
+OBJECT_NAMES['ripple_pack_third_bits_'] = 'rippack'
+OBJECT_NAMES['ripple_pack_third_add_'] = 'rippack'
+OBJECT_NAMES['ripple_pack_fourth_phase_'] = 'rippack'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
