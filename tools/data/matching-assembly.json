@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 495,
-  "unique_code_bytes": 222072,
+  "routines": 489,
+  "unique_code_bytes": 222054,
   "le_pointers": 12058,
   "non_routine_code_spans": [
     {
@@ -7633,36 +7633,12 @@
       "symbol": "read_game_data_asm_2",
       "source": "src/fate/read_game_data.asm",
       "binary": "read_game_data.bin",
-      "sha256": "c0fcecbf6dbdbf1b6289b53028178b3050cbc613cc71f8d21b2ccadea1a87a88",
-      "bytes": 2,
-      "raw_offset": "0x554be",
-      "loaded_address": "0x2febe",
-      "public_entry": "0x2febe",
-      "binary_offset": 131,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "read_game_data_asm_3",
-      "source": "src/fate/read_game_data.asm",
-      "binary": "read_game_data.bin",
-      "sha256": "a25193049a4c95cedcd5246205dfca04716ea0c6ed636213d3c980f8e1925bf5",
-      "bytes": 4,
-      "raw_offset": "0x554d9",
-      "loaded_address": "0x2fed9",
-      "public_entry": "0x2fed9",
-      "binary_offset": 133,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "read_game_data_asm_4",
-      "source": "src/fate/read_game_data.asm",
-      "binary": "read_game_data.bin",
       "sha256": "3aff3d61caee369f6f7ac3a9e36fce45dd1bdcce1a3cc2ad5581ac938477029b",
       "bytes": 111,
       "raw_offset": "0x55f34",
       "loaded_address": "0x30934",
       "public_entry": "0x30934",
-      "binary_offset": 137,
+      "binary_offset": 131,
       "le_pointers": 8
     },
     {
@@ -7681,60 +7657,12 @@
       "symbol": "write_game_data_asm_1",
       "source": "src/fate/write_game_data.asm",
       "binary": "write_game_data.bin",
-      "sha256": "c0fcecbf6dbdbf1b6289b53028178b3050cbc613cc71f8d21b2ccadea1a87a88",
-      "bytes": 2,
-      "raw_offset": "0x569c3",
-      "loaded_address": "0x313c3",
-      "public_entry": "0x313c3",
-      "binary_offset": 102,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "write_game_data_asm_2",
-      "source": "src/fate/write_game_data.asm",
-      "binary": "write_game_data.bin",
-      "sha256": "0992d4dbfc9ff8f3564312bf31e1640a8da9f3e8478c735ea4622a7e56b3c3ff",
-      "bytes": 4,
-      "raw_offset": "0x569de",
-      "loaded_address": "0x313de",
-      "public_entry": "0x313de",
-      "binary_offset": 104,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "write_game_data_asm_3",
-      "source": "src/fate/write_game_data.asm",
-      "binary": "write_game_data.bin",
-      "sha256": "c0fcecbf6dbdbf1b6289b53028178b3050cbc613cc71f8d21b2ccadea1a87a88",
-      "bytes": 2,
-      "raw_offset": "0x569fd",
-      "loaded_address": "0x313fd",
-      "public_entry": "0x313fd",
-      "binary_offset": 108,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "write_game_data_asm_4",
-      "source": "src/fate/write_game_data.asm",
-      "binary": "write_game_data.bin",
-      "sha256": "0992d4dbfc9ff8f3564312bf31e1640a8da9f3e8478c735ea4622a7e56b3c3ff",
-      "bytes": 4,
-      "raw_offset": "0x56a18",
-      "loaded_address": "0x31418",
-      "public_entry": "0x31418",
-      "binary_offset": 110,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "write_game_data_asm_5",
-      "source": "src/fate/write_game_data.asm",
-      "binary": "write_game_data.bin",
       "sha256": "618fae17e8907bb51a188573704d4ee6cb2cd0c6ed058750a73129f4fa69656b",
       "bytes": 81,
       "raw_offset": "0x57473",
       "loaded_address": "0x31e73",
       "public_entry": "0x31e73",
-      "binary_offset": 114,
+      "binary_offset": 102,
       "le_pointers": 6
     }
   ]

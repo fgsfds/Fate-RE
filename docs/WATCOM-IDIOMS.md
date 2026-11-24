@@ -404,3 +404,16 @@ subtraction suffix. Credit only the placed instruction, retain full
 context hashes/fixup guards, and exercise all indices plus complete loops.
 If emulation reuses an address for different private contexts, invalidate
 Unicorn's translated-code cache after writing new instructions.
+
+
+To extend a register-getter step into a complete pointer loop, keep its
+initialization in the C context and read the physical index again in
+the condition. This preserves the preheader, original TEST register and
+short back edge without a loop-carried C shadow variable. The reader's
+table transfer supplies the same EDI initialization as the writer's
+explicit setter. Bind a shortened subtraction context with the existing
+section-branch metadata: check raw opcode/target first, then calculate
+the original placed displacement. Private emulation must temporarily
+suppress that placement mapping and restore it in finally. Require full
+C coverage of loop test ranges and exercise both complete placed paths
+and private contexts, including partial table reads.

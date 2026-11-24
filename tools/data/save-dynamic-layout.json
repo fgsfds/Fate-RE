@@ -110,89 +110,13 @@
     {
       "object": "svstep",
       "source": "fate/save_restore_steps",
-      "size": 118,
+      "size": 137,
       "contexts": [
         {
-          "public": "save_restore_read_step_",
+          "public": "save_restore_read_loop_",
           "start": 0,
-          "size": 26,
-          "sha256": "5fe6f797fdc7c0c21e11ae05041b4c66ef21a78d90718b5ab7e7b4420fb88b7e",
-          "fixups": {
-            "1": [
-              "_save_data_image",
-              false,
-              2605984
-            ],
-            "8": [
-              "_save_restore_words",
-              false,
-              0
-            ],
-            "21": [
-              "_save_restore_words",
-              false,
-              4
-            ]
-          }
-        },
-        {
-          "public": "save_restore_offset_step_",
-          "start": 26,
-          "size": 30,
-          "sha256": "d8942092c66a0542bd03874b96a51df431bdda2b28f42aa3ef37005891cdbc1f",
-          "fixups": {
-            "1": [
-              "_save_data_image",
-              false,
-              2605984
-            ],
-            "12": [
-              "_save_restore_words",
-              false,
-              0
-            ],
-            "25": [
-              "_save_restore_words",
-              false,
-              4
-            ]
-          }
-        },
-        {
-          "public": "save_restore_address_step_",
-          "start": 56,
-          "size": 26,
-          "sha256": "3846899a4d34792b082fd85bd39521df1a2a14067e6f3f99de4db9b515b21651",
-          "fixups": {
-            "1": [
-              "_save_data_image",
-              false,
-              2605984
-            ],
-            "8": [
-              "_save_restore_words",
-              false,
-              0
-            ],
-            "21": [
-              "_save_restore_words",
-              false,
-              4
-            ]
-          }
-        },
-        {
-          "public": "save_restore_last_index_",
-          "start": 82,
-          "size": 6,
-          "sha256": "6e98f7e8169ae1bd79095b68405d5efb4ffb59c1486086c18e217753097e003e",
-          "fixups": {}
-        },
-        {
-          "public": "save_read_restore_words_",
-          "start": 88,
-          "size": 30,
-          "sha256": "a449c93c8a37b67e0f5a0678ae3d3a7b9f128d87b6d6a063211e4d50b58c4f34",
+          "size": 59,
+          "sha256": "864a09952c97e35ea1dc3a37eea172a4e57c747df7100fae3e85351e05cc96e0",
           "fixups": {
             "11": [
               "_save_restore_words",
@@ -203,6 +127,84 @@
               "fread_",
               true,
               0
+            ],
+            "30": [
+              "_save_data_image",
+              false,
+              2605984
+            ],
+            "37": [
+              "_save_restore_words",
+              false,
+              0
+            ],
+            "50": [
+              "_save_restore_words",
+              false,
+              4
+            ]
+          }
+        },
+        {
+          "public": "save_restore_offset_loop_",
+          "start": 59,
+          "size": 41,
+          "sha256": "451afbcc520cd5ef32260094131b15fdc2f28e4275fc68fbd165e0d08482e9a0",
+          "fixups": {
+            "8": [
+              "_save_data_image",
+              false,
+              2605984
+            ],
+            "19": [
+              "_save_restore_words",
+              false,
+              0
+            ],
+            "32": [
+              "_save_restore_words",
+              false,
+              4
+            ]
+          },
+          "branches": {
+            "compiler_size": 41,
+            "placed_size": 36,
+            "public_address": 201662,
+            "sites": {
+              "5": [
+                "eb",
+                36,
+                32
+              ],
+              "38": [
+                "7d",
+                7,
+                7
+              ]
+            }
+          }
+        },
+        {
+          "public": "save_restore_address_loop_",
+          "start": 100,
+          "size": 37,
+          "sha256": "6b69d6144ecd30bf710795aef4d2b8a1b12612bc4904ee83ca4b98a1c6121d96",
+          "fixups": {
+            "8": [
+              "_save_data_image",
+              false,
+              2605984
+            ],
+            "15": [
+              "_save_restore_words",
+              false,
+              0
+            ],
+            "28": [
+              "_save_restore_words",
+              false,
+              4
             ]
           }
         }
@@ -251,84 +253,54 @@
       "le_sites": 2
     },
     {
-      "phase": "save_restore_read_step_phase_",
-      "public": "save_restore_read_step_",
+      "phase": "save_restore_read_loop_phase_",
+      "public": "save_restore_read_loop_",
       "object": "svstep",
       "begin": 0,
-      "end": 25,
-      "address": 196288,
+      "end": 58,
+      "address": 196259,
       "routine": "read_game_data",
-      "le_sites": 3
+      "le_sites": 4
     },
     {
-      "phase": "save_restore_offset_base_phase_",
-      "public": "save_restore_offset_step_",
+      "phase": "save_restore_offset_prefix_phase_",
+      "public": "save_restore_offset_loop_",
       "object": "svstep",
       "begin": 0,
-      "end": 5,
-      "address": 201669,
+      "end": 12,
+      "address": 201662,
       "routine": "write_game_data",
       "le_sites": 1
     },
     {
       "phase": "save_restore_offset_word_phase_",
-      "public": "save_restore_address_step_",
+      "public": "save_restore_address_loop_",
       "object": "svstep",
-      "begin": 5,
-      "end": 12,
+      "begin": 12,
+      "end": 19,
       "address": 201674,
       "routine": "write_game_data",
       "le_sites": 1
     },
     {
-      "phase": "save_restore_offset_store_phase_",
-      "public": "save_restore_offset_step_",
+      "phase": "save_restore_offset_suffix_phase_",
+      "public": "save_restore_offset_loop_",
       "object": "svstep",
-      "begin": 16,
-      "end": 29,
+      "begin": 23,
+      "end": 40,
       "address": 201681,
       "routine": "write_game_data",
       "le_sites": 1
     },
     {
-      "phase": "save_restore_address_step_phase_",
-      "public": "save_restore_address_step_",
+      "phase": "save_restore_address_loop_phase_",
+      "public": "save_restore_address_loop_",
       "object": "svstep",
       "begin": 0,
-      "end": 25,
-      "address": 201727,
-      "routine": "write_game_data",
-      "le_sites": 3
-    },
-    {
-      "phase": "save_restore_offset_init_phase_",
-      "public": "save_restore_last_index_",
-      "object": "svstep",
-      "begin": 0,
-      "end": 5,
-      "address": 201662,
-      "routine": "write_game_data",
-      "le_sites": 0
-    },
-    {
-      "phase": "save_restore_address_init_phase_",
-      "public": "save_restore_last_index_",
-      "object": "svstep",
-      "begin": 0,
-      "end": 5,
+      "end": 36,
       "address": 201720,
       "routine": "write_game_data",
-      "le_sites": 0
-    },
-    {
-      "phase": "save_read_restore_words_phase_",
-      "public": "save_read_restore_words_",
-      "object": "svstep",
-      "begin": 0,
-      "end": 27,
-      "address": 196259,
-      "routine": "read_game_data",
-      "le_sites": 1
+      "le_sites": 3
     }
   ]
 }

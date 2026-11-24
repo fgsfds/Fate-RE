@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1399,
-  "unique_code_bytes": 192567,
+  "routines": 1396,
+  "unique_code_bytes": 192585,
   "le_pointers": 10491,
   "non_routine_code_spans": [
     {
@@ -2670,24 +2670,14 @@
       "le_pointers": 68
     },
     {
-      "symbol": "save_read_restore_words_phase_",
+      "symbol": "save_restore_read_loop_phase_",
       "object": "svstep.obj",
-      "object_sha256": "b631ab81104af0524630229298d3ceebf8e88824f11480c0ba5a0718f79469a9",
-      "sha256": "41cd3614984fd73a2d9fc4882b5d59d5d86571dbb1ed5d4ebe719dfd543734ef",
+      "object_sha256": "21741355c6f00765cf34f8994eae8abc6245fb945ea1f96edcf98221e5fc456f",
+      "sha256": "df81685ef30586e744b828c7cf15ad53a89dd9695acea330f7fc1b8aa7cde6cc",
       "raw_offset": "0x554a3",
       "loaded_address": "0x2fea3",
-      "bytes": 27,
-      "le_pointers": 1
-    },
-    {
-      "symbol": "save_restore_read_step_phase_",
-      "object": "svstep.obj",
-      "object_sha256": "b631ab81104af0524630229298d3ceebf8e88824f11480c0ba5a0718f79469a9",
-      "sha256": "26653ddb247c099828fafa7c976037d84ce623a7345e8f9bc3c9e906c9b14418",
-      "raw_offset": "0x554c0",
-      "loaded_address": "0x2fec0",
-      "bytes": 25,
-      "le_pointers": 3
+      "bytes": 58,
+      "le_pointers": 4
     },
     {
       "symbol": "save_read_fields_5_phase_",
@@ -2830,23 +2820,13 @@
       "le_pointers": 68
     },
     {
-      "symbol": "save_restore_offset_init_phase_",
+      "symbol": "save_restore_offset_prefix_phase_",
       "object": "svstep.obj",
-      "object_sha256": "b631ab81104af0524630229298d3ceebf8e88824f11480c0ba5a0718f79469a9",
-      "sha256": "4ec108b58f4a270bdce0082d0319917144a9345a10a9138a83bc31805182fca8",
+      "object_sha256": "21741355c6f00765cf34f8994eae8abc6245fb945ea1f96edcf98221e5fc456f",
+      "sha256": "7e386552fabcc6e06b50655733d0dfcc0b4a981e6e499b67152a237042de2d32",
       "raw_offset": "0x569be",
       "loaded_address": "0x313be",
-      "bytes": 5,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "save_restore_offset_base_phase_",
-      "object": "svstep.obj",
-      "object_sha256": "b631ab81104af0524630229298d3ceebf8e88824f11480c0ba5a0718f79469a9",
-      "sha256": "9d0a89d68c45d0dd94c5a9c4d5422b8c6b6e97f20c0f786f84b7b852451135e2",
-      "raw_offset": "0x569c5",
-      "loaded_address": "0x313c5",
-      "bytes": 5,
+      "bytes": 12,
       "le_pointers": 1
     },
     {
@@ -2860,13 +2840,13 @@
       "le_pointers": 1
     },
     {
-      "symbol": "save_restore_offset_store_phase_",
+      "symbol": "save_restore_offset_suffix_phase_",
       "object": "svstep.obj",
-      "object_sha256": "b631ab81104af0524630229298d3ceebf8e88824f11480c0ba5a0718f79469a9",
-      "sha256": "69074ad3881b0524767bdce636878e498cfcf06f39e9ec357462858352d056df",
+      "object_sha256": "21741355c6f00765cf34f8994eae8abc6245fb945ea1f96edcf98221e5fc456f",
+      "sha256": "eca9850ddaed2a33a90658971195a8178c6281e6a0748459d786856b9e3c9ba6",
       "raw_offset": "0x569d1",
       "loaded_address": "0x313d1",
-      "bytes": 13,
+      "bytes": 17,
       "le_pointers": 1
     },
     {
@@ -2880,23 +2860,13 @@
       "le_pointers": 1
     },
     {
-      "symbol": "save_restore_address_init_phase_",
+      "symbol": "save_restore_address_loop_phase_",
       "object": "svstep.obj",
-      "object_sha256": "b631ab81104af0524630229298d3ceebf8e88824f11480c0ba5a0718f79469a9",
-      "sha256": "4ec108b58f4a270bdce0082d0319917144a9345a10a9138a83bc31805182fca8",
+      "object_sha256": "21741355c6f00765cf34f8994eae8abc6245fb945ea1f96edcf98221e5fc456f",
+      "sha256": "44c52d8380e7b4a25276c7835c7a40108aac9b03468f25ec05fed310860fcc7f",
       "raw_offset": "0x569f8",
       "loaded_address": "0x313f8",
-      "bytes": 5,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "save_restore_address_step_phase_",
-      "object": "svstep.obj",
-      "object_sha256": "b631ab81104af0524630229298d3ceebf8e88824f11480c0ba5a0718f79469a9",
-      "sha256": "0874969d8a1d71d0fe8108ce8015d117b4d21338355932e39e4172fddd144a62",
-      "raw_offset": "0x569ff",
-      "loaded_address": "0x313ff",
-      "bytes": 25,
+      "bytes": 36,
       "le_pointers": 3
     },
     {

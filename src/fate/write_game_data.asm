@@ -300,25 +300,7 @@ write_game_data:
     call fwrite
 
 ; C field run 0 ends here.
-section .retained_1 align=1 vstart=0x313c3 follows=.text
-    jmp short .branch_313de
-
-; C field run 1 ends here.
-section .retained_2 align=1 vstart=0x313de follows=.retained_1
-    test eax, eax
-    jnl short .branch_313c5
-
-; C field run 2 ends here.
-section .retained_3 align=1 vstart=0x313fd follows=.retained_2
-    jmp short .branch_31418
-
-; C field run 3 ends here.
-section .retained_4 align=1 vstart=0x31418 follows=.retained_3
-    test eax, eax
-    jnl short .branch_313ff
-
-; C field run 4 ends here.
-section .retained_5 align=1 vstart=0x31e73 follows=.retained_4
+section .retained_1 align=1 vstart=0x31e73 follows=.text
     mov eax, esi
     mov edi, status_text
     call sub_4032e

@@ -5048,6 +5048,11 @@ for _object in SAVE_DYNAMIC_LAYOUT['objects']:
     for _context in _object['contexts']:
         LEAF_CONTEXT_SHA256[_context['public']] = _context['sha256']
         LEAF_CONTEXT_FIXUPS[_context['public']] = {int(site): tuple(spec) for site, spec in _context['fixups'].items()}
+        if 'branches' in _context:
+            _branch = _context['branches']
+            FUNCTION_ADDRESSES[_context['public']] = _branch['public_address']
+            LEAF_SECTION_BRANCHES[_context['public']] = (_branch['compiler_size'], _branch['placed_size'],
+                {int(site): (bytes.fromhex(spec[0]), spec[1], spec[2]) for site, spec in _branch['sites'].items()})
 for _phase in SAVE_DYNAMIC_LAYOUT['phases']:
     _context = next(row for obj in SAVE_DYNAMIC_LAYOUT['objects'] for row in obj['contexts'] if row['public'] == _phase['public'])
     LEAVES[_phase['phase']] = (_phase['address']+0x25600, _phase['end']-_phase['begin'])
