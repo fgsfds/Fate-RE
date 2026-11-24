@@ -1607,11 +1607,16 @@
         },
         {
           "begin": 5321,
-          "end": 5432,
+          "end": 5388,
           "binary_offset": 131
+        },
+        {
+          "begin": 5423,
+          "end": 5432,
+          "binary_offset": 198
         }
       ],
-      "retained_bytes": 242,
+      "retained_bytes": 207,
       "additional_c_layouts": [
         "save-byte-layout.json",
         "save-dynamic-layout.json"
@@ -3205,11 +3210,16 @@
         },
         {
           "begin": 5328,
-          "end": 5409,
+          "end": 5365,
           "binary_offset": 102
+        },
+        {
+          "begin": 5400,
+          "end": 5409,
+          "binary_offset": 139
         }
       ],
-      "retained_bytes": 183,
+      "retained_bytes": 148,
       "additional_c_layouts": [
         "save-byte-layout.json",
         "save-dynamic-layout.json"

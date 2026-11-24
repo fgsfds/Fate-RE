@@ -417,3 +417,12 @@ the original placed displacement. Private emulation must temporarily
 suppress that placement mapping and restore it in finally. Require full
 C coverage of loop test ranges and exercise both complete placed paths
 and private contexts, including partial table reads.
+
+
+For a saved status length, truncate to unsigned char before scaling in
+unsigned arithmetic. Empty identities can keep the scaled value in EAX
+while the clock and sum stay in EDX, preserving the original mask/shift,
+clock load, two additions and final store. Return the actual zero result
+to preserve the final XOR. Test poisoned upper length bits and clocks
+around wrap and exact zero; XOR leaves AF undefined, so exclude AF from
+the defined-flag oracle. Keep DF and IF preservation separate.

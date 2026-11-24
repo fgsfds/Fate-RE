@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 489,
-  "unique_code_bytes": 222054,
-  "le_pointers": 12058,
+  "routines": 491,
+  "unique_code_bytes": 221984,
+  "le_pointers": 12052,
   "non_routine_code_spans": [
     {
       "symbol": "setgamemode_save_tail",
@@ -7633,13 +7633,25 @@
       "symbol": "read_game_data_asm_2",
       "source": "src/fate/read_game_data.asm",
       "binary": "read_game_data.bin",
-      "sha256": "3aff3d61caee369f6f7ac3a9e36fce45dd1bdcce1a3cc2ad5581ac938477029b",
-      "bytes": 111,
+      "sha256": "ea3c53f79e77bebb08151dbc13f3ff322dcba69a320782a890c3ca73171fe77e",
+      "bytes": 67,
       "raw_offset": "0x55f34",
       "loaded_address": "0x30934",
       "public_entry": "0x30934",
       "binary_offset": 131,
-      "le_pointers": 8
+      "le_pointers": 5
+    },
+    {
+      "symbol": "read_game_data_asm_3",
+      "source": "src/fate/read_game_data.asm",
+      "binary": "read_game_data.bin",
+      "sha256": "242caad0d5cd73c9db7fcbe8facab178050b243566816c64ec886d8e92d52d9b",
+      "bytes": 9,
+      "raw_offset": "0x55f9a",
+      "loaded_address": "0x3099a",
+      "public_entry": "0x3099a",
+      "binary_offset": 198,
+      "le_pointers": 0
     },
     {
       "symbol": "write_game_data_asm_0",
@@ -7657,13 +7669,25 @@
       "symbol": "write_game_data_asm_1",
       "source": "src/fate/write_game_data.asm",
       "binary": "write_game_data.bin",
-      "sha256": "618fae17e8907bb51a188573704d4ee6cb2cd0c6ed058750a73129f4fa69656b",
-      "bytes": 81,
+      "sha256": "9a44d6512861da4c074d2d698274616a7acc229965de1145851417f62601e442",
+      "bytes": 37,
       "raw_offset": "0x57473",
       "loaded_address": "0x31e73",
       "public_entry": "0x31e73",
       "binary_offset": 102,
-      "le_pointers": 6
+      "le_pointers": 3
+    },
+    {
+      "symbol": "write_game_data_asm_2",
+      "source": "src/fate/write_game_data.asm",
+      "binary": "write_game_data.bin",
+      "sha256": "242caad0d5cd73c9db7fcbe8facab178050b243566816c64ec886d8e92d52d9b",
+      "bytes": 9,
+      "raw_offset": "0x574bb",
+      "loaded_address": "0x31ebb",
+      "public_entry": "0x31ebb",
+      "binary_offset": 139,
+      "le_pointers": 0
     }
   ]
 }

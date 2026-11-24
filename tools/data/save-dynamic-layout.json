@@ -209,6 +209,36 @@
           }
         }
       ]
+    },
+    {
+      "object": "svstat",
+      "source": "fate/save_status_completion",
+      "size": 36,
+      "contexts": [
+        {
+          "public": "save_status_completion_",
+          "start": 0,
+          "size": 36,
+          "sha256": "b3016d72477c68bdd9488fd763f671ac6289e900c7e584be4e0ea029e8a6af33",
+          "fixups": {
+            "1": [
+              "_save_status_length",
+              false,
+              0
+            ],
+            "15": [
+              "_save_status_clock",
+              false,
+              0
+            ],
+            "29": [
+              "_save_status_expiration",
+              false,
+              0
+            ]
+          }
+        }
+      ]
     }
   ],
   "phases": [
@@ -299,6 +329,26 @@
       "begin": 0,
       "end": 36,
       "address": 201720,
+      "routine": "write_game_data",
+      "le_sites": 3
+    },
+    {
+      "phase": "save_read_status_phase_",
+      "public": "save_status_completion_",
+      "object": "svstat",
+      "begin": 0,
+      "end": 35,
+      "address": 199031,
+      "routine": "read_game_data",
+      "le_sites": 3
+    },
+    {
+      "phase": "save_write_status_phase_",
+      "public": "save_status_completion_",
+      "object": "svstat",
+      "begin": 0,
+      "end": 35,
+      "address": 204440,
       "routine": "write_game_data",
       "le_sites": 3
     }

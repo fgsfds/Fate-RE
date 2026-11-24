@@ -333,14 +333,9 @@ section .retained_2 align=1 vstart=0x30934 follows=.retained_1
     movsd
     movsb
     call strlen
-    mov [board_state_7f874], al
-    and eax, strict dword 0xff
-    shl eax, byte 0x4
-    mov edx, [totalclock]
-    add edx, strict dword 0x168
-    add edx, eax
-    mov [status_expiration], edx
-    xor eax, eax
+
+; C field run 2 ends here.
+section .retained_3 align=1 vstart=0x3099a follows=.retained_2
     add esp, 0x14
     pop edi
     pop esi

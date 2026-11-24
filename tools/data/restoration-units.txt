@@ -544,3 +544,4 @@ fate/save_byte_fields svbytes
 fate/save_sized_transfer svsect
 fate/save_sized_transfer svwall /4r /s /or /bt=dos /dSAVE_DYNAMIC_WALLS
 fate/save_restore_steps svstep
+fate/save_status_completion svstat

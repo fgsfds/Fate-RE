@@ -5043,7 +5043,8 @@ for _routine in SAVE_IO_ROUTINES:
 
 # Dynamic records and unsigned pointer restoration in the same save format.
 SAVE_DYNAMIC_LAYOUT = json.loads((Path(__file__).parent/'data/save-dynamic-layout.json').read_text(encoding='utf-8'))
-DATA_OFFSETS['_save_restore_words'] = 0x1a234
+DATA_OFFSETS.update({'_save_restore_words': 0x1a234, '_save_status_length': 0x7f874,
+                     '_save_status_clock': 0x287e88, '_save_status_expiration': 0x7709c})
 for _object in SAVE_DYNAMIC_LAYOUT['objects']:
     for _context in _object['contexts']:
         LEAF_CONTEXT_SHA256[_context['public']] = _context['sha256']

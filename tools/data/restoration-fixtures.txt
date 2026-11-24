@@ -143,3 +143,4 @@ check_ripple_control --exe {exe} --build {build} --output {build}/ripple-control
 check_save_field_io --exe {exe} --build {build} --output {build}/save-field-io.json | svread svwrite svbytes
 check_save_dynamic_io --exe {exe} --build {build} --output {build}/save-dynamic-io.json | svsect svwall svstep
 check_save_restore_steps --exe {exe} --build {build} --output {build}/save-restore-steps.json | svstep
+check_save_status_completion --exe {exe} --build {build} --output {build}/save-status-completion.json | svstat

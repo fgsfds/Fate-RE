@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1396,
-  "unique_code_bytes": 192585,
-  "le_pointers": 10491,
+  "routines": 1398,
+  "unique_code_bytes": 192655,
+  "le_pointers": 10497,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -2750,6 +2750,16 @@
       "le_pointers": 4
     },
     {
+      "symbol": "save_read_status_phase_",
+      "object": "svstat.obj",
+      "object_sha256": "f1970ef517941399414d033040bc6b30446e4c155f2eacac67ce1acc67d54bb9",
+      "sha256": "033e3ae9e067f11a4841757881289f0abaff4b027c27e3b17f76c77c24452562",
+      "raw_offset": "0x55f77",
+      "loaded_address": "0x30977",
+      "bytes": 35,
+      "le_pointers": 3
+    },
+    {
       "symbol": "save_write_fields_0_phase_",
       "object": "svwrite.obj",
       "object_sha256": "4d05434dfa4a404820dc7d7b9c1fe327c1521004a8093a399fb0ff0790bf3673",
@@ -2938,6 +2948,16 @@
       "loaded_address": "0x31e1b",
       "bytes": 88,
       "le_pointers": 4
+    },
+    {
+      "symbol": "save_write_status_phase_",
+      "object": "svstat.obj",
+      "object_sha256": "f1970ef517941399414d033040bc6b30446e4c155f2eacac67ce1acc67d54bb9",
+      "sha256": "033e3ae9e067f11a4841757881289f0abaff4b027c27e3b17f76c77c24452562",
+      "raw_offset": "0x57498",
+      "loaded_address": "0x31e98",
+      "bytes": 35,
+      "le_pointers": 3
     },
     {
       "symbol": "receive_packets_entry_",
