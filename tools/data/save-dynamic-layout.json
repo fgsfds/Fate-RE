@@ -297,6 +297,134 @@
           }
         }
       ]
+    },
+    {
+      "object": "svopen",
+      "source": "fate/save_slot_open",
+      "size": 263,
+      "contexts": [
+        {
+          "public": "save_open_read_slot_",
+          "start": 0,
+          "size": 137,
+          "sha256": "c6591ea4c3b1f9cb9e4924ccb843ea1eba8df6751c0ed04498fa2f1b0fce2935",
+          "fixups": {
+            "10": [
+              "_load_slot_format",
+              false,
+              0
+            ],
+            "28": [
+              "_load_basename",
+              false,
+              0
+            ],
+            "33": [
+              "sprintf_",
+              true,
+              0
+            ],
+            "46": [
+              "strcat_",
+              true,
+              0
+            ],
+            "51": [
+              "_load_mode",
+              false,
+              0
+            ],
+            "58": [
+              "fopen_",
+              true,
+              0
+            ],
+            "90": [
+              "_player_count",
+              false,
+              0
+            ],
+            "95": [
+              "fread_",
+              true,
+              0
+            ],
+            "110": [
+              "_local_player",
+              false,
+              0
+            ],
+            "117": [
+              "fread_",
+              true,
+              0
+            ],
+            "124": [
+              "fclose_",
+              true,
+              0
+            ]
+          }
+        },
+        {
+          "public": "save_open_write_slot_",
+          "start": 137,
+          "size": 126,
+          "sha256": "68fdd358391aa559ba48eb0feffabc14c27b5166bfcc1b7af0121d6f0109fd9e",
+          "fixups": {
+            "10": [
+              "_save_slot_format",
+              false,
+              0
+            ],
+            "28": [
+              "_save_basename",
+              false,
+              0
+            ],
+            "33": [
+              "sprintf_",
+              true,
+              0
+            ],
+            "46": [
+              "strcat_",
+              true,
+              0
+            ],
+            "51": [
+              "_save_mode",
+              false,
+              0
+            ],
+            "58": [
+              "fopen_",
+              true,
+              0
+            ],
+            "90": [
+              "_player_count",
+              false,
+              0
+            ],
+            "95": [
+              "fwrite_",
+              true,
+              0
+            ],
+            "110": [
+              "_local_player",
+              false,
+              0
+            ],
+            "117": [
+              "fwrite_",
+              true,
+              0
+            ]
+          }
+        }
+      ]
     }
   ],
   "phases": [
@@ -457,6 +585,66 @@
       "begin": 19,
       "end": 24,
       "address": 204435,
+      "routine": "write_game_data",
+      "le_sites": 0
+    },
+    {
+      "phase": "save_read_path_phase_",
+      "public": "save_open_read_slot_",
+      "object": "svopen",
+      "begin": 0,
+      "end": 68,
+      "address": 193643,
+      "routine": "read_game_data",
+      "le_sites": 3
+    },
+    {
+      "phase": "save_write_path_phase_",
+      "public": "save_open_write_slot_",
+      "object": "svopen",
+      "begin": 0,
+      "end": 68,
+      "address": 199075,
+      "routine": "write_game_data",
+      "le_sites": 3
+    },
+    {
+      "phase": "save_read_count_phase_",
+      "public": "save_open_read_slot_",
+      "object": "svopen",
+      "begin": 77,
+      "end": 99,
+      "address": 193723,
+      "routine": "read_game_data",
+      "le_sites": 1
+    },
+    {
+      "phase": "save_write_count_phase_",
+      "public": "save_open_write_slot_",
+      "object": "svopen",
+      "begin": 77,
+      "end": 99,
+      "address": 199155,
+      "routine": "write_game_data",
+      "le_sites": 1
+    },
+    {
+      "phase": "save_read_frame_return_phase_",
+      "public": "save_open_read_slot_",
+      "object": "svopen",
+      "begin": 128,
+      "end": 137,
+      "address": 199066,
+      "routine": "read_game_data",
+      "le_sites": 0
+    },
+    {
+      "phase": "save_write_frame_return_phase_",
+      "public": "save_open_read_slot_",
+      "object": "svopen",
+      "begin": 128,
+      "end": 137,
+      "address": 204475,
       "routine": "write_game_data",
       "le_sites": 0
     }

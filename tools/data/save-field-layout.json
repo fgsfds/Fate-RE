@@ -1596,27 +1596,22 @@
       "object": "svread",
       "asm_slices": [
         {
-          "begin": 0,
-          "end": 102,
+          "begin": 68,
+          "end": 80,
           "binary_offset": 0
         },
         {
           "begin": 168,
           "end": 197,
-          "binary_offset": 102
+          "binary_offset": 12
         },
         {
           "begin": 5321,
           "end": 5364,
-          "binary_offset": 131
-        },
-        {
-          "begin": 5423,
-          "end": 5432,
-          "binary_offset": 174
+          "binary_offset": 41
         }
       ],
-      "retained_bytes": 183,
+      "retained_bytes": 84,
       "additional_c_layouts": [
         "save-byte-layout.json",
         "save-dynamic-layout.json"
@@ -3204,32 +3199,27 @@
       "object": "svwrite",
       "asm_slices": [
         {
-          "begin": 0,
-          "end": 102,
+          "begin": 68,
+          "end": 80,
           "binary_offset": 0
         },
         {
           "begin": 5328,
           "end": 5330,
-          "binary_offset": 102
+          "binary_offset": 12
         },
         {
           "begin": 5335,
           "end": 5342,
-          "binary_offset": 104
+          "binary_offset": 14
         },
         {
           "begin": 5347,
           "end": 5352,
-          "binary_offset": 111
-        },
-        {
-          "begin": 5400,
-          "end": 5409,
-          "binary_offset": 116
+          "binary_offset": 21
         }
       ],
-      "retained_bytes": 125,
+      "retained_bytes": 26,
       "additional_c_layouts": [
         "save-byte-layout.json",
         "save-dynamic-layout.json"

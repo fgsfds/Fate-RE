@@ -1,6 +1,6 @@
 ; Serialize game state to GAMEDATA.
 BITS 32
-ORG 0x309a3
+ORG 0x309e7
 
 save_slot_format equ 0x5fc
 save_basename equ 0x603
@@ -257,47 +257,16 @@ engine_2891da equ 0x2891da
 ; One record per call. Field order and size are part of the save format.
 ; Fixed-size field transfers are supplied by the matching C contexts.
 section .text align=1
-write_game_data:
+write_game_data equ 0x309a3
 .write_player_count equ 0x309f3
 .branch_313c5 equ 0x313c5
 .branch_313de equ 0x313de
 .branch_313ff equ 0x313ff
 .branch_31418 equ 0x31418
 .return equ 0x31ebb
-    push ebx
-    push ecx
-    push edx
-    push esi
-    push edi
-    sub esp, 0x14
-    push eax
-    push strict dword save_slot_format
-    lea eax, [esp + 0x14]
-    lea edi, [esp + 0x8]
-    push eax
-    lea edx, [esp + 0x18]
-    mov esi, save_basename
-    call format_string
-    add esp, 0xc
-    mov eax, esp
-    movsd
-    movsd
-    movsb
-    call append_string
-    mov edx, save_mode
-    mov eax, esp
-    call fopen
-    mov edi, eax
-    mov esi, eax
-    test eax, eax
     jnz short .write_player_count
     mov eax, 0xffffffff
     jmp near .return
-    mov ebx, 0x1
-    mov edx, 0x2
-    mov ecx, eax
-    mov eax, player_count
-    call fwrite
 
 ; C field run 0 ends here.
 section .retained_1 align=1 vstart=0x31e73 follows=.text
@@ -311,13 +280,3 @@ section .retained_2 align=1 vstart=0x31e7a follows=.retained_1
 ; C field run 2 ends here.
 section .retained_3 align=1 vstart=0x31e86 follows=.retained_2
     call fclose
-
-; C field run 3 ends here.
-section .retained_4 align=1 vstart=0x31ebb follows=.retained_3
-    add esp, 0x14
-    pop edi
-    pop esi
-    pop edx
-    pop ecx
-    pop ebx
-    ret

@@ -443,3 +443,20 @@ Require a relative dword external FLAT relocation and matching addend,
 reject indirect transfers, and require a terminal near RET to exclude an
 unchecked fall-through into another public. Keep unsupported transfers
 unknown; a matching printed target alone is insufficient.
+
+
+A 20-byte filename structure with a nine-byte basename, three-byte gap
+and eight-byte suffix selects the original two MOVSDs and MOVSB. Format
+into its suffix, assign the basename, then pass the complete structure's
+character representation to the audited forward-append runtime alias.
+An intrinsic memcpy probe instead used a counted copy. ISO strcat's
+overlap contract is unsuitable when the appended NUL reaches the suffix;
+document and test the target routine's exact forward-copy behavior.
+
+Bind the real header and file stream consumers to EDI/ESI before the
+null test. This keeps both original copies and the TEST live for retained
+control flow. The compiler's private return cleanup can supply the
+original full-frame epilogues when its register-save order, local size
+and EAX return convention agree. Prove the stack layout and all restored
+registers. If the function entry now comes from C, retained NASM must use
+its first remaining virtual address; keep the original entry as an EQU.

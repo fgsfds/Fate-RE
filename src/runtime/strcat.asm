@@ -1,7 +1,10 @@
 ; Independently reconstructed Watcom-register-ABI concatenation from pinned FATE.
 ; No library object or executable byte payload is embedded.
 ; EAX destination, EDX source; EAX returns the original destination.
-; Caller supplies valid disjoint strings, enough output capacity and clear DF.
+; Caller supplies valid strings, enough output capacity and clear DF.
+; The forward pair copy also supports the save path destination four bytes
+; below its source, including their shared final NUL. Callers use a distinct
+; runtime alias for this audited overlap, not the ISO strcat contract.
 BITS 32
 strcat_:
  push ecx
