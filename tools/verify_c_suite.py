@@ -1523,6 +1523,46 @@ def verify_compiler_groups(exe, directory, names=None):
                                ('puzact', 929, 'puzzle_activation_context_')):
         if selected(name):
             verify_group_layout((directory/(name+'.obj')).read_bytes(), size, [(public, 0)])
+    if selected('ripout'):
+        verify_group_layout((directory/'ripout.obj').read_bytes(), 49,
+                            [('ripple_output_row_', 0), ('ripple_store_output_', 32),
+                             ('ripple_mask_begin_', 41)])
+    if selected('ripflow'):
+        verify_group_layout((directory/'ripflow.obj').read_bytes(), 865, [('ripple_flow_context_', 0)])
+    if selected('ripidx'):
+        verify_group_layout((directory/'ripidx.obj').read_bytes(), 37,
+                            [('ripple_seed_and_read_ecx_', 0), ('ripple_commit_and_read_eax_', 13),
+                             ('ripple_step_and_read_eax_', 26)])
+    if selected('riptest'):
+        verify_group_layout((directory/'riptest.obj').read_bytes(), 44,
+                            [('ripple_particle_guard_', 0), ('ripple_sample_step_', 9),
+                             ('ripple_sample_guard_', 11), ('ripple_spawn_guard_', 20),
+                             ('ripple_last_slot_', 29), ('ripple_random_draw_', 36)])
+    if selected('ripbook'):
+        verify_group_layout((directory/'ripbook.obj').read_bytes(), 49,
+                            [('ripple_spawn_countdown_', 0), ('ripple_radial_set_slot_', 5), ('ripple_radial_load_y_', 8), ('ripple_row_reset_', 16), ('ripple_tile_register_', 19), ('ripple_spawn_step_', 22), ('ripple_output_tile_', 28), ('ripple_stencil_center_', 31), ('ripple_stencil_next1_', 34), ('ripple_first_lane_', 38), ('ripple_stencil_next2_', 41), ('ripple_stencil_next3_', 45)])
+    if selected('riploop'):
+        verify_group_layout((directory/'riploop.obj').read_bytes(), 32,
+                            [('ripple_output_word_guard_', 0),
+                             ('ripple_output_row_increment_', 11), ('ripple_output_row_guard_', 13)])
+    if selected('riprad'):
+        verify_group_layout((directory/'riprad.obj').read_bytes(), 109,
+                            [('ripple_radial_sample_', 0), ('ripple_radial_setup_', 53)])
+    if selected('rippack'):
+        verify_group_layout((directory/'rippack.obj').read_bytes(), 47,
+                            [('ripple_pack_two_', 0), ('ripple_pack_third_', 20),
+                             ('ripple_pack_fourth_', 31)])
+    if selected('rippart'):
+        verify_group_layout((directory/'rippart.obj').read_bytes(), 141,
+                            [('ripple_store_y_slot_', 0), ('ripple_floor_pixel_', 34),
+                             ('ripple_advance_radius_', 49), ('ripple_store_x_slot_', 123)])
+    if selected('ripbord'):
+        verify_group_layout((directory/'ripbord.obj').read_bytes(), 141,
+                            [('ripple_border_columns_', 0), ('ripple_border_corners_', 47),
+                             ('ripple_vertical_head_', 93), ('ripple_vertical_tail_', 105)])
+    if selected('ripctl'):
+        verify_group_layout((directory/'ripctl.obj').read_bytes(), 56,
+                            [('ripple_spawn_limit_', 0), ('ripple_mask_row_', 23)])
     if selected('enclatch'):
         verify_group_layout((directory/'enclatch.obj').read_bytes(), 1409, [('encounter_latch_context_', 160)])
     if selected('encexit'):
@@ -1567,6 +1607,90 @@ def verify_compiler_groups(exe, directory, names=None):
     if selected('netdefs'):
         verify_network_defaults(exe, (directory/'netdefs.obj').read_bytes())
 
+
+for _name in ('ripple_sum_first_', 'ripple_sum_second_',
+              'ripple_sum_third_', 'ripple_sum_fourth_'):
+    OBJECT_NAMES[_name] = 'ripsum'
+
+OBJECT_NAMES['ripple_spawn_limit_phase_'] = 'ripctl'
+OBJECT_NAMES['ripple_mask_row_phase_'] = 'ripctl'
+
+OBJECT_NAMES['ripple_border_initialize_'] = 'ripbord'
+OBJECT_NAMES['ripple_border_loop_'] = 'ripbord'
+
+for _name in ('ripple_store_y_phase_', 'ripple_floor_phase_', 'ripple_advance_radius_phase_'):
+    OBJECT_NAMES[_name] = 'rippart'
+
+for _name in ('ripple_x_draw_', 'ripple_x_index_', 'ripple_x_store_'):
+    OBJECT_NAMES[_name] = 'rippart'
+for _name in ('ripple_corners_load_', 'ripple_corners_mask_', 'ripple_corners_store_'):
+    OBJECT_NAMES[_name] = 'ripbord'
+
+OBJECT_NAMES['ripple_radial_setup_phase_'] = 'riprad'
+OBJECT_NAMES['ripple_radial_sample_phase_'] = 'riprad'
+OBJECT_NAMES['ripple_pack_two_bits_'] = 'rippack'
+OBJECT_NAMES['ripple_pack_two_add_'] = 'rippack'
+OBJECT_NAMES['ripple_pack_third_bits_'] = 'rippack'
+OBJECT_NAMES['ripple_pack_third_add_'] = 'rippack'
+OBJECT_NAMES['ripple_pack_fourth_phase_'] = 'rippack'
+
+OBJECT_NAMES['ripple_vertical_head_phase_'] = 'ripbord'
+OBJECT_NAMES['ripple_vertical_tail_phase_'] = 'ripbord'
+OBJECT_NAMES['ripple_output_row_phase_'] = 'ripout'
+OBJECT_NAMES['ripple_store_output_phase_'] = 'ripout'
+OBJECT_NAMES['ripple_mask_begin_phase_'] = 'ripout'
+OBJECT_NAMES['ripple_control_saved_registers_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2eb80_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2ebca_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2ebd5_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2ec1a_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2ec61_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2ecc6_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2ecef_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2ed1b_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2ed52_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2ed85_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_branch_2eda9_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_control_restored_registers_phase_'] = 'ripflow'
+OBJECT_NAMES['ripple_frame_allocate_phase_'] = 'ripidx'
+OBJECT_NAMES['ripple_index_seed_phase_'] = 'ripidx'
+OBJECT_NAMES['ripple_index_commit_phase_'] = 'ripidx'
+OBJECT_NAMES['ripple_index_spawn_read_phase_'] = 'ripidx'
+OBJECT_NAMES['ripple_index_radial_seed_phase_'] = 'ripidx'
+OBJECT_NAMES['ripple_index_floor_read_phase_'] = 'ripidx'
+OBJECT_NAMES['ripple_index_step_phase_'] = 'ripidx'
+OBJECT_NAMES['ripple_index_radial_read_phase_'] = 'ripidx'
+OBJECT_NAMES['ripple_frame_release_phase_'] = 'ripidx'
+OBJECT_NAMES['ripple_frame_return_phase_'] = 'ripidx'
+OBJECT_NAMES['ripple_particle_guard_phase_'] = 'riptest'
+OBJECT_NAMES['ripple_sample_step_phase_'] = 'riptest'
+OBJECT_NAMES['ripple_sample_test_phase_'] = 'riptest'
+OBJECT_NAMES['ripple_spawn_test_phase_'] = 'riptest'
+OBJECT_NAMES['ripple_last_slot_phase_'] = 'riptest'
+OBJECT_NAMES['ripple_random_x_call_phase_'] = 'riptest'
+OBJECT_NAMES['ripple_random_y_call_phase_'] = 'riptest'
+OBJECT_NAMES['ripple_mask_guard_compare_phase_'] = 'riploop'
+OBJECT_NAMES['ripple_vertical_guard_compare_phase_'] = 'riploop'
+OBJECT_NAMES['ripple_spawn_count_copy_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_spawn_count_step_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_radial_set_slot_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_radial_load_y_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_mask_row_reset_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_vertical_row_reset_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_output_row_reset_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_tile_register_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_spawn_step_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_output_tile_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_stencil_center_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_stencil_next1_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_first_lane_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_stencil_next2_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_stencil_next3_phase_'] = 'ripbook'
+OBJECT_NAMES['ripple_output_word_guard_phase_'] = 'riploop'
+OBJECT_NAMES['ripple_output_row_increment_phase_'] = 'riploop'
+OBJECT_NAMES['ripple_mask_row_increment_phase_'] = 'riploop'
+OBJECT_NAMES['ripple_vertical_row_increment_phase_'] = 'riploop'
+OBJECT_NAMES['ripple_output_row_guard_phase_'] = 'riploop'
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

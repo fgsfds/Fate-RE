@@ -3695,6 +3695,11 @@ LEAF_CONTEXT_SUFFIXES = {
 #            optional placed CODE-object offset for selected literal pointers).
 LEAF_CONTEXT_LITERALS = {}
 
+# Complete private contexts, including unlinked stack wrappers and shared tails.
+LEAF_CONTEXT_BYTES = {}
+# Digest guards keep larger complete contexts compact.
+LEAF_CONTEXT_SHA256 = {}
+
 LEAF_CONTEXT_FIXUPS = {
     'main_caption_setup_': {2: ('_loading_caption_columns', False),
                             12: ('_loading_caption', False), 41: ('draw_menu_text_', True)},
@@ -3950,20 +3955,39 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
     end = min([a for s, a, _ in publics if s == seg and a > start]
               or [len(segments[seg]['data'])])
     code = bytearray(segments[seg]['data'][start:end])
+    expected_context = LEAF_CONTEXT_BYTES.get(public_name)
+    if expected_context is not None and bytes(code) != expected_context:
+        raise ValueError('Compiler private context bytes differ')
+    expected_digest = LEAF_CONTEXT_SHA256.get(public_name)
+    if expected_digest is not None and hashlib.sha256(code).hexdigest() != expected_digest:
+        raise ValueError('Compiler private context digest differs')
     suffix = LEAF_CONTEXT_SUFFIXES.get(public_name, b'')
     if suffix and not code.endswith(suffix):
         raise ValueError('Unlinked compiler context suffix differs')
+    # The selected border loop already receives the original pixel pointer
+    # in EDX. Its excluded MOV EDX,ESI only repeats the private entry copy.
+    if (public_name == 'ripple_border_columns_'
+            and (code[:3] != bytes.fromhex('5689d6')
+                 or code[5:7] != bytes.fromhex('89f2'))):
+        raise ValueError('Unlinked ripple pixel copy differs')
     context_fixups = LEAF_CONTEXT_FIXUPS.get(public_name)
     if context_fixups is not None:
         observed = [f for f in fixups if f.segment == seg and start <= f.offset < end]
         if len(observed) != len(context_fixups) or {f.offset-start for f in observed} != context_fixups.keys():
             raise ValueError('Compiler context fixup inventory differs')
         for f in observed:
-            if (f.location != 9 or f.width != 4 or f.target[0] != 2
+            expected = context_fixups[f.offset-start]
+            if len(expected) not in (2, 3):
+                raise ValueError('Invalid compiler context fixup metadata')
+            name, relative = expected[:2]
+            addend = expected[2] if len(expected) == 3 else 0
+            if (type(addend) is not int or not 0 <= addend <= 0xffffffff
+                    or f.location != 9 or f.width != 4 or f.target[0] != 2
                     or not 0 < f.target[1] < len(externals)
                     or f.frame[0] != 1 or f.frame[1] not in flat_groups
-                    or f.displacement or code[f.offset-start:f.offset-start+4] != bytes(4)
-                    or (externals[f.target[1]], f.relative) != context_fixups[f.offset-start]):
+                    or f.displacement
+                    or int.from_bytes(code[f.offset-start:f.offset-start+4], 'little') != addend
+                    or (externals[f.target[1]], f.relative) != (name, relative)):
                 raise ValueError('Compiler context fixup target/form/addend differs')
     literal = LEAF_CONTEXT_LITERALS.get(public_name)
     literal_sites = {} if literal is None else literal[2]
@@ -4709,6 +4733,257 @@ for _symbol, (_public, _start, _size, _address) in STEREO_PHASES.items():
     LEAF_CODE_SLICES[_symbol] = (_public, _start, _start + _size,
                                STEREO_CONTEXTS[_public][1])
 DATA_OFFSETS.update(STEREO_DATA)
+
+# One compiler body implements the four original stencil sums in place.
+for _name, _raw in (
+        ('ripple_sum_first_', 0x543b0), ('ripple_sum_second_', 0x543db),
+        ('ripple_sum_third_', 0x54417), ('ripple_sum_fourth_', 0x5444a)):
+    LEAVES[_name] = (_raw, 38)
+    LEAF_CODE_SLICES[_name] = ('ripple_neighbor_sum_', 0, 38, 39)
+LEAF_CONTEXT_SUFFIXES['ripple_neighbor_sum_'] = b'\xc3'
+FUNCTION_ADDRESSES['ripple_neighbor_sum_'] = 0x2edb0
+
+LEAVES['ripple_spawn_limit_phase_'] = (0x54162, 22)
+LEAF_CODE_SLICES['ripple_spawn_limit_phase_'] = ('ripple_spawn_limit_', 0, 22, 23)
+LEAVES['ripple_mask_row_phase_'] = (0x542c8, 32)
+LEAF_CODE_SLICES['ripple_mask_row_phase_'] = ('ripple_mask_row_', 0, 32, 33)
+LEAF_CONTEXT_SUFFIXES['ripple_spawn_limit_'] = b'\xc3'
+LEAF_CONTEXT_SUFFIXES['ripple_mask_row_'] = b'\xc3'
+FUNCTION_ADDRESSES.update({'ripple_spawn_limit_': 0x2eb62, 'ripple_mask_row_': 0x2ecc8})
+LEAF_SECTION_BRANCHES['ripple_spawn_limit_'] = (23, 23, {15: (b'\x7c', 22, 22)})
+LEAF_SECTION_BRANCHES['ripple_mask_row_'] = (33, 33, {
+    5: (b'\xeb', 23, 23), 28: (b'\x7f', 7, 7)})
+
+LEAVES['ripple_border_initialize_'] = (0x542f1, 2)
+LEAF_CODE_SLICES['ripple_border_initialize_'] = ('ripple_border_columns_', 3, 5, 47)
+LEAVES['ripple_border_loop_'] = (0x542f3, 38)
+LEAF_CODE_SLICES['ripple_border_loop_'] = ('ripple_border_columns_', 7, 45, 47)
+LEAF_CONTEXT_SUFFIXES['ripple_border_columns_'] = bytes.fromhex('5ec3')
+# The loop is placed two bytes earlier after omitting the identity copy.
+FUNCTION_ADDRESSES['ripple_border_columns_'] = 0x2ecec
+DATA_OFFSETS['_ripple_buffer'] = 0x6331c
+LEAF_SECTION_BRANCHES['ripple_border_columns_'] = (47, 47, {
+    7: (b'\xeb', 37, 37), 43: (b'\x7c', 9, 9)})
+
+for _alias, _raw, _length, _public in (
+        ('ripple_store_y_phase_', 0x541a4, 33, 'ripple_store_y_slot_'),
+        ('ripple_floor_phase_', 0x54250, 14, 'ripple_floor_pixel_'),
+        ('ripple_advance_radius_phase_', 0x54266, 73, 'ripple_advance_radius_')):
+    LEAVES[_alias] = (_raw, _length)
+    LEAF_CODE_SLICES[_alias] = (_public, 0, _length, _length + 1)
+    LEAF_CONTEXT_SUFFIXES[_public] = b'\xc3'
+    FUNCTION_ADDRESSES[_public] = _raw - 0x25600
+DATA_OFFSETS.update({'_ripple_origin_y': 0x6773c, '_ripple_origin_x': 0x677bc,
+                     '_ripple_radius': 0x62fcc})
+LEAF_SECTION_BRANCHES['ripple_floor_pixel_'] = (15, 15, {9: (b'\x7d', 14, 14)})
+LEAF_SECTION_BRANCHES['ripple_advance_radius_'] = (74, 74, {19: (b'\x7e', 73, 73)})
+
+for _alias, _raw, _begin, _end in (
+        ('ripple_x_draw_', 0x54187, 0, 2),
+        ('ripple_x_index_', 0x5418b, 2, 10),
+        ('ripple_x_store_', 0x54195, 10, 17)):
+    LEAVES[_alias] = (_raw, _end - _begin)
+    LEAF_CODE_SLICES[_alias] = ('ripple_store_x_slot_', _begin, _end, 18)
+LEAF_CONTEXT_SUFFIXES['ripple_store_x_slot_'] = b'\xc3'
+FUNCTION_ADDRESSES['ripple_store_x_slot_'] = 0x2eb87
+for _alias, _raw, _begin, _end in (
+        ('ripple_corners_load_', 0x54354, 0, 38),
+        ('ripple_corners_mask_', 0x5437c, 38, 40),
+        ('ripple_corners_store_', 0x54380, 40, 45)):
+    LEAVES[_alias] = (_raw, _end - _begin)
+    LEAF_CODE_SLICES[_alias] = ('ripple_border_corners_', _begin, _end, 46)
+LEAF_CONTEXT_SUFFIXES['ripple_border_corners_'] = b'\xc3'
+FUNCTION_ADDRESSES['ripple_border_corners_'] = 0x2ed54
+
+LEAVES['ripple_radial_setup_phase_'] = (0x541dc, 55)
+LEAF_CODE_SLICES['ripple_radial_setup_phase_'] = ('ripple_radial_setup_', 0, 55, 56)
+LEAF_CONTEXT_SUFFIXES['ripple_radial_setup_'] = b'\xc3'
+LEAVES['ripple_radial_sample_phase_'] = (0x5421c, 52)
+LEAF_CODE_SLICES['ripple_radial_sample_phase_'] = ('ripple_radial_sample_', 0, 52, 53)
+LEAF_CONTEXT_SUFFIXES['ripple_radial_sample_'] = b'\xc3'
+LEAVES['ripple_pack_two_bits_'] = (0x54401, 17)
+LEAF_CODE_SLICES['ripple_pack_two_bits_'] = ('ripple_pack_two_', 0, 17, 20)
+LEAF_CONTEXT_SUFFIXES['ripple_pack_two_'] = b'\xc3'
+LEAVES['ripple_pack_two_add_'] = (0x54415, 2)
+LEAF_CODE_SLICES['ripple_pack_two_add_'] = ('ripple_pack_two_', 17, 19, 20)
+LEAF_CONTEXT_SUFFIXES['ripple_pack_two_'] = b'\xc3'
+LEAVES['ripple_pack_third_bits_'] = (0x5443d, 8)
+LEAF_CODE_SLICES['ripple_pack_third_bits_'] = ('ripple_pack_third_', 0, 8, 11)
+LEAF_CONTEXT_SUFFIXES['ripple_pack_third_'] = b'\xc3'
+LEAVES['ripple_pack_third_add_'] = (0x54448, 2)
+LEAF_CODE_SLICES['ripple_pack_third_add_'] = ('ripple_pack_third_', 8, 10, 11)
+LEAF_CONTEXT_SUFFIXES['ripple_pack_third_'] = b'\xc3'
+LEAVES['ripple_pack_fourth_phase_'] = (0x54470, 15)
+LEAF_CODE_SLICES['ripple_pack_fourth_phase_'] = ('ripple_pack_fourth_', 0, 15, 16)
+LEAF_CONTEXT_SUFFIXES['ripple_pack_fourth_'] = b'\xc3'
+DATA_OFFSETS['_ripple_speed'] = 0x630fc
+
+LEAVES['ripple_vertical_head_phase_'] = (0x5431d, 11)
+LEAF_CODE_SLICES['ripple_vertical_head_phase_'] = ('ripple_vertical_head_', 0, 11, 12)
+LEAF_CONTEXT_SUFFIXES['ripple_vertical_head_'] = b'\xc3'
+LEAVES['ripple_vertical_tail_phase_'] = (0x54329, 35)
+LEAF_CODE_SLICES['ripple_vertical_tail_phase_'] = ('ripple_vertical_tail_', 0, 35, 36)
+LEAF_CONTEXT_SUFFIXES['ripple_vertical_tail_'] = b'\xc3'
+LEAVES['ripple_output_row_phase_'] = (0x5438a, 31)
+LEAF_CODE_SLICES['ripple_output_row_phase_'] = ('ripple_output_row_', 0, 31, 32)
+LEAF_CONTEXT_SUFFIXES['ripple_output_row_'] = b'\xc3'
+LEAVES['ripple_store_output_phase_'] = (0x5447f, 8)
+LEAF_CODE_SLICES['ripple_store_output_phase_'] = ('ripple_store_output_', 0, 8, 9)
+LEAF_CONTEXT_SUFFIXES['ripple_store_output_'] = b'\xc3'
+
+FUNCTION_ADDRESSES['ripple_output_more_words_'] = 0x2edae
+FUNCTION_ADDRESSES['ripple_output_more_rows_'] = 0x2ed8a
+LEAVES['ripple_mask_begin_phase_'] = (0x542bd, 7)
+LEAF_CODE_SLICES['ripple_mask_begin_phase_'] = ('ripple_mask_begin_', 0, 7, 8)
+LEAF_CONTEXT_SUFFIXES['ripple_mask_begin_'] = b'\xc3'
+LEAVES['ripple_output_word_guard_phase_'] = (0x54487, 10)
+LEAF_CODE_SLICES['ripple_output_word_guard_phase_'] = ('ripple_output_word_guard_', 0, 10, 11)
+LEAF_CONTEXT_SUFFIXES['ripple_output_word_guard_'] = b'\xc3'
+LEAVES['ripple_output_row_increment_phase_'] = (0x54491, 1)
+LEAF_CODE_SLICES['ripple_output_row_increment_phase_'] = ('ripple_output_row_increment_', 0, 1, 2)
+LEAF_CONTEXT_SUFFIXES['ripple_output_row_increment_'] = b'\xc3'
+LEAVES['ripple_mask_row_increment_phase_'] = (0x542e8, 1)
+LEAF_CODE_SLICES['ripple_mask_row_increment_phase_'] = ('ripple_output_row_increment_', 0, 1, 2)
+LEAVES['ripple_vertical_row_increment_phase_'] = (0x54328, 1)
+LEAF_CODE_SLICES['ripple_vertical_row_increment_phase_'] = ('ripple_output_row_increment_', 0, 1, 2)
+LEAVES['ripple_output_row_guard_phase_'] = (0x54492, 18)
+LEAF_CODE_SLICES['ripple_output_row_guard_phase_'] = ('ripple_output_row_guard_', 0, 18, 19)
+LEAF_CONTEXT_SUFFIXES['ripple_output_row_guard_'] = b'\xc3'
+
+LEAVES['ripple_spawn_count_copy_phase_'] = (0x54189, 2)
+LEAF_CODE_SLICES['ripple_spawn_count_copy_phase_'] = ('ripple_spawn_countdown_', 0, 2, 5)
+LEAF_CONTEXT_SUFFIXES['ripple_spawn_countdown_'] = b'\xc3'
+LEAVES['ripple_spawn_count_step_phase_'] = (0x54193, 2)
+LEAF_CODE_SLICES['ripple_spawn_count_step_phase_'] = ('ripple_spawn_countdown_', 2, 4, 5)
+LEAF_CONTEXT_SUFFIXES['ripple_spawn_countdown_'] = b'\xc3'
+LEAVES['ripple_radial_set_slot_phase_'] = (0x541da, 2)
+LEAF_CODE_SLICES['ripple_radial_set_slot_phase_'] = ('ripple_radial_set_slot_', 0, 2, 3)
+LEAF_CONTEXT_SUFFIXES['ripple_radial_set_slot_'] = b'\xc3'
+LEAVES['ripple_radial_load_y_phase_'] = (0x54213, 7)
+LEAF_CODE_SLICES['ripple_radial_load_y_phase_'] = ('ripple_radial_load_y_', 0, 7, 8)
+LEAF_CONTEXT_SUFFIXES['ripple_radial_load_y_'] = b'\xc3'
+LEAVES['ripple_mask_row_reset_phase_'] = (0x542c4, 2)
+LEAF_CODE_SLICES['ripple_mask_row_reset_phase_'] = ('ripple_row_reset_', 0, 2, 3)
+LEAF_CONTEXT_SUFFIXES['ripple_row_reset_'] = b'\xc3'
+LEAVES['ripple_vertical_row_reset_phase_'] = (0x54319, 2)
+LEAF_CODE_SLICES['ripple_vertical_row_reset_phase_'] = ('ripple_row_reset_', 0, 2, 3)
+LEAF_CONTEXT_SUFFIXES['ripple_row_reset_'] = b'\xc3'
+LEAVES['ripple_output_row_reset_phase_'] = (0x5437e, 2)
+LEAF_CODE_SLICES['ripple_output_row_reset_phase_'] = ('ripple_row_reset_', 0, 2, 3)
+LEAF_CONTEXT_SUFFIXES['ripple_row_reset_'] = b'\xc3'
+LEAVES['ripple_tile_register_phase_'] = (0x54160, 2)
+LEAF_CODE_SLICES['ripple_tile_register_phase_'] = ('ripple_tile_register_', 0, 2, 3)
+LEAF_CONTEXT_SUFFIXES['ripple_tile_register_'] = b'\xc3'
+LEAVES['ripple_spawn_step_phase_'] = (0x54178, 5)
+LEAF_CODE_SLICES['ripple_spawn_step_phase_'] = ('ripple_spawn_step_', 0, 5, 6)
+LEAF_CONTEXT_SUFFIXES['ripple_spawn_step_'] = b'\xc3'
+LEAVES['ripple_output_tile_phase_'] = (0x5437a, 2)
+LEAF_CODE_SLICES['ripple_output_tile_phase_'] = ('ripple_output_tile_', 0, 2, 3)
+LEAF_CONTEXT_SUFFIXES['ripple_output_tile_'] = b'\xc3'
+LEAVES['ripple_stencil_center_phase_'] = (0x543ae, 2)
+LEAF_CODE_SLICES['ripple_stencil_center_phase_'] = ('ripple_stencil_center_', 0, 2, 3)
+LEAF_CONTEXT_SUFFIXES['ripple_stencil_center_'] = b'\xc3'
+LEAVES['ripple_stencil_next1_phase_'] = (0x543d6, 3)
+LEAF_CODE_SLICES['ripple_stencil_next1_phase_'] = ('ripple_stencil_next1_', 0, 3, 4)
+LEAF_CONTEXT_SUFFIXES['ripple_stencil_next1_'] = b'\xc3'
+LEAVES['ripple_first_lane_phase_'] = (0x543d9, 2)
+LEAF_CODE_SLICES['ripple_first_lane_phase_'] = ('ripple_first_lane_', 0, 2, 3)
+LEAF_CONTEXT_SUFFIXES['ripple_first_lane_'] = b'\xc3'
+LEAVES['ripple_stencil_next2_phase_'] = (0x54412, 3)
+LEAF_CODE_SLICES['ripple_stencil_next2_phase_'] = ('ripple_stencil_next2_', 0, 3, 4)
+LEAF_CONTEXT_SUFFIXES['ripple_stencil_next2_'] = b'\xc3'
+LEAVES['ripple_stencil_next3_phase_'] = (0x54445, 3)
+LEAF_CODE_SLICES['ripple_stencil_next3_phase_'] = ('ripple_stencil_next3_', 0, 3, 4)
+LEAF_CONTEXT_SUFFIXES['ripple_stencil_next3_'] = b'\xc3'
+
+FUNCTION_ADDRESSES.update({'ripple_particle_continue_': 0x2ebda, 'ripple_sample_continue_': 0x2ec1c, 'ripple_spawn_continue_': 0x2eb82})
+LEAVES['ripple_frame_allocate_phase_'] = (0x5415d, 3)
+LEAF_CODE_SLICES['ripple_frame_allocate_phase_'] = ('ripple_seed_and_read_ecx_', 0, 3, 13)
+LEAVES['ripple_index_seed_phase_'] = (0x5417d, 3)
+LEAF_CODE_SLICES['ripple_index_seed_phase_'] = ('ripple_seed_and_read_ecx_', 3, 6, 13)
+LEAVES['ripple_index_commit_phase_'] = (0x541a1, 3)
+LEAF_CODE_SLICES['ripple_index_commit_phase_'] = ('ripple_commit_and_read_eax_', 3, 6, 13)
+LEAVES['ripple_index_spawn_read_phase_'] = (0x541c5, 3)
+LEAF_CODE_SLICES['ripple_index_spawn_read_phase_'] = ('ripple_seed_and_read_ecx_', 6, 9, 13)
+LEAVES['ripple_index_radial_seed_phase_'] = (0x541d2, 3)
+LEAF_CODE_SLICES['ripple_index_radial_seed_phase_'] = ('ripple_seed_and_read_ecx_', 3, 6, 13)
+LEAVES['ripple_index_floor_read_phase_'] = (0x54263, 3)
+LEAF_CODE_SLICES['ripple_index_floor_read_phase_'] = ('ripple_commit_and_read_eax_', 6, 9, 13)
+LEAVES['ripple_index_step_phase_'] = (0x542af, 3)
+LEAF_CODE_SLICES['ripple_index_step_phase_'] = ('ripple_step_and_read_eax_', 6, 9, 11)
+LEAVES['ripple_index_radial_read_phase_'] = (0x542b2, 3)
+LEAF_CODE_SLICES['ripple_index_radial_read_phase_'] = ('ripple_commit_and_read_eax_', 6, 9, 13)
+LEAVES['ripple_frame_release_phase_'] = (0x544a4, 3)
+LEAF_CODE_SLICES['ripple_frame_release_phase_'] = ('ripple_seed_and_read_ecx_', 9, 12, 13)
+LEAVES['ripple_frame_return_phase_'] = (0x544ad, 1)
+LEAF_CODE_SLICES['ripple_frame_return_phase_'] = ('ripple_seed_and_read_ecx_', 12, 13, 13)
+LEAVES['ripple_particle_guard_phase_'] = (0x542b5, 8)
+LEAF_CODE_SLICES['ripple_particle_guard_phase_'] = ('ripple_particle_guard_', 0, 8, 9)
+LEAVES['ripple_sample_step_phase_'] = (0x5425e, 1)
+LEAF_CODE_SLICES['ripple_sample_step_phase_'] = ('ripple_sample_step_', 0, 1, 2)
+LEAVES['ripple_sample_test_phase_'] = (0x5425f, 2)
+LEAF_CODE_SLICES['ripple_sample_test_phase_'] = ('ripple_sample_guard_', 0, 2, 9)
+LEAVES['ripple_spawn_test_phase_'] = (0x541c8, 2)
+LEAF_CODE_SLICES['ripple_spawn_test_phase_'] = ('ripple_spawn_guard_', 0, 2, 9)
+LEAVES['ripple_last_slot_phase_'] = (0x541cc, 6)
+LEAF_CODE_SLICES['ripple_last_slot_phase_'] = ('ripple_last_slot_', 0, 6, 7)
+LEAVES['ripple_random_x_call_phase_'] = (0x54182, 5)
+LEAF_CODE_SLICES['ripple_random_x_call_phase_'] = ('ripple_random_draw_', 0, 5, 8)
+LEAVES['ripple_random_y_call_phase_'] = (0x5419c, 5)
+LEAF_CODE_SLICES['ripple_random_y_call_phase_'] = ('ripple_random_draw_', 0, 5, 8)
+LEAVES['ripple_mask_guard_compare_phase_'] = (0x542e9, 6)
+LEAF_CODE_SLICES['ripple_mask_guard_compare_phase_'] = ('ripple_output_row_guard_', 0, 6, 19)
+LEAVES['ripple_vertical_guard_compare_phase_'] = (0x5434c, 6)
+LEAF_CODE_SLICES['ripple_vertical_guard_compare_phase_'] = ('ripple_output_row_guard_', 0, 6, 19)
+LEAF_CONTEXT_BYTES['ripple_seed_and_read_ecx_'] = bytes.fromhex('83ec148904248b0c2483c414c3')
+LEAF_CONTEXT_FIXUPS['ripple_seed_and_read_ecx_'] = {}
+LEAF_CONTEXT_BYTES['ripple_commit_and_read_eax_'] = bytes.fromhex('83ec14892c248b042483c414c3')
+LEAF_CONTEXT_FIXUPS['ripple_commit_and_read_eax_'] = {}
+LEAF_CONTEXT_BYTES['ripple_step_and_read_eax_'] = bytes.fromhex('83ec14890424ff0c24ebee')
+LEAF_CONTEXT_FIXUPS['ripple_step_and_read_eax_'] = {}
+LEAF_CONTEXT_SUFFIXES['ripple_particle_guard_'] = bytes.fromhex('c3')
+LEAF_CONTEXT_SUFFIXES['ripple_sample_step_'] = bytes.fromhex('c3')
+LEAF_CONTEXT_SUFFIXES['ripple_sample_guard_'] = bytes.fromhex('7cfbe900000000')
+LEAF_CONTEXT_SUFFIXES['ripple_spawn_guard_'] = bytes.fromhex('7cf2e900000000')
+LEAF_CONTEXT_SUFFIXES['ripple_last_slot_'] = bytes.fromhex('c3')
+LEAF_CONTEXT_SUFFIXES['ripple_random_draw_'] = bytes.fromhex('89c3c3')
+LEAF_CONTEXT_FIXUPS['ripple_particle_guard_'] = {4: ('ripple_particle_continue_', True)}
+LEAF_CONTEXT_FIXUPS['ripple_sample_guard_'] = {5: ('ripple_sample_continue_', True)}
+LEAF_CONTEXT_FIXUPS['ripple_spawn_guard_'] = {5: ('ripple_spawn_continue_', True)}
+LEAF_CONTEXT_FIXUPS['ripple_last_slot_'] = {1: ('_ripple_count', False)}
+LEAF_CONTEXT_FIXUPS['ripple_random_draw_'] = {1: ('random_value_', True)}
+
+FUNCTION_ADDRESSES['ripple_flow_context_'] = 0x2eb57
+LEAVES['ripple_control_saved_registers_phase_'] = (0x54157, 6)
+LEAF_CODE_SLICES['ripple_control_saved_registers_phase_'] = ('ripple_flow_context_', 0, 6, 865)
+LEAVES['ripple_control_branch_2eb80_phase_'] = (0x54180, 2)
+LEAF_CODE_SLICES['ripple_control_branch_2eb80_phase_'] = ('ripple_flow_context_', 47, 49, 865)
+LEAVES['ripple_control_branch_2ebca_phase_'] = (0x541ca, 2)
+LEAF_CODE_SLICES['ripple_control_branch_2ebca_phase_'] = ('ripple_flow_context_', 117, 119, 865)
+LEAVES['ripple_control_branch_2ebd5_phase_'] = (0x541d5, 5)
+LEAF_CODE_SLICES['ripple_control_branch_2ebd5_phase_'] = ('ripple_flow_context_', 128, 133, 865)
+LEAVES['ripple_control_branch_2ec1a_phase_'] = (0x5421a, 2)
+LEAF_CODE_SLICES['ripple_control_branch_2ec1a_phase_'] = ('ripple_flow_context_', 195, 197, 865)
+LEAVES['ripple_control_branch_2ec61_phase_'] = (0x54261, 2)
+LEAF_CODE_SLICES['ripple_control_branch_2ec61_phase_'] = ('ripple_flow_context_', 260, 262, 865)
+LEAVES['ripple_control_branch_2ecc6_phase_'] = (0x542c6, 2)
+LEAF_CODE_SLICES['ripple_control_branch_2ecc6_phase_'] = ('ripple_flow_context_', 365, 367, 865)
+LEAVES['ripple_control_branch_2ecef_phase_'] = (0x542ef, 2)
+LEAF_CODE_SLICES['ripple_control_branch_2ecef_phase_'] = ('ripple_flow_context_', 406, 408, 865)
+LEAVES['ripple_control_branch_2ed1b_phase_'] = (0x5431b, 2)
+LEAF_CODE_SLICES['ripple_control_branch_2ed1b_phase_'] = ('ripple_flow_context_', 450, 452, 865)
+LEAVES['ripple_control_branch_2ed52_phase_'] = (0x54352, 2)
+LEAF_CODE_SLICES['ripple_control_branch_2ed52_phase_'] = ('ripple_flow_context_', 506, 508, 865)
+LEAVES['ripple_control_branch_2ed85_phase_'] = (0x54385, 5)
+LEAF_CODE_SLICES['ripple_control_branch_2ed85_phase_'] = ('ripple_flow_context_', 560, 565, 865)
+LEAVES['ripple_control_branch_2eda9_phase_'] = (0x543a9, 5)
+LEAF_CODE_SLICES['ripple_control_branch_2eda9_phase_'] = ('ripple_flow_context_', 595, 600, 865)
+LEAVES['ripple_control_restored_registers_phase_'] = (0x544a7, 6)
+LEAF_CODE_SLICES['ripple_control_restored_registers_phase_'] = ('ripple_flow_context_', 858, 864, 865)
+LEAF_CONTEXT_SHA256['ripple_flow_context_'] = 'c0078b4844f0f1b673fface7613e70ce1b16493b64bdf03b0d8473702665305b'
+LEAF_CONTEXT_SUFFIXES['ripple_flow_context_'] = b'\xc3'
+LEAF_CONTEXT_FIXUPS['ripple_flow_context_'] = {20: ('_ripple_count', False, 0), 50: ('random_value_', True, 0), 57: ('_ripple_count', False, 0), 69: ('_ripple_origin_x', False, 0), 74: ('random_value_', True, 0), 84: ('_ripple_count', False, 0), 94: ('_ripple_origin_y', False, 0), 101: ('_ripple_radius', False, 0), 108: ('_ripple_count', False, 0), 120: ('_ripple_count', False, 0), 136: ('_ripple_radius', False, 0), 148: ('_ripple_speed', False, 0), 159: ('_ripple_radius', False, 0), 166: ('_radial_sample_count', False, 0), 180: ('_ripple_origin_x', False, 0), 191: ('_ripple_origin_y', False, 0), 215: ('_radial_x_offsets', False, 0), 223: ('_radial_y_offsets', False, 0), 270: ('_ripple_radius', False, 0), 277: ('_ripple_radius', False, 0), 288: ('_ripple_count', False, 0), 296: ('_ripple_origin_x', False, 0), 303: ('_ripple_radius', False, 0), 310: ('_ripple_origin_y', False, 0), 316: ('_ripple_count', False, 0), 322: ('_ripple_origin_x', False, 0), 328: ('_ripple_radius', False, 0), 334: ('_ripple_origin_y', False, 0), 355: ('_ripple_buffer', False, 133), 424: ('_ripple_buffer', False, 1), 436: ('_ripple_buffer', False, 17028), 485: ('_ripple_buffer', False, 0), 496: ('_ripple_buffer', False, 129), 517: ('_ripple_buffer', False, 0), 530: ('_ripple_buffer', False, 129), 540: ('_ripple_buffer', False, 17028), 556: ('_ripple_buffer', False, 17159), 579: ('_ripple_buffer', False, 0), 851: ('_ripple_frame', False, 0)}
+LEAF_SECTION_BRANCHES['ripple_flow_context_'] = (865, 855, {47: (b'\xeb', 112, 110), 117: (b'}', 49, 43), 128: (b'\xe9', 341, 347), 195: (b'\xeb', 258, 264), 260: (b'}', 197, 197), 365: (b'\xeb', 400, 402), 406: (b'|', 367, 369), 450: (b'\xeb', 500, 501), 506: (b'|', 452, 454), 560: (b'\xe9', 837, 827), 595: (b'\xe9', 826, 816)})
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

@@ -133,3 +133,19 @@ check_setgamemode_init --exe {exe} --object {build}/setdisp.obj --output {build}
 check_setgamemode_stereo --exe {exe} --object {build}/ststate.obj --output {build}/setgamemode-stereo-behavior.json | ststate setdisp
 
 check_setgamemode_dispatch --exe {exe} --object {build}/vmoddsp.obj --output {build}/setgamemode-dispatch-behavior.json | vmoddsp
+
+check_ripple_texture --exe {exe} --build {build} --output {build}/ripple-texture-behavior.json | ripsum ripctl ripbord rippart ripout riploop ripbook ripidx riptest ripflow
+
+check_ripple_radial_sample --exe {exe} --build {build} --output {build}/ripple-radial-sample.json | riprad ripinit ripbook
+
+check_ripple_radial_setup --exe {exe} --build {build} --output {build}/ripple-radial-setup.json | riprad ripinit ripbook
+
+check_ripple_packing --exe {exe} --build {build} --output {build}/ripple-packing.json | rippack
+
+check_ripple_vertical --exe {exe} --build {build} --output {build}/ripple-vertical.json | ripbord ripbook
+
+check_ripple_output --exe {exe} --build {build} --output {build}/ripple-output.json | ripout riploop ripidx riptest
+
+check_ripple_stack --exe {exe} --build {build} --output {build}/ripple-stack.json | ripidx riptest riploop
+
+check_ripple_control --exe {exe} --build {build} --output {build}/ripple-control.json | ripflow ripsum ripctl ripbord rippart riprad rippack ripout riploop ripbook ripidx riptest

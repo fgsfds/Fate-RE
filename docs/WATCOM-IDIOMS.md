@@ -251,3 +251,116 @@ same-CODE target through its checked case-entry map. Verify every placed
 CODE relocation and replay with the translated table installed. Count table
 bytes as data. The image builder routes only the registered contiguous group
 interval through its group binder and binds separately placed leaves normally.
+
+### Ripple phases and complete control contexts
+
+The ripple stencil keeps each byte addition in AL or DL with empty
+unsigned-char identities after each update. Constraining only the first
+loads lets Watcom introduce AH/DH temporaries and an ECX save; constraining
+each result emits the original eight-instruction, 38-byte sum with no
+auxiliary instructions. One checked compiler body is placed at all four
+original sites: 152 linked image bytes, 38 distinct compiler body bytes,
+and no linked RET. The independent oracle checks seven neighbors (the
+lower-right sample is omitted), toroidal borders, and the original write
+to the final bottom-row padding byte.
+
+The ripple row helper returns the destination for the next row in EAX.
+A void helper lets Watcom discard the final MOV EAX,EBX, even though the
+retained outer loop consumes that handoff. The pointer return keeps all
+32 original body bytes, including internal short branches, without an
+inline instruction. Destination arithmetic uses a byte pointer into the
+entire assembly-owned raw bordered plane; packed word accesses cover the
+unaligned stores, and the source advances through exactly 32 packed words.
+
+For the top/bottom border loop, an empty full-pointer EDX identity fixes
+the memory-base allocation. Watcom privately saves ESI, homes the incoming
+EDX pointer there, then repeats it into EDX. The production caller already
+has that exact pointer in EDX throughout the masked-row phase. Two slices
+therefore retain the ECX initialization and loop, excluding the guarded
+private save/copy/restore and flag-neutral identity copy. The isolated
+fixture starts ESI with unrelated poison and checks that the linked code
+preserves both EDX and ESI, all source bytes, and every untouched plane byte.
+
+The radius-removal leaf publishes the decremented count before copying
+the replacement X coordinate, then reads Y and stores radius/Y. Qualifying
+the count store, X store and Y read as volatile lvalue accesses retains
+that order without changing the external declarations. The independent
+oracle records write order and rejects swapped count/X stores even when
+all final state agrees. Self-removal copies the radius after its increment,
+so the inactive last slot retains 11 as in the reference.
+
+The X-slot store and four corner stores can retain their compiler order
+while independent register bookkeeping runs between slices.
+MOV EBP,ECX / SUB EBP,ESI only affect the X countdown; MOV ESI,EDX /
+XOR EBP,EBP prepare output after the corner reads. Separate natural and
+interleaved oracles check the distinct register handoffs. Their final
+EFLAGS need not agree; the whole-image byte comparison verifies the
+production flag behavior.
+
+Caller-cleanup stack formals can model in-place frame fields without
+introducing a competing local frame: the ripple radial leaves use an
+unused +4 formal and amplitude/X at +8/+12. Volatile setup formals retain
+the original stores. The original EBP assignments remain outside these
+leaves and supply the slot and Y getter contracts. Compatible 4096-word
+radial table declarations permit aligned scalar C loads while retaining
+the initializer's existing exact stores.
+
+The vertical row can split around its original INC EBP: one C leaf reads
+the old row and last-column pixel, then another reads the advanced row,
+stores the one-byte scratch formal at ESP+16, and writes both borders.
+This avoids forcing a C function to modify EBP through an unsupported
+auxiliary declaration. Output setup similarly uses a caller-stack pointer
+formal at +4; an empty two-input handoff keeps both updated word/cursor
+pointers in their original registers.
+
+A public function may return a value in EBP even though EBP input and
+modify declarations are rejected. With a true EBP getter and a 0..127
+row contract, returning `row + 1` emits `INC EBP; RET`; the increment now
+replaces all three ripple row steps. This is an explicit output contract,
+not an automatically preserved EBP value. The same public output contract
+also supports an EAX slot identity, ECX-minus-ESI countdown and indexed Y load through a true EBP getter.
+The countdown's copy and subtraction can link around an independent
+coordinate phase that preserves ECX, ESI and the pending EBP value.
+An `aborts` continuation can produce the original near conditional jump directly from a signed guard.
+Keep a guard's private RET separately guarded: combining functions may
+cause Watcom to share a preceding RET and invert the conditional branch.
+The ripple word guard starts its own translation unit to retain the exact
+layout. A conservative clobber on an empty identity may also constrain
+scheduling without adding instructions; the ripple EAX destination
+handoff invalidates ESI before binding its tile pointer.
+
+
+For an in-place field at ESP+0, an initialized volatile local struct can
+provide the correct compiler context when a stack formal begins at +4.
+The ripple index contexts allocate the real 20-byte layout, initialize
+the index, then read or decrement it. Selected instructions reuse the
+caller's already allocated frame; one context also supplies the outer
+allocation, release and return. Guard the complete context and its zero
+fixups, including any private initializer or shared-return jump. A raw
+ESP getter instead introduced an EAX home and saved-register wrappers.
+Do not execute a private RET with the index still at the top of stack.
+
+A C wrapper returning the RNG's EAX value in EBX emits CALL, a result
+copy and RET rather than a tail JMP. The ripple build links the CALL
+twice; existing coordinate phases perform the result copy. Guard the
+unlinked copy/RET and the relative-call symbol, and test the actual call
+stack before relying on the selected instruction alone.
+
+
+The remaining ripple control layout comes from a complete readable C
+algorithm context. Its 865-byte compiler function supplies 43 matching
+save/restore/transfer bytes to the 855-byte production routine; exact C
+phase contexts supply the other 812. Register allocation may differ in
+unlinked producers, so verify the logical predicate and actual placed
+flag producer for each selected conditional branch. Preserve the compiler
+opcode and width, check its original internal target, then remap only its
+displacement to the corresponding production label. Check all edges and
+save/restore order independently, and execute both the private whole C
+model and the final routine against the toroidal oracle.
+
+Guard large private contexts with the raw CODE SHA-256 as well as a
+complete fixup inventory. Two-field context fixup metadata requires a
+zero raw addend; an optional third field pins a nonzero DATA addend.
+This protects unlinked symbolic references even when selected spans have
+no LE sites. The ripple fixture rejects a changed private opcode/return,
+external name, addend, compiler target and production destination.
