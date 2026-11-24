@@ -541,3 +541,6 @@ fate/ripple_flow_context ripflow
 fate/save_read_fields svread
 fate/save_write_fields svwrite
 fate/save_byte_fields svbytes
+fate/save_sized_transfer svsect
+fate/save_sized_transfer svwall /4r /s /or /bt=dos /dSAVE_DYNAMIC_WALLS
+fate/save_restore_steps svstep

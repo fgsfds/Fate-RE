@@ -387,3 +387,20 @@ stream identity. This preserves the shared value without new inline
 instructions. Contexts in one object may share private cursor tails
 across read/write directions: bind every public in that object before
 emulating a full private context, and guard each tail and addend.
+
+
+For a retained pointer-table loop, a single-step C context can read its
+physical incoming index through an empty ABI getter and return the new
+index in that same register. Conservative index clobbers on a value
+identity force a fresh getter after the compiler's base shift; the actual
+empty identity preserves the index. Bound entry indices to 0..511 and
+decrement as signed int, then store at index+1. Convert the flat pointer
+to unsigned and use unsigned shifts/add/sub for the address words.
+
+An exact indexed load from an addition context may also supply the same
+load in the subtraction loop: prove matching input/output registers,
+memory operand, flags and LE target before composing it with the actual
+subtraction suffix. Credit only the placed instruction, retain full
+context hashes/fixup guards, and exercise all indices plus complete loops.
+If emulation reuses an address for different private contexts, invalidate
+Unicorn's translated-code cache after writing new instructions.

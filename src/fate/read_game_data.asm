@@ -313,46 +313,16 @@ section .retained_1 align=1 vstart=0x2f513 follows=.text
     jnl short .initialize_player_before_restore
 
 ; C field run 1 ends here.
-section .retained_2 align=1 vstart=0x2f714 follows=.retained_1
-    movsx edx, word [numsectors]
-    mov eax, edx
-    mov ebx, 0x1
-    shl eax, byte 0x2
-    mov ecx, esi
-    add edx, eax
-    mov eax, sectors
-    shl edx, byte 0x3
-    call fread
+section .retained_2 align=1 vstart=0x2febe follows=.retained_1
+    jmp short .branch_2fed9
 
 ; C field run 2 ends here.
-section .retained_3 align=1 vstart=0x2f74c follows=.retained_2
-    mov ebx, 0x1
-    mov eax, walls
-    movsx edx, word [numwalls]
-    mov ecx, esi
-    shl edx, byte 0x5
-    call fread
-
-; C field run 3 ends here.
-section .retained_4 align=1 vstart=0x2fea3 follows=.retained_3
-    mov ebx, 0x1
-    mov edx, 0x800
-    mov eax, restore_addresses
-    mov ecx, esi
-    mov edi, 0x1ff
-    call fread
-    jmp short .branch_2fed9
-    mov ebx, sectors
-    mov edx, [nosplit edi*4 + restore_addresses]
-    shl ebx, byte 0x2
-    dec edi
-    add edx, ebx
-    mov [nosplit edi*4 + save_state_1a238], edx
+section .retained_3 align=1 vstart=0x2fed9 follows=.retained_2
     test edi, edi
     jnl short .branch_2fec0
 
-; C field run 4 ends here.
-section .retained_5 align=1 vstart=0x30934 follows=.retained_4
+; C field run 3 ends here.
+section .retained_4 align=1 vstart=0x30934 follows=.retained_3
     mov eax, esi
     call sub_40354
     mov eax, esi

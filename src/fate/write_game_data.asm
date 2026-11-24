@@ -300,49 +300,20 @@ write_game_data:
     call fwrite
 
 ; C field run 0 ends here.
-section .retained_1 align=1 vstart=0x30c2f follows=.text
-    movsx edx, word [numsectors]
-    mov eax, edx
-    mov ebx, 0x1
-    shl eax, byte 0x2
-    mov ecx, edi
-    add edx, eax
-    mov eax, sectors
-    shl edx, byte 0x3
-    call fwrite
+section .retained_1 align=1 vstart=0x313c3 follows=.text
+    jmp short .branch_313de
 
 ; C field run 1 ends here.
-section .retained_2 align=1 vstart=0x30c67 follows=.retained_1
-    mov ebx, 0x1
-    mov eax, walls
-    movsx edx, word [numwalls]
-    mov ecx, edi
-    shl edx, byte 0x5
-    call fwrite
-
-; C field run 2 ends here.
-section .retained_3 align=1 vstart=0x313be follows=.retained_2
-    mov eax, 0x1ff
-    jmp short .branch_313de
-    mov edx, sectors
-    mov ebx, [nosplit eax*4 + restore_addresses]
-    shl edx, byte 0x2
-    dec eax
-    sub ebx, edx
-    mov [nosplit eax*4 + save_state_1a238], ebx
+section .retained_2 align=1 vstart=0x313de follows=.retained_1
     test eax, eax
     jnl short .branch_313c5
 
-; C field run 3 ends here.
-section .retained_4 align=1 vstart=0x313f8 follows=.retained_3
-    mov eax, 0x1ff
+; C field run 2 ends here.
+section .retained_3 align=1 vstart=0x313fd follows=.retained_2
     jmp short .branch_31418
-    mov edx, sectors
-    mov ebx, [nosplit eax*4 + restore_addresses]
-    shl edx, byte 0x2
-    dec eax
-    add edx, ebx
-    mov [nosplit eax*4 + save_state_1a238], edx
+
+; C field run 3 ends here.
+section .retained_4 align=1 vstart=0x31418 follows=.retained_3
     test eax, eax
     jnl short .branch_313ff
 

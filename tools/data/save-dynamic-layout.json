@@ -1,0 +1,334 @@
+{
+  "reference_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
+  "objects": [
+    {
+      "object": "svsect",
+      "source": "fate/save_sized_transfer",
+      "size": 78,
+      "contexts": [
+        {
+          "public": "save_read_sectors_",
+          "start": 0,
+          "size": 37,
+          "sha256": "7f7420467f28dc0f54a140acc39dcaa5c211f9f02e9544e408ebca7f91c9afd9",
+          "fixups": {
+            "3": [
+              "_numsectors",
+              false,
+              0
+            ],
+            "22": [
+              "_save_data_image",
+              false,
+              2605984
+            ],
+            "30": [
+              "fread_",
+              true,
+              0
+            ]
+          }
+        },
+        {
+          "public": "save_write_sectors_",
+          "start": 37,
+          "size": 41,
+          "sha256": "08e17af3570e76a8164c28f20a747cdee3bef9dee04b267b23002fca2983f0e8",
+          "fixups": {
+            "6": [
+              "_numsectors",
+              false,
+              0
+            ],
+            "25": [
+              "_save_data_image",
+              false,
+              2605984
+            ],
+            "33": [
+              "fwrite_",
+              true,
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "object": "svwall",
+      "source": "fate/save_sized_transfer",
+      "size": 64,
+      "contexts": [
+        {
+          "public": "save_read_walls_",
+          "start": 0,
+          "size": 34,
+          "sha256": "f75a699d9069f8645ddb53c783621a950fa6f997fc3a43de83d694331d1e4a06",
+          "fixups": {
+            "9": [
+              "_save_data_image",
+              false,
+              2298016
+            ],
+            "16": [
+              "_numwalls",
+              false,
+              0
+            ],
+            "26": [
+              "fread_",
+              true,
+              0
+            ]
+          }
+        },
+        {
+          "public": "save_write_walls_",
+          "start": 34,
+          "size": 30,
+          "sha256": "13a7255ac58395adc805900b6e8417c1c8e18894ff589b5ca1fb5ffffd085da1",
+          "fixups": {
+            "6": [
+              "_save_data_image",
+              false,
+              2298016
+            ],
+            "13": [
+              "_numwalls",
+              false,
+              0
+            ],
+            "23": [
+              "fwrite_",
+              true,
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "object": "svstep",
+      "source": "fate/save_restore_steps",
+      "size": 118,
+      "contexts": [
+        {
+          "public": "save_restore_read_step_",
+          "start": 0,
+          "size": 26,
+          "sha256": "5fe6f797fdc7c0c21e11ae05041b4c66ef21a78d90718b5ab7e7b4420fb88b7e",
+          "fixups": {
+            "1": [
+              "_save_data_image",
+              false,
+              2605984
+            ],
+            "8": [
+              "_save_restore_words",
+              false,
+              0
+            ],
+            "21": [
+              "_save_restore_words",
+              false,
+              4
+            ]
+          }
+        },
+        {
+          "public": "save_restore_offset_step_",
+          "start": 26,
+          "size": 30,
+          "sha256": "d8942092c66a0542bd03874b96a51df431bdda2b28f42aa3ef37005891cdbc1f",
+          "fixups": {
+            "1": [
+              "_save_data_image",
+              false,
+              2605984
+            ],
+            "12": [
+              "_save_restore_words",
+              false,
+              0
+            ],
+            "25": [
+              "_save_restore_words",
+              false,
+              4
+            ]
+          }
+        },
+        {
+          "public": "save_restore_address_step_",
+          "start": 56,
+          "size": 26,
+          "sha256": "3846899a4d34792b082fd85bd39521df1a2a14067e6f3f99de4db9b515b21651",
+          "fixups": {
+            "1": [
+              "_save_data_image",
+              false,
+              2605984
+            ],
+            "8": [
+              "_save_restore_words",
+              false,
+              0
+            ],
+            "21": [
+              "_save_restore_words",
+              false,
+              4
+            ]
+          }
+        },
+        {
+          "public": "save_restore_last_index_",
+          "start": 82,
+          "size": 6,
+          "sha256": "6e98f7e8169ae1bd79095b68405d5efb4ffb59c1486086c18e217753097e003e",
+          "fixups": {}
+        },
+        {
+          "public": "save_read_restore_words_",
+          "start": 88,
+          "size": 30,
+          "sha256": "a449c93c8a37b67e0f5a0678ae3d3a7b9f128d87b6d6a063211e4d50b58c4f34",
+          "fixups": {
+            "11": [
+              "_save_restore_words",
+              false,
+              0
+            ],
+            "23": [
+              "fread_",
+              true,
+              0
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "phases": [
+    {
+      "phase": "save_read_sectors_phase_",
+      "public": "save_read_sectors_",
+      "object": "svsect",
+      "begin": 0,
+      "end": 34,
+      "address": 194324,
+      "routine": "read_game_data",
+      "le_sites": 2
+    },
+    {
+      "phase": "save_write_sectors_phase_",
+      "public": "save_write_sectors_",
+      "object": "svsect",
+      "begin": 3,
+      "end": 37,
+      "address": 199727,
+      "routine": "write_game_data",
+      "le_sites": 2
+    },
+    {
+      "phase": "save_read_walls_phase_",
+      "public": "save_read_walls_",
+      "object": "svwall",
+      "begin": 3,
+      "end": 30,
+      "address": 194380,
+      "routine": "read_game_data",
+      "le_sites": 2
+    },
+    {
+      "phase": "save_write_walls_phase_",
+      "public": "save_write_walls_",
+      "object": "svwall",
+      "begin": 0,
+      "end": 27,
+      "address": 199783,
+      "routine": "write_game_data",
+      "le_sites": 2
+    },
+    {
+      "phase": "save_restore_read_step_phase_",
+      "public": "save_restore_read_step_",
+      "object": "svstep",
+      "begin": 0,
+      "end": 25,
+      "address": 196288,
+      "routine": "read_game_data",
+      "le_sites": 3
+    },
+    {
+      "phase": "save_restore_offset_base_phase_",
+      "public": "save_restore_offset_step_",
+      "object": "svstep",
+      "begin": 0,
+      "end": 5,
+      "address": 201669,
+      "routine": "write_game_data",
+      "le_sites": 1
+    },
+    {
+      "phase": "save_restore_offset_word_phase_",
+      "public": "save_restore_address_step_",
+      "object": "svstep",
+      "begin": 5,
+      "end": 12,
+      "address": 201674,
+      "routine": "write_game_data",
+      "le_sites": 1
+    },
+    {
+      "phase": "save_restore_offset_store_phase_",
+      "public": "save_restore_offset_step_",
+      "object": "svstep",
+      "begin": 16,
+      "end": 29,
+      "address": 201681,
+      "routine": "write_game_data",
+      "le_sites": 1
+    },
+    {
+      "phase": "save_restore_address_step_phase_",
+      "public": "save_restore_address_step_",
+      "object": "svstep",
+      "begin": 0,
+      "end": 25,
+      "address": 201727,
+      "routine": "write_game_data",
+      "le_sites": 3
+    },
+    {
+      "phase": "save_restore_offset_init_phase_",
+      "public": "save_restore_last_index_",
+      "object": "svstep",
+      "begin": 0,
+      "end": 5,
+      "address": 201662,
+      "routine": "write_game_data",
+      "le_sites": 0
+    },
+    {
+      "phase": "save_restore_address_init_phase_",
+      "public": "save_restore_last_index_",
+      "object": "svstep",
+      "begin": 0,
+      "end": 5,
+      "address": 201720,
+      "routine": "write_game_data",
+      "le_sites": 0
+    },
+    {
+      "phase": "save_read_restore_words_phase_",
+      "public": "save_read_restore_words_",
+      "object": "svstep",
+      "begin": 0,
+      "end": 27,
+      "address": 196259,
+      "routine": "read_game_data",
+      "le_sites": 1
+    }
+  ]
+}

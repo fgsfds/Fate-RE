@@ -25,11 +25,11 @@ def oracle(run,base,reading,seed,limit):
   trace.append((DS+offset,size,1,STREAM,position,amount))
   if reading:expected[offset:offset+amount]=payload[position:position+amount]
   else:output.extend(base[offset:offset+amount])
-  position+=amount;last_complete=int(amount==size)
+  position+=amount;last_complete=int(amount==size and size!=0)
  return payload,bytes(expected),bytes(output),trace,last_complete
 
 def exercise(run,code,reading,seed,limit,private=None):
- base=BASES[seed];payload,want_data,want_output,want_trace,last=oracle(run,base,reading,seed,limit)
+ base=run.get('base_data',BASES[seed]);payload,want_data,want_output,want_trace,last=oracle(run,base,reading,seed,limit)
  cpu=Uc(UC_ARCH_X86,UC_MODE_32);cpu.mem_map(0,0x500000)
  entry=run['start_address'] if private is None else SCRATCH+run['public_start']
  cpu.mem_write(entry,code) if private is None else cpu.mem_write(SCRATCH,private)
@@ -47,11 +47,11 @@ def exercise(run,code,reading,seed,limit,private=None):
   assert calls<len(run['records'])
   ptr,n,count,stream=(machine.reg_read(reg) for reg in (UC_X86_REG_EAX,UC_X86_REG_EDX,UC_X86_REG_EBX,UC_X86_REG_ECX))
   assert count==1 and stream==STREAM
-  assert DS<=ptr<ptr+n<=DS+EXTENT
+  assert DS<=ptr<=ptr+n<=DS+EXTENT
   amount=min(n,max(0,limit-cursor));actual_trace.append((ptr,n,count,stream,cursor,amount))
   assert actual_trace[-1]==want_trace[calls]
   esp=machine.reg_read(UC_X86_REG_ESP)
-  pushes=0 if private is None else len(bytes.fromhex(run['private_prefix']))
+  pushes=0 if private is None else run.get('private_pushes',len(bytes.fromhex(run['private_prefix'])))
   assert esp==STACK-4-4*pushes,'Transfer must be CALL with only the guarded private saves'
   ret,=struct.unpack('<I',machine.mem_read(esp,4))
   assert ret==entry+(0 if private is None else run['body_start'])+run.get('record_bytes',22)*(calls+1)
@@ -59,7 +59,7 @@ def exercise(run,code,reading,seed,limit,private=None):
    if amount:machine.mem_write(ptr,payload[cursor:cursor+amount])
   else:output.extend(machine.mem_read(ptr,amount))
   cursor+=amount
-  for reg,value in ((UC_X86_REG_EAX,int(amount==n)),(UC_X86_REG_EBX,0xb0000000+calls),
+  for reg,value in ((UC_X86_REG_EAX,int(amount==n and n!=0)),(UC_X86_REG_EBX,0xb0000000+calls),
                     (UC_X86_REG_ECX,0xc0000000+calls),(UC_X86_REG_EDX,0xd0000000+calls)):
    machine.reg_write(reg,value)
   machine.reg_write(UC_X86_REG_EFLAGS,0x202|(calls&1))
@@ -80,7 +80,8 @@ def exercise(run,code,reading,seed,limit,private=None):
   assert cpu.reg_read(UC_X86_REG_EFLAGS)==0x202|((calls-1)&1)
  else:
   final=run['records'][-1]
-  assert cpu.reg_read(UC_X86_REG_EBX)==DS+final['data_offset']+last*final['size']
+  result=last if run.get('private_result')=='count' else DS+final['data_offset']+last*final['size']
+  assert cpu.reg_read(UC_X86_REG_EBX)==result
   assert cpu.reg_read(UC_X86_REG_EIP)==STOP and cpu.reg_read(UC_X86_REG_ESP)==STACK+4
 
 def private_image(blob,routine):

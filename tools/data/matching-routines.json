@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1387,
-  "unique_code_bytes": 192333,
-  "le_pointers": 10473,
+  "routines": 1399,
+  "unique_code_bytes": 192567,
+  "le_pointers": 10491,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -2610,6 +2610,16 @@
       "le_pointers": 22
     },
     {
+      "symbol": "save_read_sectors_phase_",
+      "object": "svsect.obj",
+      "object_sha256": "4177c667aea44042d7aaa10be9d77531ffeb94a34d0616c9724064ca318c2f6e",
+      "sha256": "bd50acba873d18819bf9a900c8f32d7b1c7a349579544f101c40e593f37a5514",
+      "raw_offset": "0x54d14",
+      "loaded_address": "0x2f714",
+      "bytes": 34,
+      "le_pointers": 2
+    },
+    {
       "symbol": "save_read_fields_2_phase_",
       "object": "svread.obj",
       "object_sha256": "2fae3650c0f2d7a9c93362e55f4e8f9a0a1e6dab86a18be7def348335f1aabe2",
@@ -2618,6 +2628,16 @@
       "loaded_address": "0x2f736",
       "bytes": 22,
       "le_pointers": 1
+    },
+    {
+      "symbol": "save_read_walls_phase_",
+      "object": "svwall.obj",
+      "object_sha256": "36a1c80d78bdf61e4c8dff2c5159047de866e2de8dddda04047b0fdfbd7fb6a7",
+      "sha256": "8a371be7dc5c630a596cdd4e63155bdf0ebe31d1132d8f9e078618146c61aa58",
+      "raw_offset": "0x54d4c",
+      "loaded_address": "0x2f74c",
+      "bytes": 27,
+      "le_pointers": 2
     },
     {
       "symbol": "save_read_fields_3_phase_",
@@ -2648,6 +2668,26 @@
       "loaded_address": "0x2f8cb",
       "bytes": 1496,
       "le_pointers": 68
+    },
+    {
+      "symbol": "save_read_restore_words_phase_",
+      "object": "svstep.obj",
+      "object_sha256": "b631ab81104af0524630229298d3ceebf8e88824f11480c0ba5a0718f79469a9",
+      "sha256": "41cd3614984fd73a2d9fc4882b5d59d5d86571dbb1ed5d4ebe719dfd543734ef",
+      "raw_offset": "0x554a3",
+      "loaded_address": "0x2fea3",
+      "bytes": 27,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "save_restore_read_step_phase_",
+      "object": "svstep.obj",
+      "object_sha256": "b631ab81104af0524630229298d3ceebf8e88824f11480c0ba5a0718f79469a9",
+      "sha256": "26653ddb247c099828fafa7c976037d84ce623a7345e8f9bc3c9e906c9b14418",
+      "raw_offset": "0x554c0",
+      "loaded_address": "0x2fec0",
+      "bytes": 25,
+      "le_pointers": 3
     },
     {
       "symbol": "save_read_fields_5_phase_",
@@ -2730,6 +2770,16 @@
       "le_pointers": 25
     },
     {
+      "symbol": "save_write_sectors_phase_",
+      "object": "svsect.obj",
+      "object_sha256": "4177c667aea44042d7aaa10be9d77531ffeb94a34d0616c9724064ca318c2f6e",
+      "sha256": "6eb63b819feb66a6cb0b70284c68896b8bc7e965f0f845a2fbd016287a6e5e39",
+      "raw_offset": "0x5622f",
+      "loaded_address": "0x30c2f",
+      "bytes": 34,
+      "le_pointers": 2
+    },
+    {
       "symbol": "save_write_fields_1_phase_",
       "object": "svwrite.obj",
       "object_sha256": "4d05434dfa4a404820dc7d7b9c1fe327c1521004a8093a399fb0ff0790bf3673",
@@ -2738,6 +2788,16 @@
       "loaded_address": "0x30c51",
       "bytes": 22,
       "le_pointers": 1
+    },
+    {
+      "symbol": "save_write_walls_phase_",
+      "object": "svwall.obj",
+      "object_sha256": "36a1c80d78bdf61e4c8dff2c5159047de866e2de8dddda04047b0fdfbd7fb6a7",
+      "sha256": "9a07da5a3d0a547747a79516673bb569ee58a8f7871c2e180d1c183c5e6ad97b",
+      "raw_offset": "0x56267",
+      "loaded_address": "0x30c67",
+      "bytes": 27,
+      "le_pointers": 2
     },
     {
       "symbol": "save_write_fields_2_phase_",
@@ -2770,6 +2830,46 @@
       "le_pointers": 68
     },
     {
+      "symbol": "save_restore_offset_init_phase_",
+      "object": "svstep.obj",
+      "object_sha256": "b631ab81104af0524630229298d3ceebf8e88824f11480c0ba5a0718f79469a9",
+      "sha256": "4ec108b58f4a270bdce0082d0319917144a9345a10a9138a83bc31805182fca8",
+      "raw_offset": "0x569be",
+      "loaded_address": "0x313be",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "save_restore_offset_base_phase_",
+      "object": "svstep.obj",
+      "object_sha256": "b631ab81104af0524630229298d3ceebf8e88824f11480c0ba5a0718f79469a9",
+      "sha256": "9d0a89d68c45d0dd94c5a9c4d5422b8c6b6e97f20c0f786f84b7b852451135e2",
+      "raw_offset": "0x569c5",
+      "loaded_address": "0x313c5",
+      "bytes": 5,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "save_restore_offset_word_phase_",
+      "object": "svstep.obj",
+      "object_sha256": "b631ab81104af0524630229298d3ceebf8e88824f11480c0ba5a0718f79469a9",
+      "sha256": "c8298fd63da4bb8ccaab29756c139e30a86f75e53de3f2a67a58574298de4d4a",
+      "raw_offset": "0x569ca",
+      "loaded_address": "0x313ca",
+      "bytes": 7,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "save_restore_offset_store_phase_",
+      "object": "svstep.obj",
+      "object_sha256": "b631ab81104af0524630229298d3ceebf8e88824f11480c0ba5a0718f79469a9",
+      "sha256": "69074ad3881b0524767bdce636878e498cfcf06f39e9ec357462858352d056df",
+      "raw_offset": "0x569d1",
+      "loaded_address": "0x313d1",
+      "bytes": 13,
+      "le_pointers": 1
+    },
+    {
       "symbol": "save_write_fields_4_phase_",
       "object": "svwrite.obj",
       "object_sha256": "4d05434dfa4a404820dc7d7b9c1fe327c1521004a8093a399fb0ff0790bf3673",
@@ -2778,6 +2878,26 @@
       "loaded_address": "0x313e2",
       "bytes": 22,
       "le_pointers": 1
+    },
+    {
+      "symbol": "save_restore_address_init_phase_",
+      "object": "svstep.obj",
+      "object_sha256": "b631ab81104af0524630229298d3ceebf8e88824f11480c0ba5a0718f79469a9",
+      "sha256": "4ec108b58f4a270bdce0082d0319917144a9345a10a9138a83bc31805182fca8",
+      "raw_offset": "0x569f8",
+      "loaded_address": "0x313f8",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "save_restore_address_step_phase_",
+      "object": "svstep.obj",
+      "object_sha256": "b631ab81104af0524630229298d3ceebf8e88824f11480c0ba5a0718f79469a9",
+      "sha256": "0874969d8a1d71d0fe8108ce8015d117b4d21338355932e39e4172fddd144a62",
+      "raw_offset": "0x569ff",
+      "loaded_address": "0x313ff",
+      "bytes": 25,
+      "le_pointers": 3
     },
     {
       "symbol": "save_write_fields_5_phase_",

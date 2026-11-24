@@ -5041,6 +5041,18 @@ for _routine in SAVE_IO_ROUTINES:
             _refs[_start+_stride*_index+_call_site] = (_target, True)
         LEAF_CONTEXT_FIXUPS[_public] = _refs
 
+# Dynamic records and unsigned pointer restoration in the same save format.
+SAVE_DYNAMIC_LAYOUT = json.loads((Path(__file__).parent/'data/save-dynamic-layout.json').read_text(encoding='utf-8'))
+DATA_OFFSETS['_save_restore_words'] = 0x1a234
+for _object in SAVE_DYNAMIC_LAYOUT['objects']:
+    for _context in _object['contexts']:
+        LEAF_CONTEXT_SHA256[_context['public']] = _context['sha256']
+        LEAF_CONTEXT_FIXUPS[_context['public']] = {int(site): tuple(spec) for site, spec in _context['fixups'].items()}
+for _phase in SAVE_DYNAMIC_LAYOUT['phases']:
+    _context = next(row for obj in SAVE_DYNAMIC_LAYOUT['objects'] for row in obj['contexts'] if row['public'] == _phase['public'])
+    LEAVES[_phase['phase']] = (_phase['address']+0x25600, _phase['end']-_phase['begin'])
+    LEAF_CODE_SLICES[_phase['phase']] = (_phase['public'], _phase['begin'], _phase['end'], _context['size'])
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)
