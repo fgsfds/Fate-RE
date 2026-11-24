@@ -555,3 +555,4 @@ fate/save_slot_open svowrite
 fate/save_finish_stream svfinish
 fate/video_dos_allocation vdosio
 fate/video_dos_allocation vbufret /4r /s /or /bt=dos /dVIDEO_RETURN_BUFFER
+fate/video_dos_scalar vbufscal

@@ -23,8 +23,8 @@ extern void __far *copy_far_memory(void __far *, const void __far *, unsigned);
 extern int dpmi_real_mode_far_call(int, const BiosRegisters *, BiosRegisters *, DpmiSegments *);
 #pragma aux dpmi_real_mode_far_call parm routine [eax] [edx] [ebx] [ecx] modify exact [eax ebx ecx edx];
 
-/* Only guarded entry/allocation phases link into production. The private
- * contexts use a defined helper DS; the original assembly tail remains. */
+/* Guarded entry, transfer and frame phases link into production. The private
+ * contexts initialize helper DS; the legacy BIOS call remains assembly. */
 #ifdef VIDEO_RETURN_BUFFER
 #define VIDEO_RESULT void *
 #define VIDEO_CONTEXT video_transfer_buffer_context

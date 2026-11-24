@@ -837,15 +837,16 @@ availability rather than another union spelling. Sources and reports:
 `work/spawn-attributes-research/` and
 `work/spawn-attributes-v1/` through `work/spawn-attributes-v3/`.
 
-### Video DOS transfer continuation
+### Video BIOS legacy DS input
 
-`allocate_video_dos_memory`, Watcom 10.5 `/4r /s /or /bt=dos`: the accepted
-127-byte entry/allocation prefix has 121 native bytes, six existing inline bytes
-and six LE sites. The 89-byte far-copy/BIOS continuation remains assembly.
-Whole contexts add GS saves and a defined real-mode DS initializer, so neither
-232-/230-byte public matches all 216 bytes. Keep protected selector frame+0x24
-separate from helper DS+0x22. Next isolate the native DS-to-stack store and
-far-copy register lifetimes without adding selector zero-extension or the
-saved-length spill seen with five scalar arguments. Frozen evidence:
-`work/video-dos-alloc-research/qualified-prefix.json` and
+`allocate_video_dos_memory`, Watcom 10.5 `/4r /s /or /bt=dos`: 211 C-object
+bytes (205 native, six existing inline) and nine LE sites match. Only the
+five-byte BIOS call at `0x43b06` remains assembly. The original helper reads
+DS from frame+0x22 with no proven initializing write; INT386 output ends at
++0x1b and protected-selector scratch at +0x24 is a different field. VBE's use
+of ES:DI does not justify dropping the private C initializer. Next prove an
+initialized incoming-frame contract or an exact helper boundary that avoids
+the typed read. Native instruction provenance alone is insufficient. Keep the
+assembly call and withhold a whole-defined-C claim. Frozen evidence:
+`work/video-dos-alloc-research/qualified-tail.json` and
 `work/palette-loop-check/video-dos-allocation.json`.

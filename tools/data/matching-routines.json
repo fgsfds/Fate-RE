@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1434,
-  "unique_code_bytes": 193256,
-  "le_pointers": 10527,
+  "routines": 1447,
+  "unique_code_bytes": 193340,
+  "le_pointers": 10530,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -5998,6 +5998,136 @@
       "loaded_address": "0x43a53",
       "bytes": 124,
       "le_pointers": 6
+    },
+    {
+      "symbol": "video_dos_segment_load_phase_",
+      "object": "vbufret.obj",
+      "object_sha256": "92c9f206b646bc6bd324b206cd2d329efa8e68c81d0de08ec577db93a1d81fb7",
+      "sha256": "41896e1d208ffd051ce587fb784487fa0a7a2067b0c84dc3e7b7250717a5bc5c",
+      "raw_offset": "0x690cf",
+      "loaded_address": "0x43acf",
+      "bytes": 6,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "video_dos_copy_in_length_phase_",
+      "object": "vbufret.obj",
+      "object_sha256": "92c9f206b646bc6bd324b206cd2d329efa8e68c81d0de08ec577db93a1d81fb7",
+      "sha256": "a25513c7e0f6eaa80a3337ee18081b9e2ed09e00af8531c8f7bb2542764027e7",
+      "raw_offset": "0x690d5",
+      "loaded_address": "0x43ad5",
+      "bytes": 1,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "video_dos_store_selector_phase_",
+      "object": "vbufscal.obj",
+      "object_sha256": "8f08f30f9412bf2ebb8b45e31d2d2047453d0a315f439368c110de2288eb2a00",
+      "sha256": "8d9e719b2e76c5bdeceb1a3cb79881f210d74f4edb9ee115b7b5fde3bce7123e",
+      "raw_offset": "0x690d6",
+      "loaded_address": "0x43ad6",
+      "bytes": 4,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "video_dos_copy_in_source_phase_",
+      "object": "vbufret.obj",
+      "object_sha256": "92c9f206b646bc6bd324b206cd2d329efa8e68c81d0de08ec577db93a1d81fb7",
+      "sha256": "14546a91c57e03f731ea55de68fdf280a1d61570ec9c1fb93eb3dc57859a4a89",
+      "raw_offset": "0x690da",
+      "loaded_address": "0x43ada",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "video_dos_store_segment_phase_",
+      "object": "vbufscal.obj",
+      "object_sha256": "8f08f30f9412bf2ebb8b45e31d2d2047453d0a315f439368c110de2288eb2a00",
+      "sha256": "e725320258afa534723dc72d45b577e6b88a6966e246ec8a2e14641678ae25a5",
+      "raw_offset": "0x690dc",
+      "loaded_address": "0x43adc",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "video_dos_copy_in_selector_phase_",
+      "object": "vbufret.obj",
+      "object_sha256": "92c9f206b646bc6bd324b206cd2d329efa8e68c81d0de08ec577db93a1d81fb7",
+      "sha256": "fe85db212eebec02b1baab96308e03ced08bb99fdcdd55830d3af562427be192",
+      "raw_offset": "0x690e1",
+      "loaded_address": "0x43ae1",
+      "bytes": 4,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "video_dos_clear_di_phase_",
+      "object": "vbufret.obj",
+      "object_sha256": "92c9f206b646bc6bd324b206cd2d329efa8e68c81d0de08ec577db93a1d81fb7",
+      "sha256": "c0f3f872a5cb105227506379f0370e097e626d9b36e20be33f2ce6764bef9d74",
+      "raw_offset": "0x690e5",
+      "loaded_address": "0x43ae5",
+      "bytes": 8,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "video_dos_copy_in_gate_phase_",
+      "object": "vbufret.obj",
+      "object_sha256": "92c9f206b646bc6bd324b206cd2d329efa8e68c81d0de08ec577db93a1d81fb7",
+      "sha256": "37c6070cc248a613c0d1ed29f2dbfd27df53bc777193b7c6611f189166e7e3c8",
+      "raw_offset": "0x690ed",
+      "loaded_address": "0x43aed",
+      "bytes": 21,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "video_dos_bios_output_phase_",
+      "object": "vbufret.obj",
+      "object_sha256": "92c9f206b646bc6bd324b206cd2d329efa8e68c81d0de08ec577db93a1d81fb7",
+      "sha256": "d2fe88646eae327bb8710cdc380df15285d38c62221d4676c0d95995e08c31e1",
+      "raw_offset": "0x69102",
+      "loaded_address": "0x43b02",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "video_dos_bios_input_phase_",
+      "object": "vbufret.obj",
+      "object_sha256": "92c9f206b646bc6bd324b206cd2d329efa8e68c81d0de08ec577db93a1d81fb7",
+      "sha256": "c8e5f1da29b6657eeb4aeae9b31125bec3aa9f4889072cbef54979cab6e94761",
+      "raw_offset": "0x69104",
+      "loaded_address": "0x43b04",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "video_dos_copy_out_return_phase_",
+      "object": "vbufret.obj",
+      "object_sha256": "92c9f206b646bc6bd324b206cd2d329efa8e68c81d0de08ec577db93a1d81fb7",
+      "sha256": "ac7bd82e12ffe44e03242a0c2a340475ae33be98b8f9f51d46ca7e4a5d7a3270",
+      "raw_offset": "0x6910b",
+      "loaded_address": "0x43b0b",
+      "bytes": 25,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "video_dos_restore_edi_phase_",
+      "object": "vdosio.obj",
+      "object_sha256": "0e690a1250518d6a9872fe540f8f5dd3fe8226fd06c1c064cd49d53045731b75",
+      "sha256": "d2e2adf7177b7a8afddbc12d1634cf23ea1a71020f6a1308070a16400fb68fde",
+      "raw_offset": "0x69124",
+      "loaded_address": "0x43b24",
+      "bytes": 1,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "video_dos_return_phase_",
+      "object": "vbufret.obj",
+      "object_sha256": "92c9f206b646bc6bd324b206cd2d329efa8e68c81d0de08ec577db93a1d81fb7",
+      "sha256": "e799bee2aa0588217fa99e39de4a3422cd19e63a8ceb258e4f3566e40a7a1427",
+      "raw_offset": "0x69125",
+      "loaded_address": "0x43b25",
+      "bytes": 3,
+      "le_pointers": 0
     },
     {
       "symbol": "query_vesa_mode_",

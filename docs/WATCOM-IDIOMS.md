@@ -134,6 +134,14 @@ selected instructions, never discarded compiler code or literal tables.
 
 For selected slices that point into a digest-checked literal prefix, bind through its explicit registered CODE-object offset and export typed `code_bindings`; load through the CODE segment base (`+0x10000` here). Never infer prefix placement from the selected slice address or add the DS base. For frame tests, prefill saved-register slots with distinct poison, prove entry pushes overwrite them, then pass the captured initialized frame into the return phase and clobber registers before checking restoration and guards.
 
+A genuine scalar far-copy context can spill the transfer length below a local
+frame. Its native DS and AX stores then use ESP+0x28 and ESP+0x20 before the
+outgoing length push. Those instructions can supply the same protected-selector
+and real-mode-ES fields after a length push in another checked frame. Prove the
+physical field offsets and stack depth at each handoff; do not patch operands.
+Keep a legacy call in assembly when its typed C input has no proven initializing
+write. Matching compiler instruction bytes alone do not establish that input.
+
 ### Separated NASM ranges
 
 Use `section name align=1 vstart=... follows=...` for each physically separated range. Register each physical range in `ASM_SLICES` and verify the whole linked image; a correct local range does not prove intervening bytes or final placement.

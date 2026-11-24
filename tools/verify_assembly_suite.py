@@ -1487,8 +1487,7 @@ BOARD_ACTOR_INITIALIZATION_FIXUPS = {
 }
 
 ROUTINES = [
-    ('allocate_video_dos_memory_tail', 'fate/allocate_video_dos_memory.asm', 'allocate_video_dos_memory.bin', 0x43acf, 89,
-     {2: 0x306b80, 33: 0x93fec, 67: 0x93fec}),
+    ('allocate_video_dos_memory_bios_call', 'fate/allocate_video_dos_memory.asm', 'allocate_video_dos_memory.bin', 0x43b06, 5, {}),
     ('map_video_memory', 'fate/map_video_memory.asm', 'map_video_memory.bin', 0x43b71, 411,
      {53: 0x8195f, 194: 0x8197d, 245: 0x306b58, 254: 0x306b58, 299: 0x819a1, 380: 0x819c1}),
     ('initialize_vesa_mode', 'fate/initialize_vesa_mode.asm', 'initialize_vesa_mode.bin', 0x43d0c, 1072,
@@ -3627,7 +3626,6 @@ DATA_POINTER_SITES = {
      5796, 5808, 5828, 5834, 5846, 5892, 5907, 5913, 5925, 5942, 5948, 5960, 6161, 6167, 6173,
      6251, 6284, 6541, 6547, 6553, 6585, 6591, 6603, 6629, 6635, 6647, 6867, 6878, 6925, 6948,
      7181, 7255, 7260, 7284, 7290, 7474, 7497, 7524, 7536, 7541,),
-    'allocate_video_dos_memory_tail': (2, 33, 67),
     'map_video_memory': (53, 194, 245, 254, 299, 380,),
     'initialize_vesa_mode': (17, 36, 42, 47, 82, 112, 117, 131, 149, 155, 174, 206, 212, 218, 319, 341, 521, 532, 568, 575, 580,
      586, 602, 607, 612, 622, 627, 634, 639, 647, 656, 662, 752, 760, 772, 784, 796, 808, 820, 832,

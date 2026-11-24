@@ -1093,6 +1093,101 @@
           }
         }
       ]
+    },
+    {
+      "object": "vbufscal",
+      "source": "fate/video_dos_scalar",
+      "size": 257,
+      "contexts": [
+        {
+          "public": "video_transfer_scalar_context_",
+          "start": 0,
+          "size": 257,
+          "sha256": "9a7bdb591aeed6844d5cdfe9bfef961268c955b43d61c3a17447fded7a4c610a",
+          "fixups": {
+            "18": [
+              "_video_dos_allocation",
+              false,
+              0
+            ],
+            "34": [
+              "_video_dos_buffer_size",
+              false,
+              0
+            ],
+            "68": [
+              "int386_",
+              true,
+              0
+            ],
+            "86": [
+              "_video_dos_allocation_error",
+              false,
+              0
+            ],
+            "91": [
+              "printf_",
+              true,
+              0
+            ],
+            "101": [
+              "runtime_exit_",
+              true,
+              0
+            ],
+            "113": [
+              "_video_dos_allocation",
+              false,
+              0
+            ],
+            "125": [
+              "_video_dos_real_segment",
+              false,
+              0
+            ],
+            "130": [
+              "free_video_dos_memory_",
+              false,
+              0
+            ],
+            "135": [
+              "main_prepare_",
+              true,
+              0
+            ],
+            "144": [
+              "_video_dos_real_segment",
+              false,
+              0
+            ],
+            "184": [
+              "_video_dos_allocation",
+              false,
+              0
+            ],
+            "189": [
+              "_fmemcpy_",
+              true,
+              0
+            ],
+            "217": [
+              "dpmi_real_mode_far_call_",
+              true,
+              0
+            ],
+            "238": [
+              "_video_dos_allocation",
+              false,
+              0
+            ],
+            "243": [
+              "_fmemcpy_",
+              true,
+              0
+            ]
+          }
+        }
+      ]
     }
   ],
   "phases": [
@@ -1275,6 +1370,136 @@
       "address": 277075,
       "routine": "allocate_video_dos_memory",
       "le_sites": 6
+    },
+    {
+      "phase": "video_dos_segment_load_phase_",
+      "public": "video_transfer_buffer_context_",
+      "object": "vbufret",
+      "begin": 134,
+      "end": 140,
+      "address": 277199,
+      "routine": "allocate_video_dos_memory",
+      "le_sites": 1
+    },
+    {
+      "phase": "video_dos_copy_in_length_phase_",
+      "public": "video_transfer_buffer_context_",
+      "object": "vbufret",
+      "begin": 150,
+      "end": 151,
+      "address": 277205,
+      "routine": "allocate_video_dos_memory",
+      "le_sites": 0
+    },
+    {
+      "phase": "video_dos_store_selector_phase_",
+      "public": "video_transfer_scalar_context_",
+      "object": "vbufscal",
+      "begin": 159,
+      "end": 163,
+      "address": 277206,
+      "routine": "allocate_video_dos_memory",
+      "le_sites": 0
+    },
+    {
+      "phase": "video_dos_copy_in_source_phase_",
+      "public": "video_transfer_buffer_context_",
+      "object": "vbufret",
+      "begin": 132,
+      "end": 134,
+      "address": 277210,
+      "routine": "allocate_video_dos_memory",
+      "le_sites": 0
+    },
+    {
+      "phase": "video_dos_store_segment_phase_",
+      "public": "video_transfer_scalar_context_",
+      "object": "vbufscal",
+      "begin": 150,
+      "end": 155,
+      "address": 277212,
+      "routine": "allocate_video_dos_memory",
+      "le_sites": 0
+    },
+    {
+      "phase": "video_dos_copy_in_selector_phase_",
+      "public": "video_transfer_buffer_context_",
+      "object": "vbufret",
+      "begin": 159,
+      "end": 163,
+      "address": 277217,
+      "routine": "allocate_video_dos_memory",
+      "le_sites": 0
+    },
+    {
+      "phase": "video_dos_clear_di_phase_",
+      "public": "video_transfer_buffer_context_",
+      "object": "vbufret",
+      "begin": 151,
+      "end": 159,
+      "address": 277221,
+      "routine": "allocate_video_dos_memory",
+      "le_sites": 0
+    },
+    {
+      "phase": "video_dos_copy_in_gate_phase_",
+      "public": "video_transfer_buffer_context_",
+      "object": "vbufret",
+      "begin": 163,
+      "end": 184,
+      "address": 277229,
+      "routine": "allocate_video_dos_memory",
+      "le_sites": 1
+    },
+    {
+      "phase": "video_dos_bios_output_phase_",
+      "public": "video_transfer_buffer_context_",
+      "object": "vbufret",
+      "begin": 193,
+      "end": 195,
+      "address": 277250,
+      "routine": "allocate_video_dos_memory",
+      "le_sites": 0
+    },
+    {
+      "phase": "video_dos_bios_input_phase_",
+      "public": "video_transfer_buffer_context_",
+      "object": "vbufret",
+      "begin": 186,
+      "end": 188,
+      "address": 277252,
+      "routine": "allocate_video_dos_memory",
+      "le_sites": 0
+    },
+    {
+      "phase": "video_dos_copy_out_return_phase_",
+      "public": "video_transfer_buffer_context_",
+      "object": "vbufret",
+      "begin": 200,
+      "end": 225,
+      "address": 277259,
+      "routine": "allocate_video_dos_memory",
+      "le_sites": 1
+    },
+    {
+      "phase": "video_dos_restore_edi_phase_",
+      "public": "get_vesa_mode_info_",
+      "object": "vdosio",
+      "begin": 228,
+      "end": 229,
+      "address": 277284,
+      "routine": "allocate_video_dos_memory",
+      "le_sites": 0
+    },
+    {
+      "phase": "video_dos_return_phase_",
+      "public": "video_transfer_buffer_context_",
+      "object": "vbufret",
+      "begin": 227,
+      "end": 230,
+      "address": 277285,
+      "routine": "allocate_video_dos_memory",
+      "le_sites": 0
     }
   ]
 }

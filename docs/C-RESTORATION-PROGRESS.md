@@ -1,15 +1,15 @@
 # Exact C restoration progress
 
-The current saved attribution audit covers all 414,639 CODE bytes and includes 577 compiler units. Saved full validation passed 405 tests and 146 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
+The current saved attribution audit covers all 414,639 CODE bytes and includes 578 compiler units. Saved full validation passed 405 tests and 146 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 167,693 | 40.443% |
+| Compiler-generated instructions | 167,777 | 40.463% |
 | Inline assembly instructions in C objects | 24,312 | 5.863% |
-| Standalone assembly | 221,383 | 53.392% |
+| Standalone assembly | 221,299 | 53.371% |
 | Unattributed instructions and non-routine tables | 1,251 | 0.302% |
 
-The unattributed category contains 882 instruction bytes in 16 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 245,695 bytes (59.26%). C-object inventory covers 193,256 bytes (46.61%) and 1,434 C routine spans; the assembly inventory has 481 spans.
+The unattributed category contains 882 instruction bytes in 16 unknown routines and 369 non-routine table bytes. The audit does not credit these bytes to C or assembly. Combined remaining assembly, including inline assembly: 245,611 bytes (59.23%). C-object inventory covers 193,340 bytes (46.63%) and 1,447 C routine spans; the assembly inventory has 481 spans.
 
 The accepted executable is 741,347 bytes, SHA-256 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.
 
@@ -131,35 +131,42 @@ unlinked footer bytes; two additional mutation controls cover footer and
 player-context returns. This checkpoint replaces the last 110 assembly bytes
 in the two save/load routines.
 
-Video DOS-memory allocation now supplies 127 of its 216 bytes from guarded
-C contexts: 121 native bytes and the existing six-byte CLD/segment restoration
-helper. The far-copy and BIOS continuation remains 89 assembly bytes. Three
-phases preserve four original register saves, the 40-byte local frame and the
-ESI/EDI/EBP BIOS/buffer/length handoff. A private return-buffer ABI establishes
-EDI without an extra input contract; its missing EDI save comes from the other
-genuine context. Full 232-/230-byte hashes and all 16 fixups per context guard
-unlinked GS saves, returns and calls. Six selected LE sites include the CODE
-pointer to the release callback; two conditional branches retain checked
-compiler and production targets. A fresh complete link matches the pinned image.
+Video DOS-memory allocation now supplies 211 of its 216 bytes from guarded
+C contexts: 205 native bytes and the existing six-byte CLD/segment restoration
+helper. Only the five-byte BIOS call at 0x43b06 remains assembly. The entry
+preserves four register saves, the 40-byte local frame and the ESI/EDI/EBP
+BIOS/buffer/length handoff. Transfer and return phases preserve both far-copy
+directions, selector words and the original cleanup. A scalar context's genuine
+four-byte length spill emits native DS/AX stores with the same physical field
+offsets as the original post-length-push frame. No instruction operands change.
+Full 232-/230-/257-byte hashes and all 16 fixups per context guard unlinked
+GS saves, returns and calls. All nine LE sites, including the CODE release
+callback pointer, now come from C objects. Two conditional branches retain
+checked compiler and production targets. The complete linked image is exact.
 
-The ABI fixture passes 128 cases across full placed, prefix-only and two
+The ABI fixture passes 160 cases across full placed, prefix-only and three
 private-context modes. It covers allocation success/failure/reuse, paragraph
-boundaries, both 256-/512-byte VBE buffers, word selector extremes, far-copy
-directions and error exit. All 112 first-allocation cases execute the native
-CLD/ES restoration after the INT stub deliberately changes DF and ES. The
-fixture checks complete DATA, buffer/BIOS/DOS guards, caller/lower-stack guards,
-saved registers, stack cleanup and callback registration; six mutation controls
-cover private code, symbolic targets/addends and branch destinations. Interrupt,
-copy, BIOS, callback and runtime calls use primitive ABI stubs.
+boundaries, both 256-/512-byte VBE buffers, selector extremes, copy directions
+and error exit. All 140 first-allocation cases execute native CLD/ES restoration
+after the INT stub changes DF and ES. Complete DATA, buffer/BIOS/DOS guards,
+caller/lower-stack guards, saved registers, scalar spills, stack cleanup and
+callback registration are checked. Hardware FS differs from DS and stays
+preserved; the protected selector stored in the frame still equals DS. Poisoned
+high selector halves remain outside the far-copy's word arguments. Seven
+mutation controls cover private code, targets/addends and branch destinations.
+Interrupt, copy, BIOS, callback and runtime calls use primitive ABI stubs.
 
-The private contexts use initialized BIOS inputs for VBE services 4f00/4f01.
-Their protected selector occupies the helper's FS scratch slot at frame+0x24,
-separate from real-mode DS at +0x22. A private DS initializer makes that C
-model defined; it is not selected or credited. The original assembly continuation
-and its unspecified helper DS/other unused BIOS inputs retain reference behavior.
-The release callback now declares the actual dword allocation storage, narrowing
-only its selector read; the query shares BiosRegisters in its original 16-byte
-union. Both neighboring C objects still match their original code and relocations.
+Private contexts use initialized BIOS inputs for VBE services 4f00/4f01 and
+initialize real-mode DS at frame+0x22. That initializer is not selected. The
+protected selector occupies separate FS scratch at +0x24. The retained assembly
+call handles the original unspecified DS input; its C precondition remains
+unverified. Selected C phases neither read that field as a typed input nor
+perform that call. This is 211 bytes of checked C-context placement, not a
+defined whole-C replacement. The helper boundary preserves FS scratch and the
+live registers/stack consumed by the following copy and return phases.
+The release callback declares dword allocation storage and narrows its selector
+read; the query shares BiosRegisters in the original 16-byte union. Both nearby
+C objects still match their original code and relocations.
 
 The menu loop now links all 283 image bytes as native compiler-generated C
 with no inline instructions and 19 matching LE sites. Its final
@@ -319,7 +326,7 @@ The saved full validation and audit artifacts verify the pinned image:
 - Complete status-panel contexts: `work/palette-loop-check/status-panel-behavior.json`.
 - Menu entry, private contexts and cleanup: `work/palette-loop-check/menu-loop.json`.
 - Video DOS allocation and continuation: `work/palette-loop-check/video-dos-allocation.json`.
-- Attribution audit: `work/video-alloc-audit.json`.
+- Attribution audit: `work/video-transfer-audit.json`.
 - Unit test log: `work/palette-loop-check/logs/unit-tests.log`.
 - Encounter loop setup and position phase: `work/encounter-loop-build/behavior.json`.
 - Encounter trigger/sector/clock phase: `work/encounter-spawn-build/behavior.json`.

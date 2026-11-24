@@ -1,4 +1,4 @@
-"""Verify the placed video DOS frame and both private Watcom transfer contexts."""
+"""Verify the placed video DOS frame and three private Watcom transfer contexts."""
 
 import argparse
 from collections import Counter, defaultdict
@@ -18,6 +18,7 @@ from le_fixups import read_le_fixups
 
 
 ENTRY, HANDOFF, END = 0x43A50, 0x43ACF, 0x43B28
+LEGACY_CALL, LEGACY_RETURN = 0x43B06, 0x43B0B
 RAW_DELTA, DATA_SIZE = 0x25600, 0x28A300
 BIOS, BUFFER, DOS = 0x340000, 0x341000, 0x342000
 PRIVATE, STACK, STOP = 0x400000, 0x4FF000, 0x4FFF00
@@ -33,7 +34,6 @@ TARGETS = dict(zip(
     (INT, PRINT, EXIT, REGISTER, COPY, VBE),
     (0x630B3, 0x40BB4, 0x60353, 0x40C0D, 0x63272, 0x438F9),
 ))
-TAIL_RETURNS = {COPY: (0x43AF9, 0x43B20), VBE: (0x43B0B,)}
 GPRS = (x86.UC_X86_REG_EAX, x86.UC_X86_REG_EBX, x86.UC_X86_REG_ECX,
         x86.UC_X86_REG_EDX, x86.UC_X86_REG_ESI, x86.UC_X86_REG_EDI,
         x86.UC_X86_REG_EBP)
@@ -50,6 +50,7 @@ class Program:
     code: bytes
     returns: dict
     saves: int
+    spill: int = 0
     prefix: bool = False
     result_in_edi: bool = False
 
@@ -104,19 +105,20 @@ def programs(executable, memory, build):
     assert len(pointers.between(ENTRY, END)) == 9
     for name, address in TARGETS.items():
         assert v.FUNCTION_ADDRESSES[name] == address, (name, address)
-    names = ("vdosio", "vbufret")
+    names = ("vdosio", "vbufret", "vbufscal")
     layout = v.CONTROLLER_PREFIX_LAYOUT
     objects = {row["object"]: row for row in layout["objects"] if row["object"] in names}
     assert set(objects) == set(names)
     contexts = {name: row["contexts"][0] for name, row in objects.items()}
-    assert [contexts[name]["size"] for name in names] == [232, 230]
+    assert [contexts[name]["size"] for name in names] == [232, 230, 257]
+    assert contexts["vbufscal"]["public"] == "video_transfer_scalar_context_"
     assert all(len(item["fixups"]) == 16 and item["start"] == 0
                for item in contexts.values())
     blobs = {name: (build / f"{name}.obj").read_bytes() for name in names}
     phases = sorted((row for row in layout["phases"]
                      if row["routine"] == "allocate_video_dos_memory"),
                     key=lambda row: row["address"])
-    assert [(row["object"], row["begin"], row["end"], row["address"]) for row in phases] == [
+    assert [(row["object"], row["begin"], row["end"], row["address"]) for row in phases[:3]] == [
         ("vbufret", 0, 2, ENTRY), ("vdosio", 2, 3, ENTRY + 2),
         ("vbufret", 4, 128, ENTRY + 3),
     ]
@@ -139,48 +141,57 @@ def programs(executable, memory, build):
         )
         return code, refs, code_refs
 
-    loaded_prefix = bytearray()
-    selected_returns = {}
-    selected_le = selected_code_le = 0
+    placed = bytearray()
+    selected_returns = defaultdict(list)
+    selected_bytes = selected_le = selected_code_le = 0
+    retained_bytes = 0
     for phase in phases:
         name, address = phase["object"], phase["address"]
-        assert address == ENTRY + len(loaded_prefix)
+        if ENTRY + len(placed) == LEGACY_CALL:
+            assert address == LEGACY_RETURN
+            assert not pointers.between(LEGACY_CALL, LEGACY_RETURN)
+            placed.extend(memory[LEGACY_CALL:LEGACY_RETURN])
+            retained_bytes += LEGACY_RETURN - LEGACY_CALL
+        assert address == ENTRY + len(placed)
         canonical, refs, code_refs = bind_phase(phase, blobs[name])
         raw = address + RAW_DELTA
         assert canonical == executable[raw:raw + len(canonical)]
         v.verify_leaf_relocations(canonical, refs, pointers, address, code_bindings=code_refs)
         assert len(refs) == phase["le_sites"]
+        selected_bytes += len(canonical)
         selected_le += len(refs)
         selected_code_le += len(code_refs)
         loaded, _, _ = bind_phase(phase, blobs[name], loaded=True)
-        selected_returns.update(metadata_returns(contexts[name], loaded, address, phase["begin"]))
-        loaded_prefix.extend(loaded)
-    assert (len(loaded_prefix), selected_le, selected_code_le) == (127, 6, 1)
-    assert loaded_prefix == memory[ENTRY:HANDOFF]
-    assert set(selected_returns) == {INT, PRINT, EXIT, REGISTER}
-
-    placed = bytes(loaded_prefix) + memory[HANDOFF:END]
-    for name, sites in TAIL_RETURNS.items():
-        for ret in sites:
-            check_call(placed, ENTRY, ret, name)
+        for call, sites in metadata_returns(contexts[name], loaded, address, phase["begin"]).items():
+            selected_returns[call].extend(sites)
+        placed.extend(loaded)
+    assert (selected_bytes, retained_bytes, selected_le, selected_code_le) == (211, 5, 9, 1)
+    assert len(placed) == END - ENTRY and placed == memory[ENTRY:END]
+    assert set(selected_returns) == {INT, PRINT, EXIT, REGISTER, COPY}
+    assert selected_returns[COPY] == [0x43AF9, 0x43B20]
+    prefix_returns = {call: tuple(sites) for call, sites in selected_returns.items() if call != COPY}
+    assert all(site <= HANDOFF for sites in prefix_returns.values() for site in sites)
+    check_call(placed, ENTRY, LEGACY_RETURN, VBE)
+    placed_returns = {call: tuple(sites) for call, sites in selected_returns.items()}
+    placed_returns[VBE] = (LEGACY_RETURN,)
     all_programs = [
-        Program("placed", ENTRY, placed, selected_returns | TAIL_RETURNS, 16),
-        Program("prefix", ENTRY, bytes(loaded_prefix), selected_returns, 16, prefix=True),
+        Program("placed", ENTRY, bytes(placed), placed_returns, 16),
+        Program("prefix", ENTRY, bytes(placed[:HANDOFF - ENTRY]), prefix_returns, 16, prefix=True),
     ]
-    for name, saves in (("vdosio", 20), ("vbufret", 16)):
+    for name, saves, spill in (("vdosio", 20, 0), ("vbufret", 16, 0), ("vbufscal", 20, 4)):
         private = bind_private(blobs[name], contexts[name], data, code_addresses)
         returns = metadata_returns(contexts[name], private, PRIVATE)
         assert set(returns) == set(TARGETS) and len(returns[COPY]) == 2
-        all_programs.append(Program(name, PRIVATE, private, returns, saves,
+        all_programs.append(Program(name, PRIVATE, private, returns, saves, spill=spill,
                                     result_in_edi=name == "vbufret"))
 
-    phase = phases[-1]
+    phase = phases[2]
     public, blob = phase["public"], blobs[phase["object"]]
     context = contexts[phase["object"]]
 
-    def rejected(bad_blob, reason):
+    def rejected(bad_blob, reason, selected_phase=phase):
         try:
-            bind_phase(phase, bad_blob)
+            bind_phase(selected_phase, bad_blob)
         except ValueError as exc:
             assert reason in str(exc).lower(), (reason, str(exc))
         else:
@@ -189,13 +200,22 @@ def programs(executable, memory, build):
     rejected(mutate_public_byte(blob, public, 2), "context")
     rejected(mutate_public_byte(blob, public, context["size"] - 1), "context")
     rejected(rename_external(blob, b"_fmemcpy_", b"_fmemcpY_"), "fixup")
-    data_site = next(int(site) for site, spec in context["fixups"].items()
-                     if int(site) >= phase["end"] and not spec[1])
-    digest = v.LEAF_CONTEXT_SHA256.pop(public)
+    scalar_phase = next(row for row in phases if row["object"] == "vbufscal")
+    scalar_public = scalar_phase["public"]
+    scalar = blobs["vbufscal"]
+    rejected(mutate_public_byte(scalar, scalar_public, contexts["vbufscal"]["size"] - 1),
+             "context", scalar_phase)
+
+    push_edi = phases[1]
+    incidental_public = push_edi["public"]
+    incidental_blob = blobs["vdosio"]
+    data_site = next(int(site) for site, spec in contexts["vdosio"]["fixups"].items()
+                     if int(site) >= push_edi["end"] and not spec[1])
+    digest = v.LEAF_CONTEXT_SHA256.pop(incidental_public)
     try:
-        rejected(mutate_public_byte(blob, public, data_site), "addend")
+        rejected(mutate_public_byte(incidental_blob, incidental_public, data_site), "addend", push_edi)
     finally:
-        v.LEAF_CONTEXT_SHA256[public] = digest
+        v.LEAF_CONTEXT_SHA256[incidental_public] = digest
 
     branch_guard = v.LEAF_SECTION_BRANCHES[public]
     public_size, placed_size, branches = branch_guard
@@ -214,7 +234,7 @@ def programs(executable, memory, build):
                                        phase["address"] + RAW_DELTA + len(displaced)]
     finally:
         v.LEAF_SECTION_BRANCHES[public] = branch_guard
-    return all_programs, 6
+    return all_programs, 7
 
 
 def exercise(memory, data_template, program, outcome, size, seed, length, selector, segment):
@@ -226,9 +246,10 @@ def exercise(memory, data_template, program, outcome, size, seed, length, select
                                0x00CF93000000FFFF, 0x00CF93000000FFFF))
     cpu.reg_write(x86.UC_X86_REG_GDTR, (0, 0x1000, 31, 0))
     cpu.reg_write(x86.UC_X86_REG_CS, 8)
-    for reg in (x86.UC_X86_REG_DS, x86.UC_X86_REG_ES, x86.UC_X86_REG_SS, x86.UC_X86_REG_FS):
+    for reg in (x86.UC_X86_REG_DS, x86.UC_X86_REG_ES, x86.UC_X86_REG_SS):
         cpu.reg_write(reg, DATA_SELECTOR)
-    cpu.reg_write(x86.UC_X86_REG_GS, OTHER_SELECTOR)
+    for reg in (x86.UC_X86_REG_GS, x86.UC_X86_REG_FS):
+        cpu.reg_write(reg, OTHER_SELECTOR)
     cpu.reg_write(x86.UC_X86_REG_EFLAGS, 2)
 
     first = outcome != "reuse"
@@ -314,7 +335,10 @@ def exercise(memory, data_template, program, outcome, size, seed, length, select
         sp = reg(x86.UC_X86_REG_ESP)
         assert read("<I", sp) == program.returns[name][occurrence]
         stack_argument = name in (PRINT, COPY)
-        assert sp == frame - (8 if stack_argument else 4), (name, hex(sp), hex(frame))
+        ordinary_sp = frame - program.spill
+        assert sp == ordinary_sp - (8 if stack_argument else 4), (name, hex(sp), hex(frame))
+        if program.spill:
+            assert read("<I", ordinary_sp) == length
         ax, bx, cx, dx = (reg(register) for register in (EAX, EBX, ECX, EDX))
         if name == INT:
             assert (ax, dx, bx) == (0x31, frame, frame)
@@ -377,12 +401,12 @@ def exercise(memory, data_template, program, outcome, size, seed, length, select
     assert len(normalizations) == int(first)
     normalized()
     assert reg(x86.UC_X86_REG_CS) == 8 and reg(x86.UC_X86_REG_GS) == OTHER_SELECTOR
-    assert all(reg(register) == DATA_SELECTOR for register in
-               (x86.UC_X86_REG_DS, x86.UC_X86_REG_SS, x86.UC_X86_REG_FS))
+    assert reg(x86.UC_X86_REG_DS) == reg(x86.UC_X86_REG_SS) == DATA_SELECTOR
+    assert reg(x86.UC_X86_REG_FS) == OTHER_SELECTOR
 
     if failed:
         assert reg(x86.UC_X86_REG_EIP) == TARGETS[EXIT]
-        assert reg(x86.UC_X86_REG_ESP) == frame - 4
+        assert reg(x86.UC_X86_REG_ESP) == frame - program.spill - 4
         assert cpu.mem_read(frame, 28) == expected_int
     elif program.prefix:
         assert (reg(x86.UC_X86_REG_EIP), reg(x86.UC_X86_REG_ESP)) == (HANDOFF, STACK - 56)
@@ -450,9 +474,12 @@ def main():
     report = {
         "status": "PASS", "cases": dict(counts), "total_cases": sum(counts.values()),
         "length_cases": dict(domains), "normalization_cases": normalizations,
-        "mutation_controls": mutation_controls, "selected_bytes": HANDOFF - ENTRY,
-        "selected_le_sites": 6, "selected_code_le_sites": 1,
-        "selected_inline_bytes": 6, "standalone_assembly_tail_bytes": END - HANDOFF,
+        "mutation_controls": mutation_controls,
+        "selected_bytes": END - ENTRY - (LEGACY_RETURN - LEGACY_CALL),
+        "selected_le_sites": 9, "selected_code_le_sites": 1,
+        "selected_inline_bytes": 6, "standalone_assembly_bytes": LEGACY_RETURN - LEGACY_CALL,
+        "retained_assembly_call": hex(LEGACY_CALL),
+        "placed_legacy_ds_initialization_verified": False,
         "whole_routine_le_sites": 9,
         "primitive_stubs": list(TARGETS),
     }
