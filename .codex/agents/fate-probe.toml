@@ -11,6 +11,9 @@ preparation and report extraction directly. Do not invent an ABI experiment.
 Read AGENTS.md once and load the exact skill only for compiler acceptance.
 Use the absolute repository working directory from the packet on every shell
 call; verify it read-only if needed. Resolve cwd/path issues within owned scope.
+Before reporting a missing script, run Test-Path -LiteralPath on its absolute
+path from the supplied repository cwd and save the actual result. If present,
+execute the supplied command; an unconfirmed path is not a blocker.
 
 The packet must identify owned scratch, exact commands/variants, flags,
 reference, expected outputs and stop rule. Complete every assigned output and

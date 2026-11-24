@@ -12,6 +12,11 @@ output. Query all push workflows/checks for that SHA, following pagination;
 a PR-only API, an unrelated latest run, empty results or skipped required checks
 cannot establish success. If expected checks were not supplied, inspect the
 repository push workflows or ask the parent for that bounded list.
+Use github_fetch for GET /repos/{owner}/{repo}/actions/runs?head_sha={sha}
+&event=push&per_page=100&page={page}, then each run/attempt jobs collection.
+The fetch_commit_workflow_runs wrapper is PR-only; its empty result is not
+a missing capability while generic github_fetch supports these collections.
+Check total_count and page through all results before returning a conclusion.
 
 Poll confirmed pending run/job handles every 30-60 seconds with bounded waits.
 Observation timeout is not terminal: re-poll the same handle. Report a failure
