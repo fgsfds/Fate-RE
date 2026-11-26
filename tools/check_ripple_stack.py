@@ -25,7 +25,7 @@ PHASES=(
  ('random_y_call','riptest','draw'),('mask_guard_compare','riploop','compare_row'),
  ('vertical_guard_compare','riploop','compare_row'))
 
-def mutate_public_byte(blob,public,relative):
+def mutate_public_byte(blob,public,relative,*,mask=1):
  _,publics,*_=parsed_leaf_object(blob)
  segment,start,_=next(row for row in publics if row[2]==public)
  target=start+relative;changed=bytearray(blob);cursor=0
@@ -35,7 +35,7 @@ def mutate_public_byte(blob,public,relative):
    data=blob[cursor+3:end-1];seg,pos=omf_index(data,0);width=4 if kind==0xa1 else 2
    origin=int.from_bytes(data[pos:pos+width],'little');payload=pos+width
    if seg==segment and origin<=target<origin+len(data)-payload:
-    changed[cursor+3+payload+target-origin]^=1;changed[end-1]=0
+    changed[cursor+3+payload+target-origin]^=mask;changed[end-1]=0
     changed[end-1]=(-sum(changed[cursor:end]))&255
     return bytes(changed)
   cursor=end

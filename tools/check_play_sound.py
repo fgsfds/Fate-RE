@@ -248,12 +248,40 @@ def reference_body(exe):
         body[off:off+4] = pack('<I',target)
     return bytes(body)
 
+
+def exercise_archive_full_guard(body):
+    """Enter the normally preempted archive guard with the real playback frame."""
+    from unicorn import UC_HOOK_CODE
+    c = cases()[0] | {'disabled': False, 'free': 16}
+    memory = initial_memory(c)
+    put(memory, A['frame_state_17160f'], 16)
+    contract = Contract(0x3507b, STOP, STACK, 4, preserved=(),
+        results=('eax','esi','edi','ebp','ecx'))
+    machine = Machine(contract, body, [Region('DS',DS,DATA_SIZE)], code_address=ENTRY)
+    machine.write(DS,memory)
+    saved = (0x456789ab,0x3456789a,0x23456789)
+    machine.write(STACK-20,pack('<5I',0xa7a7a7a7,u32(c['x']),*saved))
+    def seed_frame(_cpu,address,_size,_user):
+        if address == contract.entry:
+            machine.set_register('esp',STACK-20)
+    hook = machine.cpu.hook_add(UC_HOOK_CODE,seed_frame)
+    try:
+        observed = machine.run(dict(eax=0xbad00001,ebx=0xbad00002,edx=0xbad00003,
+            esi=DS+sample(0),edi=c['number'],ebp=u32(c['y']),ecx=c['flags'],eflags=0x202))
+    finally:
+        machine.cpu.hook_del(hook)
+    expected = Observation(dict(eax=0xffffffff,ebp=saved[0],edi=saved[1],esi=saved[2],ecx=c['flags']),
+        {'DS':bytes(memory)},())
+    difference = first_difference(expected,observed)
+    assert not difference, 'archive full-slot direct guard: '+str(difference)
+    return observed
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--exe', type=Path, required=True)
     group = p.add_mutually_exclusive_group()
     group.add_argument('--object',type=Path,help='existing candidate OMF; research behavior only')
-    group.add_argument('--build',type=Path,help='production build containing split sound assembly, sndopts.obj, snddesc.obj, sndpos.obj and sndqueue.obj')
+    group.add_argument('--build',type=Path,help='production build containing split sound assembly and sndarch/sndopts/snddesc/sndpos/sndqueue objects')
     p.add_argument('--symbol',default='play_sound_')
     p.add_argument('--output',type=Path,help='optional report; omitted means no files written')
     a = p.parse_args()
@@ -324,11 +352,64 @@ def main():
                     assert expected_error in str(error), str(error)
                 else:
                     raise AssertionError('Unlinked positioning continuation mutation escaped')
+            archive_obj = (a.build/'sndarch.obj').read_bytes()
+            archive = checked_phase(archive_obj, 'sound_playback_archive_', 0x3507b, 118)
+            archive_controls = []
+            for offset,mask in ((0,1),(11,1),(97,1),(121,1),(124,1),(10,0xe7),(96,0xe7)):
+                try:
+                    checked_phase(mutate_public_byte(archive_obj,'playback_archive_',offset,mask=mask),
+                        'sound_playback_archive_', 0x3507b, 118)
+                except ValueError as error:
+                    assert 'context digest' in str(error), str(error)
+                else:
+                    raise AssertionError('Archive private context mutation escaped')
+                archive_controls.append('byte_'+str(offset))
+            try:
+                checked_phase(rename_external(archive_obj, b'playback_archive_failure_', b'playback_archive_failurf_'),
+                    'sound_playback_archive_', 0x3507b, 118)
+            except ValueError as error:
+                assert 'context fixup records' in str(error), str(error)
+            else:
+                raise AssertionError('Archive failure continuation mutation escaped')
+            archive_controls.append('failure_target_name')
+            from dataclasses import replace
+            from check_encounter_actor import rewrite_fixup
+            unchanged,changed = rewrite_fixup(archive_obj,lambda f:False,lambda f:f)
+            assert not changed
+            assert checked_phase(unchanged,'sound_playback_archive_',0x3507b,118) == archive
+            for name,change in (
+                    ('frame',lambda f:replace(f,frame=(1,1))),
+                    ('unknown_group',lambda f:replace(f,frame=(1,127))),
+                    ('target',lambda f:replace(f,target=(2,1))),
+                    ('displacement',lambda f:replace(f,displacement=1))):
+                bad,changed = rewrite_fixup(archive_obj,lambda f:f.offset==12,change)
+                assert changed
+                try:
+                    checked_phase(bad,'sound_playback_archive_',0x3507b,118)
+                except ValueError as error:
+                    assert 'context fixup records' in str(error), str(error)
+                else:
+                    raise AssertionError('Archive fixup '+name+' mutation escaped')
+                archive_controls.append(name)
+            import verify_c_leaf as leaf
+            archive_digest = leaf.LEAF_CONTEXT_SHA256.pop('playback_archive_')
+            try:
+                try:
+                    checked_phase(mutate_public_byte(archive_obj,'playback_archive_',12),
+                        'sound_playback_archive_', 0x3507b, 118)
+                except ValueError as error:
+                    assert 'context fixup target/form/addend' in str(error), str(error)
+                else:
+                    raise AssertionError('Archive relative jump addend mutation escaped')
+            finally:
+                leaf.LEAF_CONTEXT_SHA256['playback_archive_'] = archive_digest
+            archive_controls.append('jump_addend')
             # Preserve raw operands while changing their LE object class. These
             # must fail typed binding checks before reference-loaded replay.
             for control_obj, symbol, address, size, name, was_code in (
                     (obj, 'sound_playback_options_', 0x35178, 80, 'sound_sample_done_offset_', True),
-                    (description_obj, 'sound_playback_description_', 0x350f1, 69, '_frame_state_16fb18', False)):
+                    (description_obj, 'sound_playback_description_', 0x350f1, 69, '_frame_state_16fb18', False),
+                    (archive_obj, 'sound_playback_archive_', 0x3507b, 118, '_frame_state_16fdac', False)):
                 data_offsets, code_offsets = dict(DATA_OFFSETS), dict(CODE_OFFSETS)
                 source, destination = (code_offsets, data_offsets) if was_code else (data_offsets, code_offsets)
                 destination[name] = source.pop(name)
@@ -339,7 +420,7 @@ def main():
                     assert 'Original LE relocation sites or targets differ' in str(error), str(error)
                 else:
                     raise AssertionError('Sound relocation class mutation escaped')
-            report['relocation_class_controls_rejected'] = 2
+            report['relocation_class_controls_rejected'] = 3
             queue_obj = (a.build/'sndqueue.obj').read_bytes()
             queue_parts = []
             for role, address, size in (('metadata',0x351c8,61),('y',0x35205,3),
@@ -391,11 +472,12 @@ def main():
                 assert part==exe[address+0x25600:address+0x25600+size]
                 verify_leaf_relocations(part,bindings,pointers,address,code_bindings=code_refs)
                 queue_results.append(part)
-            assert len(retained) == 385
-            ending=queue_results[0]+retained[376:378]+queue_results[1]+retained[378:]
-            assembled = retained[:376] + description + position + phase + queue + ending
-            natural = retained[:376] + description + position + phase + b''.join(queue_parts[i] for i in (0,2,1,3)) + ending
-            report.update(restored_c_bytes=370, retained_asm_bytes=385, context_mutations_rejected=12,
+            assert len(retained) == 267
+            ending=queue_results[0]+retained[258:260]+queue_results[1]+retained[260:]
+            assembled = retained[:258] + archive + description + position + phase + queue + ending
+            natural = retained[:258] + archive + description + position + phase + b''.join(queue_parts[i] for i in (0,2,1,3)) + ending
+            report.update(restored_c_bytes=488, retained_asm_bytes=267,
+                context_mutations_rejected=12+len(archive_controls),archive_context_controls=archive_controls,
                 swap_scope='mapped writable slot and normal completion; placed order matches original even at fault/interrupt boundaries')
             assert len(assembled) == SIZE, 'reconstructed routine must be 755 bytes'
             assert assembled == exe[RAW:RAW+SIZE], 'reconstructed routine differs from pinned original'
@@ -406,6 +488,8 @@ def main():
                 assert off+4 <= SIZE, 'partial LE operand at assembly boundary'
                 candidate[off:off+4] = pack('<I',target)
             candidate = bytes(candidate)
+            assert exercise_archive_full_guard(candidate) == exercise_archive_full_guard(ref)
+            report['direct_archive_full_guard_cases_passed'] = 1
             natural_loaded = bytearray(natural)
             for off, target in refs.items():
                 natural_loaded[off:off+4] = pack('<I',target)

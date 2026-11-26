@@ -816,27 +816,24 @@ row) and `sptarg23` (selected trace) as future merge references.
 Production assembly remains; no C coverage is credited. Evidence:
 `work/sprite-path-target-next/evidence.json`.
 
-### Sound playback: remaining entry/archive and return blocker
+### Sound playback: remaining entry/cache and return blocker
 
-`play_sound_`, Watcom 10.5 `/4r /s /or /bt=dos`: 370 of 755 bytes now
-come from exact compiler-generated C. The 376-byte entry/archive/cache prefix
-and nine shared-return bytes remain assembly. The historical whole-C candidate
-is 743 bytes, passes 60 behavior cases but fails byte/LE identity, first at
-`0x34f81`: the EBP Y copy precedes the X stack store. Its later descriptor and
-queue mismatches are resolved by the accepted slices; do not repeat those probes.
-Next isolate entry X/Y lifetimes and archive I/O without broad volatile qualifiers.
-Historical probe: `work/play-sound-next/parameter_lifetime.c`; comparison:
-`work/play-sound-next/compiler/playsnd2.report.json`.
+`play_sound_`, Watcom 10.5 `/4r /s /or /bt=dos`: 488 of 755 bytes now
+come from exact compiler-generated C. The 258-byte entry/slot/cache prefix
+and nine shared-return bytes remain assembly. The historical whole-C experiment
+reported 743 bytes and 60 behavior passes but failed byte/LE identity, first at
+`0x34f81`: the EBP Y copy preceded the X stack store. Its local source artifact
+is absent; begin the next probe from current production and the pinned executable.
+Next isolate entry X/Y lifetimes, slot scan and cache lookup. Preserve the
+original frame and shared failure handoff; do not repeat solved archive,
+descriptor, positioning or queue probes.
 
-Callback/flags, descriptor initialization and positioning supply 80, 69 and
-66 exact C bytes. A truthful EBP getter and the next real callback store resolve
-the rejected EBP formal and cloned-return branch layout. Queue/results add
-155 bytes, retaining the original short jump and shared frame epilogue.
-The complete 81/72/76/161-byte contexts and their fixup identities are guarded.
-Equivalent return expressions produced the same queue object; `/os` introduced
-an unwanted EBP frame. Do not repeat those probes without a new hypothesis.
-Accepted integration/audit: `work/sound-queue-integrate-nov26/`;
-queue candidate: `work/sound-tail-return-nov26/evidence.json`.
+Archive loading is now exact across all 118 bytes and 12 DATA sites, with
+actual near Jcc failure continuations and an unsigned, borrowed [ESP] index.
+Equivalent queue return expressions produced the same object; `/os` introduced
+an unwanted EBP frame. Accepted integration/audit:
+`work/sound-archive-integrate-nov27/`; archive research:
+`work/sound-archive-nov27/evidence.json`.
 
 ### IPX initializer: ES boundary and lifetimes
 

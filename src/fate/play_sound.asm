@@ -117,33 +117,8 @@ play_sound:
     jl short .branch_3504e
 
 .branch_3507b:
-    cmp dword [frame_state_17160f], 0x10
-    jz near .branch_34f90
-    mov eax, edi
-    shl eax, byte 0x2
-    mov [esp], eax
-    mov eax, [eax + frame_state_16fb1c]
-    xor ebx, ebx
-    mov edx, [eax + 0x4]
-    mov eax, [sound_archive_handle]
-    call lseek
-    mov eax, [esp]
-    mov eax, [eax + frame_state_16fb1c]
-    mov ebx, [eax + 0x8]
-    mov eax, [frame_state_17160f]
-    mov edx, [nosplit eax*8 + frame_state_16fdac]
-    mov eax, [sound_archive_handle]
-    call read
-    mov edx, [esp]
-    mov edx, [edx + frame_state_16fb1c]
-    mov [frame_state_12cec], eax
-    cmp eax, [edx + 0x8]
-    jnz near .branch_34f90
-    mov eax, [frame_state_17160f]
-    mov [nosplit eax*8 + frame_state_16fdb0], edi
-    mov eax, [nosplit eax*8 + frame_state_16fdac]
-
-.branch_350f1:
+; Archive guard, seek/read and cache commit are supplied by C.
+.branch_350f1 equ 0x350f1
 ; Descriptor initialization is supplied by sound_playback_description.c.
 ; Positioning and callback setup are supplied by compiler-generated C.
 .branch_351c8 equ 0x351c8

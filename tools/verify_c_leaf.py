@@ -5113,6 +5113,16 @@ LEAF_CODE_SLICES['sound_queue_cleanup_'] = ('playback_queue_', 109, 150, 161)
 LEAVES['sound_queue_success_'] = (0x5a860, 5)
 LEAF_CODE_SLICES['sound_queue_success_'] = ('playback_queue_', 153, 158, 161)
 
+# Archive I/O borrows the playback frame's scratch dword. Both failure
+# continuations are compiler-generated near Jcc fixups, with no pushed word.
+LEAVES['sound_playback_archive_'] = (0x5a67b, 118)
+LEAF_CODE_SLICES['sound_playback_archive_'] = ('playback_archive_', 3, 121, 125)
+LEAF_CONTEXT_SHA256['playback_archive_'] = '882298bdcd3ad38f666c36a9762f82c3bd76fd03506e7088e4c8a6cc673c3496'
+LEAF_CONTEXT_FIXUPS['playback_archive_'] = {5: ('_frame_state_17160f', False, 0), 12: ('playback_archive_failure_', True, 0), 26: ('_frame_state_16fb18', False, 4), 36: ('_sound_archive_handle', False, 0), 41: ('lseek_', True, 0), 50: ('_frame_state_16fb18', False, 4), 58: ('_frame_state_17160f', False, 0), 65: ('_frame_state_16fdac', False, 0), 70: ('_sound_archive_handle', False, 0), 75: ('read_', True, 0), 84: ('_frame_state_16fb18', False, 4), 89: ('_frame_state_12cec', False, 0), 98: ('playback_archive_failure_', True, 0), 103: ('_frame_state_17160f', False, 0), 110: ('_frame_state_16fdac', False, 4), 117: ('_frame_state_16fdac', False, 0)}
+LEAF_CONTEXT_RECORDS['playback_archive_'] = json.loads((Path(__file__).parent/'data/sound-archive-context-guard.json').read_text(encoding='utf-8'))
+DATA_OFFSETS.update({'_frame_state_16fdac': 0x16fdac, '_sound_archive_handle': 0x1714e0, '_frame_state_12cec': 0x12cec})
+FUNCTION_ADDRESSES.update({'playback_archive_failure_': 0x34f90, 'lseek_': 0x615b6, 'read_': 0x615f7})
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

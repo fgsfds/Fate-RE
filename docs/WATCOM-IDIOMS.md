@@ -477,3 +477,17 @@ encoded displacements match: marker insertion can change the destination.
 The regression uses the same rel8 byte to reach an ordinary NOP and a
 marked end marker. Relocated E8 calls remain subject to complete target,
 operand, addend, frame and return-path checks.
+
+
+For the sound archive phase, assign the unsigned scaled index to a normal
+first-use value, then store it to the volatile stack scratch. Use that normal
+value for the first lookup and reload the scratch only after the real CRT
+calls. Reading the volatile spill immediately after writing it instead emits
+an extra MOV. Preserve each required volatile access during placement.
+The 125-byte context in `sound_playback_archive.c` supplies 118 selected bytes
+while borrowing [ESP]; its private SUB/ADD/RET are excluded and guarded.
+Both aborting failure continuations compile as near Jcc fixups to the shared
+frame return, with no CALL or pushed return word. Check the actual transfer
+opcodes and frame contract; an `aborts` declaration alone proves neither.
+The direct archive-entry fixture covers the full-slot edge that normal
+whole-routine execution preempts earlier in the slot scan.
