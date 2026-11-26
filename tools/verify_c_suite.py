@@ -1579,6 +1579,9 @@ def verify_compiler_groups(exe, directory, names=None):
                             [('ripple_spawn_limit_', 0), ('ripple_mask_row_', 23)])
     if selected('enclatch'):
         verify_group_layout((directory/'enclatch.obj').read_bytes(), 1409, [('encounter_latch_context_', 160)])
+    for context in ENCOUNTER_SPAWN_LAYOUT['contexts']:
+        if selected(context['object']):
+            verify_group_layout((directory/(context['object']+'.obj')).read_bytes(), 160+context['size'], [(context['public'], 160)])
     if selected('encexit'):
         verify_group_layout((directory/'encexit.obj').read_bytes(), 1385, [('encounter_exit_context_', 160)])
     if selected('menuprep'):
@@ -1746,6 +1749,9 @@ OBJECT_NAMES['sound_frame_invalid_'] = 'sndframe'
 OBJECT_NAMES['sound_frame_return_jump_'] = 'sndframe'
 OBJECT_NAMES['sound_frame_epilogue_'] = 'sndframe'
 OBJECT_NAMES['sound_frame_limit_'] = 'sndlimit'
+
+from verify_c_leaf import ENCOUNTER_SPAWN_LAYOUT
+OBJECT_NAMES.update({p['symbol']: p['object'] for p in ENCOUNTER_SPAWN_LAYOUT['phases']})
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

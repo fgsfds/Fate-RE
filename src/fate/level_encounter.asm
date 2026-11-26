@@ -74,177 +74,64 @@ spawn_counts:
     times 10 db 7
 
 update_level_encounter equ 0x1df2e
-; C saves five registers; preserve the original additional EBP slot.
-section .save_ebp align=1 vstart=0x1df33 follows=.text
-    push ebp
-; Stack allocation and the two array copies are compiler-generated C.
-section .spawn align=1 vstart=0x1df5b follows=.save_ebp
-    movsx eax, word [encounter_clock]
-    cmp eax, 0xa
-    jz near .check_first_trigger_sprite
-    cmp word [encounter_clock], 0x0
-    jnz near .advance_encounter
-    mov esi, 0x1
-    jmp near .check_trigger_index
+; Compiler-generated C supplies both EBP slots and selected spawn phases.
+.inspect_encounter_trigger equ 0x1df83
+.clear_sector_tag equ 0x1e012
+.advance_sector equ 0x1e034
+.check_sector_index equ 0x1e035
+.advance_trigger equ 0x1e03e
+.check_trigger_index equ 0x1e03f
+.advance_encounter equ 0x1e04c
+.prepare_spawn_loop equ 0x1e070
+.spawn_encounter_sprite equ 0x1e086
+.check_spawn_count equ 0x1e199
+.check_first_trigger_sprite equ 0x1e1b0
 
-.inspect_encounter_trigger:
-    movsx eax, si
-    mov ax, [nosplit eax*4 + trigger_sprite]
-    cwde
-    imul eax, eax, 0x2c
-    movsx edx, word [eax + sprite_hitag]
-    cmp edx, strict dword 0x203
-    jnz near .advance_trigger
-    mov edx, [eax + sprite_x]
-    cmp edx, strict dword 0xffffcffe
-    jng near .advance_trigger
-    cmp edx, strict dword 0xffffebfd
-    jnl near .advance_trigger
-    mov ecx, [eax + sprite_y]
-    cmp ecx, strict dword 0xffffd2f5
-    jng short .advance_trigger
-    cmp ecx, strict dword 0xffffedfa
-    jnl short .advance_trigger
-    mov ecx, 0x1
-    mov eax, 0x88
-    xor ebx, ebx
-    xor edx, edx
-    mov [encounter_clock], cx
-    xor ecx, ecx
-    call play_sound
-    mov eax, 0x87
-    xor ecx, ecx
-    xor ebx, ebx
-    xor edx, edx
-    xor edi, edi
-    call play_sound
-    mov [encounter_actor_field], di
-    xor edx, edx
-    jmp short .check_sector_index
-
-.clear_sector_tag:
-    movsx ebx, dx
-    mov eax, ebx
-    shl eax, byte 0x2
-    add eax, ebx
-    shl eax, byte 0x3
-    movsx ebx, word [eax + sector_lotag]
-    cmp ebx, 0xe
-    jnz short .advance_sector
-    xor ebx, ebx
-    mov [eax + sector_lotag], bx
-
-.advance_sector:
-    inc edx
-
-.check_sector_index:
-    cmp dx, [sector_count]
-    jl short .clear_sector_tag
-
-.advance_trigger:
-    inc esi
-
-.check_trigger_index:
-    cmp si, [trigger_count]
-    jng near .inspect_encounter_trigger
-
-.advance_encounter:
-    mov cx, [encounter_clock]
-    test cx, cx
-    jng near .check_first_trigger_sprite
-    cmp word [advance_clock], 0x0
-    jz short .prepare_spawn_loop
-    mov edi, ecx
-    inc edi
-    mov [encounter_clock], di
-
-.prepare_spawn_loop:
-    mov eax, 0x1
-    mov ebp, 0xffff3c06
-    mov [esp + 0xb4], eax
-    jmp near .check_spawn_count
-
-.spawn_encounter_sprite:
-    call random_value
+section .spawn_0 align=1 vstart=0x1e08b follows=.text
     mov edx, eax
     xor dh, ah
     and dl, 0xf
     movsx ebx, dx
     mov eax, [esp + ebx*8]
-    mov [esp + 0xa0], eax
+
+section .spawn_1 align=1 vstart=0x1e09f follows=.spawn_0
     mov eax, [esp + ebx*8 + 0x4]
-    lea ebx, [esp + 0xac]
-    mov [esp + 0xa4], eax
-    mov edx, eax
-    mov eax, [esp + 0xa0]
-    mov [esp + 0xa8], ebp
-    call update_sector
-    movsx ebx, word [esp + 0xac]
-    lea edx, [esp + 0xa0]
-    mov eax, 0x2b
-    call spawn_sprite_at_position
-    mov edi, eax
-    movsx edi, di
-    imul esi, edi, 0x2c
-    call random_value
+
+section .spawn_2 align=1 vstart=0x1e0ec follows=.spawn_1
     mov edx, eax
     xor dh, ah
     and dl, 0x1
     add edx, strict dword 0x350
     mov [esi + sprite_tile], dx
-    call random_value
+
+section .spawn_3 align=1 vstart=0x1e105 follows=.spawn_2
     mov edx, eax
     xor dh, ah
-    call random_value
+
+section .spawn_4 align=1 vstart=0x1e10e follows=.spawn_3
     mov ebx, eax
     xor bh, ah
-    call random_value
+
+section .spawn_5 align=1 vstart=0x1e117 follows=.spawn_4
     xor ah, ah
-    and dl, 0xf
+
+section .spawn_6 align=1 vstart=0x1e11c follows=.spawn_5
     and al, 0x1
     and bl, 0x1
-    mov [esp + 0xb0], eax
-    movsx eax, dx
-    xor edx, edx
+
+section .spawn_7 align=1 vstart=0x1e12d follows=.spawn_6
     movsx ecx, bx
-    mov dl, [esp + eax*2 + 0x80]
-    sar edx, cl
-    mov al, [esp + eax*2 + 0x81]
-    mov [esi + sprite_shade_field], dl
+
+section .spawn_8 align=1 vstart=0x1e146 follows=.spawn_7
     movsx ecx, word [esp + 0xb0]
-    and eax, strict dword 0xff
-    sar eax, cl
-    mov [esi + sprite_yrepeat], al
-    movsx eax, word [esi + sprite_tile]
+
+section .spawn_9 align=1 vstart=0x1e162 follows=.spawn_8
     mov ax, [nosplit eax*2 + tile_width]
-    mov dl, [esi + sprite_shade_field]
+
+section .spawn_10 align=1 vstart=0x1e170 follows=.spawn_9
     movsx ebx, ax
-    xor eax, eax
+
+section .spawn_11 align=1 vstart=0x1e175 follows=.spawn_10
     mov al, dl
     imul ebx
     shrd eax, edx, byte 0x7
-    mov edx, [esp + 0xb4]
-    mov [esi + sprite_xrepeat], al
-    mov eax, edi
-    inc edx
-    call add_listed_sprite
-    mov [esp + 0xb4], edx
-
-.check_spawn_count:
-    mov eax, [ticks_per_step]
-    movsx edx, word [esp + 0xb4]
-    add eax, eax
-    cmp edx, eax
-    jng near .spawn_encounter_sprite
-
-; Complete tile latch is linked from the native C context.
-.check_first_trigger_sprite equ 0x1e1b0
-.check_second_trigger_state equ 0x1e23a
-.check_exit_scan equ 0x1e30b
-.update_second_actor equ 0x1e299
-; Actor-state decisions now come from guarded C contexts.
-
-section .actor_return align=1 vstart=0x1e416 follows=.spawn
-.return equ 0x1e410
-    pop ebp
-; C supplies the stack release before this slot and the five-pop/RET after it.

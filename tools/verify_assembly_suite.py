@@ -4137,6 +4137,22 @@ def verify(exe, directory, c_inventory):
                 c_inventory_used_only_for_overlap_check=True, spans=rows)
 
 
+# Retain only uncovered original spawn instructions and the two literal arrays.
+_spawn_layout = json.loads((Path(__file__).parent/'data/encounter-spawn-layout.json').read_text(encoding='utf-8'))
+_old_spawn = {'encounter_spawn_prefix', 'encounter_save_ebp', 'encounter_restore_ebp'}
+ROUTINES[:] = [r for r in ROUTINES if r[0] not in _old_spawn]
+NON_ROUTINE_UNITS[:] = [r for r in NON_ROUTINE_UNITS if r[0] not in _old_spawn]
+for _name in _old_spawn:
+    GROUP_SLICES.pop(_name, None)
+    DATA_POINTER_SITES.pop(_name, None)
+for _name, _offset in [('level_encounter_spawn_positions', 0), ('level_encounter_spawn_counts', 128)]:
+    GROUP_SLICES[_name] = (_offset, _spawn_layout['assembly_size'])
+for _row in _spawn_layout['retained']:
+    _fixups = {int(k): v for k, v in _row['fixups'].items()}
+    ROUTINES.append((_row['symbol'], 'fate/level_encounter.asm', 'level_encounter.bin', _row['address'], _row['size'], _fixups))
+    GROUP_SLICES[_row['symbol']] = (_row['binary_offset'], _spawn_layout['assembly_size'])
+    DATA_POINTER_SITES[_row['symbol']] = tuple(_fixups)
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

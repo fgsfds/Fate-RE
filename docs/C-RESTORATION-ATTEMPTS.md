@@ -118,13 +118,20 @@ and argument lifetimes; position-struct reuse spills the correct slots but
 changes entry allocation. Player-mirror and tag-width differences remain.
 Evidence and hash-bound behavior report: `work/numbered-board-next/evidence.json`.
 
-### Encounter spawn-prefix height lifetime
+### Encounter spawn-prefix byte draws and signed product
 
-The 95-byte actor gate is restored using checked C slices and a state-store helper.
-The remaining 597-byte spawn prefix still needs the original EBP height lifetime.
-Do not repeat the solved actor condition or ECX state-store probes. Next investigate
-height/register ownership in the spawn loop with the current packed local frame.
-Evidence: `work/actor-integrate-nov26/` and `work/resume-nov26/actor-exact-candidate.json`.
+Watcom 10.5 `/4r /s /or /bt=dos /dENCOUNTER_LATCH_CONTEXT=1` with the
+clock-context define supplies 515 of 597 prefix bytes jointly with the base
+context, plus both EBP save/restore slots. Height lifetime and full EAX counter
+initialization are solved. The remaining 82 instruction bytes begin at `0x1e08b`:
+the original copies EAX to EDX then clears DH with AH, while the compiler clears
+AH and masks AL before extending the position index into EDX. Actual RNG results
+are 0..32767. Next probe a truthful narrow-result RNG alias and its DX/BX staging
+in a small witness before perturbing the whole frame. Later retained code includes
+the signed `IMUL`/`SHRD` product and word shift-count loads; do not repeat rejected
+Watcom `__int64` or `long long` probes. Evidence:
+`work/encounter-counter-nov27/union-placement.json` and
+`work/encounter-spawn-integrate-nov27/audit.json`.
 
 ### Video prompt-mode blocker
 

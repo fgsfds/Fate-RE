@@ -5166,6 +5166,20 @@ LEAF_CONTEXT_FIXUPS['playback_sound_limit_'] = {}
 LEAF_CONTEXT_RECORDS['playback_sound_limit_'] = {'flat_groups': [2], 'fixups': []}
 DATA_OFFSETS.update({'_audio_enabled': 0x171602, '_frame_state_12cd4': 0x12cd4, '_frame_state_12cd8': 0x12cd8, '_invalid_sound_number': 0x936, '_error_buffer': 0x67e3c})
 
+# Complete compiler context and relocation records for the encounter spawn splice.
+ENCOUNTER_SPAWN_LAYOUT = json.loads((Path(__file__).parent/'data/encounter-spawn-layout.json').read_text(encoding='utf-8'))
+for _context in ENCOUNTER_SPAWN_LAYOUT['contexts']:
+    _public = _context['public']
+    LEAF_CONTEXT_SHA256[_public] = _context['sha256']
+    LEAF_CONTEXT_RECORDS[_public] = _context['records']
+    LEAF_CONTEXT_LITERALS[_public] = (160, _context['literal_sha256'], {int(k): v for k, v in _context['literal_sites'].items()})
+    FUNCTION_ADDRESSES[_public] = 0x1df2e
+    LEAF_SECTION_BRANCHES[_public] = (_context['size'], 0x4ef, {int(k): (bytes.fromhex(v[0]), v[1], v[2]) for k, v in _context['branches'].items()})
+for _phase in ENCOUNTER_SPAWN_LAYOUT['phases']:
+    _size = next(c['size'] for c in ENCOUNTER_SPAWN_LAYOUT['contexts'] if c['public'] == _phase['public'])
+    LEAVES[_phase['symbol']] = (_phase['address']+0x25600, _phase['end']-_phase['begin'])
+    LEAF_CODE_SLICES[_phase['symbol']] = (_phase['public'], _phase['begin'], _phase['end'], _size)
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

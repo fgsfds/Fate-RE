@@ -104,7 +104,7 @@ def mutate_pop_edi(return_body):
 
 def validate_asm_guards(executable):
     if executable[0x43533] != 0x55 or executable[0x43a16] != 0x5d:
-        raise ValueError('retained ASM PUSH/POP EBP guard differs')
+        raise ValueError('original PUSH/POP EBP guard differs')
 
 
 def bind(executable, build):
@@ -170,12 +170,30 @@ def bind(executable, build):
         reports.append({'role': role, 'bytes': size, 'LE_sites': len(bindings),
                         'CODE_sites': len(code_bindings)})
     validate_asm_guards(executable)
+    ebp_parts = []
+    for role, address, opcode in [('encounter_save_ebp_', 0x1df33, PUSH_EBP),
+                                  ('encounter_restore_ebp_', 0x1e416, POP_EBP)]:
+        ebp_object = OBJECT_NAMES[role]
+        ebp_blob = (build / (ebp_object + '.obj')).read_bytes()
+        ebp_code_fields = {}
+        ebp_code, ebp_bindings = bind_leaf_details(
+            ebp_blob, role, DATA_OFFSETS, address=address,
+            functions=FUNCTION_ADDRESSES, absolute_code=CODE_OFFSETS,
+            code_bindings=ebp_code_fields)
+        if ebp_code != opcode or ebp_bindings or ebp_code_fields:
+            raise ValueError('compiler EBP save/restore differs')
+        verify_leaf_relocations(ebp_code, ebp_bindings, pointers, address,
+                                code_bindings=ebp_code_fields)
+        ebp_parts.append(ebp_code)
+        reports.append({'role': role, 'bytes': 1, 'LE_sites': 0,
+                        'CODE_sites': 0, 'object': ebp_object,
+                        'object_sha256': hashlib.sha256(ebp_blob).hexdigest()})
     entry_save, initializer, release, restore = run_parts
     loaded_image = image(executable)
     if loaded_image[0x1df33] != 0x55 or loaded_image[0x1e416] != 0x5d:
-        raise ValueError('loaded retained ASM EBP opcodes differ')
-    prefix = compose_prefix(entry_save, loaded_image[0x1df33:0x1df34], initializer)
-    return_body = compose_return(release, loaded_image[0x1e416:0x1e417], restore)
+        raise ValueError('loaded original EBP opcodes differ')
+    prefix = compose_prefix(entry_save, ebp_parts[0], initializer)
+    return_body = compose_return(release, ebp_parts[1], restore)
     if len(prefix) != 45 or len(return_body) != 13:
         raise ValueError('stitched frame extents differ')
     golden_prefix = loaded_image[0x1df2e:0x1df5b]
@@ -337,7 +355,8 @@ def run(executable, build, output):
     result = {'status': 'PASS', 'cases': len(prefix_cases) + len(returns),
               'prefix_cases': len(prefix_cases), 'return_cases': len(returns),
               'controls': ['initializer CODE pointer +1', 'POP EDI -> POP ESI'],
-              'C_bytes': 56, 'CODE_LE_sites': 2, 'retained_ASM_bytes': 2,
+              'C_bytes': sum(role['bytes'] for role in reports),
+              'CODE_LE_sites': 2, 'retained_ASM_bytes': 0,
               'copied_bytes': COPY_BYTES, 'retained_ASM_table_bytes': 160,
               'object_sha256': object_hash, 'roles': reports}
     output.parent.mkdir(parents=True, exist_ok=True)

@@ -584,3 +584,5 @@ fate/sound_playback_cache sndcache
 fate/sound_playback_slots sndscan
 fate/sound_playback_frame sndframe
 fate/sound_playback_limit sndlimit
+fate/encounter_spawn encspawn /4r /s /or /bt=dos /dENCOUNTER_LATCH_CONTEXT=1
+fate/encounter_spawn encclock /4r /s /or /bt=dos /dENCOUNTER_LATCH_CONTEXT=1 /dENCOUNTER_CLOCK_CONTEXT=1
