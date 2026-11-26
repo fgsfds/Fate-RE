@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1439,
-  "unique_code_bytes": 193108,
-  "le_pointers": 10539,
+  "routines": 1445,
+  "unique_code_bytes": 193263,
+  "le_pointers": 10557,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -3628,6 +3628,66 @@
       "loaded_address": "0x35178",
       "bytes": 80,
       "le_pointers": 5
+    },
+    {
+      "symbol": "sound_queue_metadata_",
+      "object": "sndqueue.obj",
+      "object_sha256": "935400087f84171e1f275270d5ec4d8641d2eaa9fb8077678305d7994c4927a7",
+      "sha256": "add466733a24c623dfc273286146645dab76b7d7fee31cb4dcbc6dc8b1a46b86",
+      "raw_offset": "0x5a7c8",
+      "loaded_address": "0x351c8",
+      "bytes": 61,
+      "le_pointers": 8
+    },
+    {
+      "symbol": "sound_queue_y_",
+      "object": "sndqueue.obj",
+      "object_sha256": "935400087f84171e1f275270d5ec4d8641d2eaa9fb8077678305d7994c4927a7",
+      "sha256": "57b285fb4f528784254e158097fd1a5b3a4167e8d385d5df4154223ee8577b30",
+      "raw_offset": "0x5a805",
+      "loaded_address": "0x35205",
+      "bytes": 3,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "sound_queue_descriptor_",
+      "object": "sndqueue.obj",
+      "object_sha256": "935400087f84171e1f275270d5ec4d8641d2eaa9fb8077678305d7994c4927a7",
+      "sha256": "c8e5f1da29b6657eeb4aeae9b31125bec3aa9f4889072cbef54979cab6e94761",
+      "raw_offset": "0x5a808",
+      "loaded_address": "0x35208",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "sound_queue_compare_",
+      "object": "sndqueue.obj",
+      "object_sha256": "935400087f84171e1f275270d5ec4d8641d2eaa9fb8077678305d7994c4927a7",
+      "sha256": "113cc1c2a072c43af5eb073599a5dbc56daa830dad1d30e2569d8f1110e7976e",
+      "raw_offset": "0x5a80a",
+      "loaded_address": "0x3520a",
+      "bytes": 43,
+      "le_pointers": 5
+    },
+    {
+      "symbol": "sound_queue_cleanup_",
+      "object": "sndqueue.obj",
+      "object_sha256": "7a6e18c4040ca065b7007109c244f0e836883ed99658cddcd90999ae06226044",
+      "sha256": "d2614841be0bce22ee2524209efde9710b25d172811c6dc00504decd760b8204",
+      "raw_offset": "0x5a835",
+      "loaded_address": "0x35235",
+      "bytes": 41,
+      "le_pointers": 4
+    },
+    {
+      "symbol": "sound_queue_success_",
+      "object": "sndqueue.obj",
+      "object_sha256": "7a6e18c4040ca065b7007109c244f0e836883ed99658cddcd90999ae06226044",
+      "sha256": "400e43dcc15eddceb19c37a677788fecafab21445adfc59c0a7973ad344abb28",
+      "raw_offset": "0x5a860",
+      "loaded_address": "0x35260",
+      "bytes": 5,
+      "le_pointers": 1
     },
     {
       "symbol": "loop_finish_",

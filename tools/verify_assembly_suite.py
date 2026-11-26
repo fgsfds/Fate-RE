@@ -1551,7 +1551,8 @@ ROUTINES = [
       0x1f3d54, 227: 0x92d74, 238: 0x92d78, 247: 0x1f3d54, 255: 0x1f3d56, 264: 0x1f3d54, 319: 0x92d70, 326:
       0x92d30, 332: 0x809e3, 391: 0x1f3d56, 398: 0x809eb, 422: 0x1f3d54, 508: 0x809fd, 592: 0x80a0d}),
     ('play_sound', 'fate/play_sound.asm', 'play_sound.bin', 216953, 376, {16: 2037250, 35: 601300, 44: 601304, 60: 526646, 65: 949820, 90: 2037263, 95: 2037263, 102: 1070300, 113: 2037263, 125: 2033116, 165: 2037263, 171: 2037263, 182: 2037263, 198: 2031024, 209: 2037259, 214: 2037259, 223: 2031024, 231: 2031020, 242: 2037259, 249: 2037259, 260: 2037263, 281: 2030364, 291: 2036960, 305: 2030364, 313: 2037263, 320: 2031020, 325: 2036960, 339: 2030364, 344: 601324, 358: 2037263, 365: 2031024, 372: 2031020}),
-    ('play_sound_tail', 'fate/play_sound.asm', 'play_sound.bin', 217544, 164, {1: 2037263, 8: 1070300, 16: 2037263, 23: 1070300, 31: 2037263, 38: 1070300, 50: 2037263, 57: 1070300, 67: 601296, 79: 2037263, 86: 1070300, 93: 2037263, 100: 1070300, 112: 2037263, 119: 1070300, 130: 2037263, 137: 1070300, 153: 2037263}),
+    ('play_sound_tail', 'fate/play_sound.asm', 'play_sound.bin', 217694, 2, {}),
+    ('play_sound_epilogue', 'fate/play_sound.asm', 'play_sound.bin', 217701, 7, {}),
     ('draw_map_overlays', 'fate/draw_map_overlays.asm', 'draw_map_overlays.bin', 0x3279b, 4638,
      {30: 0x2b00a0, 59: 0x2b00a0, 75: 0x307e7c, 101: 0x307e7c, 154: 0x2fc3a0, 162: 0x2fc3a2, 170: 0x2b10a0, 181:
       0x2fc3a4, 196: 0x2fc3a8, 251: 0x26c920, 288: 0x26c920, 344: 0x2fc3a4, 352: 0x2fc3a8, 376: 0x2b10ae, 401:
@@ -4065,8 +4066,9 @@ DATA_POINTER_SITES = {
                       'thline_': {16, 36, 51}, 'thlineskipmodify_': {24, 36}}
 
 
-GROUP_SLICES.update({'play_sound': (0, 540), 'play_sound_tail': (376, 540)})
-DATA_POINTER_SITES['play_sound_tail'] = (1, 8, 16, 23, 31, 38, 50, 57, 67, 79, 86, 93, 100, 112, 119, 130, 137, 153)
+GROUP_SLICES.update({'play_sound': (0, 385), 'play_sound_tail': (376, 385), 'play_sound_epilogue': (378, 385)})
+DATA_POINTER_SITES['play_sound_tail'] = ()
+DATA_POINTER_SITES['play_sound_epilogue'] = ()
 
 
 def verify_pointer_operands(code, expected, data_sites=()):

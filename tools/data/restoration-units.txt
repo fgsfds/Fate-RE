@@ -578,3 +578,4 @@ fate/sound_playback_options sndopts
 fate/sound_playback_description snddesc
 fate/encounter_actor_reset actreset
 fate/sound_playback_position sndpos
+fate/sound_playback_queue sndqueue

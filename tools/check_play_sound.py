@@ -253,7 +253,7 @@ def main():
     p.add_argument('--exe', type=Path, required=True)
     group = p.add_mutually_exclusive_group()
     group.add_argument('--object',type=Path,help='existing candidate OMF; research behavior only')
-    group.add_argument('--build',type=Path,help='production build containing split sound assembly, sndopts.obj, snddesc.obj and sndpos.obj')
+    group.add_argument('--build',type=Path,help='production build containing split sound assembly, sndopts.obj, snddesc.obj, sndpos.obj and sndqueue.obj')
     p.add_argument('--symbol',default='play_sound_')
     p.add_argument('--output',type=Path,help='optional report; omitted means no files written')
     a = p.parse_args()
@@ -316,9 +316,65 @@ def main():
                     assert expected_error in str(error), str(error)
                 else:
                     raise AssertionError('Unlinked positioning continuation mutation escaped')
-            assert len(retained) == 540
-            assembled = retained[:376] + description + position + phase + retained[376:]
-            report.update(restored_c_bytes=215, retained_asm_bytes=540, context_mutations_rejected=5)
+            from verify_c_leaf import verify_leaf_relocations
+            queue_obj = (a.build/'sndqueue.obj').read_bytes()
+            queue_parts = []
+            pointers = read_le_fixups(exe)['pointers']
+            for role, address, size in (('metadata',0x351c8,61),('y',0x35205,3),
+                                        ('descriptor',0x35208,2),('compare',0x3520a,43)):
+                code_refs = {}
+                part, bindings = bind_leaf_details(queue_obj, 'sound_queue_'+role+'_', DATA_OFFSETS,
+                    address=address, functions=FUNCTION_ADDRESSES, absolute_code=CODE_OFFSETS, code_bindings=code_refs)
+                assert not code_refs, 'Queue phase LE fields must all be DATA'
+                assert len(part) == size and part == exe[address+0x25600:address+0x25600+size]
+                verify_leaf_relocations(part, bindings, pointers, address, code_bindings=code_refs)
+                queue_parts.append(part)
+            queue = b''.join(queue_parts)
+            for offset in (61,63,150,154,158):
+                try:
+                    bind_leaf_details(mutate_public_byte(queue_obj,'playback_queue_',offset),
+                        'sound_queue_metadata_', DATA_OFFSETS, address=0x351c8,
+                        functions=FUNCTION_ADDRESSES, absolute_code=CODE_OFFSETS, code_bindings={})
+                except ValueError as error:
+                    assert 'context digest' in str(error), str(error)
+                else:
+                    raise AssertionError('Queue private context mutation escaped')
+            import verify_c_leaf as leaf
+            digest = leaf.LEAF_CONTEXT_SHA256.pop('playback_queue_')
+            try:
+                try:
+                    bind_leaf_details(mutate_public_byte(queue_obj,'playback_queue_',154),
+                        'sound_queue_metadata_', DATA_OFFSETS, address=0x351c8,
+                        functions=FUNCTION_ADDRESSES, absolute_code=CODE_OFFSETS, code_bindings={})
+                except ValueError as error:
+                    assert 'context fixup target/form/addend' in str(error), str(error)
+                else:
+                    raise AssertionError('Off-slice queue addend mutation escaped')
+                try:
+                    bind_leaf_details(mutate_public_byte(queue_obj,'playback_queue_',110),
+                        'sound_queue_metadata_', DATA_OFFSETS, address=0x351c8,
+                        functions=FUNCTION_ADDRESSES, absolute_code=CODE_OFFSETS, code_bindings={})
+                except ValueError as error:
+                    assert 'Section branch compiler target differs' in str(error), str(error)
+                else:
+                    raise AssertionError('Off-slice queue branch mutation escaped')
+            finally:
+                leaf.LEAF_CONTEXT_SHA256['playback_queue_'] = digest
+            queue_results=[]
+            for role,address,size in (('cleanup',0x35235,41),('success',0x35260,5)):
+                code_refs={}
+                part,bindings=bind_leaf_details(queue_obj,'sound_queue_'+role+'_',DATA_OFFSETS,
+                    address=address,functions=FUNCTION_ADDRESSES,absolute_code=CODE_OFFSETS,code_bindings=code_refs)
+                assert not code_refs and len(part)==size
+                assert part==exe[address+0x25600:address+0x25600+size]
+                verify_leaf_relocations(part,bindings,pointers,address,code_bindings=code_refs)
+                queue_results.append(part)
+            assert len(retained) == 385
+            ending=queue_results[0]+retained[376:378]+queue_results[1]+retained[378:]
+            assembled = retained[:376] + description + position + phase + queue + ending
+            natural = retained[:376] + description + position + phase + b''.join(queue_parts[i] for i in (0,2,1,3)) + ending
+            report.update(restored_c_bytes=370, retained_asm_bytes=385, context_mutations_rejected=12,
+                swap_scope='mapped writable slot and normal completion; placed order matches original even at fault/interrupt boundaries')
             assert len(assembled) == SIZE, 'reconstructed routine must be 755 bytes'
             assert assembled == exe[RAW:RAW+SIZE], 'reconstructed routine differs from pinned original'
             refs = pointer_range(read_le_fixups(exe)['pointers'],ENTRY,SIZE)
@@ -328,6 +384,11 @@ def main():
                 assert off+4 <= SIZE, 'partial LE operand at assembly boundary'
                 candidate[off:off+4] = pack('<I',target)
             candidate = bytes(candidate)
+            natural_loaded = bytearray(natural)
+            for off, target in refs.items():
+                natural_loaded[off:off+4] = pack('<I',target)
+            natural_candidate = bytes(natural_loaded)
+            report['natural_queue_cases_passed'] = 0
             assert candidate == ref
             report.update(mode='mixed-C-assembly-and-behavior',exact_verified=True,
                           reconstructed_raw_sha256=sha(assembled),routine_bytes=SIZE,routine_le_fixups=57)
@@ -351,6 +412,11 @@ def main():
                 calls=len(observed.calls),reference_ds_sha256=sha(observed.memory['DS']),
                 candidate_ds_sha256=sha(actual.memory['DS']),trace_sha256=sha(repr(observed.calls).encode())))
             assert not difference, f"candidate {c['name']}: {difference}"
+            if a.build:
+                natural_result = exercise(natural_candidate,c)
+                difference = first_difference(observed,natural_result)
+                assert not difference, f"natural queue {c['name']}: {difference}"
+                report['natural_queue_cases_passed'] += 1
         wrong = bytearray(ref)
         pos = wrong.index(pack('<I',0x7fff7fff))
         wrong[pos:pos+4] = pack('<I',0x7ffe7ffe)

@@ -5093,6 +5093,26 @@ LEAF_CONTEXT_SHA256['playback_position_'] = 'bd5c2684b8e6d13b85be36e29dbae1c7c90
 LEAF_CONTEXT_FIXUPS['playback_position_'] = {31: ('audio_pan_', True, 0), 59: ('audio_volume_', True, 0), 69: ('sound_sample_done_offset_', False, 0)}
 FUNCTION_ADDRESSES.update({'audio_pan_': 0x34e77, 'audio_volume_': 0x34e1b})
 
+LEAF_CONTEXT_SHA256['playback_queue_'] = 'c4087085c6829ff0952f12575e41c2b52fda1db1d1f7c8000bc820676e81fd97'
+LEAF_CONTEXT_FIXUPS['playback_queue_'] = {1: ('_frame_state_17160f', False, 0), 8: ('_sound_slots', False, 0), 16: ('_frame_state_17160f', False, 0), 23: ('_sound_slots', False, 0), 31: ('_frame_state_17160f', False, 0), 38: ('_sound_slots', False, 0), 50: ('_frame_state_17160f', False, 0), 57: ('_sound_slots', False, 0), 67: ('_audio_driver', False, 0), 72: ('queue_audio_sample_', True, 0), 79: ('_frame_state_17160f', False, 0), 86: ('_sound_slots', False, 0), 93: ('_frame_state_17160f', False, 0), 100: ('_sound_slots', False, 0), 112: ('_frame_state_17160f', False, 0), 119: ('_sound_slots', False, 0), 130: ('_frame_state_17160f', False, 0), 137: ('_sound_slots', False, 0), 154: ('_frame_state_17160f', False, 0)}
+FUNCTION_ADDRESSES['queue_audio_sample_'] = 0x621b4
+DATA_OFFSETS['_audio_driver'] = 0x12cd0
+LEAVES['sound_queue_metadata_'] = (370632, 61)
+LEAF_CODE_SLICES['sound_queue_metadata_'] = ('playback_queue_', 0, 61, 161)
+LEAVES['sound_queue_y_'] = (370693, 3)
+LEAF_CODE_SLICES['sound_queue_y_'] = ('playback_queue_', 63, 66, 161)
+LEAVES['sound_queue_descriptor_'] = (370696, 2)
+LEAF_CODE_SLICES['sound_queue_descriptor_'] = ('playback_queue_', 61, 63, 161)
+LEAVES['sound_queue_compare_'] = (370698, 43)
+LEAF_CODE_SLICES['sound_queue_compare_'] = ('playback_queue_', 66, 109, 161)
+
+FUNCTION_ADDRESSES['playback_queue_'] = 0x351c8
+LEAF_SECTION_BRANCHES['playback_queue_'] = (161, 164, {109: (b'\x75', 153, 152)})
+LEAVES['sound_queue_cleanup_'] = (0x5a835, 41)
+LEAF_CODE_SLICES['sound_queue_cleanup_'] = ('playback_queue_', 109, 150, 161)
+LEAVES['sound_queue_success_'] = (0x5a860, 5)
+LEAF_CODE_SLICES['sound_queue_success_'] = ('playback_queue_', 153, 158, 161)
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

@@ -146,45 +146,13 @@ play_sound:
 .branch_350f1:
 ; Descriptor initialization is supplied by sound_playback_description.c.
 ; Positioning and callback setup are supplied by compiler-generated C.
-section .sound_tail align=1 vstart=0x351c8 follows=.text
-.branch_351c8:
-    mov eax, [frame_state_17160f]
-    mov eax, [nosplit eax*4 + sound_slots]
-    mov [eax + 0x4], edi
-    mov eax, [frame_state_17160f]
-    mov eax, [nosplit eax*4 + sound_slots]
-    mov [eax + 0x18], ecx
-    mov eax, [frame_state_17160f]
-    mov eax, [nosplit eax*4 + sound_slots]
-    mov edx, [esp + 0x4]
-    mov [eax + 0x10], edx
-    mov eax, [frame_state_17160f]
-    mov eax, [nosplit eax*4 + sound_slots]
-    mov [eax + 0x14], ebp
-    mov edx, esi
-    mov eax, [frame_state_12cd0]
-    call queue_audio_sample
-    mov edx, eax
-    mov eax, [frame_state_17160f]
-    mov eax, [nosplit eax*4 + sound_slots]
-    mov [eax], edx
-    mov eax, [frame_state_17160f]
-    mov eax, [nosplit eax*4 + sound_slots]
-    mov edx, [eax]
-    cmp edx, -1
-    jnz short .branch_35260
-    mov eax, [frame_state_17160f]
-    mov eax, [nosplit eax*4 + sound_slots]
-    mov word [eax + 0xe], 0x0
-    mov eax, [frame_state_17160f]
-    mov eax, [nosplit eax*4 + sound_slots]
-    mov dword [eax + 0x18], 0x0
-    mov eax, edx
+.branch_351c8 equ 0x351c8
+; Queue setup, call and comparison are now compiler-generated C.
+section .sound_tail align=1 vstart=0x3525e follows=.text
     jmp short .branch_35265
-
-.branch_35260:
-    mov eax, [frame_state_17160f]
-
+; The success load is supplied by the C queue context.
+.branch_35260 equ 0x35260
+section .sound_return align=1 vstart=0x35265 follows=.sound_tail
 .branch_35265:
     add esp, 0x8
     pop ebp

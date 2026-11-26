@@ -1726,6 +1726,14 @@ OBJECT_NAMES['encounter_actor_reset_'] = 'actreset'
 
 OBJECT_NAMES['sound_playback_position_'] = 'sndpos'
 
+OBJECT_NAMES['sound_queue_metadata_'] = 'sndqueue'
+OBJECT_NAMES['sound_queue_y_'] = 'sndqueue'
+OBJECT_NAMES['sound_queue_descriptor_'] = 'sndqueue'
+OBJECT_NAMES['sound_queue_compare_'] = 'sndqueue'
+
+OBJECT_NAMES['sound_queue_cleanup_'] = 'sndqueue'
+OBJECT_NAMES['sound_queue_success_'] = 'sndqueue'
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)
