@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1484,
-  "unique_code_bytes": 194199,
-  "le_pointers": 10610,
+  "routines": 1490,
+  "unique_code_bytes": 194241,
+  "le_pointers": 10612,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1170,6 +1170,16 @@
       "le_pointers": 0
     },
     {
+      "symbol": "encounter_operand_1e08f_",
+      "object": "encoper.obj",
+      "object_sha256": "d5b05c77337b8a6b86a3a1c03d351270222083964e6e2afd6c109c9a8886a5ab",
+      "sha256": "7875762539c48d434a1ea7633a224b9e7fc1ccd201bb06b540acb085b3538022",
+      "raw_offset": "0x4368f",
+      "loaded_address": "0x1e08f",
+      "bytes": 9,
+      "le_pointers": 0
+    },
+    {
       "symbol": "encounter_spawn_1e098_",
       "object": "encspawn.obj",
       "object_sha256": "b7552be547dca8daecd0969669c6b47022aa51c522212ae4e08063a3459bf186",
@@ -1177,6 +1187,16 @@
       "raw_offset": "0x43698",
       "loaded_address": "0x1e098",
       "bytes": 7,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "encounter_operand_1e09f_",
+      "object": "encoper.obj",
+      "object_sha256": "d5b05c77337b8a6b86a3a1c03d351270222083964e6e2afd6c109c9a8886a5ab",
+      "sha256": "5d6fcbc2d7579fb1ba7b59f7b226338c65f76fb713927283eb2e6143e06ef124",
+      "raw_offset": "0x4369f",
+      "loaded_address": "0x1e09f",
+      "bytes": 4,
       "le_pointers": 0
     },
     {
@@ -1198,6 +1218,16 @@
       "loaded_address": "0x1e0ec",
       "bytes": 4,
       "le_pointers": 0
+    },
+    {
+      "symbol": "encounter_operand_1e0f0_",
+      "object": "encoper.obj",
+      "object_sha256": "d5b05c77337b8a6b86a3a1c03d351270222083964e6e2afd6c109c9a8886a5ab",
+      "sha256": "8bb4b31834a3d68be94555b2194c2f090ebb1427e978ed646ee97884bfcaa5cc",
+      "raw_offset": "0x436f0",
+      "loaded_address": "0x1e0f0",
+      "bytes": 16,
+      "le_pointers": 1
     },
     {
       "symbol": "encounter_spawn_1e100_",
@@ -1360,6 +1390,16 @@
       "le_pointers": 1
     },
     {
+      "symbol": "encounter_operand_1e162_",
+      "object": "encoper.obj",
+      "object_sha256": "d5b05c77337b8a6b86a3a1c03d351270222083964e6e2afd6c109c9a8886a5ab",
+      "sha256": "6526ec3a241456d9fe2fd72a9a2d0319d52b6dfb02e3a56b8878f68a99cbb2d0",
+      "raw_offset": "0x43762",
+      "loaded_address": "0x1e162",
+      "bytes": 8,
+      "le_pointers": 1
+    },
+    {
       "symbol": "encounter_spawn_1e16a_",
       "object": "encspawn.obj",
       "object_sha256": "b7552be547dca8daecd0969669c6b47022aa51c522212ae4e08063a3459bf186",
@@ -1370,12 +1410,32 @@
       "le_pointers": 1
     },
     {
+      "symbol": "encounter_operand_1e170_",
+      "object": "encwidth.obj",
+      "object_sha256": "46404f1f54535f67286ea61f6b36ca7172d06b38577fb43ed4fe3466a0f6b321",
+      "sha256": "46e0bd1456d3819fc9db37b8786bbf4152e609ec4bda9b0ab4f05036b03d11c1",
+      "raw_offset": "0x43770",
+      "loaded_address": "0x1e170",
+      "bytes": 3,
+      "le_pointers": 0
+    },
+    {
       "symbol": "encounter_spawn_1e173_",
       "object": "encclock.obj",
       "object_sha256": "38676c788bc16ede39422403e27077449434ba3a771dd8ab02aff54507c8ca42",
       "sha256": "8359c8f2ab7af5c7569d43a68ce42c771d8e5c6e1349821ed39c1c0234f3785d",
       "raw_offset": "0x43773",
       "loaded_address": "0x1e173",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "encounter_operand_1e175_",
+      "object": "encoper.obj",
+      "object_sha256": "d5b05c77337b8a6b86a3a1c03d351270222083964e6e2afd6c109c9a8886a5ab",
+      "sha256": "e7bde1d6647c23840ac15a04af75963e96fb568619e1cf84131dbf2e16f858e7",
+      "raw_offset": "0x43775",
+      "loaded_address": "0x1e175",
       "bytes": 2,
       "le_pointers": 0
     },

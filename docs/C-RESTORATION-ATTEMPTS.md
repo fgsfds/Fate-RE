@@ -118,23 +118,21 @@ and argument lifetimes; position-struct reuse spills the correct slots but
 changes entry allocation. Player-mirror and tag-width differences remain.
 Evidence and hash-bound behavior report: `work/numbered-board-next/evidence.json`.
 
-### Encounter spawn-prefix byte draws and signed product
+### Encounter spawn-prefix signed product and double-word shift
 
-Watcom 10.5 `/4r /s /or /bt=dos` now supplies 549 of 597 prefix bytes from
-guarded base/clock/shift contexts and a compact byte-conversion witness, plus
-both EBP save/restore slots. Height, counter initialization, RNG byte clearing
-and signed word shift counts are solved. Do not transplant the failed 188-byte
-full RNG frame; only independently qualified register operations are placed.
-The remaining 48 bytes begin at `0x1e08f`: the original masks DL, sign-extends
-DX into EBX, and indexes the position table through EBX, whereas the base
-context masks AL and uses EDX as the position index. Next stage the real masked
-word in DX and its promoted signed index in EBX before both position loads.
-Other retained operations are tile-value staging, the width word load in AX,
-its signed EBX promotion and the signed `IMUL`/`SHRD` product. For the width,
-probe truthful AX and DL operand identities before multiplication. Do not repeat
-rejected Watcom `__int64` or `long long` probes. Evidence:
-`work/encounter-rng-nov27/RESULTS.md`, `work/encounter-shift-nov27/` and
-`work/encounter-byte-integrate-nov27/audit.json`.
+Watcom 10.5 now supplies 591 of 597 prefix bytes, plus both EBP save/restore
+slots. Position indexing, tile staging, signed width promotion, repeat transfer,
+byte clearing and word shift counts are solved. Only `IMUL EBX` at `0x1e177`
+and `SHRD EAX,EDX,7` at `0x1e179` remain. The operand C product is bounded
+signed-short width times unsigned-byte repeat, so its low 32-bit result is safe;
+its instruction encoding still differs from the original full EDX:EAX product.
+An isolated `/4r /s /os /bt=dos` product probe emits `IMUL EAX,EBX` and leaves
+EDX unchanged. An isolated `/4r /s /or /bt=dos` expression `(lo>>7)|(hi<<25)`
+emits saved-EDX SHR/SHL/OR rather than SHRD. Neither supplies exact bytes.
+Next require a supported multiword compiler idiom; do not repeat those probes,
+rejected `__int64`/`long long` types, or the failed 188-byte full RNG frame.
+Evidence: `work/encounter-width-nov27/RESULTS.md`, its `prodsize-evidence.json`
+and `shrdor-evidence.json`, and `work/encounter-operand-integrate-nov27/audit.json`.
 
 ### Video prompt-mode blocker
 

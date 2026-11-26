@@ -257,6 +257,27 @@ as well as nonempty ones: a body digest and absolute fixup snapshot alone do
 not prove the public stayed at zero. The empty-prefix digest and a moved-public
 counterexample make that layout check part of the binder itself.
 
+### Word operands and standalone signed promotion
+
+The encounter operand context carries a masked low-byte draw through a real DX
+word identity, then promotes that signed word through an EBX identity before
+both table loads. This yields the original AND DL / MOVSX EBX,DX and ESP+EBX*8
+addressing in the 184-byte frame. For the tile word, a DX-to-EDX capture may
+leave the upper word unspecified: unsigned addition followed by a short store
+depends only on the low word. Prove that truncation explicitly. The placed
+original byte producer supplies zero upper bits, while the natural private
+prefix can retain poisoned upper bits without changing its modeled effects.
+Its natural terminal register differences are not a shared-ABI acceptance.
+
+An AX width identity and DL/AL byte identities preserve the original table
+word load and repeat transfer. When the large context still emits MOV EBX,EAX
+followed by MOVSX EBX,BX, a standalone C conversion with an int EAX parameter,
+int EBX result and body `return (short)value;` emits MOVSX EBX,AX and a private
+RET. `src/fate/encounter_width.c` guards that complete four-byte context. Its
+fixture poisons the input upper word and checks signed results and preserved
+registers. A zero-extension control produces the same clipped byte but the
+wrong terminal EBX, so DATA-only replay would miss that ABI error.
+
 ### Switch index byte writes and generated table relocation
 
 For the video-mode dispatch, zero an unsigned dword union through an empty

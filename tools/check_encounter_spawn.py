@@ -187,7 +187,7 @@ def move_zero_public(blob,public,shift=40):
     segments,publics,_,_,fixups=v.parsed_leaf_object(blob)
     assert publics==((1,0,public),)
     raw=bytes(segments[1]['data'])
-    assert max(f.offset+f.width for f in fixups)<=shift
+    assert max((f.offset+f.width for f in fixups),default=0)<=shift
     def record(kind,data):
         row=bytearray([kind])+bytearray((len(data)+1).to_bytes(2,'little'))+data
         row.append((-sum(row))&255)
@@ -240,8 +240,9 @@ def context_controls(build):
    reject(mutate_public_byte(blob,public,-prefix),'literal prefix');controls.append(public+'literal')
   else:
    reject(move_zero_public(blob,public),'literal prefix');controls.append(public+'moved_public')
-  operand=next(f[1]-prefix for f in context['records']['fixups'] if f[-1] is not None)
-  reject(mutate_public_byte(blob,public,operand),'context digest');controls.append(public+'raw_addend')
+  operands=[f[1]-prefix for f in context['records']['fixups'] if f[-1] is not None]
+  if operands:
+   reject(mutate_public_byte(blob,public,operands[0]),'context digest');controls.append(public+'raw_addend')
   _,_,externals,_,_=v.parsed_leaf_object(blob)
   mutations=[
    ('target',lambda f:f.target[0]==2,lambda f:replace(f,target=(2,127))),
@@ -253,8 +254,8 @@ def context_controls(build):
    mutations.append(('valid_external_target',lambda f:f.target==(2,clock_index),lambda f:replace(f,target=(2,advance_index))))
   for name,predicate,change in mutations:
    bad,changed=rewrite_fixup(blob,predicate,change)
-   if name=='internal_target' and not changed:
-    assert not any(f[6][0]==0 for f in context['records']['fixups'])
+   if not changed:
+    assert not any(predicate(f) for f in v.parsed_leaf_object(blob)[-1])
     continue
    assert changed
    try:bind(bad)
@@ -302,6 +303,55 @@ def byte_witness_cases(original,build):
   assert bytes(cpu.mem_read(DS,DATA_SIZE))==bytes(original[DS:DS+DATA_SIZE])
  return len(rows)
 
+def width_witness_cases(original,build):
+ """Check low-word signed promotion and the custom EBX result ABI."""
+ import verify_c_leaf as v
+ context=next(c for c in v.ENCOUNTER_SPAWN_LAYOUT['contexts'] if c['object']=='encwidth')
+ fields={};base=0x41000;stop=0x3fff00
+ code,bindings=v.bind_leaf_details((build/'encwidth.obj').read_bytes(),context['public'],v.DATA_OFFSETS,address=base,functions=v.FUNCTION_ADDRESSES,code_bindings=fields)
+ assert code==bytes.fromhex('0fbfd8c3') and not bindings and not fields
+ cases=0
+ for width in (-32768,-32767,-256,-1,0,1,255,256,32767):
+  for high in (0,0x1234,0xffff):
+   cpu=Uc(UC_ARCH_X86,UC_MODE_32);cpu.mem_map(0,0x400000);cpu.mem_write(0,bytes(original));cpu.mem_write(base,code);cpu.mem_write(CALLER_SP-64,bytes([0xa7])*132);cpu.mem_write(CALLER_SP,struct.pack('<I',stop));cpu.reg_write(UC_X86_REG_ESP,CALLER_SP)
+   values=((high<<16)|(width&65535),0x3456789a,0xfeed1234,0x12345678,0x55667788,0x66778899,0x778899aa)
+   for reg,value in zip(REGS,values):cpu.reg_write(reg,value)
+   cpu.reg_write(UC_X86_REG_EFLAGS,0x8d7);cpu.emu_start(base,stop,count=10)
+   expected_regs=list(values);expected_regs[1]=u32(width)
+   assert tuple(cpu.reg_read(reg) for reg in REGS)==tuple(expected_regs)
+   assert cpu.reg_read(UC_X86_REG_ESP)==CALLER_SP+4 and cpu.reg_read(UC_X86_REG_EIP)==stop
+   assert cpu.reg_read(UC_X86_REG_EFLAGS)&0x8d5==0x8d5
+   assert bytes(cpu.mem_read(CALLER_SP-64,64))==bytes([0xa7])*64 and bytes(cpu.mem_read(CALLER_SP+4,64))==bytes([0xa7])*64
+   assert bytes(cpu.mem_read(DS,DATA_SIZE))==bytes(original[DS:DS+DATA_SIZE])
+   cases+=1
+ return cases
+
+def natural_operand_cases(original,build,rows):
+ """Check the private prefix's modeled effects without claiming boundary ABI."""
+ import verify_c_leaf as v
+ context=next(c for c in v.ENCOUNTER_SPAWN_LAYOUT['contexts'] if c['object']=='encoper')
+ prefix=context['prefix'];blob=(build/'encoper.obj').read_bytes()
+ end=min(f[1]-prefix-3 for f in context['records']['fixups'] if f[-1]=='_first_trigger_sprite')
+ raw=v.parsed_leaf_object(blob)[0][1]['data'][prefix:]
+ assert raw[end:end+3]==bytes.fromhex('0fbf05') and raw[:12]==bytes.fromhex('53515256575581ecb8000000')
+ alias='encounter_operand_fixture_prefix_';assert alias not in v.LEAF_CODE_SLICES
+ v.LEAF_CODE_SLICES[alias]=(context['public'],ENTRY-0x1df2e,end,context['size'])
+ try:
+  fields={}
+  code,bindings=v.bind_leaf_details(blob,alias,{k:DS+n for k,n in v.DATA_OFFSETS.items()},address=ENTRY,functions=v.FUNCTION_ADDRESSES,absolute_code=v.CODE_OFFSETS,code_bindings=fields)
+  assert not fields and len(bindings)==23
+ finally:del v.LEAF_CODE_SLICES[alias]
+ global END
+ saved_end=END;reference=bytes(original[ENTRY:saved_end]);regs_differ=flags_differ=0
+ for case in rows:
+  baseline=exercise(original,reference,case)
+  END=ENTRY+len(code)
+  try:observed=exercise(original,code,case)
+  finally:END=saved_end
+  assert observed[0]==baseline[0],case['name']
+  regs_differ+=observed[1]!=baseline[1];flags_differ+=observed[2]!=baseline[2]
+ return dict(cases=len(rows),register_difference_cases=regs_differ,flag_difference_cases=flags_differ,scope='Private prefix memory/frame/call effects only; scratch-register/flag differences do not qualify as a shared-boundary replacement.')
+
 def main():
  import argparse
  parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--exe',type=Path,required=True);parser.add_argument('--build',type=Path,required=True);parser.add_argument('--output',type=Path,required=True);a=parser.parse_args()
@@ -322,6 +372,13 @@ def main():
   except AssertionError as error:assert str(error)==mutation_case['name'],str(error)
   else:raise AssertionError('Semantic mutation escaped: '+name)
   controls.append(name)
- report=dict(status='PASS',cases=len(rows),byte_witness_cases=byte_witness_cases(original,a.build),prefix_bytes=SIZE,native_bytes=sum(s['bytes'] for s in spans),DATA_sites=sum(s['DATA_sites'] for s in spans),spans=spans,context_controls=context_controls(a.build),code_controls=controls,scope='Placed production C plus retained assembly, independent DATA/frame/call model and original register/defined-flag comparison. Complete private byte witness separately checks its result and callee-preserved state. RNG/sound/sector/spawn/list helpers stubbed; bounded counts, RNG 0..32767, seeded incoming hint; no map/assets/live allocator validation.')
+ width_case=next(c for c in rows if c['widths']==[-1,1]);baseline=exercise(original,body,width_case)
+ bad=bytearray(body);assert bad[0x1e171-ENTRY]==0xbf;bad[0x1e171-ENTRY]=0xb7
+ changed=exercise(original,bytes(bad),width_case)
+ assert changed[0]==baseline[0] and changed[2]==baseline[2]
+ assert baseline[1][1]==0xffffffff and changed[1][1]==65535
+ assert changed[1][:1]+changed[1][2:]==baseline[1][:1]+baseline[1][2:]
+ controls.append('width_signed_promotion_register_result')
+ report=dict(status='PASS',cases=len(rows),byte_witness_cases=byte_witness_cases(original,a.build),width_witness_cases=width_witness_cases(original,a.build),natural_operand=natural_operand_cases(original,a.build,rows),prefix_bytes=SIZE,native_bytes=sum(s['bytes'] for s in spans),DATA_sites=sum(s['DATA_sites'] for s in spans),spans=spans,context_controls=context_controls(a.build),code_controls=controls,scope='Placed production C plus retained assembly, independent DATA/frame/call model and original register/defined-flag comparison. Complete byte and width witnesses separately check results and preserved state; private operand prefix separately checks modeled effects. RNG/sound/sector/spawn/list helpers stubbed; bounded counts, RNG 0..32767, seeded incoming hint; no map/assets/live allocator validation.')
  a.output.write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8');print(json.dumps(report))
 if __name__=='__main__':main()

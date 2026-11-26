@@ -127,7 +127,7 @@ check_sector_puzzle --exe {exe} --build {build} --output {build}/sector-puzzle-b
 check_encounter_exit --exe {exe} --build {build} --output {build}/encounter-exit-behavior.json | encexit
 check_encounter_latch --exe {exe} --build {build} --output {build}/encounter-latch-behavior.json | enclatch
 check_encounter_frame --exe {exe} --build {build} --output {build}/encounter-frame-behavior.json | encexit encspawn
-check_encounter_spawn --exe {exe} --build {build} --output {build}/encounter-spawn.json | encspawn encclock encshift encbyte
+check_encounter_spawn --exe {exe} --build {build} --output {build}/encounter-spawn.json | encspawn encclock encshift encbyte encoper encwidth
 check_capture_header --exe {exe} --output {build}/capture-header-behavior.json | pcxhdr capopen capclose pcxstep
 check_setgamemode_init --exe {exe} --object {build}/setdisp.obj --output {build}/setgamemode-init-behavior.json | setinit setdisp plook
 

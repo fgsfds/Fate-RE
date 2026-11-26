@@ -5,7 +5,9 @@
  * Literal copies, latch and actor code remain unlinked in these private contexts.
  */
 #ifdef ENCOUNTER_LATCH_CONTEXT
-#if defined(ENCOUNTER_SHIFT_CONTEXT)
+#if defined(ENCOUNTER_OPERAND_CONTEXT)
+#define encounter_exit_context encounter_operand_context
+#elif defined(ENCOUNTER_SHIFT_CONTEXT)
 #define encounter_exit_context encounter_shift_context
 #elif defined(ENCOUNTER_CLOCK_CONTEXT)
 #define encounter_exit_context encounter_clock_context
@@ -137,6 +139,25 @@ extern long encounter_activate_keep_x(int, long);
 #pragma aux encounter_activate_keep_x "activate_sector_" parm [eax] [edx] value [edx] modify exact [eax];
 
 #endif
+#ifdef ENCOUNTER_OPERAND_CONTEXT
+/* The tile stage captures a DX word in its containing EDX register.
+ * Upper bits are unspecified and disappear in the final short store after
+ * unsigned addition; the placed original byte conversion supplies zeroes.
+ */
+extern unsigned encounter_tile_edx(unsigned short);
+#pragma aux encounter_tile_edx = "" parm nomemory [dx] value [edx] modify exact nomemory [];
+/* Preserve the real signed tile width and unsigned repeat byte. */
+extern short spawn_width_ax(short);
+#pragma aux spawn_width_ax = "" parm nomemory [ax] value [ax] modify exact nomemory [];
+extern unsigned char spawn_repeat_dl(unsigned char);
+#pragma aux spawn_repeat_dl = "" parm nomemory [dl] value [dl] modify exact nomemory [];
+extern unsigned char spawn_repeat_al(unsigned char);
+#pragma aux spawn_repeat_al = "" parm nomemory [al] value [al] modify exact nomemory [];
+extern int spawn_width_ebx(int);
+#pragma aux spawn_width_ebx = "" parm nomemory [ebx] value [ebx] modify exact nomemory [];
+
+#endif
+
 extern void encounter_exit_context(void);
 #pragma aux encounter_exit_context modify exact [eax];
 
@@ -157,6 +178,10 @@ void encounter_exit_context(void)
     EncounterSpawn spawn;
     short index, slot, sector_index;
     short position_choice, repeat_choice;
+#ifdef ENCOUNTER_OPERAND_CONTEXT
+    unsigned short position_draw, tile_draw;
+    int position_index;
+#endif
     short near_first, near_second;
 #ifdef ENCOUNTER_SHIFT_CONTEXT
     short x_shift;
@@ -220,9 +245,17 @@ void encounter_exit_context(void)
 #endif
         goto check_spawn_count;
         do {
+#ifdef ENCOUNTER_OPERAND_CONTEXT
+            position_draw = encounter_draw_dx((unsigned char)random_value());
+            position_draw &= 15U;
+            position_index = exit_int_ebx((short)position_draw);
+            spawn.position.x = positions[position_index].x;
+            spawn.position.y = positions[position_index].y;
+#else
             position_choice = (short)(random_value() & 15);
             spawn.position.x = positions[position_choice].x;
             spawn.position.y = positions[position_choice].y;
+#endif
             spawn.position.z = spawn_height;
 
             /* The original passes untouched stack bytes as the first input hint.
@@ -234,7 +267,13 @@ void encounter_exit_context(void)
 #else
             slot = spawn_sprite_at_position(0x2b, &spawn.position, spawn.sector_hint);
 #endif
+#ifdef ENCOUNTER_OPERAND_CONTEXT
+            tile_draw = encounter_draw_dx((unsigned char)random_value());
+            tile_draw &= 1U;
+            sprite[slot].tile = (short)(encounter_tile_edx(tile_draw) + 0x350U);
+#else
             sprite[slot].tile = (short)(0x350 + (random_value() & 1));
+#endif
 
 #ifdef ENCOUNTER_LATCH_CONTEXT
             repeat_draw = encounter_draw_dx((unsigned char)random_value());
@@ -254,7 +293,16 @@ void encounter_exit_context(void)
             sprite[slot].yrepeat = (unsigned char)(repeats[repeat_choice].y >> (unsigned short)spawn.y_shift.full);
 #endif
 
+#ifdef ENCOUNTER_OPERAND_CONTEXT
+            {
+                short width = spawn_width_ax(tilesizx[sprite[slot].tile]);
+                unsigned char repeat = spawn_repeat_dl(sprite[slot].xrepeat);
+                int signed_width = spawn_width_ebx(width);
+                scaled_width = (long)signed_width * spawn_repeat_al(repeat);
+            }
+#else
             scaled_width = (long)tilesizx[sprite[slot].tile] * sprite[slot].xrepeat;
+#endif
             sprite[slot].clipdist = (unsigned char)((unsigned long)scaled_width >> 7);
             spawn.number = add_listed_sprite_keep_number(slot, spawn.number + 1UL);
 check_spawn_count:
