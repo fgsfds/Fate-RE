@@ -5040,6 +5040,14 @@ for _phase in COMPILER_CONTEXT_PHASES:
     LEAVES[_phase['phase']] = (_phase['address']+0x25600, _phase['end']-_phase['begin'])
     LEAF_CODE_SLICES[_phase['phase']] = (_phase['public'], _phase['begin'], _phase['end'], _context['size'])
 
+# Sound callback/flags phase; private RET is guarded but not linked.
+LEAVES['sound_playback_options_'] = (0x5a778, 80)
+LEAF_CODE_SLICES['sound_playback_options_'] = ('playback_options_', 0, 80, 81)
+LEAF_CONTEXT_SHA256['playback_options_'] = '187e536ea0de2158507674aa90c0fb641d394cd9f3f0daa9defbbf8cb4151bca'
+LEAF_CONTEXT_FIXUPS['playback_options_'] = {3: ('sound_sample_done_offset_', False, 0), 10: ('sound_callback_return_offset_', False, 0), 17: ('sound_callback_return_offset_', False, 0), 34: ('_frame_state_17160f', False, 0), 41: ('_sound_slots', False, 0)}
+DATA_OFFSETS.update({'_frame_state_17160f': 0x17160f, '_sound_slots': 0x854dc})
+CODE_OFFSETS.update({'sound_callback_return_offset_': 0x24c35, 'sound_sample_done_offset_': 0x24c36})
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

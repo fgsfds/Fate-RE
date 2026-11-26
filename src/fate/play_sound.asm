@@ -1,6 +1,7 @@
 ; Load or reuse a sound sample and queue it for playback.
 BITS 32
 ORG 0x34f79
+section .text align=1
 
 invalid_sound_number equ 0x936
 frame_state_12cd0 equ 0x12cd0
@@ -181,29 +182,8 @@ play_sound:
     mov [esi + 0x2c], eax
 
 .branch_35178:
-    mov dword [esi + 0x60], sound_sample_done_offset
-    mov dword [esi + 0x5c], sound_callback_return_offset
-    mov dword [esi + 0x64], sound_callback_return_offset
-    test cl, 0x1
-    jz short .branch_351b0
-    mov eax, ecx
-    sar eax, byte 0x10
-    mov edx, eax
-    mov eax, [frame_state_17160f]
-    mov eax, [nosplit eax*4 + sound_slots]
-    mov [eax + 0xe], dx
-    mov dword [esi + 0x30], 0xffffffff
-
-.branch_351b0:
-    test cl, 0x8
-    jnz short .branch_351ba
-    test cl, 0x10
-    jz short .branch_351c8
-
-.branch_351ba:
-    mov dword [esi + 0x30], 0xffffffff
-    mov dword [esi + 0x2c], 0x0
-
+; Callback/flags instructions are supplied by sound_playback_options.c.
+section .sound_tail align=1 vstart=0x351c8 follows=.text
 .branch_351c8:
     mov eax, [frame_state_17160f]
     mov eax, [nosplit eax*4 + sound_slots]

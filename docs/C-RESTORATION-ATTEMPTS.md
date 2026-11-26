@@ -823,6 +823,8 @@ reload without broad volatile qualifiers. Production remains assembly; no C
 coverage is credited. Probe: `work/play-sound-next/parameter_lifetime.c`;
 comparison: `work/play-sound-next/compiler/playsnd2.report.json`.
 
+The callback/flags phase at `0x35178..0x351c8` is now exact compiler-generated C: 80 bytes and five typed LE sites. Keeping the signed high-word result in EAX before its EDX identity fixes the first probe mismatch at `0x35193`. Whole-routine entry allocation, archive operations and queue handling remain in 675 assembly bytes. Evidence: `work/sound-research-nov26/evidence.json`; accepted integration/audit: `work/sound-integrate-nov26/`.
+
 ### IPX initializer: ES boundary and lifetimes
 
 Watcom 10.5 flat model rejects modifying ES with E1122. Keep the original raw

@@ -1713,6 +1713,8 @@ for _routine in SAVE_IO_ROUTINES:
 for _phase in COMPILER_CONTEXT_PHASES:
     OBJECT_NAMES[_phase['phase']] = _phase['object']
 
+OBJECT_NAMES['sound_playback_options_'] = 'sndopts'
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

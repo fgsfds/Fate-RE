@@ -115,7 +115,7 @@ check_gameplay_checksum {exe} {build}/gamesum.obj | gamesum
 check_status_panel --exe {exe} --build {build} | statpan statpent
 check_gameplay_update --exe {exe} --build {build} | gamup gamrow
 # Assembly-only caller baseline, checked with the related sample queue/control unit.
-check_play_sound --exe {exe} --build {build} --output {build}/play-sound-behavior.json | audctrl
+check_play_sound --exe {exe} --build {build} --output {build}/play-sound-behavior.json | audctrl sndopts
 check_netsend --exe {exe} --object {build}/netsend.obj --output {build}/netsend-behavior.json | netsend
 check_sendpacket --exe {exe} --object {build}/sendpack.obj --output {build}/sendpacket-behavior.json | sendpack
 check_receivepacket --exe {exe} --production-object {build}/netinitc.obj --fragment-object {build}/recvlen.obj --output {build}/receivepacket-behavior.json | netinitc recvlen

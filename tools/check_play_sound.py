@@ -253,7 +253,7 @@ def main():
     p.add_argument('--exe', type=Path, required=True)
     group = p.add_mutually_exclusive_group()
     group.add_argument('--object',type=Path,help='existing candidate OMF; research behavior only')
-    group.add_argument('--build',type=Path,help='existing build containing asm/play_sound.bin; exact ASM baseline')
+    group.add_argument('--build',type=Path,help='production build containing split sound assembly and sndopts.obj')
     p.add_argument('--symbol',default='play_sound_')
     p.add_argument('--output',type=Path,help='optional report; omitted means no files written')
     a = p.parse_args()
@@ -279,19 +279,36 @@ def main():
         report['original_model_cases_passed'] = len(observations)
         candidate = None
         if a.build:
-            assembled = (a.build/'asm/play_sound.bin').read_bytes()
-            assert len(assembled) == SIZE, 'assembly baseline must be 755 bytes'
-            assert assembled == exe[RAW:RAW+SIZE], 'assembly baseline differs from pinned original'
+            from verify_c_leaf import bind_leaf_details, DATA_OFFSETS, CODE_OFFSETS, FUNCTION_ADDRESSES
+            from check_ripple_stack import mutate_public_byte
+            from check_ripple_control import rename_external
+            obj = (a.build/'sndopts.obj').read_bytes()
+            kwargs = dict(address=0x35178, functions=FUNCTION_ADDRESSES, absolute_code=CODE_OFFSETS, code_bindings={})
+            phase, _ = bind_leaf_details(obj, 'sound_playback_options_', DATA_OFFSETS, **kwargs)
+            for bad in (mutate_public_byte(obj, 'playback_options_', 80),
+                        rename_external(obj, b'sound_sample_done_offset_', b'sound_sample_done_offseu_')):
+                try:
+                    bind_leaf_details(bad, 'sound_playback_options_', DATA_OFFSETS, **kwargs)
+                except ValueError:
+                    pass
+                else:
+                    raise AssertionError('Sound private context mutation escaped')
+            retained = (a.build/'asm/play_sound.bin').read_bytes()
+            assert len(retained) == 675
+            assembled = retained[:511] + phase + retained[511:]
+            report.update(restored_c_bytes=80, retained_asm_bytes=675, context_mutations_rejected=2)
+            assert len(assembled) == SIZE, 'reconstructed routine must be 755 bytes'
+            assert assembled == exe[RAW:RAW+SIZE], 'reconstructed routine differs from pinned original'
             refs = pointer_range(read_le_fixups(exe)['pointers'],ENTRY,SIZE)
-            assert len(refs) == 57, 'assembly baseline requires 57 LE sites'
+            assert len(refs) == 57, 'reconstructed routine requires 57 LE sites'
             candidate = bytearray(assembled)
             for off,target in refs.items():
                 assert off+4 <= SIZE, 'partial LE operand at assembly boundary'
                 candidate[off:off+4] = pack('<I',target)
             candidate = bytes(candidate)
             assert candidate == ref
-            report.update(mode='assembly-baseline-and-behavior',exact_verified=True,
-                          assembly_sha256=sha(assembled),assembly_bytes=SIZE,assembly_le_fixups=57)
+            report.update(mode='mixed-C-assembly-and-behavior',exact_verified=True,
+                          reconstructed_raw_sha256=sha(assembled),routine_bytes=SIZE,routine_le_fixups=57)
         if a.object:
             from verify_c_leaf import CODE_OFFSETS
             saved = dict(CODE_OFFSETS)
