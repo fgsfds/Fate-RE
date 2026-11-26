@@ -591,3 +591,4 @@ fate/encounter_byte encbyte
 fate/encounter_spawn encoper /4r /s /or /bt=dos /dENCOUNTER_LATCH_CONTEXT=1 /dENCOUNTER_OPERAND_CONTEXT=1
 fate/encounter_width encwidth
 fate/weapon_animation wanim
+fate/weapon_animation wanstate /4r /s /or /bt=dos /dWEAPON_ACTIVE_STATE_CONTEXT=1

@@ -5189,17 +5189,18 @@ for _name, _offset in WEAPON_ANIMATION_LAYOUT['DATA'].items():
         raise ValueError('Conflicting weapon DATA binding: '+_name)
     DATA_OFFSETS[_name] = _offset
 FUNCTION_ADDRESSES.update(WEAPON_ANIMATION_LAYOUT['functions'])
-_weapon_context = WEAPON_ANIMATION_LAYOUT['context']
-_weapon_public = _weapon_context['public']
-FUNCTION_ADDRESSES[_weapon_public] = _weapon_context['address']
-LEAF_CONTEXT_SHA256[_weapon_public] = _weapon_context['sha256']
-LEAF_CONTEXT_LITERALS[_weapon_public] = (0, _weapon_context['literal_sha256'], {})
-LEAF_CONTEXT_RECORDS[_weapon_public] = _weapon_context['records']
-LEAF_CONTEXT_FIXUPS[_weapon_public] = {int(k): tuple(v) for k,v in _weapon_context['fixups'].items()}
-LEAF_SECTION_BRANCHES[_weapon_public] = (_weapon_context['size'], WEAPON_ANIMATION_LAYOUT['original_size'], {int(k): (bytes.fromhex(v[0]),v[1],v[2]) for k,v in _weapon_context['branches'].items()})
+for _weapon_context in WEAPON_ANIMATION_LAYOUT['contexts']:
+    _weapon_public = _weapon_context['public']
+    FUNCTION_ADDRESSES[_weapon_public] = _weapon_context['address']
+    LEAF_CONTEXT_SHA256[_weapon_public] = _weapon_context['sha256']
+    LEAF_CONTEXT_LITERALS[_weapon_public] = (0, _weapon_context['literal_sha256'], {})
+    LEAF_CONTEXT_RECORDS[_weapon_public] = _weapon_context['records']
+    LEAF_CONTEXT_FIXUPS[_weapon_public] = {int(k): tuple(v) for k,v in _weapon_context['fixups'].items()}
+    LEAF_SECTION_BRANCHES[_weapon_public] = (_weapon_context['size'], WEAPON_ANIMATION_LAYOUT['original_size'], {int(k): (bytes.fromhex(v[0]),v[1],v[2]) for k,v in _weapon_context['branches'].items()})
 for _phase in WEAPON_ANIMATION_LAYOUT['phases']:
+    _weapon_context = next(c for c in WEAPON_ANIMATION_LAYOUT['contexts'] if c['public'] == _phase['public'])
     LEAVES[_phase['symbol']] = (_phase['address']+0x25600, _phase['end']-_phase['begin'])
-    LEAF_CODE_SLICES[_phase['symbol']] = (_weapon_public, _phase['begin'], _phase['end'], _weapon_context['size'])
+    LEAF_CODE_SLICES[_phase['symbol']] = (_phase['public'], _phase['begin'], _phase['end'], _weapon_context['size'])
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

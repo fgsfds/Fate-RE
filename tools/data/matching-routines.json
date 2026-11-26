@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1505,
-  "unique_code_bytes": 194510,
-  "le_pointers": 10632,
+  "routines": 1519,
+  "unique_code_bytes": 194634,
+  "le_pointers": 10637,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1900,6 +1900,16 @@
       "le_pointers": 3
     },
     {
+      "symbol": "weapon_animation_29cfc_",
+      "object": "wanstate.obj",
+      "object_sha256": "7960bd7c297dd57852ba6326ed60792f1d5276121e89e60e70d894ea22f3e08b",
+      "sha256": "f1b302a3fb00c11063cce10575991df1b0bee73b8e69e5b8fca2371d04e3501c",
+      "raw_offset": "0x4f2fc",
+      "loaded_address": "0x29cfc",
+      "bytes": 16,
+      "le_pointers": 1
+    },
+    {
       "symbol": "weapon_animation_29d13_",
       "object": "wanim.obj",
       "object_sha256": "4622157dadb7fc2182080c7a455e7fc589371237a05788362db8dfb633621290",
@@ -1908,6 +1918,16 @@
       "loaded_address": "0x29d13",
       "bytes": 34,
       "le_pointers": 2
+    },
+    {
+      "symbol": "weapon_animation_29d46_",
+      "object": "wanim.obj",
+      "object_sha256": "e99c47845be5d4634b42faeac782504e76dad791ecd953fe21df719cbb5ec816",
+      "sha256": "b73f7cc6d67da4378ae52608d4df3e76dd5ba01b783e3e238ae599a08afb031c",
+      "raw_offset": "0x4f346",
+      "loaded_address": "0x29d46",
+      "bytes": 7,
+      "le_pointers": 0
     },
     {
       "symbol": "weapon_animation_29dbb_",
@@ -1938,6 +1958,16 @@
       "loaded_address": "0x29df3",
       "bytes": 15,
       "le_pointers": 1
+    },
+    {
+      "symbol": "weapon_animation_29e0f_",
+      "object": "wanim.obj",
+      "object_sha256": "e99c47845be5d4634b42faeac782504e76dad791ecd953fe21df719cbb5ec816",
+      "sha256": "b73f7cc6d67da4378ae52608d4df3e76dd5ba01b783e3e238ae599a08afb031c",
+      "raw_offset": "0x4f40f",
+      "loaded_address": "0x29e0f",
+      "bytes": 7,
+      "le_pointers": 0
     },
     {
       "symbol": "weapon_animation_29e40_",
@@ -2000,6 +2030,36 @@
       "le_pointers": 1
     },
     {
+      "symbol": "weapon_animation_29f01_",
+      "object": "wanim.obj",
+      "object_sha256": "e99c47845be5d4634b42faeac782504e76dad791ecd953fe21df719cbb5ec816",
+      "sha256": "b73f7cc6d67da4378ae52608d4df3e76dd5ba01b783e3e238ae599a08afb031c",
+      "raw_offset": "0x4f501",
+      "loaded_address": "0x29f01",
+      "bytes": 7,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "weapon_animation_29f32_",
+      "object": "wanim.obj",
+      "object_sha256": "e99c47845be5d4634b42faeac782504e76dad791ecd953fe21df719cbb5ec816",
+      "sha256": "5a7a3bdd966611b4ebc76a5f1d458a4e0ca98f8067715827ce7f1458cf29e17b",
+      "raw_offset": "0x4f532",
+      "loaded_address": "0x29f32",
+      "bytes": 6,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "weapon_animation_29f51_",
+      "object": "wanstate.obj",
+      "object_sha256": "7960bd7c297dd57852ba6326ed60792f1d5276121e89e60e70d894ea22f3e08b",
+      "sha256": "f35d7f9ce12ba56b1bf3af515f4a1921b06daed3155b75f366779a393fecf343",
+      "raw_offset": "0x4f551",
+      "loaded_address": "0x29f51",
+      "bytes": 18,
+      "le_pointers": 1
+    },
+    {
       "symbol": "weapon_animation_29f89_",
       "object": "wanim.obj",
       "object_sha256": "4622157dadb7fc2182080c7a455e7fc589371237a05788362db8dfb633621290",
@@ -2008,6 +2068,26 @@
       "loaded_address": "0x29f89",
       "bytes": 14,
       "le_pointers": 1
+    },
+    {
+      "symbol": "weapon_animation_29fbf_",
+      "object": "wanstate.obj",
+      "object_sha256": "7960bd7c297dd57852ba6326ed60792f1d5276121e89e60e70d894ea22f3e08b",
+      "sha256": "07ea90e75e80c43faf38c6987ca972aab1041adbaa8577f076a38b1814900927",
+      "raw_offset": "0x4f5bf",
+      "loaded_address": "0x29fbf",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "weapon_animation_29fdf_",
+      "object": "wanim.obj",
+      "object_sha256": "e99c47845be5d4634b42faeac782504e76dad791ecd953fe21df719cbb5ec816",
+      "sha256": "b73f7cc6d67da4378ae52608d4df3e76dd5ba01b783e3e238ae599a08afb031c",
+      "raw_offset": "0x4f5df",
+      "loaded_address": "0x29fdf",
+      "bytes": 7,
+      "le_pointers": 0
     },
     {
       "symbol": "weapon_animation_2a08e_",
@@ -2020,6 +2100,46 @@
       "le_pointers": 1
     },
     {
+      "symbol": "weapon_animation_2a0a0_",
+      "object": "wanstate.obj",
+      "object_sha256": "7960bd7c297dd57852ba6326ed60792f1d5276121e89e60e70d894ea22f3e08b",
+      "sha256": "a31f4d7275244cc756ffd172436da26e521a883388880be73f358761b3a7dcf5",
+      "raw_offset": "0x4f6a0",
+      "loaded_address": "0x2a0a0",
+      "bytes": 6,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "weapon_animation_2a0ba_",
+      "object": "wanstate.obj",
+      "object_sha256": "7960bd7c297dd57852ba6326ed60792f1d5276121e89e60e70d894ea22f3e08b",
+      "sha256": "9aacb843ee7f6ee19edbcf9776bb9eb3f7074bb1d3c27ac5cb065706749a4d5b",
+      "raw_offset": "0x4f6ba",
+      "loaded_address": "0x2a0ba",
+      "bytes": 9,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "weapon_animation_2a0d6_",
+      "object": "wanstate.obj",
+      "object_sha256": "7960bd7c297dd57852ba6326ed60792f1d5276121e89e60e70d894ea22f3e08b",
+      "sha256": "6dc7e37270f5413cac783297f2401851b98cc1efd18a81379dbe0e0fb3a4a3bf",
+      "raw_offset": "0x4f6d6",
+      "loaded_address": "0x2a0d6",
+      "bytes": 15,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "weapon_animation_2a10c_",
+      "object": "wanim.obj",
+      "object_sha256": "e99c47845be5d4634b42faeac782504e76dad791ecd953fe21df719cbb5ec816",
+      "sha256": "b73f7cc6d67da4378ae52608d4df3e76dd5ba01b783e3e238ae599a08afb031c",
+      "raw_offset": "0x4f70c",
+      "loaded_address": "0x2a10c",
+      "bytes": 7,
+      "le_pointers": 0
+    },
+    {
       "symbol": "weapon_animation_2a166_",
       "object": "wanim.obj",
       "object_sha256": "4622157dadb7fc2182080c7a455e7fc589371237a05788362db8dfb633621290",
@@ -2028,6 +2148,26 @@
       "loaded_address": "0x2a166",
       "bytes": 15,
       "le_pointers": 1
+    },
+    {
+      "symbol": "weapon_animation_2a18a_",
+      "object": "wanim.obj",
+      "object_sha256": "e99c47845be5d4634b42faeac782504e76dad791ecd953fe21df719cbb5ec816",
+      "sha256": "b73f7cc6d67da4378ae52608d4df3e76dd5ba01b783e3e238ae599a08afb031c",
+      "raw_offset": "0x4f78a",
+      "loaded_address": "0x2a18a",
+      "bytes": 7,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "weapon_animation_2a1ba_",
+      "object": "wanim.obj",
+      "object_sha256": "e99c47845be5d4634b42faeac782504e76dad791ecd953fe21df719cbb5ec816",
+      "sha256": "b73f7cc6d67da4378ae52608d4df3e76dd5ba01b783e3e238ae599a08afb031c",
+      "raw_offset": "0x4f7ba",
+      "loaded_address": "0x2a1ba",
+      "bytes": 7,
+      "le_pointers": 0
     },
     {
       "symbol": "weapon_animation_2a1dc_",

@@ -159,11 +159,14 @@ def bind_production(exe,build):
  from verify_c_suite import OBJECT_NAMES
  from verify_assembly_suite import ROUTINES,GROUP_SLICES,DATA_POINTER_SITES,verify_pointer_operands
  from capstone import Cs,CS_ARCH_X86,CS_MODE_32
- layout=v.WEAPON_ANIMATION_LAYOUT;context=layout['context'];blob=(build/'wanim.obj').read_bytes()
- parsed=v.parsed_leaf_object(blob);raw_context=bytes(parsed[0][1]['data'])
- assert parsed[1]==((1,0,context['public']),) and len(raw_context)==context['size']
- instructions=tuple(Cs(CS_ARCH_X86,CS_MODE_32).disasm(raw_context,0));boundaries={i.address for i in instructions}|{len(raw_context)}
- assert sum(i.size for i in instructions)==len(raw_context)
+ layout=v.WEAPON_ANIMATION_LAYOUT;contexts={c['public']:c for c in layout['contexts']};blobs={};boundaries={}
+ for public,context in contexts.items():
+  blob=(build/(context['object']+'.obj')).read_bytes();blobs[public]=blob
+  parsed=v.parsed_leaf_object(blob);raw_context=bytes(parsed[0][1]['data'])
+  assert parsed[1]==((1,0,public),) and len(raw_context)==context['size']
+  instructions=tuple(Cs(CS_ARCH_X86,CS_MODE_32).disasm(raw_context,0))
+  boundaries[public]={i.address for i in instructions}|{len(raw_context)}
+  assert sum(i.size for i in instructions)==len(raw_context)
  pointers=read_le_fixups(exe)['pointers'];covered=set();exact_body=bytearray(SIZE);run_body=bytearray(SIZE);reports=[]
  def install(address,exact,loaded):
   region=set(range(address,address+len(exact)))
@@ -171,9 +174,10 @@ def bind_production(exe,build):
   covered.update(region);exact_body[address-ENTRY:address-ENTRY+len(exact)]=exact;run_body[address-ENTRY:address-ENTRY+len(loaded)]=loaded
  for phase in layout['phases']:
   name=phase['symbol'];address=phase['address'];size=phase['end']-phase['begin']
-  assert OBJECT_NAMES[name]=='wanim' and v.LEAVES[name]==(address+0x25600,size)
+  context=contexts[phase['public']];blob=blobs[context['public']]
+  assert OBJECT_NAMES[name]==context['object'] and v.LEAVES[name]==(address+0x25600,size)
   assert v.LEAF_CODE_SLICES[name]==(context['public'],phase['begin'],phase['end'],context['size'])
-  assert phase['begin'] in boundaries and phase['end'] in boundaries
+  assert phase['begin'] in boundaries[context['public']] and phase['end'] in boundaries[context['public']]
   fields={}
   exact,bindings=v.bind_leaf_details(blob,name,v.DATA_OFFSETS,address=address,functions=v.FUNCTION_ADDRESSES,absolute_code=v.CODE_OFFSETS,code_bindings=fields)
   assert not fields and exact==exe[address+0x25600:address+0x25600+size]
@@ -195,12 +199,12 @@ def bind_production(exe,build):
   for site,target in fields.items():loaded[site:site+4]=target.to_bytes(4,'little')
   install(address,exact,loaded)
  assert covered==set(range(ENTRY,ENTRY+SIZE)) and exact_body==exe[ENTRY+0x25600:ENTRY+0x25600+SIZE]
- assert sum(r['bytes'] for r in reports)==269 and sum(r['DATA_sites'] for r in reports)==20
- return blob,bytes(run_body),reports
+ assert sum(r['bytes'] for r in reports)==393 and sum(r['DATA_sites'] for r in reports)==25
+ return blobs,bytes(run_body),reports
 
-def bind_natural(blob):
+def bind_natural(blob,context):
  import verify_c_leaf as v
- context=v.WEAPON_ANIMATION_LAYOUT['context'];public=context['public'];base=0x40000
+ public=context['public'];base=0x40000
  # Natural replay keeps compiler branch destinations; production binding
  # separately checks their original encodings and places selected edges.
  branches=v.LEAF_SECTION_BRANCHES.pop(public)
@@ -211,14 +215,14 @@ def bind_natural(blob):
  finally:v.LEAF_SECTION_BRANCHES[public]=branches
  return code,base
 
-def context_controls(blob):
+def context_controls(blob,context):
  import verify_c_leaf as v
  from dataclasses import replace
  from check_encounter_actor import rewrite_fixup
  from check_encounter_spawn import move_zero_public
  from check_ripple_stack import mutate_public_byte
  from check_ripple_control import rename_external
- layout=v.WEAPON_ANIMATION_LAYOUT;context=layout['context'];public=context['public'];phase=layout['phases'][0];controls=[]
+ layout=v.WEAPON_ANIMATION_LAYOUT;public=context['public'];phase=next(p for p in layout['phases'] if p['public']==public);controls=[]
  def bind(b):return v.bind_leaf_details(b,phase['symbol'],v.DATA_OFFSETS,address=phase['address'],functions=v.FUNCTION_ADDRESSES,absolute_code=v.CODE_OFFSETS,code_bindings={})
  def reject(b,message):
   try:bind(b)
@@ -263,6 +267,8 @@ def code_controls(original,body,rows):
  for name,site,old,new,case_name in [
   ('clock_threshold',ENTRY+18,6,7,'clock_7_0'),
   ('clock_branch',ENTRY+19,0x7e,0x7f,'clock_7_0'),
+  ('state_dispatch',0x29d07,0x85,0x84,'active_1_0_-1_7_1'),
+  ('active_state_kind',0x29f56,1,2,'active_1_0_-1_7_1'),
   ('signed_direction',0x29e41,0x9e,0x9f,'idle_0_0_1_6'),
   ('projectile_sign_extension',0x29e61,0xbf,0xb7,'projectile_word_-1'),
   ('record_stride',0x29dbf,2,1,'idle_1_1_1_7'),
@@ -278,8 +284,10 @@ def code_controls(original,body,rows):
 def natural_code_controls(original,body,base,rows):
  # After binding the guarded private context, redirect frame -1 to -1053.
  # The distinct seeded pairs make the final-DATA oracle detect the wrong read.
- instruction=bytes.fromhex('81ea1d040000') # SUB EDX,1053
- assert body.count(instruction)==1
+ # Register allocation differs between the two guarded compiler contexts.
+ instructions=[bytes.fromhex(s) for s in ('81ea1d040000','81e81d040000')]
+ assert sum(body.count(i) for i in instructions)==1
+ instruction=next(i for i in instructions if i in body)
  site=body.index(instruction);bad=bytearray(body)
  bad[site+2:site+6]=(2105).to_bytes(4,'little')
  case=next(c for c in rows if c['name']=='slot_zero_negative_frame')
@@ -292,13 +300,23 @@ def main():
  import argparse
  parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--exe',type=Path,required=True);parser.add_argument('--build',type=Path,required=True);parser.add_argument('--output',type=Path,required=True);a=parser.parse_args()
  exe=a.exe.read_bytes();assert hashlib.sha256(exe).hexdigest()==TARGET_SHA256;verify_data_extent(exe)
- original=image(exe);reference=bytes(original[ENTRY:ENTRY+SIZE]);blob,body,spans=bind_production(exe,a.build)
- natural,base=bind_natural(blob);rows=cases();calls=register_differences=flag_differences=0
+ original=image(exe);reference=bytes(original[ENTRY:ENTRY+SIZE]);blobs,body,spans=bind_production(exe,a.build)
+ import verify_c_leaf as v
+ contexts=v.WEAPON_ANIMATION_LAYOUT['contexts'];rows=cases();calls=0
+ natural_contexts=[]
+ for context in contexts:
+  code,base=bind_natural(blobs[context['public']],context)
+  natural_contexts.append(dict(context=context,code=code,base=base,register_differences=0,flag_differences=0))
  for case in rows:
   observed=exercise(original,reference,case);placed=exercise(original,body,case);assert placed==observed,case['name']
-  native=exercise(original,natural,case,base,native=True);assert native[0]==observed[0],case['name']
-  calls+=len(observed[0][1]);register_differences+=native[1]!=observed[1];flag_differences+=native[2]!=observed[2]
- report=dict(status='PASS',cases=len(rows),natural_cases=len(rows),projectile_calls=calls,natural_register_difference_cases=register_differences,natural_flag_difference_cases=flag_differences,placed_c_bytes=sum(s['bytes'] for s in spans),DATA_sites=sum(s['DATA_sites'] for s in spans),spans=spans,context_controls=context_controls(blob),code_controls=code_controls(original,body,rows),scope='Original and placed full routine vs independent final-DATA/ordered-callback model, saved registers/stack/raw EAX/arithmetic flags. Complete private C separately checks modeled effects and saved ABI, not raw EAX/flags equivalence. Valid definition slots0..7 and actual LE DATA lookup bounds, including slot-zero negative frames. Projectile is stubbed; no volatile access trace, clock-ISR interleavings or projectile gameplay validation.')
- report['natural_code_controls']=natural_code_controls(original,natural,base,rows)
+  calls+=len(observed[0][1])
+  for row in natural_contexts:
+   native=exercise(original,row['code'],case,row['base'],native=True);assert native[0]==observed[0],case['name']
+   row['register_differences']+=native[1]!=observed[1];row['flag_differences']+=native[2]!=observed[2]
+ private=[]
+ for row in natural_contexts:
+  context=row['context']
+  private.append(dict(public=context['public'],cases=len(rows),register_difference_cases=row['register_differences'],flag_difference_cases=row['flag_differences'],context_controls=context_controls(blobs[context['public']],context),code_controls=natural_code_controls(original,row['code'],row['base'],rows)))
+ report=dict(status='PASS',cases=len(rows),projectile_calls=calls,private_contexts=private,placed_c_bytes=sum(s['bytes'] for s in spans),DATA_sites=sum(s['DATA_sites'] for s in spans),spans=spans,code_controls=code_controls(original,body,rows),scope='Original and placed full routine vs independent final-DATA/ordered-callback model, saved registers/stack/raw EAX/arithmetic flags. Complete private C contexts separately check modeled effects and saved ABI, not raw EAX/flags equivalence. Valid definition slots0..7 and actual LE DATA lookup bounds, including slot-zero negative frames. Projectile is stubbed; no volatile access trace, clock-ISR interleavings or projectile gameplay validation.')
  a.output.write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8');print(json.dumps(report))
 if __name__=='__main__':main()

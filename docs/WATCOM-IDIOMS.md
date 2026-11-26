@@ -280,6 +280,16 @@ wrong terminal EBX, so DATA-only replay would miss that ABI error.
 
 ### State-machine tables and DATA views
 
+Promoting the actual signed state through an empty full-EDX identity after
+the idle branch keeps the tick flag live in EAX and restores active-state
+dispatch groups. Keep the original short-DX capture before that branch.
+These lifetimes can require separate guarded whole-algorithm contexts; the
+state allocation alone does not also fix the earlier clock load/store.
+For reused pure index intermediates, prove the same input and result at
+each placement: `3 * slot` may feed either a 24-byte definition or a 96-byte
+frame row. Preserve each original continuation, other live registers, flags
+and memory order, and check that no branch enters inside the selected group.
+
 Nominal table bounds need not describe every original lookup. Weapon slot zero
 uses zero lowering/base/ready tiles, so its frame lookup can use index -1053
 and read before the nominal offset table. Model the resolved address, then use

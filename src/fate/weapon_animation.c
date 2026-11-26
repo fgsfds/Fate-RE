@@ -4,6 +4,9 @@
  * before the nominal frame table; resolved lookups must stay inside DATA.
  * Definition slots and displayed/selected/requested slots must be 0..7.
  */
+#ifdef WEAPON_ACTIVE_STATE_CONTEXT
+#define update_weapon_animation update_weapon_animation_state_context
+#endif
 typedef struct {
     short base_tile, ready_tile;
     short lower_start, lower_end;
@@ -43,11 +46,22 @@ extern int keep_tick(int);
 extern short keep_state(short);
 #pragma aux keep_state = "" parm nomemory [dx] value [dx] modify exact [];
 
+#ifdef WEAPON_ACTIVE_STATE_CONTEXT
+/* Promote the actual signed state once, keeping the tick lifetime in EAX. */
+extern int keep_active_state(int);
+#pragma aux keep_active_state = "" parm nomemory [edx] value [edx] modify exact [];
+#else
+#define active_state state
+#endif
+
 void update_weapon_animation(void);
 #pragma aux update_weapon_animation modify exact [eax];
 void update_weapon_animation(void)
 {
     int advance;
+#ifdef WEAPON_ACTIVE_STATE_CONTEXT
+    int active_state;
+#endif
     short state, request, selected, displayed;
     short tile, limit, next, previous, fire_tile, direction;
     short frame, x, y;
@@ -121,7 +135,10 @@ void update_weapon_animation(void)
     goto offsets;
 
 advance_animation:
-    if (state == LOWERING) {
+#ifdef WEAPON_ACTIVE_STATE_CONTEXT
+    active_state = keep_active_state((int)state);
+#endif
+    if (active_state == LOWERING) {
         if (frame_direction == 0) {
             tile = weapon_tile;
             if (tile >= animation_limit)
@@ -141,7 +158,7 @@ advance_animation:
         goto offsets;
     }
 
-    if (state == START_RAISING) {
+    if (active_state == START_RAISING) {
         request = requested_weapon;
         weapon_animation_state = RAISING;
         displayed_weapon = request;
@@ -157,7 +174,7 @@ advance_animation:
 
     next = (short)(weapon_tile + 1);
     previous = (short)(weapon_tile - 1);
-    if (state == RAISING) {
+    if (active_state == RAISING) {
         if (frame_direction == 0) {
             tile = weapon_tile;
             if (tile >= animation_limit)
@@ -178,7 +195,7 @@ advance_animation:
         goto offsets;
     }
 
-    if (state != FIRING || !advance)
+    if (active_state != FIRING || !advance)
         goto offsets;
     direction = frame_direction;
     if (direction == 0) {

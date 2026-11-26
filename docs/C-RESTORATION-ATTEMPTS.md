@@ -136,20 +136,22 @@ and `shrdor-evidence.json`, and `work/encounter-operand-integrate-nov27/audit.js
 
 ### Weapon animation tick and state allocation
 
-The first whole C translation, Watcom 10.5 `/4r /s /or /bt=dos`, emits 1,175
-bytes versus 1,307. Fifteen guarded phases now supply 269 native bytes, including
-the original five-save frame entry and return. First mismatch is `0x29cee`:
-the reference stores the reread clock before loading tick 1 into EAX, while the
-compiler first materializes 1 in EBX, stores the clock, then copies the flag.
-The state arrives in DX but is promoted into EAX rather than EDX on the active
-path. Next try branch-local `keep_tick(1/0)` calls instead of the merged call,
-then an explicit signed state-to-EDX identity after the idle branch. Preserve
-volatile access order and the shared return; do not repeat the unchanged first
-translation or claim its natural EAX/flags are a binary match. The DATA word
-view must use the actual LE extent `0x28a300`, including reachable slot-zero
-negative frames, with definition slots 0..7. Evidence:
-`work/weapon-animation-nov27/placement-evidence.json` and
-`work/weapon-animation-integrate-nov27/audit.json`.
+Watcom 10.5 `/4r /s /or /bt=dos` emits 1,175 bytes versus 1,307. A signed
+state-to-EDX identity after the idle branch gives a second 1,167-byte context;
+six exact control groups add 69 bytes without changing the five-save frame.
+Reusing proven pure slot factors and direction conversion adds another 55
+placed bytes. Together 29 guarded phases supply 393 native bytes; 914 remain
+assembly. Neither complete private context is a shared-ABI replacement.
+
+The base context still first differs at `0x29cee`: it materializes tick 1 in
+EBX before the clock store. The state context instead first loads the clock
+into EDX at `0x29cd9`. Branch-local `keep_tick(1/0)` calls restore the ordered
+clock block but drop ESI from the saved frame, first differing at `0x29cd7`;
+that trial is not integrated. Next unify the tick/store lifetime with the
+signed state allocation without changing the five saves or volatile order;
+do not repeat the two independent probes. Preserve the actual DATA extent
+`0x28a300` and valid definition slots 0..7. Evidence:
+`work/weapon-tick-nov27/placement-evidence.json` and its integrated fixture.
 
 ### Video prompt-mode blocker
 
