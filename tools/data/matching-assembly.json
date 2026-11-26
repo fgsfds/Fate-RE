@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 480,
-  "unique_code_bytes": 221087,
-  "le_pointers": 11965,
+  "routines": 477,
+  "unique_code_bytes": 220991,
+  "le_pointers": 11960,
   "non_routine_code_spans": [
     {
       "symbol": "capture_after_open",
@@ -1904,42 +1904,6 @@
       "public_entry": "0x36d0a",
       "binary_offset": 25,
       "le_pointers": 29
-    },
-    {
-      "symbol": "play_sound",
-      "source": "src/fate/play_sound.asm",
-      "binary": "play_sound.bin",
-      "sha256": "1d7007a4cdfe76c5d07ce47f05c1ad012dc95447a24212da6c135290ade81b12",
-      "bytes": 87,
-      "raw_offset": "0x5a579",
-      "loaded_address": "0x34f79",
-      "public_entry": "0x34f79",
-      "binary_offset": 0,
-      "le_pointers": 5
-    },
-    {
-      "symbol": "play_sound_tail",
-      "source": "src/fate/play_sound.asm",
-      "binary": "play_sound.bin",
-      "sha256": "4e48ab6b84301af8b8fa92c04373b79b5d6f0f37d207c775c98fbce001ff67fe",
-      "bytes": 2,
-      "raw_offset": "0x5a85e",
-      "loaded_address": "0x3525e",
-      "public_entry": "0x3525e",
-      "binary_offset": 87,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "play_sound_epilogue",
-      "source": "src/fate/play_sound.asm",
-      "binary": "play_sound.bin",
-      "sha256": "f145825cc711e89257ef62d28d3fdac82a6b690802c4e82e3f2e463cb257a969",
-      "bytes": 7,
-      "raw_offset": "0x5a865",
-      "loaded_address": "0x35265",
-      "public_entry": "0x35265",
-      "binary_offset": 89,
-      "le_pointers": 0
     },
     {
       "symbol": "draw_map_overlays",

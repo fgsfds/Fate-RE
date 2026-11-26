@@ -1740,6 +1740,13 @@ OBJECT_NAMES['sound_playback_cache_'] = 'sndcache'
 
 OBJECT_NAMES['sound_playback_slots_'] = 'sndscan'
 
+OBJECT_NAMES['sound_frame_prologue_'] = 'sndframe'
+OBJECT_NAMES['sound_frame_guard_'] = 'sndframe'
+OBJECT_NAMES['sound_frame_invalid_'] = 'sndframe'
+OBJECT_NAMES['sound_frame_return_jump_'] = 'sndframe'
+OBJECT_NAMES['sound_frame_epilogue_'] = 'sndframe'
+OBJECT_NAMES['sound_frame_limit_'] = 'sndlimit'
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

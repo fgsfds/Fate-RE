@@ -582,3 +582,5 @@ fate/sound_playback_queue sndqueue
 fate/sound_playback_archive sndarch
 fate/sound_playback_cache sndcache
 fate/sound_playback_slots sndscan
+fate/sound_playback_frame sndframe
+fate/sound_playback_limit sndlimit

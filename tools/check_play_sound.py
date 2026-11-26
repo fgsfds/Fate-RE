@@ -13,6 +13,7 @@ sys.path[:0] = [str(ROOT / 'tools'), str(ROOT / 'work/cache/python/095240b6cf469
 from differential import Machine, Contract, Region, Observation, bind_bodies, first_difference, require_mutations_detected
 from le_fixups import read_le_fixups, pointer_range
 from compare_exe import TARGET_SHA256
+from unicorn import UC_HOOK_CODE
 
 ENTRY, RAW, SIZE = 0x34f79, 0x5a579, 755
 DS, DATA_SIZE, STACK, STOP = 0x80000, 0x360000, 0x3f0000, 0x3fff00
@@ -236,8 +237,17 @@ def exercise(body, c):
                      ('read_',read),('audio_pan_',positional('audio_pan',pan)),
                      ('audio_volume_',positional('audio_volume',volume)),('queue_audio_sample_',queue)]:
         machine.stub(F[name],fn)
-    return machine.run(dict(eax=u32(c['number']),edx=u32(c['x']),ebx=u32(c['y']),
-                            ecx=c['flags'],esi=0x23456789,edi=0x3456789a,ebp=0x456789ab,eflags=0x202))
+    hook = None
+    if body[51:57] == bytes.fromhex('81ffa3000000'):
+        def compare_alias(_cpu,_address,_size,_user):
+            assert machine.register('eax') == machine.register('edi'), 'Sound compare alias differs'
+        hook = machine.cpu.hook_add(UC_HOOK_CODE,compare_alias,begin=ENTRY+51,end=ENTRY+51)
+    try:
+        return machine.run(dict(eax=u32(c['number']),edx=u32(c['x']),ebx=u32(c['y']),
+                                ecx=c['flags'],esi=0x23456789,edi=0x3456789a,ebp=0x456789ab,eflags=0x202))
+    finally:
+        if hook is not None:
+            machine.cpu.hook_del(hook)
 
 def reference_body(exe):
     assert sha(exe) == TARGET_SHA256, 'pinned executable hash mismatch'
@@ -281,7 +291,7 @@ def main():
     p.add_argument('--exe', type=Path, required=True)
     group = p.add_mutually_exclusive_group()
     group.add_argument('--object',type=Path,help='existing candidate OMF; research behavior only')
-    group.add_argument('--build',type=Path,help='production build containing split sound assembly and sndscan/sndcache/sndarch/sndopts/snddesc/sndpos/sndqueue objects')
+    group.add_argument('--build',type=Path,help='production build containing all registered sound C objects, including sndframe and sndlimit')
     p.add_argument('--symbol',default='play_sound_')
     p.add_argument('--output',type=Path,help='optional report; omitted means no files written')
     a = p.parse_args()
@@ -333,7 +343,6 @@ def main():
                     assert expected_error in str(error), str(error)
                 else:
                     raise AssertionError('Sound private context mutation escaped')
-            retained = (a.build/'asm/play_sound.bin').read_bytes()
             description_obj = (a.build/'snddesc.obj').read_bytes()
             description = checked_phase(description_obj, 'sound_playback_description_', 0x350f1, 69)
             try:
@@ -492,6 +501,112 @@ def main():
             assert not full_refs and full[:93] == scan and full[93:108] == cache[:15] and full[108:] == b'\xc3'
             verify_leaf_relocations(full[93:108],{off-93:value for off,value in bindings.items() if 93<=off<108},
                 pointers,0x3502d,code_bindings={})
+            frame_obj = (a.build/'sndframe.obj').read_bytes()
+            limit_obj = (a.build/'sndlimit.obj').read_bytes()
+            frame_specs = {'prologue':(ENTRY,8),'guard':(ENTRY+8,43),'invalid':(ENTRY+57,30),
+                'return_jump':(0x3525e,2),'epilogue':(0x35265,7)}
+            frame_parts = {role:checked_phase(frame_obj,'sound_frame_'+role+'_',address,size)
+                for role,(address,size) in frame_specs.items()}
+            limit = checked_phase(limit_obj,'sound_frame_limit_',ENTRY+51,6)
+            prefix = frame_parts['prologue']+frame_parts['guard']+limit+frame_parts['invalid']
+            assert len(prefix)==87
+            frame_controls = []
+            def reject_frame(blob,message,role='prologue',**kwargs):
+                address,size = frame_specs[role]
+                try:
+                    checked_phase(blob,'sound_frame_'+role+'_',address,size,**kwargs)
+                except (ValueError,AssertionError) as error:
+                    assert message in str(error),str(error)
+                else:
+                    raise AssertionError('Playback frame context mutation escaped')
+            for offset in (0,5,8,53,88,748,755,759,30,83):
+                reject_frame(mutate_public_byte(frame_obj,'playback_complete_context_',offset),'context digest')
+                frame_controls.append('frame_byte_'+str(offset))
+            for offset in (2,7,10,14):
+                try:
+                    checked_phase(mutate_public_byte(limit_obj,'playback_sound_limit_',offset),
+                        'sound_frame_limit_',ENTRY+51,6)
+                except ValueError as error:
+                    assert 'context digest' in str(error),str(error)
+                else:
+                    raise AssertionError('Private signed predicate mutation escaped')
+                frame_controls.append('predicate_byte_'+str(offset))
+            unchanged,changed = rewrite_fixup(frame_obj,lambda f:False,lambda f:f)
+            assert not changed
+            assert checked_phase(unchanged,'sound_frame_guard_',ENTRY+8,43)==frame_parts['guard']
+            for name,change in (
+                    ('frame',lambda f:replace(f,frame=(1,1))),
+                    ('unknown_group',lambda f:replace(f,frame=(1,127))),
+                    ('target',lambda f:replace(f,target=(2,1))),
+                    ('displacement',lambda f:replace(f,displacement=1))):
+                bad,changed = rewrite_fixup(frame_obj,lambda f:f.offset==517,change)
+                assert changed
+                reject_frame(bad,'context fixup records')
+                frame_controls.append('private_callback_'+name)
+            reject_frame(rename_external(frame_obj,b'sound_sample_done_offset_',b'sound_sample_done_offseu_'),
+                'context fixup records')
+            frame_controls.append('private_callback_name')
+            digest = leaf.LEAF_CONTEXT_SHA256.pop('playback_complete_context_')
+            try:
+                for offset in (71,517):
+                    reject_frame(mutate_public_byte(frame_obj,'playback_complete_context_',offset),
+                        'context fixup target/form/addend')
+                    frame_controls.append('frame_addend_'+str(offset))
+                for offset in (31,84):
+                    reject_frame(mutate_public_byte(frame_obj,'playback_complete_context_',offset),
+                        'Section branch compiler target differs')
+                    frame_controls.append('private_epilogue_target_'+str(offset))
+            finally:
+                leaf.LEAF_CONTEXT_SHA256['playback_complete_context_'] = digest
+            branch_spec = leaf.LEAF_SECTION_BRANCHES['playback_complete_context_']
+            try:
+                branches = dict(branch_spec[2]);branches[30]=(b'\xe9',753,749)
+                leaf.LEAF_SECTION_BRANCHES['playback_complete_context_'] = (760,755,branches)
+                reject_frame(frame_obj,'Sound selected bytes differ',role='guard')
+                frame_controls.append('placed_epilogue_target')
+            finally:
+                leaf.LEAF_SECTION_BRANCHES['playback_complete_context_'] = branch_spec
+            selected = leaf.LEAF_CODE_SLICES['sound_frame_prologue_']
+            try:
+                leaf.LEAF_CODE_SLICES['sound_frame_prologue_'] = (selected[0],0,10,760)
+                reject_frame(frame_obj,'Sound selected extent differs')
+                frame_controls.append('prologue_extent')
+            finally:
+                leaf.LEAF_CODE_SLICES['sound_frame_prologue_'] = selected
+            def complete_frame(data_offsets=DATA_OFFSETS,code_offsets=CODE_OFFSETS):
+                code_refs = {}
+                code,refs = bind_leaf_details(frame_obj,'playback_complete_context_',data_offsets,address=ENTRY,
+                    functions=FUNCTION_ADDRESSES,absolute_code=code_offsets,code_bindings=code_refs)
+                assert code_refs=={517:0x24c36,524:0x24c35,531:0x24c35}, 'Complete playback CODE bindings differ'
+                return code,refs,code_refs
+            frame_full,frame_refs,frame_code_refs = complete_frame()
+            assert frame_full[:10]==bytes.fromhex('56575583ec0889c789f8')
+            assert frame_full[53:58]==bytes.fromhex('3da3000000') and frame_full[58]==0x7e
+            assert frame_full[746:748]==b'\xeb\x05' and frame_full[753:]==frame_parts['epilogue']
+            wrong_data,wrong_code = dict(DATA_OFFSETS),dict(CODE_OFFSETS)
+            wrong_data['sound_sample_done_offset_']=wrong_code.pop('sound_sample_done_offset_')
+            try:
+                complete_frame(wrong_data,wrong_code)
+            except AssertionError as error:
+                assert 'Complete playback CODE bindings differ' in str(error),str(error)
+            else:
+                raise AssertionError('Private playback CODE-to-DATA mutation escaped')
+            full_candidate = bytearray(frame_full)
+            for offset,value in frame_refs.items():
+                full_candidate[offset:offset+4]=pack('<I',value+(0x10000 if offset in frame_code_refs else 0x80000))
+            full_candidate = bytes(full_candidate)
+            predicate,refs = bind_leaf_details(limit_obj,'playback_sound_limit_',{},address=0x20000,code_bindings={})
+            assert not refs and len(predicate)==15
+            predicate_cases = 0
+            for number in (-2147483648,-1,0,162,163,164,2147483647):
+                for poison in (0,0xffffffff,0x7fff0000):
+                    contract=Contract(0x20000,STOP,STACK,4,preserved=('ebx','ecx','edx','esi','edi','ebp'),results=('eax',))
+                    m=Machine(contract,predicate)
+                    observed=m.run(dict(eax=poison,edi=u32(number),ebx=0xbad00001,ecx=0xbad00002,
+                        edx=0xbad00003,esi=0xbad00004,ebp=0xbad00005))
+                    assert observed.registers['eax']==int(number>163)
+                    predicate_cases+=1
+            report['private_predicate_cases_passed']=predicate_cases
             # Preserve raw operands while changing their LE object class. These
             # must fail typed binding checks before reference-loaded replay.
             for control_obj, symbol, address, size, name, was_code in (
@@ -499,7 +614,8 @@ def main():
                     (description_obj, 'sound_playback_description_', 0x350f1, 69, '_frame_state_16fb18', False),
                     (archive_obj, 'sound_playback_archive_', 0x3507b, 118, '_frame_state_16fdac', False),
                     (cache_obj, 'sound_playback_cache_', 0x3502d, 78, '_frame_state_17160b', False),
-                    (scan_obj, 'sound_playback_slots_', 0x34fd0, 93, '_frame_state_1705dc', False)):
+                    (scan_obj, 'sound_playback_slots_', 0x34fd0, 93, '_frame_state_1705dc', False),
+                    (frame_obj, 'sound_frame_guard_', ENTRY+8, 43, '_audio_enabled', False)):
                 data_offsets, code_offsets = dict(DATA_OFFSETS), dict(CODE_OFFSETS)
                 source, destination = (code_offsets, data_offsets) if was_code else (data_offsets, code_offsets)
                 destination[name] = source.pop(name)
@@ -510,7 +626,7 @@ def main():
                     assert 'Original LE relocation sites or targets differ' in str(error), str(error)
                 else:
                     raise AssertionError('Sound relocation class mutation escaped')
-            report['relocation_class_controls_rejected'] = 5
+            report['relocation_class_controls_rejected'] = 7
             queue_obj = (a.build/'sndqueue.obj').read_bytes()
             queue_parts = []
             for role, address, size in (('metadata',0x351c8,61),('y',0x35205,3),
@@ -562,13 +678,16 @@ def main():
                 assert part==exe[address+0x25600:address+0x25600+size]
                 verify_leaf_relocations(part,bindings,pointers,address,code_bindings=code_refs)
                 queue_results.append(part)
-            assert len(retained) == 96
-            ending=queue_results[0]+retained[87:89]+queue_results[1]+retained[89:]
-            assembled = retained[:87] + scan + cache + archive + description + position + phase + queue + ending
-            natural = retained[:87] + scan + cache + archive + description + position + phase + b''.join(queue_parts[i] for i in (0,2,1,3)) + ending
-            report.update(restored_c_bytes=659, retained_asm_bytes=96,
-                context_mutations_rejected=12+len(archive_controls)+len(cache_controls)+len(scan_controls),
+            assert frame_full[748:753]==queue_results[1]
+            verify_leaf_relocations(frame_full[748:753],{off-748:value for off,value in frame_refs.items() if 748<=off<753},
+                pointers,0x35260,code_bindings={})
+            ending=queue_results[0]+frame_parts['return_jump']+queue_results[1]+frame_parts['epilogue']
+            assembled = prefix + scan + cache + archive + description + position + phase + queue + ending
+            natural = prefix + scan + cache + archive + description + position + phase + b''.join(queue_parts[i] for i in (0,2,1,3)) + ending
+            report.update(restored_c_bytes=755, retained_asm_bytes=0,
+                context_mutations_rejected=12+len(archive_controls)+len(cache_controls)+len(scan_controls)+len(frame_controls),
                 archive_context_controls=archive_controls,cache_context_controls=cache_controls,scan_context_controls=scan_controls,
+                frame_context_controls=frame_controls,private_complete_context_cases_passed=0,
                 swap_scope='mapped writable slot and normal completion; placed order matches original even at fault/interrupt boundaries')
             assert len(assembled) == SIZE, 'reconstructed routine must be 755 bytes'
             assert assembled == exe[RAW:RAW+SIZE], 'reconstructed routine differs from pinned original'
@@ -587,7 +706,7 @@ def main():
             natural_candidate = bytes(natural_loaded)
             report['natural_queue_cases_passed'] = 0
             assert candidate == ref
-            report.update(mode='mixed-C-assembly-and-behavior',exact_verified=True,
+            report.update(mode='compiler-C-and-behavior',exact_verified=True,
                           reconstructed_raw_sha256=sha(assembled),routine_bytes=SIZE,routine_le_fixups=57)
         if a.object:
             from verify_c_leaf import CODE_OFFSETS
@@ -614,6 +733,10 @@ def main():
                 difference = first_difference(observed,natural_result)
                 assert not difference, f"natural queue {c['name']}: {difference}"
                 report['natural_queue_cases_passed'] += 1
+                full_result = exercise(full_candidate,c)
+                difference = first_difference(observed,full_result)
+                assert not difference, f"private complete context {c['name']}: {difference}"
+                report['private_complete_context_cases_passed'] += 1
         wrong = bytearray(ref)
         pos = wrong.index(pack('<I',0x7fff7fff))
         wrong[pos:pos+4] = pack('<I',0x7ffe7ffe)

@@ -5142,6 +5142,30 @@ LEAF_CONTEXT_FIXUPS['playback_slot_scan_'] = {3: ('_frame_state_17160f', False, 
 LEAF_CONTEXT_RECORDS['playback_slot_scan_'] = json.loads((Path(__file__).parent/'data/sound-slots-context-guard.json').read_text(encoding='utf-8'))
 DATA_OFFSETS['_frame_state_1705dc'] = 0x1705dc
 
+# Complete valid playback context: exclude an idempotent EAX copy and
+# select a separate signed predicate for the original EDI comparison.
+LEAVES['sound_frame_prologue_'] = (370041, 8)
+LEAF_CODE_SLICES['sound_frame_prologue_'] = ('playback_complete_context_', 0, 8, 760)
+LEAVES['sound_frame_guard_'] = (370049, 43)
+LEAF_CODE_SLICES['sound_frame_guard_'] = ('playback_complete_context_', 10, 53, 760)
+LEAVES['sound_frame_invalid_'] = (370098, 30)
+LEAF_CODE_SLICES['sound_frame_invalid_'] = ('playback_complete_context_', 58, 88, 760)
+LEAVES['sound_frame_return_jump_'] = (370782, 2)
+LEAF_CODE_SLICES['sound_frame_return_jump_'] = ('playback_complete_context_', 746, 748, 760)
+LEAVES['sound_frame_epilogue_'] = (370789, 7)
+LEAF_CODE_SLICES['sound_frame_epilogue_'] = ('playback_complete_context_', 753, 760, 760)
+LEAF_CONTEXT_SHA256['playback_complete_context_'] = 'bbaed09c58cfbc7063ac2d8626156d201f1f36fb55a8a266cd0d547d15fcf24c'
+LEAF_CONTEXT_FIXUPS['playback_complete_context_'] = {18: ('_audio_enabled', False, 0), 37: ('_frame_state_12cd4', False, 0), 46: ('_frame_state_12cd8', False, 0), 61: ('_invalid_sound_number', False, 0), 66: ('_error_buffer', False, 0), 71: ('sprintf_', True, 0), 91: ('_frame_state_17160f', False, 0), 96: ('_frame_state_17160f', False, 0), 103: ('_sound_slots', False, 0), 114: ('_frame_state_17160f', False, 0), 126: ('_frame_state_1705dc', False, 0), 145: ('memset_', True, 0), 166: ('_frame_state_17160f', False, 0), 172: ('_frame_state_17160f', False, 0), 182: ('_frame_state_17160f', False, 0), 198: ('_frame_state_16fdac', False, 4), 209: ('_frame_state_17160b', False, 0), 214: ('_frame_state_17160b', False, 0), 223: ('_frame_state_16fdac', False, 4), 231: ('_frame_state_16fdac', False, 0), 241: ('_frame_state_17160b', False, 0), 247: ('_frame_state_17160b', False, 0), 258: ('_frame_state_17160f', False, 0), 282: ('_frame_state_16fb18', False, 4), 292: ('_sound_archive_handle', False, 0), 297: ('lseek_', True, 0), 306: ('_frame_state_16fb18', False, 4), 314: ('_frame_state_17160f', False, 0), 321: ('_frame_state_16fdac', False, 0), 326: ('_sound_archive_handle', False, 0), 331: ('read_', True, 0), 342: ('_frame_state_16fb18', False, 4), 348: ('_frame_state_12cec', False, 0), 362: ('_frame_state_17160f', False, 0), 369: ('_frame_state_16fdac', False, 4), 376: ('_frame_state_16fdac', False, 0), 385: ('_frame_state_16fb18', False, 4), 403: ('_frame_state_17160f', False, 0), 479: ('audio_pan_', True, 0), 507: ('audio_volume_', True, 0), 517: ('sound_sample_done_offset_', False, 0), 524: ('sound_callback_return_offset_', False, 0), 531: ('sound_callback_return_offset_', False, 0), 548: ('_frame_state_17160f', False, 0), 555: ('_sound_slots', False, 0), 595: ('_frame_state_17160f', False, 0), 602: ('_sound_slots', False, 0), 610: ('_frame_state_17160f', False, 0), 617: ('_sound_slots', False, 0), 625: ('_frame_state_17160f', False, 0), 632: ('_sound_slots', False, 0), 646: ('_frame_state_17160f', False, 0), 653: ('_sound_slots', False, 0), 663: ('_audio_driver', False, 0), 668: ('queue_audio_sample_', True, 0), 675: ('_frame_state_17160f', False, 0), 682: ('_sound_slots', False, 0), 689: ('_frame_state_17160f', False, 0), 696: ('_sound_slots', False, 0), 708: ('_frame_state_17160f', False, 0), 715: ('_sound_slots', False, 0), 726: ('_frame_state_17160f', False, 0), 733: ('_sound_slots', False, 0), 749: ('_frame_state_17160f', False, 0)}
+LEAF_CONTEXT_RECORDS['playback_complete_context_'] = json.loads((Path(__file__).parent/'data/sound-frame-context-guard.json').read_text(encoding='utf-8'))
+LEAF_SECTION_BRANCHES['playback_complete_context_'] = (760, 755, {30: (b'\xe9', 753, 748), 83: (b'\xe9', 753, 748)})
+FUNCTION_ADDRESSES['playback_complete_context_'] = 0x34f79
+LEAVES['sound_frame_limit_'] = (0x5a5ac, 6)
+LEAF_CODE_SLICES['sound_frame_limit_'] = ('playback_sound_limit_', 0, 6, 15)
+LEAF_CONTEXT_SHA256['playback_sound_limit_'] = '45741204fb099dbfba6257d1a5a40d5c04376f4f1f2ab84873dc17a830023908'
+LEAF_CONTEXT_FIXUPS['playback_sound_limit_'] = {}
+LEAF_CONTEXT_RECORDS['playback_sound_limit_'] = {'flat_groups': [2], 'fixups': []}
+DATA_OFFSETS.update({'_audio_enabled': 0x171602, '_frame_state_12cd4': 0x12cd4, '_frame_state_12cd8': 0x12cd8, '_invalid_sound_number': 0x936, '_error_buffer': 0x67e3c})
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

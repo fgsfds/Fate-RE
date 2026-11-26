@@ -514,3 +514,22 @@ cache code and its typed LE site, and guard the final private RET separately.
 The narrow fill alias relies on the pinned CRT saving EAX/ECX and retaining
 ESI while EDX may change; the fixture models that contract with a stub, rather
 than independently executing the real CRT.
+
+
+The completed playback frame uses a valid 760-byte full C context around the
+already accepted middle phases. An emitted reverse EAX copy is idempotent after
+MOV EDI,EAX and can be excluded after proving equality along every comparison
+path. A separate signed C predicate supplies the exact six-byte CMP EDI,163
+instead of the private context's five-byte EAX comparison; the placed JLE consumes
+identical comparison flags. Guard the predicate's entire SETcc/mask/RET suffix,
+not merely its matching prefix. Two near return jumps retain their opcodes and
+widths while rebinding the checked compiler-local epilogue target. Verify the
+excluded five-byte success load and DATA LE against its installed C provider.
+
+Do not replace a real C lifetime with repeated naked register getters throughout
+an unlinked full context: the allocator may repurpose that register. A mixed
+placement can still pass while the private algorithm fails. The accepted frame
+keeps the actual sound variable and passes natural whole-context cases as well
+as placed cases. Keep its custom hidden EBX input and public-name distinction
+explicit, and match shared global and real-callee types. No new padding,
+handwritten instructions or volatile-access reordering is required.
