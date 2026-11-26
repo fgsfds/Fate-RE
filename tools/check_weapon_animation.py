@@ -36,7 +36,7 @@ def verify_data_extent(exe):
 def cases():
  rows=[]
  def add(name,**kw):
-  row=dict(name=name,clock=0x10007,last=0x10000,action=0,state=0,selected=1,displayed=1,tile=1035,requested=1,direction=0,limit=1037,projectile=2,fire_tile=1040,input=1<<13,x=1234,y=-2345,patch={},defs_patch={})
+  row=dict(name=name,clock=0x10007,last=0x10000,action=0,state=0,selected=1,displayed=1,tile=1035,requested=1,direction=0,limit=1037,projectile=2,fire_tile=1040,input=1<<13,x=1234,y=-2345,patch={},defs_patch={},data_patch={})
   row.update(kw);rows.append(row)
  for selected,requested,action,delta in itertools.product(range(8),range(8),(-1,0,1,2,3),(6,7)):
   add(f'idle_{selected}_{requested}_{action}_{delta}',selected=selected,displayed=selected,tile=1053 if selected==0 else 1035,requested=7,input=requested<<13,action=action,clock=0x10000+delta)
@@ -56,6 +56,10 @@ def cases():
   add(f'callback_{state}_{len(rows)}',state=state,action=1 if state==0 else 0,selected=0 if state==0 else 1,displayed=0 if state==0 else 1,input=0 if state==0 else 1<<13,tile=1039 if state==4 else 1053,limit=1042,fire_tile=1040,patch=patch)
  for projectile in (-32768,-1,0,32767):
   add(f'projectile_word_{projectile}',action=1,selected=0,displayed=0,input=0,defs_patch={0:{7:projectile}})
+ # Distinguish another in-object negative frame from the slot-zero tile-0
+ # transitions above, whose frame is always -1053. Seed both pairs explicitly.
+ add('slot_zero_negative_frame',state=-1,displayed=0,tile=1052,
+     data_patch={FRAMES-4:(-1234,2345),FRAMES-1053*4:(3141,-2718)})
  return rows
 
 def seed(original,case):
@@ -63,6 +67,9 @@ def seed(original,case):
  for key in A:write(m,key,case[key])
  for index,fields in case['defs_patch'].items():
   for field,value in fields.items():put(m,DS+DEFS+24*index+2*field,'h',i16(value))
+ for offset,pair in case['data_patch'].items():
+  assert 0<=offset and offset+4<=DATA_SIZE
+  put(m,DS+offset,'hh',*pair)
  put(m,DS+MARKER,'I',0x76543210)
  m[CALLER_SP-96:CALLER_SP+68]=bytes([0xa7])*164;put(m,CALLER_SP,'I',STOP)
  return m
@@ -268,6 +275,19 @@ def code_controls(original,body,rows):
   controls.append(name)
  return controls
 
+def natural_code_controls(original,body,base,rows):
+ # After binding the guarded private context, redirect frame -1 to -1053.
+ # The distinct seeded pairs make the final-DATA oracle detect the wrong read.
+ instruction=bytes.fromhex('81ea1d040000') # SUB EDX,1053
+ assert body.count(instruction)==1
+ site=body.index(instruction);bad=bytearray(body)
+ bad[site+2:site+6]=(2105).to_bytes(4,'little')
+ case=next(c for c in rows if c['name']=='slot_zero_negative_frame')
+ try:exercise(original,bytes(bad),case,base,native=True)
+ except AssertionError as error:assert str(error)==case['name'],str(error)
+ else:raise AssertionError('Native negative-frame alias escaped')
+ return ['slot_zero_negative_frame_alias']
+
 def main():
  import argparse
  parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--exe',type=Path,required=True);parser.add_argument('--build',type=Path,required=True);parser.add_argument('--output',type=Path,required=True);a=parser.parse_args()
@@ -279,5 +299,6 @@ def main():
   native=exercise(original,natural,case,base,native=True);assert native[0]==observed[0],case['name']
   calls+=len(observed[0][1]);register_differences+=native[1]!=observed[1];flag_differences+=native[2]!=observed[2]
  report=dict(status='PASS',cases=len(rows),natural_cases=len(rows),projectile_calls=calls,natural_register_difference_cases=register_differences,natural_flag_difference_cases=flag_differences,placed_c_bytes=sum(s['bytes'] for s in spans),DATA_sites=sum(s['DATA_sites'] for s in spans),spans=spans,context_controls=context_controls(blob),code_controls=code_controls(original,body,rows),scope='Original and placed full routine vs independent final-DATA/ordered-callback model, saved registers/stack/raw EAX/arithmetic flags. Complete private C separately checks modeled effects and saved ABI, not raw EAX/flags equivalence. Valid definition slots0..7 and actual LE DATA lookup bounds, including slot-zero negative frames. Projectile is stubbed; no volatile access trace, clock-ISR interleavings or projectile gameplay validation.')
+ report['natural_code_controls']=natural_code_controls(original,natural,base,rows)
  a.output.write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8');print(json.dumps(report))
 if __name__=='__main__':main()
