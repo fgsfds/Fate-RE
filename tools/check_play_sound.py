@@ -253,7 +253,7 @@ def main():
     p.add_argument('--exe', type=Path, required=True)
     group = p.add_mutually_exclusive_group()
     group.add_argument('--object',type=Path,help='existing candidate OMF; research behavior only')
-    group.add_argument('--build',type=Path,help='production build containing split sound assembly, sndopts.obj and snddesc.obj')
+    group.add_argument('--build',type=Path,help='production build containing split sound assembly, sndopts.obj, snddesc.obj and sndpos.obj')
     p.add_argument('--symbol',default='play_sound_')
     p.add_argument('--output',type=Path,help='optional report; omitted means no files written')
     a = p.parse_args()
@@ -304,9 +304,21 @@ def main():
                 assert 'private context digest' in str(error), str(error)
             else:
                 raise AssertionError('Descriptor private cleanup mutation escaped')
-            assert len(retained) == 606
-            assembled = retained[:376] + description + retained[376:442] + phase + retained[442:]
-            report.update(restored_c_bytes=149, retained_asm_bytes=606, context_mutations_rejected=3)
+            position_obj = (a.build/'sndpos.obj').read_bytes()
+            position, _ = bind_leaf_details(position_obj, 'sound_playback_position_', DATA_OFFSETS,
+                address=0x35136, functions=FUNCTION_ADDRESSES, absolute_code=CODE_OFFSETS, code_bindings={})
+            for bad, expected_error in ((mutate_public_byte(position_obj, 'playback_position_', 73), 'context digest'),
+                (rename_external(position_obj, b'sound_sample_done_offset_', b'sound_sample_done_offseu_'), 'context fixup target/form/addend')):
+                try:
+                    bind_leaf_details(bad, 'sound_playback_position_', DATA_OFFSETS, address=0x35136,
+                        functions=FUNCTION_ADDRESSES, absolute_code=CODE_OFFSETS, code_bindings={})
+                except ValueError as error:
+                    assert expected_error in str(error), str(error)
+                else:
+                    raise AssertionError('Unlinked positioning continuation mutation escaped')
+            assert len(retained) == 540
+            assembled = retained[:376] + description + position + phase + retained[376:]
+            report.update(restored_c_bytes=215, retained_asm_bytes=540, context_mutations_rejected=5)
             assert len(assembled) == SIZE, 'reconstructed routine must be 755 bytes'
             assert assembled == exe[RAW:RAW+SIZE], 'reconstructed routine differs from pinned original'
             refs = pointer_range(read_le_fixups(exe)['pointers'],ENTRY,SIZE)

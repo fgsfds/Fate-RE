@@ -1724,6 +1724,8 @@ OBJECT_NAMES['encounter_actor_kind_store_'] = 'enclatch'
 OBJECT_NAMES['encounter_actor_continue_'] = 'enclatch'
 OBJECT_NAMES['encounter_actor_reset_'] = 'actreset'
 
+OBJECT_NAMES['sound_playback_position_'] = 'sndpos'
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

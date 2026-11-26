@@ -145,34 +145,8 @@ play_sound:
 
 .branch_350f1:
 ; Descriptor initialization is supplied by sound_playback_description.c.
-section .sound_position align=1 vstart=0x35136 follows=.text
-    test eax, eax
-    jnz short .branch_3514e
-    test ebp, ebp
-    jnz short .branch_3514e
-    mov dword [esi + 0x44], 0x8000
-    mov dword [esi + 0x2c], 0x7fff7fff
-    jmp short .branch_35178
-
-.branch_3514e:
-    mov eax, [esp + 0x4]
-    mov edx, ebp
-    call audio_pan
-    mov [esi + 0x44], eax
-    test cl, 0x4
-    jz short .branch_3516a
-    mov dword [esi + 0x2c], 0x6fff6fff
-    jmp short .branch_35178
-
-.branch_3516a:
-    mov eax, [esp + 0x4]
-    mov edx, ebp
-    call audio_volume
-    mov [esi + 0x2c], eax
-
-.branch_35178:
-; Callback/flags instructions are supplied by sound_playback_options.c.
-section .sound_tail align=1 vstart=0x351c8 follows=.sound_position
+; Positioning and callback setup are supplied by compiler-generated C.
+section .sound_tail align=1 vstart=0x351c8 follows=.text
 .branch_351c8:
     mov eax, [frame_state_17160f]
     mov eax, [nosplit eax*4 + sound_slots]

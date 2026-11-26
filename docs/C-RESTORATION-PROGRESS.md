@@ -1,21 +1,21 @@
 # Exact C restoration progress
 
-The current saved attribution audit covers all 414,639 CODE bytes and includes 574 compiler units. Saved full validation passed 406 tests and 145 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
+The current saved attribution audit covers all 414,639 CODE bytes and includes 575 compiler units. Saved full validation passed 406 tests and 145 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 167,448 | 40.384% |
+| Compiler-generated instructions | 167,514 | 40.400% |
 | Inline assembly instructions in C objects | 24,311 | 5.863% |
-| Standalone assembly | 221,597 | 53.443% |
+| Standalone assembly | 221,531 | 53.427% |
 | Unattributed instructions and non-routine tables | 1,283 | 0.309% |
 
-The unattributed category contains 882 instruction bytes in 16 unknown routines and 401 non-routine table bytes. Tables are recorded as data, and the unknown instruction bytes remain uncredited. Combined remaining assembly, including inline assembly: 245,908 bytes (59.307%). C-object inventory covers 193,042 bytes (46.56%) and 1,438 C routine spans; the assembly inventory has 480 spans.
+The unattributed category contains 882 instruction bytes in 16 unknown routines and 401 non-routine table bytes. Tables are recorded as data, and the unknown instruction bytes remain uncredited. Combined remaining assembly, including inline assembly: 245,842 bytes (59.291%). C-object inventory covers 193,108 bytes (46.57%) and 1,439 C routine spans; the assembly inventory has 479 spans.
 
 The accepted executable is 741,347 bytes, SHA-256 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.
 
 The encounter actor-state decisions add 95 native C bytes and four DATA LE sites, with no inline instructions. Five slices from the existing latch context provide 86 bytes; a new C reset helper provides the nine-byte immediate word store. Dead private EAX/ECX copies and a redundant TEST are excluded after successor/register/defined-flag proofs. The complete 1,249-byte public and 160-byte literal prefix are guarded; all 85 OMF fixups are pinned, including internal targets, frames, displacements and excluded external names. Five existing branches are placed with checked displacements. The 180-case fixture compares both handoffs, full DATA/frame/register state and defined flags with stubbed near-condition calls, including synthetic signed and poisoned high-word returns. Two code controls and nine context mutations are rejected with diagnostic checks and an unchanged OMF re-encoding control.
 
-Sound playback now has 149 native C bytes and seven LE sites, with no inline instructions: callback/flags setup contributes 80 bytes and five sites (three CODE callback addresses and two DATA operands), and descriptor initialization contributes 69 bytes and two DATA sites. Complete 81- and 72-byte private contexts are guarded, including the excluded RET and RET 4. The descriptor phase preserves the original stack X spill and passes it in EAX to the positional test; the archive pointer-table relocation retains its addend of four. The three assembly spans total 606 bytes. Production archive IDs are 0..163; the negative-ID predecessor is explicitly fixture-backed. The 60-case mixed-body fixture rejects all three context mutations with fresh binding outputs and specific digest/fixup error checks, plus the existing volume and return-cleanup controls. CRT, archive I/O, positional audio and queue operations are stubbed; callback addresses are checked without invocation. This is not live audio-driver or asset verification.
+Sound playback now has 215 native C bytes and seven LE sites, with no inline instructions: callback/flags setup contributes 80 bytes and five sites, descriptor initialization contributes 69 bytes and two DATA sites, and positioning contributes 66 bytes with two relative calls and no selected LE sites. Complete 81-, 72- and 76-byte private contexts are guarded, including excluded callback code and private returns. The positioning context reads Y with a truthful EBP getter, reloads the original stack X slot, and uses a shared real callback store to preserve branch layout. Its audio-volume declaration matches the production unsigned-long return type. The two remaining assembly spans total 540 bytes. Production archive IDs are 0..163; the negative-ID predecessor is explicitly fixture-backed. The 60-case mixed-body fixture rejects five private-context mutations using fresh binding outputs and specific error checks, plus the existing volume and return-cleanup controls. CRT, archive I/O, positional audio and queue operations are stubbed; callback addresses are checked without invocation. This is not live audio-driver or asset verification.
 
 The bounded agent trial completes the remaining gameplay row setup (18 bytes, one LE site) and status-panel entry (84 bytes, five LE sites). Both routines now link entirely from compiler-generated C, with no inline instructions; their assembly sources are removed. Full private-context hashes and fixup identities guard all selected and excluded code. Empty register identities and independent setup slices preserve the original handoffs without emitting handwritten instructions. These are preserved C candidates requalified against current tools, not a measurement of fresh rewrite speed. The gameplay fixture covers the complete controller and 256 placed/private row handoffs; the panel fixture covers 40 placed and 80 private-context cases. Drawing, formatting and controller callees are modeled by fixture callbacks.
 
@@ -70,7 +70,7 @@ The saved full validation and audit artifacts verify the pinned image:
 - Trial agent outcomes: `work/agent-role-trial/outcomes.json`.
 - Gameplay row and controller: `work/reset-82ae95d/gameplay-update-behavior.json`.
 - Status-panel placed and private contexts: `work/reset-82ae95d/status-panel-behavior.json`.
-- Attribution audit: `work/actor-integrate-nov26/audit.json`.
+- Attribution audit: `work/sound-position-integrate-nov26/audit.json`.
 - Unit test log: `work/reset-82ae95d/logs/unit-tests.log`.
 - Encounter latch behavior: `work/encounter-latch-build/encounter-latch-behavior.json`.
 - Puzzle exact slices, relocations, and behavior: `work/sector-puzzle-build/sector-puzzle-behavior.json`.

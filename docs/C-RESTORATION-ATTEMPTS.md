@@ -118,9 +118,13 @@ and argument lifetimes; position-struct reuse spills the correct slots but
 changes entry allocation. Player-mirror and tag-width differences remain.
 Evidence and hash-bound behavior report: `work/numbered-board-next/evidence.json`.
 
-### Encounter actor-state and spawn-prefix hypothesis
+### Encounter spawn-prefix height lifetime
 
-Watcom 10.5 `/4r /s /or /bt=dos` still emits an extra `MOV EAX,ESI` after the SI load. Logical OR of the two computed proximity results emits two TEST/JNE pairs instead of the original signed extensions and `OR EDX,EAX`; the state-1 store also uses ECX. The remaining 95-byte actor gate and 597-byte spawn prefix stay in assembly. Next investigate the proximity-result lifetime with bitwise OR; the spawn loop separately needs the original EBP height lifetime. Evidence: `work/encounter-next/enccond.dis` and `remaining-phases.json`.
+The 95-byte actor gate is restored using checked C slices and a state-store helper.
+The remaining 597-byte spawn prefix still needs the original EBP height lifetime.
+Do not repeat the solved actor condition or ECX state-store probes. Next investigate
+height/register ownership in the spawn loop with the current packed local frame.
+Evidence: `work/actor-integrate-nov26/` and `work/resume-nov26/actor-exact-candidate.json`.
 
 ### Video prompt-mode blocker
 
@@ -823,9 +827,11 @@ reload without broad volatile qualifiers. Production remains assembly; no C
 coverage is credited. Probe: `work/play-sound-next/parameter_lifetime.c`;
 comparison: `work/play-sound-next/compiler/playsnd2.report.json`.
 
-The callback/flags phase at `0x35178..0x351c8` is now exact compiler-generated C: 80 bytes and five typed LE sites. Keeping the signed high-word result in EAX before its EDX identity fixes the first probe mismatch at `0x35193`. Whole-routine entry allocation, archive operations and queue handling remain in 606 assembly bytes. Evidence: `work/sound-research-nov26/evidence.json`; accepted integration/audit: `work/sound-integrate-nov26/`.
+The callback/flags phase at `0x35178..0x351c8` is now exact compiler-generated C: 80 bytes and five typed LE sites. Keeping the signed high-word result in EAX before its EDX identity fixes the first probe mismatch at `0x35193`. Whole-routine entry allocation, archive operations and queue handling remain in 540 assembly bytes. Evidence: `work/sound-research-nov26/evidence.json`; accepted integration/audit: `work/sound-integrate-nov26/`.
 
-Descriptor initialization at `0x350f1..0x35136` adds 69 exact C bytes and two DATA LE sites, with a guarded 72-byte context and excluded private RET 4. The larger positioning attempt rejects an EBP formal (E1122) and changes a short-branch displacement through cloned returns. Next investigate a truthful EBP handoff and shared continuation; do not repeat EBP formal declarations. Evidence: `work/sound-next-nov26/evidence.json`.
+Descriptor initialization at `0x350f1..0x35136` adds 69 exact C bytes and two DATA LE sites, with a guarded 72-byte context and excluded private RET 4. The positioning phase at `0x35136..0x35178` is now 66 exact C bytes with two relative calls and no LE sites. A truthful EBP getter and the next real callback store resolve the rejected EBP formal and cloned-return branch layout. The complete 76-byte context, both call fixups and the excluded callback CODE fixup are guarded. Next investigate the remaining entry/archive and queue-tail ownership; do not repeat the solved positioning probes. Evidence: `work/sound-position-nov26/evidence.json`; corrected production declaration and fresh qualification: `work/sound-position-integrate-nov26/`.
+
+The queue-tail follow-up removes its ESI save and restores the borrowed X read to ESP+4 by using explicit EAX return paths. The next noncommuting mismatch is at `0x35236`: the compiler branch displacement is `2a` instead of `29` because a private RET 4 replaces the original short jump to the shared epilogue and shifts the success load. A 109-byte candidate matches after swapping two independent MOVs, but is not yet registered or credited. An explicit EAX shared-result expression compiled identically to the direct-return variant; a separate `/os` probe added an EBP frame and retained both private returns. Do not repeat those variants. Next resolve shared-epilogue control or qualify the complete prefix with full context guards. Evidence: `work/sound-tail-return-nov26/evidence.json`.
 
 ### IPX initializer: ES boundary and lifetimes
 

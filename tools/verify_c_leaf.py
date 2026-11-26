@@ -5087,6 +5087,12 @@ LEAF_CODE_SLICES['encounter_actor_reset_'] = ('reset_second_trigger_', 0, 9, 10)
 LEAF_CONTEXT_SHA256['reset_second_trigger_'] = '92637b0bb7cc2e23db8e02d6f67634a5a04394bc0cfc84dffb5f46c40a2855f5'
 LEAF_CONTEXT_FIXUPS['reset_second_trigger_'] = {3: ('_second_trigger_state', False, 0)}
 
+LEAVES['sound_playback_position_'] = (0x5a736, 66)
+LEAF_CODE_SLICES['sound_playback_position_'] = ('playback_position_', 0, 66, 76)
+LEAF_CONTEXT_SHA256['playback_position_'] = 'bd5c2684b8e6d13b85be36e29dbae1c7c909081c57b1817a5da64ab358e271a6'
+LEAF_CONTEXT_FIXUPS['playback_position_'] = {31: ('audio_pan_', True, 0), 59: ('audio_volume_', True, 0), 69: ('sound_sample_done_offset_', False, 0)}
+FUNCTION_ADDRESSES.update({'audio_pan_': 0x34e77, 'audio_volume_': 0x34e1b})
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

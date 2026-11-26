@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1438,
-  "unique_code_bytes": 193042,
+  "routines": 1439,
+  "unique_code_bytes": 193108,
   "le_pointers": 10539,
   "non_routine_code_spans": [
     {
@@ -3608,6 +3608,16 @@
       "loaded_address": "0x350f1",
       "bytes": 69,
       "le_pointers": 2
+    },
+    {
+      "symbol": "sound_playback_position_",
+      "object": "sndpos.obj",
+      "object_sha256": "75c438c748534559eee2002cdc5d62ad4ee77df0e2f2f0f113b4c33155ef42f2",
+      "sha256": "2ffbc9b050cf9e32f7ed517be77888995810a8ab8b725bb709649b07bf223b39",
+      "raw_offset": "0x5a736",
+      "loaded_address": "0x35136",
+      "bytes": 66,
+      "le_pointers": 0
     },
     {
       "symbol": "sound_playback_options_",
