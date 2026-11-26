@@ -580,3 +580,4 @@ fate/encounter_actor_reset actreset
 fate/sound_playback_position sndpos
 fate/sound_playback_queue sndqueue
 fate/sound_playback_archive sndarch
+fate/sound_playback_cache sndcache

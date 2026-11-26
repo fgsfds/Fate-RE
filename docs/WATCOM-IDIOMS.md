@@ -491,3 +491,13 @@ frame return, with no CALL or pushed return word. Check the actual transfer
 opcodes and frame contract; an `aborts` declaration alone proves neither.
 The direct archive-entry fixture covers the full-slot edge that normal
 whole-routine execution preempts earlier in the slot scan.
+
+
+In `sound_playback_cache.c`, a getter reads the active index still live in
+EBX immediately after the full-slot comparison. Reusing a C local instead
+introduced an EAX copy before the cache gate. Prove the register survives
+the guard and preserve its full-width domain. The 79-byte private lookup
+context ends in RET at offset 78; cropping that byte places both the short
+miss branch and exhausted-loop fallthrough directly at the next archive C
+phase. Guard the full context and both external continuations, then exercise
+all four exit paths. No opcode rewrite or new transfer is needed.

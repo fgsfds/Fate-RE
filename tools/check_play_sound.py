@@ -281,7 +281,7 @@ def main():
     p.add_argument('--exe', type=Path, required=True)
     group = p.add_mutually_exclusive_group()
     group.add_argument('--object',type=Path,help='existing candidate OMF; research behavior only')
-    group.add_argument('--build',type=Path,help='production build containing split sound assembly and sndarch/sndopts/snddesc/sndpos/sndqueue objects')
+    group.add_argument('--build',type=Path,help='production build containing split sound assembly and sndcache/sndarch/sndopts/snddesc/sndpos/sndqueue objects')
     p.add_argument('--symbol',default='play_sound_')
     p.add_argument('--output',type=Path,help='optional report; omitted means no files written')
     a = p.parse_args()
@@ -404,12 +404,46 @@ def main():
             finally:
                 leaf.LEAF_CONTEXT_SHA256['playback_archive_'] = archive_digest
             archive_controls.append('jump_addend')
+            cache_obj = (a.build/'sndcache.obj').read_bytes()
+            cache = checked_phase(cache_obj,'sound_playback_cache_',0x3502d,78)
+            cache_controls = []
+            def reject_cache(blob,message):
+                try:
+                    checked_phase(blob,'sound_playback_cache_',0x3502d,78)
+                except ValueError as error:
+                    assert message in str(error), str(error)
+                else:
+                    raise AssertionError('Cache context mutation escaped')
+            for offset,mask in ((78,1),(23,1),(24,1),(76,1),(77,1),(10,1),(9,0xe7),(55,1)):
+                reject_cache(mutate_public_byte(cache_obj,'playback_cache_lookup_',offset,mask=mask),'context digest')
+                cache_controls.append('byte_'+str(offset))
+            reject_cache(rename_external(cache_obj,b'playback_cached_sample_',b'playback_cached_samplf_'),'context fixup records')
+            cache_controls.append('hit_target_name')
+            unchanged,changed = rewrite_fixup(cache_obj,lambda f:False,lambda f:f)
+            assert not changed
+            assert checked_phase(unchanged,'sound_playback_cache_',0x3502d,78) == cache
+            for name,change in (
+                    ('frame',lambda f:replace(f,frame=(1,1))),
+                    ('unknown_group',lambda f:replace(f,frame=(1,127))),
+                    ('target',lambda f:replace(f,target=(2,1))),
+                    ('displacement',lambda f:replace(f,displacement=1))):
+                bad,changed = rewrite_fixup(cache_obj,lambda f:f.offset==11,change)
+                assert changed
+                reject_cache(bad,'context fixup records')
+                cache_controls.append(name)
+            cache_digest = leaf.LEAF_CONTEXT_SHA256.pop('playback_cache_lookup_')
+            try:
+                reject_cache(mutate_public_byte(cache_obj,'playback_cache_lookup_',11),'context fixup target/form/addend')
+            finally:
+                leaf.LEAF_CONTEXT_SHA256['playback_cache_lookup_'] = cache_digest
+            cache_controls.append('failure_jump_addend')
             # Preserve raw operands while changing their LE object class. These
             # must fail typed binding checks before reference-loaded replay.
             for control_obj, symbol, address, size, name, was_code in (
                     (obj, 'sound_playback_options_', 0x35178, 80, 'sound_sample_done_offset_', True),
                     (description_obj, 'sound_playback_description_', 0x350f1, 69, '_frame_state_16fb18', False),
-                    (archive_obj, 'sound_playback_archive_', 0x3507b, 118, '_frame_state_16fdac', False)):
+                    (archive_obj, 'sound_playback_archive_', 0x3507b, 118, '_frame_state_16fdac', False),
+                    (cache_obj, 'sound_playback_cache_', 0x3502d, 78, '_frame_state_17160b', False)):
                 data_offsets, code_offsets = dict(DATA_OFFSETS), dict(CODE_OFFSETS)
                 source, destination = (code_offsets, data_offsets) if was_code else (data_offsets, code_offsets)
                 destination[name] = source.pop(name)
@@ -420,7 +454,7 @@ def main():
                     assert 'Original LE relocation sites or targets differ' in str(error), str(error)
                 else:
                     raise AssertionError('Sound relocation class mutation escaped')
-            report['relocation_class_controls_rejected'] = 3
+            report['relocation_class_controls_rejected'] = 4
             queue_obj = (a.build/'sndqueue.obj').read_bytes()
             queue_parts = []
             for role, address, size in (('metadata',0x351c8,61),('y',0x35205,3),
@@ -472,12 +506,13 @@ def main():
                 assert part==exe[address+0x25600:address+0x25600+size]
                 verify_leaf_relocations(part,bindings,pointers,address,code_bindings=code_refs)
                 queue_results.append(part)
-            assert len(retained) == 267
-            ending=queue_results[0]+retained[258:260]+queue_results[1]+retained[260:]
-            assembled = retained[:258] + archive + description + position + phase + queue + ending
-            natural = retained[:258] + archive + description + position + phase + b''.join(queue_parts[i] for i in (0,2,1,3)) + ending
-            report.update(restored_c_bytes=488, retained_asm_bytes=267,
-                context_mutations_rejected=12+len(archive_controls),archive_context_controls=archive_controls,
+            assert len(retained) == 189
+            ending=queue_results[0]+retained[180:182]+queue_results[1]+retained[182:]
+            assembled = retained[:180] + cache + archive + description + position + phase + queue + ending
+            natural = retained[:180] + cache + archive + description + position + phase + b''.join(queue_parts[i] for i in (0,2,1,3)) + ending
+            report.update(restored_c_bytes=566, retained_asm_bytes=189,
+                context_mutations_rejected=12+len(archive_controls)+len(cache_controls),
+                archive_context_controls=archive_controls,cache_context_controls=cache_controls,
                 swap_scope='mapped writable slot and normal completion; placed order matches original even at fault/interrupt boundaries')
             assert len(assembled) == SIZE, 'reconstructed routine must be 755 bytes'
             assert assembled == exe[RAW:RAW+SIZE], 'reconstructed routine differs from pinned original'

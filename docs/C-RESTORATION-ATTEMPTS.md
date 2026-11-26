@@ -816,24 +816,21 @@ row) and `sptarg23` (selected trace) as future merge references.
 Production assembly remains; no C coverage is credited. Evidence:
 `work/sprite-path-target-next/evidence.json`.
 
-### Sound playback: remaining entry/cache and return blocker
+### Sound playback: remaining entry/slot-scan and return blocker
 
-`play_sound_`, Watcom 10.5 `/4r /s /or /bt=dos`: 488 of 755 bytes now
-come from exact compiler-generated C. The 258-byte entry/slot/cache prefix
+`play_sound_`, Watcom 10.5 `/4r /s /or /bt=dos`: 566 of 755 bytes now
+come from exact compiler-generated C. The 180-byte entry/slot-scan prefix
 and nine shared-return bytes remain assembly. The historical whole-C experiment
 reported 743 bytes and 60 behavior passes but failed byte/LE identity, first at
 `0x34f81`: the EBP Y copy preceded the X stack store. Its local source artifact
 is absent; begin the next probe from current production and the pinned executable.
-Next isolate entry X/Y lifetimes, slot scan and cache lookup. Preserve the
-original frame and shared failure handoff; do not repeat solved archive,
-descriptor, positioning or queue probes.
-
-Archive loading is now exact across all 118 bytes and 12 DATA sites, with
-actual near Jcc failure continuations and an unsigned, borrowed [ESP] index.
-Equivalent queue return expressions produced the same object; `/os` introduced
-an unwanted EBP frame. Accepted integration/audit:
-`work/sound-archive-integrate-nov27/`; archive research:
-`work/sound-archive-nov27/evidence.json`.
+Next isolate entry X/Y lifetimes and slot scanning, including the 240-byte
+clear and descriptor address calculation. Preserve the original frame and
+shared failure handoff. Do not repeat solved cache, archive, descriptor,
+positioning or queue probes. Equivalent queue return expressions produced
+the same object; `/os` introduced an unwanted EBP frame.
+Accepted integration/audit: `work/sound-cache-integrate-nov27/`;
+cache research: `work/sound-cache-nov27/evidence.json`.
 
 ### IPX initializer: ES boundary and lifetimes
 

@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1446,
-  "unique_code_bytes": 193381,
-  "le_pointers": 10569,
+  "routines": 1447,
+  "unique_code_bytes": 193459,
+  "le_pointers": 10577,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -3598,6 +3598,16 @@
       "loaded_address": "0x34f71",
       "bytes": 8,
       "le_pointers": 0
+    },
+    {
+      "symbol": "sound_playback_cache_",
+      "object": "sndcache.obj",
+      "object_sha256": "12872a31b2e0d8e8226df4e2e23d0c58069b880a5f231880c456743501ebfb36",
+      "sha256": "aa32366ddc537246025bf242fdd6a8822331104d4fd9c2a3ca7115d042fc78fe",
+      "raw_offset": "0x5a62d",
+      "loaded_address": "0x3502d",
+      "bytes": 78,
+      "le_pointers": 8
     },
     {
       "symbol": "sound_playback_archive_",

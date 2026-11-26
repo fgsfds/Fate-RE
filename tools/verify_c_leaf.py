@@ -5123,6 +5123,16 @@ LEAF_CONTEXT_RECORDS['playback_archive_'] = json.loads((Path(__file__).parent/'d
 DATA_OFFSETS.update({'_frame_state_16fdac': 0x16fdac, '_sound_archive_handle': 0x1714e0, '_frame_state_12cec': 0x12cec})
 FUNCTION_ADDRESSES.update({'playback_archive_failure_': 0x34f90, 'lseek_': 0x615b6, 'read_': 0x615f7})
 
+# The private RET lies at the original archive entry. Both miss paths
+# reach that C phase after cropping; no extra transfer is inserted.
+LEAVES['sound_playback_cache_'] = (0x5a62d, 78)
+LEAF_CODE_SLICES['sound_playback_cache_'] = ('playback_cache_lookup_', 0, 78, 79)
+LEAF_CONTEXT_SHA256['playback_cache_lookup_'] = '774bbecd8a0a997bad7e18048090715ea3754ebc8c8ae2df92769da0e83e5e08'
+LEAF_CONTEXT_FIXUPS['playback_cache_lookup_'] = {2: ('_frame_state_17160f', False, 0), 11: ('playback_archive_failure_', True, 0), 18: ('_frame_state_16fdac', False, 4), 29: ('_frame_state_17160b', False, 0), 34: ('_frame_state_17160b', False, 0), 43: ('_frame_state_16fdac', False, 4), 51: ('_frame_state_16fdac', False, 0), 56: ('playback_cached_sample_', True, 0), 62: ('_frame_state_17160b', False, 0), 69: ('_frame_state_17160b', False, 0)}
+LEAF_CONTEXT_RECORDS['playback_cache_lookup_'] = json.loads((Path(__file__).parent/'data/sound-cache-context-guard.json').read_text(encoding='utf-8'))
+DATA_OFFSETS['_frame_state_17160b'] = 0x17160b
+FUNCTION_ADDRESSES['playback_cached_sample_'] = 0x350f1
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

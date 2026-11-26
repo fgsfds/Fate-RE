@@ -1736,6 +1736,8 @@ OBJECT_NAMES['sound_queue_success_'] = 'sndqueue'
 
 OBJECT_NAMES['sound_playback_archive_'] = 'sndarch'
 
+OBJECT_NAMES['sound_playback_cache_'] = 'sndcache'
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)
