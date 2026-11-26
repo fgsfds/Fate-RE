@@ -1,23 +1,25 @@
 # Exact C restoration progress
 
-The current saved attribution audit covers all 414,639 CODE bytes and includes 573 compiler units. Saved full validation passed 406 tests and 144 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
+The current saved attribution audit covers all 414,639 CODE bytes and includes 574 compiler units. Saved full validation passed 406 tests and 145 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 167,353 | 40.361% |
+| Compiler-generated instructions | 167,448 | 40.384% |
 | Inline assembly instructions in C objects | 24,311 | 5.863% |
-| Standalone assembly | 221,692 | 53.466% |
+| Standalone assembly | 221,597 | 53.443% |
 | Unattributed instructions and non-routine tables | 1,283 | 0.309% |
 
-The unattributed category contains 882 instruction bytes in 16 unknown routines and 401 non-routine table bytes. Tables are recorded as data, and the unknown instruction bytes remain uncredited. Combined remaining assembly, including inline assembly: 246,003 bytes (59.329%). C-object inventory covers 192,947 bytes (46.53%) and 1,432 C routine spans; the assembly inventory has 481 spans.
+The unattributed category contains 882 instruction bytes in 16 unknown routines and 401 non-routine table bytes. Tables are recorded as data, and the unknown instruction bytes remain uncredited. Combined remaining assembly, including inline assembly: 245,908 bytes (59.307%). C-object inventory covers 193,042 bytes (46.56%) and 1,438 C routine spans; the assembly inventory has 480 spans.
 
 The accepted executable is 741,347 bytes, SHA-256 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.
+
+The encounter actor-state decisions add 95 native C bytes and four DATA LE sites, with no inline instructions. Five slices from the existing latch context provide 86 bytes; a new C reset helper provides the nine-byte immediate word store. Dead private EAX/ECX copies and a redundant TEST are excluded after successor/register/defined-flag proofs. The complete 1,249-byte public and 160-byte literal prefix are guarded; all 85 OMF fixups are pinned, including internal targets, frames, displacements and excluded external names. Five existing branches are placed with checked displacements. The 180-case fixture compares both handoffs, full DATA/frame/register state and defined flags with stubbed near-condition calls, including synthetic signed and poisoned high-word returns. Two code controls and nine context mutations are rejected with diagnostic checks and an unchanged OMF re-encoding control.
 
 Sound playback now has 149 native C bytes and seven LE sites, with no inline instructions: callback/flags setup contributes 80 bytes and five sites (three CODE callback addresses and two DATA operands), and descriptor initialization contributes 69 bytes and two DATA sites. Complete 81- and 72-byte private contexts are guarded, including the excluded RET and RET 4. The descriptor phase preserves the original stack X spill and passes it in EAX to the positional test; the archive pointer-table relocation retains its addend of four. The three assembly spans total 606 bytes. Production archive IDs are 0..163; the negative-ID predecessor is explicitly fixture-backed. The 60-case mixed-body fixture rejects all three context mutations with fresh binding outputs and specific digest/fixup error checks, plus the existing volume and return-cleanup controls. CRT, archive I/O, positional audio and queue operations are stubbed; callback addresses are checked without invocation. This is not live audio-driver or asset verification.
 
 The bounded agent trial completes the remaining gameplay row setup (18 bytes, one LE site) and status-panel entry (84 bytes, five LE sites). Both routines now link entirely from compiler-generated C, with no inline instructions; their assembly sources are removed. Full private-context hashes and fixup identities guard all selected and excluded code. Empty register identities and independent setup slices preserve the original handoffs without emitting handwritten instructions. These are preserved C candidates requalified against current tools, not a measurement of fresh rewrite speed. The gameplay fixture covers the complete controller and 256 placed/private row handoffs; the panel fixture covers 40 placed and 80 private-context cases. Drawing, formatting and controller callees are modeled by fixture callbacks.
 
-The first revised-agent trial used a bounded Luna probe and an independent Sol review. The probe freshly compiled both candidates with zero cache hits and passed exact checks in 3.70 seconds (2.59 seconds compiling), after one parent correction for a premature script-path blocker. Review accepted without corrective intervention. CI discovery also needed one correction from a PR-only wrapper to the generic paginated push-run API. Both corrections were added to those profiles. The full parent gate passed 406 tests and 144 fixtures. That trial removed three overlapping helper roles; the subsequent [controlled comparison](WORKFLOW-COMPARISON.md) retires probe and CI-monitor roles as well. Research and review remain, with ready commands and CI observation handled directly. Per-agent token counters are unavailable, so this trial establishes no token-saving percentage or fresh-rewrite speedup. The broader restoration goal remains paused.
+The first revised-agent trial used a bounded Luna probe and an independent Sol review. The probe freshly compiled both candidates with zero cache hits and passed exact checks in 3.70 seconds (2.59 seconds compiling), after one parent correction for a premature script-path blocker. Review accepted without corrective intervention. CI discovery also needed one correction from a PR-only wrapper to the generic paginated push-run API. Both corrections were added to those profiles. The full parent gate passed 406 tests and 145 fixtures. That trial removed three overlapping helper roles; the subsequent [controlled comparison](WORKFLOW-COMPARISON.md) retires probe and CI-monitor roles as well. Research and review remain, with ready commands and CI observation handled directly. Per-agent token counters are unavailable, so this trial establishes no token-saving percentage or fresh-rewrite speedup. The broader restoration goal remains paused.
 
 `update_level_sector_puzzle_` is restored in readable C: 932 bytes and 59 LE sites, with no inline instructions. One C translation unit compiles twice into three selected phases (410/64/458 bytes); five existing branch edges change displacement only. Neither full compiler public matches by itself. Its differential fixture passes 128 cases and rejects both activation-tag and exit-destination code mutations.
 
@@ -53,7 +55,7 @@ The palette lookup clearing loop contributes 19 compiler-generated bytes and one
 
 The saved full validation and audit artifacts verify the pinned image:
 
-- Full validation and 144 fixtures: `work/reset-82ae95d/validation.json`.
+- Full validation and 145 fixtures: `work/reset-82ae95d/validation.json`.
 - Encounter frame behavior: `work/encounter-frame-build/encounter-frame-behavior.json`.
 - Video initialization handoff: `work/setmode-display-handoff.json`.
 - Video setup and allocation behavior: `work/reset-82ae95d/setgamemode-init-behavior.json`.
@@ -68,7 +70,7 @@ The saved full validation and audit artifacts verify the pinned image:
 - Trial agent outcomes: `work/agent-role-trial/outcomes.json`.
 - Gameplay row and controller: `work/reset-82ae95d/gameplay-update-behavior.json`.
 - Status-panel placed and private contexts: `work/reset-82ae95d/status-panel-behavior.json`.
-- Attribution audit: `work/sound-desc-integrate-nov26/audit.json`.
+- Attribution audit: `work/actor-integrate-nov26/audit.json`.
 - Unit test log: `work/reset-82ae95d/logs/unit-tests.log`.
 - Encounter latch behavior: `work/encounter-latch-build/encounter-latch-behavior.json`.
 - Puzzle exact slices, relocations, and behavior: `work/sector-puzzle-build/sector-puzzle-behavior.json`.

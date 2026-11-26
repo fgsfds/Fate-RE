@@ -1717,6 +1717,13 @@ OBJECT_NAMES['sound_playback_options_'] = 'sndopts'
 
 OBJECT_NAMES['sound_playback_description_'] = 'snddesc'
 
+OBJECT_NAMES['encounter_actor_load_'] = 'enclatch'
+OBJECT_NAMES['encounter_actor_condition_'] = 'enclatch'
+OBJECT_NAMES['encounter_actor_kind_'] = 'enclatch'
+OBJECT_NAMES['encounter_actor_kind_store_'] = 'enclatch'
+OBJECT_NAMES['encounter_actor_continue_'] = 'enclatch'
+OBJECT_NAMES['encounter_actor_reset_'] = 'actreset'
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

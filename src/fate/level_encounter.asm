@@ -239,44 +239,12 @@ section .spawn align=1 vstart=0x1df5b follows=.save_ebp
 
 ; Complete tile latch is linked from the native C context.
 .check_first_trigger_sprite equ 0x1e1b0
-section .actor_state align=1 vstart=0x1e23a follows=.spawn
-
-.check_second_trigger_state:
-    mov si, [second_trigger_state]
-    test si, si
-    jnz short .update_second_actor
-    mov edx, 0x1000
-    mov eax, 0x2a00
-    call check_encounter_condition
-    mov edx, 0x2000
-    mov ebx, eax
-    mov eax, 0x2a00
-    call check_encounter_condition
-    movsx edx, bx
-    cwde
-    or edx, eax
-    jnz short .reset_second_actor_kind
-    xor eax, eax
-    mov al, [second_actor_kind]
-    cmp eax, 0x4
-    jz short .reset_second_actor_kind
-    cmp eax, 0x5
-    jnz near .check_exit_scan
-
-.reset_second_actor_kind:
-    xor dh, dh
-    mov [second_actor_kind], dh
-    mov word [second_trigger_state], 0x1
-    jmp near .check_exit_scan
-
-; The existing C latch context supplies the second actor update.
-.update_second_actor equ 0x1e299
-
-; Complete exit-state phase is linked from encounter_exit.c at this address.
+.check_second_trigger_state equ 0x1e23a
 .check_exit_scan equ 0x1e30b
-; The return bytes follow in this blob and are placed separately at 0x1e410.
+.update_second_actor equ 0x1e299
+; Actor-state decisions now come from guarded C contexts.
 
-section .actor_return align=1 vstart=0x1e416 follows=.actor_state
+section .actor_return align=1 vstart=0x1e416 follows=.spawn
 .return equ 0x1e410
     pop ebp
 ; C supplies the stack release before this slot and the five-pop/RET after it.

@@ -319,6 +319,15 @@ each section's bytes and LE sites, then the complete image; credit only the
 selected C bytes. Marker attribution currently requires sliced publics to
 have zero inline-assembly invocations; otherwise keep those slices unknown.
 
+For a private context containing literal-prefix or other internal relocations,
+`LEAF_CONTEXT_RECORDS` can pin the complete ordered parsed OMF fixup records,
+resolved external names and FLAT group indices. Pair this with the full public
+SHA and literal-prefix digest; record snapshots do not replace byte guards.
+Numeric indices intentionally make layout changes require requalification.
+Mutation fixtures should re-encode an unchanged object successfully first, then
+assert each mutation reaches its intended diagnostic instead of accepting any
+exception as proof of the relevant guard.
+
 ## Artifacts and freshness
 
 - `build-provenance.json`: per-object content keys, input hashes, output hashes,

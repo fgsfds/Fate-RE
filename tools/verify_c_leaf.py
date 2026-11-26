@@ -3700,6 +3700,7 @@ LEAF_CONTEXT_LITERALS = {}
 LEAF_CONTEXT_BYTES = {}
 # Digest guards keep larger complete contexts compact.
 LEAF_CONTEXT_SHA256 = {}
+LEAF_CONTEXT_RECORDS = {}
 
 LEAF_CONTEXT_FIXUPS = {
     'main_caption_setup_': {2: ('_loading_caption_columns', False),
@@ -3971,6 +3972,17 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
             and (code[:3] != bytes.fromhex('5689d6')
                  or code[5:7] != bytes.fromhex('89f2'))):
         raise ValueError('Unlinked ripple pixel copy differs')
+    if public_name in LEAF_CONTEXT_RECORDS:
+        expected_records = LEAF_CONTEXT_RECORDS[public_name]
+        if any(f.target[0] == 2 and not 0 < f.target[1] < len(externals) for f in fixups):
+            raise ValueError('Compiler context external index out of range')
+        observed_records = [[f.segment, f.offset, f.width, f.location, f.relative,
+                             list(f.frame), list(f.target), f.displacement,
+                             externals[f.target[1]] if f.target[0] == 2 else None]
+                            for f in fixups]
+        if (observed_records != expected_records['fixups']
+                or sorted(flat_groups) != expected_records['flat_groups']):
+            raise ValueError('Compiler context fixup records differ')
     context_fixups = LEAF_CONTEXT_FIXUPS.get(public_name)
     if context_fixups is not None:
         observed = [f for f in fixups if f.segment == seg and start <= f.offset < end]
@@ -5053,6 +5065,27 @@ LEAF_CODE_SLICES['sound_playback_description_'] = ('playback_description_', 0, 6
 LEAF_CONTEXT_SHA256['playback_description_'] = '9e87370ca8904b9697f8489998705ed0c17ecf36b639f1a9f95f0b23463c683a'
 LEAF_CONTEXT_FIXUPS['playback_description_'] = {5: ('_frame_state_16fb18', False, 4), 23: ('_frame_state_17160f', False, 0)}
 DATA_OFFSETS['_frame_state_16fb18'] = 0x16fb18
+
+_encounter_records = json.loads((Path(__file__).parent/'data/encounter-context-guard.json').read_text(encoding='utf-8'))
+LEAF_CONTEXT_RECORDS['encounter_latch_context_'] = _encounter_records
+LEAF_CONTEXT_SHA256['encounter_latch_context_'] = '3d6f7b03608f602e3564e13a0da0ade0ac82172da09867a768376cc5e8041f2f'
+
+FUNCTION_ADDRESSES['encounter_latch_context_'] = 0x1df2e
+LEAF_SECTION_BRANCHES['encounter_latch_context_'] = (1249, 0x4ef, {772: (b'u', 862, 875), 814: (b'u', 837, 853), 826: (b't', 837, 853), 831: (b'\x0f\x85', 976, 989), 857: (b'\xe9', 976, 989)})
+LEAVES['encounter_actor_load_'] = (276538, 7)
+LEAF_CODE_SLICES['encounter_actor_load_'] = ('encounter_latch_context_', 760, 767, 1249)
+LEAVES['encounter_actor_condition_'] = (276545, 43)
+LEAF_CODE_SLICES['encounter_actor_condition_'] = ('encounter_latch_context_', 769, 812, 1249)
+LEAVES['encounter_actor_kind_'] = (276588, 25)
+LEAF_CODE_SLICES['encounter_actor_kind_'] = ('encounter_latch_context_', 814, 839, 1249)
+LEAVES['encounter_actor_kind_store_'] = (276613, 6)
+LEAF_CODE_SLICES['encounter_actor_kind_store_'] = ('encounter_latch_context_', 844, 850, 1249)
+LEAVES['encounter_actor_continue_'] = (276628, 5)
+LEAF_CODE_SLICES['encounter_actor_continue_'] = ('encounter_latch_context_', 857, 862, 1249)
+LEAVES['encounter_actor_reset_'] = (0x4388b, 9)
+LEAF_CODE_SLICES['encounter_actor_reset_'] = ('reset_second_trigger_', 0, 9, 10)
+LEAF_CONTEXT_SHA256['reset_second_trigger_'] = '92637b0bb7cc2e23db8e02d6f67634a5a04394bc0cfc84dffb5f46c40a2855f5'
+LEAF_CONTEXT_FIXUPS['reset_second_trigger_'] = {3: ('_second_trigger_state', False, 0)}
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

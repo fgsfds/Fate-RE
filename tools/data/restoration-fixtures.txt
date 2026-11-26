@@ -163,3 +163,4 @@ check_save_status_message --exe {exe} --build {build} --output {build}/save-stat
 check_save_slot_open --exe {exe} --build {build} --output {build}/save-slot-open.json | svoread svowrite
 
 check_save_players_finish --exe {exe} --build {build} --output {build}/save-players-finish.json | svoread svfinish crushio
+check_encounter_actor --exe {exe} --build {build} --output {build}/encounter-actor.json | enclatch actreset

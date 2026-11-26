@@ -1,6 +1,7 @@
 /* Board-four encounter algorithm compiled in two private contexts.
  * The exit context supplies the exit phase and frame/initializer operations;
- * the latch context supplies 138 bytes. Only verified slices are linked.
+ * the latch context supplies the latch, actor update and actor-state slices.
+ * Only verified slices are linked; actor reset uses encounter_actor_reset.c.
  * Original EBP save/restore slots preserve the six-save legacy frame.
  * Literal prefixes and other private code receive no C credit.
  * Empty identities emit no instructions. The latch tag store uses independent

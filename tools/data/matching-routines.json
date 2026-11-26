@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1432,
-  "unique_code_bytes": 192947,
-  "le_pointers": 10535,
+  "routines": 1438,
+  "unique_code_bytes": 193042,
+  "le_pointers": 10539,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1168,6 +1168,66 @@
       "loaded_address": "0x1e233",
       "bytes": 7,
       "le_pointers": 1
+    },
+    {
+      "symbol": "encounter_actor_load_",
+      "object": "enclatch.obj",
+      "object_sha256": "60485686b1107e9f5d3390805f6ac39805d7421d130d6b35f8fb30e465a3afff",
+      "sha256": "4d3f45ee5be12b5497d4ea24a6249a574acbe9756622066fd2e090d08f85b109",
+      "raw_offset": "0x4383a",
+      "loaded_address": "0x1e23a",
+      "bytes": 7,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "encounter_actor_condition_",
+      "object": "enclatch.obj",
+      "object_sha256": "60485686b1107e9f5d3390805f6ac39805d7421d130d6b35f8fb30e465a3afff",
+      "sha256": "f04feac74ae6246d20b9889322a6697aca94a69e1e0323264054ed545054a91e",
+      "raw_offset": "0x43841",
+      "loaded_address": "0x1e241",
+      "bytes": 43,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "encounter_actor_kind_",
+      "object": "enclatch.obj",
+      "object_sha256": "60485686b1107e9f5d3390805f6ac39805d7421d130d6b35f8fb30e465a3afff",
+      "sha256": "b409ff9eb9de179ced6f53904d90038694cfc48c52db7daf36632cc6e1a680ac",
+      "raw_offset": "0x4386c",
+      "loaded_address": "0x1e26c",
+      "bytes": 25,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "encounter_actor_kind_store_",
+      "object": "enclatch.obj",
+      "object_sha256": "60485686b1107e9f5d3390805f6ac39805d7421d130d6b35f8fb30e465a3afff",
+      "sha256": "1d1bcdfd02d9d31b1ef596b17d4090456845e0516e32869dfaba1ec5d8b7b997",
+      "raw_offset": "0x43885",
+      "loaded_address": "0x1e285",
+      "bytes": 6,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "encounter_actor_reset_",
+      "object": "actreset.obj",
+      "object_sha256": "297648e172603e41e60f2296bc5631cd28516fa29d96e39b7804d58bc5d84f6e",
+      "sha256": "29ec6007ce9d7ca545486b61d77906fca30b769f28fb72db0ae90891cc8684b0",
+      "raw_offset": "0x4388b",
+      "loaded_address": "0x1e28b",
+      "bytes": 9,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "encounter_actor_continue_",
+      "object": "enclatch.obj",
+      "object_sha256": "60485686b1107e9f5d3390805f6ac39805d7421d130d6b35f8fb30e465a3afff",
+      "sha256": "e09dfbb9bb50240814e23abcfd46db2e197201916a6325ed1c2dbca2acd44612",
+      "raw_offset": "0x43894",
+      "loaded_address": "0x1e294",
+      "bytes": 5,
+      "le_pointers": 0
     },
     {
       "symbol": "encounter_update_second_actor_",
