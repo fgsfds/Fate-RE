@@ -823,7 +823,9 @@ reload without broad volatile qualifiers. Production remains assembly; no C
 coverage is credited. Probe: `work/play-sound-next/parameter_lifetime.c`;
 comparison: `work/play-sound-next/compiler/playsnd2.report.json`.
 
-The callback/flags phase at `0x35178..0x351c8` is now exact compiler-generated C: 80 bytes and five typed LE sites. Keeping the signed high-word result in EAX before its EDX identity fixes the first probe mismatch at `0x35193`. Whole-routine entry allocation, archive operations and queue handling remain in 675 assembly bytes. Evidence: `work/sound-research-nov26/evidence.json`; accepted integration/audit: `work/sound-integrate-nov26/`.
+The callback/flags phase at `0x35178..0x351c8` is now exact compiler-generated C: 80 bytes and five typed LE sites. Keeping the signed high-word result in EAX before its EDX identity fixes the first probe mismatch at `0x35193`. Whole-routine entry allocation, archive operations and queue handling remain in 606 assembly bytes. Evidence: `work/sound-research-nov26/evidence.json`; accepted integration/audit: `work/sound-integrate-nov26/`.
+
+Descriptor initialization at `0x350f1..0x35136` adds 69 exact C bytes and two DATA LE sites, with a guarded 72-byte context and excluded private RET 4. The larger positioning attempt rejects an EBP formal (E1122) and changes a short-branch displacement through cloned returns. Next investigate a truthful EBP handoff and shared continuation; do not repeat EBP formal declarations. Evidence: `work/sound-next-nov26/evidence.json`.
 
 ### IPX initializer: ES boundary and lifetimes
 

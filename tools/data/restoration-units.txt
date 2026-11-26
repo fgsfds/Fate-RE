@@ -575,3 +575,4 @@ fate/save_finish_stream svfinish
 fate/status_panel_entry statpent
 fate/gameplay_row gamrow
 fate/sound_playback_options sndopts
+fate/sound_playback_description snddesc

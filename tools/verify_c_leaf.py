@@ -5048,6 +5048,12 @@ LEAF_CONTEXT_FIXUPS['playback_options_'] = {3: ('sound_sample_done_offset_', Fal
 DATA_OFFSETS.update({'_frame_state_17160f': 0x17160f, '_sound_slots': 0x854dc})
 CODE_OFFSETS.update({'sound_callback_return_offset_': 0x24c35, 'sound_sample_done_offset_': 0x24c36})
 
+LEAVES['sound_playback_description_'] = (0x5a6f1, 69)
+LEAF_CODE_SLICES['sound_playback_description_'] = ('playback_description_', 0, 69, 72)
+LEAF_CONTEXT_SHA256['playback_description_'] = '9e87370ca8904b9697f8489998705ed0c17ecf36b639f1a9f95f0b23463c683a'
+LEAF_CONTEXT_FIXUPS['playback_description_'] = {5: ('_frame_state_16fb18', False, 4), 23: ('_frame_state_17160f', False, 0)}
+DATA_OFFSETS['_frame_state_16fb18'] = 0x16fb18
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

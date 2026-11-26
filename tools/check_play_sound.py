@@ -253,7 +253,7 @@ def main():
     p.add_argument('--exe', type=Path, required=True)
     group = p.add_mutually_exclusive_group()
     group.add_argument('--object',type=Path,help='existing candidate OMF; research behavior only')
-    group.add_argument('--build',type=Path,help='production build containing split sound assembly and sndopts.obj')
+    group.add_argument('--build',type=Path,help='production build containing split sound assembly, sndopts.obj and snddesc.obj')
     p.add_argument('--symbol',default='play_sound_')
     p.add_argument('--output',type=Path,help='optional report; omitted means no files written')
     a = p.parse_args()
@@ -285,18 +285,28 @@ def main():
             obj = (a.build/'sndopts.obj').read_bytes()
             kwargs = dict(address=0x35178, functions=FUNCTION_ADDRESSES, absolute_code=CODE_OFFSETS, code_bindings={})
             phase, _ = bind_leaf_details(obj, 'sound_playback_options_', DATA_OFFSETS, **kwargs)
-            for bad in (mutate_public_byte(obj, 'playback_options_', 80),
-                        rename_external(obj, b'sound_sample_done_offset_', b'sound_sample_done_offseu_')):
+            for bad, expected_error in ((mutate_public_byte(obj, 'playback_options_', 80), 'private context digest'),
+                        (rename_external(obj, b'sound_sample_done_offset_', b'sound_sample_done_offseu_'), 'context fixup target/form/addend')):
                 try:
-                    bind_leaf_details(bad, 'sound_playback_options_', DATA_OFFSETS, **kwargs)
-                except ValueError:
-                    pass
+                    bind_leaf_details(bad, 'sound_playback_options_', DATA_OFFSETS, **(kwargs | {'code_bindings': {}}))
+                except ValueError as error:
+                    assert expected_error in str(error), str(error)
                 else:
                     raise AssertionError('Sound private context mutation escaped')
             retained = (a.build/'asm/play_sound.bin').read_bytes()
-            assert len(retained) == 675
-            assembled = retained[:511] + phase + retained[511:]
-            report.update(restored_c_bytes=80, retained_asm_bytes=675, context_mutations_rejected=2)
+            description_obj = (a.build/'snddesc.obj').read_bytes()
+            description, _ = bind_leaf_details(description_obj, 'sound_playback_description_', DATA_OFFSETS,
+                address=0x350f1, functions=FUNCTION_ADDRESSES, absolute_code=CODE_OFFSETS, code_bindings={})
+            try:
+                bind_leaf_details(mutate_public_byte(description_obj, 'playback_description_', 69),
+                    'sound_playback_description_', DATA_OFFSETS, address=0x350f1, absolute_code=CODE_OFFSETS, code_bindings={})
+            except ValueError as error:
+                assert 'private context digest' in str(error), str(error)
+            else:
+                raise AssertionError('Descriptor private cleanup mutation escaped')
+            assert len(retained) == 606
+            assembled = retained[:376] + description + retained[376:442] + phase + retained[442:]
+            report.update(restored_c_bytes=149, retained_asm_bytes=606, context_mutations_rejected=3)
             assert len(assembled) == SIZE, 'reconstructed routine must be 755 bytes'
             assert assembled == exe[RAW:RAW+SIZE], 'reconstructed routine differs from pinned original'
             refs = pointer_range(read_le_fixups(exe)['pointers'],ENTRY,SIZE)

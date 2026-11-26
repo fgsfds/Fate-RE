@@ -144,19 +144,8 @@ play_sound:
     mov eax, [nosplit eax*8 + frame_state_16fdac]
 
 .branch_350f1:
-    mov [esi], eax
-    mov eax, [nosplit edi*4 + frame_state_16fb1c]
-    mov eax, [eax + 0x8]
-    mov dword [esi + 0x10], 0x0
-    mov [esi + 0xc], eax
-    mov eax, [frame_state_17160f]
-    mov dword [esi + 0x30], 0x0
-    mov dword [esi + 0x34], 0x2b11
-    mov dword [esi + 0x38], 0x8
-    mov dword [esi + 0x3c], 0x1
-    mov [esi + 0x1c], eax
-    mov eax, [esp + 0x4]
-    mov dword [esi + 0x40], 0x8000
+; Descriptor initialization is supplied by sound_playback_description.c.
+section .sound_position align=1 vstart=0x35136 follows=.text
     test eax, eax
     jnz short .branch_3514e
     test ebp, ebp
@@ -183,7 +172,7 @@ play_sound:
 
 .branch_35178:
 ; Callback/flags instructions are supplied by sound_playback_options.c.
-section .sound_tail align=1 vstart=0x351c8 follows=.text
+section .sound_tail align=1 vstart=0x351c8 follows=.sound_position
 .branch_351c8:
     mov eax, [frame_state_17160f]
     mov eax, [nosplit eax*4 + sound_slots]

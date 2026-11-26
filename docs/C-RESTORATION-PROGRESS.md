@@ -1,19 +1,19 @@
 # Exact C restoration progress
 
-The current saved attribution audit covers all 414,639 CODE bytes and includes 572 compiler units. Saved full validation passed 406 tests and 144 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
+The current saved attribution audit covers all 414,639 CODE bytes and includes 573 compiler units. Saved full validation passed 406 tests and 144 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 167,284 | 40.344% |
+| Compiler-generated instructions | 167,353 | 40.361% |
 | Inline assembly instructions in C objects | 24,311 | 5.863% |
-| Standalone assembly | 221,761 | 53.483% |
+| Standalone assembly | 221,692 | 53.466% |
 | Unattributed instructions and non-routine tables | 1,283 | 0.309% |
 
-The unattributed category contains 882 instruction bytes in 16 unknown routines and 401 non-routine table bytes. Tables are recorded as data, and the unknown instruction bytes remain uncredited. Combined remaining assembly, including inline assembly: 246,072 bytes (59.346%). C-object inventory covers 192,878 bytes (46.52%) and 1,431 C routine spans; the assembly inventory has 480 spans.
+The unattributed category contains 882 instruction bytes in 16 unknown routines and 401 non-routine table bytes. Tables are recorded as data, and the unknown instruction bytes remain uncredited. Combined remaining assembly, including inline assembly: 246,003 bytes (59.329%). C-object inventory covers 192,947 bytes (46.53%) and 1,432 C routine spans; the assembly inventory has 481 spans.
 
 The accepted executable is 741,347 bytes, SHA-256 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.
 
-The sound playback callback/flags phase contributes 80 native C bytes and five LE sites (three CODE callback addresses and two DATA operands), with no inline instructions. An 81-byte private context is guarded completely; its final RET is excluded so both exits enter the original continuation. The 511-byte assembly prefix and 164-byte tail remain. The 60-case mixed-body fixture rejects private-RET and callback-symbol mutations, plus the existing volume and return-cleanup controls. CRT, archive I/O, positional-audio and queue operations are stubbed; callback addresses are checked without invocation. This is not live audio-driver or asset verification.
+Sound playback now has 149 native C bytes and seven LE sites, with no inline instructions: callback/flags setup contributes 80 bytes and five sites (three CODE callback addresses and two DATA operands), and descriptor initialization contributes 69 bytes and two DATA sites. Complete 81- and 72-byte private contexts are guarded, including the excluded RET and RET 4. The descriptor phase preserves the original stack X spill and passes it in EAX to the positional test; the archive pointer-table relocation retains its addend of four. The three assembly spans total 606 bytes. Production archive IDs are 0..163; the negative-ID predecessor is explicitly fixture-backed. The 60-case mixed-body fixture rejects all three context mutations with fresh binding outputs and specific digest/fixup error checks, plus the existing volume and return-cleanup controls. CRT, archive I/O, positional audio and queue operations are stubbed; callback addresses are checked without invocation. This is not live audio-driver or asset verification.
 
 The bounded agent trial completes the remaining gameplay row setup (18 bytes, one LE site) and status-panel entry (84 bytes, five LE sites). Both routines now link entirely from compiler-generated C, with no inline instructions; their assembly sources are removed. Full private-context hashes and fixup identities guard all selected and excluded code. Empty register identities and independent setup slices preserve the original handoffs without emitting handwritten instructions. These are preserved C candidates requalified against current tools, not a measurement of fresh rewrite speed. The gameplay fixture covers the complete controller and 256 placed/private row handoffs; the panel fixture covers 40 placed and 80 private-context cases. Drawing, formatting and controller callees are modeled by fixture callbacks.
 
@@ -68,7 +68,7 @@ The saved full validation and audit artifacts verify the pinned image:
 - Trial agent outcomes: `work/agent-role-trial/outcomes.json`.
 - Gameplay row and controller: `work/reset-82ae95d/gameplay-update-behavior.json`.
 - Status-panel placed and private contexts: `work/reset-82ae95d/status-panel-behavior.json`.
-- Attribution audit: `work/sound-integrate-nov26/audit.json`.
+- Attribution audit: `work/sound-desc-integrate-nov26/audit.json`.
 - Unit test log: `work/reset-82ae95d/logs/unit-tests.log`.
 - Encounter latch behavior: `work/encounter-latch-build/encounter-latch-behavior.json`.
 - Puzzle exact slices, relocations, and behavior: `work/sector-puzzle-build/sector-puzzle-behavior.json`.

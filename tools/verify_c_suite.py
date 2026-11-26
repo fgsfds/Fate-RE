@@ -1715,6 +1715,8 @@ for _phase in COMPILER_CONTEXT_PHASES:
 
 OBJECT_NAMES['sound_playback_options_'] = 'sndopts'
 
+OBJECT_NAMES['sound_playback_description_'] = 'snddesc'
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)
