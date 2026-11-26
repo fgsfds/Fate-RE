@@ -181,6 +181,41 @@ def bind_prefix(exe,build):
  assert covered==set(range(ENTRY,END)) and raw==exe[RAW:RAW+SIZE]
  return bytes(loaded),reports
 
+def move_zero_public(blob,public,shift=40):
+    import verify_c_leaf as v
+    from match_objects import index
+    segments,publics,_,_,fixups=v.parsed_leaf_object(blob)
+    assert publics==((1,0,public),)
+    raw=bytes(segments[1]['data'])
+    assert max(f.offset+f.width for f in fixups)<=shift
+    def record(kind,data):
+        row=bytearray([kind])+bytearray((len(data)+1).to_bytes(2,'little'))+data
+        row.append((-sum(row))&255)
+        return row
+    out=bytearray();cursor=0;segment=0;inserted=False;modified=False
+    while cursor<len(blob):
+        kind=blob[cursor];length=int.from_bytes(blob[cursor+1:cursor+3],'little');end=cursor+3+length;data=bytearray(blob[cursor+3:end-1])
+        if kind in (0x98,0x99):
+            segment+=1
+            if segment==1:
+                pos=4 if data[0]>>5==0 else 1;width=4 if kind&1 else 2
+                assert int.from_bytes(data[pos:pos+width],'little')==len(raw)
+                data[pos:pos+width]=(len(raw)+shift).to_bytes(width,'little')
+        if kind in (0x90,0x91):
+            _,pos=index(data,0);seg,pos=index(data,pos);assert seg==1
+            size=data[pos];name=bytes(data[pos+1:pos+1+size]).decode('ascii');assert name==public
+            pos+=size+1;width=4 if kind&1 else 2;assert int.from_bytes(data[pos:pos+width],'little')==0
+            data[pos:pos+width]=shift.to_bytes(width,'little');modified=True
+        if kind in (0x8a,0x8b):
+            assert not inserted
+            out.extend(record(0xa1,bytearray(b'\x01')+bytearray(shift.to_bytes(4,'little'))+raw));inserted=True
+        out.extend(record(kind,data));cursor=end
+    assert inserted and modified
+    parsed=v.parsed_leaf_object(bytes(out));assert parsed[1]==((1,shift,public),)
+    assert bytes(parsed[0][1]['data'][shift:])==raw and parsed[-1]==fixups
+    return bytes(out)
+
+
 def context_controls(build):
  import verify_c_leaf as v
  from dataclasses import replace
@@ -200,17 +235,28 @@ def context_controls(build):
   unchanged,changed=rewrite_fixup(blob,lambda f:False,lambda f:f)
   assert not changed and bind(unchanged)==original
   reject(mutate_public_byte(blob,public,context['size']-1),'context digest');controls.append(public+'private_ret')
-  reject(mutate_public_byte(blob,public,-160),'literal prefix');controls.append(public+'literal')
-  reject(mutate_public_byte(blob,public,0x1df5e-0x1df2e),'context digest');controls.append(public+'raw_addend')
+  prefix=context.get('prefix',160)
+  if prefix:
+   reject(mutate_public_byte(blob,public,-prefix),'literal prefix');controls.append(public+'literal')
+  else:
+   reject(move_zero_public(blob,public),'literal prefix');controls.append(public+'moved_public')
+  operand=next(f[1]-prefix for f in context['records']['fixups'] if f[-1] is not None)
+  reject(mutate_public_byte(blob,public,operand),'context digest');controls.append(public+'raw_addend')
   _,_,externals,_,_=v.parsed_leaf_object(blob)
-  clock_index=externals.index('_encounter_clock');advance_index=externals.index('_advance_clock')
-  for name,predicate,change in [
+  mutations=[
    ('target',lambda f:f.target[0]==2,lambda f:replace(f,target=(2,127))),
-   ('valid_external_target',lambda f:f.target==(2,clock_index),lambda f:replace(f,target=(2,advance_index))),
    ('internal_target',lambda f:f.target[0]==0,lambda f:replace(f,target=(0,3))),
    ('frame',lambda f:f.target[0]==2,lambda f:replace(f,frame=(1,1))),
-   ('displacement',lambda f:f.target[0]==2,lambda f:replace(f,displacement=1))]:
-   bad,changed=rewrite_fixup(blob,predicate,change);assert changed
+   ('displacement',lambda f:f.target[0]==2,lambda f:replace(f,displacement=1))]
+  if '_encounter_clock' in externals and '_advance_clock' in externals:
+   clock_index=externals.index('_encounter_clock');advance_index=externals.index('_advance_clock')
+   mutations.append(('valid_external_target',lambda f:f.target==(2,clock_index),lambda f:replace(f,target=(2,advance_index))))
+  for name,predicate,change in mutations:
+   bad,changed=rewrite_fixup(blob,predicate,change)
+   if name=='internal_target' and not changed:
+    assert not any(f[6][0]==0 for f in context['records']['fixups'])
+    continue
+   assert changed
    try:bind(bad)
    except ValueError as error:assert 'fixup records' in str(error) or name=='target' and 'external index' in str(error),str(error)
    else:raise AssertionError('OMF mutation escaped')
@@ -223,6 +269,38 @@ def context_controls(build):
    finally:v.LEAF_CONTEXT_SHA256[public]=digest
    controls.append(public+'branch_without_digest')
  return controls
+
+def byte_witness_cases(original,build):
+ """Run the complete private conversion witness against its integer contract."""
+ import itertools
+ import verify_c_leaf as v
+ context=next(c for c in v.ENCOUNTER_SPAWN_LAYOUT['contexts'] if c['object']=='encbyte')
+ blob=(build/'encbyte.obj').read_bytes();base=0x40000;stop=0x3fff00
+ fields={}
+ code,bindings=v.bind_leaf_details(blob,context['public'],v.DATA_OFFSETS,address=base,functions=v.FUNCTION_ADDRESSES,absolute_code=v.CODE_OFFSETS,code_bindings=fields)
+ assert len(code)==context['size'] and not fields and not bindings
+ rows=list(itertools.product((0,1,32767),repeat=3))
+ rows.extend(tuple((i*k+offset)&32767 for k,offset in ((293,0x100),(797,0x7f00),(983,0x1234))) for i in range(64))
+ for draws in rows:
+  cpu=Uc(UC_ARCH_X86,UC_MODE_32);cpu.mem_map(0,0x400000);cpu.mem_write(0,bytes(original));cpu.mem_write(base,code);cpu.mem_write(F['rand'],b'\xc3')
+  cpu.mem_write(CALLER_SP-64,bytes([0xa7])*132);cpu.mem_write(CALLER_SP,struct.pack('<I',stop));cpu.reg_write(UC_X86_REG_ESP,CALLER_SP)
+  values=(0xbad00000,0x3456789a,0xfeed1234,0x12345678,0x55667788,0x66778899,0x778899aa)
+  for reg,value in zip(REGS,values):cpu.reg_write(reg,value)
+  calls=[]
+  def hook(_cpu,address,size,_user):
+   if address==stop:cpu.emu_stop();return
+   if base<=address<base+len(code):return
+   assert address==F['rand'] and len(calls)<3
+   cpu.reg_write(UC_X86_REG_EAX,draws[len(calls)]);calls.append(address)
+  cpu.hook_add(UC_HOOK_CODE,hook);cpu.emu_start(base,stop,count=500)
+  assert len(calls)==3 and cpu.reg_read(UC_X86_REG_EIP)==stop
+  assert cpu.reg_read(UC_X86_REG_EAX)==(draws[0]%16)+16*(draws[1]%2)+32*(draws[2]%2),draws
+  assert tuple(cpu.reg_read(reg) for reg in REGS[1:])==values[1:]
+  assert cpu.reg_read(UC_X86_REG_ESP)==CALLER_SP+4
+  assert bytes(cpu.mem_read(CALLER_SP-64,40))==bytes([0xa7])*40
+  assert bytes(cpu.mem_read(CALLER_SP+4,64))==bytes([0xa7])*64
+  assert bytes(cpu.mem_read(DS,DATA_SIZE))==bytes(original[DS:DS+DATA_SIZE])
+ return len(rows)
 
 def main():
  import argparse
@@ -237,12 +315,13 @@ def main():
   if c['name']=='poisoned_ecx_0':assert observed[1][2]==0xfffd0001 and observed[1][5]==0xfffd0002
  case=next(c for c in rows if c['name']=='clock_1_0_1')
  controls=[]
- for name,site,old,new in [('height',0x1e076,6,7),('counter',0x1e071,1,2),('position_destination',0x1e0bd,0xa8,0xa4),('y_shift_destination',0x1e124,0xb0,0xa0)]:
+ for name,site,old,new in [('height',0x1e076,6,7),('counter',0x1e071,1,2),('position_destination',0x1e0bd,0xa8,0xa4),('y_shift_destination',0x1e124,0xb0,0xa0),('rng_position_mask',0x1e091,15,7),('rng_bx_lane',0x1e111,0xe7,0xe3)]:
+  mutation_case=next(c for c in rows if c['name']=='draw_32767') if name.startswith('rng_') else case
   bad=bytearray(body);assert bad[site-ENTRY]==old;bad[site-ENTRY]=new
-  try:exercise(original,bytes(bad),case)
-  except AssertionError as error:assert str(error)==case['name'],str(error)
+  try:exercise(original,bytes(bad),mutation_case)
+  except AssertionError as error:assert str(error)==mutation_case['name'],str(error)
   else:raise AssertionError('Semantic mutation escaped: '+name)
   controls.append(name)
- report=dict(status='PASS',cases=len(rows),prefix_bytes=SIZE,native_bytes=sum(s['bytes'] for s in spans),DATA_sites=sum(s['DATA_sites'] for s in spans),spans=spans,context_controls=context_controls(a.build),code_controls=controls,scope='Placed production C plus retained assembly, independent DATA/frame/call model and original register/defined-flag comparison. RNG/sound/sector/spawn/list helpers stubbed; bounded counts, RNG 0..32767, seeded incoming hint; no map/assets/live allocator validation.')
+ report=dict(status='PASS',cases=len(rows),byte_witness_cases=byte_witness_cases(original,a.build),prefix_bytes=SIZE,native_bytes=sum(s['bytes'] for s in spans),DATA_sites=sum(s['DATA_sites'] for s in spans),spans=spans,context_controls=context_controls(a.build),code_controls=controls,scope='Placed production C plus retained assembly, independent DATA/frame/call model and original register/defined-flag comparison. Complete private byte witness separately checks its result and callee-preserved state. RNG/sound/sector/spawn/list helpers stubbed; bounded counts, RNG 0..32767, seeded incoming hint; no map/assets/live allocator validation.')
  a.output.write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8');print(json.dumps(report))
 if __name__=='__main__':main()

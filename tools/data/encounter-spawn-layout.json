@@ -3009,6 +3009,1539 @@
           344
         ]
       }
+    },
+    {
+      "public": "encounter_shift_context_",
+      "object": "encshift",
+      "prefix": 160,
+      "size": 1258,
+      "sha256": "06f39ac2241db2926f7fe820ae25b4fbca172692a3a1a51d8b283811e075fcfa",
+      "records": {
+        "flat_groups": [
+          2
+        ],
+        "fixups": [
+          [
+            1,
+            180,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            0,
+            null
+          ],
+          [
+            1,
+            199,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              0,
+              1
+            ],
+            0,
+            null
+          ],
+          [
+            1,
+            208,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              1
+            ],
+            0,
+            "_encounter_clock"
+          ],
+          [
+            1,
+            224,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              1
+            ],
+            0,
+            "_encounter_clock"
+          ],
+          [
+            1,
+            252,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              2
+            ],
+            0,
+            "_trigger_sprite"
+          ],
+          [
+            1,
+            263,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            0,
+            "_sprite"
+          ],
+          [
+            1,
+            281,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            0,
+            "_sprite"
+          ],
+          [
+            1,
+            311,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            0,
+            "_sprite"
+          ],
+          [
+            1,
+            348,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              1
+            ],
+            0,
+            "_encounter_clock"
+          ],
+          [
+            1,
+            355,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              4
+            ],
+            0,
+            "play_sound_"
+          ],
+          [
+            1,
+            373,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              4
+            ],
+            0,
+            "play_sound_"
+          ],
+          [
+            1,
+            380,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              5
+            ],
+            0,
+            "_rotating_sector_count"
+          ],
+          [
+            1,
+            404,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              6
+            ],
+            0,
+            "_sector"
+          ],
+          [
+            1,
+            418,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              6
+            ],
+            0,
+            "_sector"
+          ],
+          [
+            1,
+            426,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              7
+            ],
+            0,
+            "_numsectors"
+          ],
+          [
+            1,
+            436,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_trigger_count"
+          ],
+          [
+            1,
+            449,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              1
+            ],
+            0,
+            "_encounter_clock"
+          ],
+          [
+            1,
+            465,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              9
+            ],
+            0,
+            "_advance_clock"
+          ],
+          [
+            1,
+            478,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              1
+            ],
+            0,
+            "_encounter_clock"
+          ],
+          [
+            1,
+            504,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              10
+            ],
+            0,
+            "random_value_"
+          ],
+          [
+            1,
+            560,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              11
+            ],
+            0,
+            "updatesector_"
+          ],
+          [
+            1,
+            585,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              12
+            ],
+            0,
+            "spawn_sprite_at_position_"
+          ],
+          [
+            1,
+            598,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              10
+            ],
+            0,
+            "random_value_"
+          ],
+          [
+            1,
+            616,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            0,
+            "_sprite"
+          ],
+          [
+            1,
+            621,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              10
+            ],
+            0,
+            "random_value_"
+          ],
+          [
+            1,
+            630,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              10
+            ],
+            0,
+            "random_value_"
+          ],
+          [
+            1,
+            637,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              10
+            ],
+            0,
+            "random_value_"
+          ],
+          [
+            1,
+            683,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            0,
+            "_sprite"
+          ],
+          [
+            1,
+            704,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            0,
+            "_sprite"
+          ],
+          [
+            1,
+            713,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            0,
+            "_sprite"
+          ],
+          [
+            1,
+            719,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            0,
+            "_sprite"
+          ],
+          [
+            1,
+            727,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              13
+            ],
+            0,
+            "_tilesizx"
+          ],
+          [
+            1,
+            747,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            0,
+            "_sprite"
+          ],
+          [
+            1,
+            754,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              14
+            ],
+            0,
+            "add_listed_sprite_"
+          ],
+          [
+            1,
+            766,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              15
+            ],
+            0,
+            "_ticks_per_step"
+          ],
+          [
+            1,
+            791,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              16
+            ],
+            0,
+            "_first_trigger_sprite"
+          ],
+          [
+            1,
+            801,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            0,
+            "_sprite"
+          ],
+          [
+            1,
+            815,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              17
+            ],
+            0,
+            "_second_trigger_state"
+          ],
+          [
+            1,
+            827,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              18
+            ],
+            0,
+            "_second_actor_kind"
+          ],
+          [
+            1,
+            838,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              19
+            ],
+            0,
+            "_second_actor_mode"
+          ],
+          [
+            1,
+            858,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              17
+            ],
+            0,
+            "_second_trigger_state"
+          ],
+          [
+            1,
+            863,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              20
+            ],
+            0,
+            "activate_sector_"
+          ],
+          [
+            1,
+            875,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              21
+            ],
+            0,
+            "activate_sector_"
+          ],
+          [
+            1,
+            887,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              4
+            ],
+            0,
+            "play_sound_"
+          ],
+          [
+            1,
+            903,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              4
+            ],
+            0,
+            "play_sound_"
+          ],
+          [
+            1,
+            912,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              16
+            ],
+            0,
+            "_first_trigger_sprite"
+          ],
+          [
+            1,
+            922,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            0,
+            "_sprite"
+          ],
+          [
+            1,
+            929,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              17
+            ],
+            0,
+            "_second_trigger_state"
+          ],
+          [
+            1,
+            951,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              22
+            ],
+            0,
+            "near_encounter_position_"
+          ],
+          [
+            1,
+            968,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              22
+            ],
+            0,
+            "near_encounter_position_"
+          ],
+          [
+            1,
+            987,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              18
+            ],
+            0,
+            "_second_actor_kind"
+          ],
+          [
+            1,
+            1014,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              18
+            ],
+            0,
+            "_second_actor_kind"
+          ],
+          [
+            1,
+            1021,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              17
+            ],
+            0,
+            "_second_trigger_state"
+          ],
+          [
+            1,
+            1044,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              23
+            ],
+            0,
+            "update_actor_common_"
+          ],
+          [
+            1,
+            1049,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              24
+            ],
+            0,
+            "_encounter_sequence"
+          ],
+          [
+            1,
+            1079,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              25
+            ],
+            0,
+            "update_sprite_sequence_state_"
+          ],
+          [
+            1,
+            1085,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              26
+            ],
+            0,
+            "_encounter_sprite_index"
+          ],
+          [
+            1,
+            1096,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            0,
+            "_sprite"
+          ],
+          [
+            1,
+            1110,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              16
+            ],
+            0,
+            "_first_trigger_sprite"
+          ],
+          [
+            1,
+            1120,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            0,
+            "_sprite"
+          ],
+          [
+            1,
+            1128,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              27
+            ],
+            0,
+            "_second_actor_state"
+          ],
+          [
+            1,
+            1138,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              17
+            ],
+            0,
+            "_second_trigger_state"
+          ],
+          [
+            1,
+            1147,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              28
+            ],
+            0,
+            "_exit_scan_initialized"
+          ],
+          [
+            1,
+            1162,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              28
+            ],
+            0,
+            "_exit_scan_initialized"
+          ],
+          [
+            1,
+            1169,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              29
+            ],
+            0,
+            "_exit_scan_index"
+          ],
+          [
+            1,
+            1179,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              30
+            ],
+            0,
+            "_board4_sector_events"
+          ],
+          [
+            1,
+            1191,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              29
+            ],
+            0,
+            "_exit_scan_index"
+          ],
+          [
+            1,
+            1198,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              29
+            ],
+            0,
+            "_exit_scan_index"
+          ],
+          [
+            1,
+            1210,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              31
+            ],
+            0,
+            "_first_actor_kind"
+          ],
+          [
+            1,
+            1226,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              32
+            ],
+            0,
+            "_first_trigger_state"
+          ],
+          [
+            1,
+            1242,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              33
+            ],
+            0,
+            "_encounter_position"
+          ],
+          [
+            1,
+            1260,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              32
+            ],
+            0,
+            "_first_trigger_state"
+          ],
+          [
+            1,
+            1266,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              34
+            ],
+            0,
+            "_first_actor_mode"
+          ],
+          [
+            1,
+            1273,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              32
+            ],
+            0,
+            "_first_trigger_state"
+          ],
+          [
+            1,
+            1285,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              29
+            ],
+            0,
+            "_exit_scan_index"
+          ],
+          [
+            1,
+            1293,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              30
+            ],
+            0,
+            "_board4_sector_events"
+          ],
+          [
+            1,
+            1303,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              32
+            ],
+            0,
+            "_first_trigger_state"
+          ],
+          [
+            1,
+            1325,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              23
+            ],
+            0,
+            "update_actor_common_"
+          ],
+          [
+            1,
+            1330,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              35
+            ],
+            0,
+            "_exit_sequence"
+          ],
+          [
+            1,
+            1360,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              25
+            ],
+            0,
+            "update_sprite_sequence_state_"
+          ],
+          [
+            1,
+            1366,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              36
+            ],
+            0,
+            "_first_actor_state"
+          ],
+          [
+            1,
+            1378,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              37
+            ],
+            0,
+            "_second_trigger_sprite"
+          ],
+          [
+            1,
+            1388,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              38
+            ],
+            0,
+            "deletesprite_"
+          ],
+          [
+            1,
+            1394,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              34
+            ],
+            0,
+            "_first_actor_mode"
+          ],
+          [
+            1,
+            1401,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              32
+            ],
+            0,
+            "_first_trigger_state"
+          ]
+        ]
+      },
+      "branches": {},
+      "literal_sha256": "4e2264519143a5033cec5947e5fd0649fd21c0189d3ad8c6ad08a90360a51142",
+      "literal_sites": {
+        "20": 0,
+        "39": 128
+      }
+    },
+    {
+      "public": "encounter_byte_context_",
+      "object": "encbyte",
+      "prefix": 0,
+      "size": 112,
+      "sha256": "6cf98898edd231ecf81cb95fd425a736fbbfd55a4dccd2e8997113651cb4459b",
+      "records": {
+        "flat_groups": [
+          2
+        ],
+        "fixups": [
+          [
+            1,
+            7,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              1
+            ],
+            0,
+            "random_value_"
+          ],
+          [
+            1,
+            16,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              1
+            ],
+            0,
+            "random_value_"
+          ],
+          [
+            1,
+            36,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              2
+            ],
+            0,
+            "random_value_"
+          ]
+        ]
+      },
+      "branches": {},
+      "literal_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "literal_sites": {}
     }
   ],
   "phases": [
@@ -3191,13 +4724,103 @@
       "begin": 1249,
       "end": 1250,
       "proof": "Compiler-managed EBP save/restore with original six-save frame."
+    },
+    {
+      "symbol": "encounter_conversion_1e12d_",
+      "object": "encshift",
+      "public": "encounter_shift_context_",
+      "address": 123181,
+      "begin": 502,
+      "end": 505,
+      "proof": "Masked shift counts are 0 or 1. The signed BX projection and low signed union word at ESP+B0 preserve the original count; the full union store remains four bytes and the private frame remains 184 bytes."
+    },
+    {
+      "symbol": "encounter_conversion_1e146_",
+      "object": "encshift",
+      "public": "encounter_shift_context_",
+      "address": 123206,
+      "begin": 527,
+      "end": 535,
+      "proof": "Masked shift counts are 0 or 1. The signed BX projection and low signed union word at ESP+B0 preserve the original count; the full union store remains four bytes and the private frame remains 184 bytes."
+    },
+    {
+      "symbol": "encounter_conversion_1e08b_",
+      "object": "encbyte",
+      "public": "encounter_byte_context_",
+      "address": 123019,
+      "begin": 11,
+      "end": 15,
+      "proof": "The actual RNG returns 0..32767 in EAX and preserves the other registers. Pure register projections copy AL into a zero-extended destination word while preserving EAX. Only these instructions are placed; original calls and frame remain unchanged."
+    },
+    {
+      "symbol": "encounter_conversion_1e0ec_",
+      "object": "encbyte",
+      "public": "encounter_byte_context_",
+      "address": 123116,
+      "begin": 11,
+      "end": 15,
+      "proof": "The actual RNG returns 0..32767 in EAX and preserves the other registers. Pure register projections copy AL into a zero-extended destination word while preserving EAX. Only these instructions are placed; original calls and frame remain unchanged."
+    },
+    {
+      "symbol": "encounter_conversion_1e105_",
+      "object": "encbyte",
+      "public": "encounter_byte_context_",
+      "address": 123141,
+      "begin": 11,
+      "end": 15,
+      "proof": "The actual RNG returns 0..32767 in EAX and preserves the other registers. Pure register projections copy AL into a zero-extended destination word while preserving EAX. Only these instructions are placed; original calls and frame remain unchanged."
+    },
+    {
+      "symbol": "encounter_conversion_1e10e_",
+      "object": "encbyte",
+      "public": "encounter_byte_context_",
+      "address": 123150,
+      "begin": 22,
+      "end": 24,
+      "proof": "The actual RNG returns 0..32767 in EAX and preserves the other registers. Pure register projections copy AL into a zero-extended destination word while preserving EAX. Only these instructions are placed; original calls and frame remain unchanged. The private spill between the BX copy and XOR only saves the previous draw to the private frame, changes no input or flags, and is excluded. Original EDX stays live across draws."
+    },
+    {
+      "symbol": "encounter_conversion_1e110_",
+      "object": "encbyte",
+      "public": "encounter_byte_context_",
+      "address": 123152,
+      "begin": 28,
+      "end": 30,
+      "proof": "The actual RNG returns 0..32767 in EAX and preserves the other registers. Pure register projections copy AL into a zero-extended destination word while preserving EAX. Only these instructions are placed; original calls and frame remain unchanged. The private spill between the BX copy and XOR only saves the previous draw to the private frame, changes no input or flags, and is excluded. Original EDX stays live across draws."
+    },
+    {
+      "symbol": "encounter_conversion_1e117_",
+      "object": "encbyte",
+      "public": "encounter_byte_context_",
+      "address": 123159,
+      "begin": 50,
+      "end": 52,
+      "proof": "The original RNG supplies the low byte in AL; the preceding conversion clears the word high byte. Select the actual unsigned byte conversion and low-bit masks from the witness. Original retained order preserves all flag consumers; private spills/reloads are not linked."
+    },
+    {
+      "symbol": "encounter_conversion_1e11c_",
+      "object": "encbyte",
+      "public": "encounter_byte_context_",
+      "address": 123164,
+      "begin": 58,
+      "end": 60,
+      "proof": "The original RNG supplies the low byte in AL; the preceding conversion clears the word high byte. Select the actual unsigned byte conversion and low-bit masks from the witness. Original retained order preserves all flag consumers; private spills/reloads are not linked."
+    },
+    {
+      "symbol": "encounter_conversion_1e11e_",
+      "object": "encbyte",
+      "public": "encounter_byte_context_",
+      "address": 123166,
+      "begin": 75,
+      "end": 78,
+      "proof": "The original RNG supplies the low byte in AL; the preceding conversion clears the word high byte. Select the actual unsigned byte conversion and low-bit masks from the witness. Original retained order preserves all flag consumers; private spills/reloads are not linked."
     }
   ],
   "retained": [
     {
       "symbol": "encounter_spawn_retained_0",
-      "address": 123019,
-      "size": 13,
+      "address": 123023,
+      "size": 9,
       "binary_offset": 160,
       "fixups": {}
     },
@@ -3205,83 +4828,41 @@
       "symbol": "encounter_spawn_retained_1",
       "address": 123039,
       "size": 4,
-      "binary_offset": 173,
+      "binary_offset": 169,
       "fixups": {}
     },
     {
       "symbol": "encounter_spawn_retained_2",
-      "address": 123116,
-      "size": 20,
-      "binary_offset": 177,
+      "address": 123120,
+      "size": 16,
+      "binary_offset": 173,
       "fixups": {
-        "16": 2637998
+        "12": 2637998
       }
     },
     {
       "symbol": "encounter_spawn_retained_3",
-      "address": 123141,
-      "size": 4,
-      "binary_offset": 197,
-      "fixups": {}
-    },
-    {
-      "symbol": "encounter_spawn_retained_4",
-      "address": 123150,
-      "size": 4,
-      "binary_offset": 201,
-      "fixups": {}
-    },
-    {
-      "symbol": "encounter_spawn_retained_5",
-      "address": 123159,
-      "size": 2,
-      "binary_offset": 205,
-      "fixups": {}
-    },
-    {
-      "symbol": "encounter_spawn_retained_6",
-      "address": 123164,
-      "size": 5,
-      "binary_offset": 207,
-      "fixups": {}
-    },
-    {
-      "symbol": "encounter_spawn_retained_7",
-      "address": 123181,
-      "size": 3,
-      "binary_offset": 212,
-      "fixups": {}
-    },
-    {
-      "symbol": "encounter_spawn_retained_8",
-      "address": 123206,
-      "size": 8,
-      "binary_offset": 215,
-      "fixups": {}
-    },
-    {
-      "symbol": "encounter_spawn_retained_9",
       "address": 123234,
       "size": 8,
-      "binary_offset": 223,
+      "binary_offset": 189,
       "fixups": {
         "4": 2564128
       }
     },
     {
-      "symbol": "encounter_spawn_retained_10",
+      "symbol": "encounter_spawn_retained_4",
       "address": 123248,
       "size": 3,
-      "binary_offset": 231,
+      "binary_offset": 197,
       "fixups": {}
     },
     {
-      "symbol": "encounter_spawn_retained_11",
+      "symbol": "encounter_spawn_retained_5",
       "address": 123253,
       "size": 8,
-      "binary_offset": 234,
+      "binary_offset": 200,
       "fixups": {}
     }
   ],
-  "assembly_size": 242
+  "assembly_size": 208
 }

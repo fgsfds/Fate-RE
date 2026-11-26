@@ -1,7 +1,7 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 488,
-  "unique_code_bytes": 220474,
+  "routines": 482,
+  "unique_code_bytes": 220440,
   "le_pointers": 11939,
   "non_routine_code_spans": [
     {
@@ -7465,11 +7465,11 @@
       "symbol": "encounter_spawn_retained_0",
       "source": "src/fate/level_encounter.asm",
       "binary": "level_encounter.bin",
-      "sha256": "610529ce769552d5a5c4941b9bd7b0507478ce507b66c4cd258266b8ddf68fc7",
-      "bytes": 13,
-      "raw_offset": "0x4368b",
-      "loaded_address": "0x1e08b",
-      "public_entry": "0x1e08b",
+      "sha256": "7875762539c48d434a1ea7633a224b9e7fc1ccd201bb06b540acb085b3538022",
+      "bytes": 9,
+      "raw_offset": "0x4368f",
+      "loaded_address": "0x1e08f",
+      "public_entry": "0x1e08f",
       "binary_offset": 160,
       "le_pointers": 0
     },
@@ -7482,95 +7482,23 @@
       "raw_offset": "0x4369f",
       "loaded_address": "0x1e09f",
       "public_entry": "0x1e09f",
-      "binary_offset": 173,
+      "binary_offset": 169,
       "le_pointers": 0
     },
     {
       "symbol": "encounter_spawn_retained_2",
       "source": "src/fate/level_encounter.asm",
       "binary": "level_encounter.bin",
-      "sha256": "9038d0765ea5f5c4da4c53755d4203ead47d1ee91b0e6ba0d2bcf4737ea6fb88",
-      "bytes": 20,
-      "raw_offset": "0x436ec",
-      "loaded_address": "0x1e0ec",
-      "public_entry": "0x1e0ec",
-      "binary_offset": 177,
+      "sha256": "8bb4b31834a3d68be94555b2194c2f090ebb1427e978ed646ee97884bfcaa5cc",
+      "bytes": 16,
+      "raw_offset": "0x436f0",
+      "loaded_address": "0x1e0f0",
+      "public_entry": "0x1e0f0",
+      "binary_offset": 173,
       "le_pointers": 1
     },
     {
       "symbol": "encounter_spawn_retained_3",
-      "source": "src/fate/level_encounter.asm",
-      "binary": "level_encounter.bin",
-      "sha256": "ec1ac75713c3cb1f51dbc89c64c02dfbc996070abd0e10281e83e5b84622ee27",
-      "bytes": 4,
-      "raw_offset": "0x43705",
-      "loaded_address": "0x1e105",
-      "public_entry": "0x1e105",
-      "binary_offset": 197,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "encounter_spawn_retained_4",
-      "source": "src/fate/level_encounter.asm",
-      "binary": "level_encounter.bin",
-      "sha256": "f82582014dc1c8f6c5d524d183120a644e4397d31814a739f485fd6ade20db91",
-      "bytes": 4,
-      "raw_offset": "0x4370e",
-      "loaded_address": "0x1e10e",
-      "public_entry": "0x1e10e",
-      "binary_offset": 201,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "encounter_spawn_retained_5",
-      "source": "src/fate/level_encounter.asm",
-      "binary": "level_encounter.bin",
-      "sha256": "3514181eb1bfa6790767368f32a6841c5ee79054c8bc877a23ed6b79de407f5d",
-      "bytes": 2,
-      "raw_offset": "0x43717",
-      "loaded_address": "0x1e117",
-      "public_entry": "0x1e117",
-      "binary_offset": 205,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "encounter_spawn_retained_6",
-      "source": "src/fate/level_encounter.asm",
-      "binary": "level_encounter.bin",
-      "sha256": "6b8d99495ed7db072c3a981dbb79de6515c94f3a6972a088834c52691b2ae5d1",
-      "bytes": 5,
-      "raw_offset": "0x4371c",
-      "loaded_address": "0x1e11c",
-      "public_entry": "0x1e11c",
-      "binary_offset": 207,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "encounter_spawn_retained_7",
-      "source": "src/fate/level_encounter.asm",
-      "binary": "level_encounter.bin",
-      "sha256": "ada239a25c82397a87a4592f38e4c00d5e8a93adac61aa0f4cabd4534e704d18",
-      "bytes": 3,
-      "raw_offset": "0x4372d",
-      "loaded_address": "0x1e12d",
-      "public_entry": "0x1e12d",
-      "binary_offset": 212,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "encounter_spawn_retained_8",
-      "source": "src/fate/level_encounter.asm",
-      "binary": "level_encounter.bin",
-      "sha256": "291e54be6534b5f7f2c4c0daa3d81c6e1817e5d0173bd22b6e580eeeefe44467",
-      "bytes": 8,
-      "raw_offset": "0x43746",
-      "loaded_address": "0x1e146",
-      "public_entry": "0x1e146",
-      "binary_offset": 215,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "encounter_spawn_retained_9",
       "source": "src/fate/level_encounter.asm",
       "binary": "level_encounter.bin",
       "sha256": "6526ec3a241456d9fe2fd72a9a2d0319d52b6dfb02e3a56b8878f68a99cbb2d0",
@@ -7578,11 +7506,11 @@
       "raw_offset": "0x43762",
       "loaded_address": "0x1e162",
       "public_entry": "0x1e162",
-      "binary_offset": 223,
+      "binary_offset": 189,
       "le_pointers": 1
     },
     {
-      "symbol": "encounter_spawn_retained_10",
+      "symbol": "encounter_spawn_retained_4",
       "source": "src/fate/level_encounter.asm",
       "binary": "level_encounter.bin",
       "sha256": "46e0bd1456d3819fc9db37b8786bbf4152e609ec4bda9b0ab4f05036b03d11c1",
@@ -7590,11 +7518,11 @@
       "raw_offset": "0x43770",
       "loaded_address": "0x1e170",
       "public_entry": "0x1e170",
-      "binary_offset": 231,
+      "binary_offset": 197,
       "le_pointers": 0
     },
     {
-      "symbol": "encounter_spawn_retained_11",
+      "symbol": "encounter_spawn_retained_5",
       "source": "src/fate/level_encounter.asm",
       "binary": "level_encounter.bin",
       "sha256": "1b477efb54d71542a2c2817219be60679fb2eaf35a8fd0f4656012ede75cc7a5",
@@ -7602,7 +7530,7 @@
       "raw_offset": "0x43775",
       "loaded_address": "0x1e175",
       "public_entry": "0x1e175",
-      "binary_offset": 234,
+      "binary_offset": 200,
       "le_pointers": 0
     }
   ]

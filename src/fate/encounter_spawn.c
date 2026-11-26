@@ -5,7 +5,9 @@
  * Literal copies, latch and actor code remain unlinked in these private contexts.
  */
 #ifdef ENCOUNTER_LATCH_CONTEXT
-#ifdef ENCOUNTER_CLOCK_CONTEXT
+#if defined(ENCOUNTER_SHIFT_CONTEXT)
+#define encounter_exit_context encounter_shift_context
+#elif defined(ENCOUNTER_CLOCK_CONTEXT)
 #define encounter_exit_context encounter_clock_context
 #else
 #define encounter_exit_context encounter_spawn_context
@@ -28,11 +30,13 @@ typedef struct {
 } EncounterSprite;
 #pragma pack(pop)
 
+typedef union { unsigned long full; short word; } EncounterShift;
+
 typedef struct {
     EncounterPosition position;
     short sector_hint;
     unsigned short padding;
-    unsigned long y_shift;
+    EncounterShift y_shift;
     unsigned long number;
 } EncounterSpawn;
 
@@ -154,7 +158,11 @@ void encounter_exit_context(void)
     short index, slot, sector_index;
     short position_choice, repeat_choice;
     short near_first, near_second;
+#ifdef ENCOUNTER_SHIFT_CONTEXT
+    short x_shift;
+#else
     unsigned x_shift;
+#endif
 #ifdef ENCOUNTER_CLOCK_CONTEXT
     unsigned clock_bits;
     unsigned long first_spawn_number;
@@ -231,16 +239,20 @@ void encounter_exit_context(void)
 #ifdef ENCOUNTER_LATCH_CONTEXT
             repeat_draw = encounter_draw_dx((unsigned char)random_value());
             x_draw = encounter_draw_bx((unsigned char)random_value());
-            spawn.y_shift = random_value() & 1U;
+            spawn.y_shift.full = random_value() & 1U;
             repeat_choice = (short)(repeat_draw & 15U);
             x_shift = x_draw & 1U;
 #else
             repeat_choice = (short)(random_value() & 15);
             x_shift = random_value() & 1U;
-            spawn.y_shift = random_value() & 1U;
+            spawn.y_shift.full = random_value() & 1U;
 #endif
             sprite[slot].xrepeat = (unsigned char)(repeats[repeat_choice].x >> x_shift);
-            sprite[slot].yrepeat = (unsigned char)(repeats[repeat_choice].y >> (unsigned short)spawn.y_shift);
+#ifdef ENCOUNTER_SHIFT_CONTEXT
+            sprite[slot].yrepeat = (unsigned char)(repeats[repeat_choice].y >> spawn.y_shift.word);
+#else
+            sprite[slot].yrepeat = (unsigned char)(repeats[repeat_choice].y >> (unsigned short)spawn.y_shift.full);
+#endif
 
             scaled_width = (long)tilesizx[sprite[slot].tile] * sprite[slot].xrepeat;
             sprite[slot].clipdist = (unsigned char)((unsigned long)scaled_width >> 7);

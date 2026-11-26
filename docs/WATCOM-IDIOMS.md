@@ -236,6 +236,27 @@ bits and shared return restoration. Do not reorder volatile accesses to make
 this proof: volatile access order is part of that C program's semantics.
 
 
+### RNG byte projections and signed union word counts
+
+The encounter draw witness uses truthful AH/DH/BH projections and a join of
+disjoint low/high byte inputs. After copying the actual raw EAX value into EDX
+or EBX, XORing the copied high byte with AH produces zero while preserving EAX.
+Watcom emits the original MOV/XOR pair. The pinned RNG returns 0..32767 and
+preserves the other registers. Keep that domain and the incoming register proof;
+do not claim arbitrary upper bits are zero from a narrow return declaration.
+`src/fate/encounter_byte.c` supplies the compact context, and the encounter
+fixture separately executes its complete private algorithm before qualifying
+pure conversion/mask slices. A full draw context that grew the frame to 188
+bytes was rejected as a frame replacement. Its spills are not production code.
+
+For masked 0/1 shift counts, writing a union's full unsigned dword and reading
+its low signed word preserves the four-byte store while producing the original
+MOVSX word load on the pinned little-endian compiler. A signed short x count
+similarly produces MOVSX ECX,BX. Guard zero-length literal prefixes explicitly
+as well as nonempty ones: a body digest and absolute fixup snapshot alone do
+not prove the public stayed at zero. The empty-prefix digest and a moved-public
+counterexample make that layout check part of the binder itself.
+
 ### Switch index byte writes and generated table relocation
 
 For the video-mode dispatch, zero an unsigned dword union through an empty

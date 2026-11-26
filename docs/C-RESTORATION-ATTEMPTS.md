@@ -120,18 +120,21 @@ Evidence and hash-bound behavior report: `work/numbered-board-next/evidence.json
 
 ### Encounter spawn-prefix byte draws and signed product
 
-Watcom 10.5 `/4r /s /or /bt=dos /dENCOUNTER_LATCH_CONTEXT=1` with the
-clock-context define supplies 515 of 597 prefix bytes jointly with the base
-context, plus both EBP save/restore slots. Height lifetime and full EAX counter
-initialization are solved. The remaining 82 instruction bytes begin at `0x1e08b`:
-the original copies EAX to EDX then clears DH with AH, while the compiler clears
-AH and masks AL before extending the position index into EDX. Actual RNG results
-are 0..32767. Next probe a truthful narrow-result RNG alias and its DX/BX staging
-in a small witness before perturbing the whole frame. Later retained code includes
-the signed `IMUL`/`SHRD` product and word shift-count loads; do not repeat rejected
-Watcom `__int64` or `long long` probes. Evidence:
-`work/encounter-counter-nov27/union-placement.json` and
-`work/encounter-spawn-integrate-nov27/audit.json`.
+Watcom 10.5 `/4r /s /or /bt=dos` now supplies 549 of 597 prefix bytes from
+guarded base/clock/shift contexts and a compact byte-conversion witness, plus
+both EBP save/restore slots. Height, counter initialization, RNG byte clearing
+and signed word shift counts are solved. Do not transplant the failed 188-byte
+full RNG frame; only independently qualified register operations are placed.
+The remaining 48 bytes begin at `0x1e08f`: the original masks DL, sign-extends
+DX into EBX, and indexes the position table through EBX, whereas the base
+context masks AL and uses EDX as the position index. Next stage the real masked
+word in DX and its promoted signed index in EBX before both position loads.
+Other retained operations are tile-value staging, the width word load in AX,
+its signed EBX promotion and the signed `IMUL`/`SHRD` product. For the width,
+probe truthful AX and DL operand identities before multiplication. Do not repeat
+rejected Watcom `__int64` or `long long` probes. Evidence:
+`work/encounter-rng-nov27/RESULTS.md`, `work/encounter-shift-nov27/` and
+`work/encounter-byte-integrate-nov27/audit.json`.
 
 ### Video prompt-mode blocker
 

@@ -5172,9 +5172,11 @@ for _context in ENCOUNTER_SPAWN_LAYOUT['contexts']:
     _public = _context['public']
     LEAF_CONTEXT_SHA256[_public] = _context['sha256']
     LEAF_CONTEXT_RECORDS[_public] = _context['records']
-    LEAF_CONTEXT_LITERALS[_public] = (160, _context['literal_sha256'], {int(k): v for k, v in _context['literal_sites'].items()})
-    FUNCTION_ADDRESSES[_public] = 0x1df2e
-    LEAF_SECTION_BRANCHES[_public] = (_context['size'], 0x4ef, {int(k): (bytes.fromhex(v[0]), v[1], v[2]) for k, v in _context['branches'].items()})
+    if 'literal_sha256' in _context:
+        LEAF_CONTEXT_LITERALS[_public] = (_context.get('prefix', 160), _context['literal_sha256'], {int(k): v for k, v in _context['literal_sites'].items()})
+    if _context['branches']:
+        FUNCTION_ADDRESSES[_public] = 0x1df2e
+        LEAF_SECTION_BRANCHES[_public] = (_context['size'], 0x4ef, {int(k): (bytes.fromhex(v[0]), v[1], v[2]) for k, v in _context['branches'].items()})
 for _phase in ENCOUNTER_SPAWN_LAYOUT['phases']:
     _size = next(c['size'] for c in ENCOUNTER_SPAWN_LAYOUT['contexts'] if c['public'] == _phase['public'])
     LEAVES[_phase['symbol']] = (_phase['address']+0x25600, _phase['end']-_phase['begin'])

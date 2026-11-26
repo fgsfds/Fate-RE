@@ -87,9 +87,8 @@ update_level_encounter equ 0x1df2e
 .check_spawn_count equ 0x1e199
 .check_first_trigger_sprite equ 0x1e1b0
 
-section .spawn_0 align=1 vstart=0x1e08b follows=.text
-    mov edx, eax
-    xor dh, ah
+
+section .spawn_0 align=1 vstart=0x1e08f follows=.text
     and dl, 0xf
     movsx ebx, dx
     mov eax, [esp + ebx*8]
@@ -97,41 +96,18 @@ section .spawn_0 align=1 vstart=0x1e08b follows=.text
 section .spawn_1 align=1 vstart=0x1e09f follows=.spawn_0
     mov eax, [esp + ebx*8 + 0x4]
 
-section .spawn_2 align=1 vstart=0x1e0ec follows=.spawn_1
-    mov edx, eax
-    xor dh, ah
+section .spawn_2 align=1 vstart=0x1e0f0 follows=.spawn_1
     and dl, 0x1
     add edx, strict dword 0x350
     mov [esi + sprite_tile], dx
 
-section .spawn_3 align=1 vstart=0x1e105 follows=.spawn_2
-    mov edx, eax
-    xor dh, ah
-
-section .spawn_4 align=1 vstart=0x1e10e follows=.spawn_3
-    mov ebx, eax
-    xor bh, ah
-
-section .spawn_5 align=1 vstart=0x1e117 follows=.spawn_4
-    xor ah, ah
-
-section .spawn_6 align=1 vstart=0x1e11c follows=.spawn_5
-    and al, 0x1
-    and bl, 0x1
-
-section .spawn_7 align=1 vstart=0x1e12d follows=.spawn_6
-    movsx ecx, bx
-
-section .spawn_8 align=1 vstart=0x1e146 follows=.spawn_7
-    movsx ecx, word [esp + 0xb0]
-
-section .spawn_9 align=1 vstart=0x1e162 follows=.spawn_8
+section .spawn_3 align=1 vstart=0x1e162 follows=.spawn_2
     mov ax, [nosplit eax*2 + tile_width]
 
-section .spawn_10 align=1 vstart=0x1e170 follows=.spawn_9
+section .spawn_4 align=1 vstart=0x1e170 follows=.spawn_3
     movsx ebx, ax
 
-section .spawn_11 align=1 vstart=0x1e175 follows=.spawn_10
+section .spawn_5 align=1 vstart=0x1e175 follows=.spawn_4
     mov al, dl
     imul ebx
     shrd eax, edx, byte 0x7

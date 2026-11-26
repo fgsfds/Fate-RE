@@ -1581,7 +1581,8 @@ def verify_compiler_groups(exe, directory, names=None):
         verify_group_layout((directory/'enclatch.obj').read_bytes(), 1409, [('encounter_latch_context_', 160)])
     for context in ENCOUNTER_SPAWN_LAYOUT['contexts']:
         if selected(context['object']):
-            verify_group_layout((directory/(context['object']+'.obj')).read_bytes(), 160+context['size'], [(context['public'], 160)])
+            prefix = context.get('prefix', 160)
+            verify_group_layout((directory/(context['object']+'.obj')).read_bytes(), prefix+context['size'], [(context['public'], prefix)])
     if selected('encexit'):
         verify_group_layout((directory/'encexit.obj').read_bytes(), 1385, [('encounter_exit_context_', 160)])
     if selected('menuprep'):
