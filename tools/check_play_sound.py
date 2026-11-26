@@ -279,12 +279,22 @@ def main():
         report['original_model_cases_passed'] = len(observations)
         candidate = None
         if a.build:
-            from verify_c_leaf import bind_leaf_details, DATA_OFFSETS, CODE_OFFSETS, FUNCTION_ADDRESSES
+            from verify_c_leaf import bind_leaf_details, verify_leaf_relocations, DATA_OFFSETS, CODE_OFFSETS, FUNCTION_ADDRESSES
             from check_ripple_stack import mutate_public_byte
             from check_ripple_control import rename_external
+            pointers = read_le_fixups(exe)['pointers']
+
+            def checked_phase(obj, symbol, address, size, *, data_offsets=DATA_OFFSETS, code_offsets=CODE_OFFSETS):
+                code_refs = {}
+                part, bindings = bind_leaf_details(obj, symbol, data_offsets, address=address,
+                    functions=FUNCTION_ADDRESSES, absolute_code=code_offsets, code_bindings=code_refs)
+                assert len(part) == size and part == exe[address+0x25600:address+0x25600+size]
+                verify_leaf_relocations(part, bindings, pointers, address, code_bindings=code_refs)
+                return part
+
             obj = (a.build/'sndopts.obj').read_bytes()
             kwargs = dict(address=0x35178, functions=FUNCTION_ADDRESSES, absolute_code=CODE_OFFSETS, code_bindings={})
-            phase, _ = bind_leaf_details(obj, 'sound_playback_options_', DATA_OFFSETS, **kwargs)
+            phase = checked_phase(obj, 'sound_playback_options_', 0x35178, 80)
             for bad, expected_error in ((mutate_public_byte(obj, 'playback_options_', 80), 'private context digest'),
                         (rename_external(obj, b'sound_sample_done_offset_', b'sound_sample_done_offseu_'), 'context fixup target/form/addend')):
                 try:
@@ -295,8 +305,7 @@ def main():
                     raise AssertionError('Sound private context mutation escaped')
             retained = (a.build/'asm/play_sound.bin').read_bytes()
             description_obj = (a.build/'snddesc.obj').read_bytes()
-            description, _ = bind_leaf_details(description_obj, 'sound_playback_description_', DATA_OFFSETS,
-                address=0x350f1, functions=FUNCTION_ADDRESSES, absolute_code=CODE_OFFSETS, code_bindings={})
+            description = checked_phase(description_obj, 'sound_playback_description_', 0x350f1, 69)
             try:
                 bind_leaf_details(mutate_public_byte(description_obj, 'playback_description_', 69),
                     'sound_playback_description_', DATA_OFFSETS, address=0x350f1, absolute_code=CODE_OFFSETS, code_bindings={})
@@ -305,8 +314,7 @@ def main():
             else:
                 raise AssertionError('Descriptor private cleanup mutation escaped')
             position_obj = (a.build/'sndpos.obj').read_bytes()
-            position, _ = bind_leaf_details(position_obj, 'sound_playback_position_', DATA_OFFSETS,
-                address=0x35136, functions=FUNCTION_ADDRESSES, absolute_code=CODE_OFFSETS, code_bindings={})
+            position = checked_phase(position_obj, 'sound_playback_position_', 0x35136, 66)
             for bad, expected_error in ((mutate_public_byte(position_obj, 'playback_position_', 73), 'context digest'),
                 (rename_external(position_obj, b'sound_sample_done_offset_', b'sound_sample_done_offseu_'), 'context fixup target/form/addend')):
                 try:
@@ -316,10 +324,24 @@ def main():
                     assert expected_error in str(error), str(error)
                 else:
                     raise AssertionError('Unlinked positioning continuation mutation escaped')
-            from verify_c_leaf import verify_leaf_relocations
+            # Preserve raw operands while changing their LE object class. These
+            # must fail typed binding checks before reference-loaded replay.
+            for control_obj, symbol, address, size, name, was_code in (
+                    (obj, 'sound_playback_options_', 0x35178, 80, 'sound_sample_done_offset_', True),
+                    (description_obj, 'sound_playback_description_', 0x350f1, 69, '_frame_state_16fb18', False)):
+                data_offsets, code_offsets = dict(DATA_OFFSETS), dict(CODE_OFFSETS)
+                source, destination = (code_offsets, data_offsets) if was_code else (data_offsets, code_offsets)
+                destination[name] = source.pop(name)
+                try:
+                    checked_phase(control_obj, symbol, address, size,
+                        data_offsets=data_offsets, code_offsets=code_offsets)
+                except ValueError as error:
+                    assert 'Original LE relocation sites or targets differ' in str(error), str(error)
+                else:
+                    raise AssertionError('Sound relocation class mutation escaped')
+            report['relocation_class_controls_rejected'] = 2
             queue_obj = (a.build/'sndqueue.obj').read_bytes()
             queue_parts = []
-            pointers = read_le_fixups(exe)['pointers']
             for role, address, size in (('metadata',0x351c8,61),('y',0x35205,3),
                                         ('descriptor',0x35208,2),('compare',0x3520a,43)):
                 code_refs = {}

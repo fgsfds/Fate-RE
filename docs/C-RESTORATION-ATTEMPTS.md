@@ -816,22 +816,27 @@ row) and `sptarg23` (selected trace) as future merge references.
 Production assembly remains; no C coverage is credited. Evidence:
 `work/sprite-path-target-next/evidence.json`.
 
-### Sound playback: entry and scheduling blocker
+### Sound playback: remaining entry/archive and return blocker
 
-`play_sound_`, Watcom 10.5 `/4r /s /or /bt=dos`: the closest whole-C
-candidate is 743 bytes versus 755, with all 60 behavior cases passing but
-byte and LE identity failing. First divergence at `0x34f81`: the EBP y copy
-precedes the x stack store. Seek arguments, descriptor stores and queue-failure
-reloads also differ. Next isolate entry x/y lifetimes and the failure-index
-reload without broad volatile qualifiers. Production remains assembly; no C
-coverage is credited. Probe: `work/play-sound-next/parameter_lifetime.c`;
-comparison: `work/play-sound-next/compiler/playsnd2.report.json`.
+`play_sound_`, Watcom 10.5 `/4r /s /or /bt=dos`: 370 of 755 bytes now
+come from exact compiler-generated C. The 376-byte entry/archive/cache prefix
+and nine shared-return bytes remain assembly. The historical whole-C candidate
+is 743 bytes, passes 60 behavior cases but fails byte/LE identity, first at
+`0x34f81`: the EBP Y copy precedes the X stack store. Its later descriptor and
+queue mismatches are resolved by the accepted slices; do not repeat those probes.
+Next isolate entry X/Y lifetimes and archive I/O without broad volatile qualifiers.
+Historical probe: `work/play-sound-next/parameter_lifetime.c`; comparison:
+`work/play-sound-next/compiler/playsnd2.report.json`.
 
-The callback/flags phase at `0x35178..0x351c8` is now exact compiler-generated C: 80 bytes and five typed LE sites. Keeping the signed high-word result in EAX before its EDX identity fixes the first probe mismatch at `0x35193`. Whole-routine entry allocation, archive operations and queue handling remain in 385 assembly bytes. Evidence: `work/sound-research-nov26/evidence.json`; accepted integration/audit: `work/sound-integrate-nov26/`.
-
-Descriptor initialization at `0x350f1..0x35136` adds 69 exact C bytes and two DATA LE sites, with a guarded 72-byte context and excluded private RET 4. The positioning phase at `0x35136..0x35178` is now 66 exact C bytes with two relative calls and no LE sites. A truthful EBP getter and the next real callback store resolve the rejected EBP formal and cloned-return branch layout. The complete 76-byte context, both call fixups and the excluded callback CODE fixup are guarded. Next investigate the remaining entry/archive and queue-tail ownership; do not repeat the solved positioning probes. Evidence: `work/sound-position-nov26/evidence.json`; corrected production declaration and fresh qualification: `work/sound-position-integrate-nov26/`.
-
-Queue/results now supply 155 C bytes with 18 DATA LE sites and the original queue call. Checked slicing places the conditional branch and both result paths while retaining the original short jump and shared frame epilogue (nine assembly bytes). The complete 161-byte context and 19 fixups are guarded. The entry/archive/cache prefix remains 376 assembly bytes. Next focus on its sound-ID, slot-search and I/O register lifetimes rather than repeating solved return-expression or `/os` probes. Evidence: `work/sound-queue-integrate-nov26/` and `work/sound-tail-return-nov26/evidence.json`.
+Callback/flags, descriptor initialization and positioning supply 80, 69 and
+66 exact C bytes. A truthful EBP getter and the next real callback store resolve
+the rejected EBP formal and cloned-return branch layout. Queue/results add
+155 bytes, retaining the original short jump and shared frame epilogue.
+The complete 81/72/76/161-byte contexts and their fixup identities are guarded.
+Equivalent return expressions produced the same queue object; `/os` introduced
+an unwanted EBP frame. Do not repeat those probes without a new hypothesis.
+Accepted integration/audit: `work/sound-queue-integrate-nov26/`;
+queue candidate: `work/sound-tail-return-nov26/evidence.json`.
 
 ### IPX initializer: ES boundary and lifetimes
 

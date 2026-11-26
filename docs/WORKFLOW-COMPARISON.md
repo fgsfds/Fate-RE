@@ -3,7 +3,7 @@
 The four-role workflow did not demonstrate a benefit for short mechanical
 assignments. Keep those operations with the integrator and retain independent
 research and review. This changes orchestration, not restoration acceptance.
-The broader restoration goal remains paused; no additional production functions
+The broader restoration goal was paused during this comparison; no additional production functions
 or native bytes are claimed for this comparison.
 
 ## Compared workflows
@@ -144,3 +144,28 @@ Raw additional evidence: `work/workflow-retest-2/` contains the scenario packets
 `research-result.json` and `results.json`; the direct probe report is
 `work/workflow-direct-c/experiment.json`. Only the CI wording required correction;
 the retained workers completed their assigned judgments without repair.
+
+## Production regression retest - 2026-11-27
+
+A fresh bounded reviewer examined the recent sound C/ABI and fixture guards
+while the integrator ran full validation. The reviewer accepted the source
+but found that the options, descriptor and positioning fixture bindings were
+discarded before reference-loaded replay. Moving the sample-done callback from
+CODE to DATA at the same numeric offset therefore passed the focused fixture
+and its existing mutation controls. The parent reproduced that false positive.
+The full production byte/LE acceptance gate remained separate.
+
+The fixture now retains and verifies all three selected binding maps before
+replay. Two class-swap controls retain the numeric operands and require the
+specific LE mismatch, covering callback CODE-to-DATA and archive DATA-to-CODE.
+The parent reran the original counterexample and observed rejection; the reviewer
+accepted the correction without another repair. Normal sound replay passes
+60 placed and 60 natural-order cases, 12 context controls and the two new class
+controls. Stale blocker text was consolidated to the 376-byte entry/archive
+prefix and nine shared-return bytes that actually remain assembly.
+
+This is a concrete production verifier defect found by independent review.
+It supports retaining that role, but provides no controlled rewrite-speed or
+per-agent token comparison. No new conversion or native coverage is claimed.
+Full validation and publication CI are recorded for the resulting checkpoint.
+Raw reproducer: `work/sound-relocation-retest.py`.
