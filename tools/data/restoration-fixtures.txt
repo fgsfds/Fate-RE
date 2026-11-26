@@ -165,3 +165,4 @@ check_save_slot_open --exe {exe} --build {build} --output {build}/save-slot-open
 
 check_save_players_finish --exe {exe} --build {build} --output {build}/save-players-finish.json | svoread svfinish crushio
 check_encounter_actor --exe {exe} --build {build} --output {build}/encounter-actor.json | enclatch actreset
+check_weapon_animation --exe {exe} --build {build} --output {build}/weapon-animation.json | wanim

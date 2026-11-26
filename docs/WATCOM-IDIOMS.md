@@ -278,6 +278,23 @@ fixture poisons the input upper word and checks signed results and preserved
 registers. A zero-extension control produces the same clipped byte but the
 wrong terminal EBX, so DATA-only replay would miss that ABI error.
 
+### State-machine tables and DATA views
+
+Nominal table bounds need not describe every original lookup. Weapon slot zero
+uses zero lowering/base/ready tiles, so its frame lookup can use index -1053
+and read before the nominal offset table. Model the resolved address, then use
+an appropriately bounded mutable DATA view when the original can reach other
+fields. The pinned LE object's virtual extent is `0x28a300`, distinct from its
+stored file bytes and the emulator's larger mapped address space. Derive that
+extent from the LE object table; keep stub markers inside the intended object.
+Document valid definition-slot and resolved-address preconditions separately.
+
+Final-memory and callback models do not prove volatile access order or clock
+interrupt interleavings. Keep the selected instructions' ordered accesses and
+branch-entry contracts as separate evidence. A complete private C replay can
+match all state effects and callee-saved registers while returning different
+raw EAX bits or flags; those differences cannot qualify a shared ABI boundary.
+
 ### Switch index byte writes and generated table relocation
 
 For the video-mode dispatch, zero an unsigned dword union through an empty

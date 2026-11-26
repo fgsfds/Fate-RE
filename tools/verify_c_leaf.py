@@ -5182,6 +5182,25 @@ for _phase in ENCOUNTER_SPAWN_LAYOUT['phases']:
     LEAVES[_phase['symbol']] = (_phase['address']+0x25600, _phase['end']-_phase['begin'])
     LEAF_CODE_SLICES[_phase['symbol']] = (_phase['public'], _phase['begin'], _phase['end'], _size)
 
+# Weapon animation phases retain the full private context and every OMF record.
+WEAPON_ANIMATION_LAYOUT = json.loads((Path(__file__).parent/'data/weapon-animation-layout.json').read_text(encoding='utf-8'))
+for _name, _offset in WEAPON_ANIMATION_LAYOUT['DATA'].items():
+    if _name in DATA_OFFSETS and DATA_OFFSETS[_name] != _offset:
+        raise ValueError('Conflicting weapon DATA binding: '+_name)
+    DATA_OFFSETS[_name] = _offset
+FUNCTION_ADDRESSES.update(WEAPON_ANIMATION_LAYOUT['functions'])
+_weapon_context = WEAPON_ANIMATION_LAYOUT['context']
+_weapon_public = _weapon_context['public']
+FUNCTION_ADDRESSES[_weapon_public] = _weapon_context['address']
+LEAF_CONTEXT_SHA256[_weapon_public] = _weapon_context['sha256']
+LEAF_CONTEXT_LITERALS[_weapon_public] = (0, _weapon_context['literal_sha256'], {})
+LEAF_CONTEXT_RECORDS[_weapon_public] = _weapon_context['records']
+LEAF_CONTEXT_FIXUPS[_weapon_public] = {int(k): tuple(v) for k,v in _weapon_context['fixups'].items()}
+LEAF_SECTION_BRANCHES[_weapon_public] = (_weapon_context['size'], WEAPON_ANIMATION_LAYOUT['original_size'], {int(k): (bytes.fromhex(v[0]),v[1],v[2]) for k,v in _weapon_context['branches'].items()})
+for _phase in WEAPON_ANIMATION_LAYOUT['phases']:
+    LEAVES[_phase['symbol']] = (_phase['address']+0x25600, _phase['end']-_phase['begin'])
+    LEAF_CODE_SLICES[_phase['symbol']] = (_weapon_public, _phase['begin'], _phase['end'], _weapon_context['size'])
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

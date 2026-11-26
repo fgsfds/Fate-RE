@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1490,
-  "unique_code_bytes": 194241,
-  "le_pointers": 10612,
+  "routines": 1505,
+  "unique_code_bytes": 194510,
+  "le_pointers": 10632,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1888,6 +1888,156 @@
       "loaded_address": "0x2944b",
       "bytes": 81,
       "le_pointers": 5
+    },
+    {
+      "symbol": "weapon_animation_29cd4_",
+      "object": "wanim.obj",
+      "object_sha256": "4622157dadb7fc2182080c7a455e7fc589371237a05788362db8dfb633621290",
+      "sha256": "7cdd90918df89b343aa6c183391fb08dce3134282b8686e64e3d08fc7f13d8c0",
+      "raw_offset": "0x4f2d4",
+      "loaded_address": "0x29cd4",
+      "bytes": 26,
+      "le_pointers": 3
+    },
+    {
+      "symbol": "weapon_animation_29d13_",
+      "object": "wanim.obj",
+      "object_sha256": "4622157dadb7fc2182080c7a455e7fc589371237a05788362db8dfb633621290",
+      "sha256": "dfba4df8939be2b57d3cc0570664216d7fa2faa0fb82272674a20c3f5a97958c",
+      "raw_offset": "0x4f313",
+      "loaded_address": "0x29d13",
+      "bytes": 34,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "weapon_animation_29dbb_",
+      "object": "wanim.obj",
+      "object_sha256": "4622157dadb7fc2182080c7a455e7fc589371237a05788362db8dfb633621290",
+      "sha256": "51478a799b10a3b3a60278888d37fea04f078136c725075a8a7fca0a9b8844ac",
+      "raw_offset": "0x4f3bb",
+      "loaded_address": "0x29dbb",
+      "bytes": 15,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "weapon_animation_29dd7_",
+      "object": "wanim.obj",
+      "object_sha256": "4622157dadb7fc2182080c7a455e7fc589371237a05788362db8dfb633621290",
+      "sha256": "4bf5c309a885058dd755208afb5135d4f087b93cb7c6e34eb4000003244010b7",
+      "raw_offset": "0x4f3d7",
+      "loaded_address": "0x29dd7",
+      "bytes": 15,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "weapon_animation_29df3_",
+      "object": "wanim.obj",
+      "object_sha256": "4622157dadb7fc2182080c7a455e7fc589371237a05788362db8dfb633621290",
+      "sha256": "cec58dd0e7774fa1d75fb2a29095cf89244b07d270d0ebcfff52414ac61d3403",
+      "raw_offset": "0x4f3f3",
+      "loaded_address": "0x29df3",
+      "bytes": 15,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "weapon_animation_29e40_",
+      "object": "wanim.obj",
+      "object_sha256": "4622157dadb7fc2182080c7a455e7fc589371237a05788362db8dfb633621290",
+      "sha256": "5a7a3bdd966611b4ebc76a5f1d458a4e0ca98f8067715827ce7f1458cf29e17b",
+      "raw_offset": "0x4f440",
+      "loaded_address": "0x29e40",
+      "bytes": 6,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "weapon_animation_29e60_",
+      "object": "wanim.obj",
+      "object_sha256": "4622157dadb7fc2182080c7a455e7fc589371237a05788362db8dfb633621290",
+      "sha256": "1c10140815c9362cc5e06cd32f54d889b4c69f74b4dd471b92caefb12482e0d7",
+      "raw_offset": "0x4f460",
+      "loaded_address": "0x29e60",
+      "bytes": 12,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "weapon_animation_29e81_",
+      "object": "wanim.obj",
+      "object_sha256": "4622157dadb7fc2182080c7a455e7fc589371237a05788362db8dfb633621290",
+      "sha256": "fbbf05ed29dcfca04eaecdace36e45df6e98dd9a1b727e9ec0a38c0d9263f149",
+      "raw_offset": "0x4f481",
+      "loaded_address": "0x29e81",
+      "bytes": 35,
+      "le_pointers": 3
+    },
+    {
+      "symbol": "weapon_animation_29ead_",
+      "object": "wanim.obj",
+      "object_sha256": "4622157dadb7fc2182080c7a455e7fc589371237a05788362db8dfb633621290",
+      "sha256": "dcbec59b7cc29a841d17e0e531b4bb8a99697ad8b4121026511ca9c234621ef0",
+      "raw_offset": "0x4f4ad",
+      "loaded_address": "0x29ead",
+      "bytes": 15,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "weapon_animation_29ec9_",
+      "object": "wanim.obj",
+      "object_sha256": "4622157dadb7fc2182080c7a455e7fc589371237a05788362db8dfb633621290",
+      "sha256": "a01429d2eda15d28cd76da3e0f63d165a2e1bd9aabcea2ad46c5d2c037560c2c",
+      "raw_offset": "0x4f4c9",
+      "loaded_address": "0x29ec9",
+      "bytes": 15,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "weapon_animation_29ee5_",
+      "object": "wanim.obj",
+      "object_sha256": "4622157dadb7fc2182080c7a455e7fc589371237a05788362db8dfb633621290",
+      "sha256": "4882cbcd21ff355a7acf6ac7ae6e8626cf0ebecd025c871911a0ecf763ffe1b1",
+      "raw_offset": "0x4f4e5",
+      "loaded_address": "0x29ee5",
+      "bytes": 15,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "weapon_animation_29f89_",
+      "object": "wanim.obj",
+      "object_sha256": "4622157dadb7fc2182080c7a455e7fc589371237a05788362db8dfb633621290",
+      "sha256": "cf96f8e281c9fd0b87d8b0e00f7d8f67f6dacc62dfab1ca6a14b72f04ef665f9",
+      "raw_offset": "0x4f589",
+      "loaded_address": "0x29f89",
+      "bytes": 14,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "weapon_animation_2a08e_",
+      "object": "wanim.obj",
+      "object_sha256": "4622157dadb7fc2182080c7a455e7fc589371237a05788362db8dfb633621290",
+      "sha256": "061431b3aff387a1ee7f5ad16594c43294ae693df316017fb96e00bdb7ca39b2",
+      "raw_offset": "0x4f68e",
+      "loaded_address": "0x2a08e",
+      "bytes": 18,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "weapon_animation_2a166_",
+      "object": "wanim.obj",
+      "object_sha256": "4622157dadb7fc2182080c7a455e7fc589371237a05788362db8dfb633621290",
+      "sha256": "1a3e3796c602fedfb573263ef56cab62c1d6f78c6dc840feb1ddd6050c622149",
+      "raw_offset": "0x4f766",
+      "loaded_address": "0x2a166",
+      "bytes": 15,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "weapon_animation_2a1dc_",
+      "object": "wanim.obj",
+      "object_sha256": "4622157dadb7fc2182080c7a455e7fc589371237a05788362db8dfb633621290",
+      "sha256": "72c895cfaa516f999d9432f3f574cd9857afac018aff1aa10cab423069016b39",
+      "raw_offset": "0x4f7dc",
+      "loaded_address": "0x2a1dc",
+      "bytes": 19,
+      "le_pointers": 2
     },
     {
       "symbol": "update_sprite_view_",

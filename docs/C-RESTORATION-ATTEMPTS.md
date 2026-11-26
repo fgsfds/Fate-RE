@@ -134,6 +134,23 @@ rejected `__int64`/`long long` types, or the failed 188-byte full RNG frame.
 Evidence: `work/encounter-width-nov27/RESULTS.md`, its `prodsize-evidence.json`
 and `shrdor-evidence.json`, and `work/encounter-operand-integrate-nov27/audit.json`.
 
+### Weapon animation tick and state allocation
+
+The first whole C translation, Watcom 10.5 `/4r /s /or /bt=dos`, emits 1,175
+bytes versus 1,307. Fifteen guarded phases now supply 269 native bytes, including
+the original five-save frame entry and return. First mismatch is `0x29cee`:
+the reference stores the reread clock before loading tick 1 into EAX, while the
+compiler first materializes 1 in EBX, stores the clock, then copies the flag.
+The state arrives in DX but is promoted into EAX rather than EDX on the active
+path. Next try branch-local `keep_tick(1/0)` calls instead of the merged call,
+then an explicit signed state-to-EDX identity after the idle branch. Preserve
+volatile access order and the shared return; do not repeat the unchanged first
+translation or claim its natural EAX/flags are a binary match. The DATA word
+view must use the actual LE extent `0x28a300`, including reachable slot-zero
+negative frames, with definition slots 0..7. Evidence:
+`work/weapon-animation-nov27/placement-evidence.json` and
+`work/weapon-animation-integrate-nov27/audit.json`.
+
 ### Video prompt-mode blocker
 
 Watcom 10.5 `/4r /s /or /bt=dos` emits 627 bytes versus 617. Brightness lands in ESI instead of ECX and the default-width spill moves from `+0x10` to `+0x14`; the invalid-mode edge also misses the original shared join. Next stage brightness in ECX and inspect width/end-slot lifetimes while retaining the original invalid-input edge in assembly. Probe: `work/video-prompt-next/prompt_video_mode.c`; comparison: `work/video-prompt-next/vidmode.report.json`.

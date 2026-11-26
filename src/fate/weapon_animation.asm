@@ -33,39 +33,43 @@ animation_limit equ 0x85242
 requested_weapon equ 0x85246
 game_clock equ 0x287e88
 
-update_weapon_animation:
-    push ebx
-    push ecx
-    push edx
-    push esi
-    push edi
-    mov eax, [game_clock]
-    sub eax, [last_frame_tick]
-    cmp eax, 0x6
-    jng short .hold_frame_clock
-    mov eax, [game_clock]
+section .text align=1
+update_weapon_animation equ 0x29cd4
+; Exact C phases own removed code; original branch targets remain fixed.
+.hold_frame_clock equ 0x29cfa
+.check_weapon_animation equ 0x29cfc
+.branch_29d8e equ 0x29d8e
+.check_weapon_action equ 0x29d9c
+.check_projectile_frame equ 0x29e5a
+.branch_29e71 equ 0x29e71
+.advance_active_animation equ 0x29f51
+.branch_29f89 equ 0x29f89
+.branch_29f97 equ 0x29f97
+.branch_29fbf equ 0x29fbf
+.branch_2a01a equ 0x2a01a
+.branch_2a062 equ 0x2a062
+.branch_2a07b equ 0x2a07b
+.branch_2a0a0 equ 0x2a0a0
+.branch_2a0ba equ 0x2a0ba
+.branch_2a0fd equ 0x2a0fd
+.branch_2a124 equ 0x2a124
+.branch_2a14f equ 0x2a14f
+.branch_2a175 equ 0x2a175
+.compute_weapon_offsets equ 0x2a17b
+.compute_default_frame_index equ 0x2a1a6
+.lookup_frame_offsets equ 0x2a1b3
+
+section .retained_0 align=1 vstart=0x29cee follows=.text
     mov [last_frame_tick], eax
     mov eax, 0x1
     jmp short .check_weapon_animation
-
-.hold_frame_clock:
     xor eax, eax
-
-.check_weapon_animation:
     mov dx, [weapon_animation_state]
     test dx, dx
     jnz near .advance_active_animation
     movsx eax, word [weapon_input_bits]
-    sar eax, byte 0xd
-    and eax, 0x7
-    mov bx, [selected_weapon]
-    mov [requested_weapon], ax
-    cmp ax, bx
-    jz short .check_weapon_action
-    movsx edx, bx
-    mov eax, edx
-    shl eax, byte 0x2
-    sub eax, edx
+
+section .retained_1 align=1 vstart=0x29d35 follows=.retained_0
     mov ax, [nosplit eax*8 + lower_start_tile]
     movsx edx, bx
     mov [weapon_tile], ax
@@ -84,34 +88,24 @@ update_weapon_animation:
     xor ecx, ecx
     mov [frame_direction], cx
     jmp near .compute_weapon_offsets
-
-.branch_29d8e:
     mov word [frame_direction], 0xffff
     jmp near .compute_weapon_offsets
-
-.check_weapon_action:
     movsx eax, word [weapon_action]
     cmp eax, 0x1
     jnz near .branch_29e71
     mov ax, [requested_weapon]
     movsx edx, ax
     mov [displayed_weapon], ax
-    mov eax, edx
-    shl eax, byte 0x2
-    sub eax, edx
-    mov ax, [nosplit eax*8 + primary_start_tile]
+
+section .retained_2 align=1 vstart=0x29dca follows=.retained_1
     movsx edx, word [requested_weapon]
     mov [weapon_tile], ax
-    mov eax, edx
-    shl eax, byte 0x2
-    sub eax, edx
-    mov ax, [nosplit eax*8 + primary_end_tile]
+
+section .retained_3 align=1 vstart=0x29de6 follows=.retained_2
     movsx edx, word [requested_weapon]
     mov [animation_limit], ax
-    mov eax, edx
-    shl eax, byte 0x2
-    sub eax, edx
-    mov ax, [nosplit eax*8 + primary_fire_tile]
+
+section .retained_4 align=1 vstart=0x29e02 follows=.retained_3
     movsx edx, word [requested_weapon]
     mov [projectile_frame], ax
     mov eax, edx
@@ -124,48 +118,32 @@ update_weapon_animation:
     mov ax, [weapon_tile]
     mov [weapon_animation_state], bx
     cmp ax, cx
-    setng al
-    xor ah, ah
-    dec eax
+
+section .retained_5 align=1 vstart=0x29e46 follows=.retained_4
     mov si, [projectile_frame]
     mov [frame_direction], ax
     cmp si, [weapon_tile]
-
-.check_projectile_frame:
     jnz near .compute_weapon_offsets
-    movsx eax, word [projectile_type]
-    call fire_player_projectile
-    jmp near .compute_weapon_offsets
 
-.branch_29e71:
+section .retained_6 align=1 vstart=0x29e6c follows=.retained_5
+    jmp near .compute_weapon_offsets
     movsx eax, word [weapon_action]
     cmp eax, 0x2
     jnz near .compute_weapon_offsets
-    movsx edx, word [requested_weapon]
-    mov eax, edx
-    shl eax, byte 0x2
-    sub eax, edx
-    cmp word [nosplit eax*8 + secondary_start_tile], 0x0
-    jz near .compute_weapon_offsets
-    mov ax, [requested_weapon]
+
+section .retained_7 align=1 vstart=0x29ea4 follows=.retained_6
     movsx edx, ax
     mov [displayed_weapon], ax
-    mov eax, edx
-    shl eax, byte 0x2
-    sub eax, edx
-    mov ax, [nosplit eax*8 + secondary_start_tile]
+
+section .retained_8 align=1 vstart=0x29ebc follows=.retained_7
     movsx edx, word [requested_weapon]
     mov [weapon_tile], ax
-    mov eax, edx
-    shl eax, byte 0x2
-    sub eax, edx
-    mov ax, [nosplit eax*8 + secondary_end_tile]
+
+section .retained_9 align=1 vstart=0x29ed8 follows=.retained_8
     movsx edx, word [requested_weapon]
     mov [animation_limit], ax
-    mov eax, edx
-    shl eax, byte 0x2
-    sub eax, edx
-    mov ax, [nosplit eax*8 + secondary_fire_tile]
+
+section .retained_10 align=1 vstart=0x29ef4 follows=.retained_9
     movsx edx, word [requested_weapon]
     mov [projectile_frame], ax
     mov eax, edx
@@ -185,8 +163,6 @@ update_weapon_animation:
     mov [frame_direction], ax
     cmp dx, [weapon_tile]
     jmp near .check_projectile_frame
-
-.advance_active_animation:
     movsx edx, dx
     cmp edx, 0x1
     jnz short .branch_29fbf
@@ -201,11 +177,7 @@ update_weapon_animation:
     mov [weapon_tile], dx
     jmp near .compute_weapon_offsets
 
-.branch_29f89:
-    mov word [weapon_animation_state], 0x2
-    jmp near .compute_weapon_offsets
-
-.branch_29f97:
+section .retained_11 align=1 vstart=0x29f97 follows=.retained_10
     mov dx, [weapon_tile]
     cmp dx, [animation_limit]
     jng short .branch_29f89
@@ -215,8 +187,6 @@ update_weapon_animation:
     dec esi
     mov [weapon_tile], si
     jmp near .compute_weapon_offsets
-
-.branch_29fbf:
     cmp edx, 0x2
     jnz short .branch_2a01a
     mov edx, 0x3
@@ -236,8 +206,6 @@ update_weapon_animation:
     xor esi, esi
     mov [frame_direction], si
     jmp near .compute_weapon_offsets
-
-.branch_2a01a:
     mov cx, [weapon_tile]
     mov bx, [weapon_tile]
     inc ecx
@@ -253,31 +221,22 @@ update_weapon_animation:
     jz near .compute_weapon_offsets
     mov [weapon_tile], cx
     jmp near .compute_weapon_offsets
-
-.branch_2a062:
     mov ax, [requested_weapon]
     mov [selected_weapon], ax
     xor eax, eax
     mov [weapon_animation_state], ax
     jmp near .compute_weapon_offsets
-
-.branch_2a07b:
     mov dx, [weapon_tile]
     cmp dx, [animation_limit]
     jng short .branch_2a0a0
     test ax, ax
-    jz near .compute_weapon_offsets
-    mov [weapon_tile], bx
-    jmp near .compute_weapon_offsets
 
-.branch_2a0a0:
+section .retained_12 align=1 vstart=0x2a0a0 follows=.retained_11
     mov ax, [requested_weapon]
     xor esi, esi
     mov [selected_weapon], ax
     mov [weapon_animation_state], si
     jmp near .compute_weapon_offsets
-
-.branch_2a0ba:
     cmp edx, 0x4
     jnz near .compute_weapon_offsets
     test ax, ax
@@ -292,8 +251,6 @@ update_weapon_animation:
     mov [weapon_tile], cx
     cmp cx, si
     jmp near .check_projectile_frame
-
-.branch_2a0fd:
     mov ax, [requested_weapon]
     movsx edx, ax
     mov [displayed_weapon], ax
@@ -303,8 +260,6 @@ update_weapon_animation:
     mov ax, [nosplit eax*8 + weapon_ready_tile]
     mov [weapon_animation_state], si
     jmp short .branch_2a175
-
-.branch_2a124:
     mov dx, [weapon_tile]
     cmp dx, [animation_limit]
     jng short .branch_2a14f
@@ -314,22 +269,14 @@ update_weapon_animation:
     mov [weapon_tile], bx
     cmp bx, dx
     jmp near .check_projectile_frame
-
-.branch_2a14f:
     xor eax, eax
     mov [weapon_animation_state], ax
     mov ax, [requested_weapon]
     movsx edx, ax
     mov [displayed_weapon], ax
-    mov eax, edx
-    shl eax, byte 0x2
-    sub eax, edx
-    mov ax, [nosplit eax*8 + weapon_ready_tile]
 
-.branch_2a175:
+section .retained_13 align=1 vstart=0x2a175 follows=.retained_12
     mov [weapon_tile], ax
-
-.compute_weapon_offsets:
     mov si, [displayed_weapon]
     test si, si
     jz short .compute_default_frame_index
@@ -342,12 +289,8 @@ update_weapon_animation:
     mov bx, [weapon_tile]
     sub bx, [edx + weapon_base_tile]
     jmp short .lookup_frame_offsets
-
-.compute_default_frame_index:
     mov bx, [weapon_tile]
     sub ebx, strict dword 0x41d
-
-.lookup_frame_offsets:
     movsx edx, word [displayed_weapon]
     mov eax, edx
     shl eax, byte 0x2
@@ -359,11 +302,3 @@ update_weapon_animation:
     add eax, edx
     mov dx, [eax + frame_x_offset]
     mov ax, [eax + frame_y_offset]
-    mov [weapon_x_offset], dx
-    mov [weapon_y_offset], ax
-    pop edi
-    pop esi
-    pop edx
-    pop ecx
-    pop ebx
-    ret

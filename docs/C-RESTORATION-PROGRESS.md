@@ -1,17 +1,23 @@
 # Exact C restoration progress
 
-The current saved attribution audit covers all 414,639 CODE bytes and includes 587 compiler units. Saved full validation passed 406 tests and 146 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
+The current saved attribution audit covers all 414,639 CODE bytes and includes 588 compiler units. Saved full validation passed 406 tests and 147 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 168,647 | 40.673% |
+| Compiler-generated instructions | 168,916 | 40.738% |
 | Inline assembly instructions in C objects | 24,311 | 5.863% |
-| Standalone assembly | 220,398 | 53.154% |
+| Standalone assembly | 220,129 | 53.089% |
 | Unattributed instructions and non-routine tables | 1,283 | 0.309% |
 
-The unattributed category contains 882 instruction bytes in 16 unknown routines and 401 non-routine table bytes. Tables are recorded as data, and the unknown instruction bytes remain uncredited. Combined remaining assembly, including inline assembly: 244,709 bytes (59.017%). C-object inventory covers 194,241 bytes (46.85%) and 1,490 C routine spans; the assembly inventory has 477 spans.
+The unattributed category contains 882 instruction bytes in 16 unknown routines and 401 non-routine table bytes. Tables are recorded as data, and the unknown instruction bytes remain uncredited. Combined remaining assembly, including inline assembly: 244,440 bytes (58.952%). C-object inventory covers 194,510 bytes (46.91%) and 1,505 C routine spans; the assembly inventory has 490 spans.
 
 The accepted executable is 741,347 bytes, SHA-256 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.
+
+`update_weapon_animation` adds 269 measured native C bytes in 15 exact phases, with 20 DATA LE sites and one relative projectile call. The readable whole algorithm compiles to a 1,175-byte private context; the original is 1,307 bytes, and 1,038 instruction bytes remain in 14 assembly runs. The selected phases cover clock/request checks, weapon-record indexing, direction conversion, projectile dispatch, secondary eligibility, two animation transitions, and output/return. Six internal branch sites are checked, with five displacement changes; no opcode or width changes. The full raw context, all 107 OMF records (106 DATA fields and one call), every external name/addend, and the zero-offset public are guarded before cropping. All original neighbors and the five-register saved frame remain exact.
+
+Weapon slot zero has zero base/ready/lowering tiles. Its reachable frame index -1053 resolves to DATA offsets `0x117f4` and `0x117f6`, before the nominal frame table. The C lookup therefore uses a mutable word view of the actual `0x28a300`-byte LE DATA object, with valid definition slots 0..7 and in-object lookup bounds. The fixture verifies that extent from the LE object table. Enlarging the initial probe's table-only view and correcting emulator-slack bounds changed no compiled instructions.
+
+The weapon fixture passes 850 original/placed state-machine cases and 850 complete private-C cases, with 35 stubbed projectile callbacks. It checks final DATA and ordered calls, clock wrap and threshold, both animation directions, switching/firing boundaries, slot-zero reads, callback mutations, saved registers, stack, and the original raw EAX/arithmetic flags. The natural private context has 72 EAX-result differences and 421 flag differences, so it is not an exact shared-ABI replacement. Twelve context controls and six code controls reject wrong symbols/classes, frames, displacements, excluded addends, branch encodings, public placement, clock/transition logic, direction, signed projectile arguments and record stride. The model does not establish volatile access traces, clock-interrupt interleavings, malformed-save C equivalence or projectile gameplay; selected volatile access order is checked separately from the original instruction groups.
 
 The encounter spawn prefix supplies 591 native C bytes and 23 DATA LE sites; compiler-managed EBP save/restore adds two more bytes. Three readable sources provide four full-algorithm contexts and two compact witnesses, supplying 36 selected aliases. An ordinary long local keeps the spawn height in EBP across calls. Truthful empty identities stage signed tags, the partial clock and the full unsigned initial counter. The placed slices preserve the original six-save frame, 184-byte locals, ten call destinations and checked branch targets. Full private code, four 160-byte literal prefixes, both compact witnesses' zero-byte prefixes and every ordered OMF fixup record are guarded before cropping. One retained assembly run contains the remaining six instruction bytes, `IMUL EBX; SHRD EAX,EDX,7`; the 160-byte tables remain assembly data. No complete private context is claimed as an exact replacement.
 
@@ -67,7 +73,8 @@ The palette lookup clearing loop contributes 19 compiler-generated bytes and one
 
 The saved full validation and audit artifacts verify the pinned image:
 
-- Full validation and 146 fixtures: `work/reset-82ae95d/validation.json`.
+- Full validation and 147 fixtures: `work/reset-82ae95d/validation.json`.
+- Weapon animation state machine, private replay and controls: `work/reset-82ae95d/weapon-animation.json`.
 - Encounter spawn prefix and context controls: `work/reset-82ae95d/encounter-spawn.json`.
 - Encounter frame behavior: `work/encounter-frame-build/encounter-frame-behavior.json`.
 - Video initialization handoff: `work/setmode-display-handoff.json`.
@@ -83,7 +90,7 @@ The saved full validation and audit artifacts verify the pinned image:
 - Trial agent outcomes: `work/agent-role-trial/outcomes.json`.
 - Gameplay row and controller: `work/reset-82ae95d/gameplay-update-behavior.json`.
 - Status-panel placed and private contexts: `work/reset-82ae95d/status-panel-behavior.json`.
-- Attribution audit: `work/encounter-operand-integrate-nov27/audit.json`.
+- Attribution audit: `work/weapon-animation-integrate-nov27/audit.json`.
 - Unit test log: `work/reset-82ae95d/logs/unit-tests.log`.
 - Encounter latch behavior: `work/encounter-latch-build/encounter-latch-behavior.json`.
 - Puzzle exact slices, relocations, and behavior: `work/sector-puzzle-build/sector-puzzle-behavior.json`.

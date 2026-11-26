@@ -1583,6 +1583,8 @@ def verify_compiler_groups(exe, directory, names=None):
         if selected(context['object']):
             prefix = context.get('prefix', 160)
             verify_group_layout((directory/(context['object']+'.obj')).read_bytes(), prefix+context['size'], [(context['public'], prefix)])
+    if selected('wanim'):
+        verify_group_layout((directory/'wanim.obj').read_bytes(), WEAPON_ANIMATION_LAYOUT['context']['size'], [(WEAPON_ANIMATION_LAYOUT['context']['public'], 0)])
     if selected('encexit'):
         verify_group_layout((directory/'encexit.obj').read_bytes(), 1385, [('encounter_exit_context_', 160)])
     if selected('menuprep'):
@@ -1753,6 +1755,9 @@ OBJECT_NAMES['sound_frame_limit_'] = 'sndlimit'
 
 from verify_c_leaf import ENCOUNTER_SPAWN_LAYOUT
 OBJECT_NAMES.update({p['symbol']: p['object'] for p in ENCOUNTER_SPAWN_LAYOUT['phases']})
+
+from verify_c_leaf import WEAPON_ANIMATION_LAYOUT
+OBJECT_NAMES.update({p['symbol']: 'wanim' for p in WEAPON_ANIMATION_LAYOUT['phases']})
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

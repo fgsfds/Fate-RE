@@ -208,7 +208,9 @@ def move_zero_public(blob,public,shift=40):
             data[pos:pos+width]=shift.to_bytes(width,'little');modified=True
         if kind in (0x8a,0x8b):
             assert not inserted
-            out.extend(record(0xa1,bytearray(b'\x01')+bytearray(shift.to_bytes(4,'little'))+raw));inserted=True
+            for begin in range(0,len(raw),512):
+                out.extend(record(0xa1,bytearray(b'\x01')+bytearray((shift+begin).to_bytes(4,'little'))+raw[begin:begin+512]))
+            inserted=True
         out.extend(record(kind,data));cursor=end
     assert inserted and modified
     parsed=v.parsed_leaf_object(bytes(out));assert parsed[1]==((1,shift,public),)
