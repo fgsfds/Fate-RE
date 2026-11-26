@@ -58,41 +58,8 @@ play_sound:
     jmp near .branch_35265
 
 .branch_34fd0:
-    xor eax, eax
-    mov [frame_state_17160f], eax
-
-.branch_34fd7:
-    mov eax, [frame_state_17160f]
-    mov eax, [nosplit eax*4 + sound_slots]
-    cmp dword [eax], -1
-    jnz short .branch_3500f
-    mov edx, [frame_state_17160f]
-    mov eax, edx
-    shl eax, byte 0x4
-    sub eax, edx
-    mov esi, frame_state_1705dc
-    shl eax, byte 0x4
-    mov ebx, 0xf0
-    add esi, eax
-    xor edx, edx
-    mov eax, esi
-    call memset
-    jmp short .branch_3502d
-
-.branch_3500f:
-    test cl, 0x4
-    jz short .branch_3501d
-    cmp edi, [eax + 0x4]
-    jz near .branch_34f90
-
-.branch_3501d:
-    mov eax, [frame_state_17160f]
-    inc eax
-    mov [frame_state_17160f], eax
-    cmp eax, 0x10
-    jl short .branch_34fd7
-
-.branch_3502d:
+; Slot scan and descriptor clear are supplied by C.
+.branch_3502d equ 0x3502d
 ; Cache selection and lookup are supplied by C.
 .branch_3507b equ 0x3507b
 ; Archive guard, seek/read and cache commit are supplied by C.

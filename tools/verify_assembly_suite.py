@@ -1550,7 +1550,7 @@ ROUTINES = [
       93: 0x92d68, 98: 0x92d60, 103: 0x92d64, 119: 0x1f3d56, 147: 0x1f3d56, 153: 0x1f3d54, 160: 0x1f3d56, 174:
       0x1f3d54, 227: 0x92d74, 238: 0x92d78, 247: 0x1f3d54, 255: 0x1f3d56, 264: 0x1f3d54, 319: 0x92d70, 326:
       0x92d30, 332: 0x809e3, 391: 0x1f3d56, 398: 0x809eb, 422: 0x1f3d54, 508: 0x809fd, 592: 0x80a0d}),
-    ('play_sound', 'fate/play_sound.asm', 'play_sound.bin', 216953, 180, {16: 2037250, 35: 601300, 44: 601304, 60: 526646, 65: 949820, 90: 2037263, 95: 2037263, 102: 1070300, 113: 2037263, 125: 2033116, 165: 2037263, 171: 2037263}),
+    ('play_sound', 'fate/play_sound.asm', 'play_sound.bin', 216953, 87, {16: 2037250, 35: 601300, 44: 601304, 60: 526646, 65: 949820}),
     ('play_sound_tail', 'fate/play_sound.asm', 'play_sound.bin', 217694, 2, {}),
     ('play_sound_epilogue', 'fate/play_sound.asm', 'play_sound.bin', 217701, 7, {}),
     ('draw_map_overlays', 'fate/draw_map_overlays.asm', 'draw_map_overlays.bin', 0x3279b, 4638,
@@ -3635,7 +3635,7 @@ DATA_POINTER_SITES = {
     'prompt_video_mode': (60, 65, 70, 86, 93, 98, 103, 119, 147, 153, 160, 174, 227, 238, 247, 255, 264, 319,
      326, 332, 391, 398, 422, 508, 592,),
     'load_video_settings': (18, 44, 83, 95, 125, 143, 148, 153, 158, 163, 168, 174,),
-    'play_sound': (16, 35, 44, 60, 65, 90, 95, 102, 113, 125, 165, 171),
+    'play_sound': (16, 35, 44, 60, 65),
     'draw_map_overlays': (30, 59, 75, 101, 154, 162, 170, 181, 196, 251, 288, 344, 352, 376, 401, 407, 441, 447,
      469, 475, 495, 508, 514, 555, 562, 574, 580, 660, 716, 744, 805, 861, 957, 972, 982, 1006, 1022, 1058,
      1133, 1178, 1221, 1238, 1254, 1271, 1287, 1324, 1344, 1351, 1376, 1547, 1555, 1586, 1609, 1702, 1714, 1765,
@@ -4066,7 +4066,7 @@ DATA_POINTER_SITES = {
                       'thline_': {16, 36, 51}, 'thlineskipmodify_': {24, 36}}
 
 
-GROUP_SLICES.update({'play_sound': (0, 189), 'play_sound_tail': (180, 189), 'play_sound_epilogue': (182, 189)})
+GROUP_SLICES.update({'play_sound': (0, 96), 'play_sound_tail': (87, 96), 'play_sound_epilogue': (89, 96)})
 DATA_POINTER_SITES['play_sound_tail'] = ()
 DATA_POINTER_SITES['play_sound_epilogue'] = ()
 

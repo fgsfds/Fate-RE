@@ -281,7 +281,7 @@ def main():
     p.add_argument('--exe', type=Path, required=True)
     group = p.add_mutually_exclusive_group()
     group.add_argument('--object',type=Path,help='existing candidate OMF; research behavior only')
-    group.add_argument('--build',type=Path,help='production build containing split sound assembly and sndcache/sndarch/sndopts/snddesc/sndpos/sndqueue objects')
+    group.add_argument('--build',type=Path,help='production build containing split sound assembly and sndscan/sndcache/sndarch/sndopts/snddesc/sndpos/sndqueue objects')
     p.add_argument('--symbol',default='play_sound_')
     p.add_argument('--output',type=Path,help='optional report; omitted means no files written')
     a = p.parse_args()
@@ -292,10 +292,10 @@ def main():
                   reference_le_fixups=57,data_bytes_compared=DATA_SIZE,preserved_registers=list(CONTRACT.preserved),
                   case_count=len(cases()),cases=[],status='FAIL',
                   helper_contracts={'format_string':'caller stack, EAX only; bounded invalid-number literal',
-                    'memset':'EAX/EDX/EBX args, EAX retained, EDX clobbered',
+                    'memset':'EAX/EDX/EBX args; model retains EAX/ECX/ESI and poisons EDX',
                     'lseek_read':'EAX/EDX/EBX args; EAX/EBX/EDX clobbered',
                     'pan_volume_queue':'EAX/EDX args; EAX/EDX clobbered; ECX retained'},
-                  model_scope='60 bounded cases; 0..163 plus backed -1 ID; deterministic read, pan, volume and queue stubs; no asset or live driver verification')
+                  model_scope='60 bounded cases; 0..163 plus backed -1 ID; formatting, memset, seek/read, pan/volume and queue are stubbed; no asset or live driver verification')
     try:
         observations = []
         # Validate the independent state/trace model against original before binding candidate.
@@ -312,11 +312,13 @@ def main():
             from check_ripple_control import rename_external
             pointers = read_le_fixups(exe)['pointers']
 
-            def checked_phase(obj, symbol, address, size, *, data_offsets=DATA_OFFSETS, code_offsets=CODE_OFFSETS):
+            def checked_phase(obj, symbol, address, size, *, data_offsets=DATA_OFFSETS, code_offsets=CODE_OFFSETS,
+                              functions=FUNCTION_ADDRESSES):
                 code_refs = {}
                 part, bindings = bind_leaf_details(obj, symbol, data_offsets, address=address,
-                    functions=FUNCTION_ADDRESSES, absolute_code=code_offsets, code_bindings=code_refs)
-                assert len(part) == size and part == exe[address+0x25600:address+0x25600+size]
+                    functions=functions, absolute_code=code_offsets, code_bindings=code_refs)
+                assert len(part) == size, 'Sound selected extent differs'
+                assert part == exe[address+0x25600:address+0x25600+size], 'Sound selected bytes differ'
                 verify_leaf_relocations(part, bindings, pointers, address, code_bindings=code_refs)
                 return part
 
@@ -437,13 +439,67 @@ def main():
             finally:
                 leaf.LEAF_CONTEXT_SHA256['playback_cache_lookup_'] = cache_digest
             cache_controls.append('failure_jump_addend')
+            scan_obj = (a.build/'sndscan.obj').read_bytes()
+            scan = checked_phase(scan_obj,'sound_playback_slots_',0x34fd0,93)
+            scan_controls = []
+            def reject_scan(blob,message,**kwargs):
+                try:
+                    checked_phase(blob,'sound_playback_slots_',0x34fd0,93,**kwargs)
+                except (ValueError,AssertionError) as error:
+                    assert message in str(error), str(error)
+                else:
+                    raise AssertionError('Slot scan context mutation escaped')
+            for offset,mask in ((93,1),(103,1),(108,1),(56,1),(71,0xe7),(72,1),(62,1),(91,1),(92,1)):
+                reject_scan(mutate_public_byte(scan_obj,'playback_slot_scan_',offset,mask=mask),'context digest')
+                scan_controls.append('byte_'+str(offset))
+            reject_scan(rename_external(scan_obj,b'memset_',b'memseu_'),'context fixup records')
+            scan_controls.append('clear_target_name')
+            unchanged,changed = rewrite_fixup(scan_obj,lambda f:False,lambda f:f)
+            assert not changed
+            assert checked_phase(unchanged,'sound_playback_slots_',0x34fd0,93) == scan
+            for name,change in (
+                    ('frame',lambda f:replace(f,frame=(1,1))),
+                    ('unknown_group',lambda f:replace(f,frame=(1,127))),
+                    ('target',lambda f:replace(f,target=(2,1))),
+                    ('displacement',lambda f:replace(f,displacement=1))):
+                bad,changed = rewrite_fixup(scan_obj,lambda f:f.offset==104,change)
+                assert changed
+                reject_scan(bad,'context fixup records')
+                scan_controls.append('excluded_'+name)
+            scan_digest = leaf.LEAF_CONTEXT_SHA256.pop('playback_slot_scan_')
+            try:
+                for offset in (57,95,104):
+                    reject_scan(mutate_public_byte(scan_obj,'playback_slot_scan_',offset),'context fixup target/form/addend')
+                    scan_controls.append('addend_'+str(offset))
+            finally:
+                leaf.LEAF_CONTEXT_SHA256['playback_slot_scan_'] = scan_digest
+            selected = leaf.LEAF_CODE_SLICES['sound_playback_slots_']
+            try:
+                for end in (108,109):
+                    leaf.LEAF_CODE_SLICES['sound_playback_slots_'] = (selected[0],0,end,109)
+                    reject_scan(scan_obj,'Sound selected extent differs')
+                    scan_controls.append('extent_'+str(end))
+            finally:
+                leaf.LEAF_CODE_SLICES['sound_playback_slots_'] = selected
+            for name in ('memset_','playback_archive_failure_'):
+                wrong = dict(FUNCTION_ADDRESSES)
+                wrong[name] += 1
+                reject_scan(scan_obj,'Sound selected bytes differ',functions=wrong)
+                scan_controls.append('binding_'+name)
+            full_refs = {}
+            full,bindings = bind_leaf_details(scan_obj,'playback_slot_scan_',DATA_OFFSETS,address=0x34fd0,
+                functions=FUNCTION_ADDRESSES,absolute_code=CODE_OFFSETS,code_bindings=full_refs)
+            assert not full_refs and full[:93] == scan and full[93:108] == cache[:15] and full[108:] == b'\xc3'
+            verify_leaf_relocations(full[93:108],{off-93:value for off,value in bindings.items() if 93<=off<108},
+                pointers,0x3502d,code_bindings={})
             # Preserve raw operands while changing their LE object class. These
             # must fail typed binding checks before reference-loaded replay.
             for control_obj, symbol, address, size, name, was_code in (
                     (obj, 'sound_playback_options_', 0x35178, 80, 'sound_sample_done_offset_', True),
                     (description_obj, 'sound_playback_description_', 0x350f1, 69, '_frame_state_16fb18', False),
                     (archive_obj, 'sound_playback_archive_', 0x3507b, 118, '_frame_state_16fdac', False),
-                    (cache_obj, 'sound_playback_cache_', 0x3502d, 78, '_frame_state_17160b', False)):
+                    (cache_obj, 'sound_playback_cache_', 0x3502d, 78, '_frame_state_17160b', False),
+                    (scan_obj, 'sound_playback_slots_', 0x34fd0, 93, '_frame_state_1705dc', False)):
                 data_offsets, code_offsets = dict(DATA_OFFSETS), dict(CODE_OFFSETS)
                 source, destination = (code_offsets, data_offsets) if was_code else (data_offsets, code_offsets)
                 destination[name] = source.pop(name)
@@ -454,7 +510,7 @@ def main():
                     assert 'Original LE relocation sites or targets differ' in str(error), str(error)
                 else:
                     raise AssertionError('Sound relocation class mutation escaped')
-            report['relocation_class_controls_rejected'] = 4
+            report['relocation_class_controls_rejected'] = 5
             queue_obj = (a.build/'sndqueue.obj').read_bytes()
             queue_parts = []
             for role, address, size in (('metadata',0x351c8,61),('y',0x35205,3),
@@ -506,13 +562,13 @@ def main():
                 assert part==exe[address+0x25600:address+0x25600+size]
                 verify_leaf_relocations(part,bindings,pointers,address,code_bindings=code_refs)
                 queue_results.append(part)
-            assert len(retained) == 189
-            ending=queue_results[0]+retained[180:182]+queue_results[1]+retained[182:]
-            assembled = retained[:180] + cache + archive + description + position + phase + queue + ending
-            natural = retained[:180] + cache + archive + description + position + phase + b''.join(queue_parts[i] for i in (0,2,1,3)) + ending
-            report.update(restored_c_bytes=566, retained_asm_bytes=189,
-                context_mutations_rejected=12+len(archive_controls)+len(cache_controls),
-                archive_context_controls=archive_controls,cache_context_controls=cache_controls,
+            assert len(retained) == 96
+            ending=queue_results[0]+retained[87:89]+queue_results[1]+retained[89:]
+            assembled = retained[:87] + scan + cache + archive + description + position + phase + queue + ending
+            natural = retained[:87] + scan + cache + archive + description + position + phase + b''.join(queue_parts[i] for i in (0,2,1,3)) + ending
+            report.update(restored_c_bytes=659, retained_asm_bytes=96,
+                context_mutations_rejected=12+len(archive_controls)+len(cache_controls)+len(scan_controls),
+                archive_context_controls=archive_controls,cache_context_controls=cache_controls,scan_context_controls=scan_controls,
                 swap_scope='mapped writable slot and normal completion; placed order matches original even at fault/interrupt boundaries')
             assert len(assembled) == SIZE, 'reconstructed routine must be 755 bytes'
             assert assembled == exe[RAW:RAW+SIZE], 'reconstructed routine differs from pinned original'

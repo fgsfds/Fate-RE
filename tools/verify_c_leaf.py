@@ -5133,6 +5133,15 @@ LEAF_CONTEXT_RECORDS['playback_cache_lookup_'] = json.loads((Path(__file__).pare
 DATA_OFFSETS['_frame_state_17160b'] = 0x17160b
 FUNCTION_ADDRESSES['playback_cached_sample_'] = 0x350f1
 
+# Slot scan shares its successor with the existing cache phase. Pin the
+# excluded cache load/guard and private RET as part of the complete context.
+LEAVES['sound_playback_slots_'] = (0x5a5d0, 93)
+LEAF_CODE_SLICES['sound_playback_slots_'] = ('playback_slot_scan_', 0, 93, 109)
+LEAF_CONTEXT_SHA256['playback_slot_scan_'] = '5c782774cdb11b115334028a83d6ca054595df22d06d9f815d847867384a3fc3'
+LEAF_CONTEXT_FIXUPS['playback_slot_scan_'] = {3: ('_frame_state_17160f', False, 0), 8: ('_frame_state_17160f', False, 0), 15: ('_sound_slots', False, 0), 26: ('_frame_state_17160f', False, 0), 38: ('_frame_state_1705dc', False, 0), 57: ('memset_', True, 0), 73: ('playback_archive_failure_', True, 0), 78: ('_frame_state_17160f', False, 0), 84: ('_frame_state_17160f', False, 0), 95: ('_frame_state_17160f', False, 0), 104: ('playback_archive_failure_', True, 0)}
+LEAF_CONTEXT_RECORDS['playback_slot_scan_'] = json.loads((Path(__file__).parent/'data/sound-slots-context-guard.json').read_text(encoding='utf-8'))
+DATA_OFFSETS['_frame_state_1705dc'] = 0x1705dc
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('executable', type=Path)

@@ -501,3 +501,16 @@ context ends in RET at offset 78; cropping that byte places both the short
 miss branch and exhausted-loop fallthrough directly at the next archive C
 phase. Guard the full context and both external continuations, then exercise
 all four exit paths. No opcode rewrite or new transfer is needed.
+
+
+The slot scan in `sound_playback_slots.c` stages the unsigned 240-byte stride
+as shift/subtract/shift. Register-only data dependencies retain the ESI base
+between the shifts and the EBX count before the final add. Its ESI getter reads
+the base established by the preceding producer, before any clobber. A copy of
+the real cache-entry guard supplies a shared successor in the 109-byte private
+context, preventing a tail JMP to memset or cloned cache transfers. Only the
+first 93 bytes are linked; check the excluded 15-byte guard against installed
+cache code and its typed LE site, and guard the final private RET separately.
+The narrow fill alias relies on the pinned CRT saving EAX/ECX and retaining
+ESI while EDX may change; the fixture models that contract with a stub, rather
+than independently executing the real CRT.
