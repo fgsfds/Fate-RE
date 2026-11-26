@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 503,
-  "unique_code_bytes": 220005,
-  "le_pointers": 11912,
+  "routines": 500,
+  "unique_code_bytes": 219921,
+  "le_pointers": 11901,
   "non_routine_code_spans": [
     {
       "symbol": "capture_after_open",
@@ -7513,11 +7513,11 @@
       "symbol": "weapon_animation_retained_4",
       "source": "src/fate/weapon_animation.asm",
       "binary": "weapon_animation.bin",
-      "sha256": "bcc967df4096c3796801ee7db9e8559baa75cfc806dca00c1185eb764bce52a5",
+      "sha256": "a648e6ca1883e3f80cba573a6319c14ef91abb005a377f6a835116163e4268e2",
       "bytes": 13,
-      "raw_offset": "0x4f3ca",
-      "loaded_address": "0x29dca",
-      "public_entry": "0x29dca",
+      "raw_offset": "0x4f3e6",
+      "loaded_address": "0x29de6",
+      "public_entry": "0x29de6",
       "binary_offset": 148,
       "le_pointers": 2
     },
@@ -7525,40 +7525,16 @@
       "symbol": "weapon_animation_retained_5",
       "source": "src/fate/weapon_animation.asm",
       "binary": "weapon_animation.bin",
-      "sha256": "a648e6ca1883e3f80cba573a6319c14ef91abb005a377f6a835116163e4268e2",
-      "bytes": 13,
-      "raw_offset": "0x4f3e6",
-      "loaded_address": "0x29de6",
-      "public_entry": "0x29de6",
-      "binary_offset": 161,
-      "le_pointers": 2
-    },
-    {
-      "symbol": "weapon_animation_retained_6",
-      "source": "src/fate/weapon_animation.asm",
-      "binary": "weapon_animation.bin",
-      "sha256": "d843b5119732c31f430b9a42a98df222136060ec783ffa348c888f310d90ffcb",
-      "bytes": 13,
-      "raw_offset": "0x4f402",
-      "loaded_address": "0x29e02",
-      "public_entry": "0x29e02",
-      "binary_offset": 174,
-      "le_pointers": 2
-    },
-    {
-      "symbol": "weapon_animation_retained_7",
-      "source": "src/fate/weapon_animation.asm",
-      "binary": "weapon_animation.bin",
       "sha256": "c48da1eb5e3150f51e267628a1aa12b62cf4eb8b56e45559c4fb904aad2d3e31",
       "bytes": 42,
       "raw_offset": "0x4f416",
       "loaded_address": "0x29e16",
       "public_entry": "0x29e16",
-      "binary_offset": 187,
+      "binary_offset": 161,
       "le_pointers": 5
     },
     {
-      "symbol": "weapon_animation_retained_8",
+      "symbol": "weapon_animation_retained_6",
       "source": "src/fate/weapon_animation.asm",
       "binary": "weapon_animation.bin",
       "sha256": "621a63404919bc645e84c51c4a576ac64ce5e487962389ae69d5e96938459cf3",
@@ -7566,11 +7542,11 @@
       "raw_offset": "0x4f446",
       "loaded_address": "0x29e46",
       "public_entry": "0x29e46",
-      "binary_offset": 229,
+      "binary_offset": 203,
       "le_pointers": 3
     },
     {
-      "symbol": "weapon_animation_retained_9",
+      "symbol": "weapon_animation_retained_7",
       "source": "src/fate/weapon_animation.asm",
       "binary": "weapon_animation.bin",
       "sha256": "de34e776e858a14cca47b24099b4f956b4f7b9868572de38990027462afde6ba",
@@ -7578,11 +7554,11 @@
       "raw_offset": "0x4f46c",
       "loaded_address": "0x29e6c",
       "public_entry": "0x29e6c",
-      "binary_offset": 255,
+      "binary_offset": 229,
       "le_pointers": 1
     },
     {
-      "symbol": "weapon_animation_retained_10",
+      "symbol": "weapon_animation_retained_8",
       "source": "src/fate/weapon_animation.asm",
       "binary": "weapon_animation.bin",
       "sha256": "5967dbb8fbadf377d10e6f279494f721b4c2868511fd79c85721741860a24bb2",
@@ -7590,23 +7566,11 @@
       "raw_offset": "0x4f4a4",
       "loaded_address": "0x29ea4",
       "public_entry": "0x29ea4",
-      "binary_offset": 276,
+      "binary_offset": 250,
       "le_pointers": 1
     },
     {
-      "symbol": "weapon_animation_retained_11",
-      "source": "src/fate/weapon_animation.asm",
-      "binary": "weapon_animation.bin",
-      "sha256": "bcc967df4096c3796801ee7db9e8559baa75cfc806dca00c1185eb764bce52a5",
-      "bytes": 13,
-      "raw_offset": "0x4f4bc",
-      "loaded_address": "0x29ebc",
-      "public_entry": "0x29ebc",
-      "binary_offset": 285,
-      "le_pointers": 2
-    },
-    {
-      "symbol": "weapon_animation_retained_12",
+      "symbol": "weapon_animation_retained_9",
       "source": "src/fate/weapon_animation.asm",
       "binary": "weapon_animation.bin",
       "sha256": "a648e6ca1883e3f80cba573a6319c14ef91abb005a377f6a835116163e4268e2",
@@ -7614,23 +7578,11 @@
       "raw_offset": "0x4f4d8",
       "loaded_address": "0x29ed8",
       "public_entry": "0x29ed8",
-      "binary_offset": 298,
+      "binary_offset": 259,
       "le_pointers": 2
     },
     {
-      "symbol": "weapon_animation_retained_13",
-      "source": "src/fate/weapon_animation.asm",
-      "binary": "weapon_animation.bin",
-      "sha256": "d843b5119732c31f430b9a42a98df222136060ec783ffa348c888f310d90ffcb",
-      "bytes": 13,
-      "raw_offset": "0x4f4f4",
-      "loaded_address": "0x29ef4",
-      "public_entry": "0x29ef4",
-      "binary_offset": 311,
-      "le_pointers": 2
-    },
-    {
-      "symbol": "weapon_animation_retained_14",
+      "symbol": "weapon_animation_retained_10",
       "source": "src/fate/weapon_animation.asm",
       "binary": "weapon_animation.bin",
       "sha256": "8af7163c4c3e841e6f10c718a768b56955544186be748fce39502af5cd42843c",
@@ -7638,11 +7590,11 @@
       "raw_offset": "0x4f508",
       "loaded_address": "0x29f08",
       "public_entry": "0x29f08",
-      "binary_offset": 324,
+      "binary_offset": 272,
       "le_pointers": 5
     },
     {
-      "symbol": "weapon_animation_retained_15",
+      "symbol": "weapon_animation_retained_11",
       "source": "src/fate/weapon_animation.asm",
       "binary": "weapon_animation.bin",
       "sha256": "0d0ada63ebb5b802150bbd2035cc6c7e1ca1025a8dd3609019acdb6c8ed88101",
@@ -7650,11 +7602,11 @@
       "raw_offset": "0x4f538",
       "loaded_address": "0x29f38",
       "public_entry": "0x29f38",
-      "binary_offset": 366,
+      "binary_offset": 314,
       "le_pointers": 3
     },
     {
-      "symbol": "weapon_animation_retained_16",
+      "symbol": "weapon_animation_retained_12",
       "source": "src/fate/weapon_animation.asm",
       "binary": "weapon_animation.bin",
       "sha256": "a5389486f5c603d3e78e6a983771a4b1661cff8139f38702049863a0ebebde3b",
@@ -7662,11 +7614,11 @@
       "raw_offset": "0x4f563",
       "loaded_address": "0x29f63",
       "public_entry": "0x29f63",
-      "binary_offset": 391,
+      "binary_offset": 339,
       "le_pointers": 3
     },
     {
-      "symbol": "weapon_animation_retained_17",
+      "symbol": "weapon_animation_retained_13",
       "source": "src/fate/weapon_animation.asm",
       "binary": "weapon_animation.bin",
       "sha256": "28c4425f9f84cee02aba0f3df322d119ff2193758106f873b5dcd33bd3b0968c",
@@ -7674,11 +7626,11 @@
       "raw_offset": "0x4f597",
       "loaded_address": "0x29f97",
       "public_entry": "0x29f97",
-      "binary_offset": 429,
+      "binary_offset": 377,
       "le_pointers": 3
     },
     {
-      "symbol": "weapon_animation_retained_18",
+      "symbol": "weapon_animation_retained_14",
       "source": "src/fate/weapon_animation.asm",
       "binary": "weapon_animation.bin",
       "sha256": "96f86fe76b33c1d773525ca9b6d72415d1386bb5f87348525189ef957addf607",
@@ -7686,11 +7638,11 @@
       "raw_offset": "0x4f5c4",
       "loaded_address": "0x29fc4",
       "public_entry": "0x29fc4",
-      "binary_offset": 469,
+      "binary_offset": 417,
       "le_pointers": 3
     },
     {
-      "symbol": "weapon_animation_retained_19",
+      "symbol": "weapon_animation_retained_15",
       "source": "src/fate/weapon_animation.asm",
       "binary": "weapon_animation.bin",
       "sha256": "765ba160825738afd5357a6901ad4e370ee7d18e246035eb290677173b4e83f0",
@@ -7698,11 +7650,11 @@
       "raw_offset": "0x4f5e6",
       "loaded_address": "0x29fe6",
       "public_entry": "0x29fe6",
-      "binary_offset": 496,
+      "binary_offset": 444,
       "le_pointers": 16
     },
     {
-      "symbol": "weapon_animation_retained_20",
+      "symbol": "weapon_animation_retained_16",
       "source": "src/fate/weapon_animation.asm",
       "binary": "weapon_animation.bin",
       "sha256": "79fac62c9d5e43d3900a3b2e6c590c27711e3cd7c288d2383d8a53c26331d11c",
@@ -7710,11 +7662,11 @@
       "raw_offset": "0x4f6a6",
       "loaded_address": "0x2a0a6",
       "public_entry": "0x2a0a6",
-      "binary_offset": 664,
+      "binary_offset": 612,
       "le_pointers": 2
     },
     {
-      "symbol": "weapon_animation_retained_21",
+      "symbol": "weapon_animation_retained_17",
       "source": "src/fate/weapon_animation.asm",
       "binary": "weapon_animation.bin",
       "sha256": "54795e9e4b67f140f93a36d1d3a683cea56d358a656c1282eb702ddf130213ea",
@@ -7722,11 +7674,11 @@
       "raw_offset": "0x4f6c3",
       "loaded_address": "0x2a0c3",
       "public_entry": "0x2a0c3",
-      "binary_offset": 684,
+      "binary_offset": 632,
       "le_pointers": 1
     },
     {
-      "symbol": "weapon_animation_retained_22",
+      "symbol": "weapon_animation_retained_18",
       "source": "src/fate/weapon_animation.asm",
       "binary": "weapon_animation.bin",
       "sha256": "539776767c676a6457045f5bb71a5c58216b82de9f3e4249b292f7cd8b037912",
@@ -7734,11 +7686,11 @@
       "raw_offset": "0x4f6e5",
       "loaded_address": "0x2a0e5",
       "public_entry": "0x2a0e5",
-      "binary_offset": 703,
+      "binary_offset": 651,
       "le_pointers": 4
     },
     {
-      "symbol": "weapon_animation_retained_23",
+      "symbol": "weapon_animation_retained_19",
       "source": "src/fate/weapon_animation.asm",
       "binary": "weapon_animation.bin",
       "sha256": "a0867bbc07d5c8351621cc9951137e59e4bf707a99e683540bbaeecc057e1dee",
@@ -7746,35 +7698,47 @@
       "raw_offset": "0x4f713",
       "loaded_address": "0x2a113",
       "public_entry": "0x2a113",
-      "binary_offset": 742,
+      "binary_offset": 690,
       "le_pointers": 9
     },
     {
-      "symbol": "weapon_animation_retained_24",
+      "symbol": "weapon_animation_retained_20",
       "source": "src/fate/weapon_animation.asm",
       "binary": "weapon_animation.bin",
-      "sha256": "64bb4da1a5042891a4aa9f46803eb5119e059d04de93fac8efed606c524a83ee",
-      "bytes": 21,
+      "sha256": "0eb5af4dd7492074d682b5dba276e1831de074b5c5e3a07714f68005181d7aef",
+      "bytes": 6,
       "raw_offset": "0x4f775",
       "loaded_address": "0x2a175",
       "public_entry": "0x2a175",
-      "binary_offset": 825,
-      "le_pointers": 2
+      "binary_offset": 773,
+      "le_pointers": 1
     },
     {
-      "symbol": "weapon_animation_retained_25",
+      "symbol": "weapon_animation_retained_21",
       "source": "src/fate/weapon_animation.asm",
       "binary": "weapon_animation.bin",
-      "sha256": "7d00b634748a5d1ce2c52ce05237cfbf0374fdbc4e3e106208412e5575d617c4",
-      "bytes": 41,
+      "sha256": "5d9cf9b7904120bdde5f6d28ecd777775f28df37ae067e953d88b1a7881ec283",
+      "bytes": 3,
+      "raw_offset": "0x4f787",
+      "loaded_address": "0x2a187",
+      "public_entry": "0x2a187",
+      "binary_offset": 779,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "weapon_animation_retained_22",
+      "source": "src/fate/weapon_animation.asm",
+      "binary": "weapon_animation.bin",
+      "sha256": "aa961cc6ebb371f4a6d325e3ccb51031d2fe08e6cff63f6b5b21e99cdeaaa151",
+      "bytes": 21,
       "raw_offset": "0x4f791",
       "loaded_address": "0x2a191",
       "public_entry": "0x2a191",
-      "binary_offset": 846,
-      "le_pointers": 4
+      "binary_offset": 782,
+      "le_pointers": 2
     },
     {
-      "symbol": "weapon_animation_retained_26",
+      "symbol": "weapon_animation_retained_23",
       "source": "src/fate/weapon_animation.asm",
       "binary": "weapon_animation.bin",
       "sha256": "091195329cf03b8b3f5be9700f85cab17f0f917865e4d2c66a1b80f7b79cc719",
@@ -7782,7 +7746,7 @@
       "raw_offset": "0x4f7c1",
       "loaded_address": "0x2a1c1",
       "public_entry": "0x2a1c1",
-      "binary_offset": 887,
+      "binary_offset": 803,
       "le_pointers": 2
     }
   ]

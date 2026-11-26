@@ -176,6 +176,27 @@
       "public": "update_weapon_animation_"
     },
     {
+      "symbol": "weapon_animation_29dca_",
+      "public": "update_weapon_animation_transfer_context_",
+      "address": 171466,
+      "begin": 229,
+      "end": 242,
+      "meaning": "Ordered field transfer",
+      "entry_contract": "AX is the primary start tile; reload the signed requested slot into EDX before storing AX to weapon_tile. Preserve both ordered volatile accesses.",
+      "memory_order": [
+        {
+          "name": "_requested_weapon",
+          "offset": 3,
+          "target": 1069638
+        },
+        {
+          "name": "_weapon_tile",
+          "offset": 9,
+          "target": 535524
+        }
+      ]
+    },
+    {
       "symbol": "weapon_animation_29dd7_",
       "address": 171479,
       "begin": 243,
@@ -228,6 +249,27 @@
         }
       ],
       "public": "update_weapon_animation_"
+    },
+    {
+      "symbol": "weapon_animation_29e02_",
+      "public": "update_weapon_animation_transfer_context_",
+      "address": 171522,
+      "begin": 286,
+      "end": 299,
+      "meaning": "Ordered field transfer",
+      "entry_contract": "AX is the primary firing tile; reload the signed requested slot into EDX before storing AX to projectile_frame.",
+      "memory_order": [
+        {
+          "name": "_requested_weapon",
+          "offset": 3,
+          "target": 1069638
+        },
+        {
+          "name": "_projectile_frame",
+          "offset": 9,
+          "target": 1069630
+        }
+      ]
     },
     {
       "symbol": "weapon_animation_29e0f_",
@@ -363,6 +405,27 @@
       "public": "update_weapon_animation_"
     },
     {
+      "symbol": "weapon_animation_29ebc_",
+      "public": "update_weapon_animation_transfer_context_",
+      "address": 171708,
+      "begin": 454,
+      "end": 467,
+      "meaning": "Ordered field transfer",
+      "entry_contract": "AX is the secondary start tile; reload the signed requested slot into EDX before storing AX to weapon_tile.",
+      "memory_order": [
+        {
+          "name": "_requested_weapon",
+          "offset": 3,
+          "target": 1069638
+        },
+        {
+          "name": "_weapon_tile",
+          "offset": 9,
+          "target": 535524
+        }
+      ]
+    },
+    {
       "symbol": "weapon_animation_29ec9_",
       "address": 171721,
       "begin": 467,
@@ -415,6 +478,27 @@
         }
       ],
       "public": "update_weapon_animation_"
+    },
+    {
+      "symbol": "weapon_animation_29ef4_",
+      "public": "update_weapon_animation_transfer_context_",
+      "address": 171764,
+      "begin": 511,
+      "end": 524,
+      "meaning": "Ordered field transfer",
+      "entry_contract": "AX is the secondary firing tile; reload the signed requested slot into EDX before storing AX to projectile_frame.",
+      "memory_order": [
+        {
+          "name": "_requested_weapon",
+          "offset": 3,
+          "target": 1069638
+        },
+        {
+          "name": "_projectile_frame",
+          "offset": 9,
+          "target": 1069630
+        }
+      ]
     },
     {
       "symbol": "weapon_animation_29f01_",
@@ -595,6 +679,22 @@
       "public": "update_weapon_animation_"
     },
     {
+      "symbol": "weapon_animation_2a17b_",
+      "public": "update_weapon_animation_transfer_context_",
+      "address": 172411,
+      "begin": 1056,
+      "end": 1068,
+      "meaning": "Frame-offset preparation",
+      "entry_contract": "Capture displayed slot in SI, test the signed word, branch to default-frame calculation for zero. No prior register inputs or stack dependence.",
+      "memory_order": [
+        {
+          "name": "_displayed_weapon",
+          "offset": 3,
+          "target": 535522
+        }
+      ]
+    },
+    {
       "symbol": "weapon_animation_2a18a_",
       "public": "update_weapon_animation_",
       "address": 172426,
@@ -603,6 +703,38 @@
       "meaning": "Three-times-slot factor for displayed base tile",
       "entry_contract": "EDX is the signed definition/displayed slot 0..7. EAX becomes 3*EDX, EDX and every other register are unchanged; SUB defines the same flags. No memory, calls or stack operations.",
       "memory_order": []
+    },
+    {
+      "symbol": "weapon_animation_2a1a6_",
+      "public": "update_weapon_animation_transfer_context_",
+      "address": 172454,
+      "begin": 1096,
+      "end": 1109,
+      "meaning": "Frame-offset preparation",
+      "entry_contract": "Default displayed slot is zero. Read weapon_tile into BX and subtract1053; only the signed low word is consumed by the later frame calculation. Upper EBX/flags are overwritten before use.",
+      "memory_order": [
+        {
+          "name": "_weapon_tile",
+          "offset": 3,
+          "target": 535524
+        }
+      ]
+    },
+    {
+      "symbol": "weapon_animation_2a1b3_",
+      "public": "update_weapon_animation_transfer_context_",
+      "address": 172467,
+      "begin": 1109,
+      "end": 1116,
+      "meaning": "Frame-offset preparation",
+      "entry_contract": "BX is the signed frame word from either predecessor; reload the current displayed slot into full EDX for the retained row calculation. Other registers and flags are unchanged.",
+      "memory_order": [
+        {
+          "name": "_displayed_weapon",
+          "offset": 3,
+          "target": 535522
+        }
+      ]
     },
     {
       "symbol": "weapon_animation_2a1ba_",
@@ -708,39 +840,19 @@
     },
     {
       "symbol": "weapon_animation_retained_4",
-      "address": 171466,
-      "size": 13,
-      "binary_offset": 148,
-      "fixups": {
-        "3": 1069638,
-        "9": 535524
-      }
-    },
-    {
-      "symbol": "weapon_animation_retained_5",
       "address": 171494,
       "size": 13,
-      "binary_offset": 161,
+      "binary_offset": 148,
       "fixups": {
         "3": 1069638,
         "9": 1069634
       }
     },
     {
-      "symbol": "weapon_animation_retained_6",
-      "address": 171522,
-      "size": 13,
-      "binary_offset": 174,
-      "fixups": {
-        "3": 1069638,
-        "9": 1069630
-      }
-    },
-    {
-      "symbol": "weapon_animation_retained_7",
+      "symbol": "weapon_animation_retained_5",
       "address": 171542,
       "size": 42,
-      "binary_offset": 187,
+      "binary_offset": 161,
       "fixups": {
         "9": 600950,
         "16": 1069634,
@@ -750,10 +862,10 @@
       }
     },
     {
-      "symbol": "weapon_animation_retained_8",
+      "symbol": "weapon_animation_retained_6",
       "address": 171590,
       "size": 26,
-      "binary_offset": 229,
+      "binary_offset": 203,
       "fixups": {
         "3": 1069630,
         "9": 1069632,
@@ -761,58 +873,38 @@
       }
     },
     {
-      "symbol": "weapon_animation_retained_9",
+      "symbol": "weapon_animation_retained_7",
       "address": 171628,
       "size": 21,
-      "binary_offset": 255,
+      "binary_offset": 229,
       "fixups": {
         "8": 535516
       }
     },
     {
-      "symbol": "weapon_animation_retained_10",
+      "symbol": "weapon_animation_retained_8",
       "address": 171684,
       "size": 9,
-      "binary_offset": 276,
+      "binary_offset": 250,
       "fixups": {
         "5": 535522
       }
     },
     {
-      "symbol": "weapon_animation_retained_11",
-      "address": 171708,
-      "size": 13,
-      "binary_offset": 285,
-      "fixups": {
-        "3": 1069638,
-        "9": 535524
-      }
-    },
-    {
-      "symbol": "weapon_animation_retained_12",
+      "symbol": "weapon_animation_retained_9",
       "address": 171736,
       "size": 13,
-      "binary_offset": 298,
+      "binary_offset": 259,
       "fixups": {
         "3": 1069638,
         "9": 1069634
       }
     },
     {
-      "symbol": "weapon_animation_retained_13",
-      "address": 171764,
-      "size": 13,
-      "binary_offset": 311,
-      "fixups": {
-        "3": 1069638,
-        "9": 1069630
-      }
-    },
-    {
-      "symbol": "weapon_animation_retained_14",
+      "symbol": "weapon_animation_retained_10",
       "address": 171784,
       "size": 42,
-      "binary_offset": 324,
+      "binary_offset": 272,
       "fixups": {
         "9": 600958,
         "16": 1069634,
@@ -822,10 +914,10 @@
       }
     },
     {
-      "symbol": "weapon_animation_retained_15",
+      "symbol": "weapon_animation_retained_11",
       "address": 171832,
       "size": 25,
-      "binary_offset": 366,
+      "binary_offset": 314,
       "fixups": {
         "3": 1069630,
         "9": 1069632,
@@ -833,10 +925,10 @@
       }
     },
     {
-      "symbol": "weapon_animation_retained_16",
+      "symbol": "weapon_animation_retained_12",
       "address": 171875,
       "size": 38,
-      "binary_offset": 391,
+      "binary_offset": 339,
       "fixups": {
         "3": 535524,
         "10": 1069634,
@@ -844,10 +936,10 @@
       }
     },
     {
-      "symbol": "weapon_animation_retained_17",
+      "symbol": "weapon_animation_retained_13",
       "address": 171927,
       "size": 40,
-      "binary_offset": 429,
+      "binary_offset": 377,
       "fixups": {
         "3": 535524,
         "10": 1069634,
@@ -855,10 +947,10 @@
       }
     },
     {
-      "symbol": "weapon_animation_retained_18",
+      "symbol": "weapon_animation_retained_14",
       "address": 171972,
       "size": 27,
-      "binary_offset": 469,
+      "binary_offset": 417,
       "fixups": {
         "7": 1069638,
         "14": 535518,
@@ -866,10 +958,10 @@
       }
     },
     {
-      "symbol": "weapon_animation_retained_19",
+      "symbol": "weapon_animation_retained_15",
       "address": 172006,
       "size": 168,
-      "binary_offset": 496,
+      "binary_offset": 444,
       "fixups": {
         "4": 600936,
         "12": 600938,
@@ -890,29 +982,29 @@
       }
     },
     {
-      "symbol": "weapon_animation_retained_20",
+      "symbol": "weapon_animation_retained_16",
       "address": 172198,
       "size": 20,
-      "binary_offset": 664,
+      "binary_offset": 612,
       "fixups": {
         "4": 535520,
         "11": 535518
       }
     },
     {
-      "symbol": "weapon_animation_retained_21",
+      "symbol": "weapon_animation_retained_17",
       "address": 172227,
       "size": 19,
-      "binary_offset": 684,
+      "binary_offset": 632,
       "fixups": {
         "12": 1069632
       }
     },
     {
-      "symbol": "weapon_animation_retained_22",
+      "symbol": "weapon_animation_retained_18",
       "address": 172261,
       "size": 39,
-      "binary_offset": 703,
+      "binary_offset": 651,
       "fixups": {
         "5": 1069630,
         "12": 535524,
@@ -921,10 +1013,10 @@
       }
     },
     {
-      "symbol": "weapon_animation_retained_23",
+      "symbol": "weapon_animation_retained_19",
       "address": 172307,
       "size": 83,
-      "binary_offset": 742,
+      "binary_offset": 690,
       "fixups": {
         "4": 600938,
         "11": 535518,
@@ -938,39 +1030,43 @@
       }
     },
     {
-      "symbol": "weapon_animation_retained_24",
+      "symbol": "weapon_animation_retained_20",
       "address": 172405,
-      "size": 21,
-      "binary_offset": 825,
+      "size": 6,
+      "binary_offset": 773,
       "fixups": {
-        "2": 535524,
-        "9": 535522
+        "2": 535524
       }
     },
     {
-      "symbol": "weapon_animation_retained_25",
+      "symbol": "weapon_animation_retained_21",
+      "address": 172423,
+      "size": 3,
+      "binary_offset": 779,
+      "fixups": {}
+    },
+    {
+      "symbol": "weapon_animation_retained_22",
       "address": 172433,
-      "size": 41,
-      "binary_offset": 846,
+      "size": 21,
+      "binary_offset": 782,
       "fixups": {
         "8": 535524,
-        "15": 600936,
-        "24": 535524,
-        "37": 535522
+        "15": 600936
       }
     },
     {
-      "symbol": "weapon_animation_retained_26",
+      "symbol": "weapon_animation_retained_23",
       "address": 172481,
       "size": 27,
-      "binary_offset": 887,
+      "binary_offset": 803,
       "fixups": {
         "16": 600168,
         "23": 600170
       }
     }
   ],
-  "assembly_size": 914,
+  "assembly_size": 830,
   "contexts": [
     {
       "public": "update_weapon_animation_",
@@ -5777,6 +5873,2363 @@
           "75",
           951,
           1104
+        ]
+      }
+    },
+    {
+      "public": "update_weapon_animation_transfer_context_",
+      "object": "wanxfer",
+      "address": 171220,
+      "size": 1164,
+      "prefix": 0,
+      "sha256": "6fc45ecf89dad76e87e86be06825ff993531104fa0b560d614579e637d9501fe",
+      "literal_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "records": {
+        "flat_groups": [
+          2
+        ],
+        "fixups": [
+          [
+            1,
+            5,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              1
+            ],
+            0,
+            "_game_clock"
+          ],
+          [
+            1,
+            11,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              2
+            ],
+            0,
+            "_last_frame_tick"
+          ],
+          [
+            1,
+            21,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              1
+            ],
+            0,
+            "_game_clock"
+          ],
+          [
+            1,
+            31,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              2
+            ],
+            0,
+            "_last_frame_tick"
+          ],
+          [
+            1,
+            46,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            0,
+            "_weapon_animation_state"
+          ],
+          [
+            1,
+            65,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              4
+            ],
+            0,
+            "_weapon_input_bits"
+          ],
+          [
+            1,
+            78,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              5
+            ],
+            0,
+            "_selected_weapon"
+          ],
+          [
+            1,
+            84,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              6
+            ],
+            0,
+            "_requested_weapon"
+          ],
+          [
+            1,
+            107,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              7
+            ],
+            0,
+            "_weapon_animations"
+          ],
+          [
+            1,
+            114,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            122,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              7
+            ],
+            0,
+            "_weapon_animations"
+          ],
+          [
+            1,
+            129,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              9
+            ],
+            0,
+            "_displayed_weapon"
+          ],
+          [
+            1,
+            136,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              10
+            ],
+            0,
+            "_animation_limit"
+          ],
+          [
+            1,
+            142,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            149,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              10
+            ],
+            0,
+            "_animation_limit"
+          ],
+          [
+            1,
+            156,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            0,
+            "_weapon_animation_state"
+          ],
+          [
+            1,
+            176,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              11
+            ],
+            0,
+            "_frame_direction"
+          ],
+          [
+            1,
+            188,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              12
+            ],
+            0,
+            "_weapon_action"
+          ],
+          [
+            1,
+            201,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              6
+            ],
+            0,
+            "_requested_weapon"
+          ],
+          [
+            1,
+            207,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              9
+            ],
+            0,
+            "_displayed_weapon"
+          ],
+          [
+            1,
+            225,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              7
+            ],
+            0,
+            "_weapon_animations"
+          ],
+          [
+            1,
+            232,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              6
+            ],
+            0,
+            "_requested_weapon"
+          ],
+          [
+            1,
+            238,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            253,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              7
+            ],
+            0,
+            "_weapon_animations"
+          ],
+          [
+            1,
+            260,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              6
+            ],
+            0,
+            "_requested_weapon"
+          ],
+          [
+            1,
+            267,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              10
+            ],
+            0,
+            "_animation_limit"
+          ],
+          [
+            1,
+            282,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              7
+            ],
+            0,
+            "_weapon_animations"
+          ],
+          [
+            1,
+            289,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              6
+            ],
+            0,
+            "_requested_weapon"
+          ],
+          [
+            1,
+            295,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              13
+            ],
+            0,
+            "_projectile_frame"
+          ],
+          [
+            1,
+            310,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              7
+            ],
+            0,
+            "_weapon_animations"
+          ],
+          [
+            1,
+            317,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              10
+            ],
+            0,
+            "_animation_limit"
+          ],
+          [
+            1,
+            323,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              14
+            ],
+            0,
+            "_projectile_type"
+          ],
+          [
+            1,
+            329,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            336,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            0,
+            "_weapon_animation_state"
+          ],
+          [
+            1,
+            353,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              11
+            ],
+            0,
+            "_frame_direction"
+          ],
+          [
+            1,
+            359,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              13
+            ],
+            0,
+            "_projectile_frame"
+          ],
+          [
+            1,
+            366,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            384,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              12
+            ],
+            0,
+            "_weapon_action"
+          ],
+          [
+            1,
+            398,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              6
+            ],
+            0,
+            "_requested_weapon"
+          ],
+          [
+            1,
+            413,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              7
+            ],
+            0,
+            "_weapon_animations"
+          ],
+          [
+            1,
+            426,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              6
+            ],
+            0,
+            "_requested_weapon"
+          ],
+          [
+            1,
+            432,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              9
+            ],
+            0,
+            "_displayed_weapon"
+          ],
+          [
+            1,
+            450,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              7
+            ],
+            0,
+            "_weapon_animations"
+          ],
+          [
+            1,
+            457,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              6
+            ],
+            0,
+            "_requested_weapon"
+          ],
+          [
+            1,
+            463,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            478,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              7
+            ],
+            0,
+            "_weapon_animations"
+          ],
+          [
+            1,
+            485,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              6
+            ],
+            0,
+            "_requested_weapon"
+          ],
+          [
+            1,
+            492,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              10
+            ],
+            0,
+            "_animation_limit"
+          ],
+          [
+            1,
+            507,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              7
+            ],
+            0,
+            "_weapon_animations"
+          ],
+          [
+            1,
+            514,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              6
+            ],
+            0,
+            "_requested_weapon"
+          ],
+          [
+            1,
+            520,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              13
+            ],
+            0,
+            "_projectile_frame"
+          ],
+          [
+            1,
+            535,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              7
+            ],
+            0,
+            "_weapon_animations"
+          ],
+          [
+            1,
+            555,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              11
+            ],
+            0,
+            "_frame_direction"
+          ],
+          [
+            1,
+            564,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            571,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              10
+            ],
+            0,
+            "_animation_limit"
+          ],
+          [
+            1,
+            588,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            599,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            606,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              10
+            ],
+            0,
+            "_animation_limit"
+          ],
+          [
+            1,
+            626,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            0,
+            "_weapon_animation_state"
+          ],
+          [
+            1,
+            645,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              6
+            ],
+            0,
+            "_requested_weapon"
+          ],
+          [
+            1,
+            652,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            0,
+            "_weapon_animation_state"
+          ],
+          [
+            1,
+            661,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              9
+            ],
+            0,
+            "_displayed_weapon"
+          ],
+          [
+            1,
+            689,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              7
+            ],
+            0,
+            "_weapon_animations"
+          ],
+          [
+            1,
+            697,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              7
+            ],
+            0,
+            "_weapon_animations"
+          ],
+          [
+            1,
+            703,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            710,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              10
+            ],
+            0,
+            "_animation_limit"
+          ],
+          [
+            1,
+            722,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            730,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            743,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              11
+            ],
+            0,
+            "_frame_direction"
+          ],
+          [
+            1,
+            752,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            759,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              10
+            ],
+            0,
+            "_animation_limit"
+          ],
+          [
+            1,
+            776,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            787,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            794,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              10
+            ],
+            0,
+            "_animation_limit"
+          ],
+          [
+            1,
+            811,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            822,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              6
+            ],
+            0,
+            "_requested_weapon"
+          ],
+          [
+            1,
+            828,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              5
+            ],
+            0,
+            "_selected_weapon"
+          ],
+          [
+            1,
+            837,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            0,
+            "_weapon_animation_state"
+          ],
+          [
+            1,
+            865,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              11
+            ],
+            0,
+            "_frame_direction"
+          ],
+          [
+            1,
+            876,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            883,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              10
+            ],
+            0,
+            "_animation_limit"
+          ],
+          [
+            1,
+            891,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              6
+            ],
+            0,
+            "_requested_weapon"
+          ],
+          [
+            1,
+            897,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              9
+            ],
+            0,
+            "_displayed_weapon"
+          ],
+          [
+            1,
+            917,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              7
+            ],
+            0,
+            "_weapon_animations"
+          ],
+          [
+            1,
+            924,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            0,
+            "_weapon_animation_state"
+          ],
+          [
+            1,
+            935,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              13
+            ],
+            0,
+            "_projectile_frame"
+          ],
+          [
+            1,
+            942,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            956,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            963,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              10
+            ],
+            0,
+            "_animation_limit"
+          ],
+          [
+            1,
+            973,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            0,
+            "_weapon_animation_state"
+          ],
+          [
+            1,
+            979,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              6
+            ],
+            0,
+            "_requested_weapon"
+          ],
+          [
+            1,
+            985,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              9
+            ],
+            0,
+            "_displayed_weapon"
+          ],
+          [
+            1,
+            1003,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              7
+            ],
+            0,
+            "_weapon_animations"
+          ],
+          [
+            1,
+            1014,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              13
+            ],
+            0,
+            "_projectile_frame"
+          ],
+          [
+            1,
+            1021,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            1036,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              11
+            ],
+            0,
+            "_frame_direction"
+          ],
+          [
+            1,
+            1047,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              14
+            ],
+            0,
+            "_projectile_type"
+          ],
+          [
+            1,
+            1052,
+            4,
+            9,
+            true,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              15
+            ],
+            0,
+            "fire_player_projectile_"
+          ],
+          [
+            1,
+            1059,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              9
+            ],
+            0,
+            "_displayed_weapon"
+          ],
+          [
+            1,
+            1070,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            1090,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              7
+            ],
+            0,
+            "_weapon_animations"
+          ],
+          [
+            1,
+            1099,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            1112,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              9
+            ],
+            0,
+            "_displayed_weapon"
+          ],
+          [
+            1,
+            1135,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              16
+            ],
+            0,
+            "_weapon_frame_words"
+          ],
+          [
+            1,
+            1149,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              17
+            ],
+            0,
+            "_weapon_x_offset"
+          ],
+          [
+            1,
+            1155,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              18
+            ],
+            0,
+            "_weapon_y_offset"
+          ]
+        ]
+      },
+      "fixups": {
+        "5": [
+          "_game_clock",
+          false,
+          0
+        ],
+        "11": [
+          "_last_frame_tick",
+          false,
+          0
+        ],
+        "21": [
+          "_game_clock",
+          false,
+          0
+        ],
+        "31": [
+          "_last_frame_tick",
+          false,
+          0
+        ],
+        "46": [
+          "_weapon_animation_state",
+          false,
+          0
+        ],
+        "65": [
+          "_weapon_input_bits",
+          false,
+          0
+        ],
+        "78": [
+          "_selected_weapon",
+          false,
+          0
+        ],
+        "84": [
+          "_requested_weapon",
+          false,
+          0
+        ],
+        "107": [
+          "_weapon_animations",
+          false,
+          4
+        ],
+        "114": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "122": [
+          "_weapon_animations",
+          false,
+          6
+        ],
+        "129": [
+          "_displayed_weapon",
+          false,
+          0
+        ],
+        "136": [
+          "_animation_limit",
+          false,
+          0
+        ],
+        "142": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "149": [
+          "_animation_limit",
+          false,
+          0
+        ],
+        "156": [
+          "_weapon_animation_state",
+          false,
+          0
+        ],
+        "176": [
+          "_frame_direction",
+          false,
+          0
+        ],
+        "188": [
+          "_weapon_action",
+          false,
+          0
+        ],
+        "201": [
+          "_requested_weapon",
+          false,
+          0
+        ],
+        "207": [
+          "_displayed_weapon",
+          false,
+          0
+        ],
+        "225": [
+          "_weapon_animations",
+          false,
+          8
+        ],
+        "232": [
+          "_requested_weapon",
+          false,
+          0
+        ],
+        "238": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "253": [
+          "_weapon_animations",
+          false,
+          10
+        ],
+        "260": [
+          "_requested_weapon",
+          false,
+          0
+        ],
+        "267": [
+          "_animation_limit",
+          false,
+          0
+        ],
+        "282": [
+          "_weapon_animations",
+          false,
+          12
+        ],
+        "289": [
+          "_requested_weapon",
+          false,
+          0
+        ],
+        "295": [
+          "_projectile_frame",
+          false,
+          0
+        ],
+        "310": [
+          "_weapon_animations",
+          false,
+          14
+        ],
+        "317": [
+          "_animation_limit",
+          false,
+          0
+        ],
+        "323": [
+          "_projectile_type",
+          false,
+          0
+        ],
+        "329": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "336": [
+          "_weapon_animation_state",
+          false,
+          0
+        ],
+        "353": [
+          "_frame_direction",
+          false,
+          0
+        ],
+        "359": [
+          "_projectile_frame",
+          false,
+          0
+        ],
+        "366": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "384": [
+          "_weapon_action",
+          false,
+          0
+        ],
+        "398": [
+          "_requested_weapon",
+          false,
+          0
+        ],
+        "413": [
+          "_weapon_animations",
+          false,
+          16
+        ],
+        "426": [
+          "_requested_weapon",
+          false,
+          0
+        ],
+        "432": [
+          "_displayed_weapon",
+          false,
+          0
+        ],
+        "450": [
+          "_weapon_animations",
+          false,
+          16
+        ],
+        "457": [
+          "_requested_weapon",
+          false,
+          0
+        ],
+        "463": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "478": [
+          "_weapon_animations",
+          false,
+          18
+        ],
+        "485": [
+          "_requested_weapon",
+          false,
+          0
+        ],
+        "492": [
+          "_animation_limit",
+          false,
+          0
+        ],
+        "507": [
+          "_weapon_animations",
+          false,
+          20
+        ],
+        "514": [
+          "_requested_weapon",
+          false,
+          0
+        ],
+        "520": [
+          "_projectile_frame",
+          false,
+          0
+        ],
+        "535": [
+          "_weapon_animations",
+          false,
+          22
+        ],
+        "555": [
+          "_frame_direction",
+          false,
+          0
+        ],
+        "564": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "571": [
+          "_animation_limit",
+          false,
+          0
+        ],
+        "588": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "599": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "606": [
+          "_animation_limit",
+          false,
+          0
+        ],
+        "626": [
+          "_weapon_animation_state",
+          false,
+          0
+        ],
+        "645": [
+          "_requested_weapon",
+          false,
+          0
+        ],
+        "652": [
+          "_weapon_animation_state",
+          false,
+          0
+        ],
+        "661": [
+          "_displayed_weapon",
+          false,
+          0
+        ],
+        "689": [
+          "_weapon_animations",
+          false,
+          0
+        ],
+        "697": [
+          "_weapon_animations",
+          false,
+          2
+        ],
+        "703": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "710": [
+          "_animation_limit",
+          false,
+          0
+        ],
+        "722": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "730": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "743": [
+          "_frame_direction",
+          false,
+          0
+        ],
+        "752": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "759": [
+          "_animation_limit",
+          false,
+          0
+        ],
+        "776": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "787": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "794": [
+          "_animation_limit",
+          false,
+          0
+        ],
+        "811": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "822": [
+          "_requested_weapon",
+          false,
+          0
+        ],
+        "828": [
+          "_selected_weapon",
+          false,
+          0
+        ],
+        "837": [
+          "_weapon_animation_state",
+          false,
+          0
+        ],
+        "865": [
+          "_frame_direction",
+          false,
+          0
+        ],
+        "876": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "883": [
+          "_animation_limit",
+          false,
+          0
+        ],
+        "891": [
+          "_requested_weapon",
+          false,
+          0
+        ],
+        "897": [
+          "_displayed_weapon",
+          false,
+          0
+        ],
+        "917": [
+          "_weapon_animations",
+          false,
+          2
+        ],
+        "924": [
+          "_weapon_animation_state",
+          false,
+          0
+        ],
+        "935": [
+          "_projectile_frame",
+          false,
+          0
+        ],
+        "942": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "956": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "963": [
+          "_animation_limit",
+          false,
+          0
+        ],
+        "973": [
+          "_weapon_animation_state",
+          false,
+          0
+        ],
+        "979": [
+          "_requested_weapon",
+          false,
+          0
+        ],
+        "985": [
+          "_displayed_weapon",
+          false,
+          0
+        ],
+        "1003": [
+          "_weapon_animations",
+          false,
+          2
+        ],
+        "1014": [
+          "_projectile_frame",
+          false,
+          0
+        ],
+        "1021": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "1036": [
+          "_frame_direction",
+          false,
+          0
+        ],
+        "1047": [
+          "_projectile_type",
+          false,
+          0
+        ],
+        "1052": [
+          "fire_player_projectile_",
+          true,
+          0
+        ],
+        "1059": [
+          "_displayed_weapon",
+          false,
+          0
+        ],
+        "1070": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "1090": [
+          "_weapon_animations",
+          false,
+          0
+        ],
+        "1099": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "1112": [
+          "_displayed_weapon",
+          false,
+          0
+        ],
+        "1135": [
+          "_weapon_frame_words",
+          false,
+          75880
+        ],
+        "1149": [
+          "_weapon_x_offset",
+          false,
+          0
+        ],
+        "1155": [
+          "_weapon_y_offset",
+          false,
+          0
+        ]
+      },
+      "branches": {
+        "1066": [
+          "74",
+          1096,
+          1234
         ]
       }
     }

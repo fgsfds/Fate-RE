@@ -199,7 +199,7 @@ def bind_production(exe,build):
   for site,target in fields.items():loaded[site:site+4]=target.to_bytes(4,'little')
   install(address,exact,loaded)
  assert covered==set(range(ENTRY,ENTRY+SIZE)) and exact_body==exe[ENTRY+0x25600:ENTRY+0x25600+SIZE]
- assert sum(r['bytes'] for r in reports)==393 and sum(r['DATA_sites'] for r in reports)==25
+ assert sum(r['bytes'] for r in reports)==477 and sum(r['DATA_sites'] for r in reports)==36
  return blobs,bytes(run_body),reports
 
 def bind_natural(blob,context):
@@ -211,7 +211,8 @@ def bind_natural(blob,context):
  try:
   fields={}
   code,bindings=v.bind_leaf_details(blob,public,{k:DS+n for k,n in v.DATA_OFFSETS.items()},address=base,functions=v.FUNCTION_ADDRESSES,absolute_code=v.CODE_OFFSETS,code_bindings=fields)
-  assert not fields and len(code)==context['size'] and len(bindings)==106
+  expected_DATA=sum(not row[4] for row in context['records']['fixups'])
+  assert not fields and len(code)==context['size'] and len(bindings)==expected_DATA
  finally:v.LEAF_SECTION_BRANCHES[public]=branches
  return code,base
 
@@ -269,6 +270,9 @@ def code_controls(original,body,rows):
   ('clock_branch',ENTRY+19,0x7e,0x7f,'clock_7_0'),
   ('state_dispatch',0x29d07,0x85,0x84,'active_1_0_-1_7_1'),
   ('active_state_kind',0x29f56,1,2,'active_1_0_-1_7_1'),
+  ('start_tile_store',0x29dd2,0xa3,0xa1,'idle_0_0_1_7'),
+  ('default_frame_dispatch',0x2a185,0x74,0x75,'slot_zero_negative_frame'),
+  ('default_frame_origin',0x2a1af,0x1d,0x1c,'slot_zero_negative_frame'),
   ('signed_direction',0x29e41,0x9e,0x9f,'idle_0_0_1_6'),
   ('projectile_sign_extension',0x29e61,0xbf,0xb7,'projectile_word_-1'),
   ('record_stride',0x29dbf,2,1,'idle_1_1_1_7'),
@@ -284,8 +288,8 @@ def code_controls(original,body,rows):
 def natural_code_controls(original,body,base,rows):
  # After binding the guarded private context, redirect frame -1 to -1053.
  # The distinct seeded pairs make the final-DATA oracle detect the wrong read.
- # Register allocation differs between the two guarded compiler contexts.
- instructions=[bytes.fromhex(s) for s in ('81ea1d040000','81e81d040000')]
+ # Register allocation differs between the guarded compiler contexts.
+ instructions=[bytes.fromhex(s) for s in ('81ea1d040000','81e81d040000','81eb1d040000')]
  assert sum(body.count(i) for i in instructions)==1
  instruction=next(i for i in instructions if i in body)
  site=body.index(instruction);bad=bytearray(body)

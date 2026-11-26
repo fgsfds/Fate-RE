@@ -280,6 +280,16 @@ wrong terminal EBX, so DATA-only replay would miss that ABI error.
 
 ### State-machine tables and DATA views
 
+To preserve a volatile field-transfer sequence, name the table value and the
+next signed slot separately: load the table word, capture the requested slot
+as an int, then store the previous word. In weapon animation this produces
+`MOVSX EDX,[requested_weapon]` before the AX store; a direct assignment had
+placed the store first. Check that order from the actual selected instructions.
+Truthful SI/BX identities can retain a displayed slot and signed frame word
+across the default-frame join. A private compiler context may save fewer
+registers than production when the selected operations have no stack/frame
+dependence and the original entry, return and all continuations remain exact.
+
 Promoting the actual signed state through an empty full-EDX identity after
 the idle branch keeps the tick flag live in EAX and restores active-state
 dispatch groups. Keep the original short-DX capture before that branch.

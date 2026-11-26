@@ -95,19 +95,11 @@ section .retained_3 align=1 vstart=0x29d4d follows=.retained_2
     movsx edx, ax
     mov [displayed_weapon], ax
 
-section .retained_4 align=1 vstart=0x29dca follows=.retained_3
-    movsx edx, word [requested_weapon]
-    mov [weapon_tile], ax
-
-section .retained_5 align=1 vstart=0x29de6 follows=.retained_4
+section .retained_4 align=1 vstart=0x29de6 follows=.retained_3
     movsx edx, word [requested_weapon]
     mov [animation_limit], ax
 
-section .retained_6 align=1 vstart=0x29e02 follows=.retained_5
-    movsx edx, word [requested_weapon]
-    mov [projectile_frame], ax
-
-section .retained_7 align=1 vstart=0x29e16 follows=.retained_6
+section .retained_5 align=1 vstart=0x29e16 follows=.retained_4
     mov ebx, 0x4
     mov ax, [nosplit eax*8 + primary_projectile]
     mov cx, [animation_limit]
@@ -116,35 +108,27 @@ section .retained_7 align=1 vstart=0x29e16 follows=.retained_6
     mov [weapon_animation_state], bx
     cmp ax, cx
 
-section .retained_8 align=1 vstart=0x29e46 follows=.retained_7
+section .retained_6 align=1 vstart=0x29e46 follows=.retained_5
     mov si, [projectile_frame]
     mov [frame_direction], ax
     cmp si, [weapon_tile]
     jnz near .compute_weapon_offsets
 
-section .retained_9 align=1 vstart=0x29e6c follows=.retained_8
+section .retained_7 align=1 vstart=0x29e6c follows=.retained_6
     jmp near .compute_weapon_offsets
     movsx eax, word [weapon_action]
     cmp eax, 0x2
     jnz near .compute_weapon_offsets
 
-section .retained_10 align=1 vstart=0x29ea4 follows=.retained_9
+section .retained_8 align=1 vstart=0x29ea4 follows=.retained_7
     movsx edx, ax
     mov [displayed_weapon], ax
 
-section .retained_11 align=1 vstart=0x29ebc follows=.retained_10
-    movsx edx, word [requested_weapon]
-    mov [weapon_tile], ax
-
-section .retained_12 align=1 vstart=0x29ed8 follows=.retained_11
+section .retained_9 align=1 vstart=0x29ed8 follows=.retained_8
     movsx edx, word [requested_weapon]
     mov [animation_limit], ax
 
-section .retained_13 align=1 vstart=0x29ef4 follows=.retained_12
-    movsx edx, word [requested_weapon]
-    mov [projectile_frame], ax
-
-section .retained_14 align=1 vstart=0x29f08 follows=.retained_13
+section .retained_10 align=1 vstart=0x29f08 follows=.retained_9
     mov esi, 0x4
     mov ax, [nosplit eax*8 + secondary_projectile]
     mov di, [animation_limit]
@@ -153,13 +137,13 @@ section .retained_14 align=1 vstart=0x29f08 follows=.retained_13
     mov [weapon_animation_state], si
     cmp ax, di
 
-section .retained_15 align=1 vstart=0x29f38 follows=.retained_14
+section .retained_11 align=1 vstart=0x29f38 follows=.retained_10
     mov dx, [projectile_frame]
     mov [frame_direction], ax
     cmp dx, [weapon_tile]
     jmp near .check_projectile_frame
 
-section .retained_16 align=1 vstart=0x29f63 follows=.retained_15
+section .retained_12 align=1 vstart=0x29f63 follows=.retained_11
     mov dx, [weapon_tile]
     cmp dx, [animation_limit]
     jnl short .branch_29f89
@@ -169,7 +153,7 @@ section .retained_16 align=1 vstart=0x29f63 follows=.retained_15
     mov [weapon_tile], dx
     jmp near .compute_weapon_offsets
 
-section .retained_17 align=1 vstart=0x29f97 follows=.retained_16
+section .retained_13 align=1 vstart=0x29f97 follows=.retained_12
     mov dx, [weapon_tile]
     cmp dx, [animation_limit]
     jng short .branch_29f89
@@ -180,14 +164,14 @@ section .retained_17 align=1 vstart=0x29f97 follows=.retained_16
     mov [weapon_tile], si
     jmp near .compute_weapon_offsets
 
-section .retained_18 align=1 vstart=0x29fc4 follows=.retained_17
+section .retained_14 align=1 vstart=0x29fc4 follows=.retained_13
     mov edx, 0x3
     mov ax, [requested_weapon]
     mov [weapon_animation_state], dx
     movsx edx, ax
     mov [displayed_weapon], ax
 
-section .retained_19 align=1 vstart=0x29fe6 follows=.retained_18
+section .retained_15 align=1 vstart=0x29fe6 follows=.retained_14
     mov dx, [nosplit eax*8 + weapon_base_tile]
     mov ax, [nosplit eax*8 + weapon_ready_tile]
     mov [weapon_tile], dx
@@ -222,19 +206,19 @@ section .retained_19 align=1 vstart=0x29fe6 follows=.retained_18
     jng short .branch_2a0a0
     test ax, ax
 
-section .retained_20 align=1 vstart=0x2a0a6 follows=.retained_19
+section .retained_16 align=1 vstart=0x2a0a6 follows=.retained_15
     xor esi, esi
     mov [selected_weapon], ax
     mov [weapon_animation_state], si
     jmp near .compute_weapon_offsets
 
-section .retained_21 align=1 vstart=0x2a0c3 follows=.retained_20
+section .retained_17 align=1 vstart=0x2a0c3 follows=.retained_16
     test ax, ax
     jz near .compute_weapon_offsets
     mov si, [frame_direction]
     test si, si
 
-section .retained_22 align=1 vstart=0x2a0e5 follows=.retained_21
+section .retained_18 align=1 vstart=0x2a0e5 follows=.retained_17
     jnl short .branch_2a0fd
     mov si, [projectile_frame]
     mov [weapon_tile], cx
@@ -244,7 +228,7 @@ section .retained_22 align=1 vstart=0x2a0e5 follows=.retained_21
     movsx edx, ax
     mov [displayed_weapon], ax
 
-section .retained_23 align=1 vstart=0x2a113 follows=.retained_22
+section .retained_19 align=1 vstart=0x2a113 follows=.retained_18
     mov ax, [nosplit eax*8 + weapon_ready_tile]
     mov [weapon_animation_state], si
     jmp short .branch_2a175
@@ -263,24 +247,20 @@ section .retained_23 align=1 vstart=0x2a113 follows=.retained_22
     movsx edx, ax
     mov [displayed_weapon], ax
 
-section .retained_24 align=1 vstart=0x2a175 follows=.retained_23
+section .retained_20 align=1 vstart=0x2a175 follows=.retained_19
     mov [weapon_tile], ax
-    mov si, [displayed_weapon]
-    test si, si
-    jz short .compute_default_frame_index
+
+section .retained_21 align=1 vstart=0x2a187 follows=.retained_20
     movsx edx, si
 
-section .retained_25 align=1 vstart=0x2a191 follows=.retained_24
+section .retained_22 align=1 vstart=0x2a191 follows=.retained_21
     mov edx, eax
     shl edx, byte 0x3
     mov bx, [weapon_tile]
     sub bx, [edx + weapon_base_tile]
     jmp short .lookup_frame_offsets
-    mov bx, [weapon_tile]
-    sub ebx, strict dword 0x41d
-    movsx edx, word [displayed_weapon]
 
-section .retained_26 align=1 vstart=0x2a1c1 follows=.retained_25
+section .retained_23 align=1 vstart=0x2a1c1 follows=.retained_22
     mov edx, eax
     movsx eax, bx
     shl edx, byte 0x5

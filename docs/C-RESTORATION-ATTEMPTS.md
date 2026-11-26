@@ -140,8 +140,13 @@ Watcom 10.5 `/4r /s /or /bt=dos` emits 1,175 bytes versus 1,307. A signed
 state-to-EDX identity after the idle branch gives a second 1,167-byte context;
 six exact control groups add 69 bytes without changing the five-save frame.
 Reusing proven pure slot factors and direction conversion adds another 55
-placed bytes. Together 29 guarded phases supply 393 native bytes; 914 remain
-assembly. Neither complete private context is a shared-ABI replacement.
+placed bytes. A third 1,164-byte context stages requested-slot reads before
+preceding AX stores and captures the displayed/frame words in SI/BX. Seven
+stack-independent groups add 84 bytes: 52 field-transfer bytes and 32 offset
+preparation bytes. Together 36 guarded phases supply 477 native bytes; 830
+remain assembly. The third context omits the unused EDI save, but none of its
+entry/return is selected. Production keeps the original five-register frame.
+No complete private context is a shared-ABI replacement.
 
 The base context still first differs at `0x29cee`: it materializes tick 1 in
 EBX before the clock store. The state context instead first loads the clock
@@ -149,9 +154,15 @@ into EDX at `0x29cd9`. Branch-local `keep_tick(1/0)` calls restore the ordered
 clock block but drop ESI from the saved frame, first differing at `0x29cd7`;
 that trial is not integrated. Next unify the tick/store lifetime with the
 signed state allocation without changing the five saves or volatile order;
-do not repeat the two independent probes. Preserve the actual DATA extent
-`0x28a300` and valid definition slots 0..7. Evidence:
-`work/weapon-tick-nov27/placement-evidence.json` and its integrated fixture.
+do not repeat the two independent probes. The nonzero offset path first differs
+at `0x2a187`: the third context reads the tile into AX before sign-extending SI.
+Its final pointer addition also emits a relocated immediate instead of the
+original indexed load displacement. Next stage the nonzero row calculation in
+full EDX before the volatile tile read and keep the signed frame in BX; the two
+limit-field transfers still use BX instead of AX. Preserve the actual DATA
+extent `0x28a300` and valid definition slots 0..7. Evidence:
+`work/weapon-memory-order-nov27/placement-evidence.json` and
+`work/weapon-transfer-integrate-nov27/full-validation.json`.
 
 ### Video prompt-mode blocker
 

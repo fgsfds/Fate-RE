@@ -6,6 +6,8 @@
  */
 #ifdef WEAPON_ACTIVE_STATE_CONTEXT
 #define update_weapon_animation update_weapon_animation_state_context
+#elif defined(WEAPON_TRANSFER_CONTEXT)
+#define update_weapon_animation update_weapon_animation_transfer_context
 #endif
 typedef struct {
     short base_tile, ready_tile;
@@ -54,11 +56,28 @@ extern int keep_active_state(int);
 #define active_state state
 #endif
 
+#ifdef WEAPON_TRANSFER_CONTEXT
+/* Register-only identities preserve their actual input at each boundary. */
+extern short keep_displayed(short);
+#pragma aux keep_displayed = "" parm nomemory [si] value [si] modify exact [];
+extern short keep_frame(short);
+#pragma aux keep_frame = "" parm nomemory [bx] value [bx] modify exact [];
+extern int keep_byte_offset(int);
+#pragma aux keep_byte_offset = "" parm nomemory [eax] value [eax] modify exact [];
+extern short keep_screen_x(short);
+#pragma aux keep_screen_x = "" parm nomemory [dx] value [dx] modify exact [];
+
+#endif
+
 void update_weapon_animation(void);
 #pragma aux update_weapon_animation modify exact [eax];
 void update_weapon_animation(void)
 {
+#ifdef WEAPON_TRANSFER_CONTEXT
+    int advance, index;
+#else
     int advance;
+#endif
 #ifdef WEAPON_ACTIVE_STATE_CONTEXT
     int active_state;
 #endif
@@ -66,6 +85,9 @@ void update_weapon_animation(void)
     short tile, limit, next, previous, fire_tile, direction;
     short frame, x, y;
     int offset;
+#ifdef WEAPON_TRANSFER_CONTEXT
+    const short *pair;
+#endif
 
     if ((long)(game_clock - last_frame_tick) > 6) {
         last_frame_tick = game_clock;
@@ -99,10 +121,23 @@ void update_weapon_animation(void)
     if (weapon_action == 1) {
         request = requested_weapon;
         displayed_weapon = request;
+#ifdef WEAPON_TRANSFER_CONTEXT
+        tile = weapon_animations[request].primary_start;
+        index = requested_weapon;
+        weapon_tile = tile;
+        limit = weapon_animations[index].primary_end;
+        index = requested_weapon;
+        animation_limit = limit;
+        fire_tile = weapon_animations[index].primary_fire;
+        index = requested_weapon;
+        projectile_frame = fire_tile;
+        direction = weapon_animations[index].primary_projectile;
+#else
         weapon_tile = weapon_animations[request].primary_start;
         animation_limit = weapon_animations[requested_weapon].primary_end;
         projectile_frame = weapon_animations[requested_weapon].primary_fire;
         direction = weapon_animations[requested_weapon].primary_projectile;
+#endif
         limit = animation_limit;
         projectile_type = direction;
         tile = weapon_tile;
@@ -120,10 +155,23 @@ void update_weapon_animation(void)
 
     request = requested_weapon;
     displayed_weapon = request;
+#ifdef WEAPON_TRANSFER_CONTEXT
+    tile = weapon_animations[request].secondary_start;
+    index = requested_weapon;
+    weapon_tile = tile;
+    limit = weapon_animations[index].secondary_end;
+    index = requested_weapon;
+    animation_limit = limit;
+    fire_tile = weapon_animations[index].secondary_fire;
+    index = requested_weapon;
+    projectile_frame = fire_tile;
+    direction = weapon_animations[index].secondary_projectile;
+#else
     weapon_tile = weapon_animations[request].secondary_start;
     animation_limit = weapon_animations[requested_weapon].secondary_end;
     projectile_frame = weapon_animations[requested_weapon].secondary_fire;
     direction = weapon_animations[requested_weapon].secondary_projectile;
+#endif
     limit = animation_limit;
     projectile_type = direction;
     tile = weapon_tile;
@@ -239,6 +287,23 @@ fire:
     fire_player_projectile((int)projectile_type);
 
 offsets:
+#ifdef WEAPON_TRANSFER_CONTEXT
+    displayed = keep_displayed(displayed_weapon);
+    if (displayed != 0) {
+        tile = weapon_tile;
+        frame = keep_frame((short)(tile - weapon_animations[displayed].base_tile));
+    } else {
+        frame = keep_frame((short)(weapon_tile - DEFAULT_WEAPON_TILE));
+    }
+    offset = keep_byte_offset((int)displayed_weapon * (FRAMES_PER_WEAPON * 4) +
+                              (int)frame * 4);
+    pair = (const short *)((const char *)&weapon_frame_words +
+                          FRAME_OFFSET_BASE_WORD * (int)sizeof(short) + offset);
+    x = keep_screen_x(pair[0]);
+    y = pair[1];
+    weapon_x_offset = x;
+    weapon_y_offset = y;
+#else
     displayed = displayed_weapon;
     if (displayed != 0) {
         tile = weapon_tile;
@@ -252,4 +317,5 @@ offsets:
     y = weapon_frame_words[offset + 1];
     weapon_x_offset = x;
     weapon_y_offset = y;
+#endif
 }
