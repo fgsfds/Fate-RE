@@ -33,11 +33,32 @@ def registrations():
     return result
 
 
+def mixed_routine(selector):
+    """Keep original routine context after its coverage is split into phases."""
+    from verify_c_leaf import WEAPON_ANIMATION_LAYOUT, BOARD_ACTOR_LAYOUT
+    layouts = {'update_weapon_animation': WEAPON_ANIMATION_LAYOUT,
+               'initialize_board_actors': BOARD_ACTOR_LAYOUT}
+    name = selector.rstrip('_')
+    if name not in layouts:
+        return None
+    layout = layouts[name]
+    objects = ({c['object'] for c in layout['contexts']} if 'contexts' in layout
+               else {layout['object']})
+    return dict(symbol=name, loaded_address=hex(layout['original_address']),
+                bytes=layout['original_size'],
+                compiler_bytes=sum(p['end']-p['begin'] for p in layout['phases']),
+                assembly_bytes=layout['assembly_size'], objects=objects,
+                assembly_symbols={r['symbol'] for r in layout['retained']})
+
+
 def resolve_units(selector):
     registered = registrations()
     symbol = selector if selector in registered else selector.rstrip('_') + '_'
     if symbol in registered:
         return select_units(load_units(), [registered[symbol]['object']])
+    mixed = mixed_routine(selector)
+    if mixed:
+        return select_units(load_units(), sorted(mixed['objects']))
     normalized = selector.removeprefix('src/').removesuffix('.c')
     units = [unit for unit in load_units()
              if unit.source == normalized or unit.name == Path(selector).stem]
@@ -49,8 +70,10 @@ def resolve_units(selector):
 
 def routine_context(selector):
     from verify_assembly_suite import ROUTINES, NON_ROUTINE_UNITS
+    mixed = mixed_routine(selector)
     assembly = [row for row in ROUTINES + NON_ROUTINE_UNITS
-                if row[0].rstrip('_') == selector.rstrip('_')]
+                if row[0].rstrip('_') == selector.rstrip('_')
+                or mixed and row[0] in mixed['assembly_symbols']]
     try:
         units = resolve_units(selector)
     except ValueError:
@@ -90,6 +113,8 @@ def routine_context(selector):
                assembly[0][3] + 0x25600 if assembly else 0)
     neighbors = sorted(spans, key=lambda row: abs(int(row['raw_offset'], 16) - address))[:3]
     return dict(
+        enclosing_routine=({k: value for k,value in mixed.items()
+                            if k not in ('objects','assembly_symbols')} if mixed else None),
         units=[dict(source='src/'+unit.source+'.c', object=unit.name+'.obj', flags=unit.flags)
                for unit in units[:4]], omitted_units=max(0, len(units)-4),
         routines=[dict(symbol=symbol, **row) for symbol, row in entries[:12]],
@@ -99,6 +124,7 @@ def routine_context(selector):
                                           in sorted(pointers.items())[:12]})
                   for symbol, source, binary, address, size, pointers in assembly[:2]],
         omitted_routines=max(0, len(entries)-12), source_hints=source_hints,
+        omitted_assembly=max(0, len(assembly)-2),
         fixtures=[fixture.script for fixture in fixtures(names)],
         behavior_fixtures=[BEHAVIOR_FIXTURES[name] for name in sorted(names)
                            if name in BEHAVIOR_FIXTURES],

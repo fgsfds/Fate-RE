@@ -99,6 +99,19 @@ class Registrations(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'unambiguous routine symbol'):
             reference_span(routine_context('dwrite'), 'dwrite')
 
+    def test_mixed_context_keeps_original_span_without_claiming_whole_c_coverage(self):
+        for symbol, span in [('initialize_board_actors',(0x1e91a,32303)),
+                             ('update_weapon_animation',(0x29cd4,1307))]:
+            context = routine_context(symbol)
+            self.assertEqual(reference_span(context,symbol),span)
+            self.assertTrue(context['routines'])
+            self.assertTrue(context['assembly'])
+            enclosing = context['enclosing_routine']
+            self.assertGreater(enclosing['compiler_bytes'],0)
+            self.assertGreater(enclosing['assembly_bytes'],0)
+            self.assertEqual(enclosing['compiler_bytes']+enclosing['assembly_bytes'],span[1])
+            self.assertNotIn(symbol.rstrip('_')+'_',registrations())
+
 
 class IncrementalCompiler(CompilerCacheContract, unittest.TestCase):
     def setUp(self):

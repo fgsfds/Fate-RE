@@ -249,22 +249,3 @@ section .retained_19 align=1 vstart=0x2a113 follows=.retained_18
 
 section .retained_20 align=1 vstart=0x2a175 follows=.retained_19
     mov [weapon_tile], ax
-
-section .retained_21 align=1 vstart=0x2a187 follows=.retained_20
-    movsx edx, si
-
-section .retained_22 align=1 vstart=0x2a191 follows=.retained_21
-    mov edx, eax
-    shl edx, byte 0x3
-    mov bx, [weapon_tile]
-    sub bx, [edx + weapon_base_tile]
-    jmp short .lookup_frame_offsets
-
-section .retained_23 align=1 vstart=0x2a1c1 follows=.retained_22
-    mov edx, eax
-    movsx eax, bx
-    shl edx, byte 0x5
-    shl eax, byte 0x2
-    add eax, edx
-    mov dx, [eax + frame_x_offset]
-    mov ax, [eax + frame_y_offset]

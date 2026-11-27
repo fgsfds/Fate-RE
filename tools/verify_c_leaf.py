@@ -3923,6 +3923,9 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
         raise ValueError('CODE binding output must be an empty dict; stale metadata rejected')
     segments, publics, externals, flat_groups, fixups = parsed_leaf_object(bytes(blob))
     public_name = leaf_public_name(symbol)
+    from bind_board_actor import PUBLICS as board_actor_publics, verify_context as verify_board_actor_context
+    if public_name in board_actor_publics:
+        verify_board_actor_context(blob)
     if public_name == 'setgamemode_dispatch_context_':
         from bind_setgamemode_dispatch import bind_section
         return bind_section(blob, symbol, address=address, code_bindings=code_bindings)
@@ -5201,6 +5204,19 @@ for _phase in WEAPON_ANIMATION_LAYOUT['phases']:
     _weapon_context = next(c for c in WEAPON_ANIMATION_LAYOUT['contexts'] if c['public'] == _phase['public'])
     LEAVES[_phase['symbol']] = (_phase['address']+0x25600, _phase['end']-_phase['begin'])
     LEAF_CODE_SLICES[_phase['symbol']] = (_phase['public'], _phase['begin'], _phase['end'], _weapon_context['size'])
+
+from bind_board_actor import LAYOUT as BOARD_ACTOR_LAYOUT
+for _name, _offset in BOARD_ACTOR_LAYOUT['DATA'].items():
+    if _name in DATA_OFFSETS and DATA_OFFSETS[_name] != _offset:
+        raise ValueError('Conflicting board actor DATA binding: '+_name)
+    DATA_OFFSETS[_name] = _offset
+for _phase in BOARD_ACTOR_LAYOUT['phases']:
+    _public = _phase['public']
+    LEAVES[_phase['symbol']] = (_phase['address']+0x25600, _phase['end']-_phase['begin'])
+    LEAF_CODE_SLICES[_phase['symbol']] = (_public, _phase['begin'], _phase['end'], _phase['context_size'])
+    LEAF_CONTEXT_SHA256[_public] = _phase['context_sha256']
+    LEAF_CONTEXT_RECORDS[_public] = BOARD_ACTOR_LAYOUT['records']
+    LEAF_CONTEXT_FIXUPS[_public] = {int(k): tuple(v) for k,v in _phase['fixups'].items()}
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

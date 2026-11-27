@@ -31,6 +31,11 @@ enum {
 extern const WeaponAnimation weapon_animations[WEAPON_COUNT];
 /* A complete DATA-image view keeps reachable non-table reads in bounds. */
 extern short weapon_frame_words[0x28a300UL / sizeof(short)];
+#ifdef WEAPON_TRANSFER_CONTEXT
+/* Separate X/Y views both bind to the same full mutable DATA object. */
+extern short weapon_frame_x_words[0x28a300UL / sizeof(short)];
+extern short weapon_frame_y_words[0x28a300UL / sizeof(short)];
+#endif
 extern volatile unsigned long game_clock;
 extern unsigned long last_frame_tick;
 extern volatile short weapon_input_bits, weapon_action, weapon_animation_state;
@@ -58,6 +63,8 @@ extern int keep_active_state(int);
 
 #ifdef WEAPON_TRANSFER_CONTEXT
 /* Register-only identities preserve their actual input at each boundary. */
+extern int keep_row_offset(int);
+#pragma aux keep_row_offset = "" parm nomemory [edx] value [edx] modify exact [];
 extern short keep_displayed(short);
 #pragma aux keep_displayed = "" parm nomemory [si] value [si] modify exact [];
 extern short keep_frame(short);
@@ -85,9 +92,6 @@ void update_weapon_animation(void)
     short tile, limit, next, previous, fire_tile, direction;
     short frame, x, y;
     int offset;
-#ifdef WEAPON_TRANSFER_CONTEXT
-    const short *pair;
-#endif
 
     if ((long)(game_clock - last_frame_tick) > 6) {
         last_frame_tick = game_clock;
@@ -290,17 +294,19 @@ offsets:
 #ifdef WEAPON_TRANSFER_CONTEXT
     displayed = keep_displayed(displayed_weapon);
     if (displayed != 0) {
-        tile = weapon_tile;
-        frame = keep_frame((short)(tile - weapon_animations[displayed].base_tile));
+        index = keep_row_offset((int)displayed * (int)sizeof(WeaponAnimation));
+        frame = keep_frame(weapon_tile);
+        frame = keep_frame((short)(frame - *(const short *)
+                          ((const char *)&weapon_animations + index)));
     } else {
         frame = keep_frame((short)(weapon_tile - DEFAULT_WEAPON_TILE));
     }
-    offset = keep_byte_offset((int)displayed_weapon * (FRAMES_PER_WEAPON * 4) +
-                              (int)frame * 4);
-    pair = (const short *)((const char *)&weapon_frame_words +
-                          FRAME_OFFSET_BASE_WORD * (int)sizeof(short) + offset);
-    x = keep_screen_x(pair[0]);
-    y = pair[1];
+    index = keep_row_offset((int)displayed_weapon * 3);
+    offset = keep_byte_offset((int)frame * 4 + index * 32);
+    x = keep_screen_x(*(short *)((char *)&weapon_frame_x_words +
+                                 FRAME_OFFSET_BASE_WORD * (int)sizeof(short) + offset));
+    y = *(short *)((char *)&weapon_frame_y_words +
+                   (FRAME_OFFSET_BASE_WORD + 1) * (int)sizeof(short) + offset);
     weapon_x_offset = x;
     weapon_y_offset = y;
 #else

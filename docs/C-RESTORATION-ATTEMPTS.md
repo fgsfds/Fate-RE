@@ -136,17 +136,14 @@ and `shrdor-evidence.json`, and `work/encounter-operand-integrate-nov27/audit.js
 
 ### Weapon animation tick and state allocation
 
-Watcom 10.5 `/4r /s /or /bt=dos` emits 1,175 bytes versus 1,307. A signed
-state-to-EDX identity after the idle branch gives a second 1,167-byte context;
-six exact control groups add 69 bytes without changing the five-save frame.
-Reusing proven pure slot factors and direction conversion adds another 55
-placed bytes. A third 1,164-byte context stages requested-slot reads before
-preceding AX stores and captures the displayed/frame words in SI/BX. Seven
-stack-independent groups add 84 bytes: 52 field-transfer bytes and 32 offset
-preparation bytes. Together 36 guarded phases supply 477 native bytes; 830
-remain assembly. The third context omits the unused EDI save, but none of its
-entry/return is selected. Production keeps the original five-register frame.
-No complete private context is a shared-ABI replacement.
+Watcom 10.5 `/4r /s /or /bt=dos` emits three private contexts of 1,175, 1,167
+and 1,191 bytes versus 1,307. Together 31 guarded phases supply 528 native
+bytes; 779 remain assembly. The third context stages requested-slot reads
+before preceding AX stores and now supplies the complete 116-byte offsets
+and return operation. Full-EDX row capture, BX frame capture and separate X/Y
+whole-DATA word views recover the final 51 tail bytes. All five saves/pops
+match, and its fixture requires original raw EAX, arithmetic flags and stack
+depth as well as modeled effects. No complete private context is byte-exact.
 
 The base context still first differs at `0x29cee`: it materializes tick 1 in
 EBX before the clock store. The state context instead first loads the clock
@@ -154,15 +151,27 @@ into EDX at `0x29cd9`. Branch-local `keep_tick(1/0)` calls restore the ordered
 clock block but drop ESI from the saved frame, first differing at `0x29cd7`;
 that trial is not integrated. Next unify the tick/store lifetime with the
 signed state allocation without changing the five saves or volatile order;
-do not repeat the two independent probes. The nonzero offset path first differs
-at `0x2a187`: the third context reads the tile into AX before sign-extending SI.
-Its final pointer addition also emits a relocated immediate instead of the
-original indexed load displacement. Next stage the nonzero row calculation in
-full EDX before the volatile tile read and keep the signed frame in BX; the two
-limit-field transfers still use BX instead of AX. Preserve the actual DATA
-extent `0x28a300` and valid definition slots 0..7. Evidence:
-`work/weapon-memory-order-nov27/placement-evidence.json` and
-`work/weapon-transfer-integrate-nov27/full-validation.json`.
+do not repeat the two independent probes. The remaining limit-field transfers
+still use BX instead of AX, and action checks use direct word comparisons
+instead of the original signed promotion. Next constrain those actual value
+lifetimes while retaining the now-exact offsets tail. Preserve the actual
+DATA extent `0x28a300` and valid definition slots 0..7. Evidence:
+`work/weapon-tail-nov27/placement-evidence.json` and the production fixture.
+
+### `initialize_board_actors`: initialization register lifetimes
+
+The full typed constant-write translation emits 21,580 bytes versus 32,303
+with Watcom 10.5 `/4r /s /or /bt=dos`. It reproduces the 501 disables and
+2,578 configuration writes for 115 actors across nine boards, but reorders
+stores. The first mismatch at `0x1e920` uses BL instead of CL for the disabled
+marker; the loop compares AX with 501 rather than promoted EDX with 500.
+Three compact typed operations now supply 85 exact bytes and 13 DATA sites;
+the larger translation is unlinked and earns no coverage. Next retain the
+signed slot in AX across indexed record stores instead of folding each slot
+into an absolute address, and preserve the CL marker lifetime. Saved XYZ,
+destination, waypoint and tile-row strides are 12, 16, 4 and 18 bytes; the last
+two tile words and the second waypoint word are untouched. Evidence:
+`work/board-actor-init-nov27/REPORT.md` and `boardgrp-evidence.json`.
 
 ### Video prompt-mode blocker
 

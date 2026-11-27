@@ -13,6 +13,9 @@ IMAGE_BASE = 0x10000
 
 def reference_span(context, selector):
     symbol = selector.rstrip('_')
+    enclosing = context.get('enclosing_routine')
+    if enclosing and enclosing['symbol'].rstrip('_') == symbol:
+        return int(enclosing['loaded_address'], 16), enclosing['bytes']
     exact = [r for r in context['routines'] if r['symbol'].rstrip('_') == symbol]
     assembly = [r for r in context['assembly'] if r['symbol'].rstrip('_') == symbol]
     if len(exact) + len(assembly) != 1:

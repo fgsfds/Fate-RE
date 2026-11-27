@@ -199,7 +199,7 @@ def bind_production(exe,build):
   for site,target in fields.items():loaded[site:site+4]=target.to_bytes(4,'little')
   install(address,exact,loaded)
  assert covered==set(range(ENTRY,ENTRY+SIZE)) and exact_body==exe[ENTRY+0x25600:ENTRY+0x25600+SIZE]
- assert sum(r['bytes'] for r in reports)==477 and sum(r['DATA_sites'] for r in reports)==36
+ assert sum(r['bytes'] for r in reports)==528 and sum(r['DATA_sites'] for r in reports)==40
  return blobs,bytes(run_body),reports
 
 def bind_natural(blob,context):
@@ -224,6 +224,8 @@ def context_controls(blob,context):
  from check_ripple_stack import mutate_public_byte
  from check_ripple_control import rename_external
  layout=v.WEAPON_ANIMATION_LAYOUT;public=context['public'];phase=next(p for p in layout['phases'] if p['public']==public);controls=[]
+ _,_,externals,_,fixups=v.parsed_leaf_object(blob)
+ frame_symbol=next(n for n in externals if n and n.startswith('_weapon_frame_') and n.endswith('_words'))
  def bind(b):return v.bind_leaf_details(b,phase['symbol'],v.DATA_OFFSETS,address=phase['address'],functions=v.FUNCTION_ADDRESSES,absolute_code=v.CODE_OFFSETS,code_bindings={})
  def reject(b,message):
   try:bind(b)
@@ -232,8 +234,7 @@ def context_controls(blob,context):
  baseline=bind(blob);roundtrip,changed=rewrite_fixup(blob,lambda f:False,lambda f:f)
  assert not changed and bind(roundtrip)==baseline
  reject(mutate_public_byte(blob,public,context['size']-1),'context digest');controls.append('private_return')
- reject(rename_external(blob,b'_weapon_frame_words',b'_weapon_frame_wordx'),'fixup records');controls.append('excluded_frame_external')
- _,_,externals,_,fixups=v.parsed_leaf_object(blob)
+ reject(rename_external(blob,frame_symbol.encode(),(frame_symbol[:-1]+'x').encode()),'fixup records');controls.append('excluded_frame_external')
  clock=externals.index('_game_clock');last=externals.index('_last_frame_tick');fire=externals.index('fire_player_projectile_')
  for name,predicate,change in [
   ('valid_DATA_target',lambda f:f.target==(2,clock),lambda f:replace(f,target=(2,last))),
@@ -251,7 +252,7 @@ def context_controls(blob,context):
   controls.append(name)
  saved_digest=v.LEAF_CONTEXT_SHA256.pop(public)
  try:
-  excluded=next(f for f in fixups if externals[f.target[1]]=='_weapon_frame_words')
+  excluded=next(f for f in fixups if externals[f.target[1]]==frame_symbol and not phase['begin']<=f.offset<phase['end'])
   reject(mutate_public_byte(blob,public,excluded.offset),'target/form/addend');controls.append('excluded_addend_without_digest')
   site=int(next(iter(context['branches'])));opcode=bytes.fromhex(context['branches'][str(site)][0])
   reject(mutate_public_byte(blob,public,site+len(opcode)),'compiler target');controls.append('branch_target_without_digest')
@@ -316,11 +317,13 @@ def main():
   calls+=len(observed[0][1])
   for row in natural_contexts:
    native=exercise(original,row['code'],case,row['base'],native=True);assert native[0]==observed[0],case['name']
+   if row['context'].get('exact_boundary'):
+    assert native[1:]==observed[1:],case['name']
    row['register_differences']+=native[1]!=observed[1];row['flag_differences']+=native[2]!=observed[2]
  private=[]
  for row in natural_contexts:
   context=row['context']
-  private.append(dict(public=context['public'],cases=len(rows),register_difference_cases=row['register_differences'],flag_difference_cases=row['flag_differences'],context_controls=context_controls(blobs[context['public']],context),code_controls=natural_code_controls(original,row['code'],row['base'],rows)))
- report=dict(status='PASS',cases=len(rows),projectile_calls=calls,private_contexts=private,placed_c_bytes=sum(s['bytes'] for s in spans),DATA_sites=sum(s['DATA_sites'] for s in spans),spans=spans,code_controls=code_controls(original,body,rows),scope='Original and placed full routine vs independent final-DATA/ordered-callback model, saved registers/stack/raw EAX/arithmetic flags. Complete private C contexts separately check modeled effects and saved ABI, not raw EAX/flags equivalence. Valid definition slots0..7 and actual LE DATA lookup bounds, including slot-zero negative frames. Projectile is stubbed; no volatile access trace, clock-ISR interleavings or projectile gameplay validation.')
+  private.append(dict(public=context['public'],cases=len(rows),exact_boundary_required=context.get('exact_boundary',False),register_difference_cases=row['register_differences'],flag_difference_cases=row['flag_differences'],context_controls=context_controls(blobs[context['public']],context),code_controls=natural_code_controls(original,row['code'],row['base'],rows)))
+ report=dict(status='PASS',cases=len(rows),projectile_calls=calls,private_contexts=private,placed_c_bytes=sum(s['bytes'] for s in spans),DATA_sites=sum(s['DATA_sites'] for s in spans),spans=spans,code_controls=code_controls(original,body,rows),scope='Original and placed full routine vs independent final-DATA/ordered-callback model, saved registers/stack/raw EAX/arithmetic flags. Complete private C contexts check modeled effects and saved ABI. Contexts marked exact_boundary additionally require original raw EAX/arithmetic flags and maximum stack depth; other private contexts remain diagnostic for those outputs. Valid definition slots0..7 and actual LE DATA lookup bounds, including slot-zero negative frames. Projectile is stubbed; no volatile access trace, clock-ISR interleavings or projectile gameplay validation.')
  a.output.write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8');print(json.dumps(report))
 if __name__=='__main__':main()

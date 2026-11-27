@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1526,
-  "unique_code_bytes": 194718,
-  "le_pointers": 10648,
+  "routines": 1524,
+  "unique_code_bytes": 194854,
+  "le_pointers": 10665,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1850,6 +1850,36 @@
       "le_pointers": 9
     },
     {
+      "symbol": "board_actor_activation_",
+      "object": "actorcfg.obj",
+      "object_sha256": "99a32a4eab35318fa68f1d3e3c5e6eede04ab53fcd7e5cbc011ae75ae340cbd0",
+      "sha256": "7360987135a53a3f007619feadc2f1790939b9e386b4397ce2cb88a433708cd2",
+      "raw_offset": "0x43f4d",
+      "loaded_address": "0x1e94d",
+      "bytes": 12,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "board_actor_destination_",
+      "object": "actorcfg.obj",
+      "object_sha256": "99a32a4eab35318fa68f1d3e3c5e6eede04ab53fcd7e5cbc011ae75ae340cbd0",
+      "sha256": "37fa222415d16d151bdb909259617b9c782fd69198448179a1b93957aec8cbb9",
+      "raw_offset": "0x43fa9",
+      "loaded_address": "0x1e9a9",
+      "bytes": 24,
+      "le_pointers": 4
+    },
+    {
+      "symbol": "board_actor_tiles_",
+      "object": "actorcfg.obj",
+      "object_sha256": "99a32a4eab35318fa68f1d3e3c5e6eede04ab53fcd7e5cbc011ae75ae340cbd0",
+      "sha256": "d5b668f345dd14e7448b7013dce12e101d87b9889500882bf1c0fb1d7b79f23f",
+      "raw_offset": "0x46213",
+      "loaded_address": "0x20c13",
+      "bytes": 49,
+      "le_pointers": 7
+    },
+    {
       "symbol": "restore_board_actor_sprites_",
       "object": "boardact.obj",
       "object_sha256": "2a47f57bcc52d26e6e479d6754ad5ac8f41ef484e6b9ab9aef9a6720d6fb3e84",
@@ -2192,62 +2222,12 @@
     {
       "symbol": "weapon_animation_2a17b_",
       "object": "wanxfer.obj",
-      "object_sha256": "60b197dd687b69e5764e70bc85277c60219dda0a570a44e4f738274ace7f8c9e",
-      "sha256": "bcc3056191e81ee250ab357e5e591e3760fa90ce8c244e22ae02d93a31559725",
+      "object_sha256": "1be67c10f2b583af2d17a6371ba3e0010b37103ef5c3b6c01d37fc75fa6a864e",
+      "sha256": "98965b0fceb7d08ae92c216bc3948233a92f60b0bd8eb8d2977d35f4fdab818e",
       "raw_offset": "0x4f77b",
       "loaded_address": "0x2a17b",
-      "bytes": 12,
-      "le_pointers": 1
-    },
-    {
-      "symbol": "weapon_animation_2a18a_",
-      "object": "wanim.obj",
-      "object_sha256": "e99c47845be5d4634b42faeac782504e76dad791ecd953fe21df719cbb5ec816",
-      "sha256": "b73f7cc6d67da4378ae52608d4df3e76dd5ba01b783e3e238ae599a08afb031c",
-      "raw_offset": "0x4f78a",
-      "loaded_address": "0x2a18a",
-      "bytes": 7,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "weapon_animation_2a1a6_",
-      "object": "wanxfer.obj",
-      "object_sha256": "60b197dd687b69e5764e70bc85277c60219dda0a570a44e4f738274ace7f8c9e",
-      "sha256": "c9a191a9091145b5b2c5f6190ada2843b6d398e30febcfcf885d08cbac52cf7d",
-      "raw_offset": "0x4f7a6",
-      "loaded_address": "0x2a1a6",
-      "bytes": 13,
-      "le_pointers": 1
-    },
-    {
-      "symbol": "weapon_animation_2a1b3_",
-      "object": "wanxfer.obj",
-      "object_sha256": "60b197dd687b69e5764e70bc85277c60219dda0a570a44e4f738274ace7f8c9e",
-      "sha256": "fc9e35e5a0d83fb52c018441f31c976c690ab8c02a4bf5cfc506ad120b52e3e4",
-      "raw_offset": "0x4f7b3",
-      "loaded_address": "0x2a1b3",
-      "bytes": 7,
-      "le_pointers": 1
-    },
-    {
-      "symbol": "weapon_animation_2a1ba_",
-      "object": "wanim.obj",
-      "object_sha256": "e99c47845be5d4634b42faeac782504e76dad791ecd953fe21df719cbb5ec816",
-      "sha256": "b73f7cc6d67da4378ae52608d4df3e76dd5ba01b783e3e238ae599a08afb031c",
-      "raw_offset": "0x4f7ba",
-      "loaded_address": "0x2a1ba",
-      "bytes": 7,
-      "le_pointers": 0
-    },
-    {
-      "symbol": "weapon_animation_2a1dc_",
-      "object": "wanim.obj",
-      "object_sha256": "4622157dadb7fc2182080c7a455e7fc589371237a05788362db8dfb633621290",
-      "sha256": "72c895cfaa516f999d9432f3f574cd9857afac018aff1aa10cab423069016b39",
-      "raw_offset": "0x4f7dc",
-      "loaded_address": "0x2a1dc",
-      "bytes": 19,
-      "le_pointers": 2
+      "bytes": 116,
+      "le_pointers": 9
     },
     {
       "symbol": "update_sprite_view_",

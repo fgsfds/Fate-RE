@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
   "routines": 500,
-  "unique_code_bytes": 219921,
-  "le_pointers": 11901,
+  "unique_code_bytes": 219785,
+  "le_pointers": 11884,
   "non_routine_code_spans": [
     {
       "symbol": "capture_after_open",
@@ -1940,18 +1940,6 @@
       "public_entry": "0x2a56e",
       "binary_offset": 0,
       "le_pointers": 253
-    },
-    {
-      "symbol": "initialize_board_actors",
-      "source": "src/fate/board_actor_initialization.asm",
-      "binary": "board_actor_initialization.bin",
-      "sha256": "4cc37061363401ff7405eab2fa07bc8b2e0c9123b9244f696638e1fc8d240343",
-      "bytes": 32303,
-      "raw_offset": "0x43f1a",
-      "loaded_address": "0x1e91a",
-      "public_entry": "0x1e91a",
-      "binary_offset": 0,
-      "le_pointers": 2579
     },
     {
       "symbol": "initialize_environment",
@@ -7714,40 +7702,52 @@
       "le_pointers": 1
     },
     {
-      "symbol": "weapon_animation_retained_21",
-      "source": "src/fate/weapon_animation.asm",
-      "binary": "weapon_animation.bin",
-      "sha256": "5d9cf9b7904120bdde5f6d28ecd777775f28df37ae067e953d88b1a7881ec283",
-      "bytes": 3,
-      "raw_offset": "0x4f787",
-      "loaded_address": "0x2a187",
-      "public_entry": "0x2a187",
-      "binary_offset": 779,
-      "le_pointers": 0
+      "symbol": "board_actor_retained_0",
+      "source": "src/fate/board_actor_initialization.asm",
+      "binary": "board_actor_initialization.bin",
+      "sha256": "cc1d550adcfc75fcbd5f1f3baa3599178b1f233cbda4c73c3aa7062dae44143c",
+      "bytes": 51,
+      "raw_offset": "0x43f1a",
+      "loaded_address": "0x1e91a",
+      "public_entry": "0x1e91a",
+      "binary_offset": 0,
+      "le_pointers": 1
     },
     {
-      "symbol": "weapon_animation_retained_22",
-      "source": "src/fate/weapon_animation.asm",
-      "binary": "weapon_animation.bin",
-      "sha256": "aa961cc6ebb371f4a6d325e3ccb51031d2fe08e6cff63f6b5b21e99cdeaaa151",
-      "bytes": 21,
-      "raw_offset": "0x4f791",
-      "loaded_address": "0x2a191",
-      "public_entry": "0x2a191",
-      "binary_offset": 782,
-      "le_pointers": 2
+      "symbol": "board_actor_retained_1",
+      "source": "src/fate/board_actor_initialization.asm",
+      "binary": "board_actor_initialization.bin",
+      "sha256": "01f48af11a386bcb654ddbaf3ff6879a40725c7c17105dd02bc43bf7fdc6e71c",
+      "bytes": 80,
+      "raw_offset": "0x43f59",
+      "loaded_address": "0x1e959",
+      "public_entry": "0x1e959",
+      "binary_offset": 51,
+      "le_pointers": 10
     },
     {
-      "symbol": "weapon_animation_retained_23",
-      "source": "src/fate/weapon_animation.asm",
-      "binary": "weapon_animation.bin",
-      "sha256": "091195329cf03b8b3f5be9700f85cab17f0f917865e4d2c66a1b80f7b79cc719",
-      "bytes": 27,
-      "raw_offset": "0x4f7c1",
-      "loaded_address": "0x2a1c1",
-      "public_entry": "0x2a1c1",
-      "binary_offset": 803,
-      "le_pointers": 2
+      "symbol": "board_actor_retained_2",
+      "source": "src/fate/board_actor_initialization.asm",
+      "binary": "board_actor_initialization.bin",
+      "sha256": "48f52f7c71b8c54ef04415270db53a4f596caf851c7df125e096b320be33d424",
+      "bytes": 8786,
+      "raw_offset": "0x43fc1",
+      "loaded_address": "0x1e9c1",
+      "public_entry": "0x1e9c1",
+      "binary_offset": 131,
+      "le_pointers": 1028
+    },
+    {
+      "symbol": "board_actor_retained_3",
+      "source": "src/fate/board_actor_initialization.asm",
+      "binary": "board_actor_initialization.bin",
+      "sha256": "a3ed25d8eca0c4044bb094a9769499092b384efa3dbe64f2f14b7c9efbd7a1ec",
+      "bytes": 23301,
+      "raw_offset": "0x46244",
+      "loaded_address": "0x20c44",
+      "public_entry": "0x20c44",
+      "binary_offset": 8917,
+      "le_pointers": 1527
     }
   ]
 }

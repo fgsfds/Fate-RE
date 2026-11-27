@@ -16,7 +16,9 @@
     "_requested_weapon": 545350,
     "_game_clock": 2653832,
     "_weapon_animations": 76648,
-    "_weapon_frame_words": 0
+    "_weapon_frame_words": 0,
+    "_weapon_frame_x_words": 0,
+    "_weapon_frame_y_words": 0
   },
   "functions": {
     "fire_player_projectile_": 74913
@@ -179,10 +181,10 @@
       "symbol": "weapon_animation_29dca_",
       "public": "update_weapon_animation_transfer_context_",
       "address": 171466,
-      "begin": 229,
-      "end": 242,
+      "begin": 230,
+      "end": 243,
       "meaning": "Ordered field transfer",
-      "entry_contract": "AX is the primary start tile; reload the signed requested slot into EDX before storing AX to weapon_tile. Preserve both ordered volatile accesses.",
+      "entry_contract": "AX is primary start tile; signed requested-slot reload into EDX precedes the tile store.",
       "memory_order": [
         {
           "name": "_requested_weapon",
@@ -254,10 +256,10 @@
       "symbol": "weapon_animation_29e02_",
       "public": "update_weapon_animation_transfer_context_",
       "address": 171522,
-      "begin": 286,
-      "end": 299,
+      "begin": 287,
+      "end": 300,
       "meaning": "Ordered field transfer",
-      "entry_contract": "AX is the primary firing tile; reload the signed requested slot into EDX before storing AX to projectile_frame.",
+      "entry_contract": "AX is primary firing tile; signed requested-slot reload into EDX precedes projectile-frame store.",
       "memory_order": [
         {
           "name": "_requested_weapon",
@@ -408,10 +410,10 @@
       "symbol": "weapon_animation_29ebc_",
       "public": "update_weapon_animation_transfer_context_",
       "address": 171708,
-      "begin": 454,
-      "end": 467,
+      "begin": 455,
+      "end": 468,
       "meaning": "Ordered field transfer",
-      "entry_contract": "AX is the secondary start tile; reload the signed requested slot into EDX before storing AX to weapon_tile.",
+      "entry_contract": "AX is secondary start tile; signed requested-slot reload into EDX precedes tile store.",
       "memory_order": [
         {
           "name": "_requested_weapon",
@@ -483,10 +485,10 @@
       "symbol": "weapon_animation_29ef4_",
       "public": "update_weapon_animation_transfer_context_",
       "address": 171764,
-      "begin": 511,
-      "end": 524,
+      "begin": 512,
+      "end": 525,
       "meaning": "Ordered field transfer",
-      "entry_contract": "AX is the secondary firing tile; reload the signed requested slot into EDX before storing AX to projectile_frame.",
+      "entry_contract": "AX is secondary firing tile; signed requested-slot reload into EDX precedes projectile-frame store.",
       "memory_order": [
         {
           "name": "_requested_weapon",
@@ -682,112 +684,57 @@
       "symbol": "weapon_animation_2a17b_",
       "public": "update_weapon_animation_transfer_context_",
       "address": 172411,
-      "begin": 1056,
-      "end": 1068,
-      "meaning": "Frame-offset preparation",
-      "entry_contract": "Capture displayed slot in SI, test the signed word, branch to default-frame calculation for zero. No prior register inputs or stack dependence.",
+      "begin": 1075,
+      "end": 1191,
+      "meaning": "Complete frame-offset calculation and return",
+      "entry_contract": "No live input register is required at the common offsets entry. Read displayed/tile in original order, compute signed frame and byte row offsets, read both in-DATA words, store X/Y, and restore the original five-save frame. Frame-relative incoming ESP must match the original prologue. All branch destinations within this group retain corresponding instruction boundaries.",
       "memory_order": [
         {
           "name": "_displayed_weapon",
           "offset": 3,
           "target": 535522
-        }
-      ]
-    },
-    {
-      "symbol": "weapon_animation_2a18a_",
-      "public": "update_weapon_animation_",
-      "address": 172426,
-      "begin": 215,
-      "end": 222,
-      "meaning": "Three-times-slot factor for displayed base tile",
-      "entry_contract": "EDX is the signed definition/displayed slot 0..7. EAX becomes 3*EDX, EDX and every other register are unchanged; SUB defines the same flags. No memory, calls or stack operations.",
-      "memory_order": []
-    },
-    {
-      "symbol": "weapon_animation_2a1a6_",
-      "public": "update_weapon_animation_transfer_context_",
-      "address": 172454,
-      "begin": 1096,
-      "end": 1109,
-      "meaning": "Frame-offset preparation",
-      "entry_contract": "Default displayed slot is zero. Read weapon_tile into BX and subtract1053; only the signed low word is consumed by the later frame calculation. Upper EBX/flags are overwritten before use.",
-      "memory_order": [
-        {
-          "name": "_weapon_tile",
-          "offset": 3,
-          "target": 535524
-        }
-      ]
-    },
-    {
-      "symbol": "weapon_animation_2a1b3_",
-      "public": "update_weapon_animation_transfer_context_",
-      "address": 172467,
-      "begin": 1109,
-      "end": 1116,
-      "meaning": "Frame-offset preparation",
-      "entry_contract": "BX is the signed frame word from either predecessor; reload the current displayed slot into full EDX for the retained row calculation. Other registers and flags are unchanged.",
-      "memory_order": [
-        {
-          "name": "_displayed_weapon",
-          "offset": 3,
-          "target": 535522
-        }
-      ]
-    },
-    {
-      "symbol": "weapon_animation_2a1ba_",
-      "public": "update_weapon_animation_",
-      "address": 172474,
-      "begin": 215,
-      "end": 222,
-      "meaning": "Three-times-slot factor for displayed frame row",
-      "entry_contract": "EDX is the signed definition/displayed slot 0..7. EAX becomes 3*EDX, EDX and every other register are unchanged; SUB defines the same flags. No memory, calls or stack operations.",
-      "memory_order": []
-    },
-    {
-      "symbol": "weapon_animation_2a1dc_",
-      "address": 172508,
-      "begin": 1156,
-      "end": 1175,
-      "meaning": "Store screen offsets from DX and AX and return with all five registers restored.",
-      "entry_contract": "DX and AX hold X and Y. The same five saved registers are present in the same stack order.",
-      "memory_order": [
-        {
-          "reference_instruction": 172508,
-          "compiler_instruction": 172376,
-          "text": "mov word ptr [0x7dee8], dx",
-          "operands": [
-            {
-              "operand": 0,
-              "access": 2,
-              "bytes": 2,
-              "base": null,
-              "index": null,
-              "scale": 1,
-              "displacement": 515816
-            }
-          ]
         },
         {
-          "reference_instruction": 172515,
-          "compiler_instruction": 172383,
-          "text": "mov word ptr [0x7deea], ax",
-          "operands": [
-            {
-              "operand": 0,
-              "access": 2,
-              "bytes": 2,
-              "base": null,
-              "index": null,
-              "scale": 1,
-              "displacement": 515818
-            }
-          ]
+          "name": "_weapon_tile",
+          "offset": 30,
+          "target": 535524
+        },
+        {
+          "name": "_weapon_animations",
+          "offset": 37,
+          "target": 600936
+        },
+        {
+          "name": "_weapon_tile",
+          "offset": 46,
+          "target": 535524
+        },
+        {
+          "name": "_displayed_weapon",
+          "offset": 59,
+          "target": 535522
+        },
+        {
+          "name": "_weapon_frame_x_words",
+          "offset": 86,
+          "target": 600168
+        },
+        {
+          "name": "_weapon_frame_y_words",
+          "offset": 93,
+          "target": 600170
+        },
+        {
+          "name": "_weapon_x_offset",
+          "offset": 100,
+          "target": 1040104
+        },
+        {
+          "name": "_weapon_y_offset",
+          "offset": 106,
+          "target": 1040106
         }
-      ],
-      "public": "update_weapon_animation_"
+      ]
     }
   ],
   "retained": [
@@ -1037,36 +984,9 @@
       "fixups": {
         "2": 535524
       }
-    },
-    {
-      "symbol": "weapon_animation_retained_21",
-      "address": 172423,
-      "size": 3,
-      "binary_offset": 779,
-      "fixups": {}
-    },
-    {
-      "symbol": "weapon_animation_retained_22",
-      "address": 172433,
-      "size": 21,
-      "binary_offset": 782,
-      "fixups": {
-        "8": 535524,
-        "15": 600936
-      }
-    },
-    {
-      "symbol": "weapon_animation_retained_23",
-      "address": 172481,
-      "size": 27,
-      "binary_offset": 803,
-      "fixups": {
-        "16": 600168,
-        "23": 600170
-      }
     }
   ],
-  "assembly_size": 830,
+  "assembly_size": 779,
   "contexts": [
     {
       "public": "update_weapon_animation_",
@@ -5880,9 +5800,10 @@
       "public": "update_weapon_animation_transfer_context_",
       "object": "wanxfer",
       "address": 171220,
-      "size": 1164,
+      "size": 1191,
       "prefix": 0,
-      "sha256": "6fc45ecf89dad76e87e86be06825ff993531104fa0b560d614579e637d9501fe",
+      "exact_boundary": true,
+      "sha256": "9749056d3c07cb60e8e0ef003d30897bbae184e5816a73b8c5ceec2a1b820b72",
       "literal_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "records": {
         "flat_groups": [
@@ -5891,7 +5812,7 @@
         "fixups": [
           [
             1,
-            5,
+            6,
             4,
             9,
             false,
@@ -5908,7 +5829,7 @@
           ],
           [
             1,
-            11,
+            12,
             4,
             9,
             false,
@@ -5925,7 +5846,7 @@
           ],
           [
             1,
-            21,
+            22,
             4,
             9,
             false,
@@ -5942,7 +5863,7 @@
           ],
           [
             1,
-            31,
+            32,
             4,
             9,
             false,
@@ -5959,7 +5880,7 @@
           ],
           [
             1,
-            46,
+            47,
             4,
             9,
             false,
@@ -5976,7 +5897,7 @@
           ],
           [
             1,
-            65,
+            66,
             4,
             9,
             false,
@@ -5993,7 +5914,7 @@
           ],
           [
             1,
-            78,
+            79,
             4,
             9,
             false,
@@ -6010,7 +5931,7 @@
           ],
           [
             1,
-            84,
+            85,
             4,
             9,
             false,
@@ -6027,7 +5948,7 @@
           ],
           [
             1,
-            107,
+            108,
             4,
             9,
             false,
@@ -6044,7 +5965,7 @@
           ],
           [
             1,
-            114,
+            115,
             4,
             9,
             false,
@@ -6061,7 +5982,7 @@
           ],
           [
             1,
-            122,
+            123,
             4,
             9,
             false,
@@ -6078,7 +5999,7 @@
           ],
           [
             1,
-            129,
+            130,
             4,
             9,
             false,
@@ -6095,7 +6016,7 @@
           ],
           [
             1,
-            136,
+            137,
             4,
             9,
             false,
@@ -6112,7 +6033,7 @@
           ],
           [
             1,
-            142,
+            143,
             4,
             9,
             false,
@@ -6129,7 +6050,7 @@
           ],
           [
             1,
-            149,
+            150,
             4,
             9,
             false,
@@ -6146,7 +6067,7 @@
           ],
           [
             1,
-            156,
+            157,
             4,
             9,
             false,
@@ -6163,7 +6084,7 @@
           ],
           [
             1,
-            176,
+            177,
             4,
             9,
             false,
@@ -6180,7 +6101,7 @@
           ],
           [
             1,
-            188,
+            189,
             4,
             9,
             false,
@@ -6197,7 +6118,7 @@
           ],
           [
             1,
-            201,
+            202,
             4,
             9,
             false,
@@ -6214,7 +6135,7 @@
           ],
           [
             1,
-            207,
+            208,
             4,
             9,
             false,
@@ -6231,7 +6152,7 @@
           ],
           [
             1,
-            225,
+            226,
             4,
             9,
             false,
@@ -6248,7 +6169,7 @@
           ],
           [
             1,
-            232,
+            233,
             4,
             9,
             false,
@@ -6265,7 +6186,7 @@
           ],
           [
             1,
-            238,
+            239,
             4,
             9,
             false,
@@ -6282,7 +6203,7 @@
           ],
           [
             1,
-            253,
+            254,
             4,
             9,
             false,
@@ -6299,7 +6220,7 @@
           ],
           [
             1,
-            260,
+            261,
             4,
             9,
             false,
@@ -6316,7 +6237,7 @@
           ],
           [
             1,
-            267,
+            268,
             4,
             9,
             false,
@@ -6333,7 +6254,7 @@
           ],
           [
             1,
-            282,
+            283,
             4,
             9,
             false,
@@ -6350,7 +6271,7 @@
           ],
           [
             1,
-            289,
+            290,
             4,
             9,
             false,
@@ -6367,7 +6288,7 @@
           ],
           [
             1,
-            295,
+            296,
             4,
             9,
             false,
@@ -6384,7 +6305,7 @@
           ],
           [
             1,
-            310,
+            311,
             4,
             9,
             false,
@@ -6401,7 +6322,7 @@
           ],
           [
             1,
-            317,
+            318,
             4,
             9,
             false,
@@ -6418,7 +6339,7 @@
           ],
           [
             1,
-            323,
+            324,
             4,
             9,
             false,
@@ -6435,7 +6356,7 @@
           ],
           [
             1,
-            329,
+            330,
             4,
             9,
             false,
@@ -6452,7 +6373,7 @@
           ],
           [
             1,
-            336,
+            337,
             4,
             9,
             false,
@@ -6469,7 +6390,7 @@
           ],
           [
             1,
-            353,
+            354,
             4,
             9,
             false,
@@ -6486,7 +6407,7 @@
           ],
           [
             1,
-            359,
+            360,
             4,
             9,
             false,
@@ -6503,7 +6424,7 @@
           ],
           [
             1,
-            366,
+            367,
             4,
             9,
             false,
@@ -6520,7 +6441,7 @@
           ],
           [
             1,
-            384,
+            385,
             4,
             9,
             false,
@@ -6537,7 +6458,7 @@
           ],
           [
             1,
-            398,
+            399,
             4,
             9,
             false,
@@ -6554,7 +6475,7 @@
           ],
           [
             1,
-            413,
+            414,
             4,
             9,
             false,
@@ -6571,7 +6492,7 @@
           ],
           [
             1,
-            426,
+            427,
             4,
             9,
             false,
@@ -6588,7 +6509,7 @@
           ],
           [
             1,
-            432,
+            433,
             4,
             9,
             false,
@@ -6605,7 +6526,7 @@
           ],
           [
             1,
-            450,
+            451,
             4,
             9,
             false,
@@ -6622,7 +6543,7 @@
           ],
           [
             1,
-            457,
+            458,
             4,
             9,
             false,
@@ -6639,7 +6560,7 @@
           ],
           [
             1,
-            463,
+            464,
             4,
             9,
             false,
@@ -6656,7 +6577,7 @@
           ],
           [
             1,
-            478,
+            479,
             4,
             9,
             false,
@@ -6673,7 +6594,7 @@
           ],
           [
             1,
-            485,
+            486,
             4,
             9,
             false,
@@ -6690,7 +6611,7 @@
           ],
           [
             1,
-            492,
+            493,
             4,
             9,
             false,
@@ -6707,7 +6628,7 @@
           ],
           [
             1,
-            507,
+            508,
             4,
             9,
             false,
@@ -6724,7 +6645,7 @@
           ],
           [
             1,
-            514,
+            515,
             4,
             9,
             false,
@@ -6741,7 +6662,7 @@
           ],
           [
             1,
-            520,
+            521,
             4,
             9,
             false,
@@ -6758,7 +6679,7 @@
           ],
           [
             1,
-            535,
+            536,
             4,
             9,
             false,
@@ -6775,7 +6696,7 @@
           ],
           [
             1,
-            555,
+            556,
             4,
             9,
             false,
@@ -6792,7 +6713,7 @@
           ],
           [
             1,
-            564,
+            565,
             4,
             9,
             false,
@@ -6809,7 +6730,7 @@
           ],
           [
             1,
-            571,
+            572,
             4,
             9,
             false,
@@ -6826,7 +6747,7 @@
           ],
           [
             1,
-            588,
+            589,
             4,
             9,
             false,
@@ -6843,7 +6764,7 @@
           ],
           [
             1,
-            599,
+            600,
             4,
             9,
             false,
@@ -6860,7 +6781,7 @@
           ],
           [
             1,
-            606,
+            607,
             4,
             9,
             false,
@@ -6877,7 +6798,7 @@
           ],
           [
             1,
-            626,
+            627,
             4,
             9,
             false,
@@ -6894,7 +6815,7 @@
           ],
           [
             1,
-            645,
+            646,
             4,
             9,
             false,
@@ -6911,7 +6832,7 @@
           ],
           [
             1,
-            652,
+            653,
             4,
             9,
             false,
@@ -6928,7 +6849,7 @@
           ],
           [
             1,
-            661,
+            662,
             4,
             9,
             false,
@@ -6945,7 +6866,7 @@
           ],
           [
             1,
-            689,
+            690,
             4,
             9,
             false,
@@ -6962,7 +6883,7 @@
           ],
           [
             1,
-            697,
+            698,
             4,
             9,
             false,
@@ -6979,7 +6900,7 @@
           ],
           [
             1,
-            703,
+            704,
             4,
             9,
             false,
@@ -6996,7 +6917,7 @@
           ],
           [
             1,
-            710,
+            711,
             4,
             9,
             false,
@@ -7013,41 +6934,7 @@
           ],
           [
             1,
-            722,
-            4,
-            9,
-            false,
-            [
-              1,
-              2
-            ],
-            [
-              2,
-              8
-            ],
-            0,
-            "_weapon_tile"
-          ],
-          [
-            1,
-            730,
-            4,
-            9,
-            false,
-            [
-              1,
-              2
-            ],
-            [
-              2,
-              8
-            ],
-            0,
-            "_weapon_tile"
-          ],
-          [
-            1,
-            743,
+            729,
             4,
             9,
             false,
@@ -7064,7 +6951,7 @@
           ],
           [
             1,
-            752,
+            741,
             4,
             9,
             false,
@@ -7081,7 +6968,58 @@
           ],
           [
             1,
-            759,
+            749,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            762,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              11
+            ],
+            0,
+            "_frame_direction"
+          ],
+          [
+            1,
+            771,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            778,
             4,
             9,
             false,
@@ -7098,7 +7036,7 @@
           ],
           [
             1,
-            776,
+            795,
             4,
             9,
             false,
@@ -7115,7 +7053,7 @@
           ],
           [
             1,
-            787,
+            806,
             4,
             9,
             false,
@@ -7132,7 +7070,7 @@
           ],
           [
             1,
-            794,
+            813,
             4,
             9,
             false,
@@ -7149,7 +7087,7 @@
           ],
           [
             1,
-            811,
+            830,
             4,
             9,
             false,
@@ -7166,7 +7104,7 @@
           ],
           [
             1,
-            822,
+            841,
             4,
             9,
             false,
@@ -7183,7 +7121,7 @@
           ],
           [
             1,
-            828,
+            847,
             4,
             9,
             false,
@@ -7200,7 +7138,7 @@
           ],
           [
             1,
-            837,
+            856,
             4,
             9,
             false,
@@ -7217,7 +7155,7 @@
           ],
           [
             1,
-            865,
+            884,
             4,
             9,
             false,
@@ -7234,7 +7172,7 @@
           ],
           [
             1,
-            876,
+            895,
             4,
             9,
             false,
@@ -7251,7 +7189,7 @@
           ],
           [
             1,
-            883,
+            902,
             4,
             9,
             false,
@@ -7268,7 +7206,7 @@
           ],
           [
             1,
-            891,
+            910,
             4,
             9,
             false,
@@ -7285,7 +7223,7 @@
           ],
           [
             1,
-            897,
+            916,
             4,
             9,
             false,
@@ -7302,7 +7240,7 @@
           ],
           [
             1,
-            917,
+            936,
             4,
             9,
             false,
@@ -7319,7 +7257,7 @@
           ],
           [
             1,
-            924,
+            943,
             4,
             9,
             false,
@@ -7336,7 +7274,7 @@
           ],
           [
             1,
-            935,
+            954,
             4,
             9,
             false,
@@ -7353,7 +7291,7 @@
           ],
           [
             1,
-            942,
+            961,
             4,
             9,
             false,
@@ -7370,7 +7308,7 @@
           ],
           [
             1,
-            956,
+            975,
             4,
             9,
             false,
@@ -7387,7 +7325,7 @@
           ],
           [
             1,
-            963,
+            982,
             4,
             9,
             false,
@@ -7404,7 +7342,7 @@
           ],
           [
             1,
-            973,
+            992,
             4,
             9,
             false,
@@ -7421,7 +7359,7 @@
           ],
           [
             1,
-            979,
+            998,
             4,
             9,
             false,
@@ -7438,7 +7376,7 @@
           ],
           [
             1,
-            985,
+            1004,
             4,
             9,
             false,
@@ -7455,7 +7393,7 @@
           ],
           [
             1,
-            1003,
+            1022,
             4,
             9,
             false,
@@ -7472,7 +7410,7 @@
           ],
           [
             1,
-            1014,
+            1033,
             4,
             9,
             false,
@@ -7489,7 +7427,7 @@
           ],
           [
             1,
-            1021,
+            1040,
             4,
             9,
             false,
@@ -7506,7 +7444,7 @@
           ],
           [
             1,
-            1036,
+            1055,
             4,
             9,
             false,
@@ -7523,7 +7461,7 @@
           ],
           [
             1,
-            1047,
+            1066,
             4,
             9,
             false,
@@ -7540,7 +7478,7 @@
           ],
           [
             1,
-            1052,
+            1071,
             4,
             9,
             true,
@@ -7557,7 +7495,7 @@
           ],
           [
             1,
-            1059,
+            1078,
             4,
             9,
             false,
@@ -7574,41 +7512,7 @@
           ],
           [
             1,
-            1070,
-            4,
-            9,
-            false,
-            [
-              1,
-              2
-            ],
-            [
-              2,
-              8
-            ],
-            0,
-            "_weapon_tile"
-          ],
-          [
-            1,
-            1090,
-            4,
-            9,
-            false,
-            [
-              1,
-              2
-            ],
-            [
-              2,
-              7
-            ],
-            0,
-            "_weapon_animations"
-          ],
-          [
-            1,
-            1099,
+            1105,
             4,
             9,
             false,
@@ -7635,6 +7539,40 @@
             ],
             [
               2,
+              7
+            ],
+            0,
+            "_weapon_animations"
+          ],
+          [
+            1,
+            1121,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              8
+            ],
+            0,
+            "_weapon_tile"
+          ],
+          [
+            1,
+            1134,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
               9
             ],
             0,
@@ -7642,7 +7580,7 @@
           ],
           [
             1,
-            1135,
+            1161,
             4,
             9,
             false,
@@ -7655,11 +7593,11 @@
               16
             ],
             0,
-            "_weapon_frame_words"
+            "_weapon_frame_x_words"
           ],
           [
             1,
-            1149,
+            1168,
             4,
             9,
             false,
@@ -7672,11 +7610,11 @@
               17
             ],
             0,
-            "_weapon_x_offset"
+            "_weapon_frame_y_words"
           ],
           [
             1,
-            1155,
+            1175,
             4,
             9,
             false,
@@ -7689,547 +7627,579 @@
               18
             ],
             0,
+            "_weapon_x_offset"
+          ],
+          [
+            1,
+            1181,
+            4,
+            9,
+            false,
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              19
+            ],
+            0,
             "_weapon_y_offset"
           ]
         ]
       },
       "fixups": {
-        "5": [
+        "6": [
           "_game_clock",
           false,
           0
         ],
-        "11": [
+        "12": [
           "_last_frame_tick",
           false,
           0
         ],
-        "21": [
+        "22": [
           "_game_clock",
           false,
           0
         ],
-        "31": [
+        "32": [
           "_last_frame_tick",
           false,
           0
         ],
-        "46": [
+        "47": [
           "_weapon_animation_state",
           false,
           0
         ],
-        "65": [
+        "66": [
           "_weapon_input_bits",
           false,
           0
         ],
-        "78": [
+        "79": [
           "_selected_weapon",
           false,
           0
         ],
-        "84": [
+        "85": [
           "_requested_weapon",
           false,
           0
         ],
-        "107": [
+        "108": [
           "_weapon_animations",
           false,
           4
         ],
-        "114": [
+        "115": [
           "_weapon_tile",
           false,
           0
         ],
-        "122": [
+        "123": [
           "_weapon_animations",
           false,
           6
         ],
-        "129": [
+        "130": [
           "_displayed_weapon",
           false,
           0
         ],
-        "136": [
+        "137": [
           "_animation_limit",
           false,
           0
         ],
-        "142": [
+        "143": [
           "_weapon_tile",
           false,
           0
         ],
-        "149": [
+        "150": [
           "_animation_limit",
           false,
           0
         ],
-        "156": [
+        "157": [
           "_weapon_animation_state",
           false,
           0
         ],
-        "176": [
+        "177": [
           "_frame_direction",
           false,
           0
         ],
-        "188": [
+        "189": [
           "_weapon_action",
           false,
           0
         ],
-        "201": [
+        "202": [
           "_requested_weapon",
           false,
           0
         ],
-        "207": [
+        "208": [
           "_displayed_weapon",
           false,
           0
         ],
-        "225": [
+        "226": [
           "_weapon_animations",
           false,
           8
         ],
-        "232": [
+        "233": [
           "_requested_weapon",
           false,
           0
         ],
-        "238": [
+        "239": [
           "_weapon_tile",
           false,
           0
         ],
-        "253": [
+        "254": [
           "_weapon_animations",
           false,
           10
         ],
-        "260": [
+        "261": [
           "_requested_weapon",
           false,
           0
         ],
-        "267": [
+        "268": [
           "_animation_limit",
           false,
           0
         ],
-        "282": [
+        "283": [
           "_weapon_animations",
           false,
           12
         ],
-        "289": [
+        "290": [
           "_requested_weapon",
           false,
           0
         ],
-        "295": [
+        "296": [
           "_projectile_frame",
           false,
           0
         ],
-        "310": [
+        "311": [
           "_weapon_animations",
           false,
           14
         ],
-        "317": [
+        "318": [
           "_animation_limit",
           false,
           0
         ],
-        "323": [
+        "324": [
           "_projectile_type",
           false,
           0
         ],
-        "329": [
+        "330": [
           "_weapon_tile",
           false,
           0
         ],
-        "336": [
+        "337": [
           "_weapon_animation_state",
           false,
           0
         ],
-        "353": [
+        "354": [
           "_frame_direction",
           false,
           0
         ],
-        "359": [
+        "360": [
           "_projectile_frame",
           false,
           0
         ],
-        "366": [
+        "367": [
           "_weapon_tile",
           false,
           0
         ],
-        "384": [
+        "385": [
           "_weapon_action",
           false,
           0
         ],
-        "398": [
+        "399": [
           "_requested_weapon",
           false,
           0
         ],
-        "413": [
+        "414": [
           "_weapon_animations",
           false,
           16
         ],
-        "426": [
+        "427": [
           "_requested_weapon",
           false,
           0
         ],
-        "432": [
+        "433": [
           "_displayed_weapon",
           false,
           0
         ],
-        "450": [
+        "451": [
           "_weapon_animations",
           false,
           16
         ],
-        "457": [
+        "458": [
           "_requested_weapon",
           false,
           0
         ],
-        "463": [
+        "464": [
           "_weapon_tile",
           false,
           0
         ],
-        "478": [
+        "479": [
           "_weapon_animations",
           false,
           18
         ],
-        "485": [
+        "486": [
           "_requested_weapon",
           false,
           0
         ],
-        "492": [
+        "493": [
           "_animation_limit",
           false,
           0
         ],
-        "507": [
+        "508": [
           "_weapon_animations",
           false,
           20
         ],
-        "514": [
+        "515": [
           "_requested_weapon",
           false,
           0
         ],
-        "520": [
+        "521": [
           "_projectile_frame",
           false,
           0
         ],
-        "535": [
+        "536": [
           "_weapon_animations",
           false,
           22
         ],
-        "555": [
+        "556": [
           "_frame_direction",
           false,
           0
         ],
-        "564": [
+        "565": [
           "_weapon_tile",
           false,
           0
         ],
-        "571": [
+        "572": [
           "_animation_limit",
           false,
           0
         ],
-        "588": [
+        "589": [
           "_weapon_tile",
           false,
           0
         ],
-        "599": [
+        "600": [
           "_weapon_tile",
           false,
           0
         ],
-        "606": [
+        "607": [
           "_animation_limit",
           false,
           0
         ],
-        "626": [
+        "627": [
           "_weapon_animation_state",
           false,
           0
         ],
-        "645": [
+        "646": [
           "_requested_weapon",
           false,
           0
         ],
-        "652": [
+        "653": [
           "_weapon_animation_state",
           false,
           0
         ],
-        "661": [
+        "662": [
           "_displayed_weapon",
           false,
           0
         ],
-        "689": [
+        "690": [
           "_weapon_animations",
           false,
           0
         ],
-        "697": [
+        "698": [
           "_weapon_animations",
           false,
           2
         ],
-        "703": [
+        "704": [
           "_weapon_tile",
           false,
           0
         ],
-        "710": [
+        "711": [
           "_animation_limit",
           false,
           0
         ],
-        "722": [
-          "_weapon_tile",
-          false,
-          0
-        ],
-        "730": [
-          "_weapon_tile",
-          false,
-          0
-        ],
-        "743": [
+        "729": [
           "_frame_direction",
           false,
           0
         ],
-        "752": [
+        "741": [
           "_weapon_tile",
           false,
           0
         ],
-        "759": [
+        "749": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "762": [
+          "_frame_direction",
+          false,
+          0
+        ],
+        "771": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "778": [
           "_animation_limit",
           false,
           0
         ],
-        "776": [
+        "795": [
           "_weapon_tile",
           false,
           0
         ],
-        "787": [
+        "806": [
           "_weapon_tile",
           false,
           0
         ],
-        "794": [
+        "813": [
           "_animation_limit",
           false,
           0
         ],
-        "811": [
+        "830": [
           "_weapon_tile",
           false,
           0
         ],
-        "822": [
+        "841": [
           "_requested_weapon",
           false,
           0
         ],
-        "828": [
+        "847": [
           "_selected_weapon",
           false,
           0
         ],
-        "837": [
+        "856": [
           "_weapon_animation_state",
           false,
           0
         ],
-        "865": [
+        "884": [
           "_frame_direction",
           false,
           0
         ],
-        "876": [
+        "895": [
           "_weapon_tile",
           false,
           0
         ],
-        "883": [
+        "902": [
           "_animation_limit",
           false,
           0
         ],
-        "891": [
+        "910": [
           "_requested_weapon",
           false,
           0
         ],
-        "897": [
+        "916": [
           "_displayed_weapon",
           false,
           0
         ],
-        "917": [
+        "936": [
           "_weapon_animations",
           false,
           2
         ],
-        "924": [
+        "943": [
           "_weapon_animation_state",
           false,
           0
         ],
-        "935": [
+        "954": [
           "_projectile_frame",
           false,
           0
         ],
-        "942": [
+        "961": [
           "_weapon_tile",
           false,
           0
         ],
-        "956": [
+        "975": [
           "_weapon_tile",
           false,
           0
         ],
-        "963": [
+        "982": [
           "_animation_limit",
           false,
           0
         ],
-        "973": [
+        "992": [
           "_weapon_animation_state",
           false,
           0
         ],
-        "979": [
+        "998": [
           "_requested_weapon",
           false,
           0
         ],
-        "985": [
+        "1004": [
           "_displayed_weapon",
           false,
           0
         ],
-        "1003": [
+        "1022": [
           "_weapon_animations",
           false,
           2
         ],
-        "1014": [
+        "1033": [
           "_projectile_frame",
           false,
           0
         ],
-        "1021": [
+        "1040": [
           "_weapon_tile",
           false,
           0
         ],
-        "1036": [
+        "1055": [
           "_frame_direction",
           false,
           0
         ],
-        "1047": [
+        "1066": [
           "_projectile_type",
           false,
           0
         ],
-        "1052": [
+        "1071": [
           "fire_player_projectile_",
           true,
           0
         ],
-        "1059": [
+        "1078": [
           "_displayed_weapon",
           false,
           0
         ],
-        "1070": [
-          "_weapon_tile",
-          false,
-          0
-        ],
-        "1090": [
-          "_weapon_animations",
-          false,
-          0
-        ],
-        "1099": [
+        "1105": [
           "_weapon_tile",
           false,
           0
         ],
         "1112": [
+          "_weapon_animations",
+          false,
+          0
+        ],
+        "1121": [
+          "_weapon_tile",
+          false,
+          0
+        ],
+        "1134": [
           "_displayed_weapon",
           false,
           0
         ],
-        "1135": [
-          "_weapon_frame_words",
+        "1161": [
+          "_weapon_frame_x_words",
           false,
           75880
         ],
-        "1149": [
+        "1168": [
+          "_weapon_frame_y_words",
+          false,
+          75882
+        ],
+        "1175": [
           "_weapon_x_offset",
           false,
           0
         ],
-        "1155": [
+        "1181": [
           "_weapon_y_offset",
           false,
           0
         ]
       },
       "branches": {
-        "1066": [
+        "1085": [
           "74",
-          1096,
+          1118,
           1234
+        ],
+        "1116": [
+          "eb",
+          1131,
+          1247
         ]
       }
     }

@@ -1586,6 +1586,8 @@ def verify_compiler_groups(exe, directory, names=None):
     for context in WEAPON_ANIMATION_LAYOUT['contexts']:
         if selected(context['object']):
             verify_group_layout((directory/(context['object']+'.obj')).read_bytes(), context['size'], [(context['public'], 0)])
+    if selected('actorcfg'):
+        verify_group_layout((directory/'actorcfg.obj').read_bytes(), BOARD_ACTOR_LAYOUT['size'], [(p[2], p[1]) for p in BOARD_ACTOR_LAYOUT['publics']])
     if selected('encexit'):
         verify_group_layout((directory/'encexit.obj').read_bytes(), 1385, [('encounter_exit_context_', 160)])
     if selected('menuprep'):
@@ -1757,8 +1759,9 @@ OBJECT_NAMES['sound_frame_limit_'] = 'sndlimit'
 from verify_c_leaf import ENCOUNTER_SPAWN_LAYOUT
 OBJECT_NAMES.update({p['symbol']: p['object'] for p in ENCOUNTER_SPAWN_LAYOUT['phases']})
 
-from verify_c_leaf import WEAPON_ANIMATION_LAYOUT
+from verify_c_leaf import WEAPON_ANIMATION_LAYOUT, BOARD_ACTOR_LAYOUT
 OBJECT_NAMES.update({p['symbol']: next(c['object'] for c in WEAPON_ANIMATION_LAYOUT['contexts'] if c['public'] == p['public']) for p in WEAPON_ANIMATION_LAYOUT['phases']})
+OBJECT_NAMES.update({p['symbol']: 'actorcfg' for p in BOARD_ACTOR_LAYOUT['phases']})
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

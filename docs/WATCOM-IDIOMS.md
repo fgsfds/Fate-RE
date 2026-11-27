@@ -280,6 +280,21 @@ wrong terminal EBX, so DATA-only replay would miss that ABI error.
 
 ### State-machine tables and DATA views
 
+A whole-array character view should start from `&array`, so byte arithmetic
+can cover all rows rather than only the first element. Separate mutable X/Y
+word views of the same verified DATA object can retain two indexed load
+displacements instead of a shared relocated pointer addition. Capture the
+three-times-slot factor in EDX and the signed frame in BX; widening the frame
+to EAX before the two shifts reproduces the original byte-offset sum and its
+return flags. Preserve the in-DATA lookup domain and alignment explicitly.
+
+Use a distinct external name for a typed view when another translation unit
+already exposes the storage through a different C type. A normalized OMF
+public tuple omits PUBDEF group/type fields. For a shared multi-public object,
+pin the full CODE and raw semantic EXTDEF/PUBDEF/LNAMES/SEGDEF/GRPDEF records
+alongside all parsed fixup forms, names and addends. A checksum-valid FLAT-to-
+DGROUP PUBDEF mutation can otherwise pass a normalized-layout check.
+
 To preserve a volatile field-transfer sequence, name the table value and the
 next signed slot separately: load the table word, capture the requested slot
 as an int, then store the previous word. In weapon animation this produces

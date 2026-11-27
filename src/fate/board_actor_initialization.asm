@@ -40,6 +40,7 @@ second_actor_mode equ 0x7f6be
     shl %1, byte 4
 %endmacro
 
+section .retained_0 align=1 vstart=0x1e91a
 initialize_board_actors:
     push ebx
     push ecx
@@ -66,8 +67,8 @@ initialize_board_actors:
     mov edi, 0x3e8
     xor ecx, ecx
     xor esi, esi
-    mov [actor_enabled + 1], ah
-    mov [actor_board + 1], dl
+; board_actor_activation_ is supplied by guarded C.
+section .retained_1 align=1 vstart=0x1e959 follows=.retained_0
     mov [0x772d4], ebx
     mov [actor_z_offset + 1*4], ecx
     mov [mode_one_tile + 1*18], si
@@ -84,10 +85,8 @@ initialize_board_actors:
     mov [0x772d0], edx
     mov [actor_projectile_type + 1], bl
     mov [actor_mode + 1], cl
-    mov [actor_destination_x + 1*16], esi
-    mov [actor_destination_y + 1*16], esi
-    mov [actor_destination_parameter_one + 1*16], esi
-    mov [actor_destination_parameter_two + 1*16], esi
+; board_actor_destination_ is supplied by guarded C.
+section .retained_2 align=1 vstart=0x1e9c1 follows=.retained_1
     mov [actor_z_offset + 2*4], esi
     mov [actor_sequence_initial + 2], ah
     mov [actor_destination_x + 2*16], esi
@@ -1786,13 +1785,8 @@ initialize_board_actors:
     xor dl, dl
     mov bl, 0x3
     mov [0x7ef12], dl
-    mov [0x7b2fe], cx
-    mov [0x7b300], cx
-    mov [0x7b302], cx
-    mov [0x7b304], cx
-    mov [0x7b306], cx
-    mov [0x7b308], cx
-    mov [0x7b30a], cx
+; board_actor_tiles_ is supplied by guarded C.
+section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     mov dh, 0x1
     mov [0x7f6e6], bl
     xor ebx, ebx
