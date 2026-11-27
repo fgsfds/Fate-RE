@@ -46,22 +46,7 @@ initialize_board_actors equ 0x1e91a
 .disable_slot equ 0x1e926
 .check_slot equ 0x1e930
 
-section .retained_0 align=1 vstart=0x1e91a follows=.text
-    push ebx
-    push ecx
-    push edx
-    push esi
-    push edi
-    push ebp
-    mov cl, 0xff
-    xor eax, eax
-    jmp short .check_slot
-    movsx edx, ax
-    inc eax
-    mov [edx + actor_enabled], cl
-    movsx edx, ax
-    cmp edx, strict dword 0x1f4
-    jng short .disable_slot
+section .retained_0 align=1 vstart=0x1e93b follows=.text
     mov ah, 0x5
     mov dl, 0x1
     mov ebx, 0xffffea00
@@ -2366,20 +2351,8 @@ section .retained_5 align=1 vstart=0x21074 follows=.retained_4
     mov [nosplit edx*2 + mode_six_tile], cx
     movsx edx, ax
     mov word [nosplit edx*4 + actor_first_waypoint], 0x59
-    movsx edx, ax
-    shl edx, byte 4
-    xor esi, esi
-    mov [edx + actor_destination_x], esi
-    movsx edx, ax
-    shl edx, byte 4
-    mov [edx + actor_destination_y], esi
-    movsx edx, ax
-    shl edx, byte 4
-    mov [edx + actor_destination_parameter_one], esi
-    movsx edx, ax
-    shl edx, byte 4
-    mov eax, 0x6f
-    mov [edx + actor_destination_parameter_two], esi
+
+section .retained_6 align=1 vstart=0x215ba follows=.retained_5
     movsx edx, ax
     xor ch, ch
     mov [edx + actor_enabled], ch
@@ -2536,11 +2509,7 @@ section .retained_5 align=1 vstart=0x21074 follows=.retained_4
     xor ebx, ebx
     mov [edx + actor_destination_x], ebx
 
-section .retained_6 align=1 vstart=0x2184c follows=.retained_5
-    movsx edx, ax
-    shl edx, byte 4
-    mov eax, 0x71
-    mov [edx + actor_destination_parameter_two], ebx
+section .retained_7 align=1 vstart=0x2185d follows=.retained_6
     movsx edx, ax
     mov byte [edx + actor_enabled], 0x4
     movsx edx, ax
@@ -3009,19 +2978,13 @@ section .retained_6 align=1 vstart=0x2184c follows=.retained_5
     mov [nosplit edx*2 + mode_five_tile], si
     movsx edx, ax
     mov word [nosplit edx*4 + actor_first_waypoint], 0x21
-    movsx edx, ax
-    shl edx, byte 4
-    mov [edx + actor_destination_x], ebp
-    movsx edx, ax
-    shl edx, byte 4
-    mov [edx + actor_destination_y], ebp
+
+section .retained_8 align=1 vstart=0x21fe6 follows=.retained_7
     movsx edx, ax
     shl edx, byte 4
     mov [edx + actor_destination_parameter_one], ebp
-    movsx edx, ax
-    shl edx, byte 4
-    mov eax, 0x77
-    mov [edx + actor_destination_parameter_two], ebp
+
+section .retained_9 align=1 vstart=0x22003 follows=.retained_8
     movsx edx, ax
     mov byte [edx + actor_enabled], 0x4
     movsx edx, ax
@@ -3041,11 +3004,11 @@ section .retained_6 align=1 vstart=0x2184c follows=.retained_5
     xor ecx, ecx
     mov [nosplit edx*4 + actor_z_offset], ecx
 
-section .retained_7 align=1 vstart=0x22065 follows=.retained_6
+section .retained_10 align=1 vstart=0x22065 follows=.retained_9
     movsx edx, ax
     mov byte [edx + actor_projectile_type], 0x1
 
-section .retained_8 align=1 vstart=0x22090 follows=.retained_7
+section .retained_11 align=1 vstart=0x22090 follows=.retained_10
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -3078,7 +3041,7 @@ section .retained_8 align=1 vstart=0x22090 follows=.retained_7
     add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], di
 
-section .retained_9 align=1 vstart=0x2210e follows=.retained_8
+section .retained_12 align=1 vstart=0x2210e follows=.retained_11
     movsx edx, ax
     shl edx, byte 4
     xor esi, esi
@@ -3101,7 +3064,7 @@ section .retained_9 align=1 vstart=0x2210e follows=.retained_8
     movsx ebx, ax
     mov [edx + actor_board], cl
 
-section .retained_10 align=1 vstart=0x22185 follows=.retained_9
+section .retained_13 align=1 vstart=0x22185 follows=.retained_12
     movsx edx, ax
     mov ch, 0x8
     mov [nosplit edx*4 + actor_z_offset], esi
@@ -3154,7 +3117,7 @@ section .retained_10 align=1 vstart=0x22185 follows=.retained_9
     add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], cx
 
-section .retained_11 align=1 vstart=0x2225b follows=.retained_10
+section .retained_14 align=1 vstart=0x2225b follows=.retained_13
     movsx edx, ax
     shl edx, byte 4
     xor edi, edi
@@ -3174,7 +3137,7 @@ section .retained_11 align=1 vstart=0x2225b follows=.retained_10
     movsx edx, ax
     mov byte [edx + actor_board], 0x6
 
-section .retained_12 align=1 vstart=0x2231f follows=.retained_11
+section .retained_15 align=1 vstart=0x2231f follows=.retained_14
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -3207,13 +3170,13 @@ section .retained_12 align=1 vstart=0x2231f follows=.retained_11
     add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], cx
 
-section .retained_13 align=1 vstart=0x2239d follows=.retained_12
+section .retained_16 align=1 vstart=0x2239d follows=.retained_15
     movsx edx, ax
     shl edx, byte 4
     xor ebx, ebx
     mov [edx + actor_destination_x], ebx
 
-section .retained_14 align=1 vstart=0x223d4 follows=.retained_13
+section .retained_17 align=1 vstart=0x223d4 follows=.retained_16
     mov bh, 0x4
     movsx edx, ax
     mov cl, 0x6
@@ -3222,7 +3185,7 @@ section .retained_14 align=1 vstart=0x223d4 follows=.retained_13
     movsx ebx, ax
     mov [edx + actor_board], cl
 
-section .retained_15 align=1 vstart=0x22438 follows=.retained_14
+section .retained_18 align=1 vstart=0x22438 follows=.retained_17
     mov bl, 0x1
     movsx edx, ax
     mov ecx, 0x4665
@@ -3287,7 +3250,7 @@ section .retained_15 align=1 vstart=0x22438 follows=.retained_14
     movsx edx, ax
     mov byte [edx + actor_board], 0x6
 
-section .retained_16 align=1 vstart=0x225b4 follows=.retained_15
+section .retained_19 align=1 vstart=0x225b4 follows=.retained_18
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -3420,17 +3383,14 @@ section .retained_16 align=1 vstart=0x225b4 follows=.retained_15
     movsx edx, ax
     shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0xfffffc80
-    movsx edx, ax
-    mov edi, 0x1a80
-    shl edx, byte 0x4
-    mov eax, 0x7d
-    mov [edx + actor_destination_parameter_two], edi
+
+section .retained_20 align=1 vstart=0x227d7 follows=.retained_19
     movsx edx, ax
     mov byte [edx + actor_enabled], 0x4
     movsx edx, ax
     mov byte [edx + actor_board], 0x6
 
-section .retained_17 align=1 vstart=0x22864 follows=.retained_16
+section .retained_21 align=1 vstart=0x22864 follows=.retained_20
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 3
@@ -3466,9 +3426,8 @@ section .retained_17 align=1 vstart=0x22864 follows=.retained_16
     movsx edx, ax
     xor edi, ecx
     mov [nosplit edx*4 + actor_first_waypoint], di
-    movsx edx, ax
-    shl edx, byte 4
-    mov [edx + actor_destination_x], ebp
+
+section .retained_22 align=1 vstart=0x228f0 follows=.retained_21
     movsx edx, ax
     shl edx, byte 4
     mov dword [edx + actor_destination_y], 0xfffff480
@@ -3487,7 +3446,7 @@ section .retained_17 align=1 vstart=0x22864 follows=.retained_16
     movsx ebx, ax
     mov [edx + actor_board], cl
 
-section .retained_18 align=1 vstart=0x229a9 follows=.retained_17
+section .retained_23 align=1 vstart=0x229a9 follows=.retained_22
     mov cl, 0x4
     movsx edx, ax
     movsx ebx, ax
@@ -3535,10 +3494,8 @@ section .retained_18 align=1 vstart=0x229a9 follows=.retained_17
     movsx edx, ax
     shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0xf00
-    movsx edx, ax
-    shl edx, byte 4
-    mov eax, 0x7f
-    mov [edx + actor_destination_parameter_two], ebp
+
+section .retained_24 align=1 vstart=0x22a74 follows=.retained_23
     movsx edx, ax
     mov [edx + actor_enabled], cl
     movsx edx, ax
@@ -3555,7 +3512,7 @@ section .retained_18 align=1 vstart=0x229a9 follows=.retained_17
     sub edx, ebx
     mov dword [nosplit edx*4 + saved_actor_y], 0x1880
 
-section .retained_19 align=1 vstart=0x22b00 follows=.retained_18
+section .retained_25 align=1 vstart=0x22b00 follows=.retained_24
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -3614,7 +3571,7 @@ section .retained_19 align=1 vstart=0x22b00 follows=.retained_18
     movsx ebx, ax
     mov [edx + actor_board], cl
 
-section .retained_20 align=1 vstart=0x22c1e follows=.retained_19
+section .retained_26 align=1 vstart=0x22c1e follows=.retained_25
     mov esi, 0x3e8
     movsx edx, ax
     mov bl, 0x3
@@ -3688,7 +3645,7 @@ section .retained_20 align=1 vstart=0x22c1e follows=.retained_19
     movsx edx, ax
     mov byte [edx + actor_board], 0x6
 
-section .retained_21 align=1 vstart=0x22dc0 follows=.retained_20
+section .retained_27 align=1 vstart=0x22dc0 follows=.retained_26
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -3840,7 +3797,7 @@ section .retained_21 align=1 vstart=0x22dc0 follows=.retained_20
     movsx edx, ax
     mov byte [edx + actor_board], 0x6
 
-section .retained_22 align=1 vstart=0x23098 follows=.retained_21
+section .retained_28 align=1 vstart=0x23098 follows=.retained_27
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -3998,7 +3955,7 @@ section .retained_22 align=1 vstart=0x23098 follows=.retained_21
     sub edx, ebx
     mov [nosplit edx*4 + saved_actor_y], ebp
 
-section .retained_23 align=1 vstart=0x23355 follows=.retained_22
+section .retained_29 align=1 vstart=0x23355 follows=.retained_28
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -4056,7 +4013,7 @@ section .retained_23 align=1 vstart=0x23355 follows=.retained_22
     movsx ebx, ax
     mov [edx + actor_board], cl
 
-section .retained_24 align=1 vstart=0x2347a follows=.retained_23
+section .retained_30 align=1 vstart=0x2347a follows=.retained_29
     mov bl, 0x1
     movsx edx, ax
     mov ecx, 0x3665
@@ -4120,7 +4077,7 @@ section .retained_24 align=1 vstart=0x2347a follows=.retained_23
     movsx edx, ax
     mov byte [edx + actor_board], 0x7
 
-section .retained_25 align=1 vstart=0x235f3 follows=.retained_24
+section .retained_31 align=1 vstart=0x235f3 follows=.retained_30
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -4263,7 +4220,7 @@ section .retained_25 align=1 vstart=0x235f3 follows=.retained_24
     movsx edx, ax
     mov byte [edx + actor_board], 0x7
 
-section .retained_26 align=1 vstart=0x238a7 follows=.retained_25
+section .retained_32 align=1 vstart=0x238a7 follows=.retained_31
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 3
@@ -4320,7 +4277,7 @@ section .retained_26 align=1 vstart=0x238a7 follows=.retained_25
     movsx ebx, ax
     mov [edx + actor_board], cl
 
-section .retained_27 align=1 vstart=0x239ec follows=.retained_26
+section .retained_33 align=1 vstart=0x239ec follows=.retained_32
     mov cl, 0x4
     movsx edx, ax
     movsx ebx, ax
@@ -4388,7 +4345,7 @@ section .retained_27 align=1 vstart=0x239ec follows=.retained_26
     sub edx, ebx
     mov dword [nosplit edx*4 + saved_actor_y], 0xd580
 
-section .retained_28 align=1 vstart=0x23b48 follows=.retained_27
+section .retained_34 align=1 vstart=0x23b48 follows=.retained_33
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -4447,7 +4404,7 @@ section .retained_28 align=1 vstart=0x23b48 follows=.retained_27
     movsx ebx, ax
     mov [edx + actor_board], cl
 
-section .retained_29 align=1 vstart=0x23c66 follows=.retained_28
+section .retained_35 align=1 vstart=0x23c66 follows=.retained_34
     mov esi, 0x3e8
     movsx edx, ax
     mov bl, 0x3
@@ -4503,9 +4460,8 @@ section .retained_29 align=1 vstart=0x23c66 follows=.retained_28
     movsx edx, ax
     xor edi, ecx
     mov [nosplit edx*4 + actor_first_waypoint], di
-    movsx edx, ax
-    shl edx, byte 4
-    mov [edx + actor_destination_x], ebp
+
+section .retained_36 align=1 vstart=0x23d47 follows=.retained_35
     movsx edx, ax
     shl edx, byte 4
     mov dword [edx + actor_destination_y], 0xdc80
@@ -4521,7 +4477,7 @@ section .retained_29 align=1 vstart=0x23c66 follows=.retained_28
     movsx edx, ax
     mov byte [edx + actor_board], 0x7
 
-section .retained_30 align=1 vstart=0x23e08 follows=.retained_29
+section .retained_37 align=1 vstart=0x23e08 follows=.retained_36
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -4647,32 +4603,24 @@ section .retained_30 align=1 vstart=0x23e08 follows=.retained_29
     add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], cx
 
-section .retained_31 align=1 vstart=0x23ffe follows=.retained_30
-    movsx edx, ax
-    shl edx, byte 4
-    mov [edx + actor_destination_x], ebp
-    movsx edx, ax
-    shl edx, byte 4
-    mov [edx + actor_destination_y], ebp
+section .retained_38 align=1 vstart=0x24016 follows=.retained_37
     movsx edx, ax
     shl edx, byte 4
     mov [edx + actor_destination_parameter_one], ebp
-    movsx edx, ax
-    shl edx, byte 4
-    mov eax, 0x9e
-    mov [edx + actor_destination_parameter_two], ebp
+
+section .retained_39 align=1 vstart=0x24033 follows=.retained_38
     movsx edx, ax
     xor ch, ch
     mov [edx + actor_enabled], ch
     movsx edx, ax
     mov byte [edx + actor_board], 0x7
 
-section .retained_32 align=1 vstart=0x24073 follows=.retained_31
+section .retained_40 align=1 vstart=0x24073 follows=.retained_39
     movsx edx, ax
     xor ecx, ecx
     mov [nosplit edx*4 + actor_z_offset], ecx
 
-section .retained_33 align=1 vstart=0x240c1 follows=.retained_32
+section .retained_41 align=1 vstart=0x240c1 follows=.retained_40
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -4706,17 +4654,13 @@ section .retained_33 align=1 vstart=0x240c1 follows=.retained_32
     add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], cx
 
-section .retained_34 align=1 vstart=0x24144 follows=.retained_33
+section .retained_42 align=1 vstart=0x24144 follows=.retained_41
     movsx edx, ax
     shl edx, byte 4
     xor esi, esi
     mov [edx + actor_destination_x], esi
-    movsx edx, ax
-    shl edx, byte 4
-    mov [edx + actor_destination_y], esi
-    movsx edx, ax
-    shl edx, byte 4
-    mov [edx + actor_destination_parameter_one], esi
+
+section .retained_43 align=1 vstart=0x2416a follows=.retained_42
     movsx edx, ax
     xor bh, bh
     shl edx, byte 0x4
@@ -4729,7 +4673,7 @@ section .retained_34 align=1 vstart=0x24144 follows=.retained_33
     movsx ebx, ax
     mov [edx + actor_board], cl
 
-section .retained_35 align=1 vstart=0x241dc follows=.retained_34
+section .retained_44 align=1 vstart=0x241dc follows=.retained_43
     mov bl, 0x2
     movsx edx, ax
     mov ecx, 0x1865
@@ -4807,7 +4751,7 @@ section .retained_35 align=1 vstart=0x241dc follows=.retained_34
     sub edx, ebx
     mov dword [nosplit edx*4 + saved_actor_y], 0x7200
 
-section .retained_36 align=1 vstart=0x24361 follows=.retained_35
+section .retained_45 align=1 vstart=0x24361 follows=.retained_44
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -4870,7 +4814,7 @@ section .retained_36 align=1 vstart=0x24361 follows=.retained_35
     movsx ebx, ax
     mov [edx + actor_board], cl
 
-section .retained_37 align=1 vstart=0x244b3 follows=.retained_36
+section .retained_46 align=1 vstart=0x244b3 follows=.retained_45
     mov bh, 0x1
     movsx edx, ax
     mov cl, 0x4
@@ -4916,9 +4860,8 @@ section .retained_37 align=1 vstart=0x244b3 follows=.retained_36
     movsx edx, ax
     xor ebx, ebx
     mov [nosplit edx*4 + actor_first_waypoint], bx
-    movsx edx, ax
-    shl edx, byte 4
-    mov [edx + actor_destination_x], ebp
+
+section .retained_47 align=1 vstart=0x24565 follows=.retained_46
     movsx edx, ax
     shl edx, byte 4
     mov dword [edx + actor_destination_y], 0x8400
@@ -4934,7 +4877,7 @@ section .retained_37 align=1 vstart=0x244b3 follows=.retained_36
     movsx edx, ax
     mov byte [edx + actor_board], 0x7
 
-section .retained_38 align=1 vstart=0x24626 follows=.retained_37
+section .retained_48 align=1 vstart=0x24626 follows=.retained_47
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -4999,7 +4942,7 @@ section .retained_38 align=1 vstart=0x24626 follows=.retained_37
     movsx ebx, ax
     mov [edx + actor_board], cl
 
-section .retained_39 align=1 vstart=0x24776 follows=.retained_38
+section .retained_49 align=1 vstart=0x24776 follows=.retained_48
     mov bh, 0x1
     movsx edx, ax
     mov cl, 0x4
@@ -5065,7 +5008,7 @@ section .retained_39 align=1 vstart=0x24776 follows=.retained_38
     movsx edx, ax
     mov byte [edx + actor_board], 0x7
 
-section .retained_40 align=1 vstart=0x248f0 follows=.retained_39
+section .retained_50 align=1 vstart=0x248f0 follows=.retained_49
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -5136,12 +5079,12 @@ section .retained_40 align=1 vstart=0x248f0 follows=.retained_39
     xor esi, ebp
     mov [nosplit edx*4 + actor_z_offset], esi
 
-section .retained_41 align=1 vstart=0x24a16 follows=.retained_40
+section .retained_51 align=1 vstart=0x24a16 follows=.retained_50
     movsx edx, ax
     mov bl, 0x2
     mov [edx + actor_projectile_type], bl
 
-section .retained_42 align=1 vstart=0x24a38 follows=.retained_41
+section .retained_52 align=1 vstart=0x24a38 follows=.retained_51
     movsx edx, ax
     mov [edx + actor_mode], bl
     movsx ebx, ax
@@ -5202,12 +5145,12 @@ section .retained_42 align=1 vstart=0x24a38 follows=.retained_41
     movsx edx, ax
     mov byte [edx + actor_board], 0x7
 
-section .retained_43 align=1 vstart=0x24b64 follows=.retained_42
+section .retained_53 align=1 vstart=0x24b64 follows=.retained_52
     movsx edx, ax
     mov cl, 0x2
     mov [edx + actor_projectile_type], cl
 
-section .retained_44 align=1 vstart=0x24b86 follows=.retained_43
+section .retained_54 align=1 vstart=0x24b86 follows=.retained_53
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_mode], cl
@@ -5258,7 +5201,7 @@ section .retained_44 align=1 vstart=0x24b86 follows=.retained_43
     xor esi, esi
     mov [edx + actor_destination_parameter_one], esi
 
-section .retained_45 align=1 vstart=0x24c4d follows=.retained_44
+section .retained_55 align=1 vstart=0x24c4d follows=.retained_54
     movsx edx, ax
     xor bh, bh
     mov cl, 0xa
@@ -5267,12 +5210,12 @@ section .retained_45 align=1 vstart=0x24c4d follows=.retained_44
     movsx ebx, ax
     mov [edx + actor_board], cl
 
-section .retained_46 align=1 vstart=0x24c8e follows=.retained_45
+section .retained_56 align=1 vstart=0x24c8e follows=.retained_55
     movsx edx, ax
     xor ecx, ecx
     mov [nosplit edx*4 + actor_z_offset], ecx
 
-section .retained_47 align=1 vstart=0x24cb1 follows=.retained_46
+section .retained_57 align=1 vstart=0x24cb1 follows=.retained_56
     mov bl, 0x2
     movsx edx, ax
     mov ecx, 0x565
@@ -5338,17 +5281,17 @@ section .retained_47 align=1 vstart=0x24cb1 follows=.retained_46
     movsx edx, ax
     mov byte [edx + actor_board], 0xa
 
-section .retained_48 align=1 vstart=0x24de1 follows=.retained_47
+section .retained_58 align=1 vstart=0x24de1 follows=.retained_57
     movsx edx, ax
     xor esi, esi
     mov [nosplit edx*4 + actor_z_offset], esi
 
-section .retained_49 align=1 vstart=0x24e04 follows=.retained_48
+section .retained_59 align=1 vstart=0x24e04 follows=.retained_58
     movsx edx, ax
     xor cl, cl
     mov [edx + actor_projectile_type], cl
 
-section .retained_50 align=1 vstart=0x24e30 follows=.retained_49
+section .retained_60 align=1 vstart=0x24e30 follows=.retained_59
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -5411,7 +5354,7 @@ section .retained_50 align=1 vstart=0x24e30 follows=.retained_49
     movsx ebx, ax
     mov [edx + actor_board], cl
 
-section .retained_51 align=1 vstart=0x24f7f follows=.retained_50
+section .retained_61 align=1 vstart=0x24f7f follows=.retained_60
     mov bh, 0x2
     movsx edx, ax
     mov cl, 0x4
@@ -5483,7 +5426,7 @@ section .retained_51 align=1 vstart=0x24f7f follows=.retained_50
     sub edx, ebx
     mov dword [nosplit edx*4 + saved_actor_y], 0x8d00
 
-section .retained_52 align=1 vstart=0x250e0 follows=.retained_51
+section .retained_62 align=1 vstart=0x250e0 follows=.retained_61
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -5527,10 +5470,8 @@ section .retained_52 align=1 vstart=0x250e0 follows=.retained_51
     movsx edx, ax
     shl edx, byte 4
     mov [edx + actor_destination_x], ebp
-    movsx edx, ax
-    shl edx, byte 4
-    mov edi, 0x8d00
-    mov [edx + actor_destination_y], edi
+
+section .retained_63 align=1 vstart=0x2518f follows=.retained_62
     movsx edx, ax
     shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0xfffffb00
@@ -5649,7 +5590,7 @@ section .retained_52 align=1 vstart=0x250e0 follows=.retained_51
     mov edi, 0xffffe800
     mov [nosplit edx*4 + saved_actor_y], edi
 
-section .retained_53 align=1 vstart=0x253b2 follows=.retained_52
+section .retained_64 align=1 vstart=0x253b2 follows=.retained_63
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -5713,7 +5654,7 @@ section .retained_53 align=1 vstart=0x253b2 follows=.retained_52
     movsx ebx, ax
     mov [edx + actor_board], cl
 
-section .retained_54 align=1 vstart=0x254d5 follows=.retained_53
+section .retained_65 align=1 vstart=0x254d5 follows=.retained_64
     mov ch, 0x10
     movsx edx, ax
     mov esi, 0x3e8
@@ -5770,26 +5711,14 @@ section .retained_54 align=1 vstart=0x254d5 follows=.retained_53
     add edx, ebx
     mov [nosplit edx*2 + mode_six_tile], cx
 
-section .retained_55 align=1 vstart=0x255b8 follows=.retained_54
-    movsx edx, ax
-    shl edx, byte 4
-    xor esi, esi
-    mov [edx + actor_destination_x], esi
-    movsx edx, ax
-    shl edx, byte 4
-    mov [edx + actor_destination_y], esi
-    movsx edx, ax
-    shl edx, byte 4
-    mov [edx + actor_destination_parameter_one], esi
-
-section .retained_56 align=1 vstart=0x255ef follows=.retained_55
+section .retained_66 align=1 vstart=0x255ef follows=.retained_65
     movsx edx, ax
     xor ch, ch
     mov [edx + actor_enabled], ch
     movsx edx, ax
     mov byte [edx + actor_board], 0x18
 
-section .retained_57 align=1 vstart=0x25662 follows=.retained_56
+section .retained_67 align=1 vstart=0x25662 follows=.retained_66
     movsx edx, ax
     mov ch, 0x1
     mov [edx + actor_profile], ch
@@ -5859,12 +5788,12 @@ section .retained_57 align=1 vstart=0x25662 follows=.retained_56
     movsx ebx, ax
     mov [edx + actor_board], cl
 
-section .retained_58 align=1 vstart=0x257aa follows=.retained_57
+section .retained_68 align=1 vstart=0x257aa follows=.retained_67
     movsx edx, ax
     mov bl, 0x2
     mov [edx + actor_projectile_type], bl
 
-section .retained_59 align=1 vstart=0x257cc follows=.retained_58
+section .retained_69 align=1 vstart=0x257cc follows=.retained_68
     movsx edx, ax
     mov [edx + actor_mode], bl
     movsx ebx, ax
@@ -5920,22 +5849,22 @@ section .retained_59 align=1 vstart=0x257cc follows=.retained_58
     xor esi, esi
     mov [edx + actor_destination_parameter_one], esi
 
-section .retained_60 align=1 vstart=0x258a7 follows=.retained_59
+section .retained_70 align=1 vstart=0x258a7 follows=.retained_69
     movsx edx, ax
     mov byte [edx + actor_enabled], 0x2
     movsx edx, ax
     mov byte [edx + actor_board], 0x18
 
-section .retained_61 align=1 vstart=0x258e6 follows=.retained_60
+section .retained_71 align=1 vstart=0x258e6 follows=.retained_70
     movsx edx, ax
     mov [nosplit edx*4 + actor_z_offset], esi
 
-section .retained_62 align=1 vstart=0x25907 follows=.retained_61
+section .retained_72 align=1 vstart=0x25907 follows=.retained_71
     movsx edx, ax
     xor cl, cl
     mov [edx + actor_projectile_type], cl
 
-section .retained_63 align=1 vstart=0x25933 follows=.retained_62
+section .retained_73 align=1 vstart=0x25933 follows=.retained_72
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -5982,9 +5911,8 @@ section .retained_63 align=1 vstart=0x25933 follows=.retained_62
     movsx edx, ax
     shl edx, byte 4
     mov dword [edx + actor_destination_y], 0xb80
-    movsx edx, ax
-    shl edx, byte 4
-    mov [edx + actor_destination_parameter_one], ebp
+
+section .retained_74 align=1 vstart=0x259ed follows=.retained_73
     movsx edx, ax
     shl edx, byte 4
     mov dword [edx + actor_destination_parameter_two], 0xfffff980
@@ -6087,18 +6015,18 @@ section .retained_63 align=1 vstart=0x25933 follows=.retained_62
     movsx edx, ax
     mov byte [edx + actor_board], 0x18
 
-section .retained_64 align=1 vstart=0x25ba7 follows=.retained_63
+section .retained_75 align=1 vstart=0x25ba7 follows=.retained_74
     movsx edx, ax
     mov [nosplit edx*4 + actor_z_offset], ebp
 
-section .retained_65 align=1 vstart=0x25bbb follows=.retained_64
+section .retained_76 align=1 vstart=0x25bbb follows=.retained_75
     movsx edx, ax
     mov word [nosplit edx*2 + actor_health], 0x3e8
     movsx edx, ax
     xor cl, cl
     mov [edx + actor_projectile_type], cl
 
-section .retained_66 align=1 vstart=0x25bf4 follows=.retained_65
+section .retained_77 align=1 vstart=0x25bf4 follows=.retained_76
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -6137,7 +6065,7 @@ section .retained_66 align=1 vstart=0x25bf4 follows=.retained_65
     add edx, ebx
     mov [nosplit edx*2 + mode_six_tile], di
 
-section .retained_67 align=1 vstart=0x25c86 follows=.retained_66
+section .retained_78 align=1 vstart=0x25c86 follows=.retained_77
     movsx edx, ax
     shl edx, byte 4
     xor ebx, ebx
@@ -6151,7 +6079,7 @@ section .retained_67 align=1 vstart=0x25c86 follows=.retained_66
     xor esi, esi
     mov [edx + actor_destination_parameter_one], esi
 
-section .retained_68 align=1 vstart=0x25cc1 follows=.retained_67
+section .retained_79 align=1 vstart=0x25cc1 follows=.retained_78
     mov bh, 0x5
     movsx edx, ax
     mov cl, 0x18
@@ -6160,7 +6088,7 @@ section .retained_68 align=1 vstart=0x25cc1 follows=.retained_67
     movsx ebx, ax
     mov [edx + actor_board], cl
 
-section .retained_69 align=1 vstart=0x25d02 follows=.retained_68
+section .retained_80 align=1 vstart=0x25d02 follows=.retained_79
     movsx edx, ax
     mov ch, 0x10
     mov [nosplit edx*4 + actor_z_offset], esi
@@ -6226,9 +6154,8 @@ section .retained_69 align=1 vstart=0x25d02 follows=.retained_68
     movsx edx, ax
     shl edx, byte 4
     mov dword [edx + actor_destination_y], 0x1b00
-    movsx edx, ax
-    shl edx, byte 4
-    mov [edx + actor_destination_parameter_one], ebp
+
+section .retained_81 align=1 vstart=0x25e12 follows=.retained_80
     movsx edx, ax
     shl edx, byte 4
     mov dword [edx + actor_destination_parameter_two], 0xfffff400
@@ -6238,7 +6165,7 @@ section .retained_69 align=1 vstart=0x25d02 follows=.retained_68
     movsx edx, ax
     mov byte [edx + actor_board], 0x18
 
-section .retained_70 align=1 vstart=0x25eb6 follows=.retained_69
+section .retained_82 align=1 vstart=0x25eb6 follows=.retained_81
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -6282,9 +6209,8 @@ section .retained_70 align=1 vstart=0x25eb6 follows=.retained_69
     shl edx, byte 4
     xor edi, edi
     mov [edx + actor_destination_x], edi
-    movsx edx, ax
-    shl edx, byte 4
-    mov [edx + actor_destination_y], edi
+
+section .retained_83 align=1 vstart=0x25f60 follows=.retained_82
     movsx edx, ax
     shl edx, byte 4
     mov [edx + actor_destination_parameter_one], edi
@@ -6300,17 +6226,17 @@ section .retained_70 align=1 vstart=0x25eb6 follows=.retained_69
     movsx ebx, ax
     mov [edx + actor_board], cl
 
-section .retained_71 align=1 vstart=0x25fbe follows=.retained_70
+section .retained_84 align=1 vstart=0x25fbe follows=.retained_83
     movsx edx, ax
     xor ebp, ebp
     mov [nosplit edx*4 + actor_z_offset], ebp
 
-section .retained_72 align=1 vstart=0x25fe1 follows=.retained_71
+section .retained_85 align=1 vstart=0x25fe1 follows=.retained_84
     movsx edx, ax
     mov bl, 0x3
     mov [edx + actor_projectile_type], bl
 
-section .retained_73 align=1 vstart=0x26003 follows=.retained_72
+section .retained_86 align=1 vstart=0x26003 follows=.retained_85
     movsx edx, ax
     mov [edx + actor_mode], bl
     movsx ebx, ax
@@ -6351,24 +6277,24 @@ section .retained_73 align=1 vstart=0x26003 follows=.retained_72
     add edx, ebx
     mov [nosplit edx*2 + mode_six_tile], cx
 
-section .retained_74 align=1 vstart=0x260a0 follows=.retained_73
+section .retained_87 align=1 vstart=0x260a0 follows=.retained_86
     movsx edx, ax
     shl edx, byte 4
     xor ebx, ebx
     mov [edx + actor_destination_x], ebx
 
-section .retained_75 align=1 vstart=0x260d7 follows=.retained_74
+section .retained_88 align=1 vstart=0x260d7 follows=.retained_87
     movsx edx, ax
     mov byte [edx + actor_enabled], 0x4
     movsx edx, ax
     mov byte [edx + actor_board], 0x18
 
-section .retained_76 align=1 vstart=0x26116 follows=.retained_75
+section .retained_89 align=1 vstart=0x26116 follows=.retained_88
     movsx edx, ax
     xor esi, esi
     mov [nosplit edx*4 + actor_z_offset], esi
 
-section .retained_77 align=1 vstart=0x26164 follows=.retained_76
+section .retained_90 align=1 vstart=0x26164 follows=.retained_89
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -6403,15 +6329,13 @@ section .retained_77 align=1 vstart=0x26164 follows=.retained_76
     movsx edx, ax
     xor ebx, ebx
     mov [nosplit edx*4 + actor_first_waypoint], bx
-    movsx edx, ax
-    shl edx, byte 4
-    mov [edx + actor_destination_x], ebp
+
+section .retained_91 align=1 vstart=0x261ee follows=.retained_90
     movsx edx, ax
     shl edx, byte 4
     mov dword [edx + actor_destination_y], 0x900
-    movsx edx, ax
-    shl edx, byte 4
-    mov [edx + actor_destination_parameter_one], ebp
+
+section .retained_92 align=1 vstart=0x2620a follows=.retained_91
     movsx edx, ax
     shl edx, byte 4
     mov dword [edx + actor_destination_parameter_two], 0xffffe500
@@ -6438,7 +6362,7 @@ section .retained_77 align=1 vstart=0x26164 follows=.retained_76
     xor esi, ebp
     mov [nosplit edx*4 + actor_z_offset], esi
 
-section .retained_78 align=1 vstart=0x26278 follows=.retained_77
+section .retained_93 align=1 vstart=0x26278 follows=.retained_92
     mov ecx, 0x3e8
     movsx edx, ax
     mov bl, 0x1
@@ -6509,7 +6433,7 @@ section .retained_78 align=1 vstart=0x26278 follows=.retained_77
     movsx edx, ax
     mov byte [edx + actor_board], 0x18
 
-section .retained_79 align=1 vstart=0x26409 follows=.retained_78
+section .retained_94 align=1 vstart=0x26409 follows=.retained_93
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 3
@@ -6542,7 +6466,7 @@ section .retained_79 align=1 vstart=0x26409 follows=.retained_78
     add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], cx
 
-section .retained_80 align=1 vstart=0x26489 follows=.retained_79
+section .retained_95 align=1 vstart=0x26489 follows=.retained_94
     movsx edx, ax
     shl edx, byte 4
     mov [edx + actor_destination_x], ebp
@@ -6564,11 +6488,11 @@ section .retained_80 align=1 vstart=0x26489 follows=.retained_79
     movsx ebx, ax
     mov [edx + actor_board], cl
 
-section .retained_81 align=1 vstart=0x26522 follows=.retained_80
+section .retained_96 align=1 vstart=0x26522 follows=.retained_95
     movsx edx, ax
     mov byte [edx + actor_projectile_type], 0x1
 
-section .retained_82 align=1 vstart=0x26539 follows=.retained_81
+section .retained_97 align=1 vstart=0x26539 follows=.retained_96
     mov bh, 0x2
     movsx edx, ax
     mov cl, 0x1
@@ -6629,7 +6553,7 @@ section .retained_82 align=1 vstart=0x26539 follows=.retained_81
     movsx edx, ax
     mov byte [edx + actor_board], 0x18
 
-section .retained_83 align=1 vstart=0x26690 follows=.retained_82
+section .retained_98 align=1 vstart=0x26690 follows=.retained_97
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3

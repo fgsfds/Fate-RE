@@ -55,7 +55,8 @@ def model(memory, phase):
     return bytes(memory[DS:DS+DATA_SIZE]), writes
 
 
-def execute(memory, registers, flags, body, address, *, function=False, full=False, watch=None):
+def execute(memory, registers, flags, body, address, *, function=False, full=False, watch=None, borrowed_stack=0):
+    assert borrowed_stack in (0,24) and not (function and borrowed_stack)
     cpu = Uc(UC_ARCH_X86, UC_MODE_32)
     cpu.mem_map(0,0x400000); cpu.mem_write(0,bytes(memory)); cpu.mem_write(address,body)
     for register, value in zip(REGS,registers): cpu.reg_write(register,value)
@@ -66,7 +67,7 @@ def execute(memory, registers, flags, body, address, *, function=False, full=Fal
         if DS <= where and where+size <= DS+DATA_SIZE:
             writes.append((where,size,value & ((1 << (size*8))-1)))
         else:
-            assert function and SP-24 <= where and where+size <= SP
+            assert (function or borrowed_stack) and SP-24 <= where and where+size <= SP
             lowest = min(lowest,where)
     def instruction(_cpu,where,size,_user):
         if where == STOP: cpu.emu_stop(); return
@@ -80,13 +81,14 @@ def execute(memory, registers, flags, body, address, *, function=False, full=Fal
                     visited.add(phase['symbol'])
     cpu.hook_add(UC_HOOK_MEM_WRITE,write); cpu.hook_add(UC_HOOK_CODE,instruction)
     end = STOP if function else address+len(body)
-    cpu.emu_start(address,end,count=50000 if full else 100)
+    cpu.emu_start(address,end,count=50000 if full or borrowed_stack else 100)
     assert cpu.reg_read(UC_X86_REG_EIP) == end
-    assert cpu.reg_read(UC_X86_REG_ESP) == SP+(4 if function else 0)
+    assert cpu.reg_read(UC_X86_REG_ESP) == SP+(4 if function else -borrowed_stack)
     assert bytes(cpu.mem_read(SP+4,64)) == bytes([0xa7])*64
     assert bytes(cpu.mem_read(SP-128,104)) == bytes([0xa7])*104
-    return (bytes(cpu.mem_read(DS,DATA_SIZE)),writes,
+    result = (bytes(cpu.mem_read(DS,DATA_SIZE)),writes,
             tuple(cpu.reg_read(r) for r in REGS),cpu.reg_read(UC_X86_REG_EFLAGS),SP-lowest,visited)
+    return result+(bytes(cpu.mem_read(SP-borrowed_stack,borrowed_stack)),) if borrowed_stack else result
 
 
 def bind_production(exe, build):
@@ -110,7 +112,7 @@ def bind_production(exe, build):
         fields = {}; natural, natural_data = v.bind_leaf_details(blob,phase['public'],values,address=0x50000,code_bindings=fields)
         assert not fields and len(natural_data) == len(data)
         slices.append((phase,loaded,natural))
-    for actor_layout in (group.INDEXED_LAYOUT, group.DESTINATION_LAYOUT):
+    for actor_layout in group.CONFIGURATION_LAYOUTS:
         indexed_blob = (build/(actor_layout['context']['object']+'.obj')).read_bytes()
         for phase in actor_layout['phases']:
             fields = {}; address = phase['address']; symbol = phase['symbol']

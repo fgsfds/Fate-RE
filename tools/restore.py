@@ -35,7 +35,7 @@ def registrations():
 
 def mixed_routine(selector):
     """Keep original routine context after its coverage is split into phases."""
-    from verify_c_leaf import WEAPON_ANIMATION_LAYOUT, BOARD_ACTOR_LAYOUT, BOARD_ACTOR_INDEXED_LAYOUT, BOARD_ACTOR_DESTINATION_LAYOUT
+    from verify_c_leaf import WEAPON_ANIMATION_LAYOUT, BOARD_ACTOR_LAYOUT, BOARD_ACTOR_CONFIGURATION_LAYOUTS
     layouts = {'update_weapon_animation': WEAPON_ANIMATION_LAYOUT,
                'initialize_board_actors': BOARD_ACTOR_LAYOUT}
     name = selector.rstrip('_')
@@ -46,7 +46,7 @@ def mixed_routine(selector):
                else {layout['object']})
     phases = list(layout['phases'])
     if name == 'initialize_board_actors':
-        for actor_layout in (BOARD_ACTOR_INDEXED_LAYOUT, BOARD_ACTOR_DESTINATION_LAYOUT):
+        for actor_layout in BOARD_ACTOR_CONFIGURATION_LAYOUTS:
             objects.add(actor_layout['context']['object'])
             phases += actor_layout['phases']
     return dict(symbol=name, loaded_address=hex(layout['original_address']),

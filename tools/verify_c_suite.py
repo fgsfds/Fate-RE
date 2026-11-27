@@ -1588,7 +1588,7 @@ def verify_compiler_groups(exe, directory, names=None):
             verify_group_layout((directory/(context['object']+'.obj')).read_bytes(), context['size'], [(context['public'], 0)])
     if selected('actorcfg'):
         verify_group_layout((directory/'actorcfg.obj').read_bytes(), BOARD_ACTOR_LAYOUT['size'], [(p[2], p[1]) for p in BOARD_ACTOR_LAYOUT['publics']])
-    for layout in (BOARD_ACTOR_INDEXED_LAYOUT, BOARD_ACTOR_DESTINATION_LAYOUT):
+    for layout in BOARD_ACTOR_CONFIGURATION_LAYOUTS:
         context = layout['context']
         if selected(context['object']):
             verify_group_layout((directory/(context['object']+'.obj')).read_bytes(), context['size'], [(context['public'], 0)])
@@ -1763,11 +1763,11 @@ OBJECT_NAMES['sound_frame_limit_'] = 'sndlimit'
 from verify_c_leaf import ENCOUNTER_SPAWN_LAYOUT
 OBJECT_NAMES.update({p['symbol']: p['object'] for p in ENCOUNTER_SPAWN_LAYOUT['phases']})
 
-from verify_c_leaf import WEAPON_ANIMATION_LAYOUT, BOARD_ACTOR_LAYOUT, BOARD_ACTOR_INDEXED_LAYOUT, BOARD_ACTOR_DESTINATION_LAYOUT
+from verify_c_leaf import WEAPON_ANIMATION_LAYOUT, BOARD_ACTOR_LAYOUT, BOARD_ACTOR_CONFIGURATION_LAYOUTS
 OBJECT_NAMES.update({p['symbol']: next(c['object'] for c in WEAPON_ANIMATION_LAYOUT['contexts'] if c['public'] == p['public']) for p in WEAPON_ANIMATION_LAYOUT['phases']})
 OBJECT_NAMES.update({p['symbol']: 'actorcfg' for p in BOARD_ACTOR_LAYOUT['phases']})
-OBJECT_NAMES.update({p['symbol']: 'actsetup' for p in BOARD_ACTOR_INDEXED_LAYOUT['phases']})
-OBJECT_NAMES.update({p['symbol']: 'actdest' for p in BOARD_ACTOR_DESTINATION_LAYOUT['phases']})
+for _actor_layout in BOARD_ACTOR_CONFIGURATION_LAYOUTS:
+    OBJECT_NAMES.update({p['symbol']: _actor_layout['context']['object'] for p in _actor_layout['phases']})
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

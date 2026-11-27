@@ -167,25 +167,22 @@ addition to the earlier compact 85 bytes, 281 complete typed operations supply
 4,271 exact bytes and 318 DATA sites in 71 runs. The full private routine still
 changes store order and raw EAX; it is not a whole-routine binary replacement.
 
-The first whole-context mismatch is `0x1e930`: the loop condition compares AX
-with 501 instead of promoting into EDX and comparing with 500. Three separate
-disable-loop probes kept the counter in BX and promoted through EAX, even with
-short/full counter captures or a direct increment. A conservative EDX output
-clobber emits CMP EDX,500 but retains MOVSX EAX,BX; MOV EDX,EAX and counter
-copies. Next establish the EAX counter and EDX promotion lifetimes together
-inside the constructor; repeating these isolated forms is unhelpful.
-
 A second typed context captures the actual zero in EBX and each destination
 byte offset in EDX. It restores 18 complete field assignments, including eight
 interleaved next-slot loads, for 250 additional bytes and 18 DATA sites in nine
 runs. Its 31,119-byte whole translation still differs in store order and is not
-a full byte-exact replacement. The first remaining destination field is actor
-104 X at `0x20da3`: original XOR ESI,ESI and store ESI versus the existing EBP
-zero in the private context. Next model the actual ESI zero lifetime. Saved XYZ,
+a full byte-exact replacement. A third context carries actual ESI/EDI/EAX
+values and adds 27 assignments, 368 bytes and 27 DATA sites in 19 runs.
+Keep the previous context: the new one reproduces only 175 of its 250 bytes.
+Actor 104 X now clears/stores ESI, but its MOVSX EDX,AX is hoisted before the
+preceding waypoint write; the original complete assignment still differs.
+Next qualify those complete neighboring operations together and prove any
+independent address calculation can commute, without changing store order.
+Explicit EBP outputs fail with E1122; use natural allocation. Saved XYZ,
 destination, waypoint and tile-row strides are 12, 16, 4 and 18 bytes; untouched
 words remain unchanged. Evidence: `work/board-slot-lifetime-nov27/REPORT.md`,
-`selected-indexed-operations.json`, `work/actor-disable-loop-nov27/actclob-result.json`,
-and `work/destination-lifetime-nov27/REPORT.md`.
+`selected-indexed-operations.json`, `work/destination-lifetime-nov27/REPORT.md`,
+and `work/destination-values-nov27/REPORT.md`.
 
 ### Video prompt-mode blocker
 

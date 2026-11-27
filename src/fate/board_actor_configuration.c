@@ -38,14 +38,29 @@ extern short actor_slot_in_ax(short);
 #pragma aux actor_slot_in_ax = "" parm [ax] value [ax] modify exact [];
 
 #ifndef ACTOR_DESTINATION_CONTEXT
+#ifdef ACTOR_DISABLE_CONTEXT
+extern int promoted_slot(int);
+#pragma aux promoted_slot = "" parm nomemory [edx] value [edx] modify exact [edx];
+void board_actor_disable_context(void);
+#pragma aux board_actor_disable_context modify exact [eax];
+#else
 void board_actor_configuration_context(void);
 #pragma aux board_actor_configuration_context modify exact [eax];
+#endif
 #endif
 
 #ifdef ACTOR_DESTINATION_CONTEXT
 /* The empty auxiliaries carry their actual input through the named register. */
 extern long actor_destination_zero_in_ebx(long);
 #pragma aux actor_destination_zero_in_ebx = "" parm [ebx] value [ebx] modify exact [];
+#ifdef ACTOR_DESTINATION_VALUES
+extern long actor_destination_value_in_esi(long);
+#pragma aux actor_destination_value_in_esi = "" parm [esi] value [esi] modify exact [];
+extern long actor_destination_value_in_edi(long);
+#pragma aux actor_destination_value_in_edi = "" parm [edi] value [edi] modify exact [];
+extern long actor_destination_value_in_eax(long);
+#pragma aux actor_destination_value_in_eax = "" parm [eax] value [eax] modify exact [];
+#endif
 extern long actor_destination_offset_in_edx(long);
 #pragma aux actor_destination_offset_in_edx = "" parm [edx] value [edx] modify exact [];
 
@@ -53,20 +68,43 @@ extern long actor_destination_offset_in_edx(long);
 #define destination_at(offset) \
     (*(ActorDestination *)((char *)&startup_actor_destinations + (offset)))
 
+#ifdef ACTOR_DESTINATION_VALUES
+void board_actor_value_context(void);
+#pragma aux board_actor_value_context modify exact [eax];
+#else
 void board_actor_destination_context(void);
 #pragma aux board_actor_destination_context modify exact [eax];
+#endif
 
+#ifdef ACTOR_DESTINATION_VALUES
+void board_actor_value_context(void)
+#else
 void board_actor_destination_context(void)
+#endif
+#else
+#ifdef ACTOR_DISABLE_CONTEXT
+void board_actor_disable_context(void)
 #else
 void board_actor_configuration_context(void)
+#endif
 #endif
 {
     short slot, configured_slot;
 #ifdef ACTOR_DESTINATION_CONTEXT
+#ifdef ACTOR_DESTINATION_VALUES
+    long destination_offset;
+    long destination_value_esi;
+    long destination_value_edi;
+    long destination_value_eax;
+#endif
     long destination_zero;
 #endif
 
+#ifdef ACTOR_DISABLE_CONTEXT
+    for (slot = 0; promoted_slot((int)slot) <= 500; ++slot)
+#else
     for (slot = 0; slot < ACTOR_SLOTS; ++slot)
+#endif
         actor_enabled[slot] = ACTOR_DISABLED;
 
     /* Configure actors in original write order. */
@@ -1168,17 +1206,35 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 0;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_esi = actor_destination_value_in_esi(0);
+    destination_at(destination_offset).x = destination_value_esi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0);
+    destination_at(destination_offset).y = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_eax = actor_destination_value_in_eax(0);
+    destination_at(destination_offset).parameter_two = destination_value_eax;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = 0;
     startup_actor_destinations[configured_slot].y = 0;
@@ -1207,8 +1263,14 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 0;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0);
+    destination_at(destination_offset).x = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
@@ -1287,17 +1349,38 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 0;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_esi = actor_destination_value_in_esi(0);
+    destination_at(destination_offset).x = destination_value_esi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).y = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_one = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_two = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = 0;
     startup_actor_destinations[configured_slot].y = 0;
@@ -1326,17 +1409,33 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 0;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0);
+    destination_at(destination_offset).x = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_one = actor_destination_value_in_edi(destination_value_edi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_two = actor_destination_value_in_edi(destination_value_edi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = 0;
     startup_actor_destinations[configured_slot].y = 0;
@@ -1405,17 +1504,38 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 89;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_esi = actor_destination_value_in_esi(0);
+    destination_at(destination_offset).x = destination_value_esi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).y = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_one = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_two = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = 0;
     startup_actor_destinations[configured_slot].y = 0;
@@ -1444,17 +1564,38 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 95;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0);
+    destination_at(destination_offset).x = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).y = actor_destination_value_in_edi(destination_value_edi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_one = actor_destination_value_in_edi(destination_value_edi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_two = actor_destination_value_in_edi(destination_value_edi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = 0;
     startup_actor_destinations[configured_slot].y = 0;
@@ -1524,17 +1665,38 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 0;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_esi = actor_destination_value_in_esi(0);
+    destination_at(destination_offset).x = destination_value_esi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).y = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_one = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_two = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = 0;
     startup_actor_destinations[configured_slot].y = 0;
@@ -1563,17 +1725,33 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 0;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0);
+    destination_at(destination_offset).x = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_one = actor_destination_value_in_edi(destination_value_edi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_two = actor_destination_value_in_edi(destination_value_edi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = 0;
     startup_actor_destinations[configured_slot].y = 0;
@@ -1680,17 +1858,38 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 29;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_esi = actor_destination_value_in_esi(0);
+    destination_at(destination_offset).x = destination_value_esi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).y = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_one = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_two = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = 0;
     startup_actor_destinations[configured_slot].y = 0;
@@ -1758,17 +1957,38 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 36;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_esi = actor_destination_value_in_esi(0);
+    destination_at(destination_offset).x = destination_value_esi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).y = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_one = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_two = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = 0;
     startup_actor_destinations[configured_slot].y = 0;
@@ -1797,17 +2017,38 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 39;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0);
+    destination_at(destination_offset).x = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).y = actor_destination_value_in_edi(destination_value_edi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_one = actor_destination_value_in_edi(destination_value_edi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_two = actor_destination_value_in_edi(destination_value_edi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = 0;
     startup_actor_destinations[configured_slot].y = 0;
@@ -1915,14 +2156,25 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 0;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0x1900L);
+    destination_at(destination_offset).x = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0x1900L;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0x3b00L;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_one = actor_destination_value_in_edi(destination_value_edi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0x1900L;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = -0x100L;
@@ -1963,8 +2215,14 @@ void board_actor_configuration_context(void)
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = -0x380L;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0x1a80L);
+    destination_at(destination_offset).parameter_two = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0x1a80L;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = 0x2580L;
     startup_actor_destinations[configured_slot].y = -0x3400L;
@@ -2077,11 +2335,23 @@ void board_actor_configuration_context(void)
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0x1880L;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_esi = actor_destination_value_in_esi(-0x1400L);
+    destination_at(destination_offset).parameter_one = destination_value_esi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = -0x1400L;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(-0x500L);
+    destination_at(destination_offset).parameter_two = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = -0x500L;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = -0x1a00L;
     startup_actor_destinations[configured_slot].y = 0x1880L;
@@ -2200,8 +2470,14 @@ void board_actor_configuration_context(void)
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = -0x3000L;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(-0x100L);
+    destination_at(destination_offset).parameter_two = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = -0x100L;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = -0x2000L;
     startup_actor_destinations[configured_slot].y = 0x3a00L;
@@ -2309,8 +2585,14 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 0;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_esi = actor_destination_value_in_esi(-0xc00L);
+    destination_at(destination_offset).x = destination_value_esi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = -0xc00L;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0xcb00L;
@@ -2435,8 +2717,14 @@ void board_actor_configuration_context(void)
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0x400L;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0xa980L);
+    destination_at(destination_offset).parameter_two = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0xa980L;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = 0x2780L;
     startup_actor_destinations[configured_slot].y = 0xad80L;
@@ -2549,11 +2837,23 @@ void board_actor_configuration_context(void)
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0xd580L;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_esi = actor_destination_value_in_esi(-0x4e80L);
+    destination_at(destination_offset).parameter_one = destination_value_esi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = -0x4e80L;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0xe380L);
+    destination_at(destination_offset).parameter_two = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0xe380L;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = -0x6200L;
     startup_actor_destinations[configured_slot].y = 0xd580L;
@@ -2701,17 +3001,38 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 59;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_esi = actor_destination_value_in_esi(0);
+    destination_at(destination_offset).x = destination_value_esi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).y = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_one = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_two = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = 0;
     startup_actor_destinations[configured_slot].y = 0;
@@ -2786,11 +3107,23 @@ void board_actor_configuration_context(void)
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0x7200L;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_esi = actor_destination_value_in_esi(-0x1500L);
+    destination_at(destination_offset).parameter_one = destination_value_esi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = -0x1500L;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0xa100L);
+    destination_at(destination_offset).parameter_two = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0xa100L;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = -0x1580L;
     startup_actor_destinations[configured_slot].y = 0x7200L;
@@ -2860,8 +3193,14 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 0;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0x3480L);
+    destination_at(destination_offset).x = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0x3480L;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0xb100L;
@@ -2909,8 +3248,14 @@ void board_actor_configuration_context(void)
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0x2780L;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0xad00L);
+    destination_at(destination_offset).parameter_two = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0xad00L;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = 0x3480L;
     startup_actor_destinations[configured_slot].y = 0xa300L;
@@ -2978,8 +3323,14 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 0;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0);
+    destination_at(destination_offset).x = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
@@ -3025,8 +3376,14 @@ void board_actor_configuration_context(void)
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_esi = actor_destination_value_in_esi(0);
+    destination_at(destination_offset).parameter_one = destination_value_esi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = actor_destination_zero_in_ebx(destination_zero);
@@ -3061,14 +3418,25 @@ void board_actor_configuration_context(void)
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = -0x1d00L;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0xcb00L);
+    destination_at(destination_offset).y = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0xcb00L;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = -0xc00L;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_two = actor_destination_value_in_edi(destination_value_edi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0xcb00L;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = -0x1d00L;
     startup_actor_destinations[configured_slot].y = 0xcb00L;
@@ -3137,17 +3505,34 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 0;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_esi = actor_destination_value_in_esi(-0x4080L);
+    destination_at(destination_offset).x = destination_value_esi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = -0x4080L;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0xb000L;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_one = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = -0x4080L;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0x9d00L);
+    destination_at(destination_offset).parameter_two = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0x9d00L;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = -0x4080L;
     startup_actor_destinations[configured_slot].y = 0xb000L;
@@ -3180,14 +3565,25 @@ void board_actor_configuration_context(void)
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = -0x2480L;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0x8d00L);
+    destination_at(destination_offset).y = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0x8d00L;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = -0x500L;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_two = actor_destination_value_in_edi(destination_value_edi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0x8d00L;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = -0x2480L;
     startup_actor_destinations[configured_slot].y = 0x8d00L;
@@ -3217,14 +3613,25 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 0;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(-0x6980L);
+    destination_at(destination_offset).x = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = -0x6980L;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0x1f80L;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_one = actor_destination_value_in_edi(destination_value_edi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = -0x6980L;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = -0x1600L;
@@ -3260,14 +3667,26 @@ void board_actor_configuration_context(void)
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = -0x5f80L;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(-0x1800L);
+    destination_at(destination_offset).y = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = -0x1800L;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = -0x5f80L;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0x2100L);
+    destination_at(destination_offset).parameter_two = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0x2100L;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = -0x5f80L;
     startup_actor_destinations[configured_slot].y = -0x1800L;
@@ -3297,17 +3716,38 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 105;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_esi = actor_destination_value_in_esi(0);
+    destination_at(destination_offset).x = destination_value_esi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).y = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_one = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_two = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = 0;
     startup_actor_destinations[configured_slot].y = 0;
@@ -3337,8 +3777,14 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 0;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0);
+    destination_at(destination_offset).x = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
@@ -3385,8 +3831,14 @@ void board_actor_configuration_context(void)
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_esi = actor_destination_value_in_esi(0);
+    destination_at(destination_offset).parameter_one = destination_value_esi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = actor_destination_zero_in_ebx(destination_zero);
@@ -3459,8 +3911,14 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 0;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0);
+    destination_at(destination_offset).x = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
@@ -3507,8 +3965,14 @@ void board_actor_configuration_context(void)
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_esi = actor_destination_value_in_esi(0);
+    destination_at(destination_offset).parameter_one = destination_value_esi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = actor_destination_zero_in_ebx(destination_zero);
@@ -3581,17 +4045,38 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 0;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0);
+    destination_at(destination_offset).x = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).y = actor_destination_value_in_edi(destination_value_edi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_one = actor_destination_value_in_edi(destination_value_edi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_two = actor_destination_value_in_edi(destination_value_edi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = 0;
     startup_actor_destinations[configured_slot].y = 0;
@@ -3700,14 +4185,25 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 0;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0x4980L);
+    destination_at(destination_offset).x = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0x4980L;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0xc00L;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_one = actor_destination_value_in_edi(destination_value_edi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0x4980L;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = -0x500L;
@@ -3778,17 +4274,38 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 0;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_esi = actor_destination_value_in_esi(0);
+    destination_at(destination_offset).x = destination_value_esi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).y = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_one = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_two = actor_destination_value_in_esi(destination_value_esi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = 0;
     startup_actor_destinations[configured_slot].y = 0;
@@ -3817,17 +4334,33 @@ void board_actor_configuration_context(void)
     startup_actor_waypoints[configured_slot].first = 0;
 #ifdef ACTOR_DESTINATION_CONTEXT
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_value_edi = actor_destination_value_in_edi(0);
+    destination_at(destination_offset).x = destination_value_edi;
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .x = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .y = 0;
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_one = actor_destination_value_in_edi(destination_value_edi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_one = 0;
+#endif
     configured_slot = actor_slot_in_ax(configured_slot);
+#ifdef ACTOR_DESTINATION_VALUES
+    destination_offset = actor_destination_offset_in_edx((long)configured_slot * 16L);
+    destination_at(destination_offset).parameter_two = actor_destination_value_in_edi(destination_value_edi);
+#else
     destination_at(actor_destination_offset_in_edx((long)configured_slot * 16L))
         .parameter_two = 0;
+#endif
 #else
     startup_actor_destinations[configured_slot].x = 0;
     startup_actor_destinations[configured_slot].y = 0;

@@ -218,6 +218,19 @@ keep the incoming EBX value live through a standalone C loop. Watcom 10.5
 the zero through an ECX identity alone schedules the XOR before the increment.
 The checked public has one extra private RET, excluded by the leaf slice.
 
+The startup actor disable loop needs the complete constructor's register
+allocation. An isolated signed-word loop keeps its counter in BX and adds
+EAX/EDX copies. In the full typed constructor, a truthful empty int identity
+with `parm nomemory [edx] value [edx] modify exact [edx]` in the `<= 500`
+condition emits the original `MOVSX EDX,AX; CMP EDX,500` while retaining the
+EAX counter. The conservative EDX clobber blocks comparison-value reuse.
+The six-register save frame and both internal branches match as one 33-byte
+prefix. That frame remains live into retained assembly; the complete context
+and all fixups are guarded, and the fixture checks its exact saved words,
+501 ordered writes, arithmetic flags and whole-routine restoration. Do not
+infer a whole-constructor match from the prefix. Source:
+`src/fate/board_actor_configuration.c`, `ACTOR_DISABLE_CONTEXT`.
+
 
 ### Byte-register identities and natural EBP constant allocation
 

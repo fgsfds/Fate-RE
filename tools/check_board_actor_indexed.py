@@ -62,7 +62,7 @@ def live(registers, operation):
     return tuple(registers)
 
 
-def validate_destination_instructions(layout, original, natural):
+def validate_destination_instructions(layout, original, natural, expected_setups=8):
     """Pin every recorded store and interleaved next-slot load to real instructions."""
     from capstone import Cs, CS_ARCH_X86, CS_MODE_32, CS_OP_MEM, CS_OP_REG, CS_OP_IMM
     from capstone.x86_const import X86_REG_EAX
@@ -82,7 +82,7 @@ def validate_destination_instructions(layout, original, natural):
                       and i.operands[1].type == CS_OP_IMM and i.address < stores[-1][0]]
             assert actual == operation['interleaved_slot_setup'], 'destination next-slot instruction metadata'
         setups += len(operation['interleaved_slot_setup'])
-    assert setups == 8, 'destination next-slot instruction count'
+    assert setups == expected_setups, 'destination next-slot instruction count'
 
 
 def model(memory, operation):
@@ -124,7 +124,7 @@ def context_controls(blob, layout):
         else: raise AssertionError(message)
     unchanged,changed = rewrite_fixup(blob,lambda f:False,lambda f:f)
     assert not changed and bind(unchanged) == bind(blob)
-    for label,site in [('excluded_prologue',0),('excluded_return',context['size']-1)]:
+    for label,site in [('private_prologue',0),('excluded_return',context['size']-1)]:
         reject(mutate_public_byte(blob,public,site),'complete context digest'); controls.append(label)
     _,_,names,_,fixups = v.parsed_leaf_object(blob)
     first = fixups[0]
@@ -140,29 +140,32 @@ def context_controls(blob, layout):
     bad[cursor+3] = 1; bad[end-1] = (-sum(bad[cursor:end-1])) & 255
     assert v.parsed_leaf_object(bytes(bad)) == v.parsed_leaf_object(blob)
     reject(bytes(bad),'structural OMF metadata'); controls.append('PUBDEF_group')
-    attribute = 'DESTINATION_SHA256' if public == group.DESTINATION_PUBLIC else 'INDEXED_SHA256'
+    attribute = group.CONTEXT_DIGEST_ATTRIBUTES[public]
     digest = getattr(group,attribute); leaf_digest = v.LEAF_CONTEXT_SHA256.pop(public)
     setattr(group,attribute,None)
     try:
-        assert not any(p['begin'] <= first.offset < p['end'] for p in layout['phases'])
-        reject(mutate_public_byte(blob,public,first.offset),'fixup addends')
+        excluded = next(f for f in fixups if not any(p['begin'] <= f.offset < p['end'] for p in layout['phases']))
+        reject(mutate_public_byte(blob,public,excluded.offset),'fixup addends')
         controls.append('excluded_addend_without_digests')
     finally:
         setattr(group,attribute,digest); v.LEAF_CONTEXT_SHA256[public] = leaf_digest
     return controls
 
 
-def main(destinations=False):
+def main(destinations=False, values=False):
+    assert not (destinations and values)
+    destinations = destinations or values
+    expected_setups = 6 if values else 8
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--exe',type=Path,required=True); parser.add_argument('--build',type=Path,required=True); parser.add_argument('--output',type=Path,required=True)
     args = parser.parse_args(); exe = args.exe.read_bytes(); assert hashlib.sha256(exe).hexdigest() == TARGET_SHA256
-    layout = group.DESTINATION_LAYOUT if destinations else group.INDEXED_LAYOUT; validate_operations(layout)
-    operations = layout['operations']; assert len(operations) == (18 if destinations else 281)
+    layout = group.VALUE_LAYOUT if values else group.DESTINATION_LAYOUT if destinations else group.INDEXED_LAYOUT; validate_operations(layout)
+    operations = layout['operations']; assert len(operations) == (27 if values else 18 if destinations else 281)
     original = image(exe); _,body,_ = base.bind_production(exe,args.build)
-    blob = (args.build/(layout['context']['object']+'.obj')).read_bytes(); values = {k:DS+n for k,n in v.DATA_OFFSETS.items()}; fields = {}
-    natural,data = v.bind_leaf_details(blob,layout['context']['public'],values,address=0x50000,code_bindings=fields)
-    assert not fields and len(natural) == (31119 if destinations else 30235) and len(data) == 2579
-    if destinations: validate_destination_instructions(layout,original,natural)
+    blob = (args.build/(layout['context']['object']+'.obj')).read_bytes(); bindings = {k:DS+n for k,n in v.DATA_OFFSETS.items()}; fields = {}
+    natural,data = v.bind_leaf_details(blob,layout['context']['public'],bindings,address=0x50000,code_bindings=fields)
+    assert not fields and len(natural) == (31347 if values else 31119 if destinations else 30235) and len(data) == 2579
+    if destinations: validate_destination_instructions(layout,original,natural,expected_setups)
     begin = group.LAYOUT['original_address']; cases = 0
     seed_registers = base.seed(original,0)[1]
     for operation in operations:
@@ -217,16 +220,16 @@ def main(destinations=False):
     memory,registers = base.seed(original,7); actual = base.execute(memory,live(registers,operation),0x202,bytes(code),address)
     assert actual[0] != model(memory,operation)[0]; code_controls.append('destination_stride' if destinations else 'saved_position_stride')
     if destinations:
-        # The direct actor-103 X store must consume EBX, not another poisoned zero-looking register.
+        # A destination store must consume its actual zero register.
         operation = operations[0]; address = operation['original_start']
         code = bytearray(body[address-begin:operation['original_end']-begin])
-        instruction = next(decoder.disasm(bytes(code),0))
-        assert instruction.mnemonic == 'mov' and instruction.op_str.endswith(', ebx')
-        code[instruction.modrm_offset] ^= 0x28  # source EBX -> ESI
+        from capstone import CS_OP_MEM
+        instruction = next(i for i in decoder.disasm(bytes(code),0) if i.mnemonic == 'mov' and i.operands[0].type == CS_OP_MEM)
+        code[instruction.address+instruction.modrm_offset] ^= 8  # select a different poisoned source register
         memory,registers = base.seed(original,7)
         actual = base.execute(memory,live(registers,operation),0x202,bytes(code),address)
         assert actual[0] != model(memory,operation)[0]; code_controls.append('destination_zero_register')
-        # Eight compiler intervals also set the next slot. That EAX result is observable.
+        # Some compiler intervals also set the next slot. That EAX result is observable.
         operation = next(o for o in operations if o['interleaved_slot_setup'])
         address = operation['original_start']; code = bytearray(body[address-begin:operation['original_end']-begin])
         setup = operation['interleaved_slot_setup'][0]; code[setup['offset']+1] ^= 1
@@ -246,12 +249,12 @@ def main(destinations=False):
                 if key == 'missing': record.clear()
                 elif key == 'offset': record[0][key] += 1
                 else: record[0][key] += 'x'
-                try: validate_destination_instructions(changed,original,natural)
+                try: validate_destination_instructions(changed,original,natural,expected_setups)
                 except AssertionError as error: assert 'next-slot instruction' in str(error),str(error)
                 else: raise AssertionError('Destination setup metadata mutation escaped')
                 metadata_controls.append(f'next_slot_{pos}_{key}')
         changed = deepcopy(layout); changed['operations'][0]['writes'][0][0] += 1
-        try: validate_destination_instructions(changed,original,natural)
+        try: validate_destination_instructions(changed,original,natural,expected_setups)
         except AssertionError as error: assert 'store instruction metadata' in str(error),str(error)
         else: raise AssertionError('Destination store-offset metadata mutation escaped')
         metadata_controls.append('store_instruction_offset')
@@ -264,14 +267,14 @@ def main(destinations=False):
         except AssertionError as error: assert message in str(error),str(error)
         else: raise AssertionError('Metadata mutation escaped: '+label)
         metadata_controls.append(label)
-    operation = deepcopy(next(o for o in operations if o['live_in_bitmasks'].get('eax',0) & 1))
-    assert operation['original_start'] == (0x20c5a if destinations else 0x2204e)
+    operation = deepcopy(next(o for o in operations if o['live_in_bitmasks'].get('eax',0) & o['live_in_values'].get('eax',0) & 1))
+    if not values: assert operation['original_start'] == (0x20c5a if destinations else 0x2204e)
     operation['live_in_bitmasks']['eax'] &= ~1; operation['live_in_values']['eax'] &= ~1
     memory,_ = base.seed(original,7); registers = tuple(r ^ 0xffffffff for r in seed_registers)
     address = operation['original_start']; code = body[address-begin:operation['original_end']-begin]
     actual = base.execute(memory,live(registers,operation),0x202,code,address)
     assert actual[0] != model(memory,operation)[0]; metadata_controls.append('omitted_AX_bit')
-    report = dict(status='PASS',placed_c_bytes=250 if destinations else 4271,DATA_sites=18 if destinations else 318,operations=len(operations),runs=len(layout['phases']),operation_cases=cases,whole_cases=whole,private_register_difference_cases=register_differences,private_flag_difference_cases=flag_differences,context_controls=context_controls(blob,layout),code_controls=code_controls,scope='Independent typed field/slot/width/value models with poisoned unused register bits; original and placed operation DATA/write traces/registers/flags agree. Five whole original/placed runs preserve 3079 ordered writes and all selected entry contracts. Whole private C checks final DATA, write multiset, saved registers and the same masked entries; private raw EAX/flags and full store-order equivalence are not required. No whole-routine byte-exact C claim.')
+    report = dict(status='PASS',placed_c_bytes=368 if values else 250 if destinations else 4271,DATA_sites=27 if values else 18 if destinations else 318,operations=len(operations),runs=len(layout['phases']),operation_cases=cases,whole_cases=whole,private_register_difference_cases=register_differences,private_flag_difference_cases=flag_differences,context_controls=context_controls(blob,layout),code_controls=code_controls,scope='Independent typed field/slot/width/value models with poisoned unused register bits; original and placed operation DATA/write traces/registers/flags agree. Five whole original/placed runs preserve 3079 ordered writes and all selected entry contracts. Whole private C checks final DATA, write multiset, saved registers and the same masked entries; private raw EAX/flags and full store-order equivalence are not required. No whole-routine byte-exact C claim.')
     report['metadata_controls'] = metadata_controls
     args.output.write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8'); print(json.dumps(report))
 

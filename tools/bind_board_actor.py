@@ -1,4 +1,4 @@
-"""Guard complete compact, indexed and destination actor compiler contexts."""
+"""Guard complete actor compiler contexts before selecting any placed ranges."""
 import hashlib
 import json
 from pathlib import Path
@@ -8,10 +8,17 @@ INDEXED_LAYOUT = json.loads((Path(__file__).parent/'data'/LAYOUT['indexed_contex
 INDEXED_PUBLIC = INDEXED_LAYOUT['context']['public']
 DESTINATION_LAYOUT = json.loads((Path(__file__).parent/'data'/LAYOUT['destination_context_file']).read_text(encoding='utf-8'))
 DESTINATION_PUBLIC = DESTINATION_LAYOUT['context']['public']
-PUBLICS = frozenset([p[2] for p in LAYOUT['publics']] + [INDEXED_PUBLIC, DESTINATION_PUBLIC])
+VALUE_LAYOUT = json.loads((Path(__file__).parent/'data'/LAYOUT['value_context_file']).read_text(encoding='utf-8'))
+DISABLE_LAYOUT = json.loads((Path(__file__).parent/'data'/LAYOUT['disable_context_file']).read_text(encoding='utf-8'))
+CONFIGURATION_LAYOUTS = (INDEXED_LAYOUT, DESTINATION_LAYOUT, VALUE_LAYOUT, DISABLE_LAYOUT)
+CONTEXTS = {layout['context']['public']: layout['context'] for layout in CONFIGURATION_LAYOUTS}
+PUBLICS = frozenset([p[2] for p in LAYOUT['publics']] + list(CONTEXTS))
 GROUP_SHA256 = LAYOUT['sha256']
 INDEXED_SHA256 = INDEXED_LAYOUT['context']['sha256']
 DESTINATION_SHA256 = DESTINATION_LAYOUT['context']['sha256']
+VALUE_SHA256 = VALUE_LAYOUT['context']['sha256']
+DISABLE_SHA256 = DISABLE_LAYOUT['context']['sha256']
+CONTEXT_DIGEST_ATTRIBUTES = dict(zip(CONTEXTS, ('INDEXED_SHA256', 'DESTINATION_SHA256', 'VALUE_SHA256', 'DISABLE_SHA256')))
 
 
 def structural_records(blob):
@@ -35,11 +42,9 @@ def verify_context(blob, public_name=None):
     from verify_c_leaf import parsed_leaf_object
     segments, publics, names, flat, fixups = parsed_leaf_object(blob)
     if public_name is None:
-        public_name = next((p[2] for p in publics if p[2] in (INDEXED_PUBLIC, DESTINATION_PUBLIC)), None)
-    if public_name == DESTINATION_PUBLIC:
-        layout, digest = DESTINATION_LAYOUT['context'], DESTINATION_SHA256
-    elif public_name == INDEXED_PUBLIC:
-        layout, digest = INDEXED_LAYOUT['context'], INDEXED_SHA256
+        public_name = next((p[2] for p in publics if p[2] in CONTEXTS), None)
+    if public_name in CONTEXTS:
+        layout, digest = CONTEXTS[public_name], globals()[CONTEXT_DIGEST_ATTRIBUTES[public_name]]
     else:
         layout, digest = LAYOUT, GROUP_SHA256
     if [list(p) for p in publics] != layout['publics']:
