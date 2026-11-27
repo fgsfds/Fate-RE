@@ -599,3 +599,5 @@ fate/board_actor_configuration actdest /4r /s /or /bt=dos /dACTOR_DESTINATION_CO
 fate/board_actor_configuration actvalue /4r /s /or /bt=dos /dACTOR_DESTINATION_CONTEXT=1 /dACTOR_DESTINATION_VALUES=1
 fate/board_actor_configuration actdisab /4r /s /or /bt=dos /dACTOR_DISABLE_CONTEXT=1
 fate/board_actor_configuration actclob /4r /s /or /bt=dos /dACTOR_CLOBBER_CONTEXT=1
+fate/board_actor_configuration actoff /4r /s /or /bt=dos /dACTOR_OFFSET_CONTEXT=1
+fate/input_selection inpsel

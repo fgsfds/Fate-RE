@@ -11,7 +11,8 @@ DESTINATION_PUBLIC = DESTINATION_LAYOUT['context']['public']
 VALUE_LAYOUT = json.loads((Path(__file__).parent/'data'/LAYOUT['value_context_file']).read_text(encoding='utf-8'))
 DISABLE_LAYOUT = json.loads((Path(__file__).parent/'data'/LAYOUT['disable_context_file']).read_text(encoding='utf-8'))
 CLOBBER_LAYOUT = json.loads((Path(__file__).parent/'data'/LAYOUT['clobber_context_file']).read_text(encoding='utf-8'))
-CONFIGURATION_LAYOUTS = (INDEXED_LAYOUT, DESTINATION_LAYOUT, VALUE_LAYOUT, DISABLE_LAYOUT, CLOBBER_LAYOUT)
+OFFSET_LAYOUT = json.loads((Path(__file__).parent/'data'/LAYOUT['offset_context_file']).read_text(encoding='utf-8'))
+CONFIGURATION_LAYOUTS = (INDEXED_LAYOUT, DESTINATION_LAYOUT, VALUE_LAYOUT, DISABLE_LAYOUT, CLOBBER_LAYOUT, OFFSET_LAYOUT)
 FRAGMENT_LAYOUT = json.loads((Path(__file__).parent/'data'/LAYOUT['fragment_context_file']).read_text(encoding='utf-8'))
 if FRAGMENT_LAYOUT['context_file'] != LAYOUT['value_context_file']:
     raise ValueError('Fragment compiler context differs')
@@ -25,7 +26,8 @@ DESTINATION_SHA256 = DESTINATION_LAYOUT['context']['sha256']
 VALUE_SHA256 = VALUE_LAYOUT['context']['sha256']
 DISABLE_SHA256 = DISABLE_LAYOUT['context']['sha256']
 CLOBBER_SHA256 = CLOBBER_LAYOUT['context']['sha256']
-CONTEXT_DIGEST_ATTRIBUTES = dict(zip(CONTEXTS, ('INDEXED_SHA256', 'DESTINATION_SHA256', 'VALUE_SHA256', 'DISABLE_SHA256', 'CLOBBER_SHA256')))
+OFFSET_SHA256 = OFFSET_LAYOUT['context']['sha256']
+CONTEXT_DIGEST_ATTRIBUTES = dict(zip(CONTEXTS, ('INDEXED_SHA256', 'DESTINATION_SHA256', 'VALUE_SHA256', 'DISABLE_SHA256', 'CLOBBER_SHA256', 'OFFSET_SHA256')))
 
 
 def structural_records(blob):

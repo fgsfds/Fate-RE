@@ -2223,8 +2223,6 @@ ROUTINES = [
      0x562f9, 2966, GETZRANGE_POINTERS),
     ('getcliplines_', 'engine/getcliplines.asm', 'getcliplines.bin',
      0x52c88, 3941, GETCLIPLINES_POINTERS),
-    ('collect_input_', 'fate/collect_input.asm', 'collect_input.bin',
-     0x2d51a, 3097, INPUT_COLLECTOR_POINTERS),
     ('faketimerhandler_', 'fate/faketimerhandler.asm', 'faketimerhandler.bin',
      0x31ec4, 1347, TIMER_CALLBACK_POINTERS),
     ('__CHP', 'runtime/chp.asm', 'chp.bin', 0x60304, 29, {}),
@@ -3595,7 +3593,6 @@ DATA_POINTER_SITES = {
                       'neartag_': NEARTAG_POINTERS.keys(),
                       'getzrange_': GETZRANGE_POINTERS.keys(),
                       'getcliplines_': GETCLIPLINES_POINTERS.keys(),
-                      'collect_input_': INPUT_COLLECTOR_POINTERS.keys(),
                       'faketimerhandler_': TIMER_CALLBACK_POINTERS.keys(),
                       'start_sequence_': START_SEQUENCE_POINTERS.keys(), 'clipmove_': CLIPMOVE_POINTERS.keys(), 'slopevlin2_': {16, 22, 51, 63}, 'hlineasm4_': {37, 71, 104, 77, 110, 182, 152, 31}, 'mvlineasm4_': {2, 8, 141, 147, 24, 153, 30, 159, 171, 46, 52, 68, 74, 338, 90, 350, 96, 356, 362, 368, 116, 122}, 'vlineasm4_': {2, 8, 140, 24, 153, 30, 159, 165, 171, 46, 307, 52, 313, 319, 68, 325, 74, 90, 96, 112, 118}, 'tvlineasm2_': {10, 32, 274, 280}, 'mhline_': {16, 46, 61}, 'mhlineskipmodify_': {22, 34},
                       'thline_': {16, 36, 51}, 'thlineskipmodify_': {24, 36}}
@@ -3704,6 +3701,13 @@ for _row in _board_actor_layout['retained']:
     _fields = {int(k): v for k,v in _row['fixups'].items()}
     ROUTINES.append((_row['symbol'], 'fate/board_actor_initialization.asm', 'board_actor_initialization.bin', _row['address'], _row['size'], _fields))
     GROUP_SLICES[_row['symbol']] = (_row['binary_offset'], _board_actor_layout['assembly_size'])
+    DATA_POINTER_SITES[_row['symbol']] = tuple(_fields)
+
+_input_selection_layout = json.loads((Path(__file__).parent/'data/input-selection-layout.json').read_text(encoding='utf-8'))
+for _row in _input_selection_layout['retained']:
+    _fields = {int(k):v for k,v in _row['fixups'].items()}
+    ROUTINES.append((_row['symbol'],'fate/collect_input.asm','collect_input.bin',_row['address'],_row['size'],_fields))
+    GROUP_SLICES[_row['symbol']] = (_row['binary_offset'],_input_selection_layout['assembly_size'])
     DATA_POINTER_SITES[_row['symbol']] = tuple(_fields)
 
 if __name__ == '__main__':

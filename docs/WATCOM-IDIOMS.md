@@ -247,6 +247,10 @@ from one selector, as in `ACTOR_CLOBBER_CONTEXT`. The three-selector probe
 produced `AC.OBJ` instead of the requested `ACTCLOB.OBJ` despite zero compiler
 errors; the production missing-object check rejected it. The single selector
 produces the intended object with the same CODE and parsed fixups as the probe.
+Merge existing conditional pragma blocks as complete blocks when adding a new
+selector. Mechanically wrapping diff hunks can misnest existing `#else` and
+`#endif` directives. Recompile every affected prior selector and compare its
+full CODE and parsed OMF before qualifying the new variant.
 
 
 ### Byte-register identities and natural EBP constant allocation

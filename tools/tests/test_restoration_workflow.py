@@ -101,7 +101,8 @@ class Registrations(unittest.TestCase):
 
     def test_mixed_context_keeps_original_span_without_claiming_whole_c_coverage(self):
         for symbol, span in [('initialize_board_actors',(0x1e91a,32303)),
-                             ('update_weapon_animation',(0x29cd4,1307))]:
+                             ('update_weapon_animation',(0x29cd4,1307)),
+                             ('collect_input',(0x2d51a,3097))]:
             context = routine_context(symbol)
             self.assertEqual(reference_span(context,symbol),span)
             self.assertTrue(context['routines'])

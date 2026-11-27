@@ -180,16 +180,35 @@ store without register/flag dependencies or changed store order. These add
 28 bytes without another compile. Conservative ESI/EDI output clobbers in a
 31,425-byte context add six other assignments, 87 bytes and six DATA sites.
 Keep all earlier contexts: this one loses 210 of the prior 618 destination
-bytes. Actor 104 Y at `0x20da9` still schedules XOR EDI,EDI before SHL EDX,4;
-the original shifts first. Both write flags, so do not reuse the pure-MOVSX
-commutation argument. Next keep the EDI zero lifetime after the completed EDX
-offset capture, using truthful conservative clobbers at that boundary.
+bytes. A conservative EDI clobber on the EDX-offset identity now reproduces
+the original shift-before-zero lifetime for actor 104 Y at `0x20da9`. Its
+31,450-byte context adds 29 complete assignments, 433 bytes and 29 DATA sites
+in 25 runs, retaining only 335 of the prior 733 destination bytes. The first
+uncovered mismatch is actor 104 parameter two at `0x20dc5`: the private store
+uses EBP zero and hoists MOV EAX,105, whereas the original clears and stores
+EAX before loading the next slot. Next keep the actual EAX value live through
+the fourth-field store with a truthful conservative value-output clobber.
 Explicit EBP outputs fail with E1122; use natural allocation. Saved XYZ,
 destination, waypoint and tile-row strides are 12, 16, 4 and 18 bytes; untouched
 words remain unchanged. Evidence: `work/board-slot-lifetime-nov27/REPORT.md`,
 `selected-indexed-operations.json`, `work/destination-lifetime-nov27/REPORT.md`,
 `work/destination-values-nov27/REPORT.md`, `work/destination-clobbers-nov27/`,
-and `work/destination-fragments-nov27/REPORT.md`.
+`work/destination-fragments-nov27/REPORT.md`, and
+`work/destination-offset-nov27/REPORT.md`.
+
+### `collect_input_`: toggle-index producer
+
+One Watcom 10.5 `/4r /s /or /bt=dos` context supplies the 398-byte mode-toggle
+and selection prefix, with 42 DATA sites, 24 branches and six proven adjacent
+instruction swaps. The original six saves and the seven-byte producer at
+`0x2d52d` remain assembly. Watcom emits MOV AL,[key_toggle_mode]; AND EAX,0xff
+instead of XOR EAX,EAX; MOV AL,[key_toggle_mode], in a 415-byte private context.
+The 1,096-case stable-memory model checks both producers' full EAX bridge into
+the consumer at `0x2d534`, all branch outcomes and representative signed/unsigned
+values. Keep that bridge while extending the typed context into keyboard
+motion. A separate producer probe could stage an actual full-width EAX zero
+before a defined union low-byte update; do not substitute a false zero getter.
+Evidence: `work/input-selection-nov27/NOTES.md` and `behavior-evidence.json`.
 
 ### Video prompt-mode blocker
 

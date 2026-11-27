@@ -152,14 +152,15 @@ def context_controls(blob, layout):
     return controls
 
 
-def main(destinations=False, values=False, clobbers=False):
-    assert sum((destinations,values,clobbers)) <= 1
-    mode = 'clobbers' if clobbers else 'values' if values else 'destinations' if destinations else 'indexed'
+def main(destinations=False, values=False, clobbers=False, offsets=False):
+    assert sum((destinations,values,clobbers,offsets)) <= 1
+    mode = 'offsets' if offsets else 'clobbers' if clobbers else 'values' if values else 'destinations' if destinations else 'indexed'
     layout,count,context_size,placed_bytes,DATA_sites,expected_setups = {
         'indexed': (group.INDEXED_LAYOUT,281,30235,4271,318,0),
         'destinations': (group.DESTINATION_LAYOUT,18,31119,250,18,8),
         'values': (group.VALUE_LAYOUT,27,31347,368,27,6),
         'clobbers': (group.CLOBBER_LAYOUT,6,31425,87,6,1),
+        'offsets': (group.OFFSET_LAYOUT,29,31450,433,29,0),
     }[mode]
     destinations = mode != 'indexed'
     parser = argparse.ArgumentParser(description=__doc__)
@@ -235,6 +236,7 @@ def main(destinations=False, values=False, clobbers=False):
         memory,registers = base.seed(original,7)
         actual = base.execute(memory,live(registers,operation),0x202,bytes(code),address)
         assert actual[0] != model(memory,operation)[0]; code_controls.append('destination_zero_register')
+    if expected_setups:
         # Some compiler intervals also set the next slot. That EAX result is observable.
         operation = next(o for o in operations if o['interleaved_slot_setup'])
         address = operation['original_start']; code = bytearray(body[address-begin:operation['original_end']-begin])

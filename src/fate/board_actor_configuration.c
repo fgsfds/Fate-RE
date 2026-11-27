@@ -1,4 +1,7 @@
 /* Startup configuration for the actor slots of every board. */
+#ifdef ACTOR_OFFSET_CONTEXT
+#define ACTOR_CLOBBER_CONTEXT 1
+#endif
 #ifdef ACTOR_CLOBBER_CONTEXT
 #define ACTOR_DESTINATION_CONTEXT 1
 #define ACTOR_DESTINATION_VALUES 1
@@ -76,7 +79,11 @@ extern long actor_destination_value_in_eax(long);
 #pragma aux actor_destination_value_in_eax = "" parm [eax] value [eax] modify exact [];
 #endif
 extern long actor_destination_offset_in_edx(long);
+#ifdef ACTOR_OFFSET_CONTEXT
+#pragma aux actor_destination_offset_in_edx = "" parm [edx] value [edx] modify exact [edi];
+#else
 #pragma aux actor_destination_offset_in_edx = "" parm [edx] value [edx] modify exact [];
+#endif
 
 /* A character view of the complete array preserves the row's byte offset. */
 #define destination_at(offset) \
@@ -84,8 +91,13 @@ extern long actor_destination_offset_in_edx(long);
 
 #ifdef ACTOR_DESTINATION_VALUES
 #ifdef ACTOR_DESTINATION_CLOBBERS
+#ifdef ACTOR_OFFSET_CONTEXT
+void board_actor_offset_context(void);
+#pragma aux board_actor_offset_context modify exact [eax];
+#else
 void board_actor_clobber_context(void);
 #pragma aux board_actor_clobber_context modify exact [eax];
+#endif
 #else
 void board_actor_value_context(void);
 #pragma aux board_actor_value_context modify exact [eax];
@@ -97,7 +109,11 @@ void board_actor_destination_context(void);
 
 #ifdef ACTOR_DESTINATION_VALUES
 #ifdef ACTOR_DESTINATION_CLOBBERS
+#ifdef ACTOR_OFFSET_CONTEXT
+void board_actor_offset_context(void)
+#else
 void board_actor_clobber_context(void)
+#endif
 #else
 void board_actor_value_context(void)
 #endif
