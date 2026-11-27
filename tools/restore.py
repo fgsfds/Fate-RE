@@ -35,7 +35,7 @@ def registrations():
 
 def mixed_routine(selector):
     """Keep original routine context after its coverage is split into phases."""
-    from verify_c_leaf import WEAPON_ANIMATION_LAYOUT, BOARD_ACTOR_LAYOUT, BOARD_ACTOR_PLACEMENT_LAYOUTS, INPUT_SELECTION_LAYOUT, INPUT_CURSOR_LAYOUT
+    from verify_c_leaf import WEAPON_ANIMATION_LAYOUT, BOARD_ACTOR_LAYOUT, BOARD_ACTOR_PLACEMENT_LAYOUTS, INPUT_SELECTION_LAYOUT, INPUT_CURSOR_LAYOUT, INPUT_ACTIONS_LAYOUT
     layouts = {'update_weapon_animation': WEAPON_ANIMATION_LAYOUT,
                'initialize_board_actors': BOARD_ACTOR_LAYOUT,
                'collect_input': INPUT_SELECTION_LAYOUT}
@@ -49,6 +49,8 @@ def mixed_routine(selector):
     if name == 'collect_input':
         objects.add(INPUT_CURSOR_LAYOUT['context']['object'])
         phases += INPUT_CURSOR_LAYOUT['phases']
+        objects.add(INPUT_ACTIONS_LAYOUT['context']['object'])
+        phases += INPUT_ACTIONS_LAYOUT['phases']
     if name == 'initialize_board_actors':
         for actor_layout in BOARD_ACTOR_PLACEMENT_LAYOUTS:
             objects.add(actor_layout['context']['object'])

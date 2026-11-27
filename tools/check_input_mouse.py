@@ -102,7 +102,7 @@ def main():
 
     def validate(layout):
         assert layout['CODE']=={'getmousevalues_':GET,'scale_mouse_':SCALE},'mouse call targets'
-        assert layout['selected_bytes']==817 and layout['assembly_size']==1892
+        assert layout['selected_bytes']==817 and layout['assembly_size']==1378
         records={int(k):value for k,value in layout['branches'].items()}
         selected=[r for r in layout['instructions'] if r['original']>=POLL]
         mapping={};owned=[];sources=[]

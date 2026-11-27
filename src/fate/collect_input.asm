@@ -94,7 +94,7 @@ setbrightness equ 0x59bee
 
 section .text align=1
 collect_input_ equ 0x2d51a
-; Guarded C supplies selection, keyboard motion and selected mouse operations.
+; Guarded C supplies selection, motion and selected action operations.
 .loc_032 equ 0x2d54c
 .loc_04b equ 0x2d565
 .loc_06c equ 0x2d586
@@ -517,55 +517,11 @@ section .retained_11 align=1 vstart=0x2dd48 follows=.retained_10
     movsx eax, byte [input_strafe]
     add eax, ebx
     mov byte [input_strafe], al
-    mov ax, word [selection]
-    shl eax, 0xd
-    mov word [input_actions], ax
-    cmp byte [input_mode], 0
-    jne short .loc_937
-    xor eax, eax
-    mov al, byte [key_action_12]
-    mov al, byte [eax + key_state]
-    and eax, 0xff
-    cmp eax, 1
-    sete al
+
+section .retained_12 align=1 vstart=0x2de3c follows=.retained_11
     xor ah, ah
-    mov cx, word [input_actions]
-    shl eax, 0xc
-    or ecx, eax
-    mov word [input_actions], cx
-    xor eax, eax
-    mov al, byte [key_action_0]
-    mov al, byte [eax + key_state]
-    mov si, word [input_actions]
-    xor ah, ah
-    or esi, eax
-    xor eax, eax
-    mov al, byte [key_action_1]
-    mov word [input_actions], si
-    mov al, byte [eax + key_state]
-    xor ah, ah
-    mov edi, esi
-    add eax, eax
-    or edi, eax
-    xor eax, eax
-    mov al, byte [key_action_4]
-    mov word [input_actions], di
-    mov al, byte [eax + key_state]
-    xor ah, ah
-    mov edx, edi
-    shl eax, 4
-    or edx, eax
-    xor eax, eax
-    mov al, byte [key_action_5]
-    mov word [input_actions], dx
-    mov al, byte [eax + key_state]
-    xor ah, ah
-    mov ebx, edx
-    shl eax, 5
-    or ebx, eax
-    xor eax, eax
-    mov al, byte [key_run]
-    mov word [input_actions], bx
+
+section .retained_13 align=1 vstart=0x2decd follows=.retained_12
     mov al, byte [eax + key_state]
     xor ah, ah
     mov ecx, ebx
@@ -587,28 +543,8 @@ section .retained_11 align=1 vstart=0x2dd48 follows=.retained_10
     mov edi, esi
     shl eax, 3
     or edi, eax
-    xor eax, eax
-    mov al, byte [key_action_10]
-    mov word [input_actions], di
-    mov al, byte [eax + key_state]
-    and eax, 0xff
-    cmp eax, 1
-    sete al
-    xor ah, ah
-    mov edx, edi
-    shl eax, 0xa
-    or edx, eax
-    xor eax, eax
-    mov al, byte [key_action_11]
-    mov word [input_actions], dx
-    mov al, byte [eax + key_state]
-    and eax, 0xff
-    cmp eax, 1
-    sete al
-    xor ah, ah
-    mov ebx, edx
-    shl eax, 0xb
-    or ebx, eax
+
+section .retained_14 align=1 vstart=0x2df66 follows=.retained_13
     mov ax, word [active_mouse_buttons]
     xor ah, ah
     and al, 1
@@ -634,17 +570,8 @@ section .retained_11 align=1 vstart=0x2dd48 follows=.retained_10
     mov si, word [button_latch_disabled]
     test si, si
     jne near .release_button_latches
-    movsx eax, word [prior_action_word]
-    sar eax, 0xd
-    test al, 7
-    je short .loc_abd
-    mov word [button_alternate], si
-    cmp word [primary_button_latch], 0
-    jne near .save_mouse_buttons
-    cmp word [secondary_button_latch], 0
-    jne near .save_mouse_buttons
-    cmp word [button_alternate], 0
-    jne short .loc_b06
+
+section .retained_15 align=1 vstart=0x2dffd follows=.retained_14
     xor eax, eax
     mov al, byte [key_action_11]
     mov byte [eax + key_state], 1
@@ -660,50 +587,11 @@ section .retained_11 align=1 vstart=0x2dd48 follows=.retained_10
     mov word [secondary_button_latch], di
     mov word [button_alternate], ax
     jmp short .save_mouse_buttons
-    movsx eax, word [primary_button_latch]
-    cmp eax, 1
-    jne short .loc_b4e
+
+section .retained_16 align=1 vstart=0x2e07c follows=.retained_15
     xor eax, eax
-    xor edi, edi
-    mov al, byte [key_action_11]
-    xor dl, dl
-    mov word [primary_button_latch], di
-    mov byte [eax + key_state], dl
-    movsx eax, word [secondary_button_latch]
-    cmp eax, 1
-    jne short .save_mouse_buttons
-    xor eax, eax
-    mov word [secondary_button_latch], ax
-    xor eax, eax
-    mov al, byte [key_latched_secondary]
-    xor dh, dh
-    mov byte [eax + key_state], dh
-    mov ax, word [active_mouse_buttons]
-    mov word [saved_mouse_buttons], ax
-    mov ax, word [input_actions]
-    xor al, al
-    and ah, 8
-    cwde
-    test eax, eax
-    jle short .cycle_brightness
-    cmp dword [selection], 3
-    jne short .cycle_brightness
-    and byte [saved_mouse_buttons], 0xfe
-    cmp byte [brightness_key], 0
-    jbe short .check_fifo_mode
-    xor al, al
-    mov byte [brightness_key], al
-    mov cx, word [brightness]
-    inc ecx
-    movsx eax, cx
-    mov word [brightness], cx
-    cmp eax, 8
-    jle short .loc_bcd
-    xor esi, esi
-    mov word [brightness], si
-    mov edx, brightness_palette
-    movsx eax, word [brightness]
-    call setbrightness
+
+section .retained_17 align=1 vstart=0x2e0f8 follows=.retained_16
     cmp byte [input_mode], 0
     je short .done
     mov al, byte [key_fifo_read]
@@ -719,9 +607,3 @@ section .retained_11 align=1 vstart=0x2dd48 follows=.retained_10
     mov byte [key_fifo_read], al
     jmp short .drain_key_fifo
     pop ebp
-    pop edi
-    pop esi
-    pop edx
-    pop ecx
-    pop ebx
-    ret

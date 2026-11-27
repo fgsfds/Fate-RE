@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1700,
-  "unique_code_bytes": 201543,
-  "le_pointers": 11194,
+  "routines": 1718,
+  "unique_code_bytes": 202057,
+  "le_pointers": 11246,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -4028,6 +4028,186 @@
       "loaded_address": "0x2dd1e",
       "bytes": 42,
       "le_pointers": 3
+    },
+    {
+      "symbol": "input_action_selection_0_",
+      "object": "inpacts.obj",
+      "object_sha256": "81decbc43a26c2825e608e16db4f49531d79d39d9883a5dd7d87258c936a50bd",
+      "sha256": "17ee029ee91c7650e3466116265f02520a58401a6e26afaf7d0ce245059535bc",
+      "raw_offset": "0x5340c",
+      "loaded_address": "0x2de0c",
+      "bytes": 15,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "input_action_mode_key_0_",
+      "object": "inpacts.obj",
+      "object_sha256": "81decbc43a26c2825e608e16db4f49531d79d39d9883a5dd7d87258c936a50bd",
+      "sha256": "37655d7273f001516c9cb3f4e3b3e130ae81a26d33ec8e5232c1fa7eb61167bb",
+      "raw_offset": "0x5341b",
+      "loaded_address": "0x2de1b",
+      "bytes": 33,
+      "le_pointers": 3
+    },
+    {
+      "symbol": "input_action_mode_key_1_",
+      "object": "inpacts.obj",
+      "object_sha256": "81decbc43a26c2825e608e16db4f49531d79d39d9883a5dd7d87258c936a50bd",
+      "sha256": "049267c70a084c8c284b379251861c3e04ca002769ddf5bf6acec35ed7dd2841",
+      "raw_offset": "0x5343e",
+      "loaded_address": "0x2de3e",
+      "bytes": 19,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "input_action_keys_0145_0_",
+      "object": "inpacts.obj",
+      "object_sha256": "81decbc43a26c2825e608e16db4f49531d79d39d9883a5dd7d87258c936a50bd",
+      "sha256": "4a04e458c466ecd8eaeb2b6b1d4049464678704bd29e6e9b94d4e056cf23ba60",
+      "raw_offset": "0x53451",
+      "loaded_address": "0x2de51",
+      "bytes": 124,
+      "le_pointers": 14
+    },
+    {
+      "symbol": "input_action_keys_1011_0_",
+      "object": "inpacts.obj",
+      "object_sha256": "81decbc43a26c2825e608e16db4f49531d79d39d9883a5dd7d87258c936a50bd",
+      "sha256": "83070ed04c944d1b2a011a340cb8fa8d43fa955f6d2304c1639c4c476e657b09",
+      "raw_offset": "0x53516",
+      "loaded_address": "0x2df16",
+      "bytes": 47,
+      "le_pointers": 4
+    },
+    {
+      "symbol": "input_action_keys_1011_1_",
+      "object": "inpacts.obj",
+      "object_sha256": "81decbc43a26c2825e608e16db4f49531d79d39d9883a5dd7d87258c936a50bd",
+      "sha256": "b5909032fee758a2143204731c9eef835448d20bec544726dee68dc402161b1c",
+      "raw_offset": "0x53545",
+      "loaded_address": "0x2df45",
+      "bytes": 26,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "input_action_keys_1011_2_",
+      "object": "inpacts.obj",
+      "object_sha256": "81decbc43a26c2825e608e16db4f49531d79d39d9883a5dd7d87258c936a50bd",
+      "sha256": "071459ca0a5de31b65b6d6b4dd23668658eb6207c40907d01d88f1cb2803b282",
+      "raw_offset": "0x5355f",
+      "loaded_address": "0x2df5f",
+      "bytes": 2,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "input_action_keys_1011_3_",
+      "object": "inpacts.obj",
+      "object_sha256": "81decbc43a26c2825e608e16db4f49531d79d39d9883a5dd7d87258c936a50bd",
+      "sha256": "345c6dbc06013d9c3de249c6965f8c502bebaa8c47a92ae368529f07ac46f8fa",
+      "raw_offset": "0x53561",
+      "loaded_address": "0x2df61",
+      "bytes": 5,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "input_button_latch_route_0_",
+      "object": "inpacts.obj",
+      "object_sha256": "81decbc43a26c2825e608e16db4f49531d79d39d9883a5dd7d87258c936a50bd",
+      "sha256": "e53b31dc119ea47192341aaa37d0f3ad157eda8c91d0e365ccedb9f00694625a",
+      "raw_offset": "0x535c2",
+      "loaded_address": "0x2dfc2",
+      "bytes": 59,
+      "le_pointers": 5
+    },
+    {
+      "symbol": "input_primary_button_release_0_",
+      "object": "inpacts.obj",
+      "object_sha256": "81decbc43a26c2825e608e16db4f49531d79d39d9883a5dd7d87258c936a50bd",
+      "sha256": "ccd9fa31bc72259d748d09f531c14623cf136ae70cf44e2952d91b0b404940b0",
+      "raw_offset": "0x53644",
+      "loaded_address": "0x2e044",
+      "bytes": 36,
+      "le_pointers": 4
+    },
+    {
+      "symbol": "input_secondary_button_release_0_",
+      "object": "inpacts.obj",
+      "object_sha256": "81decbc43a26c2825e608e16db4f49531d79d39d9883a5dd7d87258c936a50bd",
+      "sha256": "c2479e343c509a716e5eb90079c32dbbb895fc00a6e08bd621e8cf226c5d2b84",
+      "raw_offset": "0x53668",
+      "loaded_address": "0x2e068",
+      "bytes": 20,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "input_secondary_button_release_1_",
+      "object": "inpacts.obj",
+      "object_sha256": "81decbc43a26c2825e608e16db4f49531d79d39d9883a5dd7d87258c936a50bd",
+      "sha256": "1da54a2fa6046e55e641acec17e13095806b4b0123c10347f3236d6708dbcb71",
+      "raw_offset": "0x5367e",
+      "loaded_address": "0x2e07e",
+      "bytes": 13,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "input_save_action_buttons_0_",
+      "object": "inpacts.obj",
+      "object_sha256": "81decbc43a26c2825e608e16db4f49531d79d39d9883a5dd7d87258c936a50bd",
+      "sha256": "1481e631f8ccc9ab5825e58d15256582a0af4c9e4bf5a47e04007f3c45d833cd",
+      "raw_offset": "0x5368b",
+      "loaded_address": "0x2e08b",
+      "bytes": 44,
+      "le_pointers": 5
+    },
+    {
+      "symbol": "input_cycle_input_brightness_0_",
+      "object": "inpacts.obj",
+      "object_sha256": "81decbc43a26c2825e608e16db4f49531d79d39d9883a5dd7d87258c936a50bd",
+      "sha256": "599bf3c34e3d39fc0208071b76703f5697e953d1819c568dedcd099852d54ee5",
+      "raw_offset": "0x536b7",
+      "loaded_address": "0x2e0b7",
+      "bytes": 11,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "input_cycle_input_brightness_1_",
+      "object": "inpacts.obj",
+      "object_sha256": "81decbc43a26c2825e608e16db4f49531d79d39d9883a5dd7d87258c936a50bd",
+      "sha256": "0d9d097e465e3a568dd2656a7b16c9b5b1c7dbc2e49956288d5429035ba545be",
+      "raw_offset": "0x536c2",
+      "loaded_address": "0x2e0c2",
+      "bytes": 5,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "input_cycle_input_brightness_2_",
+      "object": "inpacts.obj",
+      "object_sha256": "81decbc43a26c2825e608e16db4f49531d79d39d9883a5dd7d87258c936a50bd",
+      "sha256": "40ea9062665fe225e30052facfd19941c835b429a4b7c26324e8ac66d2ebd520",
+      "raw_offset": "0x536c7",
+      "loaded_address": "0x2e0c7",
+      "bytes": 7,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "input_cycle_input_brightness_3_",
+      "object": "inpacts.obj",
+      "object_sha256": "81decbc43a26c2825e608e16db4f49531d79d39d9883a5dd7d87258c936a50bd",
+      "sha256": "3dc0cf616cb4074a92af7ce9cc46adbd604fcaa2f0350823b27cc0cf9ae456cf",
+      "raw_offset": "0x536ce",
+      "loaded_address": "0x2e0ce",
+      "bytes": 42,
+      "le_pointers": 4
+    },
+    {
+      "symbol": "input_actions_return_",
+      "object": "inpacts.obj",
+      "object_sha256": "81decbc43a26c2825e608e16db4f49531d79d39d9883a5dd7d87258c936a50bd",
+      "sha256": "2cf27f6ddcd494187645482c8e32915ce469ba9abe28cbdc5cfb5b5cf6862e6b",
+      "raw_offset": "0x5372d",
+      "loaded_address": "0x2e12d",
+      "bytes": 6,
+      "le_pointers": 0
     },
     {
       "symbol": "initialize_board_entry_",

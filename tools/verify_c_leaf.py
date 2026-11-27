@@ -5235,7 +5235,7 @@ for _actor_layout in BOARD_ACTOR_PLACEMENT_LAYOUTS:
         LEAVES[_phase['symbol']] = (_phase['address']+0x25600, _phase['end']-_phase['begin'])
         LEAF_CODE_SLICES[_phase['symbol']] = (_actor_public, _phase['begin'], _phase['end'], _actor_context['size'])
 
-from bind_input_selection import LAYOUT as INPUT_SELECTION_LAYOUT, CURSOR_LAYOUT as INPUT_CURSOR_LAYOUT, PLACEMENT_LAYOUTS as INPUT_PLACEMENT_LAYOUTS
+from bind_input_selection import LAYOUT as INPUT_SELECTION_LAYOUT, CURSOR_LAYOUT as INPUT_CURSOR_LAYOUT, ACTIONS_LAYOUT as INPUT_ACTIONS_LAYOUT, PLACEMENT_LAYOUTS as INPUT_PLACEMENT_LAYOUTS
 for _input_layout in INPUT_PLACEMENT_LAYOUTS:
     _input_context = _input_layout['context']; _input_public = _input_context['public']
     for _name, _address in _input_layout['CODE'].items():

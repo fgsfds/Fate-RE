@@ -603,3 +603,4 @@ fate/board_actor_configuration actoff /4r /s /or /bt=dos /dACTOR_OFFSET_CONTEXT=
 fate/board_actor_configuration acteax /4r /s /or /bt=dos /dACTOR_EAX_CONTEXT=1
 fate/input_selection inpsel
 fate/input_cursor inpcurs
+fate/input_actions inpacts

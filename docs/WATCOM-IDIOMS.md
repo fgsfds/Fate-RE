@@ -700,3 +700,11 @@ volatile read order independently of sums: swapping sample reads 1 and 0
 can preserve every result and register. For selected branches, also bind
 the compiler successor to the logical placed entry; a same-opcode branch
 from another condition can otherwise pass byte normalization.
+
+A compiler return suffix can follow a retained POP EBP when its five saved
+registers and return address have exactly the original stack layout. Exclude
+private local cleanup and verify both original incoming return branches, the
+restored EBP boundary, saved registers and sentinel through the real RET.
+For volatile FIFO indices, identical results do not prove access order: count
+every repeated read, and keep malformed stable states as bounded cycles
+rather than normalizing their indices or claiming termination.
