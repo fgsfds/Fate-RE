@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1679,
-  "unique_code_bytes": 200722,
-  "le_pointers": 11108,
+  "routines": 1683,
+  "unique_code_bytes": 201024,
+  "le_pointers": 11139,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1940,6 +1940,16 @@
       "le_pointers": 1
     },
     {
+      "symbol": "board_actor_eax_000_",
+      "object": "acteax.obj",
+      "object_sha256": "20f01cd823a0e832e0d5255ed3c28ec90de9d6f5c97f845cb8191d8c725e9c9c",
+      "sha256": "37a0533aa848d69da3c61dfd746aa50544d57c1c61facf0adc9953caa667a3c5",
+      "raw_offset": "0x463c5",
+      "loaded_address": "0x20dc5",
+      "bytes": 14,
+      "le_pointers": 1
+    },
+    {
       "symbol": "board_actor_fragment_001_0_",
       "object": "actvalue.obj",
       "object_sha256": "db6107997a2fcf89901b49b0a9658ed06d7ed2c30dc980df217f7680bc50e716",
@@ -3812,12 +3822,42 @@
     {
       "symbol": "input_selection_019_",
       "object": "inpsel.obj",
-      "object_sha256": "33b6371cf3021cb5d7cd81132859abb5fa596e627db2415bd48464ee547776ce",
-      "sha256": "87cc36bd91f5626db18044b6f900a094667fbf8e3510da4b2699fdd4e06d3def",
+      "object_sha256": "a8438dab8cbecb3ad7a6e5b5e077c20bca3846be49d4b256cb73eecafa2e945b",
+      "sha256": "d7684f1343d4e8f360fb47c24210e0815fc9630fbc7ac3893676d5e8c5df3d59",
       "raw_offset": "0x52c9c",
       "loaded_address": "0x2d69c",
-      "bytes": 25,
-      "le_pointers": 2
+      "bytes": 157,
+      "le_pointers": 15
+    },
+    {
+      "symbol": "input_selection_020_",
+      "object": "inpsel.obj",
+      "object_sha256": "a8438dab8cbecb3ad7a6e5b5e077c20bca3846be49d4b256cb73eecafa2e945b",
+      "sha256": "0a5f536b1bda16742992dd57e5af19a16b51c7d05eb4f43609f229f2be0d7e06",
+      "raw_offset": "0x52d39",
+      "loaded_address": "0x2d739",
+      "bytes": 6,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "input_selection_021_",
+      "object": "inpsel.obj",
+      "object_sha256": "a8438dab8cbecb3ad7a6e5b5e077c20bca3846be49d4b256cb73eecafa2e945b",
+      "sha256": "0e225e73a6e3e02b365e5f8ea998e11d7150a1e6daa303c41f06dcfb05259aba",
+      "raw_offset": "0x52d3f",
+      "loaded_address": "0x2d73f",
+      "bytes": 6,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "input_selection_022_",
+      "object": "inpsel.obj",
+      "object_sha256": "a8438dab8cbecb3ad7a6e5b5e077c20bca3846be49d4b256cb73eecafa2e945b",
+      "sha256": "f6164fed37ce9ce615b89996b01a005943b69f7696d3ac5d66bb9853663cdc50",
+      "raw_offset": "0x52d45",
+      "loaded_address": "0x2d745",
+      "bytes": 144,
+      "le_pointers": 15
     },
     {
       "symbol": "initialize_board_entry_",

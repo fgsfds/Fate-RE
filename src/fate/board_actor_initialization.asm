@@ -1851,11 +1851,7 @@ section .retained_4 align=1 vstart=0x20c83 follows=.retained_3
     xor ebx, ebx
     mov [nosplit edx*4 + actor_first_waypoint], bx
 
-section .retained_5 align=1 vstart=0x20dc5 follows=.retained_4
-    movsx edx, ax
-    shl edx, byte 4
-    xor eax, eax
-    mov [edx + actor_destination_parameter_two], eax
+section .retained_5 align=1 vstart=0x20dd3 follows=.retained_4
     mov eax, 0x69
     movsx edx, ax
     xor ch, ch

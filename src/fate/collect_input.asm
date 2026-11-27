@@ -94,7 +94,7 @@ setbrightness equ 0x59bee
 
 section .text align=1
 collect_input_ equ 0x2d51a
-; The guarded C prefix owns omitted instruction ranges.
+; Guarded C owns the mode, selection, and keyboard-motion instruction ranges.
 .loc_032 equ 0x2d54c
 .loc_04b equ 0x2d565
 .loc_06c equ 0x2d586
@@ -208,82 +208,7 @@ section .retained_1 align=1 vstart=0x2d52d follows=.retained_0
     xor eax, eax
     mov al, byte [key_toggle_mode]
 
-section .retained_2 align=1 vstart=0x2d6b5 follows=.retained_1
-    xor eax, eax
-    mov al, byte [key_strafe]
-    cmp byte [eax + key_state], 0
-    jne short .strafe_modifier_motion
-    xor eax, eax
-    mov al, byte [key_left]
-    cmp byte [eax + key_state], 0
-    jbe short .loc_1d2
-    mov eax, dword [keyboard_turn]
-    sub eax, 0x30
-    cmp eax, -0x80
-    jg short .loc_1cd
-    mov eax, 0xffffff80
-    mov dword [keyboard_turn], eax
-    xor eax, eax
-    mov al, byte [key_right]
-    cmp byte [eax + key_state], 0
-    jbe near .toggle_keys
-    mov eax, dword [keyboard_turn]
-    add eax, 0x30
-    cmp eax, 0x7f
-    jl short .loc_1f8
-    mov eax, 0x7f
-    mov dword [keyboard_turn], eax
-    jmp near .toggle_keys
-    xor eax, eax
-    mov al, byte [key_left]
-    cmp byte [eax + key_state], 0
-    jbe short .loc_238
-    mov ebx, dword [strafe_step]
-    mov eax, ebx
-    shl eax, 2
-    sub eax, ebx
-    mov ebx, dword [keyboard_strafe]
-    mov ecx, dword [strafe_limit]
-    add eax, ebx
-    cmp eax, ecx
-    jl short .loc_233
-    mov eax, ecx
-    mov dword [keyboard_strafe], eax
-    xor eax, eax
-    mov al, byte [key_right]
-    cmp byte [eax + key_state], 0
-    jbe short .toggle_keys
-    mov ebx, dword [strafe_step]
-    mov eax, ebx
-    shl eax, 2
-    sub eax, ebx
-    mov ebx, dword [keyboard_strafe]
-    sub ebx, eax
-    mov eax, ebx
-    mov ebx, dword [strafe_limit]
-    neg ebx
-    cmp eax, ebx
-    jg short .loc_26d
-    mov eax, ebx
-    mov dword [keyboard_strafe], eax
-    xor eax, eax
-    mov al, byte [key_toggle_word]
-    xor ebx, ebx
-    mov bl, byte [eax + key_state]
-    cmp ebx, 1
-    jne short .loc_295
-    xor bl, bl
-    mov byte [eax + key_state], bl
-    not word [toggled_word]
-    xor eax, eax
-    mov al, byte [key_reset_view]
-    xor ebx, ebx
-    mov bl, byte [eax + key_state]
-    cmp ebx, 1
-    jne short .poll_mouse
-    xor bh, bh
-    mov byte [eax + key_state], bh
-    mov dword [view_adjustment], 0x64
+section .retained_2 align=1 vstart=0x2d7d5 follows=.retained_1
     mov ebx, mouse_buttons
     mov edx, mouse_dy
     xor ecx, ecx

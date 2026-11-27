@@ -675,3 +675,10 @@ keeps the actual sound variable and passes natural whole-context cases as well
 as placed cases. Keep its custom hidden EBX input and public-name distinction
 explicit, and match shared global and real-callee types. No new padding,
 handwritten instructions or volatile-access reordering is required.
+
+For keyboard motion, calculate additions, subtractions, scaled steps and limit
+negation in unsigned long before converting to signed long for clamps. This
+preserves x86 wrap at extreme loaded state, including INT_MIN limits. Key
+consumption may alias later configurable keys: model and execute each clear
+before the next lookup. Only commute fixed DATA loads after checking register,
+flags, memory and branch-entry independence in both instruction streams.

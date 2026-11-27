@@ -1510,36 +1510,35 @@
     },
     {
       "symbol": "board_actor_retained_5",
-      "address": 134597,
-      "size": 289,
+      "address": 134611,
+      "size": 275,
       "binary_offset": 9180,
       "fixups": {
-        "10": 993800,
-        "26": 1043638,
-        "35": 1043137,
-        "53": 1012420,
-        "74": 1012424,
-        "88": 1020436,
-        "97": 1041634,
-        "109": 1036026,
-        "120": 1044139,
-        "132": 1038030,
-        "143": 1042636,
-        "155": 1046143,
-        "181": 1027008,
-        "196": 1027010,
-        "219": 1027012,
-        "237": 1027014,
-        "255": 1027016,
-        "270": 1027018,
-        "285": 1018432
+        "12": 1043638,
+        "21": 1043137,
+        "39": 1012420,
+        "60": 1012424,
+        "74": 1020436,
+        "83": 1041634,
+        "95": 1036026,
+        "106": 1044139,
+        "118": 1038030,
+        "129": 1042636,
+        "141": 1046143,
+        "167": 1027008,
+        "182": 1027010,
+        "205": 1027012,
+        "223": 1027014,
+        "241": 1027016,
+        "256": 1027018,
+        "271": 1018432
       }
     },
     {
       "symbol": "board_actor_retained_6",
       "address": 134900,
       "size": 26,
-      "binary_offset": 9469,
+      "binary_offset": 9455,
       "fixups": {
         "8": 993792,
         "22": 993796
@@ -1549,7 +1548,7 @@
       "symbol": "board_actor_retained_7",
       "address": 134943,
       "size": 312,
-      "binary_offset": 9495,
+      "binary_offset": 9481,
       "fixups": {
         "9": 1043638,
         "21": 1043137,
@@ -1577,7 +1576,7 @@
       "symbol": "board_actor_retained_8",
       "address": 135284,
       "size": 606,
-      "binary_offset": 9807,
+      "binary_offset": 9793,
       "fixups": {
         "7": 1043638,
         "16": 1043137,
@@ -1625,7 +1624,7 @@
       "symbol": "board_actor_retained_9",
       "address": 135904,
       "size": 347,
-      "binary_offset": 10413,
+      "binary_offset": 10399,
       "fixups": {
         "10": 993792,
         "24": 993796,
@@ -1656,7 +1655,7 @@
       "symbol": "board_actor_retained_10",
       "address": 136263,
       "size": 316,
-      "binary_offset": 10760,
+      "binary_offset": 10746,
       "fixups": {
         "15": 993800,
         "26": 1043638,
@@ -1684,7 +1683,7 @@
       "symbol": "board_actor_retained_11",
       "address": 136634,
       "size": 634,
-      "binary_offset": 11076,
+      "binary_offset": 11062,
       "fixups": {
         "7": 1043638,
         "16": 1043137,
@@ -1734,7 +1733,7 @@
       "symbol": "board_actor_retained_12",
       "address": 137309,
       "size": 269,
-      "binary_offset": 11710,
+      "binary_offset": 11696,
       "fixups": {
         "5": 1043638,
         "15": 1043137,
@@ -1760,7 +1759,7 @@
       "symbol": "board_actor_retained_13",
       "address": 137592,
       "size": 307,
-      "binary_offset": 11979,
+      "binary_offset": 11965,
       "fixups": {
         "8": 993792,
         "20": 993796,
@@ -1789,7 +1788,7 @@
       "symbol": "board_actor_retained_14",
       "address": 137913,
       "size": 310,
-      "binary_offset": 12286,
+      "binary_offset": 12272,
       "fixups": {
         "10": 993792,
         "22": 993796,
@@ -1818,7 +1817,7 @@
       "symbol": "board_actor_retained_15",
       "address": 138247,
       "size": 967,
-      "binary_offset": 12596,
+      "binary_offset": 12582,
       "fixups": {
         "8": 993796,
         "20": 993800,
@@ -1890,7 +1889,7 @@
       "symbol": "board_actor_retained_16",
       "address": 139238,
       "size": 12,
-      "binary_offset": 13563,
+      "binary_offset": 13549,
       "fixups": {
         "8": 993796
       }
@@ -1899,7 +1898,7 @@
       "symbol": "board_actor_retained_17",
       "address": 139267,
       "size": 75,
-      "binary_offset": 13575,
+      "binary_offset": 13561,
       "fixups": {
         "5": 1043638,
         "15": 1043137,
@@ -1912,7 +1911,7 @@
       "symbol": "board_actor_retained_18",
       "address": 139365,
       "size": 10,
-      "binary_offset": 13650,
+      "binary_offset": 13636,
       "fixups": {
         "5": 1044139
       }
@@ -1921,7 +1920,7 @@
       "symbol": "board_actor_retained_19",
       "address": 139408,
       "size": 113,
-      "binary_offset": 13660,
+      "binary_offset": 13646,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -1935,7 +1934,7 @@
       "symbol": "board_actor_retained_20",
       "address": 139548,
       "size": 66,
-      "binary_offset": 13773,
+      "binary_offset": 13759,
       "fixups": {
         "8": 993792,
         "20": 993796,
@@ -1948,7 +1947,7 @@
       "symbol": "board_actor_retained_21",
       "address": 139653,
       "size": 201,
-      "binary_offset": 13839,
+      "binary_offset": 13825,
       "fixups": {
         "8": 1020436,
         "22": 1041634,
@@ -1969,7 +1968,7 @@
       "symbol": "board_actor_retained_22",
       "address": 139881,
       "size": 61,
-      "binary_offset": 14040,
+      "binary_offset": 14026,
       "fixups": {
         "8": 993792,
         "20": 993796,
@@ -1982,7 +1981,7 @@
       "symbol": "board_actor_retained_23",
       "address": 140063,
       "size": 113,
-      "binary_offset": 14101,
+      "binary_offset": 14087,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -1996,7 +1995,7 @@
       "symbol": "board_actor_retained_24",
       "address": 140189,
       "size": 14,
-      "binary_offset": 14214,
+      "binary_offset": 14200,
       "fixups": {
         "10": 993788
       }
@@ -2005,7 +2004,7 @@
       "symbol": "board_actor_retained_25",
       "address": 140244,
       "size": 25,
-      "binary_offset": 14228,
+      "binary_offset": 14214,
       "fixups": {
         "9": 1043638,
         "21": 1043137
@@ -2015,7 +2014,7 @@
       "symbol": "board_actor_retained_26",
       "address": 140344,
       "size": 175,
-      "binary_offset": 14253,
+      "binary_offset": 14239,
       "fixups": {
         "12": 1044139,
         "25": 1038030,
@@ -2034,7 +2033,7 @@
       "symbol": "board_actor_retained_27",
       "address": 140547,
       "size": 57,
-      "binary_offset": 14428,
+      "binary_offset": 14414,
       "fixups": {
         "8": 993796,
         "24": 993800,
@@ -2046,7 +2045,7 @@
       "symbol": "board_actor_retained_28",
       "address": 140724,
       "size": 126,
-      "binary_offset": 14485,
+      "binary_offset": 14471,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2061,7 +2060,7 @@
       "symbol": "board_actor_retained_29",
       "address": 140867,
       "size": 334,
-      "binary_offset": 14611,
+      "binary_offset": 14597,
       "fixups": {
         "8": 993792,
         "26": 993796,
@@ -2090,7 +2089,7 @@
       "symbol": "board_actor_retained_30",
       "address": 141217,
       "size": 32,
-      "binary_offset": 14945,
+      "binary_offset": 14931,
       "fixups": {
         "8": 993792,
         "24": 993796
@@ -2100,7 +2099,7 @@
       "symbol": "board_actor_retained_31",
       "address": 141271,
       "size": 20,
-      "binary_offset": 14977,
+      "binary_offset": 14963,
       "fixups": {
         "5": 1043638,
         "15": 1043137
@@ -2110,7 +2109,7 @@
       "symbol": "board_actor_retained_32",
       "address": 141412,
       "size": 128,
-      "binary_offset": 14997,
+      "binary_offset": 14983,
       "fixups": {
         "19": 1027008,
         "40": 1027010,
@@ -2125,7 +2124,7 @@
       "symbol": "board_actor_retained_33",
       "address": 141552,
       "size": 78,
-      "binary_offset": 15125,
+      "binary_offset": 15111,
       "fixups": {
         "8": 993792,
         "24": 993796,
@@ -2138,7 +2137,7 @@
       "symbol": "board_actor_retained_34",
       "address": 141737,
       "size": 170,
-      "binary_offset": 15203,
+      "binary_offset": 15189,
       "fixups": {
         "10": 1046143,
         "33": 1027008,
@@ -2156,7 +2155,7 @@
       "symbol": "board_actor_retained_35",
       "address": 141940,
       "size": 62,
-      "binary_offset": 15373,
+      "binary_offset": 15359,
       "fixups": {
         "5": 1043638,
         "14": 1043137,
@@ -2168,7 +2167,7 @@
       "symbol": "board_actor_retained_36",
       "address": 142080,
       "size": 128,
-      "binary_offset": 15435,
+      "binary_offset": 15421,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2183,7 +2182,7 @@
       "symbol": "board_actor_retained_37",
       "address": 142224,
       "size": 80,
-      "binary_offset": 15563,
+      "binary_offset": 15549,
       "fixups": {
         "8": 993792,
         "34": 993796,
@@ -2196,7 +2195,7 @@
       "symbol": "board_actor_retained_38",
       "address": 142366,
       "size": 298,
-      "binary_offset": 15643,
+      "binary_offset": 15629,
       "fixups": {
         "14": 1036026,
         "28": 1044139,
@@ -2223,7 +2222,7 @@
       "symbol": "board_actor_retained_39",
       "address": 142784,
       "size": 533,
-      "binary_offset": 15941,
+      "binary_offset": 15927,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2263,7 +2262,7 @@
       "symbol": "board_actor_retained_40",
       "address": 143333,
       "size": 58,
-      "binary_offset": 16474,
+      "binary_offset": 16460,
       "fixups": {
         "8": 993796,
         "34": 993800,
@@ -2275,7 +2274,7 @@
       "symbol": "board_actor_retained_41",
       "address": 143512,
       "size": 623,
-      "binary_offset": 16532,
+      "binary_offset": 16518,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2321,7 +2320,7 @@
       "symbol": "board_actor_retained_42",
       "address": 144213,
       "size": 218,
-      "binary_offset": 17155,
+      "binary_offset": 17141,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2342,7 +2341,7 @@
       "symbol": "board_actor_retained_43",
       "address": 144506,
       "size": 257,
-      "binary_offset": 17373,
+      "binary_offset": 17359,
       "fixups": {
         "12": 1044139,
         "25": 1038030,
@@ -2367,7 +2366,7 @@
       "symbol": "board_actor_retained_44",
       "address": 144883,
       "size": 497,
-      "binary_offset": 17630,
+      "binary_offset": 17616,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2405,7 +2404,7 @@
       "symbol": "board_actor_retained_45",
       "address": 145396,
       "size": 58,
-      "binary_offset": 18127,
+      "binary_offset": 18113,
       "fixups": {
         "8": 993796,
         "34": 993800,
@@ -2417,7 +2416,7 @@
       "symbol": "board_actor_retained_46",
       "address": 145575,
       "size": 218,
-      "binary_offset": 18185,
+      "binary_offset": 18171,
       "fixups": {
         "19": 1027008,
         "40": 1027010,
@@ -2438,7 +2437,7 @@
       "symbol": "board_actor_retained_47",
       "address": 145900,
       "size": 270,
-      "binary_offset": 18403,
+      "binary_offset": 18389,
       "fixups": {
         "10": 1046143,
         "33": 1027008,
@@ -2462,7 +2461,7 @@
       "symbol": "board_actor_retained_48",
       "address": 146248,
       "size": 144,
-      "binary_offset": 18673,
+      "binary_offset": 18659,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2478,7 +2477,7 @@
       "symbol": "board_actor_retained_49",
       "address": 146408,
       "size": 64,
-      "binary_offset": 18817,
+      "binary_offset": 18803,
       "fixups": {
         "18": 993796,
         "37": 993800,
@@ -2490,7 +2489,7 @@
       "symbol": "board_actor_retained_50",
       "address": 146534,
       "size": 213,
-      "binary_offset": 18881,
+      "binary_offset": 18867,
       "fixups": {
         "14": 1036026,
         "28": 1044139,
@@ -2511,7 +2510,7 @@
       "symbol": "board_actor_retained_51",
       "address": 146775,
       "size": 57,
-      "binary_offset": 19094,
+      "binary_offset": 19080,
       "fixups": {
         "8": 993796,
         "24": 993800,
@@ -2523,7 +2522,7 @@
       "symbol": "board_actor_retained_52",
       "address": 146952,
       "size": 146,
-      "binary_offset": 19151,
+      "binary_offset": 19137,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2539,7 +2538,7 @@
       "symbol": "board_actor_retained_53",
       "address": 147114,
       "size": 327,
-      "binary_offset": 19297,
+      "binary_offset": 19283,
       "fixups": {
         "8": 993792,
         "24": 993796,
@@ -2567,7 +2566,7 @@
       "symbol": "board_actor_retained_54",
       "address": 147478,
       "size": 12,
-      "binary_offset": 19624,
+      "binary_offset": 19610,
       "fixups": {
         "8": 993796
       }
@@ -2576,7 +2575,7 @@
       "symbol": "board_actor_retained_55",
       "address": 147507,
       "size": 21,
-      "binary_offset": 19636,
+      "binary_offset": 19622,
       "fixups": {
         "7": 1043638,
         "16": 1043137
@@ -2586,7 +2585,7 @@
       "symbol": "board_actor_retained_56",
       "address": 147571,
       "size": 12,
-      "binary_offset": 19657,
+      "binary_offset": 19643,
       "fixups": {
         "8": 1020436
       }
@@ -2595,7 +2594,7 @@
       "symbol": "board_actor_retained_57",
       "address": 147649,
       "size": 118,
-      "binary_offset": 19669,
+      "binary_offset": 19655,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2609,7 +2608,7 @@
       "symbol": "board_actor_retained_58",
       "address": 147780,
       "size": 14,
-      "binary_offset": 19787,
+      "binary_offset": 19773,
       "fixups": {
         "10": 993788
       }
@@ -2618,7 +2617,7 @@
       "symbol": "board_actor_retained_59",
       "address": 147818,
       "size": 42,
-      "binary_offset": 19801,
+      "binary_offset": 19787,
       "fixups": {
         "15": 993800,
         "26": 1043638,
@@ -2629,7 +2628,7 @@
       "symbol": "board_actor_retained_60",
       "address": 147932,
       "size": 311,
-      "binary_offset": 19843,
+      "binary_offset": 19829,
       "fixups": {
         "12": 1044139,
         "25": 1038030,
@@ -2656,7 +2655,7 @@
       "symbol": "board_actor_retained_61",
       "address": 148321,
       "size": 160,
-      "binary_offset": 20154,
+      "binary_offset": 20140,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2673,7 +2672,7 @@
       "symbol": "board_actor_retained_62",
       "address": 148497,
       "size": 64,
-      "binary_offset": 20314,
+      "binary_offset": 20300,
       "fixups": {
         "18": 993796,
         "37": 993800,
@@ -2685,7 +2684,7 @@
       "symbol": "board_actor_retained_63",
       "address": 148659,
       "size": 166,
-      "binary_offset": 20378,
+      "binary_offset": 20364,
       "fixups": {
         "9": 1042636,
         "21": 1046143,
@@ -2703,7 +2702,7 @@
       "symbol": "board_actor_retained_64",
       "address": 148853,
       "size": 57,
-      "binary_offset": 20544,
+      "binary_offset": 20530,
       "fixups": {
         "8": 993796,
         "24": 993800,
@@ -2715,7 +2714,7 @@
       "symbol": "board_actor_retained_65",
       "address": 149030,
       "size": 146,
-      "binary_offset": 20601,
+      "binary_offset": 20587,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2731,7 +2730,7 @@
       "symbol": "board_actor_retained_66",
       "address": 149209,
       "size": 64,
-      "binary_offset": 20747,
+      "binary_offset": 20733,
       "fixups": {
         "18": 993796,
         "37": 993800,
@@ -2743,7 +2742,7 @@
       "symbol": "board_actor_retained_67",
       "address": 149366,
       "size": 166,
-      "binary_offset": 20811,
+      "binary_offset": 20797,
       "fixups": {
         "9": 1042636,
         "21": 1046143,
@@ -2761,7 +2760,7 @@
       "symbol": "board_actor_retained_68",
       "address": 149548,
       "size": 75,
-      "binary_offset": 20977,
+      "binary_offset": 20963,
       "fixups": {
         "8": 993792,
         "24": 993796,
@@ -2774,7 +2773,7 @@
       "symbol": "board_actor_retained_69",
       "address": 149744,
       "size": 271,
-      "binary_offset": 21052,
+      "binary_offset": 21038,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2798,7 +2797,7 @@
       "symbol": "board_actor_retained_70",
       "address": 150038,
       "size": 11,
-      "binary_offset": 21323,
+      "binary_offset": 21309,
       "fixups": {
         "7": 1044139
       }
@@ -2807,7 +2806,7 @@
       "symbol": "board_actor_retained_71",
       "address": 150072,
       "size": 224,
-      "binary_offset": 21334,
+      "binary_offset": 21320,
       "fixups": {
         "5": 1046143,
         "23": 1027008,
@@ -2829,7 +2828,7 @@
       "symbol": "board_actor_retained_72",
       "address": 150372,
       "size": 11,
-      "binary_offset": 21558,
+      "binary_offset": 21544,
       "fixups": {
         "7": 1044139
       }
@@ -2838,7 +2837,7 @@
       "symbol": "board_actor_retained_73",
       "address": 150406,
       "size": 182,
-      "binary_offset": 21569,
+      "binary_offset": 21555,
       "fixups": {
         "8": 1046143,
         "31": 1027008,
@@ -2857,7 +2856,7 @@
       "symbol": "board_actor_retained_74",
       "address": 150605,
       "size": 25,
-      "binary_offset": 21751,
+      "binary_offset": 21737,
       "fixups": {
         "9": 1043638,
         "21": 1043137
@@ -2867,7 +2866,7 @@
       "symbol": "board_actor_retained_75",
       "address": 150670,
       "size": 12,
-      "binary_offset": 21776,
+      "binary_offset": 21762,
       "fixups": {
         "8": 1020436
       }
@@ -2876,7 +2875,7 @@
       "symbol": "board_actor_retained_76",
       "address": 150705,
       "size": 262,
-      "binary_offset": 21788,
+      "binary_offset": 21774,
       "fixups": {
         "12": 1044139,
         "25": 1038030,
@@ -2901,7 +2900,7 @@
       "symbol": "board_actor_retained_77",
       "address": 151009,
       "size": 12,
-      "binary_offset": 22050,
+      "binary_offset": 22036,
       "fixups": {
         "8": 1020436
       }
@@ -2910,7 +2909,7 @@
       "symbol": "board_actor_retained_78",
       "address": 151044,
       "size": 11,
-      "binary_offset": 22062,
+      "binary_offset": 22048,
       "fixups": {
         "7": 1044139
       }
@@ -2919,7 +2918,7 @@
       "symbol": "board_actor_retained_79",
       "address": 151088,
       "size": 237,
-      "binary_offset": 22073,
+      "binary_offset": 22059,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2941,7 +2940,7 @@
       "symbol": "board_actor_retained_80",
       "address": 151423,
       "size": 162,
-      "binary_offset": 22310,
+      "binary_offset": 22296,
       "fixups": {
         "9": 1042636,
         "21": 1046143,
@@ -2959,7 +2958,7 @@
       "symbol": "board_actor_retained_81",
       "address": 151613,
       "size": 85,
-      "binary_offset": 22472,
+      "binary_offset": 22458,
       "fixups": {
         "18": 993800,
         "27": 1043638,
@@ -2972,7 +2971,7 @@
       "symbol": "board_actor_retained_82",
       "address": 151776,
       "size": 146,
-      "binary_offset": 22557,
+      "binary_offset": 22543,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2988,7 +2987,7 @@
       "symbol": "board_actor_retained_83",
       "address": 151951,
       "size": 469,
-      "binary_offset": 22703,
+      "binary_offset": 22689,
       "fixups": {
         "8": 993796,
         "31": 993800,
@@ -3025,7 +3024,7 @@
       "symbol": "board_actor_retained_84",
       "address": 152498,
       "size": 239,
-      "binary_offset": 23172,
+      "binary_offset": 23158,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -3047,7 +3046,7 @@
       "symbol": "board_actor_retained_85",
       "address": 152789,
       "size": 214,
-      "binary_offset": 23411,
+      "binary_offset": 23397,
       "fixups": {
         "12": 1041634,
         "25": 1036026,
@@ -3068,7 +3067,7 @@
       "symbol": "board_actor_retained_86",
       "address": 153071,
       "size": 21,
-      "binary_offset": 23625,
+      "binary_offset": 23611,
       "fixups": {
         "7": 1043638,
         "16": 1043137
@@ -3078,7 +3077,7 @@
       "symbol": "board_actor_retained_87",
       "address": 153186,
       "size": 255,
-      "binary_offset": 23646,
+      "binary_offset": 23632,
       "fixups": {
         "7": 1042636,
         "19": 1046143,
@@ -3102,7 +3101,7 @@
       "symbol": "board_actor_retained_88",
       "address": 153514,
       "size": 11,
-      "binary_offset": 23901,
+      "binary_offset": 23887,
       "fixups": {
         "7": 1044139
       }
@@ -3111,7 +3110,7 @@
       "symbol": "board_actor_retained_89",
       "address": 153548,
       "size": 202,
-      "binary_offset": 23912,
+      "binary_offset": 23898,
       "fixups": {
         "5": 1046143,
         "23": 1027008,
@@ -3131,7 +3130,7 @@
       "symbol": "board_actor_retained_90",
       "address": 153767,
       "size": 20,
-      "binary_offset": 24114,
+      "binary_offset": 24100,
       "fixups": {
         "5": 1043638,
         "15": 1043137
@@ -3141,7 +3140,7 @@
       "symbol": "board_actor_retained_91",
       "address": 153830,
       "size": 10,
-      "binary_offset": 24134,
+      "binary_offset": 24120,
       "fixups": {
         "6": 1020436
       }
@@ -3150,7 +3149,7 @@
       "symbol": "board_actor_retained_92",
       "address": 153863,
       "size": 11,
-      "binary_offset": 24144,
+      "binary_offset": 24130,
       "fixups": {
         "7": 1044139
       }
@@ -3159,7 +3158,7 @@
       "symbol": "board_actor_retained_93",
       "address": 153907,
       "size": 174,
-      "binary_offset": 24155,
+      "binary_offset": 24141,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -3177,7 +3176,7 @@
       "symbol": "board_actor_retained_94",
       "address": 154093,
       "size": 399,
-      "binary_offset": 24329,
+      "binary_offset": 24315,
       "fixups": {
         "8": 993800,
         "30": 1043638,
@@ -3211,7 +3210,7 @@
       "symbol": "board_actor_retained_95",
       "address": 154535,
       "size": 10,
-      "binary_offset": 24728,
+      "binary_offset": 24714,
       "fixups": {
         "6": 1020436
       }
@@ -3220,7 +3219,7 @@
       "symbol": "board_actor_retained_96",
       "address": 154555,
       "size": 24,
-      "binary_offset": 24738,
+      "binary_offset": 24724,
       "fixups": {
         "7": 1036026,
         "20": 1044139
@@ -3230,7 +3229,7 @@
       "symbol": "board_actor_retained_97",
       "address": 154612,
       "size": 133,
-      "binary_offset": 24762,
+      "binary_offset": 24748,
       "fixups": {
         "22": 1027008,
         "42": 1027010,
@@ -3245,7 +3244,7 @@
       "symbol": "board_actor_retained_98",
       "address": 154758,
       "size": 42,
-      "binary_offset": 24895,
+      "binary_offset": 24881,
       "fixups": {
         "10": 993788,
         "24": 993792,
@@ -3256,7 +3255,7 @@
       "symbol": "board_actor_retained_99",
       "address": 154817,
       "size": 25,
-      "binary_offset": 24937,
+      "binary_offset": 24923,
       "fixups": {
         "9": 1043638,
         "21": 1043137
@@ -3266,7 +3265,7 @@
       "symbol": "board_actor_retained_100",
       "address": 154882,
       "size": 260,
-      "binary_offset": 24962,
+      "binary_offset": 24948,
       "fixups": {
         "8": 1020436,
         "22": 1041634,
@@ -3291,7 +3290,7 @@
       "symbol": "board_actor_retained_101",
       "address": 155154,
       "size": 41,
-      "binary_offset": 25222,
+      "binary_offset": 25208,
       "fixups": {
         "8": 993800,
         "26": 1043638,
@@ -3302,7 +3301,7 @@
       "symbol": "board_actor_retained_102",
       "address": 155318,
       "size": 144,
-      "binary_offset": 25263,
+      "binary_offset": 25249,
       "fixups": {
         "22": 1027008,
         "42": 1027010,
@@ -3318,7 +3317,7 @@
       "symbol": "board_actor_retained_103",
       "address": 155488,
       "size": 54,
-      "binary_offset": 25407,
+      "binary_offset": 25393,
       "fixups": {
         "8": 993796,
         "27": 993800,
@@ -3330,7 +3329,7 @@
       "symbol": "board_actor_retained_104",
       "address": 155582,
       "size": 12,
-      "binary_offset": 25461,
+      "binary_offset": 25447,
       "fixups": {
         "8": 1020436
       }
@@ -3339,7 +3338,7 @@
       "symbol": "board_actor_retained_105",
       "address": 155617,
       "size": 11,
-      "binary_offset": 25473,
+      "binary_offset": 25459,
       "fixups": {
         "7": 1044139
       }
@@ -3348,7 +3347,7 @@
       "symbol": "board_actor_retained_106",
       "address": 155651,
       "size": 144,
-      "binary_offset": 25484,
+      "binary_offset": 25470,
       "fixups": {
         "5": 1046143,
         "23": 1027008,
@@ -3364,7 +3363,7 @@
       "symbol": "board_actor_retained_107",
       "address": 155808,
       "size": 14,
-      "binary_offset": 25628,
+      "binary_offset": 25614,
       "fixups": {
         "10": 993788
       }
@@ -3373,7 +3372,7 @@
       "symbol": "board_actor_retained_108",
       "address": 155863,
       "size": 20,
-      "binary_offset": 25642,
+      "binary_offset": 25628,
       "fixups": {
         "5": 1043638,
         "15": 1043137
@@ -3383,7 +3382,7 @@
       "symbol": "board_actor_retained_109",
       "address": 155926,
       "size": 12,
-      "binary_offset": 25662,
+      "binary_offset": 25648,
       "fixups": {
         "8": 1020436
       }
@@ -3392,7 +3391,7 @@
       "symbol": "board_actor_retained_110",
       "address": 156004,
       "size": 126,
-      "binary_offset": 25674,
+      "binary_offset": 25660,
       "fixups": {
         "22": 1027008,
         "37": 1027010,
@@ -3407,7 +3406,7 @@
       "symbol": "board_actor_retained_111",
       "address": 156170,
       "size": 100,
-      "binary_offset": 25800,
+      "binary_offset": 25786,
       "fixups": {
         "8": 993800,
         "30": 1043638,
@@ -3421,7 +3420,7 @@
       "symbol": "board_actor_retained_112",
       "address": 156280,
       "size": 193,
-      "binary_offset": 25900,
+      "binary_offset": 25886,
       "fixups": {
         "14": 1036026,
         "28": 1044139,
@@ -3441,7 +3440,7 @@
       "symbol": "board_actor_retained_113",
       "address": 156490,
       "size": 70,
-      "binary_offset": 26093,
+      "binary_offset": 26079,
       "fixups": {
         "8": 993792,
         "24": 993796,
@@ -3454,7 +3453,7 @@
       "symbol": "board_actor_retained_114",
       "address": 156681,
       "size": 115,
-      "binary_offset": 26163,
+      "binary_offset": 26149,
       "fixups": {
         "14": 1027008,
         "42": 1027010,
@@ -3468,7 +3467,7 @@
       "symbol": "board_actor_retained_115",
       "address": 156809,
       "size": 78,
-      "binary_offset": 26278,
+      "binary_offset": 26264,
       "fixups": {
         "8": 993788,
         "20": 993792,
@@ -3482,7 +3481,7 @@
       "symbol": "board_actor_retained_116",
       "address": 156962,
       "size": 10,
-      "binary_offset": 26356,
+      "binary_offset": 26342,
       "fixups": {
         "5": 1044139
       }
@@ -3491,7 +3490,7 @@
       "symbol": "board_actor_retained_117",
       "address": 156985,
       "size": 150,
-      "binary_offset": 26366,
+      "binary_offset": 26352,
       "fixups": {
         "9": 1042636,
         "21": 1046143,
@@ -3508,7 +3507,7 @@
       "symbol": "board_actor_retained_118",
       "address": 157149,
       "size": 61,
-      "binary_offset": 26516,
+      "binary_offset": 26502,
       "fixups": {
         "8": 993792,
         "20": 993796,
@@ -3521,7 +3520,7 @@
       "symbol": "board_actor_retained_119",
       "address": 157328,
       "size": 126,
-      "binary_offset": 26577,
+      "binary_offset": 26563,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -3536,7 +3535,7 @@
       "symbol": "board_actor_retained_120",
       "address": 157468,
       "size": 45,
-      "binary_offset": 26703,
+      "binary_offset": 26689,
       "fixups": {
         "10": 993792,
         "22": 993796,
@@ -3544,7 +3543,7 @@
       }
     }
   ],
-  "assembly_size": 26748,
+  "assembly_size": 26734,
   "structure": [
     [
       150,
@@ -3609,5 +3608,6 @@
   "disable_context_file": "board-actor-disable-layout.json",
   "clobber_context_file": "board-actor-clobber-layout.json",
   "fragment_context_file": "board-actor-fragment-layout.json",
-  "offset_context_file": "board-actor-offset-layout.json"
+  "offset_context_file": "board-actor-offset-layout.json",
+  "eax_context_file": "board-actor-eax-layout.json"
 }

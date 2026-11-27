@@ -152,15 +152,16 @@ def context_controls(blob, layout):
     return controls
 
 
-def main(destinations=False, values=False, clobbers=False, offsets=False):
-    assert sum((destinations,values,clobbers,offsets)) <= 1
-    mode = 'offsets' if offsets else 'clobbers' if clobbers else 'values' if values else 'destinations' if destinations else 'indexed'
+def main(destinations=False, values=False, clobbers=False, offsets=False, eax=False):
+    assert sum((destinations,values,clobbers,offsets,eax)) <= 1
+    mode = 'eax' if eax else 'offsets' if offsets else 'clobbers' if clobbers else 'values' if values else 'destinations' if destinations else 'indexed'
     layout,count,context_size,placed_bytes,DATA_sites,expected_setups = {
         'indexed': (group.INDEXED_LAYOUT,281,30235,4271,318,0),
         'destinations': (group.DESTINATION_LAYOUT,18,31119,250,18,8),
         'values': (group.VALUE_LAYOUT,27,31347,368,27,6),
         'clobbers': (group.CLOBBER_LAYOUT,6,31425,87,6,1),
         'offsets': (group.OFFSET_LAYOUT,29,31450,433,29,0),
+        'eax': (group.EAX_LAYOUT,1,31450,14,1,0),
     }[mode]
     destinations = mode != 'indexed'
     parser = argparse.ArgumentParser(description=__doc__)
@@ -275,10 +276,12 @@ def main(destinations=False, values=False, clobbers=False, offsets=False):
         except AssertionError as error: assert message in str(error),str(error)
         else: raise AssertionError('Metadata mutation escaped: '+label)
         metadata_controls.append(label)
-    operation = deepcopy(next(o for o in operations if o['live_in_bitmasks'].get('eax',0) & o['live_in_values'].get('eax',0) & 1))
-    if mode in ('indexed','destinations'): assert operation['original_start'] == (0x20c5a if destinations else 0x2204e)
+    operation = deepcopy(next(o for o in operations if o['live_in_bitmasks'].get('eax',0) & 1))
+    required_bit = operation['live_in_values']['eax'] & 1
     operation['live_in_bitmasks']['eax'] &= ~1; operation['live_in_values']['eax'] &= ~1
-    memory,_ = base.seed(original,7); registers = tuple(r ^ 0xffffffff for r in seed_registers)
+    memory,_ = base.seed(original,7); registers = [r ^ 0xffffffff for r in seed_registers]
+    # Oppose the omitted bit explicitly, including even slot numbers such as104.
+    registers[0] = (registers[0] & ~1) | (required_bit ^ 1)
     address = operation['original_start']; code = body[address-begin:operation['original_end']-begin]
     actual = base.execute(memory,live(registers,operation),0x202,code,address)
     assert actual[0] != model(memory,operation)[0]; metadata_controls.append('omitted_AX_bit')

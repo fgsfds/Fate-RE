@@ -1,4 +1,7 @@
 /* Startup configuration for the actor slots of every board. */
+#ifdef ACTOR_EAX_CONTEXT
+#define ACTOR_OFFSET_CONTEXT 1
+#endif
 #ifdef ACTOR_OFFSET_CONTEXT
 #define ACTOR_CLOBBER_CONTEXT 1
 #endif
@@ -76,7 +79,11 @@ extern long actor_destination_value_in_edi(long);
 #pragma aux actor_destination_value_in_edi = "" parm [edi] value [edi] modify exact [];
 #endif
 extern long actor_destination_value_in_eax(long);
+#ifdef ACTOR_EAX_CONTEXT
+#pragma aux actor_destination_value_in_eax = "" parm [eax] value [eax] modify exact [eax];
+#else
 #pragma aux actor_destination_value_in_eax = "" parm [eax] value [eax] modify exact [];
+#endif
 #endif
 extern long actor_destination_offset_in_edx(long);
 #ifdef ACTOR_OFFSET_CONTEXT
@@ -92,8 +99,13 @@ extern long actor_destination_offset_in_edx(long);
 #ifdef ACTOR_DESTINATION_VALUES
 #ifdef ACTOR_DESTINATION_CLOBBERS
 #ifdef ACTOR_OFFSET_CONTEXT
+#ifdef ACTOR_EAX_CONTEXT
+void board_actor_eax_context(void);
+#pragma aux board_actor_eax_context modify exact [eax];
+#else
 void board_actor_offset_context(void);
 #pragma aux board_actor_offset_context modify exact [eax];
+#endif
 #else
 void board_actor_clobber_context(void);
 #pragma aux board_actor_clobber_context modify exact [eax];
@@ -110,7 +122,11 @@ void board_actor_destination_context(void);
 #ifdef ACTOR_DESTINATION_VALUES
 #ifdef ACTOR_DESTINATION_CLOBBERS
 #ifdef ACTOR_OFFSET_CONTEXT
+#ifdef ACTOR_EAX_CONTEXT
+void board_actor_eax_context(void)
+#else
 void board_actor_offset_context(void)
+#endif
 #else
 void board_actor_clobber_context(void)
 #endif

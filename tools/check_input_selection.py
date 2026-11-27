@@ -215,25 +215,30 @@ def resources(ins):
 
 
 def validate_layout(layout,original,natural):
-    assert layout['original_address']==START and layout['original_size']==SIZE and layout['prefix_size']==STOP
-    assert layout['DATA']==MODEL_DATA,'input DATA model bindings'
+    boundary=699
+    assert layout['original_address']==START and layout['original_size']==SIZE and layout['prefix_size']==boundary
+    assert all(layout['DATA'][k]==v for k,v in MODEL_DATA.items()),'input DATA model bindings'
     old,new=decode(original),decode(natural);mapping={};owned=[];private=[]
     for row in layout['instructions']:
         off=row['original']-START;source=row['private'];size=row['size']
         assert off not in mapping and old[off].size==new[source].size==size,'input instruction map'
         mapping[off]=source;owned.extend(range(off,off+size));private.extend(range(source,source+size))
-    assert owned==list(range(6,19))+list(range(26,STOP)),'input original partition'
-    assert sorted(private)==list(range(3,16))+list(range(26,STOP)),'input private partition'
+    assert owned==list(range(6,19))+list(range(26,boundary)),'input original partition'
+    assert sorted(private)==list(range(3,16))+list(range(26,boundary)),'input private partition'
     normal={off:off-3 if off<19 else off for off in mapping}
-    assert len(layout['swaps'])==len({tuple(pair) for pair in layout['swaps']})==6,'input unique swap inventory'
+    assert len(layout['swaps'])==len({tuple(pair) for pair in layout['swaps']})==7,'input unique swap inventory'
+    original_targets={branch(i) for i in old.values() if branch(i) is not None}
+    private_targets={branch(i) for i in new.values() if branch(i) is not None}
     for left,right in layout['swaps']:
         a,b=old[left],old[right];assert left+a.size==right,'input swap adjacency'
         ar,aw,am=resources(a);br,bw,bm=resources(b)
         assert not (aw&(br|bw) or bw&ar),'input swap register/flag dependency'
         assert not am&bm,'input swap memory dependency'
         normal[left],normal[right]=left+b.size,left
+        assert not {left,right}&original_targets,'input branch enters original swap'
+        assert not {normal[left],normal[right]}&private_targets,'input branch enters private swap'
     assert mapping==normal,'input reorder map'
-    entries={source:off for off,source in mapping.items()};entries[STOP]=STOP
+    entries={source:off for off,source in mapping.items()};entries[boundary]=boundary
     records={int(k):value for k,value in layout['branches'].items()}
     assert set(records)=={off for off,ins in new.items() if branch(ins) is not None},'input complete branch set'
     for off,source in mapping.items():
@@ -256,7 +261,7 @@ def validate_layout(layout,original,natural):
             phase_original.extend(range(old_off,old_off+ins.size))
     assert phase_map==mapping and phase_original==owned,'input placement partition'
     assert original[:6]==bytes.fromhex('535152565755') and original[19:26]==bytes.fromhex('31c0a050360100'),'input retained entry/producer'
-    assert natural[:3]==bytes.fromhex('535152') and natural[STOP:]==bytes.fromhex('5a595bc3'),'input private frame/return'
+    assert natural[:3]==bytes.fromhex('535152') and natural[boundary:]==bytes.fromhex('5a595bc3'),'input private frame/return'
     assert natural[16:26]==bytes.fromhex('a05036010025ff000000'),'input alternate producer'
     return old
 
@@ -269,22 +274,22 @@ def bind_production(exe,build):
         assert region<=set(range(START,START+SIZE));covered.update(region)
         output[address-START:address-START+len(code)]=code
     for phase in layout['phases']:
-        fields={};code,data=v.bind_leaf_details(blob,phase['symbol'],MODEL_DATA,address=phase['address'],functions={group.PUBLIC:START},code_bindings=fields)
+        fields={};code,data=v.bind_leaf_details(blob,phase['symbol'],layout['DATA'],address=phase['address'],functions={group.PUBLIC:START},code_bindings=fields)
         assert not fields and code==original[phase['address']-START:phase['address']-START+len(code)]
         v.verify_leaf_relocations(code,data,pointers,phase['address'],code_bindings=fields)
         install(phase['address'],code);C_sites+=len(data)
-    assembly=(build/'asm/collect_input.bin').read_bytes();assert len(assembly)==2699
+    assembly=(build/'asm/collect_input.bin').read_bytes();assert len(assembly)==2411
     for row in layout['retained']:
         code=assembly[row['binary_offset']:row['binary_offset']+row['size']]
         assert code==original[row['address']-START:row['address']-START+row['size']]
         assert {site-row['address']:target for site,target in pointers.between(row['address'],row['address']+row['size'])}=={int(k):value for k,value in row['fixups'].items()}
         install(row['address'],code)
-    assert len(covered)==SIZE and output==original and C_sites==42
-    fields={};natural,data=v.bind_leaf_details(blob,group.PUBLIC,MODEL_DATA,address=START,functions={group.PUBLIC:START},code_bindings=fields)
-    assert not fields and len(natural)==415 and len(data)==43
-    sites={site-START:target for site,target in pointers.between(START,START+STOP)}
-    assert len(sites)==43
-    return blob,bytes(original[:STOP]),bytes(output[:STOP]),natural,sites,{off:DATA_BASE+target for off,target in data.items()}
+    assert len(covered)==SIZE and output==original and C_sites==72
+    fields={};natural,data=v.bind_leaf_details(blob,group.PUBLIC,layout['DATA'],address=START,functions={group.PUBLIC:START},code_bindings=fields)
+    assert not fields and len(natural)==703 and len(data)==73
+    sites={site-START:target for site,target in pointers.between(START,START+699)}
+    assert len(sites)==73
+    return blob,bytes(original[:699]),bytes(output[:699]),natural,sites,{off:DATA_BASE+target for off,target in data.items()}
 
 
 def context_controls(blob):
@@ -292,7 +297,7 @@ def context_controls(blob):
     from check_encounter_actor import rewrite_fixup
     from check_ripple_control import rename_external
     phase=group.LAYOUT['phases'][0];controls=[]
-    def bind(b):return v.bind_leaf_details(b,phase['symbol'],MODEL_DATA,address=phase['address'],functions={group.PUBLIC:START},code_bindings={})
+    def bind(b):return v.bind_leaf_details(b,phase['symbol'],group.LAYOUT['DATA'],address=phase['address'],functions={group.PUBLIC:START},code_bindings={})
     def reject(label,b,expected):
         try:bind(b)
         except ValueError as error:assert expected in str(error),str(error)
@@ -300,7 +305,7 @@ def context_controls(blob):
         controls.append(label)
     unchanged,changed=rewrite_fixup(blob,lambda f:False,lambda f:f)
     assert not changed and bind(unchanged)==bind(blob)
-    for label,off in [('private_save',0),('excluded_index_producer',16),('excluded_return',414)]:
+    for label,off in [('private_save',0),('excluded_index_producer',16),('excluded_return',702)]:
         reject(label,mutate_public_byte(blob,group.PUBLIC,off),'complete context digest')
     _,_,names,_,fixups=v.parsed_leaf_object(blob);excluded=next(f for f in fixups if f.offset==17)
     other=next(n for n in range(1,len(names)) if n!=excluded.target[1])
@@ -332,7 +337,7 @@ def main():
     orig=Replay(relocated(original,sites),('ebx','ecx','edx','esi','edi','ebp'))
     production=Replay(relocated(placed,sites),orig.saves)
     natural=Replay(relocated(private,private_sites),('ebx','ecx','edx'),private=True)
-    outcomes={off:set() for off,ins in rows.items() if branch(ins) is not None};all_cases=list(cases())
+    outcomes={off:set() for off,ins in rows.items() if off<STOP and branch(ins) is not None};all_cases=list(cases())
     for case in all_cases:
         expected=orig.run(case);actual=production.run(case);compiled=natural.run(case)
         assert expected==actual==compiled and expected[:2]==model(case)
@@ -375,7 +380,7 @@ def main():
     bad=bytearray(placed);bad[toggle.address+toggle.size-1]=2;replay=Replay(relocated(bytes(bad),sites),orig.saves);case=sample({255:1})
     def run_bad_toggle():assert replay.run(case)[:2]==model(case)
     reject('toggle_mask',run_bad_toggle)
-    first_phase=group.LAYOUT['phases'][0];code,data=v.bind_leaf_details(blob,first_phase['symbol'],MODEL_DATA,address=first_phase['address'],functions={group.PUBLIC:START},code_bindings={})
+    first_phase=group.LAYOUT['phases'][0];code,data=v.bind_leaf_details(blob,first_phase['symbol'],group.LAYOUT['DATA'],address=first_phase['address'],functions={group.PUBLIC:START},code_bindings={})
     pointers=read_le_fixups(exe)['pointers']
     try:v.verify_leaf_relocations(code,data,pointers,first_phase['address'],code_bindings=data)
     except ValueError as error:
@@ -383,7 +388,7 @@ def main():
         controls.append('DATA_as_CODE')
     else:raise AssertionError('Input DATA-as-CODE mutation escaped')
     report=dict(status='PASS',placed_c_bytes=398,DATA_sites=42,branches=24,cases=len(all_cases),branch_outcomes={hex(START+k):sorted(v) for k,v in outcomes.items()},code_metadata_controls=controls,context_controls=context_controls(blob),
-        scope='Independent stable-memory model for one-shot toggle and ordered selection eligibility. Original and placed prefixes retain six saves; the private prefix retains three and stops before its epilogue. All ordered writes, key bytes, mode/selection, entry EAX, exit GPRs, guarded frames and defined EFLAGS mask0x8c5 agree. No keyboard/mouse continuation, interrupt interleavings or full collect_input C claim.')
+        scope='Independent stable-memory model for one-shot toggle and ordered selection eligibility. Original and placed prefixes retain six saves; the private prefix retains three and stops at keyboard-motion entry. All ordered writes, key bytes, mode/selection, entry EAX, exit GPRs, guarded frames and defined EFLAGS mask0x8c5 agree. No keyboard/mouse continuation, interrupt interleavings or full collect_input C claim.')
     args.output.write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))
 
 
