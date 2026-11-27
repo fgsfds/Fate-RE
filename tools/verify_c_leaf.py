@@ -5205,7 +5205,7 @@ for _phase in WEAPON_ANIMATION_LAYOUT['phases']:
     LEAVES[_phase['symbol']] = (_phase['address']+0x25600, _phase['end']-_phase['begin'])
     LEAF_CODE_SLICES[_phase['symbol']] = (_phase['public'], _phase['begin'], _phase['end'], _weapon_context['size'])
 
-from bind_board_actor import LAYOUT as BOARD_ACTOR_LAYOUT, INDEXED_LAYOUT as BOARD_ACTOR_INDEXED_LAYOUT
+from bind_board_actor import LAYOUT as BOARD_ACTOR_LAYOUT, INDEXED_LAYOUT as BOARD_ACTOR_INDEXED_LAYOUT, DESTINATION_LAYOUT as BOARD_ACTOR_DESTINATION_LAYOUT
 for _name, _offset in BOARD_ACTOR_LAYOUT['DATA'].items():
     if _name in DATA_OFFSETS and DATA_OFFSETS[_name] != _offset:
         raise ValueError('Conflicting board actor DATA binding: '+_name)
@@ -5218,19 +5218,19 @@ for _phase in BOARD_ACTOR_LAYOUT['phases']:
     LEAF_CONTEXT_RECORDS[_public] = BOARD_ACTOR_LAYOUT['records']
     LEAF_CONTEXT_FIXUPS[_public] = {int(k): tuple(v) for k,v in _phase['fixups'].items()}
 
-_indexed_context = BOARD_ACTOR_INDEXED_LAYOUT['context']
-_indexed_public = _indexed_context['public']
-for _name, _offset in BOARD_ACTOR_INDEXED_LAYOUT['DATA'].items():
-    if _name in DATA_OFFSETS and DATA_OFFSETS[_name] != _offset:
-        raise ValueError('Conflicting indexed actor DATA binding: '+_name)
-    DATA_OFFSETS[_name] = _offset
-LEAF_CONTEXT_SHA256[_indexed_public] = _indexed_context['sha256']
-LEAF_CONTEXT_LITERALS[_indexed_public] = (0, hashlib.sha256(b'').hexdigest(), {})
-LEAF_CONTEXT_RECORDS[_indexed_public] = _indexed_context['records']
-LEAF_CONTEXT_FIXUPS[_indexed_public] = {int(k): tuple(v) for k,v in _indexed_context['fixups'].items()}
-for _phase in BOARD_ACTOR_INDEXED_LAYOUT['phases']:
-    LEAVES[_phase['symbol']] = (_phase['address']+0x25600, _phase['end']-_phase['begin'])
-    LEAF_CODE_SLICES[_phase['symbol']] = (_indexed_public, _phase['begin'], _phase['end'], _indexed_context['size'])
+for _actor_layout in (BOARD_ACTOR_INDEXED_LAYOUT, BOARD_ACTOR_DESTINATION_LAYOUT):
+    _actor_context = _actor_layout['context']; _actor_public = _actor_context['public']
+    for _name, _offset in _actor_layout['DATA'].items():
+        if _name in DATA_OFFSETS and DATA_OFFSETS[_name] != _offset:
+            raise ValueError('Conflicting indexed actor DATA binding: '+_name)
+        DATA_OFFSETS[_name] = _offset
+    LEAF_CONTEXT_SHA256[_actor_public] = _actor_context['sha256']
+    LEAF_CONTEXT_LITERALS[_actor_public] = (0, hashlib.sha256(b'').hexdigest(), {})
+    LEAF_CONTEXT_RECORDS[_actor_public] = _actor_context['records']
+    LEAF_CONTEXT_FIXUPS[_actor_public] = {int(k): tuple(v) for k,v in _actor_context['fixups'].items()}
+    for _phase in _actor_layout['phases']:
+        LEAVES[_phase['symbol']] = (_phase['address']+0x25600, _phase['end']-_phase['begin'])
+        LEAF_CODE_SLICES[_phase['symbol']] = (_actor_public, _phase['begin'], _phase['end'], _actor_context['size'])
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

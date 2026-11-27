@@ -595,3 +595,4 @@ fate/weapon_animation wanstate /4r /s /or /bt=dos /dWEAPON_ACTIVE_STATE_CONTEXT=
 fate/weapon_animation wanxfer /4r /s /or /bt=dos /dWEAPON_TRANSFER_CONTEXT=1
 fate/board_actor_groups actorcfg
 fate/board_actor_configuration actsetup
+fate/board_actor_configuration actdest /4r /s /or /bt=dos /dACTOR_DESTINATION_CONTEXT=1

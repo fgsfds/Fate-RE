@@ -110,15 +110,16 @@ def bind_production(exe, build):
         fields = {}; natural, natural_data = v.bind_leaf_details(blob,phase['public'],values,address=0x50000,code_bindings=fields)
         assert not fields and len(natural_data) == len(data)
         slices.append((phase,loaded,natural))
-    indexed_blob = (build/'actsetup.obj').read_bytes()
-    for phase in group.INDEXED_LAYOUT['phases']:
-        fields = {}; address = phase['address']; symbol = phase['symbol']
-        raw,data = v.bind_leaf_details(indexed_blob,symbol,v.DATA_OFFSETS,address=address,code_bindings=fields)
-        assert not fields and raw == exe[address+0x25600:address+0x25600+len(raw)]
-        v.verify_leaf_relocations(raw,data,pointers,address,code_bindings=fields)
-        fields = {}; loaded,bindings = v.bind_leaf_details(indexed_blob,symbol,values,address=address,code_bindings=fields)
-        assert not fields and bindings == {k:DS+n for k,n in data.items()}
-        install(address,raw,loaded)
+    for actor_layout in (group.INDEXED_LAYOUT, group.DESTINATION_LAYOUT):
+        indexed_blob = (build/(actor_layout['context']['object']+'.obj')).read_bytes()
+        for phase in actor_layout['phases']:
+            fields = {}; address = phase['address']; symbol = phase['symbol']
+            raw,data = v.bind_leaf_details(indexed_blob,symbol,v.DATA_OFFSETS,address=address,code_bindings=fields)
+            assert not fields and raw == exe[address+0x25600:address+0x25600+len(raw)]
+            v.verify_leaf_relocations(raw,data,pointers,address,code_bindings=fields)
+            fields = {}; loaded,bindings = v.bind_leaf_details(indexed_blob,symbol,values,address=address,code_bindings=fields)
+            assert not fields and bindings == {k:DS+n for k,n in data.items()}
+            install(address,raw,loaded)
     assembly = (build/'asm/board_actor_initialization.bin').read_bytes()
     assert len(assembly) == layout['assembly_size']
     for row in layout['retained']:

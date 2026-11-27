@@ -170,15 +170,22 @@ changes store order and raw EAX; it is not a whole-routine binary replacement.
 The first whole-context mismatch is `0x1e930`: the loop condition compares AX
 with 501 instead of promoting into EDX and comparing with 500. Three separate
 disable-loop probes kept the counter in BX and promoted through EAX, even with
-short/full counter captures or a direct increment. Do not repeat those forms;
-next investigate an honest output-clobber/conversion lifetime that prevents
-the EAX copy while retaining the counter. The first remaining indexed block
-at `0x20c5a` uses CWDE and a cached EAX destination address, while the original
-recomputes the EDX address for each field and stores from EBX. Next model the
-actual zero value in EBX and the per-field signed index lifetime. Saved XYZ,
+short/full counter captures or a direct increment. A conservative EDX output
+clobber emits CMP EDX,500 but retains MOVSX EAX,BX; MOV EDX,EAX and counter
+copies. Next establish the EAX counter and EDX promotion lifetimes together
+inside the constructor; repeating these isolated forms is unhelpful.
+
+A second typed context captures the actual zero in EBX and each destination
+byte offset in EDX. It restores 18 complete field assignments, including eight
+interleaved next-slot loads, for 250 additional bytes and 18 DATA sites in nine
+runs. Its 31,119-byte whole translation still differs in store order and is not
+a full byte-exact replacement. The first remaining destination field is actor
+104 X at `0x20da3`: original XOR ESI,ESI and store ESI versus the existing EBP
+zero in the private context. Next model the actual ESI zero lifetime. Saved XYZ,
 destination, waypoint and tile-row strides are 12, 16, 4 and 18 bytes; untouched
 words remain unchanged. Evidence: `work/board-slot-lifetime-nov27/REPORT.md`,
-`selected-indexed-operations.json`, and `work/actor-disable-loop-nov27/`.
+`selected-indexed-operations.json`, `work/actor-disable-loop-nov27/actclob-result.json`,
+and `work/destination-lifetime-nov27/REPORT.md`.
 
 ### Video prompt-mode blocker
 

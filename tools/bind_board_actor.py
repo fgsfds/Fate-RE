@@ -1,4 +1,4 @@
-"""Guard the entire three-public actor-configuration compiler object."""
+"""Guard complete compact, indexed and destination actor compiler contexts."""
 import hashlib
 import json
 from pathlib import Path
@@ -6,9 +6,12 @@ from pathlib import Path
 LAYOUT = json.loads((Path(__file__).parent/'data/board-actor-layout.json').read_text(encoding='utf-8'))
 INDEXED_LAYOUT = json.loads((Path(__file__).parent/'data'/LAYOUT['indexed_context_file']).read_text(encoding='utf-8'))
 INDEXED_PUBLIC = INDEXED_LAYOUT['context']['public']
-PUBLICS = frozenset([p[2] for p in LAYOUT['publics']] + [INDEXED_PUBLIC])
+DESTINATION_LAYOUT = json.loads((Path(__file__).parent/'data'/LAYOUT['destination_context_file']).read_text(encoding='utf-8'))
+DESTINATION_PUBLIC = DESTINATION_LAYOUT['context']['public']
+PUBLICS = frozenset([p[2] for p in LAYOUT['publics']] + [INDEXED_PUBLIC, DESTINATION_PUBLIC])
 GROUP_SHA256 = LAYOUT['sha256']
 INDEXED_SHA256 = INDEXED_LAYOUT['context']['sha256']
+DESTINATION_SHA256 = DESTINATION_LAYOUT['context']['sha256']
 
 
 def structural_records(blob):
@@ -31,9 +34,14 @@ def structural_records(blob):
 def verify_context(blob, public_name=None):
     from verify_c_leaf import parsed_leaf_object
     segments, publics, names, flat, fixups = parsed_leaf_object(blob)
-    indexed = public_name == INDEXED_PUBLIC or public_name is None and any(p[2] == INDEXED_PUBLIC for p in publics)
-    layout = INDEXED_LAYOUT['context'] if indexed else LAYOUT
-    digest = INDEXED_SHA256 if indexed else GROUP_SHA256
+    if public_name is None:
+        public_name = next((p[2] for p in publics if p[2] in (INDEXED_PUBLIC, DESTINATION_PUBLIC)), None)
+    if public_name == DESTINATION_PUBLIC:
+        layout, digest = DESTINATION_LAYOUT['context'], DESTINATION_SHA256
+    elif public_name == INDEXED_PUBLIC:
+        layout, digest = INDEXED_LAYOUT['context'], INDEXED_SHA256
+    else:
+        layout, digest = LAYOUT, GROUP_SHA256
     if [list(p) for p in publics] != layout['publics']:
         raise ValueError('Board actor public layout differs')
     if structural_records(blob) != layout['structure']:

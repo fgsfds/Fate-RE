@@ -23,10 +23,15 @@ FIELDS = {
     'actor_projectile_type': (0x7eeab,1,1),
     'actor_mode': (0x7f67f,1,1),
     'actor_waypoints.first': (0x78a40,4,2),
+    'actor_destinations.x': (0x729fc,16,4),
+    'actor_destinations.y': (0x72a00,16,4),
+    'actor_destinations.parameter_one': (0x72a04,16,4),
+    'actor_destinations.parameter_two': (0x72a08,16,4),
 }
 KINDS = {name:(name,) for name in FIELDS if '.' not in name}
 KINDS['saved_actor_positions'] = ('saved_actor_positions.x','saved_actor_positions.y')
 KINDS['actor_waypoints'] = ('actor_waypoints.first',)
+KINDS.update({name:(name,) for name in FIELDS if name.startswith('actor_destinations.')})
 
 
 def validate_operations(layout):
@@ -55,6 +60,29 @@ def live(registers, operation):
         assert value & ~mask == 0
         registers[pos] = (registers[pos] & ~mask) | value
     return tuple(registers)
+
+
+def validate_destination_instructions(layout, original, natural):
+    """Pin every recorded store and interleaved next-slot load to real instructions."""
+    from capstone import Cs, CS_ARCH_X86, CS_MODE_32, CS_OP_MEM, CS_OP_REG, CS_OP_IMM
+    from capstone.x86_const import X86_REG_EAX
+    decoder = Cs(CS_ARCH_X86,CS_MODE_32); decoder.detail = True
+    setups = 0
+    for operation in layout['operations']:
+        for code in (original[operation['original_start']:operation['original_end']],
+                     natural[operation['candidate_start']:operation['candidate_end']]):
+            instructions = list(decoder.disasm(bytes(code),0))
+            assert sum(i.size for i in instructions) == len(code), 'incomplete destination instruction decoding'
+            stores = [(i.address,i.operands[0].size) for i in instructions
+                      if i.mnemonic == 'mov' and i.operands[0].type == CS_OP_MEM]
+            assert stores == [(offset,width) for offset,_,width,_ in operation['writes']], 'destination store instruction metadata'
+            actual = [dict(offset=i.address,code=i.bytes.hex(),text=i.op_str,move=i.mnemonic)
+                      for i in instructions if i.mnemonic == 'mov'
+                      and i.operands[0].type == CS_OP_REG and i.operands[0].reg == X86_REG_EAX
+                      and i.operands[1].type == CS_OP_IMM and i.address < stores[-1][0]]
+            assert actual == operation['interleaved_slot_setup'], 'destination next-slot instruction metadata'
+        setups += len(operation['interleaved_slot_setup'])
+    assert setups == 8, 'destination next-slot instruction count'
 
 
 def model(memory, operation):
@@ -112,27 +140,29 @@ def context_controls(blob, layout):
     bad[cursor+3] = 1; bad[end-1] = (-sum(bad[cursor:end-1])) & 255
     assert v.parsed_leaf_object(bytes(bad)) == v.parsed_leaf_object(blob)
     reject(bytes(bad),'structural OMF metadata'); controls.append('PUBDEF_group')
-    digest = group.INDEXED_SHA256; leaf_digest = v.LEAF_CONTEXT_SHA256.pop(public)
-    group.INDEXED_SHA256 = None
+    attribute = 'DESTINATION_SHA256' if public == group.DESTINATION_PUBLIC else 'INDEXED_SHA256'
+    digest = getattr(group,attribute); leaf_digest = v.LEAF_CONTEXT_SHA256.pop(public)
+    setattr(group,attribute,None)
     try:
         assert not any(p['begin'] <= first.offset < p['end'] for p in layout['phases'])
         reject(mutate_public_byte(blob,public,first.offset),'fixup addends')
         controls.append('excluded_addend_without_digests')
     finally:
-        group.INDEXED_SHA256 = digest; v.LEAF_CONTEXT_SHA256[public] = leaf_digest
+        setattr(group,attribute,digest); v.LEAF_CONTEXT_SHA256[public] = leaf_digest
     return controls
 
 
-def main():
+def main(destinations=False):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--exe',type=Path,required=True); parser.add_argument('--build',type=Path,required=True); parser.add_argument('--output',type=Path,required=True)
     args = parser.parse_args(); exe = args.exe.read_bytes(); assert hashlib.sha256(exe).hexdigest() == TARGET_SHA256
-    layout = group.INDEXED_LAYOUT; validate_operations(layout)
-    operations = layout['operations']; assert len(operations) == 281
+    layout = group.DESTINATION_LAYOUT if destinations else group.INDEXED_LAYOUT; validate_operations(layout)
+    operations = layout['operations']; assert len(operations) == (18 if destinations else 281)
     original = image(exe); _,body,_ = base.bind_production(exe,args.build)
-    blob = (args.build/'actsetup.obj').read_bytes(); values = {k:DS+n for k,n in v.DATA_OFFSETS.items()}; fields = {}
+    blob = (args.build/(layout['context']['object']+'.obj')).read_bytes(); values = {k:DS+n for k,n in v.DATA_OFFSETS.items()}; fields = {}
     natural,data = v.bind_leaf_details(blob,layout['context']['public'],values,address=0x50000,code_bindings=fields)
-    assert not fields and len(natural) == 30235 and len(data) == 2579
+    assert not fields and len(natural) == (31119 if destinations else 30235) and len(data) == 2579
+    if destinations: validate_destination_instructions(layout,original,natural)
     begin = group.LAYOUT['original_address']; cases = 0
     seed_registers = base.seed(original,0)[1]
     for operation in operations:
@@ -169,7 +199,7 @@ def main():
         whole.append(dict(seed=number,ordered_placed_writes=len(placed[1]),private_writes=len(native[1])))
     # Wrong byte/word values and wrong 12-byte coordinate stride must affect the model.
     code_controls = []
-    for field,width in [('actor_sequence_initial',1),('actor_health',2)]:
+    for field,width in ([] if destinations else [('actor_sequence_initial',1),('actor_health',2)]):
         operation = next(o for o in operations if o['fields'] == [field])
         address = operation['original_start']; code = bytearray(body[address-begin:operation['original_end']-begin])
         value = operation['writes'][0][3]
@@ -177,32 +207,71 @@ def main():
         code[-width] ^= 1
         memory,registers = base.seed(original,7); actual = base.execute(memory,live(registers,operation),0x202,bytes(code),address)
         assert actual[0] != model(memory,operation)[0]; code_controls.append(field+'_value')
-    operation = next(o for o in operations if len(o['fields']) == 2)
+    operation = next(o for o in operations if ('eax' in o['live_in_bitmasks'] if destinations else len(o['fields']) == 2))
     address = operation['original_start']; code = bytearray(body[address-begin:operation['original_end']-begin])
     from capstone import Cs,CS_ARCH_X86,CS_MODE_32
     decoder = Cs(CS_ARCH_X86,CS_MODE_32); decoder.detail = True
-    instruction = next(i for i in decoder.disasm(bytes(code),0) if i.mnemonic == 'shl' and i.bytes[-1] == 2)
-    code[instruction.address+instruction.size-1] = 1
+    shift = 4 if destinations else 2
+    instruction = next(i for i in decoder.disasm(bytes(code),0) if i.mnemonic == 'shl' and i.bytes[-1] == shift)
+    code[instruction.address+instruction.size-1] = shift-1
     memory,registers = base.seed(original,7); actual = base.execute(memory,live(registers,operation),0x202,bytes(code),address)
-    assert actual[0] != model(memory,operation)[0]; code_controls.append('saved_position_stride')
+    assert actual[0] != model(memory,operation)[0]; code_controls.append('destination_stride' if destinations else 'saved_position_stride')
+    if destinations:
+        # The direct actor-103 X store must consume EBX, not another poisoned zero-looking register.
+        operation = operations[0]; address = operation['original_start']
+        code = bytearray(body[address-begin:operation['original_end']-begin])
+        instruction = next(decoder.disasm(bytes(code),0))
+        assert instruction.mnemonic == 'mov' and instruction.op_str.endswith(', ebx')
+        code[instruction.modrm_offset] ^= 0x28  # source EBX -> ESI
+        memory,registers = base.seed(original,7)
+        actual = base.execute(memory,live(registers,operation),0x202,bytes(code),address)
+        assert actual[0] != model(memory,operation)[0]; code_controls.append('destination_zero_register')
+        # Eight compiler intervals also set the next slot. That EAX result is observable.
+        operation = next(o for o in operations if o['interleaved_slot_setup'])
+        address = operation['original_start']; code = bytearray(body[address-begin:operation['original_end']-begin])
+        setup = operation['interleaved_slot_setup'][0]; code[setup['offset']+1] ^= 1
+        memory,registers = base.seed(original,7); registers = live(registers,operation)
+        reference = base.execute(memory,registers,0x202,body[address-begin:operation['original_end']-begin],address)
+        actual = base.execute(memory,registers,0x202,bytes(code),address)
+        assert actual[0:2] == reference[0:2] and actual[2] != reference[2]
+        code_controls.append('interleaved_next_slot')
     from copy import deepcopy
     metadata_controls = []
+    if destinations:
+        # Challenge every setup record, including the later actor-106 record.
+        for pos,operation in enumerate(operations):
+            if not operation['interleaved_slot_setup']: continue
+            for key in ('missing','offset','code','text','move'):
+                changed = deepcopy(layout); record = changed['operations'][pos]['interleaved_slot_setup']
+                if key == 'missing': record.clear()
+                elif key == 'offset': record[0][key] += 1
+                else: record[0][key] += 'x'
+                try: validate_destination_instructions(changed,original,natural)
+                except AssertionError as error: assert 'next-slot instruction' in str(error),str(error)
+                else: raise AssertionError('Destination setup metadata mutation escaped')
+                metadata_controls.append(f'next_slot_{pos}_{key}')
+        changed = deepcopy(layout); changed['operations'][0]['writes'][0][0] += 1
+        try: validate_destination_instructions(changed,original,natural)
+        except AssertionError as error: assert 'store instruction metadata' in str(error),str(error)
+        else: raise AssertionError('Destination store-offset metadata mutation escaped')
+        metadata_controls.append('store_instruction_offset')
     for label,change,message in [
-        ('missing_saved_Y',lambda o:(o['fields'].pop(),o['writes'].pop()),'operation fields'),
+        ('missing_destination_field' if destinations else 'missing_saved_Y',lambda o:(o['fields'].pop(),o['writes'].pop()),'operation fields'),
         ('operation_partition_gap',lambda o:o.update(original_end=o['original_end']-1,candidate_end=o['candidate_end']-1),'partition')]:
         changed = deepcopy(operations)
-        change(next(o for o in changed if o['operation'] == 'saved_actor_positions'))
+        change(changed[0] if destinations else next(o for o in changed if o['operation'] == 'saved_actor_positions'))
         try: validate_operations(dict(operations=changed,phases=layout['phases']))
         except AssertionError as error: assert message in str(error),str(error)
         else: raise AssertionError('Metadata mutation escaped: '+label)
         metadata_controls.append(label)
-    operation = deepcopy(operations[0]); assert operation['original_start'] == 0x2204e
+    operation = deepcopy(next(o for o in operations if o['live_in_bitmasks'].get('eax',0) & 1))
+    assert operation['original_start'] == (0x20c5a if destinations else 0x2204e)
     operation['live_in_bitmasks']['eax'] &= ~1; operation['live_in_values']['eax'] &= ~1
     memory,_ = base.seed(original,7); registers = tuple(r ^ 0xffffffff for r in seed_registers)
     address = operation['original_start']; code = body[address-begin:operation['original_end']-begin]
     actual = base.execute(memory,live(registers,operation),0x202,code,address)
     assert actual[0] != model(memory,operation)[0]; metadata_controls.append('omitted_AX_bit')
-    report = dict(status='PASS',placed_c_bytes=4271,DATA_sites=318,operations=len(operations),runs=len(layout['phases']),operation_cases=cases,whole_cases=whole,private_register_difference_cases=register_differences,private_flag_difference_cases=flag_differences,context_controls=context_controls(blob,layout),code_controls=code_controls,scope='Independent typed field/slot/width/value models with poisoned unused register bits; original and placed operation DATA/write traces/registers/flags agree. Five whole original/placed runs preserve 3079 ordered writes and 281 entry contracts. Whole private C checks final DATA, write multiset, saved registers and the same masked entries; private raw EAX/flags and full store-order equivalence are not required. No whole-routine byte-exact C claim.')
+    report = dict(status='PASS',placed_c_bytes=250 if destinations else 4271,DATA_sites=18 if destinations else 318,operations=len(operations),runs=len(layout['phases']),operation_cases=cases,whole_cases=whole,private_register_difference_cases=register_differences,private_flag_difference_cases=flag_differences,context_controls=context_controls(blob,layout),code_controls=code_controls,scope='Independent typed field/slot/width/value models with poisoned unused register bits; original and placed operation DATA/write traces/registers/flags agree. Five whole original/placed runs preserve 3079 ordered writes and all selected entry contracts. Whole private C checks final DATA, write multiset, saved registers and the same masked entries; private raw EAX/flags and full store-order equivalence are not required. No whole-routine byte-exact C claim.')
     report['metadata_controls'] = metadata_controls
     args.output.write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8'); print(json.dumps(report))
 

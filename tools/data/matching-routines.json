@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1595,
-  "unique_code_bytes": 199125,
-  "le_pointers": 10983,
+  "routines": 1604,
+  "unique_code_bytes": 199375,
+  "le_pointers": 11001,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1880,6 +1880,36 @@
       "le_pointers": 7
     },
     {
+      "symbol": "board_actor_destination_000_",
+      "object": "actdest.obj",
+      "object_sha256": "2cf5287a05f2aefb12485c64d00b640af2103d6be547a2c86c64ad4afa80836c",
+      "sha256": "35a637b4e32740c45a243aef040c2f45feae0467c2d72a369a9a6e383ea8998d",
+      "raw_offset": "0x46254",
+      "loaded_address": "0x20c54",
+      "bytes": 47,
+      "le_pointers": 4
+    },
+    {
+      "symbol": "board_actor_destination_001_",
+      "object": "actdest.obj",
+      "object_sha256": "2cf5287a05f2aefb12485c64d00b640af2103d6be547a2c86c64ad4afa80836c",
+      "sha256": "462702313f1557ade088f81b612a791a708ddc85a822ab29240365dd0809eb94",
+      "raw_offset": "0x46657",
+      "loaded_address": "0x21057",
+      "bytes": 29,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "board_actor_destination_002_",
+      "object": "actdest.obj",
+      "object_sha256": "2cf5287a05f2aefb12485c64d00b640af2103d6be547a2c86c64ad4afa80836c",
+      "sha256": "5e6276be80fb1dc1b33aa4840aeed9ad76aff6056f5b5797ab43ddaf7e93819d",
+      "raw_offset": "0x46e34",
+      "loaded_address": "0x21834",
+      "bytes": 24,
+      "le_pointers": 2
+    },
+    {
       "symbol": "board_actor_indexed_000_",
       "object": "actsetup.obj",
       "object_sha256": "b4b991aa2dc0c5748f373a036e1348e06da3cd56f5fa4888753c78f6b383070e",
@@ -1948,6 +1978,16 @@
       "loaded_address": "0x22390",
       "bytes": 13,
       "le_pointers": 1
+    },
+    {
+      "symbol": "board_actor_destination_003_",
+      "object": "actdest.obj",
+      "object_sha256": "2cf5287a05f2aefb12485c64d00b640af2103d6be547a2c86c64ad4afa80836c",
+      "sha256": "7828cb88adc33a99dfcaae4c6f54eea7a21deede5d378a11fec51649fcd0ccc3",
+      "raw_offset": "0x479ab",
+      "loaded_address": "0x223ab",
+      "bytes": 41,
+      "le_pointers": 3
     },
     {
       "symbol": "board_actor_indexed_007_",
@@ -2250,6 +2290,16 @@
       "le_pointers": 2
     },
     {
+      "symbol": "board_actor_destination_004_",
+      "object": "actdest.obj",
+      "object_sha256": "2cf5287a05f2aefb12485c64d00b640af2103d6be547a2c86c64ad4afa80836c",
+      "sha256": "d09dba3d6bea99dd9ea4a3f95c341e56b25142c654f0c088349e344f265d8a79",
+      "raw_offset": "0x4a23c",
+      "loaded_address": "0x24c3c",
+      "bytes": 17,
+      "le_pointers": 1
+    },
+    {
       "symbol": "board_actor_indexed_037_",
       "object": "actsetup.obj",
       "object_sha256": "b4b991aa2dc0c5748f373a036e1348e06da3cd56f5fa4888753c78f6b383070e",
@@ -2350,6 +2400,16 @@
       "le_pointers": 1
     },
     {
+      "symbol": "board_actor_destination_005_",
+      "object": "actdest.obj",
+      "object_sha256": "2cf5287a05f2aefb12485c64d00b640af2103d6be547a2c86c64ad4afa80836c",
+      "sha256": "1508d9c3b633123795c4461bc10f7a42a0ad4b663388e30b4289518ead3c11d0",
+      "raw_offset": "0x4abde",
+      "loaded_address": "0x255de",
+      "bytes": 17,
+      "le_pointers": 1
+    },
+    {
       "symbol": "board_actor_indexed_047_",
       "object": "actsetup.obj",
       "object_sha256": "b4b991aa2dc0c5748f373a036e1348e06da3cd56f5fa4888753c78f6b383070e",
@@ -2378,6 +2438,16 @@
       "loaded_address": "0x257b5",
       "bytes": 23,
       "le_pointers": 2
+    },
+    {
+      "symbol": "board_actor_destination_006_",
+      "object": "actdest.obj",
+      "object_sha256": "2cf5287a05f2aefb12485c64d00b640af2103d6be547a2c86c64ad4afa80836c",
+      "sha256": "18c79b6cec2a193eea8096fd0065038b31900bac983f030a979465c0c67a1c7c",
+      "raw_offset": "0x4ae96",
+      "loaded_address": "0x25896",
+      "bytes": 17,
+      "le_pointers": 1
     },
     {
       "symbol": "board_actor_indexed_050_",
@@ -2450,6 +2520,16 @@
       "le_pointers": 1
     },
     {
+      "symbol": "board_actor_destination_007_",
+      "object": "actdest.obj",
+      "object_sha256": "2cf5287a05f2aefb12485c64d00b640af2103d6be547a2c86c64ad4afa80836c",
+      "sha256": "24e998694293c00dc23160886ca88f8776b7aa42c46a7daf4008e93f9c763255",
+      "raw_offset": "0x4b2b0",
+      "loaded_address": "0x25cb0",
+      "bytes": 17,
+      "le_pointers": 1
+    },
+    {
       "symbol": "board_actor_indexed_057_",
       "object": "actsetup.obj",
       "object_sha256": "b4b991aa2dc0c5748f373a036e1348e06da3cd56f5fa4888753c78f6b383070e",
@@ -2508,6 +2588,16 @@
       "loaded_address": "0x26093",
       "bytes": 13,
       "le_pointers": 1
+    },
+    {
+      "symbol": "board_actor_destination_008_",
+      "object": "actdest.obj",
+      "object_sha256": "2cf5287a05f2aefb12485c64d00b640af2103d6be547a2c86c64ad4afa80836c",
+      "sha256": "a3bbfcc80cad9c319b358c0408ecfe5484c8877ff55f01f4a2a9d004519aa936",
+      "raw_offset": "0x4b6ae",
+      "loaded_address": "0x260ae",
+      "bytes": 41,
+      "le_pointers": 3
     },
     {
       "symbol": "board_actor_indexed_063_",
