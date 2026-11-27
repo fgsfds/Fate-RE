@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
   "routines": 1719,
-  "unique_code_bytes": 202109,
-  "le_pointers": 11253,
+  "unique_code_bytes": 202166,
+  "le_pointers": 11255,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -3982,12 +3982,12 @@
     {
       "symbol": "input_map_vertical_0_",
       "object": "inpcurs.obj",
-      "object_sha256": "8d2d02d674dfe61cdd5b5759960b764b21a4f64f928daf67be27e650c632ef5a",
-      "sha256": "96310125cdbf04e7927ffd4657b5b5c4f2459324f2c64784e65e9b1f08551a26",
+      "object_sha256": "c35ca7ad623e5c4fbb7eeda61a09ef4b35a5283b47f2b1f589d02208477afce6",
+      "sha256": "6c8cc00744026dbf5d2d21124e0d00509c141dd888c57962ddb97a9f698af08e",
       "raw_offset": "0x531dd",
       "loaded_address": "0x2dbdd",
-      "bytes": 26,
-      "le_pointers": 3
+      "bytes": 83,
+      "le_pointers": 5
     },
     {
       "symbol": "input_view_adjust_key_0_",

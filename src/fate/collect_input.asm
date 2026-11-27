@@ -94,7 +94,7 @@ setbrightness equ 0x59bee
 
 section .text align=1
 collect_input_ equ 0x2d51a
-; Guarded C supplies selection, motion and selected action operations.
+; Guarded C supplies selection, keyboard motion and selected mouse operations.
 .loc_032 equ 0x2d54c
 .loc_04b equ 0x2d565
 .loc_06c equ 0x2d586
@@ -426,20 +426,7 @@ section .retained_7 align=1 vstart=0x2db68 follows=.retained_6
     mov word [map_x], bx
     jmp near .view_adjustment_key
 
-section .retained_8 align=1 vstart=0x2dbf7 follows=.retained_7
-    cmp ebx, 0xffffff00
-    jg short .loc_6ea
-    mov ebx, 0xffffff00
-    cmp ebx, 0x100
-    jge short .loc_708
-    movsx ebx, word [map_offset_y]
-    cmp ebx, 0xffffff00
-    jg short .loc_70d
-    mov ebx, 0xffffff00
-    jmp short .loc_70d
-    mov ebx, 0x100
-    mov word [map_offset_y], bx
-    jmp short .view_adjustment_key
+section .retained_8 align=1 vstart=0x2dc30 follows=.retained_7
     cmp word [mouse_motion_disabled], 0
     jne short .loc_736
     mov dx, word [mouse_dx]

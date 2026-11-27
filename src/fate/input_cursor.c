@@ -370,22 +370,22 @@ void collect_input_cursor_context(void)
                 if (position < 988) {
                     position = input_cursor_in_ebx(cursor_x);
                     if (position <= 316)
-                        position = 316;
+                        position = input_cursor_in_ebx(316L);
                 } else {
-                    position = 988;
+                    position = input_cursor_in_ebx(988L);
                 }
-                cursor_x = input_cursor_in_bx((short)position);
+                cursor_x = (short)input_cursor_in_ebx(position);
 
                 position = input_cursor_in_ebx(cursor_y);
                 position = position > 364 ? position : 364;
                 if (position < 440) {
                     position = input_cursor_in_ebx(cursor_y);
                     if (position <= 364)
-                        position = 364;
+                        position = input_cursor_in_ebx(364L);
                 } else {
-                    position = 440;
+                    position = input_cursor_in_ebx(440L);
                 }
-                cursor_y = input_cursor_in_bx((short)position);
+                cursor_y = (short)input_cursor_in_ebx(position);
 
                 /* This Watcom target uses arithmetic right shifts for signed longs. */
                 position = input_cursor_in_ebx(cursor_x);
@@ -412,11 +412,11 @@ void collect_input_cursor_context(void)
                 if (position < 2048) {
                     position = input_cursor_in_ebx(map_scale_or_y);
                     if (position <= 256)
-                        position = 256;
+                        position = input_cursor_in_ebx(256L);
                 } else {
-                    position = 2048;
+                    position = input_cursor_in_ebx(2048L);
                 }
-                scale = input_cursor_in_bx((short)position);
+                scale = (short)input_cursor_in_ebx(position);
                 map_scale_or_y = scale;
 
                 position = input_cursor_in_ebx(scale);
@@ -448,11 +448,11 @@ void collect_input_cursor_context(void)
                 if (position < 256) {
                     position = input_cursor_in_ebx(map_offset_y);
                     if (position <= -256)
-                        position = -256;
+                        position = input_cursor_in_ebx(-256L);
                 } else {
-                    position = 256;
+                    position = input_cursor_in_ebx(256L);
                 }
-                map_offset_y = input_cursor_in_bx((short)position);
+                map_offset_y = (short)input_cursor_in_ebx(position);
             }
         } else {
             short buttons;

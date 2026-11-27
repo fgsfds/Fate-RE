@@ -170,9 +170,9 @@ def main():
     _,original,placed,_,sites,_=bind_production(exe,args.build,stop=END-BASE,asm=args.asm)
     blob=(args.build/(ctx['object']+'.obj')).read_bytes();fields={}
     private,data=v.bind_leaf_details(blob,public,layout['DATA'],address=BASE,functions={public:BASE,**layout['CODE']},code_bindings=fields)
-    assert not fields and len(private)==2395 and len(data)==197
+    assert not fields and len(private)==2412 and len(data)==197
     old,new=decode(original),decode(private)
-    ranges=((0x501,0x51c),(0x51c,0x54d),(0x5c2,0x5e4),(0x61f,0x64e),(0x6c3,0x6dd),(0x743,0x785),(0x79a,0x7fb),(0x804,0x82e))
+    ranges=((0x501,0x51c),(0x51c,0x54d),(0x5c2,0x5e4),(0x61f,0x64e),(0x6c3,0x716),(0x743,0x785),(0x79a,0x7fb),(0x804,0x82e))
     def resources(ins):
         aliases={alias:root for root,names in {'eax':('ax','al','ah'),'ebx':('bx','bl','bh'),'ecx':('cx','cl','ch'),'edx':('dx','dl','dh'),'esi':('si',),'edi':('di',),'ebp':('bp',),'esp':('sp',)}.items() for alias in names}
         reads,writes=ins.regs_access();normalize=lambda ids:{aliases.get(ins.reg_name(r),ins.reg_name(r)) for r in ids}
@@ -186,7 +186,7 @@ def main():
         ar,aw,am=resources(a);br,bw,bm=resources(b)
         assert not (aw&(br|bw) or bw&ar or am&bm),'cursor reorder dependency'
     def validate(candidate):
-        assert candidate['selected_bytes']==388 and candidate['combined_selected_bytes']==1205 and candidate['assembly_size']==1892
+        assert candidate['selected_bytes']==445 and candidate['combined_selected_bytes']==1828 and candidate['assembly_size']==1269
         mapping={};owned=[];private_owned=[]
         for row in candidate['instructions']:
             off=row['original']-BASE;source=row['private'];size=row['size']
@@ -195,11 +195,11 @@ def main():
             assert not new[source].group(CS_GRP_CALL)
             assert all(new[source].reg_name(op.mem.base)!='esp' and new[source].reg_name(op.mem.index)!='esp' for op in new[source].operands if op.type==CS_OP_MEM),'selected private stack access'
         assert owned==[i for lo,hi in ranges for i in range(lo,hi)],'cursor complete operation partition'
-        assert len(set(private_owned))==len(private_owned)==388,'cursor private overlap'
+        assert len(set(private_owned))==len(private_owned)==445,'cursor private overlap'
         records={int(k):value for k,value in candidate['branches'].items()}
         assert set(records)=={source for source in mapping.values() if branch(new[source]) is not None},'cursor branch inventory'
         entries={source:off for off,source in mapping.items()}
-        entries.update({0x634:0x608,0x7cb:0x785,0x952:0x8f2})
+        entries.update({0x646:0x608,0x7dc:0x785,0x963:0x8f2})
         for off,source in mapping.items():
             ref,chosen=old[off],new[source];code=bytearray(chosen.bytes);target=branch(chosen)
             if target is not None:
@@ -216,10 +216,10 @@ def main():
                 at=phase['address']-BASE+off;assert at not in phase_map
                 phase_map[at]=phase['begin']+off
         assert phase_map==mapping,'cursor phase partition'
-        expected=((0x501,0x50c,0x527),(0x50c,0x51c,0x539),(0x51c,0x54d,0x549),
-                  (0x5c2,0x5c9,0x5ef),(0x5c9,0x5e4,0x5fc),
-                  (0x61f,0x63d,0x644),(0x63d,0x644,0x665),(0x644,0x647,0x662),(0x647,0x64e,0x66c),
-                  (0x6c3,0x6dd,0x6f4),(0x743,0x785,0x789),(0x79a,0x7c1,0x7e0),(0x7c1,0x7fb,0x80a),(0x804,0x82e,0x851))
+        expected=((0x501,0x50c,0x535),(0x50c,0x51c,0x547),(0x51c,0x54d,0x557),
+                  (0x5c2,0x5c9,0x601),(0x5c9,0x5e4,0x60e),
+                  (0x61f,0x63d,0x656),(0x63d,0x644,0x677),(0x644,0x647,0x674),(0x647,0x64e,0x67e),
+                  (0x6c3,0x716,0x708),(0x743,0x785,0x79a),(0x79a,0x7c1,0x7f1),(0x7c1,0x7fb,0x81b),(0x804,0x82e,0x862))
         assert [(p['address']-BASE,p['address']-BASE+p['end']-p['begin'],p['begin']) for p in candidate['phases']]==list(expected),'cursor private operation provenance'
         assert candidate['swaps']==[[0x63d,0x644]],'cursor swap inventory'
         independent(old[0x63d],old[0x644])
@@ -229,13 +229,13 @@ def main():
         assert not {mapping[0x63d],mapping[0x644]}&private_targets,'branch enters private pan swap'
         # The private X load crosses an AX-based Y store. The production BX-based
         # Y store remains before the placed load; it is not commuted.
-        assert private[0x5f6:0x5fc]==bytes.fromhex('66a38c520800')
-        independent(new[0x5ef],new[0x5f6])
-        assert private[0x532:0x539]==bytes.fromhex('89142489542404')
-        assert private[0x807:0x80a]==bytes.fromhex('8b1424')
+        assert private[0x608:0x60e]==bytes.fromhex('66a38c520800')
+        independent(new[0x601],new[0x608])
+        assert private[0x540:0x547]==bytes.fromhex('89142489542404')
+        assert private[0x818:0x81b]==bytes.fromhex('8b1424')
         return mapping
     mapping=validate(layout)
-    boundaries={BEGIN,END,*(p['address'] for p in layout['phases']),*(p['address']+p['end']-p['begin'] for p in layout['phases'])}
+    boundaries={BEGIN,END,BASE+0x6dd,*(p['address'] for p in layout['phases']),*(p['address']+p['end']-p['begin'] for p in layout['phases'])}
     general=('eax','ebx','ecx','edx','esi','edi','ebp')
     reg={n:getattr(x,'UC_X86_REG_'+n.upper()) for n in (*general,'esp','eip','eflags')}
     class Replay:
@@ -258,6 +258,9 @@ def main():
             if pc==BASE+0x54d:
                 address,size,_=FIELDS['cursor_x'];assert cpu.reg_read(reg['ebx'])&0xffffffff==int.from_bytes(cpu.mem_read(DATA+address,size),'little',signed=True)&0xffffffff
                 self.contracts.add('cursor_EBX')
+            if pc==BASE+0x6dd:
+                address,size,_=FIELDS['map_offset_y'];assert cpu.reg_read(reg['ebx'])==int.from_bytes(cpu.mem_read(DATA+address,size),'little',signed=True)&0xffffffff,'vertical clamp EBX input contract'
+                self.contracts.add('vertical_EBX')
             if pc==BASE+0x63d:
                 assert signed(cpu.reg_read(reg['esi']),16)==signed(self.case.state['map_scale_or_y']-self.case.state['mouse_dy'],16)
                 assert signed(cpu.reg_read(reg['ecx']),16)==signed(self.case.state['map_x']-self.case.state['mouse_dx'],16)
@@ -306,9 +309,9 @@ def main():
                 if here in outcomes:
                     taken=next_pc==branch(old[here]);assert taken or next_pc==here+old[here].size
                     outcomes[here].add(taken)
-    assert len(all_cases)==4941 and len(outcomes)==7
+    assert len(all_cases)==4941 and len(outcomes)==12
     assert all(values==({True} if old[off].mnemonic=='jmp' else {False,True}) for off,values in outcomes.items()),outcomes
-    assert contracts=={'history_DX','history_AX_CH','cursor_EBX','pan_SI_ECX'}
+    assert contracts=={'history_DX','history_AX_CH','cursor_EBX','pan_SI_ECX','vertical_EBX'}
     assert any(c.state['mouse_history_index']==-14798 for c in all_cases),'packed-input history alias case'
 
     controls=[]
@@ -327,8 +330,8 @@ def main():
         changed=deepcopy(layout);change(changed);reject(label,lambda:validate(changed))
     changed=deepcopy(layout)
     row=next(r for r in changed['instructions'] if r['original']==BASE+0x516)
-    row['private']=0x63e;changed['branches'].pop(str(0x543))
-    changed['branches'][str(0x63e)]=['0f85',0x6f4,0x608]
+    row['private']=0x650;changed['branches'].pop(str(0x551))
+    changed['branches'][str(0x650)]=['0f85',0x708,0x608]
     reject('wrong_condition_branch_substitution',lambda:validate(changed),'logical branch provenance')
     def counterexample(label,code,sample,relocations=None,expected=None):
         replay=Replay(relocated(bytes(code),sites if relocations is None else relocations))
@@ -353,8 +356,19 @@ def main():
     bad=bytearray(placed);bad[view.address+view.imm_offset]=5
     sample=replace(sample,state={**sample.state,'adjust_view_held':255,'mouse_dy':1,'view_adjustment':100})
     counterexample('view_step',bad,sample)
+    vertical=replace(all_cases[0],state={**all_cases[0].state,'cursor_mode':0,'map_mode':1,'mouse_buttons':2,'mouse_dx':0,'mouse_dy':0,'map_offset_y':-32768},keys=bytes(256))
+    low=[i for off,i in old.items() if 0x6dd<=off<0x716 and i.mnemonic=='mov' and i.op_str=='ebx, 0xffffff00']
+    assert len(low)==2
+    bad=bytearray(placed);bad[low[-1].address+low[-1].imm_offset]=1
+    counterexample('vertical_lower_limit',bad,vertical,expected='cursor ordered DATA writes')
+    high=next(i for off,i in old.items() if 0x6dd<=off<0x716 and i.mnemonic=='mov' and i.op_str=='ebx, 0x100')
+    bad=bytearray(placed);bad[high.address+high.imm_offset:high.address+high.imm_offset+4]=(255).to_bytes(4,'little')
+    counterexample('vertical_upper_limit',bad,replace(vertical,state={**vertical.state,'map_offset_y':32767}),expected='cursor ordered DATA writes')
+    continuation=old[0x714];assert continuation.mnemonic=='jmp' and branch(continuation)==0x743
+    bad=bytearray(placed);bad[continuation.address+continuation.imm_offset]=0
+    counterexample('vertical_wrong_continuation',bad,vertical,expected='cursor ordered DATA writes')
     dependent_store=decode(bytes.fromhex('66891d8c520800'))[0]
-    reject('projection_store_register_dependency',lambda:independent(new[0x5ef],dependent_store),'reorder dependency')
+    reject('projection_store_register_dependency',lambda:independent(new[0x601],dependent_store),'reorder dependency')
 
     from check_encounter_actor import rewrite_fixup
     from check_ripple_stack import mutate_public_byte
@@ -365,7 +379,7 @@ def main():
     assert [int.from_bytes(private[f.offset:f.offset+4],'little') for f in history]==[HISTORY,HISTORY+2,HISTORY,HISTORY+4,HISTORY+6]
     phase=layout['phases'][0]
     def bind(b):return v.bind_leaf_details(b,phase['symbol'],layout['DATA'],address=phase['address'],functions={public:BASE,**layout['CODE']},code_bindings={})
-    for label,offset in (('excluded_stack_spills',0x532),('excluded_stack_reload',0x807),('excluded_projection_store',0x5f6),('excluded_return',2394)):
+    for label,offset in (('excluded_stack_spills',0x540),('excluded_stack_reload',0x818),('excluded_projection_store',0x608),('excluded_return',2411)):
         reject(label,lambda:bind(mutate_public_byte(blob,public,offset)),'complete context digest')
     other=next(i for i,n in enumerate(external) if n=='_key_state')
     for label,change in (
@@ -377,9 +391,9 @@ def main():
     digest=group.CURSOR_CONTEXT_SHA256;leaf=v.LEAF_CONTEXT_SHA256.pop(public);group.CURSOR_CONTEXT_SHA256=None
     try:reject('history_addend_without_digests',lambda:bind(mutate_public_byte(blob,public,history[0].offset)),'fixup addends')
     finally:group.CURSOR_CONTEXT_SHA256=digest;v.LEAF_CONTEXT_SHA256[public]=leaf
-    report=dict(status='PASS',new_native_bytes=388,new_DATA_sites=41,new_branches=7,operations=8,cases=len(all_cases),poison_seeds=2,
+    report=dict(status='PASS',new_native_bytes=445,incremental_native_bytes=57,new_DATA_sites=43,new_branches=12,operations=8,cases=len(all_cases),poison_seeds=2,
                 live_contracts=sorted(contracts),branch_outcomes={hex(BASE+k):sorted(v) for k,v in outcomes.items()},controls=controls,
-                scope='Original and freshly bound production cursor/map/mouse blend agree with independent mutable-byte DATA model on all ordered writes, volatile history read order, final modeled/written bytes, GPR/defined-flag fragment boundaries and protected stack. Covers signed history-index aliases and both positive-view exits. Full DATA extent is checked from LE headers. Private compiler frame/full routine ABI is not substituted; no interrupts, BIOS calls or action-packing continuation modeled.')
+                scope='Original and freshly bound production cursor/map/mouse blend agree with independent mutable-byte DATA model on all ordered writes, volatile history read order, final modeled/written bytes, GPR and masked arithmetic-flag fragment boundaries and protected stack. Covers signed history-index aliases, both positive-view exits and every vertical-clamp branch outcome; live EBX is checked before the clamp. Full DATA extent is checked from LE headers. Private compiler frame/full routine ABI is not substituted; no interrupts, BIOS calls or action-packing continuation modeled.')
     args.output.write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))
 
 if __name__=='__main__':main()

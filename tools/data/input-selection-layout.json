@@ -3017,7 +3017,7 @@
   "original_size": 3097,
   "prefix_size": 699,
   "selected_bytes": 817,
-  "assembly_size": 1326,
+  "assembly_size": 1269,
   "phases": [
     {
       "public": "collect_input_mouse_",
@@ -3318,24 +3318,22 @@
     },
     {
       "symbol": "input_selection_retained_8",
-      "address": 187383,
-      "size": 102,
+      "address": 187440,
+      "size": 45,
       "binary_offset": 757,
       "fixups": {
-        "24": 535540,
-        "51": 535540,
-        "60": 535548,
-        "70": 1040090,
-        "77": 1040098,
-        "83": 1040092,
-        "98": 1069712
+        "3": 535548,
+        "13": 1040090,
+        "20": 1040098,
+        "26": 1040092,
+        "41": 1069712
       }
     },
     {
       "symbol": "input_selection_retained_9",
       "address": 187551,
       "size": 21,
-      "binary_offset": 859,
+      "binary_offset": 802,
       "fixups": {
         "4": 603714,
         "10": 948540
@@ -3345,14 +3343,14 @@
       "symbol": "input_selection_retained_10",
       "address": 187669,
       "size": 9,
-      "binary_offset": 880,
+      "binary_offset": 823,
       "fixups": {}
     },
     {
       "symbol": "input_selection_retained_11",
       "address": 187720,
       "size": 196,
-      "binary_offset": 889,
+      "binary_offset": 832,
       "fixups": {
         "8": 929676,
         "17": 929676,
@@ -3371,14 +3369,14 @@
       "symbol": "input_selection_retained_12",
       "address": 187964,
       "size": 2,
-      "binary_offset": 1085,
+      "binary_offset": 1028,
       "fixups": {}
     },
     {
       "symbol": "input_selection_retained_13",
       "address": 188109,
       "size": 73,
-      "binary_offset": 1087,
+      "binary_offset": 1030,
       "fixups": {
         "2": 948540,
         "18": 603719,
@@ -3393,7 +3391,7 @@
       "symbol": "input_selection_retained_14",
       "address": 188262,
       "size": 92,
-      "binary_offset": 1160,
+      "binary_offset": 1103,
       "fixups": {
         "2": 1069712,
         "13": 1040124,
@@ -3408,7 +3406,7 @@
       "symbol": "input_selection_retained_15",
       "address": 188413,
       "size": 71,
-      "binary_offset": 1252,
+      "binary_offset": 1195,
       "fixups": {
         "3": 603715,
         "9": 948540,
@@ -3424,14 +3422,14 @@
       "symbol": "input_selection_retained_16",
       "address": 188540,
       "size": 2,
-      "binary_offset": 1323,
+      "binary_offset": 1266,
       "fixups": {}
     },
     {
       "symbol": "input_selection_retained_17",
       "address": 188716,
       "size": 1,
-      "binary_offset": 1325,
+      "binary_offset": 1268,
       "fixups": {}
     }
   ],
@@ -4645,7 +4643,7 @@
     ]
   },
   "cursor_context_file": "input-cursor-layout.json",
-  "combined_selected_bytes": 1771,
+  "combined_selected_bytes": 1828,
   "actions_context_file": "input-actions-layout.json",
   "fifo_context_file": "input-fifo-layout.json"
 }

@@ -227,32 +227,33 @@ Evidence: `work/input-mouse-nov27/NOTES.md`, its `scoped` artifacts, and
 
 ### `collect_input_`: cursor allocation and private frame
 
-A supplemental Watcom 10.5 `/4r /s /or /bt=dos` context adds 388 native
-bytes and 41 DATA sites across eight cursor/map/blending operations, with
-seven placed branches. Keep the earlier 817 bytes: the combined source
-changes allocation in the backward clamp at `0x2d850`. Four pinned contexts now supply 1,771 bytes; 1,326 remain assembly. The
-third context adds action packing, latch releases, signed brightness and the
-shared return suffix; a fourth adds the FIFO drain. Preserve earlier allocations.
-The 2,395-byte cursor context has
-eight bytes of private locals; selected production fragments never access ESP.
-Original DX/AX lifetimes replace excluded private spills and the history reload.
+A supplemental Watcom 10.5 `/4r /s /or /bt=dos` context now supplies 445
+native bytes and 43 DATA sites across eight cursor/map/blending operations,
+with twelve placed branches. Four pinned contexts supply 1,828 bytes; 1,269
+remain assembly. Keep the earlier selection, action and FIFO allocations.
+The 2,412-byte cursor context still has eight bytes of private locals;
+selected production fragments never access ESP. Original DX/AX lifetimes
+replace excluded private spills and the history reload.
 
 Signed history indices can reach before the four normal samples. The C view
 covers the actual 0x28a300-byte DATA object, with index bias 0x42949; the
 reachable store interval is 0x75292..0x85299. Preserve volatile sample read
-order 1,0,2,3, including aliases into packed input bytes. The first remaining
-cursor mismatch is the `cursor_mode` load into CH instead of BL and the
-packed-turn store from DL instead of AL at `0x2d9fe`. Next test a coherent
-packed-turn/cursor predicate with actual AL/BL operands. For the remaining
-action tail, the bit-12 normalizer uses AND EAX,255 rather than XOR AH,AH;
-run/2/3 packing still has different allocation. Direct volatile FIFO aliases
-resolved the indirect-operand mismatch and added 52 exact bytes. This changes
-17 earlier action bytes, so keep that context separate. Preserve all four
-accepted contexts; next isolate one real operand lifetime. No fake register getter or EBP pragma.
-Evidence: `work/input-cursor-nov27/placement-evidence.json`,
-`integration-evidence.json`, `work/input-cursor-oracle-nov27/`, and
-`work/input-actions-nov27/production-evidence.json` and
-`work/input-fifo-nov27/production-evidence.json`.
+order 1,0,2,3, including aliases into packed input bytes.
+
+Constraining inner clamp constants to full EBX alone left the result in EAX
+(v1, 2,418 bytes). Passing the final store input through the full-width EBX
+identity fixes the complete vertical-offset clamp and its continuation: 57
+new bytes, two DATA sites, all 388 prior cursor bytes preserved. X, Y and map
+scale still copy EBX to EAX at the inner join; the first X mismatch is private
+0x5a4. Next isolate the complete join/store lifetime rather than retrying
+constant spellings. The earlier cursor_mode CH-vs-BL and packed-turn DL-vs-AL
+mismatches, bit-12 normalizer, and run/2/3 allocation remain. No fake getter
+or illegal EBP pragma.
+Evidence: `work/input-clamps-nov27/first-mismatch-v1.json`,
+`work/input-clamps-nov27/v2/first-mismatch.json`, and
+`work/input-clamps-nov27/production-evidence.json`. Earlier operation packets
+remain under `work/input-cursor-nov27/`, `work/input-actions-nov27/` and
+`work/input-fifo-nov27/`.
 
 ### Video prompt-mode blocker
 

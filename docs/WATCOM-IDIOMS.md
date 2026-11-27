@@ -715,3 +715,9 @@ addressing. Bind the alias to the independently verified byte offset, explicitly
 sequence the condition samples, and preserve every repeated read. Requalify all
 previous slices: this FIFO change altered 17 earlier action bytes despite an
 unchanged source prefix, so its 52-byte phase uses a separate guarded context.
+
+A short-register identity at a final word store may keep a clamp result in EAX
+even when its constants are staged in EBX. Passing the full long result through
+the EBX identity before truncating the store removed that join copy in the
+vertical map clamp. Constant constraints alone did not fix it. Requalify all
+prior slices; the X/Y/scale joins still need a distinct lifetime solution.
