@@ -96,9 +96,10 @@ def main():
     parser.add_argument('--exe',type=Path,required=True)
     parser.add_argument('--build',type=Path,required=True)
     parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--asm',type=Path)
     args=parser.parse_args();exe=args.exe.read_bytes()
     assert hashlib.sha256(exe).hexdigest()==TARGET_SHA256
-    blob,original,placed,private,sites,private_sites=bind_production(exe,args.build)
+    blob,original,placed,private,sites,private_sites=bind_production(exe,args.build,asm=args.asm)
     rows=validate_layout(LAYOUT,original,private)
     start,begin,end,stack=0x2d51a,411,699,0x200000
     names={n[1:]:0x80000+a for n,a in LAYOUT['DATA'].items()}

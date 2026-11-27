@@ -225,6 +225,28 @@ cases with complementary register poisons. BIOS polling/scaling are stubbed.
 Evidence: `work/input-mouse-nov27/NOTES.md`, its `scoped` artifacts, and
 `work/input-mouse-oracle-nov27/original-report.json`.
 
+### `collect_input_`: cursor allocation and private frame
+
+A supplemental Watcom 10.5 `/4r /s /or /bt=dos` context adds 388 native
+bytes and 41 DATA sites across eight cursor/map/blending operations, with
+seven placed branches. Keep the earlier 817 bytes: the combined source
+changes allocation in the backward clamp at `0x2d850`. Two pinned contexts
+now supply 1,205 bytes; 1,892 remain assembly. The new 2,395-byte context has
+eight bytes of private locals; selected production fragments never access ESP.
+Original DX/AX lifetimes replace excluded private spills and the history reload.
+
+Signed history indices can reach before the four normal samples. The C view
+covers the actual 0x28a300-byte DATA object, with index bias 0x42949; the
+reachable store interval is 0x75292..0x85299. Preserve volatile sample read
+order 1,0,2,3, including aliases into packed input bytes. The first remaining
+cursor mismatch is the `cursor_mode` load into CH instead of BL and the
+packed-turn store from DL instead of AL at `0x2d9fe`. Next test a coherent
+packed-turn/cursor predicate with actual AL/BL operands, or extend the typed
+source through action packing and brightness/FIFO handling, preserving both
+current contexts if allocation shifts. No fake register getter or EBP pragma.
+Evidence: `work/input-cursor-nov27/placement-evidence.json`,
+`integration-evidence.json`, and `work/input-cursor-oracle-nov27/`.
+
 ### Video prompt-mode blocker
 
 Watcom 10.5 `/4r /s /or /bt=dos` emits 627 bytes versus 617. Brightness lands in ESI instead of ECX and the default-width spill moves from `+0x10` to `+0x14`; the invalid-mode edge also misses the original shared join. Next stage brightness in ECX and inspect width/end-slot lifetimes while retaining the original invalid-input edge in assembly. Probe: `work/video-prompt-next/prompt_video_mode.c`; comparison: `work/video-prompt-next/vidmode.report.json`.

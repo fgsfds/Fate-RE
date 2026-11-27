@@ -85,28 +85,42 @@ class TargetedFixtureModes(unittest.TestCase):
                 args = SimpleNamespace(build=Path(directory) / 'probe', reference=Path('original.exe'),
                                        command='probe', symbol=None, fixtures=requested,
                                        dependencies=None, jobs=1)
+                mocks = {}
                 for name, value in (
                         ('verified_reference', b'original'), ('compile_units', {}),
                         ('verify_objects', [{'symbol': 'leaf_'}]),
                         ('assert_fresh', {'leaf': {'key': 'fresh'}})):
-                    stack.enter_context(patch.object(restore, name, return_value=value))
+                    mocks[name] = stack.enter_context(patch.object(restore, name, return_value=value))
+                mocks['assert_fresh'].side_effect = lambda build, names: {
+                    name: {'key': 'fresh-' + name} for name in names}
                 fixtures = stack.enter_context(patch.object(
-                    restore, 'fixtures', return_value=[SimpleNamespace(arguments=())]))
+                    restore, 'fixtures', return_value=[SimpleNamespace(
+                        arguments=('--asm', '{asm}'), objects=frozenset(('leaf', 'peer')))]))
                 stack.enter_context(patch('validation_workflow.validation_inputs',
                                           return_value={'source.c': 'current'}))
                 dependencies = stack.enter_context(patch(
                     'validation_workflow.ensure_dependencies', return_value=Path(directory) / 'deps'))
-                stack.enter_context(patch('validation_workflow.StageRunner', return_value=Mock()))
+                runner = Mock()
+                stack.enter_context(patch('validation_workflow.StageRunner', return_value=runner))
                 run = stack.enter_context(patch('validation_workflow.run_fixtures',
                                                 return_value=['check_leaf']))
                 restore.targeted(args, ['leaf'])
                 self.assertEqual(fixtures.call_count, int(requested))
                 self.assertEqual(dependencies.call_count, int(requested))
                 self.assertEqual(run.call_count, int(requested))
+                required = {'leaf', 'peer'} if requested else {'leaf'}
+                self.assertEqual(set(mocks['compile_units'].call_args.args[1]), required)
+                self.assertEqual(mocks['verify_objects'].call_args.args[2], {'leaf'})
+                self.assertTrue(all(call.args[1] == required for call in mocks['assert_fresh'].call_args_list))
+                self.assertEqual(runner.python.call_count, int(requested))
+                if requested:
+                    fixtures.assert_called_once_with({'leaf'})
+                    self.assertEqual(run.call_args.args[2], {'leaf'})
                 report = json.loads((args.build / 'targeted-validation.json').read_text())
                 self.assertEqual(report['fixtures_requested'], requested)
                 self.assertFalse(report['whole_image_verified'])
                 self.assertEqual(report['fixtures'], ['check_leaf'] if requested else [])
+                self.assertEqual(set(report['unit_keys']), required)
 
 
 if __name__ == '__main__':

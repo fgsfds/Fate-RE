@@ -144,6 +144,11 @@ python tools/restore.py probe run_menu_loop --build work/restoration-build --ref
 This stages the current sources, compiles/reuses the containing object, verifies
 its registered CODE spans and LE sites/targets. Registered fixtures are opt-in
 with `--fixtures`.
+Registered mixed-routine selectors such as `collect_input` probe all their
+compiler contexts. Fixture object prerequisites are built and freshness-checked
+without expanding the requested fixture set. Input fixtures declare and use
+`--asm {asm}`, so both whole-routine and fragment probes work in fresh build
+directories. Research `--symbol` probes still require one compiler object.
 It does **not** refresh coverage or claim that the whole executable was linked.
 Full logs stay under the build directory; failures print only bounded diagnostics.
 Some fixtures require a complete baseline build and fresh `c.json`.

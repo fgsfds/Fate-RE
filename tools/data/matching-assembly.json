@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 621,
-  "unique_code_bytes": 213484,
-  "le_pointers": 11396,
+  "routines": 628,
+  "unique_code_bytes": 213096,
+  "le_pointers": 11355,
   "non_routine_code_spans": [
     {
       "symbol": "capture_after_open",
@@ -9193,13 +9193,97 @@
       "symbol": "input_selection_retained_4",
       "source": "src/fate/collect_input.asm",
       "binary": "collect_input.bin",
-      "sha256": "7e6085b92d79cbc56500859bae10a6bbd1501817c53be97987431284a0ff728d",
-      "bytes": 2054,
+      "sha256": "cdab85b24f3fce2bd6a21293df5c470097b8f7cf73ac9dcc9d3ae19a3de7b6c7",
+      "bytes": 238,
       "raw_offset": "0x52f2d",
       "loaded_address": "0x2d92d",
       "public_entry": "0x2d92d",
       "binary_offset": 226,
-      "le_pointers": 170
+      "le_pointers": 15
+    },
+    {
+      "symbol": "input_selection_retained_5",
+      "source": "src/fate/collect_input.asm",
+      "binary": "collect_input.bin",
+      "sha256": "6b85786963636db1b765af6978aa255791f0e4a468376532955b5ebcc524d5bc",
+      "bytes": 117,
+      "raw_offset": "0x53067",
+      "loaded_address": "0x2da67",
+      "public_entry": "0x2da67",
+      "binary_offset": 464,
+      "le_pointers": 5
+    },
+    {
+      "symbol": "input_selection_retained_6",
+      "source": "src/fate/collect_input.asm",
+      "binary": "collect_input.bin",
+      "sha256": "ba3534f8ccdd6fd209187864dc485ddafcceeebdcb0e5de3df69e83de369efc4",
+      "bytes": 59,
+      "raw_offset": "0x530fe",
+      "loaded_address": "0x2dafe",
+      "public_entry": "0x2dafe",
+      "binary_offset": 581,
+      "le_pointers": 3
+    },
+    {
+      "symbol": "input_selection_retained_7",
+      "source": "src/fate/collect_input.asm",
+      "binary": "collect_input.bin",
+      "sha256": "4d866a2bffd8df489034f81db57acfd48a677d23dce74e97922061176667bc8e",
+      "bytes": 117,
+      "raw_offset": "0x53168",
+      "loaded_address": "0x2db68",
+      "public_entry": "0x2db68",
+      "binary_offset": 640,
+      "le_pointers": 5
+    },
+    {
+      "symbol": "input_selection_retained_8",
+      "source": "src/fate/collect_input.asm",
+      "binary": "collect_input.bin",
+      "sha256": "429a99e7c23dafa26e5f5e77def68679b28f984748950596ee0b1c427171dc25",
+      "bytes": 102,
+      "raw_offset": "0x531f7",
+      "loaded_address": "0x2dbf7",
+      "public_entry": "0x2dbf7",
+      "binary_offset": 757,
+      "le_pointers": 7
+    },
+    {
+      "symbol": "input_selection_retained_9",
+      "source": "src/fate/collect_input.asm",
+      "binary": "collect_input.bin",
+      "sha256": "d6434af9c9495795eedbb80afd7c9b1e81c97d7c145d32b7fd76fde8f7ba3100",
+      "bytes": 21,
+      "raw_offset": "0x5329f",
+      "loaded_address": "0x2dc9f",
+      "public_entry": "0x2dc9f",
+      "binary_offset": 859,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "input_selection_retained_10",
+      "source": "src/fate/collect_input.asm",
+      "binary": "collect_input.bin",
+      "sha256": "938ce7ddee4c34ac729990b693e6d42e1646c466ee1c2336893c98cbce2c8c46",
+      "bytes": 9,
+      "raw_offset": "0x53315",
+      "loaded_address": "0x2dd15",
+      "public_entry": "0x2dd15",
+      "binary_offset": 880,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "input_selection_retained_11",
+      "source": "src/fate/collect_input.asm",
+      "binary": "collect_input.bin",
+      "sha256": "08967ebe19ba9722b26071dfcd92b9f3c69fd94f7f9ac947f56a35848ea4f637",
+      "bytes": 1003,
+      "raw_offset": "0x53348",
+      "loaded_address": "0x2dd48",
+      "public_entry": "0x2dd48",
+      "binary_offset": 889,
+      "le_pointers": 92
     }
   ]
 }

@@ -690,3 +690,13 @@ the input collector: the private context shrank from 1,415 to 1,300 bytes and
 retained all 686 earlier selected bytes while adding 131. Recheck the complete
 context and old slices after this change. Explicit EBP parameter/result pragmas
 are rejected by 10.5 with E1122; leave EBP allocation to the compiler.
+
+A four-sample smoothing table can receive negative signed indices when its
+index only has an upper reset. Model the actual LE DATA backing object and
+all aliasing stores; an enlarged table declaration is not a bounds proof.
+The input history reaches DATA bytes 0x75292..0x85299, and an incoming index
+of -14798 changes the packed forward byte before it is read again. Check
+volatile read order independently of sums: swapping sample reads 1 and 0
+can preserve every result and register. For selected branches, also bind
+the compiler successor to the logical placed entry; a same-opcode branch
+from another condition can otherwise pass byte normalization.

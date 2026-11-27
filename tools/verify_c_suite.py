@@ -1595,6 +1595,9 @@ def verify_compiler_groups(exe, directory, names=None):
     if selected('inpsel'):
         context = INPUT_SELECTION_LAYOUT['context']
         verify_group_layout((directory/'inpsel.obj').read_bytes(),context['size'],[(context['public'],0)])
+    if selected('inpcurs'):
+        context = INPUT_CURSOR_LAYOUT['context']
+        verify_group_layout((directory/'inpcurs.obj').read_bytes(),context['size'],[(context['public'],0)])
     if selected('encexit'):
         verify_group_layout((directory/'encexit.obj').read_bytes(), 1385, [('encounter_exit_context_', 160)])
     if selected('menuprep'):
@@ -1767,8 +1770,9 @@ from verify_c_leaf import ENCOUNTER_SPAWN_LAYOUT
 OBJECT_NAMES.update({p['symbol']: p['object'] for p in ENCOUNTER_SPAWN_LAYOUT['phases']})
 
 from verify_c_leaf import WEAPON_ANIMATION_LAYOUT, BOARD_ACTOR_LAYOUT, BOARD_ACTOR_CONFIGURATION_LAYOUTS, BOARD_ACTOR_PLACEMENT_LAYOUTS
-from verify_c_leaf import INPUT_SELECTION_LAYOUT
-OBJECT_NAMES.update({p['symbol']:'inpsel' for p in INPUT_SELECTION_LAYOUT['phases']})
+from verify_c_leaf import INPUT_SELECTION_LAYOUT, INPUT_CURSOR_LAYOUT, INPUT_PLACEMENT_LAYOUTS
+for _input_layout in INPUT_PLACEMENT_LAYOUTS:
+    OBJECT_NAMES.update({p['symbol']:_input_layout['context']['object'] for p in _input_layout['phases']})
 OBJECT_NAMES.update({p['symbol']: next(c['object'] for c in WEAPON_ANIMATION_LAYOUT['contexts'] if c['public'] == p['public']) for p in WEAPON_ANIMATION_LAYOUT['phases']})
 OBJECT_NAMES.update({p['symbol']: 'actorcfg' for p in BOARD_ACTOR_LAYOUT['phases']})
 for _actor_layout in BOARD_ACTOR_PLACEMENT_LAYOUTS:

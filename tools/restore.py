@@ -35,7 +35,7 @@ def registrations():
 
 def mixed_routine(selector):
     """Keep original routine context after its coverage is split into phases."""
-    from verify_c_leaf import WEAPON_ANIMATION_LAYOUT, BOARD_ACTOR_LAYOUT, BOARD_ACTOR_PLACEMENT_LAYOUTS, INPUT_SELECTION_LAYOUT
+    from verify_c_leaf import WEAPON_ANIMATION_LAYOUT, BOARD_ACTOR_LAYOUT, BOARD_ACTOR_PLACEMENT_LAYOUTS, INPUT_SELECTION_LAYOUT, INPUT_CURSOR_LAYOUT
     layouts = {'update_weapon_animation': WEAPON_ANIMATION_LAYOUT,
                'initialize_board_actors': BOARD_ACTOR_LAYOUT,
                'collect_input': INPUT_SELECTION_LAYOUT}
@@ -46,6 +46,9 @@ def mixed_routine(selector):
     objects = ({c['object'] for c in layout['contexts']} if 'contexts' in layout
                else {layout['context']['object']} if 'context' in layout else {layout['object']})
     phases = list(layout['phases'])
+    if name == 'collect_input':
+        objects.add(INPUT_CURSOR_LAYOUT['context']['object'])
+        phases += INPUT_CURSOR_LAYOUT['phases']
     if name == 'initialize_board_actors':
         for actor_layout in BOARD_ACTOR_PLACEMENT_LAYOUTS:
             objects.add(actor_layout['context']['object'])
@@ -223,14 +226,17 @@ def targeted(args, names):
     args.build.mkdir(parents=True, exist_ok=True)
     report_path = args.build / 'targeted-validation.json'
     write_json(report_path, dict(status='pending', mode='targeted'))
-    result = compile_units(args.build, names, incremental=True)
+    selected = fixtures(set(names)) if args.fixtures else []
+    build_names=set(names)
+    for fixture in selected:
+        build_names.update(fixture.objects)
+    result = compile_units(args.build, sorted(build_names), incremental=True)
     if args.command == 'probe' and args.symbol:
         rows = research_probe(args, select_units(load_units(), names)[0])
     else:
         rows = verify_objects(args.reference, args.build, set(names))
     # Byte/LE verification needs only stdlib; install/reuse emulator dependencies
     # only when fixtures are requested and this object has a registered fixture.
-    selected = fixtures(set(names)) if args.fixtures else []
     checks = []
     if selected:
         dependencies = ensure_dependencies(args.dependencies)
@@ -240,7 +246,7 @@ def targeted(args, names):
             runner.python('targeted-assembly', TOOLS / 'build_assembly.py',
                           TOOLS / 'inputs/nasm/nasm.exe', args.build / 'asm', '--incremental')
         checks = run_fixtures(runner, args.reference, set(names), args.jobs)
-    assert_fresh(args.build, set(names))
+    assert_fresh(args.build, build_names)
     if validation_inputs() != snapshot:
         raise ValueError('Sources or validation tools changed during the probe; rerun it')
     write_json(report_path, dict(
@@ -248,7 +254,7 @@ def targeted(args, names):
         reference_sha256=TARGET_SHA256, routines=rows, fixtures=checks,
         fixtures_requested=args.fixtures, compile=result,
         validation_inputs=snapshot,
-        unit_keys={name: row['key'] for name, row in assert_fresh(args.build, set(names)).items()}))
+        unit_keys={name: row['key'] for name, row in assert_fresh(args.build, build_names).items()}))
     print(f'PASS: {len(rows)} exact CODE spans, {len(checks)} fixtures; {report_path}')
     if not checks:
         print('Bytes and LE sites/targets only; '
@@ -406,9 +412,9 @@ def main():
             if any(provided) and not all(provided):
                 raise ValueError('Research probes require --symbol, --raw-offset, and --size together')
             units = resolve_units(args.routine)
-            if len(units) != 1:
+            if len(units) != 1 and (any(provided) or mixed_routine(args.routine) is None):
                 raise ValueError('Choose a single variant by its DOS object name')
-            names = [units[0].name]
+            names = [unit.name for unit in units]
         else:
             if args.clean:
                 raise ValueError('--clean requires an exact or full build, not --changed')

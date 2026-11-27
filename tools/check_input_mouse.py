@@ -90,18 +90,19 @@ def main():
     parser.add_argument('--exe',type=Path,required=True)
     parser.add_argument('--build',type=Path,required=True)
     parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--asm',type=Path)
     args=parser.parse_args();exe=args.exe.read_bytes()
     assert hashlib.sha256(exe).hexdigest()==TARGET_SHA256
     START,POLL,END,STACK=0x2d51a,0x2d7d5,0x2da09,0x200000
     GET,SCALE=0x54424,0x3a96d
-    blob,original,placed,private,sites,private_sites=bind_production(exe,args.build,stop=0x4ef)
+    blob,original,placed,private,sites,private_sites=bind_production(exe,args.build,stop=0x4ef,asm=args.asm)
     validate_layout(group.LAYOUT,original,private)
     ranges=((699,743,701,745),(797,836,801,840),(995,1043,1014,1062))
     old,new=decode(original),decode(private)
 
     def validate(layout):
         assert layout['CODE']=={'getmousevalues_':GET,'scale_mouse_':SCALE},'mouse call targets'
-        assert layout['selected_bytes']==817 and layout['assembly_size']==2280
+        assert layout['selected_bytes']==817 and layout['assembly_size']==1892
         records={int(k):value for k,value in layout['branches'].items()}
         selected=[r for r in layout['instructions'] if r['original']>=POLL]
         mapping={};owned=[];sources=[]

@@ -94,7 +94,7 @@ setbrightness equ 0x59bee
 
 section .text align=1
 collect_input_ equ 0x2d51a
-; Guarded C supplies selection, keyboard motion, and three mouse-prefix operations.
+; Guarded C supplies selection, keyboard motion and selected mouse operations.
 .loc_032 equ 0x2d54c
 .loc_04b equ 0x2d565
 .loc_06c equ 0x2d586
@@ -347,21 +347,8 @@ section .retained_4 align=1 vstart=0x2d92d follows=.retained_3
     jne short .cursor_or_map_motion
     cmp word [map_mode], 0
     je near .gameplay_mouse_motion
-    mov si, word [map_mode]
-    xor edx, edx
-    xor eax, eax
-    mov word [active_mouse_buttons], dx
-    test si, si
-    jne near .map_motion
-    mov bx, word [mouse_dx]
-    mov di, word [cursor_x]
-    mov cx, word [cursor_y]
-    add edi, ebx
-    mov bx, word [mouse_dy]
-    mov word [cursor_x], di
-    add ecx, ebx
-    movsx ebx, di
-    mov word [cursor_y], cx
+
+section .retained_5 align=1 vstart=0x2da67 follows=.retained_4
     cmp ebx, 0x13c
     jg short .loc_55a
     mov ebx, 0x13c
@@ -387,12 +374,8 @@ section .retained_4 align=1 vstart=0x2d92d follows=.retained_3
     jmp short .loc_5bb
     mov ebx, 0x1b8
     mov word [cursor_y], bx
-    movsx ebx, word [cursor_x]
-    sar ebx, 2
-    mov word [map_x], bx
-    movsx ebx, word [cursor_y]
-    sar ebx, 2
-    mov word [map_scale_or_y], bx
+
+section .retained_6 align=1 vstart=0x2dafe follows=.retained_5
     mov bx, word [mouse_buttons]
     xor bh, bh
     and bl, 2
@@ -408,14 +391,8 @@ section .retained_4 align=1 vstart=0x2d92d follows=.retained_3
     movsx ebx, bx
     test ebx, ebx
     jne near .map_vertical_offset
-    mov bx, word [mouse_dx]
-    mov cx, word [map_x]
-    mov si, word [map_scale_or_y]
-    sub ecx, ebx
-    sub si, word [mouse_dy]
-    mov word [map_x], cx
-    movsx ebx, si
-    mov word [map_scale_or_y], si
+
+section .retained_7 align=1 vstart=0x2db68 follows=.retained_6
     cmp ebx, 0x100
     jg short .loc_65b
     mov ebx, 0x100
@@ -448,11 +425,8 @@ section .retained_4 align=1 vstart=0x2d92d follows=.retained_3
     mov ebx, ecx
     mov word [map_x], bx
     jmp near .view_adjustment_key
-    mov bx, word [mouse_dy]
-    mov di, word [map_offset_y]
-    add edi, ebx
-    movsx ebx, di
-    mov word [map_offset_y], di
+
+section .retained_8 align=1 vstart=0x2dbf7 follows=.retained_7
     cmp ebx, 0xffffff00
     jg short .loc_6ea
     mov ebx, 0xffffff00
@@ -476,57 +450,20 @@ section .retained_4 align=1 vstart=0x2d92d follows=.retained_3
     xor bh, bh
     xor eax, eax
     mov word [active_mouse_buttons], bx
-    xor ebx, ebx
-    mov bl, byte [key_adjust_view]
-    mov bl, byte [ebx + key_state]
-    and ebx, 0xff
-    cmp ebx, 1
-    jne short .loc_765
-    mov byte [adjust_view_held], 1
-    jmp short .blend_mouse_motion
-    xor ebx, ebx
-    mov bl, byte [adjust_view_held]
-    cmp ebx, 1
-    jne short .blend_mouse_motion
-    xor cl, cl
-    mov edi, 0x64
-    mov byte [adjust_view_held], cl
-    mov dword [view_adjustment], edi
+
+section .retained_9 align=1 vstart=0x2dc9f follows=.retained_8
     xor ebx, ebx
     mov bl, byte [key_strafe]
     cmp byte [ebx + key_state], 0
     jne near .mouse_strafe_motion
-    mov di, word [mouse_history_index]
-    inc edi
-    movsx ebx, di
-    mov word [mouse_history_index], di
-    cmp ebx, 3
-    jle short .loc_7ba
-    xor ebx, ebx
-    mov word [mouse_history_index], bx
-    movsx ebx, word [mouse_history_index]
-    mov word [nosplit ebx*2 + mouse_history], dx
-    movsx ebx, word [mouse_history+2]
-    movsx ecx, word [mouse_history]
-    add ebx, ecx
-    movsx ecx, word [mouse_history+4]
-    add ecx, ebx
-    movsx ebx, word [mouse_history+6]
-    add ebx, ecx
-    sar ebx, 2
-    mov ch, byte [adjust_view_held]
-    mov word [smoothed_mouse_dx], bx
+
+section .retained_10 align=1 vstart=0x2dd15 follows=.retained_9
     test ch, ch
     je short .loc_858
     test ax, ax
     jle short .loc_82e
-    mov ebx, dword [view_adjustment]
-    add ebx, 4
-    mov dword [view_adjustment], ebx
-    cmp ebx, 0xc8
-    jle near .pack_actions
-    mov dword [view_adjustment], 0xc8
-    jmp near .pack_actions
+
+section .retained_11 align=1 vstart=0x2dd48 follows=.retained_10
     jge near .pack_actions
     mov ebp, dword [view_adjustment]
     sub ebp, 4

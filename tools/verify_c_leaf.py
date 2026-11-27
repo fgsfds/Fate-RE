@@ -3926,9 +3926,9 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
     from bind_board_actor import PUBLICS as board_actor_publics, verify_context as verify_board_actor_context
     if public_name in board_actor_publics:
         verify_board_actor_context(blob, public_name)
-    from bind_input_selection import PUBLIC as input_selection_public, verify_context as verify_input_selection_context
-    if public_name == input_selection_public:
-        verify_input_selection_context(blob)
+    from bind_input_selection import PUBLICS as input_publics, verify_context as verify_input_selection_context
+    if public_name in input_publics:
+        verify_input_selection_context(blob,public_name)
     if public_name == 'setgamemode_dispatch_context_':
         from bind_setgamemode_dispatch import bind_section
         return bind_section(blob, symbol, address=address, code_bindings=code_bindings)
@@ -5235,27 +5235,28 @@ for _actor_layout in BOARD_ACTOR_PLACEMENT_LAYOUTS:
         LEAVES[_phase['symbol']] = (_phase['address']+0x25600, _phase['end']-_phase['begin'])
         LEAF_CODE_SLICES[_phase['symbol']] = (_actor_public, _phase['begin'], _phase['end'], _actor_context['size'])
 
-from bind_input_selection import LAYOUT as INPUT_SELECTION_LAYOUT
-_input_context = INPUT_SELECTION_LAYOUT['context']; _input_public = _input_context['public']
-for _name, _address in INPUT_SELECTION_LAYOUT['CODE'].items():
-    if _name not in LEAVES or LEAVES[_name][0]-0x25600 != _address:
-        raise ValueError('Input call target differs from restored routine: '+_name)
-    if _name in FUNCTION_ADDRESSES and FUNCTION_ADDRESSES[_name] != _address:
-        raise ValueError('Conflicting input call target: '+_name)
-    FUNCTION_ADDRESSES[_name] = _address
-for _name, _offset in INPUT_SELECTION_LAYOUT['DATA'].items():
-    if _name in DATA_OFFSETS and DATA_OFFSETS[_name] != _offset:
-        raise ValueError('Conflicting input selection DATA binding: '+_name)
-    DATA_OFFSETS[_name] = _offset
-LEAF_CONTEXT_SHA256[_input_public] = _input_context['sha256']
-LEAF_CONTEXT_LITERALS[_input_public] = (0, hashlib.sha256(b'').hexdigest(), {})
-LEAF_CONTEXT_RECORDS[_input_public] = _input_context['records']
-LEAF_CONTEXT_FIXUPS[_input_public] = {int(k): tuple(v) for k,v in _input_context['fixups'].items()}
-FUNCTION_ADDRESSES[_input_public] = INPUT_SELECTION_LAYOUT['original_address']
-LEAF_SECTION_BRANCHES[_input_public] = (_input_context['size'],INPUT_SELECTION_LAYOUT['original_size'],{int(k):(bytes.fromhex(v[0]),v[1],v[2]) for k,v in INPUT_SELECTION_LAYOUT['branches'].items()})
-for _phase in INPUT_SELECTION_LAYOUT['phases']:
-    LEAVES[_phase['symbol']] = (_phase['address']+0x25600,_phase['end']-_phase['begin'])
-    LEAF_CODE_SLICES[_phase['symbol']] = (_input_public,_phase['begin'],_phase['end'],_input_context['size'])
+from bind_input_selection import LAYOUT as INPUT_SELECTION_LAYOUT, CURSOR_LAYOUT as INPUT_CURSOR_LAYOUT, PLACEMENT_LAYOUTS as INPUT_PLACEMENT_LAYOUTS
+for _input_layout in INPUT_PLACEMENT_LAYOUTS:
+    _input_context = _input_layout['context']; _input_public = _input_context['public']
+    for _name, _address in _input_layout['CODE'].items():
+        if _name not in LEAVES or LEAVES[_name][0]-0x25600 != _address:
+            raise ValueError('Input call target differs from restored routine: '+_name)
+        if _name in FUNCTION_ADDRESSES and FUNCTION_ADDRESSES[_name] != _address:
+            raise ValueError('Conflicting input call target: '+_name)
+        FUNCTION_ADDRESSES[_name] = _address
+    for _name, _offset in _input_layout['DATA'].items():
+        if _name in DATA_OFFSETS and DATA_OFFSETS[_name] != _offset:
+            raise ValueError('Conflicting input selection DATA binding: '+_name)
+        DATA_OFFSETS[_name] = _offset
+    LEAF_CONTEXT_SHA256[_input_public] = _input_context['sha256']
+    LEAF_CONTEXT_LITERALS[_input_public] = (0, hashlib.sha256(b'').hexdigest(), {})
+    LEAF_CONTEXT_RECORDS[_input_public] = _input_context['records']
+    LEAF_CONTEXT_FIXUPS[_input_public] = {int(k): tuple(v) for k,v in _input_context['fixups'].items()}
+    FUNCTION_ADDRESSES[_input_public] = _input_layout['original_address']
+    LEAF_SECTION_BRANCHES[_input_public] = (_input_context['size'],_input_layout['original_size'],{int(k):(bytes.fromhex(v[0]),v[1],v[2]) for k,v in _input_layout['branches'].items()})
+    for _phase in _input_layout['phases']:
+        LEAVES[_phase['symbol']] = (_phase['address']+0x25600,_phase['end']-_phase['begin'])
+        LEAF_CODE_SLICES[_phase['symbol']] = (_input_public,_phase['begin'],_phase['end'],_input_context['size'])
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

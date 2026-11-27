@@ -274,25 +274,28 @@ def validate_layout(layout,original,natural):
     return old
 
 
-def bind_production(exe,build,*,stop=699):
+def bind_production(exe,build,*,stop=699,asm=None):
     layout=group.LAYOUT;pointers=read_le_fixups(exe)['pointers'];blob=(build/'inpsel.obj').read_bytes()
     original=exe[START+0x25600:START+0x25600+SIZE];output=bytearray(SIZE);covered=set();C_sites=0
     def install(address,code):
         region=set(range(address,address+len(code)));assert not covered&region
         assert region<=set(range(START,START+SIZE));covered.update(region)
         output[address-START:address-START+len(code)]=code
-    for phase in layout['phases']:
-        fields={};code,data=v.bind_leaf_details(blob,phase['symbol'],layout['DATA'],address=phase['address'],functions=functions(),code_bindings=fields)
-        assert not fields and code==original[phase['address']-START:phase['address']-START+len(code)]
-        v.verify_leaf_relocations(code,data,pointers,phase['address'],code_bindings=fields)
-        install(phase['address'],code);C_sites+=len(data)
-    assembly=(build/'asm/collect_input.bin').read_bytes();assert len(assembly)==2280
+    for context_layout in group.PLACEMENT_LAYOUTS:
+        current=(build/(context_layout['context']['object']+'.obj')).read_bytes()
+        calls={context_layout['context']['public']:START,**context_layout['CODE']}
+        for phase in context_layout['phases']:
+            fields={};code,data=v.bind_leaf_details(current,phase['symbol'],context_layout['DATA'],address=phase['address'],functions=calls,code_bindings=fields)
+            assert not fields and code==original[phase['address']-START:phase['address']-START+len(code)]
+            v.verify_leaf_relocations(code,data,pointers,phase['address'],code_bindings=fields)
+            install(phase['address'],code);C_sites+=len(data)
+    assembly=((asm or build/'asm')/'collect_input.bin').read_bytes();assert len(assembly)==1892
     for row in layout['retained']:
         code=assembly[row['binary_offset']:row['binary_offset']+row['size']]
         assert code==original[row['address']-START:row['address']-START+row['size']]
         assert {site-row['address']:target for site,target in pointers.between(row['address'],row['address']+row['size'])}=={int(k):value for k,value in row['fixups'].items()}
         install(row['address'],code)
-    assert len(covered)==SIZE and output==original and C_sites==86
+    assert len(covered)==SIZE and output==original and C_sites==127
     fields={};natural,data=v.bind_leaf_details(blob,group.PUBLIC,layout['DATA'],address=START,functions=functions(),code_bindings=fields)
     assert not fields and len(natural)==1300 and len(data)==121
     sites={site-START:target for site,target in pointers.between(START,START+stop)}
@@ -338,9 +341,9 @@ def context_controls(blob):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--exe',type=Path,required=True);parser.add_argument('--build',type=Path,required=True);parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--exe',type=Path,required=True);parser.add_argument('--build',type=Path,required=True);parser.add_argument('--output',type=Path,required=True);parser.add_argument('--asm',type=Path)
     args=parser.parse_args();exe=args.exe.read_bytes();assert hashlib.sha256(exe).hexdigest()==TARGET_SHA256
-    blob,original,placed,private,sites,private_sites=bind_production(exe,args.build)
+    blob,original,placed,private,sites,private_sites=bind_production(exe,args.build,asm=args.asm)
     rows=validate_layout(group.LAYOUT,original,private)
     orig=Replay(relocated(original,sites),('ebx','ecx','edx','esi','edi','ebp'))
     production=Replay(relocated(placed,sites),orig.saves)
