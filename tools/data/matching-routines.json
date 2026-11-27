@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1683,
-  "unique_code_bytes": 201024,
-  "le_pointers": 11139,
+  "routines": 1686,
+  "unique_code_bytes": 201155,
+  "le_pointers": 11153,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -3858,6 +3858,36 @@
       "loaded_address": "0x2d745",
       "bytes": 144,
       "le_pointers": 15
+    },
+    {
+      "symbol": "input_mouse_poll_",
+      "object": "inpsel.obj",
+      "object_sha256": "0366364b376ace5ec456c3cb79efb32c041cb949b8fb751a810af5d958164f7f",
+      "sha256": "203c4f57bd06c0c942d54ae1f1c8f29d134296cd5228f20abca7ce5302c269b9",
+      "raw_offset": "0x52dd5",
+      "loaded_address": "0x2d7d5",
+      "bytes": 44,
+      "le_pointers": 6
+    },
+    {
+      "symbol": "input_mouse_backward_",
+      "object": "inpsel.obj",
+      "object_sha256": "0366364b376ace5ec456c3cb79efb32c041cb949b8fb751a810af5d958164f7f",
+      "sha256": "5d52edad95c23245c7cd85e1f96b0db193ac2b4419d225064223a5c10a47a0e4",
+      "raw_offset": "0x52e37",
+      "loaded_address": "0x2d837",
+      "bytes": 39,
+      "le_pointers": 4
+    },
+    {
+      "symbol": "input_mouse_strafe_decay_",
+      "object": "inpsel.obj",
+      "object_sha256": "0366364b376ace5ec456c3cb79efb32c041cb949b8fb751a810af5d958164f7f",
+      "sha256": "f978018f57dfe24ba50d2923cad552dcb0a4fe8caa6a20023cd171343bae487c",
+      "raw_offset": "0x52efd",
+      "loaded_address": "0x2d8fd",
+      "bytes": 48,
+      "le_pointers": 4
     },
     {
       "symbol": "initialize_board_entry_",

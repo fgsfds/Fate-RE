@@ -94,7 +94,7 @@ setbrightness equ 0x59bee
 
 section .text align=1
 collect_input_ equ 0x2d51a
-; Guarded C owns the mode, selection, and keyboard-motion instruction ranges.
+; Guarded C supplies selection, keyboard motion, and three mouse-prefix operations.
 .loc_032 equ 0x2d54c
 .loc_04b equ 0x2d565
 .loc_06c equ 0x2d586
@@ -208,16 +208,7 @@ section .retained_1 align=1 vstart=0x2d52d follows=.retained_0
     xor eax, eax
     mov al, byte [key_toggle_mode]
 
-section .retained_2 align=1 vstart=0x2d7d5 follows=.retained_1
-    mov ebx, mouse_buttons
-    mov edx, mouse_dy
-    xor ecx, ecx
-    mov eax, mouse_dx
-    mov word [mouse_buttons], cx
-    call getmousevalues
-    mov edx, mouse_dy
-    mov eax, mouse_dx
-    call scale_mouse
+section .retained_2 align=1 vstart=0x2d801 follows=.retained_1
     xor eax, eax
     mov al, byte [key_forward]
     cmp byte [eax + key_state], 0
@@ -234,16 +225,8 @@ section .retained_2 align=1 vstart=0x2d7d5 follows=.retained_1
     jl short .loc_318
     mov eax, 0x7f
     mov dword [keyboard_forward], eax
-    xor eax, eax
-    mov al, byte [key_backward]
-    cmp byte [eax + key_state], 0
-    jbe short .loc_344
-    mov eax, dword [keyboard_forward]
-    sub eax, 0xc
-    cmp eax, -0x80
-    jg short .loc_33f
-    mov eax, 0xffffff80
-    mov dword [keyboard_forward], eax
+
+section .retained_3 align=1 vstart=0x2d85e follows=.retained_2
     xor eax, eax
     mov al, byte [key_strafe_left]
     cmp byte [eax + key_state], 0
@@ -292,22 +275,8 @@ section .retained_2 align=1 vstart=0x2d7d5 follows=.retained_1
     jg short .loc_3de
     xor eax, eax
     mov dword [keyboard_turn], eax
-    mov ebx, dword [keyboard_strafe]
-    test ebx, ebx
-    jge short .loc_3fb
-    lea eax, [ebx + 6]
-    test eax, eax
-    jl short .loc_3f6
-    xor eax, eax
-    mov dword [keyboard_strafe], eax
-    mov ecx, dword [keyboard_strafe]
-    test ecx, ecx
-    jle short .loc_413
-    lea eax, [ecx - 6]
-    test eax, eax
-    jg short .loc_40e
-    xor eax, eax
-    mov dword [keyboard_strafe], eax
+
+section .retained_4 align=1 vstart=0x2d92d follows=.retained_3
     mov esi, dword [keyboard_forward]
     test esi, esi
     jge short .loc_42b

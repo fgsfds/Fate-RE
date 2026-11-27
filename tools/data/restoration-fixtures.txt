@@ -177,3 +177,4 @@ check_board_actor_offsets --exe {exe} --build {build} --output {build}/board-act
 check_input_selection --exe {exe} --build {build} --output {build}/input-selection.json | inpsel
 check_board_actor_eax --exe {exe} --build {build} --output {build}/board-actor-eax.json | actorcfg actsetup actdest actvalue actdisab actclob actoff acteax
 check_input_motion --exe {exe} --build {build} --output {build}/input-motion.json | inpsel
+check_input_mouse --exe {exe} --build {build} --output {build}/input-mouse.json | inpsel

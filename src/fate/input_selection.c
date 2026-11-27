@@ -1,4 +1,4 @@
-/* Local input mode, selection, and keyboard motion. */
+/* Local input mode, selection, and mouse and keyboard motion. */
 extern unsigned char input_mode, key_toggle_mode, toggled_mode;
 extern unsigned char key_state[256];
 extern short selection_1_enabled, selection_2_enabled, selection_3_enabled;
@@ -39,7 +39,26 @@ extern unsigned char input_motion_in_bh(unsigned char);
 #pragma aux input_motion_in_ecx = "" parm [ecx] value [ecx] modify exact [];
 #pragma aux input_motion_in_bh = "" parm [bh] value [bh] modify exact [];
 
-void collect_input_selection(void)
+extern unsigned char key_forward, key_backward, key_strafe_left, key_strafe_right;
+extern short mouse_dx, mouse_dy, mouse_buttons;
+extern unsigned short active_mouse_buttons;
+extern long keyboard_forward;
+extern signed char input_forward, input_strafe, input_turn;
+
+extern int getmousevalues(short *, short *, short *);
+extern void scale_mouse(short *, short *);
+
+/* These identities leave the supplied values and all other register bits intact. */
+extern unsigned short input_mouse_in_ax(unsigned short);
+extern short input_mouse_in_cx(short);
+extern long input_motion_in_esi(long);
+extern long input_motion_in_edi(long);
+#pragma aux input_mouse_in_ax = "" parm [ax] value [ax] modify exact [];
+#pragma aux input_mouse_in_cx = "" parm [cx] value [cx] modify exact [];
+#pragma aux input_motion_in_esi = "" parm [esi] value [esi] modify exact [];
+#pragma aux input_motion_in_edi = "" parm [edi] value [edi] modify exact [];
+
+void collect_input_mouse(void)
 {
     unsigned char toggle_key;
     long enabled;
@@ -142,5 +161,160 @@ void collect_input_selection(void)
     if (input_motion_in_ebx(key_state[key]) == 1) {
         key_state[key] = input_motion_in_bh(0);
         view_adjustment = 100;
+    }
+
+    mouse_buttons = input_mouse_in_cx(0);
+    getmousevalues(&mouse_dx, &mouse_dy, &mouse_buttons);
+    scale_mouse(&mouse_dx, &mouse_dy);
+
+    if (key_state[input_selection_in_eax(key_forward)] > 0 ||
+        input_selection_in_eax((short)((unsigned char)input_mouse_in_ax(active_mouse_buttons) & 2U))) {
+        long motion;
+
+        motion = input_selection_in_eax((long)((unsigned long)keyboard_forward + 12UL));
+        if (motion >= 127)
+            motion = 127;
+        keyboard_forward = input_selection_in_eax(motion);
+    }
+    if (key_state[input_selection_in_eax(key_backward)] > 0) {
+        long motion;
+
+        motion = input_selection_in_eax((long)((unsigned long)keyboard_forward - 12UL));
+        if (motion <= -128)
+            motion = -128;
+        keyboard_forward = input_selection_in_eax(motion);
+    }
+    if (key_state[input_selection_in_eax(key_strafe_left)] > 0) {
+        long motion;
+        unsigned long step;
+        long limit;
+        long next;
+
+        step = input_motion_in_ebx((unsigned long)strafe_step);
+        motion = input_selection_in_eax((long)((step << 2) - step));
+        next = input_motion_in_edi(keyboard_strafe);
+        limit = strafe_limit;
+        motion = (long)((unsigned long)motion + (unsigned long)next);
+        if (motion >= limit)
+            motion = limit;
+        keyboard_strafe = input_selection_in_eax(motion);
+    }
+    if (key_state[input_selection_in_eax(key_strafe_right)] > 0) {
+        long motion;
+        unsigned long step;
+        long limit;
+
+        step = input_motion_in_ebx((unsigned long)strafe_step);
+        motion = input_selection_in_eax((long)((step << 2) - step));
+        motion = input_selection_in_eax((long)(input_motion_in_ebx((unsigned long)keyboard_strafe) -
+                                               (unsigned long)motion));
+        limit = (long)input_motion_in_ebx(0UL - (unsigned long)strafe_limit);
+        if (motion <= limit)
+            motion = limit;
+        keyboard_strafe = input_selection_in_eax(motion);
+    }
+
+    {
+        long motion = input_selection_in_eax(keyboard_turn);
+        if (motion < 0) {
+            motion = input_selection_in_eax((long)((unsigned long)motion + 36UL));
+            if (motion >= 0)
+                motion = 0;
+            keyboard_turn = input_selection_in_eax(motion);
+        }
+    }
+
+    {
+        long next = input_selection_in_edx(keyboard_turn);
+        if (next > 0) {
+            long motion = input_selection_in_eax((long)((unsigned long)next - 36UL));
+            if (motion <= 0)
+                motion = 0;
+            keyboard_turn = input_selection_in_eax(motion);
+        }
+    }
+
+    {
+        long next = (long)input_motion_in_ebx((unsigned long)keyboard_strafe);
+        if (next < 0) {
+            long motion = input_selection_in_eax((long)((unsigned long)next + 6UL));
+            if (motion >= 0)
+                motion = 0;
+            keyboard_strafe = input_selection_in_eax(motion);
+        }
+    }
+
+    {
+        long next = input_motion_in_ecx(keyboard_strafe);
+        if (next > 0) {
+            long motion = input_selection_in_eax((long)((unsigned long)next - 6UL));
+            if (motion <= 0)
+                motion = 0;
+            keyboard_strafe = input_selection_in_eax(motion);
+        }
+    }
+
+    {
+        long next = input_motion_in_esi(keyboard_forward);
+        if (next < 0) {
+            long motion = input_selection_in_eax((long)((unsigned long)next + 6UL));
+            if (motion >= 0)
+                motion = 0;
+            keyboard_forward = input_selection_in_eax(motion);
+        }
+    }
+
+    {
+        long next = input_motion_in_edi(keyboard_forward);
+        if (next > 0) {
+            long motion = input_selection_in_eax((long)((unsigned long)next - 6UL));
+            if (motion <= 0)
+                motion = 0;
+            keyboard_forward = input_selection_in_eax(motion);
+        }
+    }
+
+    {
+        long strafe_sample, turn_sample;
+
+        {
+            /* The upper-bound test uses a lower-clamped value. The low arm samples
+               the accumulator again, matching the original nested clamps. */
+            long next = keyboard_forward;
+            long motion = input_selection_in_eax(next > -120 ? next : -120);
+            if (motion < 119) {
+                next = input_selection_in_eax(keyboard_forward);
+                motion = input_selection_in_eax(next > -120 ? next : -120);
+            } else {
+                motion = 119;
+            }
+            strafe_sample = input_selection_in_edx(keyboard_strafe);
+            input_forward = (signed char)input_selection_in_al((unsigned char)motion);
+        }
+
+        {
+            long next = strafe_sample;
+            long motion = input_selection_in_eax(next > -120 ? next : -120);
+            if (motion < 119) {
+                next = (long)input_motion_in_ebx((unsigned long)keyboard_strafe);
+                motion = input_selection_in_eax(next > -120 ? next : -120);
+            } else {
+                motion = 119;
+            }
+            turn_sample = input_motion_in_ecx(keyboard_turn);
+            input_strafe = (signed char)input_selection_in_al((unsigned char)motion);
+        }
+
+        {
+            long next = turn_sample;
+            long motion = input_selection_in_eax(next > -112 ? next : -112);
+            if (motion < 111) {
+                next = input_motion_in_esi(keyboard_turn);
+                motion = input_selection_in_eax(next > -112 ? next : -112);
+            } else {
+                motion = 111;
+            }
+            input_turn = (signed char)input_selection_in_al((unsigned char)motion);
+        }
     }
 }

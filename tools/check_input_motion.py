@@ -112,15 +112,16 @@ def main():
     reg={n:getattr(x,'UC_X86_REG_'+n.upper()) for n in (*general,'esp','eip','eflags')}
 
     class Replay:
-        def __init__(self,code):
+        def __init__(self,code,private=False):
+            self.delta=2 if private else 0
             self.cpu=Uc(UC_ARCH_X86,UC_MODE_32);self.cpu.mem_map(0,0x210000)
             self.cpu.mem_write(start,code)
             self.cpu.hook_add(UC_HOOK_MEM_WRITE,self.on_write)
             self.cpu.hook_add(UC_HOOK_CODE,self.on_pc)
 
         def on_pc(self,cpu,pc,size,user):
-            assert start+begin<=pc and pc+size<=start+end,'motion execution extent'
-            self.path.append(pc-start)
+            assert start+begin+self.delta<=pc and pc+size<=start+end+self.delta,'motion execution extent'
+            self.path.append(pc-start-self.delta)
 
         def on_write(self,cpu,access,address,size,value,user):
             if names['key_state']<=address<names['key_state']+256:
@@ -142,14 +143,14 @@ def main():
             for i,n in enumerate(general):cpu.reg_write(reg[n],0x81a3b5c7+i)
             cpu.mem_write(stack-64,b'\xa5'*128)
             cpu.reg_write(reg['esp'],stack);cpu.reg_write(reg['eflags'],0xa97)
-            self.writes=[];self.path=[];cpu.emu_start(start+begin,start+end,count=150)
-            assert cpu.reg_read(reg['eip'])==start+end and cpu.reg_read(reg['esp'])==stack
+            self.writes=[];self.path=[];cpu.emu_start(start+begin+self.delta,start+end+self.delta,count=150)
+            assert cpu.reg_read(reg['eip'])==start+end+self.delta and cpu.reg_read(reg['esp'])==stack
             assert cpu.mem_read(stack-64,128)==b'\xa5'*128,'motion stack guard'
             for i,n in enumerate(general[4:],4):assert cpu.reg_read(reg[n])==0x81a3b5c7+i,'motion saved register'
             memory=(bytes(cpu.mem_read(names['key_state'],256)),*(int.from_bytes(cpu.mem_read(names[n],s),'little') for n,s in (('keyboard_turn',4),('keyboard_strafe',4),('toggled_word',2),('view_adjustment',4))))
             return (memory,tuple(self.writes)),tuple(cpu.reg_read(reg[n]) for n in general),cpu.reg_read(reg['eflags'])&0x8c5
 
-    orig=Replay(relocated(original,sites));production=Replay(relocated(placed,sites));natural=Replay(relocated(private,private_sites))
+    orig=Replay(relocated(original,sites));production=Replay(relocated(placed,sites));natural=Replay(relocated(private,private_sites),private=True)
     all_cases=list(cases());outcomes={off:set() for off,ins in rows.items() if off>=begin and branch(ins) is not None}
     for case in all_cases:
         expected=orig.run(case)

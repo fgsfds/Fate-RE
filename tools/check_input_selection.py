@@ -46,6 +46,9 @@ ENTRIES = {
     0x139: ('selection_6', ()), 0x16a: ('selection_7', ()),
 }
 
+def functions():
+    return {group.PUBLIC:START, **group.LAYOUT['CODE']}
+
 
 @dataclass(frozen=True)
 class Case:
@@ -134,7 +137,9 @@ def relocated(code, sites):
 class Replay:
     def __init__(self, code, saves, private=False):
         self.saves = saves
-        self.entries = {(0x03 if private and offset == 0x06 else offset): entry
+        offsets={row['original']-START:row['private'] for row in group.LAYOUT['instructions']}
+        self.stop=offsets[STOP] if private else STOP
+        self.entries = {(offsets[offset] if private else offset): entry
                         for offset, entry in ENTRIES.items()}
         self.cpu = Uc(UC_ARCH_X86, UC_MODE_32)
         self.cpu.mem_map(0, 0x210000)
@@ -144,7 +149,7 @@ class Replay:
 
     def on_pc(self, cpu, pc, size, data):
         off = pc - START
-        assert 0 <= off < STOP and off + size <= STOP
+        assert 0 <= off < self.stop and off + size <= self.stop
         self.path.append(off)
         if off in self.entries:
             name, live = self.entries[off]
@@ -177,8 +182,8 @@ class Replay:
             cpu.reg_write(REG[reg], value)
         cpu.reg_write(REG['eflags'], case.flags)
         cpu.reg_write(REG['esp'], STACK)
-        cpu.emu_start(START, START + STOP, count=180)
-        assert cpu.reg_read(REG['eip']) == START + STOP
+        cpu.emu_start(START, START + self.stop, count=180)
+        assert cpu.reg_read(REG['eip']) == START + self.stop
         assert cpu.reg_read(REG['esp']) == STACK - 4 * len(self.saves)
         assert [(STACK - 4 * i, case.registers[reg]) for i, reg in enumerate(self.saves, 1)] == self.stack_writes
         assert cpu.mem_read(STACK - 48, 48 - 4 * len(self.saves)) == b'\xa5' * (48 - 4 * len(self.saves))
@@ -196,7 +201,7 @@ def decode(code):
 
 
 def branch(ins):
-    assert not ins.group(CS_GRP_CALL),'input prefix call'
+    if ins.group(CS_GRP_CALL):return None
     if ins.group(CS_GRP_JUMP):
         assert ins.operands[0].type==CS_OP_IMM and ins.imm_size in (1,4),'input branch form'
         return ins.operands[0].imm
@@ -220,12 +225,14 @@ def validate_layout(layout,original,natural):
     assert all(layout['DATA'][k]==v for k,v in MODEL_DATA.items()),'input DATA model bindings'
     old,new=decode(original),decode(natural);mapping={};owned=[];private=[]
     for row in layout['instructions']:
+        if row['original']>=START+boundary:continue
         off=row['original']-START;source=row['private'];size=row['size']
         assert off not in mapping and old[off].size==new[source].size==size,'input instruction map'
         mapping[off]=source;owned.extend(range(off,off+size));private.extend(range(source,source+size))
     assert owned==list(range(6,19))+list(range(26,boundary)),'input original partition'
-    assert sorted(private)==list(range(3,16))+list(range(26,boundary)),'input private partition'
-    normal={off:off-3 if off<19 else off for off in mapping}
+    assert sorted(private)==list(range(5,18))+list(range(28,boundary+2)),'input private partition'
+    assert not any(new[source].group(CS_GRP_CALL) for source in mapping.values()),'input prefix call'
+    normal={off:off-1 if off<19 else off+2 for off in mapping}
     assert len(layout['swaps'])==len({tuple(pair) for pair in layout['swaps']})==7,'input unique swap inventory'
     original_targets={branch(i) for i in old.values() if branch(i) is not None}
     private_targets={branch(i) for i in new.values() if branch(i) is not None}
@@ -234,13 +241,13 @@ def validate_layout(layout,original,natural):
         ar,aw,am=resources(a);br,bw,bm=resources(b)
         assert not (aw&(br|bw) or bw&ar),'input swap register/flag dependency'
         assert not am&bm,'input swap memory dependency'
-        normal[left],normal[right]=left+b.size,left
+        normal[left],normal[right]=left+b.size+2,left+2
         assert not {left,right}&original_targets,'input branch enters original swap'
         assert not {normal[left],normal[right]}&private_targets,'input branch enters private swap'
     assert mapping==normal,'input reorder map'
-    entries={source:off for off,source in mapping.items()};entries[boundary]=boundary
-    records={int(k):value for k,value in layout['branches'].items()}
-    assert set(records)=={off for off,ins in new.items() if branch(ins) is not None},'input complete branch set'
+    entries={source:off for off,source in mapping.items()};entries[boundary+2]=boundary
+    records={int(k):value for k,value in layout['branches'].items() if int(k)<boundary+2}
+    assert set(records)=={off for off,ins in new.items() if off<boundary+2 and branch(ins) is not None},'input complete branch set'
     for off,source in mapping.items():
         ref,chosen=old[off],new[source];code=bytearray(chosen.bytes)
         target=branch(chosen);ref_target=branch(ref)
@@ -257,16 +264,17 @@ def validate_layout(layout,original,natural):
         selected=natural[phase['begin']:phase['end']];instructions=decode(selected)
         for offset,ins in instructions.items():
             old_off=phase['address']-START+offset;new_off=phase['begin']+offset
+            if old_off>=boundary:continue
             assert old_off not in phase_map;phase_map[old_off]=new_off
             phase_original.extend(range(old_off,old_off+ins.size))
     assert phase_map==mapping and phase_original==owned,'input placement partition'
     assert original[:6]==bytes.fromhex('535152565755') and original[19:26]==bytes.fromhex('31c0a050360100'),'input retained entry/producer'
-    assert natural[:3]==bytes.fromhex('535152') and natural[boundary:]==bytes.fromhex('5a595bc3'),'input private frame/return'
-    assert natural[16:26]==bytes.fromhex('a05036010025ff000000'),'input alternate producer'
+    assert natural[:5]==bytes.fromhex('5351525657') and natural[-6:]==bytes.fromhex('5f5e5a595bc3'),'input private frame/return'
+    assert natural[18:28]==bytes.fromhex('a05036010025ff000000'),'input alternate producer'
     return old
 
 
-def bind_production(exe,build):
+def bind_production(exe,build,*,stop=699):
     layout=group.LAYOUT;pointers=read_le_fixups(exe)['pointers'];blob=(build/'inpsel.obj').read_bytes()
     original=exe[START+0x25600:START+0x25600+SIZE];output=bytearray(SIZE);covered=set();C_sites=0
     def install(address,code):
@@ -274,22 +282,22 @@ def bind_production(exe,build):
         assert region<=set(range(START,START+SIZE));covered.update(region)
         output[address-START:address-START+len(code)]=code
     for phase in layout['phases']:
-        fields={};code,data=v.bind_leaf_details(blob,phase['symbol'],layout['DATA'],address=phase['address'],functions={group.PUBLIC:START},code_bindings=fields)
+        fields={};code,data=v.bind_leaf_details(blob,phase['symbol'],layout['DATA'],address=phase['address'],functions=functions(),code_bindings=fields)
         assert not fields and code==original[phase['address']-START:phase['address']-START+len(code)]
         v.verify_leaf_relocations(code,data,pointers,phase['address'],code_bindings=fields)
         install(phase['address'],code);C_sites+=len(data)
-    assembly=(build/'asm/collect_input.bin').read_bytes();assert len(assembly)==2411
+    assembly=(build/'asm/collect_input.bin').read_bytes();assert len(assembly)==2280
     for row in layout['retained']:
         code=assembly[row['binary_offset']:row['binary_offset']+row['size']]
         assert code==original[row['address']-START:row['address']-START+row['size']]
         assert {site-row['address']:target for site,target in pointers.between(row['address'],row['address']+row['size'])}=={int(k):value for k,value in row['fixups'].items()}
         install(row['address'],code)
-    assert len(covered)==SIZE and output==original and C_sites==72
-    fields={};natural,data=v.bind_leaf_details(blob,group.PUBLIC,layout['DATA'],address=START,functions={group.PUBLIC:START},code_bindings=fields)
-    assert not fields and len(natural)==703 and len(data)==73
-    sites={site-START:target for site,target in pointers.between(START,START+699)}
-    assert len(sites)==73
-    return blob,bytes(original[:699]),bytes(output[:699]),natural,sites,{off:DATA_BASE+target for off,target in data.items()}
+    assert len(covered)==SIZE and output==original and C_sites==86
+    fields={};natural,data=v.bind_leaf_details(blob,group.PUBLIC,layout['DATA'],address=START,functions=functions(),code_bindings=fields)
+    assert not fields and len(natural)==1300 and len(data)==121
+    sites={site-START:target for site,target in pointers.between(START,START+stop)}
+    if stop==699:assert len(sites)==73
+    return blob,bytes(original[:stop]),bytes(output[:stop]),natural,sites,{off:DATA_BASE+target for off,target in data.items()}
 
 
 def context_controls(blob):
@@ -297,7 +305,7 @@ def context_controls(blob):
     from check_encounter_actor import rewrite_fixup
     from check_ripple_control import rename_external
     phase=group.LAYOUT['phases'][0];controls=[]
-    def bind(b):return v.bind_leaf_details(b,phase['symbol'],group.LAYOUT['DATA'],address=phase['address'],functions={group.PUBLIC:START},code_bindings={})
+    def bind(b):return v.bind_leaf_details(b,phase['symbol'],group.LAYOUT['DATA'],address=phase['address'],functions=functions(),code_bindings={})
     def reject(label,b,expected):
         try:bind(b)
         except ValueError as error:assert expected in str(error),str(error)
@@ -305,12 +313,12 @@ def context_controls(blob):
         controls.append(label)
     unchanged,changed=rewrite_fixup(blob,lambda f:False,lambda f:f)
     assert not changed and bind(unchanged)==bind(blob)
-    for label,off in [('private_save',0),('excluded_index_producer',16),('excluded_return',702)]:
+    for label,off in [('private_save',0),('excluded_index_producer',18),('excluded_return',1299)]:
         reject(label,mutate_public_byte(blob,group.PUBLIC,off),'complete context digest')
-    _,_,names,_,fixups=v.parsed_leaf_object(blob);excluded=next(f for f in fixups if f.offset==17)
+    _,_,names,_,fixups=v.parsed_leaf_object(blob);excluded=next(f for f in fixups if f.offset==19)
     other=next(n for n in range(1,len(names)) if n!=excluded.target[1])
     for label,change in [('excluded_DATA_target',lambda f:replace(f,target=(2,other))),('frame',lambda f:replace(f,frame=(1,1))),('displacement',lambda f:replace(f,displacement=1)),('relative_DATA',lambda f:replace(f,relative=True))]:
-        bad,changed=rewrite_fixup(blob,lambda f:f.offset==17,change);assert changed
+        bad,changed=rewrite_fixup(blob,lambda f:f.offset==19,change);assert changed
         reject(label,bad,'fixup records')
     reject('excluded_external_name',rename_external(blob,b'_key_toggle_mode',b'_key_toggle_modx'),'structural OMF metadata')
     for label,index,value,expected in [('PUBDEF_group',0,1,'structural OMF metadata'),('moved_public',2,1,'public layout')]:
@@ -323,7 +331,7 @@ def context_controls(blob):
         bad[site]=value;bad[end-1]=(-sum(bad[cursor:end-1]))&255
         reject(label,bytes(bad),expected)
     saved=group.CONTEXT_SHA256;leaf=v.LEAF_CONTEXT_SHA256.pop(group.PUBLIC);group.CONTEXT_SHA256=None
-    try:reject('excluded_addend_without_digests',mutate_public_byte(blob,group.PUBLIC,17),'fixup addends')
+    try:reject('excluded_addend_without_digests',mutate_public_byte(blob,group.PUBLIC,19),'fixup addends')
     finally:group.CONTEXT_SHA256=saved;v.LEAF_CONTEXT_SHA256[group.PUBLIC]=leaf
     return controls
 
@@ -336,7 +344,7 @@ def main():
     rows=validate_layout(group.LAYOUT,original,private)
     orig=Replay(relocated(original,sites),('ebx','ecx','edx','esi','edi','ebp'))
     production=Replay(relocated(placed,sites),orig.saves)
-    natural=Replay(relocated(private,private_sites),('ebx','ecx','edx'),private=True)
+    natural=Replay(relocated(private,private_sites),('ebx','ecx','edx','esi','edi'),private=True)
     outcomes={off:set() for off,ins in rows.items() if off<STOP and branch(ins) is not None};all_cases=list(cases())
     for case in all_cases:
         expected=orig.run(case);actual=production.run(case);compiled=natural.run(case)
@@ -354,11 +362,11 @@ def main():
         except (AssertionError,ValueError,KeyError):controls.append(label)
         else:raise AssertionError('Input mutation escaped: '+label)
     for label,change in [
-        ('missing_branch',lambda l:l['branches'].pop('10')),
-        ('wrong_branch_target',lambda l:l['branches']['10'].__setitem__(2,50)),
+        ('missing_branch',lambda l:l['branches'].pop('12')),
+        ('wrong_branch_target',lambda l:l['branches']['12'].__setitem__(2,50)),
         ('missing_swap',lambda l:l['swaps'].pop()),
         ('duplicate_swap',lambda l:l['swaps'].append(l['swaps'][0])),
-        ('omitted_instruction',lambda l:l['instructions'].pop()),
+        ('omitted_instruction',lambda l:l['instructions'].pop(0)),
         ('partial_phase',lambda l:l['phases'][0].update(end=15)),
         ('wrong_placement',lambda l:l['phases'][0].update(address=START+7))]:
         changed=deepcopy(group.LAYOUT);change(changed);reject(label,lambda:validate_layout(changed,original,private))
@@ -380,7 +388,7 @@ def main():
     bad=bytearray(placed);bad[toggle.address+toggle.size-1]=2;replay=Replay(relocated(bytes(bad),sites),orig.saves);case=sample({255:1})
     def run_bad_toggle():assert replay.run(case)[:2]==model(case)
     reject('toggle_mask',run_bad_toggle)
-    first_phase=group.LAYOUT['phases'][0];code,data=v.bind_leaf_details(blob,first_phase['symbol'],group.LAYOUT['DATA'],address=first_phase['address'],functions={group.PUBLIC:START},code_bindings={})
+    first_phase=group.LAYOUT['phases'][0];code,data=v.bind_leaf_details(blob,first_phase['symbol'],group.LAYOUT['DATA'],address=first_phase['address'],functions=functions(),code_bindings={})
     pointers=read_le_fixups(exe)['pointers']
     try:v.verify_leaf_relocations(code,data,pointers,first_phase['address'],code_bindings=data)
     except ValueError as error:
@@ -388,7 +396,7 @@ def main():
         controls.append('DATA_as_CODE')
     else:raise AssertionError('Input DATA-as-CODE mutation escaped')
     report=dict(status='PASS',placed_c_bytes=398,DATA_sites=42,branches=24,cases=len(all_cases),branch_outcomes={hex(START+k):sorted(v) for k,v in outcomes.items()},code_metadata_controls=controls,context_controls=context_controls(blob),
-        scope='Independent stable-memory model for one-shot toggle and ordered selection eligibility. Original and placed prefixes retain six saves; the private prefix retains three and stops at keyboard-motion entry. All ordered writes, key bytes, mode/selection, entry EAX, exit GPRs, guarded frames and defined EFLAGS mask0x8c5 agree. No keyboard/mouse continuation, interrupt interleavings or full collect_input C claim.')
+        scope='Independent stable-memory model for one-shot toggle and ordered selection eligibility. Original and placed prefixes retain six saves; the private prefix retains five and stops at keyboard-motion entry. All ordered writes, key bytes, mode/selection, entry EAX, exit GPRs, guarded frames and defined EFLAGS mask0x8c5 agree. No keyboard/mouse continuation, interrupt interleavings or full collect_input C claim.')
     args.output.write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))
 
 

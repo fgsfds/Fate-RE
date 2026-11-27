@@ -198,23 +198,32 @@ words remain unchanged. Evidence: `work/board-slot-lifetime-nov27/REPORT.md`,
 `work/destination-offset-nov27/REPORT.md`, and
 `work/actor-eax-nov27/REPORT.md`.
 
-### `collect_input_`: toggle-index producer
+### `collect_input_`: forward-button predicate and register allocation
 
-One Watcom 10.5 `/4r /s /or /bt=dos` context supplies the 398-byte mode-toggle
-and selection prefix, with 42 DATA sites, 24 branches and six proven adjacent
-instruction swaps. The original six saves and the seven-byte producer at
-`0x2d52d` remain assembly. Watcom emits MOV AL,[key_toggle_mode]; AND EAX,0xff
-instead of XOR EAX,EAX; MOV AL,[key_toggle_mode], in a 703-byte private context.
-The 1,096-case stable-memory model checks both producers' full EAX bridge into
-the consumer at `0x2d534`, all branch outcomes and representative signed/unsigned
-values. The keyboard extension adds 288 native bytes and 30 DATA sites;
-3,762 cases cover wrapping motion and ordered toggle/reset consumption.
-The 703-byte context supplies 686 bytes through poll_mouse, leaving 2,411
-assembly bytes. Keep the producer bridge while extending into mouse polling.
-A separate producer probe could stage an actual full-width EAX zero
-before a defined union low-byte update; do not substitute a false zero getter.
-Evidence: `work/input-selection-nov27/NOTES.md` and
-`work/keyboard-motion-nov27/NOTES.md`.
+Watcom 10.5 `/4r /s /or /bt=dos` now supplies 817 native bytes in one
+1,300-byte private context: the existing 686 selection/keyboard bytes plus
+44 polling/scaling bytes, 39 backward-key/clamp bytes and 48 strafe-decay
+bytes. All 86 DATA sites, two relative CODE calls and 42 selected branches
+match after the existing seven independent swaps. Original six saves and
+toggle-index producer remain assembly; 2,280 assembly bytes remain.
+
+A broad context reused a function-wide temporary across calls and spilled
+it even in earlier matched blocks. Distinct operation-scoped locals removed
+the spills and preserved all prior C coverage. The initial EBP parameter/result
+auxiliary failed with documented E1122 and was not qualified. The earliest
+remaining extension mismatch is the active-button predicate: the original
+clears AH, masks AL and applies CWDE; C masks AL then EAX with 0xff. Next
+isolate a real low-byte-to-signed-AX conversion using the documented word
+conversion idiom. The left-strafe limit uses EDX instead of EBP; other
+decay/packing blocks also allocate different registers. Keep natural EBP
+allocation; do not retry illegal EBP pragma parameters/results.
+
+The older toggle-index mismatch still uses MOV AL then AND EAX,0xff instead
+of XOR EAX then MOV AL. Keep its verified producer bridge. Independent
+models cover 1,096 selection cases, 3,762 keyboard cases and 5,766 post-poll
+cases with complementary register poisons. BIOS polling/scaling are stubbed.
+Evidence: `work/input-mouse-nov27/NOTES.md`, its `scoped` artifacts, and
+`work/input-mouse-oracle-nov27/original-report.json`.
 
 ### Video prompt-mode blocker
 

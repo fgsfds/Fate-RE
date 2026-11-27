@@ -5237,6 +5237,12 @@ for _actor_layout in BOARD_ACTOR_PLACEMENT_LAYOUTS:
 
 from bind_input_selection import LAYOUT as INPUT_SELECTION_LAYOUT
 _input_context = INPUT_SELECTION_LAYOUT['context']; _input_public = _input_context['public']
+for _name, _address in INPUT_SELECTION_LAYOUT['CODE'].items():
+    if _name not in LEAVES or LEAVES[_name][0]-0x25600 != _address:
+        raise ValueError('Input call target differs from restored routine: '+_name)
+    if _name in FUNCTION_ADDRESSES and FUNCTION_ADDRESSES[_name] != _address:
+        raise ValueError('Conflicting input call target: '+_name)
+    FUNCTION_ADDRESSES[_name] = _address
 for _name, _offset in INPUT_SELECTION_LAYOUT['DATA'].items():
     if _name in DATA_OFFSETS and DATA_OFFSETS[_name] != _offset:
         raise ValueError('Conflicting input selection DATA binding: '+_name)

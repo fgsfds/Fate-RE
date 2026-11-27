@@ -682,3 +682,11 @@ preserves x86 wrap at extreme loaded state, including INT_MIN limits. Key
 consumption may alias later configurable keys: model and execute each clear
 before the next lookup. Only commute fixed DATA loads after checking register,
 flags, memory and branch-entry independence in both instruction streams.
+
+Watcom may assign one storage location to a repeatedly reused C temporary.
+Extending a routine across calls can therefore spill even previously matched
+blocks. Distinct locals scoped to complete operations removed those spills in
+the input collector: the private context shrank from 1,415 to 1,300 bytes and
+retained all 686 earlier selected bytes while adding 131. Recheck the complete
+context and old slices after this change. Explicit EBP parameter/result pragmas
+are rejected by 10.5 with E1122; leave EBP allocation to the compiler.
