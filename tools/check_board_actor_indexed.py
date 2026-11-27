@@ -152,19 +152,25 @@ def context_controls(blob, layout):
     return controls
 
 
-def main(destinations=False, values=False):
-    assert not (destinations and values)
-    destinations = destinations or values
-    expected_setups = 6 if values else 8
+def main(destinations=False, values=False, clobbers=False):
+    assert sum((destinations,values,clobbers)) <= 1
+    mode = 'clobbers' if clobbers else 'values' if values else 'destinations' if destinations else 'indexed'
+    layout,count,context_size,placed_bytes,DATA_sites,expected_setups = {
+        'indexed': (group.INDEXED_LAYOUT,281,30235,4271,318,0),
+        'destinations': (group.DESTINATION_LAYOUT,18,31119,250,18,8),
+        'values': (group.VALUE_LAYOUT,27,31347,368,27,6),
+        'clobbers': (group.CLOBBER_LAYOUT,6,31425,87,6,1),
+    }[mode]
+    destinations = mode != 'indexed'
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--exe',type=Path,required=True); parser.add_argument('--build',type=Path,required=True); parser.add_argument('--output',type=Path,required=True)
     args = parser.parse_args(); exe = args.exe.read_bytes(); assert hashlib.sha256(exe).hexdigest() == TARGET_SHA256
-    layout = group.VALUE_LAYOUT if values else group.DESTINATION_LAYOUT if destinations else group.INDEXED_LAYOUT; validate_operations(layout)
-    operations = layout['operations']; assert len(operations) == (27 if values else 18 if destinations else 281)
+    validate_operations(layout)
+    operations = layout['operations']; assert len(operations) == count
     original = image(exe); _,body,_ = base.bind_production(exe,args.build)
     blob = (args.build/(layout['context']['object']+'.obj')).read_bytes(); bindings = {k:DS+n for k,n in v.DATA_OFFSETS.items()}; fields = {}
     natural,data = v.bind_leaf_details(blob,layout['context']['public'],bindings,address=0x50000,code_bindings=fields)
-    assert not fields and len(natural) == (31347 if values else 31119 if destinations else 30235) and len(data) == 2579
+    assert not fields and len(natural) == context_size and len(data) == 2579
     if destinations: validate_destination_instructions(layout,original,natural,expected_setups)
     begin = group.LAYOUT['original_address']; cases = 0
     seed_registers = base.seed(original,0)[1]
@@ -268,13 +274,13 @@ def main(destinations=False, values=False):
         else: raise AssertionError('Metadata mutation escaped: '+label)
         metadata_controls.append(label)
     operation = deepcopy(next(o for o in operations if o['live_in_bitmasks'].get('eax',0) & o['live_in_values'].get('eax',0) & 1))
-    if not values: assert operation['original_start'] == (0x20c5a if destinations else 0x2204e)
+    if mode in ('indexed','destinations'): assert operation['original_start'] == (0x20c5a if destinations else 0x2204e)
     operation['live_in_bitmasks']['eax'] &= ~1; operation['live_in_values']['eax'] &= ~1
     memory,_ = base.seed(original,7); registers = tuple(r ^ 0xffffffff for r in seed_registers)
     address = operation['original_start']; code = body[address-begin:operation['original_end']-begin]
     actual = base.execute(memory,live(registers,operation),0x202,code,address)
     assert actual[0] != model(memory,operation)[0]; metadata_controls.append('omitted_AX_bit')
-    report = dict(status='PASS',placed_c_bytes=368 if values else 250 if destinations else 4271,DATA_sites=27 if values else 18 if destinations else 318,operations=len(operations),runs=len(layout['phases']),operation_cases=cases,whole_cases=whole,private_register_difference_cases=register_differences,private_flag_difference_cases=flag_differences,context_controls=context_controls(blob,layout),code_controls=code_controls,scope='Independent typed field/slot/width/value models with poisoned unused register bits; original and placed operation DATA/write traces/registers/flags agree. Five whole original/placed runs preserve 3079 ordered writes and all selected entry contracts. Whole private C checks final DATA, write multiset, saved registers and the same masked entries; private raw EAX/flags and full store-order equivalence are not required. No whole-routine byte-exact C claim.')
+    report = dict(status='PASS',placed_c_bytes=placed_bytes,DATA_sites=DATA_sites,operations=len(operations),runs=len(layout['phases']),operation_cases=cases,whole_cases=whole,private_register_difference_cases=register_differences,private_flag_difference_cases=flag_differences,context_controls=context_controls(blob,layout),code_controls=code_controls,scope='Independent typed field/slot/width/value models with poisoned unused register bits; original and placed operation DATA/write traces/registers/flags agree. Five whole original/placed runs preserve 3079 ordered writes and all selected entry contracts. Whole private C checks final DATA, write multiset, saved registers and the same masked entries; private raw EAX/flags and full store-order equivalence are not required. No whole-routine byte-exact C claim.')
     report['metadata_controls'] = metadata_controls
     args.output.write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8'); print(json.dumps(report))
 

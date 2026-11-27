@@ -1,4 +1,10 @@
 /* Startup configuration for the actor slots of every board. */
+#ifdef ACTOR_CLOBBER_CONTEXT
+#define ACTOR_DESTINATION_CONTEXT 1
+#define ACTOR_DESTINATION_VALUES 1
+#define ACTOR_DESTINATION_CLOBBERS 1
+#endif
+
 enum { ACTOR_SLOTS = 501, ACTOR_DISABLED = -1 };
 
 typedef struct {
@@ -55,9 +61,17 @@ extern long actor_destination_zero_in_ebx(long);
 #pragma aux actor_destination_zero_in_ebx = "" parm [ebx] value [ebx] modify exact [];
 #ifdef ACTOR_DESTINATION_VALUES
 extern long actor_destination_value_in_esi(long);
+#ifdef ACTOR_DESTINATION_CLOBBERS
+#pragma aux actor_destination_value_in_esi = "" parm [esi] value [esi] modify exact [esi];
+#else
 #pragma aux actor_destination_value_in_esi = "" parm [esi] value [esi] modify exact [];
+#endif
 extern long actor_destination_value_in_edi(long);
+#ifdef ACTOR_DESTINATION_CLOBBERS
+#pragma aux actor_destination_value_in_edi = "" parm [edi] value [edi] modify exact [edi];
+#else
 #pragma aux actor_destination_value_in_edi = "" parm [edi] value [edi] modify exact [];
+#endif
 extern long actor_destination_value_in_eax(long);
 #pragma aux actor_destination_value_in_eax = "" parm [eax] value [eax] modify exact [];
 #endif
@@ -69,15 +83,24 @@ extern long actor_destination_offset_in_edx(long);
     (*(ActorDestination *)((char *)&startup_actor_destinations + (offset)))
 
 #ifdef ACTOR_DESTINATION_VALUES
+#ifdef ACTOR_DESTINATION_CLOBBERS
+void board_actor_clobber_context(void);
+#pragma aux board_actor_clobber_context modify exact [eax];
+#else
 void board_actor_value_context(void);
 #pragma aux board_actor_value_context modify exact [eax];
+#endif
 #else
 void board_actor_destination_context(void);
 #pragma aux board_actor_destination_context modify exact [eax];
 #endif
 
 #ifdef ACTOR_DESTINATION_VALUES
+#ifdef ACTOR_DESTINATION_CLOBBERS
+void board_actor_clobber_context(void)
+#else
 void board_actor_value_context(void)
+#endif
 #else
 void board_actor_destination_context(void)
 #endif

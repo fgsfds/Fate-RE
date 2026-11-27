@@ -5205,7 +5205,7 @@ for _phase in WEAPON_ANIMATION_LAYOUT['phases']:
     LEAVES[_phase['symbol']] = (_phase['address']+0x25600, _phase['end']-_phase['begin'])
     LEAF_CODE_SLICES[_phase['symbol']] = (_phase['public'], _phase['begin'], _phase['end'], _weapon_context['size'])
 
-from bind_board_actor import LAYOUT as BOARD_ACTOR_LAYOUT, INDEXED_LAYOUT as BOARD_ACTOR_INDEXED_LAYOUT, DESTINATION_LAYOUT as BOARD_ACTOR_DESTINATION_LAYOUT, CONFIGURATION_LAYOUTS as BOARD_ACTOR_CONFIGURATION_LAYOUTS
+from bind_board_actor import LAYOUT as BOARD_ACTOR_LAYOUT, INDEXED_LAYOUT as BOARD_ACTOR_INDEXED_LAYOUT, DESTINATION_LAYOUT as BOARD_ACTOR_DESTINATION_LAYOUT, CONFIGURATION_LAYOUTS as BOARD_ACTOR_CONFIGURATION_LAYOUTS, PLACEMENT_LAYOUTS as BOARD_ACTOR_PLACEMENT_LAYOUTS
 for _name, _offset in BOARD_ACTOR_LAYOUT['DATA'].items():
     if _name in DATA_OFFSETS and DATA_OFFSETS[_name] != _offset:
         raise ValueError('Conflicting board actor DATA binding: '+_name)
@@ -5218,7 +5218,7 @@ for _phase in BOARD_ACTOR_LAYOUT['phases']:
     LEAF_CONTEXT_RECORDS[_public] = BOARD_ACTOR_LAYOUT['records']
     LEAF_CONTEXT_FIXUPS[_public] = {int(k): tuple(v) for k,v in _phase['fixups'].items()}
 
-for _actor_layout in BOARD_ACTOR_CONFIGURATION_LAYOUTS:
+for _actor_layout in BOARD_ACTOR_PLACEMENT_LAYOUTS:
     _actor_context = _actor_layout['context']; _actor_public = _actor_context['public']
     for _name, _offset in _actor_layout['DATA'].items():
         if _name in DATA_OFFSETS and DATA_OFFSETS[_name] != _offset:

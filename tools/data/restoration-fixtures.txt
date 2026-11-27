@@ -166,8 +166,10 @@ check_save_slot_open --exe {exe} --build {build} --output {build}/save-slot-open
 check_save_players_finish --exe {exe} --build {build} --output {build}/save-players-finish.json | svoread svfinish crushio
 check_encounter_actor --exe {exe} --build {build} --output {build}/encounter-actor.json | enclatch actreset
 check_weapon_animation --exe {exe} --build {build} --output {build}/weapon-animation.json | wanim wanstate wanxfer
-check_board_actor_groups --exe {exe} --build {build} --output {build}/board-actor-groups.json | actorcfg actsetup actdest actvalue actdisab
-check_board_actor_indexed --exe {exe} --build {build} --output {build}/board-actor-indexed.json | actorcfg actsetup actdest actvalue actdisab
-check_board_actor_destinations --exe {exe} --build {build} --output {build}/board-actor-destinations.json | actorcfg actsetup actdest actvalue actdisab
-check_board_actor_values --exe {exe} --build {build} --output {build}/board-actor-values.json | actorcfg actsetup actdest actvalue actdisab
-check_board_actor_disable --exe {exe} --build {build} --output {build}/board-actor-disable.json | actorcfg actsetup actdest actvalue actdisab
+check_board_actor_groups --exe {exe} --build {build} --output {build}/board-actor-groups.json | actorcfg actsetup actdest actvalue actdisab actclob
+check_board_actor_indexed --exe {exe} --build {build} --output {build}/board-actor-indexed.json | actorcfg actsetup actdest actvalue actdisab actclob
+check_board_actor_destinations --exe {exe} --build {build} --output {build}/board-actor-destinations.json | actorcfg actsetup actdest actvalue actdisab actclob
+check_board_actor_values --exe {exe} --build {build} --output {build}/board-actor-values.json | actorcfg actsetup actdest actvalue actdisab actclob
+check_board_actor_disable --exe {exe} --build {build} --output {build}/board-actor-disable.json | actorcfg actsetup actdest actvalue actdisab actclob
+check_board_actor_clobbers --exe {exe} --build {build} --output {build}/board-actor-clobbers.json | actorcfg actsetup actdest actvalue actdisab actclob
+check_board_actor_fragments --exe {exe} --build {build} --output {build}/board-actor-fragments.json | actorcfg actsetup actdest actvalue actdisab actclob

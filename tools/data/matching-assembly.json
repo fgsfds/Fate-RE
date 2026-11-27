@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 595,
-  "unique_code_bytes": 214863,
-  "le_pointers": 11520,
+  "routines": 603,
+  "unique_code_bytes": 214748,
+  "le_pointers": 11512,
   "non_routine_code_spans": [
     {
       "symbol": "capture_after_open",
@@ -7753,16 +7753,64 @@
       "symbol": "board_actor_retained_4",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
-      "sha256": "bf75d1b243087b5391c0d0346607d930c3f7604d737c252df1e4a30a058f5eea",
-      "bytes": 980,
+      "sha256": "8a222dccc794dc246477529622265050db6cf6c98af1de2d646d5476929a5188",
+      "bytes": 280,
       "raw_offset": "0x46283",
       "loaded_address": "0x20c83",
       "public_entry": "0x20c83",
       "binary_offset": 8900,
-      "le_pointers": 64
+      "le_pointers": 18
     },
     {
       "symbol": "board_actor_retained_5",
+      "source": "src/fate/board_actor_initialization.asm",
+      "binary": "board_actor_initialization.bin",
+      "sha256": "3b6d5fe81bdde07e3e33d93f06dac6aeace6cc45d50b4bbfe104af542e33bb68",
+      "bytes": 14,
+      "raw_offset": "0x463a9",
+      "loaded_address": "0x20da9",
+      "public_entry": "0x20da9",
+      "binary_offset": 9180,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "board_actor_retained_6",
+      "source": "src/fate/board_actor_initialization.asm",
+      "binary": "board_actor_initialization.bin",
+      "sha256": "efdc50bcddfeff71520a380e5c31df6a18e97b909a5b0d1b9d301ca686c5c915",
+      "bytes": 289,
+      "raw_offset": "0x463c5",
+      "loaded_address": "0x20dc5",
+      "public_entry": "0x20dc5",
+      "binary_offset": 9194,
+      "le_pointers": 19
+    },
+    {
+      "symbol": "board_actor_retained_7",
+      "source": "src/fate/board_actor_initialization.asm",
+      "binary": "board_actor_initialization.bin",
+      "sha256": "e4a89553bbb9ac662a912fbabeff2119c93eaf71e5795480b981ae176f3c62f8",
+      "bytes": 26,
+      "raw_offset": "0x464f4",
+      "loaded_address": "0x20ef4",
+      "public_entry": "0x20ef4",
+      "binary_offset": 9483,
+      "le_pointers": 2
+    },
+    {
+      "symbol": "board_actor_retained_8",
+      "source": "src/fate/board_actor_initialization.asm",
+      "binary": "board_actor_initialization.bin",
+      "sha256": "b0fd95eb9040e49533d1c4fa47f5ea3f1a5c6faad080f3d59a7361a9ee5712b2",
+      "bytes": 312,
+      "raw_offset": "0x4651f",
+      "loaded_address": "0x20f1f",
+      "public_entry": "0x20f1f",
+      "binary_offset": 9509,
+      "le_pointers": 20
+    },
+    {
+      "symbol": "board_actor_retained_9",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "4b73943142457f7843c70fdcec9986abf758408ed7f0c6168636ca098f0fcbe5",
@@ -7770,11 +7818,11 @@
       "raw_offset": "0x46674",
       "loaded_address": "0x21074",
       "public_entry": "0x21074",
-      "binary_offset": 9880,
+      "binary_offset": 9821,
       "le_pointers": 85
     },
     {
-      "symbol": "board_actor_retained_6",
+      "symbol": "board_actor_retained_10",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "89e2aaf78ca89840438642bc01398e1ae430d5c1b0bce9877e28642d915c7a46",
@@ -7782,23 +7830,47 @@
       "raw_offset": "0x46bba",
       "loaded_address": "0x215ba",
       "public_entry": "0x215ba",
-      "binary_offset": 11175,
+      "binary_offset": 11116,
       "le_pointers": 42
     },
     {
-      "symbol": "board_actor_retained_7",
+      "symbol": "board_actor_retained_11",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
-      "sha256": "a3ce461f4938d01f5793c8cf08e584fc06efcf3650ff0d645155be338ca46f53",
-      "bytes": 1905,
+      "sha256": "03e968be311bca2b3b8aa27b0c2dfb11760983499adce64ae4bbb16fa36b736f",
+      "bytes": 269,
       "raw_offset": "0x46e5d",
       "loaded_address": "0x2185d",
       "public_entry": "0x2185d",
-      "binary_offset": 11809,
-      "le_pointers": 128
+      "binary_offset": 11750,
+      "le_pointers": 18
     },
     {
-      "symbol": "board_actor_retained_8",
+      "symbol": "board_actor_retained_12",
+      "source": "src/fate/board_actor_initialization.asm",
+      "binary": "board_actor_initialization.bin",
+      "sha256": "8ddf9e9b02163244f96f979da1f3257b1b7db0fe7fd3a96b7f7b8cbb09d24c46",
+      "bytes": 307,
+      "raw_offset": "0x46f78",
+      "loaded_address": "0x21978",
+      "public_entry": "0x21978",
+      "binary_offset": 12019,
+      "le_pointers": 21
+    },
+    {
+      "symbol": "board_actor_retained_13",
+      "source": "src/fate/board_actor_initialization.asm",
+      "binary": "board_actor_initialization.bin",
+      "sha256": "0c1e6b0550b6e0906ee1b7f03bad1a0bf22c4062de1944928f0e1d0f35d37ec6",
+      "bytes": 1301,
+      "raw_offset": "0x470b9",
+      "loaded_address": "0x21ab9",
+      "public_entry": "0x21ab9",
+      "binary_offset": 12326,
+      "le_pointers": 87
+    },
+    {
+      "symbol": "board_actor_retained_14",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "8b8ab9c60abbb97686df3566c83183f12c822c00f590b0805d5aae4789668c62",
@@ -7806,11 +7878,11 @@
       "raw_offset": "0x475e6",
       "loaded_address": "0x21fe6",
       "public_entry": "0x21fe6",
-      "binary_offset": 13714,
+      "binary_offset": 13627,
       "le_pointers": 1
     },
     {
-      "symbol": "board_actor_retained_9",
+      "symbol": "board_actor_retained_15",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "ff3aba233d3a6e72e83456af8b2e9736d1dffb469c8e17452ad7a7855d9cfbe8",
@@ -7818,11 +7890,11 @@
       "raw_offset": "0x47603",
       "loaded_address": "0x22003",
       "public_entry": "0x22003",
-      "binary_offset": 13726,
+      "binary_offset": 13639,
       "le_pointers": 5
     },
     {
-      "symbol": "board_actor_retained_10",
+      "symbol": "board_actor_retained_16",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "1f740c1d18c5e096d2ffb16c475ea04629eb4a6460496c80457545f07e5e200e",
@@ -7830,11 +7902,11 @@
       "raw_offset": "0x47665",
       "loaded_address": "0x22065",
       "public_entry": "0x22065",
-      "binary_offset": 13801,
+      "binary_offset": 13714,
       "le_pointers": 1
     },
     {
-      "symbol": "board_actor_retained_11",
+      "symbol": "board_actor_retained_17",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "9d736c897d935e9f961a83a31ba90cb340f70593ebb2caab7c1d0b5b103c739f",
@@ -7842,11 +7914,11 @@
       "raw_offset": "0x47690",
       "loaded_address": "0x22090",
       "public_entry": "0x22090",
-      "binary_offset": 13811,
+      "binary_offset": 13724,
       "le_pointers": 6
     },
     {
-      "symbol": "board_actor_retained_12",
+      "symbol": "board_actor_retained_18",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "8e8369ab2efb8b851695407820cb4cfbda2ceee26b54fdcd84ef4312ee086d01",
@@ -7854,11 +7926,11 @@
       "raw_offset": "0x4770e",
       "loaded_address": "0x2210e",
       "public_entry": "0x2210e",
-      "binary_offset": 13924,
+      "binary_offset": 13837,
       "le_pointers": 6
     },
     {
-      "symbol": "board_actor_retained_13",
+      "symbol": "board_actor_retained_19",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "54c18af1f061023dbfd468ebeac1a03bab4c2d8d049a7c68fefb8a758b131a33",
@@ -7866,11 +7938,11 @@
       "raw_offset": "0x47785",
       "loaded_address": "0x22185",
       "public_entry": "0x22185",
-      "binary_offset": 14004,
+      "binary_offset": 13917,
       "le_pointers": 13
     },
     {
-      "symbol": "board_actor_retained_14",
+      "symbol": "board_actor_retained_20",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "2145553e23c69eb7afdcbdcca2b602e710c1c2278615d658074162e108a7652d",
@@ -7878,11 +7950,11 @@
       "raw_offset": "0x4785b",
       "loaded_address": "0x2225b",
       "public_entry": "0x2225b",
-      "binary_offset": 14205,
+      "binary_offset": 14118,
       "le_pointers": 6
     },
     {
-      "symbol": "board_actor_retained_15",
+      "symbol": "board_actor_retained_21",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "a121b199f80c8772ed787f806bdc5b6527553d697787531eb0ad009a9ee8d54f",
@@ -7890,11 +7962,11 @@
       "raw_offset": "0x4791f",
       "loaded_address": "0x2231f",
       "public_entry": "0x2231f",
-      "binary_offset": 14280,
+      "binary_offset": 14193,
       "le_pointers": 6
     },
     {
-      "symbol": "board_actor_retained_16",
+      "symbol": "board_actor_retained_22",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "4952677c56f998f00c8f5f2a4e9c0870e41c626f0fc130e4564421194223bd1d",
@@ -7902,11 +7974,11 @@
       "raw_offset": "0x4799d",
       "loaded_address": "0x2239d",
       "public_entry": "0x2239d",
-      "binary_offset": 14393,
+      "binary_offset": 14306,
       "le_pointers": 1
     },
     {
-      "symbol": "board_actor_retained_17",
+      "symbol": "board_actor_retained_23",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "5866b887399768a72cb765f7e5f6cffd1c52581848b0753f9d5446a3e6d7dd37",
@@ -7914,11 +7986,11 @@
       "raw_offset": "0x479d4",
       "loaded_address": "0x223d4",
       "public_entry": "0x223d4",
-      "binary_offset": 14407,
+      "binary_offset": 14320,
       "le_pointers": 2
     },
     {
-      "symbol": "board_actor_retained_18",
+      "symbol": "board_actor_retained_24",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "279f9434072dbf13287ada576f47c271cd7c3d8e8d51911a3eac956b8193be6c",
@@ -7926,11 +7998,11 @@
       "raw_offset": "0x47a38",
       "loaded_address": "0x22438",
       "public_entry": "0x22438",
-      "binary_offset": 14432,
+      "binary_offset": 14345,
       "le_pointers": 17
     },
     {
-      "symbol": "board_actor_retained_19",
+      "symbol": "board_actor_retained_25",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "e50ca5ad86d64851b4d12b187e5700ae7284bc70aad1429079bf4597d2f9f358",
@@ -7938,11 +8010,11 @@
       "raw_offset": "0x47bb4",
       "loaded_address": "0x225b4",
       "public_entry": "0x225b4",
-      "binary_offset": 14692,
+      "binary_offset": 14605,
       "le_pointers": 32
     },
     {
-      "symbol": "board_actor_retained_20",
+      "symbol": "board_actor_retained_26",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "3b72fd15f6031b607c7a20f1519bed6661d2a42e577765dc44631f11787849a3",
@@ -7950,11 +8022,11 @@
       "raw_offset": "0x47dd7",
       "loaded_address": "0x227d7",
       "public_entry": "0x227d7",
-      "binary_offset": 15217,
+      "binary_offset": 15130,
       "le_pointers": 2
     },
     {
-      "symbol": "board_actor_retained_21",
+      "symbol": "board_actor_retained_27",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "6c275ff344309086e4654ba710d9f9098a84c92ceedfde78b6d1fe09174da479",
@@ -7962,11 +8034,11 @@
       "raw_offset": "0x47e64",
       "loaded_address": "0x22864",
       "public_entry": "0x22864",
-      "binary_offset": 15237,
+      "binary_offset": 15150,
       "le_pointers": 7
     },
     {
-      "symbol": "board_actor_retained_22",
+      "symbol": "board_actor_retained_28",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "9fba1e3fc58baa89d735d8f4f7fbac7c0b5124c3854947e6d7c14313519bfb84",
@@ -7974,11 +8046,11 @@
       "raw_offset": "0x47ef0",
       "loaded_address": "0x228f0",
       "public_entry": "0x228f0",
-      "binary_offset": 15365,
+      "binary_offset": 15278,
       "le_pointers": 5
     },
     {
-      "symbol": "board_actor_retained_23",
+      "symbol": "board_actor_retained_29",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "63b3e7417cac6b07ea218d24ae41fb19dedca2188e764e9f1beb185b0a91a853",
@@ -7986,11 +8058,11 @@
       "raw_offset": "0x47fa9",
       "loaded_address": "0x229a9",
       "public_entry": "0x229a9",
-      "binary_offset": 15443,
+      "binary_offset": 15356,
       "le_pointers": 11
     },
     {
-      "symbol": "board_actor_retained_24",
+      "symbol": "board_actor_retained_30",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "970d508768b55949bc43e43672ae75d3050cd8d743e5142cf8c8975b9c08b4bb",
@@ -7998,11 +8070,11 @@
       "raw_offset": "0x48074",
       "loaded_address": "0x22a74",
       "public_entry": "0x22a74",
-      "binary_offset": 15629,
+      "binary_offset": 15542,
       "le_pointers": 4
     },
     {
-      "symbol": "board_actor_retained_25",
+      "symbol": "board_actor_retained_31",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "26506f5aaa0b595046effb4e92ad11ac9ff99deba9f505875995e8cb06783250",
@@ -8010,11 +8082,11 @@
       "raw_offset": "0x48100",
       "loaded_address": "0x22b00",
       "public_entry": "0x22b00",
-      "binary_offset": 15691,
+      "binary_offset": 15604,
       "le_pointers": 13
     },
     {
-      "symbol": "board_actor_retained_26",
+      "symbol": "board_actor_retained_32",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "57e37319633e3463fcca4290f660a63db241737d8c143366d4b85f586063385a",
@@ -8022,11 +8094,11 @@
       "raw_offset": "0x4821e",
       "loaded_address": "0x22c1e",
       "public_entry": "0x22c1e",
-      "binary_offset": 15915,
+      "binary_offset": 15828,
       "le_pointers": 19
     },
     {
-      "symbol": "board_actor_retained_27",
+      "symbol": "board_actor_retained_33",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "32f3004f38c88de3966c0681e1e259603950292c1c5f0c1d551a0b42180b0017",
@@ -8034,11 +8106,11 @@
       "raw_offset": "0x483c0",
       "loaded_address": "0x22dc0",
       "public_entry": "0x22dc0",
-      "binary_offset": 16213,
+      "binary_offset": 16126,
       "le_pointers": 37
     },
     {
-      "symbol": "board_actor_retained_28",
+      "symbol": "board_actor_retained_34",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "07f33ad4d0b95e57acb86129a8e11bf49f1c14ebcee18c7bbb95c5dde0ea0553",
@@ -8046,11 +8118,11 @@
       "raw_offset": "0x48698",
       "loaded_address": "0x23098",
       "public_entry": "0x23098",
-      "binary_offset": 16820,
+      "binary_offset": 16733,
       "le_pointers": 38
     },
     {
-      "symbol": "board_actor_retained_29",
+      "symbol": "board_actor_retained_35",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "59b11499d65f509a9dc510720938f25fd70df3a3a12025097f72435b1c4b565e",
@@ -8058,11 +8130,11 @@
       "raw_offset": "0x48955",
       "loaded_address": "0x23355",
       "public_entry": "0x23355",
-      "binary_offset": 17443,
+      "binary_offset": 17356,
       "le_pointers": 13
     },
     {
-      "symbol": "board_actor_retained_30",
+      "symbol": "board_actor_retained_36",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "7ea3f32d9d553c14947156f7f6005fef9aac87fa3d92eeb530638a673224d205",
@@ -8070,11 +8142,11 @@
       "raw_offset": "0x48a7a",
       "loaded_address": "0x2347a",
       "public_entry": "0x2347a",
-      "binary_offset": 17661,
+      "binary_offset": 17574,
       "le_pointers": 17
     },
     {
-      "symbol": "board_actor_retained_31",
+      "symbol": "board_actor_retained_37",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "e9a37d4ea6ffc4f9867d45f9ff6101a05aea6a44c4a4d7e970a4b66c17f1596b",
@@ -8082,11 +8154,11 @@
       "raw_offset": "0x48bf3",
       "loaded_address": "0x235f3",
       "public_entry": "0x235f3",
-      "binary_offset": 17918,
+      "binary_offset": 17831,
       "le_pointers": 35
     },
     {
-      "symbol": "board_actor_retained_32",
+      "symbol": "board_actor_retained_38",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "eff31e37c619dda089fbf660ef4f67bf024c474b29f60de36000ab960df71b4d",
@@ -8094,11 +8166,11 @@
       "raw_offset": "0x48ea7",
       "loaded_address": "0x238a7",
       "public_entry": "0x238a7",
-      "binary_offset": 18489,
+      "binary_offset": 18402,
       "le_pointers": 13
     },
     {
-      "symbol": "board_actor_retained_33",
+      "symbol": "board_actor_retained_39",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "45b6e0aaf8387f32c5355e7f5315d2e3d320a237b0911d01bb9c94c6549b029e",
@@ -8106,11 +8178,11 @@
       "raw_offset": "0x48fec",
       "loaded_address": "0x239ec",
       "public_entry": "0x239ec",
-      "binary_offset": 18707,
+      "binary_offset": 18620,
       "le_pointers": 16
     },
     {
-      "symbol": "board_actor_retained_34",
+      "symbol": "board_actor_retained_40",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "002c1954c00eda24d65b7cf74cd73406630386ce7965443a99eed7c0374ef0dc",
@@ -8118,11 +8190,11 @@
       "raw_offset": "0x49148",
       "loaded_address": "0x23b48",
       "public_entry": "0x23b48",
-      "binary_offset": 18977,
+      "binary_offset": 18890,
       "le_pointers": 13
     },
     {
-      "symbol": "board_actor_retained_35",
+      "symbol": "board_actor_retained_41",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "5170b75e5cd861768999a7ca9b23fde6291b29b3ea420ca07e5cfd8bc723806a",
@@ -8130,11 +8202,11 @@
       "raw_offset": "0x49266",
       "loaded_address": "0x23c66",
       "public_entry": "0x23c66",
-      "binary_offset": 19201,
+      "binary_offset": 19114,
       "le_pointers": 13
     },
     {
-      "symbol": "board_actor_retained_36",
+      "symbol": "board_actor_retained_42",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "108a85753d9069f56d0e3a33e6eb77806155f07db697122461ddbc1b418c0a59",
@@ -8142,11 +8214,11 @@
       "raw_offset": "0x49347",
       "loaded_address": "0x23d47",
       "public_entry": "0x23d47",
-      "binary_offset": 19414,
+      "binary_offset": 19327,
       "le_pointers": 5
     },
     {
-      "symbol": "board_actor_retained_37",
+      "symbol": "board_actor_retained_43",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "a9d2d65158a58d47c6689d9cc20b0b4885fe116beae8e94242c16a4a8525942d",
@@ -8154,11 +8226,11 @@
       "raw_offset": "0x49408",
       "loaded_address": "0x23e08",
       "public_entry": "0x23e08",
-      "binary_offset": 19487,
+      "binary_offset": 19400,
       "le_pointers": 29
     },
     {
-      "symbol": "board_actor_retained_38",
+      "symbol": "board_actor_retained_44",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "8b8ab9c60abbb97686df3566c83183f12c822c00f590b0805d5aae4789668c62",
@@ -8166,11 +8238,11 @@
       "raw_offset": "0x49616",
       "loaded_address": "0x24016",
       "public_entry": "0x24016",
-      "binary_offset": 19976,
+      "binary_offset": 19889,
       "le_pointers": 1
     },
     {
-      "symbol": "board_actor_retained_39",
+      "symbol": "board_actor_retained_45",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "85ad0d63c602a6124c456076dd043489d97c84a850b9b70bfd576741719f6147",
@@ -8178,11 +8250,11 @@
       "raw_offset": "0x49633",
       "loaded_address": "0x24033",
       "public_entry": "0x24033",
-      "binary_offset": 19988,
+      "binary_offset": 19901,
       "le_pointers": 2
     },
     {
-      "symbol": "board_actor_retained_40",
+      "symbol": "board_actor_retained_46",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "45b84765104d39d963899b1900623d84f14f45485698fe478b5b62559834086a",
@@ -8190,11 +8262,11 @@
       "raw_offset": "0x49673",
       "loaded_address": "0x24073",
       "public_entry": "0x24073",
-      "binary_offset": 20009,
+      "binary_offset": 19922,
       "le_pointers": 1
     },
     {
-      "symbol": "board_actor_retained_41",
+      "symbol": "board_actor_retained_47",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "102c968eb74aec0ad8880182c75daae275de893616b29b921f171bdf97d2238b",
@@ -8202,11 +8274,11 @@
       "raw_offset": "0x496c1",
       "loaded_address": "0x240c1",
       "public_entry": "0x240c1",
-      "binary_offset": 20021,
+      "binary_offset": 19934,
       "le_pointers": 6
     },
     {
-      "symbol": "board_actor_retained_42",
+      "symbol": "board_actor_retained_48",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "4d3d49cbc4c2efc32db01f8ec83afd9f685105b9a1b5870406f10b9f08d61826",
@@ -8214,11 +8286,11 @@
       "raw_offset": "0x49744",
       "loaded_address": "0x24144",
       "public_entry": "0x24144",
-      "binary_offset": 20139,
+      "binary_offset": 20052,
       "le_pointers": 1
     },
     {
-      "symbol": "board_actor_retained_43",
+      "symbol": "board_actor_retained_49",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "a6a5598fc2f030aacdefb354e4c365d38292ef81531c5dc888b46ffaaca25c7c",
@@ -8226,11 +8298,11 @@
       "raw_offset": "0x4976a",
       "loaded_address": "0x2416a",
       "public_entry": "0x2416a",
-      "binary_offset": 20153,
+      "binary_offset": 20066,
       "le_pointers": 3
     },
     {
-      "symbol": "board_actor_retained_44",
+      "symbol": "board_actor_retained_50",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "80d9e0cfd94c497c4294c91a6d304fbbc6c58d760fc9962689c84aecfa89380d",
@@ -8238,11 +8310,11 @@
       "raw_offset": "0x497dc",
       "loaded_address": "0x241dc",
       "public_entry": "0x241dc",
-      "binary_offset": 20195,
+      "binary_offset": 20108,
       "le_pointers": 19
     },
     {
-      "symbol": "board_actor_retained_45",
+      "symbol": "board_actor_retained_51",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "714e139c2077b1b321402512fd7d98381fec6ac224d9904478a6308d360843ea",
@@ -8250,11 +8322,11 @@
       "raw_offset": "0x49961",
       "loaded_address": "0x24361",
       "public_entry": "0x24361",
-      "binary_offset": 20506,
+      "binary_offset": 20419,
       "le_pointers": 14
     },
     {
-      "symbol": "board_actor_retained_46",
+      "symbol": "board_actor_retained_52",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "ba95d9e8fd9c660572997ec2b8aa19f88553c8393300f9f8cf4d9270908bc5ea",
@@ -8262,11 +8334,11 @@
       "raw_offset": "0x49ab3",
       "loaded_address": "0x244b3",
       "public_entry": "0x244b3",
-      "binary_offset": 20746,
+      "binary_offset": 20659,
       "le_pointers": 10
     },
     {
-      "symbol": "board_actor_retained_47",
+      "symbol": "board_actor_retained_53",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "8c417fb5cb4597b7b3b7e4cb0645a76304a8e2e5f55d9c2f067c41fdb742d1d9",
@@ -8274,11 +8346,11 @@
       "raw_offset": "0x49b65",
       "loaded_address": "0x24565",
       "public_entry": "0x24565",
-      "binary_offset": 20912,
+      "binary_offset": 20825,
       "le_pointers": 5
     },
     {
-      "symbol": "board_actor_retained_48",
+      "symbol": "board_actor_retained_54",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "956524addef86ae2de10702279217256d3b5802afe9dd2f9a27b08c63542c985",
@@ -8286,11 +8358,11 @@
       "raw_offset": "0x49c26",
       "loaded_address": "0x24626",
       "public_entry": "0x24626",
-      "binary_offset": 20985,
+      "binary_offset": 20898,
       "le_pointers": 14
     },
     {
-      "symbol": "board_actor_retained_49",
+      "symbol": "board_actor_retained_55",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "5706ae1079be46483fa09ba71ae372271554021ae12740e2909fd6c651a040fe",
@@ -8298,11 +8370,11 @@
       "raw_offset": "0x49d76",
       "loaded_address": "0x24776",
       "public_entry": "0x24776",
-      "binary_offset": 21228,
+      "binary_offset": 21141,
       "le_pointers": 16
     },
     {
-      "symbol": "board_actor_retained_50",
+      "symbol": "board_actor_retained_56",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "5cd4578c13abc2fbd8302b99ac5e62b971d20188bd5c80c2910c8f5741c6ec02",
@@ -8310,11 +8382,11 @@
       "raw_offset": "0x49ef0",
       "loaded_address": "0x248f0",
       "public_entry": "0x248f0",
-      "binary_offset": 21485,
+      "binary_offset": 21398,
       "le_pointers": 16
     },
     {
-      "symbol": "board_actor_retained_51",
+      "symbol": "board_actor_retained_57",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "2fa7b1f6724b2b6134c66381485d05a7b92f365f79ee24abb2212a36b5bcb17c",
@@ -8322,11 +8394,11 @@
       "raw_offset": "0x4a016",
       "loaded_address": "0x24a16",
       "public_entry": "0x24a16",
-      "binary_offset": 21756,
+      "binary_offset": 21669,
       "le_pointers": 1
     },
     {
-      "symbol": "board_actor_retained_52",
+      "symbol": "board_actor_retained_58",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "8292deccaa3b6965fe375177aaa4e78a7f1449ab12f00f046a9b6c53d2346df4",
@@ -8334,11 +8406,11 @@
       "raw_offset": "0x4a038",
       "loaded_address": "0x24a38",
       "public_entry": "0x24a38",
-      "binary_offset": 21767,
+      "binary_offset": 21680,
       "le_pointers": 14
     },
     {
-      "symbol": "board_actor_retained_53",
+      "symbol": "board_actor_retained_59",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "875bf1ab1b37cdffaee771219332d2c653cb7ae877652f7675b29a6ffb82ac76",
@@ -8346,11 +8418,11 @@
       "raw_offset": "0x4a164",
       "loaded_address": "0x24b64",
       "public_entry": "0x24b64",
-      "binary_offset": 21991,
+      "binary_offset": 21904,
       "le_pointers": 1
     },
     {
-      "symbol": "board_actor_retained_54",
+      "symbol": "board_actor_retained_60",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "b5ab2dc0c06674e8f3fa09fe62c697b45a76b9198f739e00e5df491ebfe72f3f",
@@ -8358,11 +8430,11 @@
       "raw_offset": "0x4a186",
       "loaded_address": "0x24b86",
       "public_entry": "0x24b86",
-      "binary_offset": 22002,
+      "binary_offset": 21915,
       "le_pointers": 11
     },
     {
-      "symbol": "board_actor_retained_55",
+      "symbol": "board_actor_retained_61",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "c9f2fc44ef31604090ba556ff709be857153528505f4836221b52c571f5b1ecb",
@@ -8370,11 +8442,11 @@
       "raw_offset": "0x4a24d",
       "loaded_address": "0x24c4d",
       "public_entry": "0x24c4d",
-      "binary_offset": 22184,
+      "binary_offset": 22097,
       "le_pointers": 2
     },
     {
-      "symbol": "board_actor_retained_56",
+      "symbol": "board_actor_retained_62",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "45b84765104d39d963899b1900623d84f14f45485698fe478b5b62559834086a",
@@ -8382,11 +8454,11 @@
       "raw_offset": "0x4a28e",
       "loaded_address": "0x24c8e",
       "public_entry": "0x24c8e",
-      "binary_offset": 22209,
+      "binary_offset": 22122,
       "le_pointers": 1
     },
     {
-      "symbol": "board_actor_retained_57",
+      "symbol": "board_actor_retained_63",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "756ea6d76b3b0035a15f66e0afca58e466a63eb62fbc0cadaa2ea1bed47e3f2c",
@@ -8394,11 +8466,11 @@
       "raw_offset": "0x4a2b1",
       "loaded_address": "0x24cb1",
       "public_entry": "0x24cb1",
-      "binary_offset": 22221,
+      "binary_offset": 22134,
       "le_pointers": 17
     },
     {
-      "symbol": "board_actor_retained_58",
+      "symbol": "board_actor_retained_64",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "91a6f45c16665fc49ae260249f98222825c1da917768319f4e1c366c16c27049",
@@ -8406,11 +8478,11 @@
       "raw_offset": "0x4a3e1",
       "loaded_address": "0x24de1",
       "public_entry": "0x24de1",
-      "binary_offset": 22483,
+      "binary_offset": 22396,
       "le_pointers": 1
     },
     {
-      "symbol": "board_actor_retained_59",
+      "symbol": "board_actor_retained_65",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "ba99029e9cd80e35defdf9ae6b65efc958e4fb8d3ddd7e142675790d29889b41",
@@ -8418,11 +8490,11 @@
       "raw_offset": "0x4a404",
       "loaded_address": "0x24e04",
       "public_entry": "0x24e04",
-      "binary_offset": 22495,
+      "binary_offset": 22408,
       "le_pointers": 1
     },
     {
-      "symbol": "board_actor_retained_60",
+      "symbol": "board_actor_retained_66",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "cbd121cfca786014bb6b4445b7823224adef1de365803d5836f8d061835493a8",
@@ -8430,11 +8502,11 @@
       "raw_offset": "0x4a430",
       "loaded_address": "0x24e30",
       "public_entry": "0x24e30",
-      "binary_offset": 22506,
+      "binary_offset": 22419,
       "le_pointers": 14
     },
     {
-      "symbol": "board_actor_retained_61",
+      "symbol": "board_actor_retained_67",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "eeb139334e070d3d82a24efec73ea4d09e2b2601182fd709bfbe6e95f3663a15",
@@ -8442,11 +8514,11 @@
       "raw_offset": "0x4a57f",
       "loaded_address": "0x24f7f",
       "public_entry": "0x24f7f",
-      "binary_offset": 22743,
+      "binary_offset": 22656,
       "le_pointers": 17
     },
     {
-      "symbol": "board_actor_retained_62",
+      "symbol": "board_actor_retained_68",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "1be1806f28dd63d24d172c9397b60f0be9909b2d9120fa2f056dfd23f9bc7ebb",
@@ -8454,11 +8526,11 @@
       "raw_offset": "0x4a6e0",
       "loaded_address": "0x250e0",
       "public_entry": "0x250e0",
-      "binary_offset": 23018,
+      "binary_offset": 22931,
       "le_pointers": 9
     },
     {
-      "symbol": "board_actor_retained_63",
+      "symbol": "board_actor_retained_69",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "db8bce7a25b3587b95d2821f3dc22e75ea4b3199a4f7b94c05e759cb7dd52ae5",
@@ -8466,11 +8538,11 @@
       "raw_offset": "0x4a78f",
       "loaded_address": "0x2518f",
       "public_entry": "0x2518f",
-      "binary_offset": 23176,
+      "binary_offset": 23089,
       "le_pointers": 29
     },
     {
-      "symbol": "board_actor_retained_64",
+      "symbol": "board_actor_retained_70",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "e388fb15ddea504308b8d34eb3ab04ad1b3e85519934204f8011c66d50691498",
@@ -8478,11 +8550,11 @@
       "raw_offset": "0x4a9b2",
       "loaded_address": "0x253b2",
       "public_entry": "0x253b2",
-      "binary_offset": 23645,
+      "binary_offset": 23558,
       "le_pointers": 14
     },
     {
-      "symbol": "board_actor_retained_65",
+      "symbol": "board_actor_retained_71",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "cd95b11646eecc3bd1c4844e1b0f4fa8e2357d72377fd8e3d6580f7e30324de6",
@@ -8490,11 +8562,11 @@
       "raw_offset": "0x4aad5",
       "loaded_address": "0x254d5",
       "public_entry": "0x254d5",
-      "binary_offset": 23884,
+      "binary_offset": 23797,
       "le_pointers": 13
     },
     {
-      "symbol": "board_actor_retained_66",
+      "symbol": "board_actor_retained_72",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "5971af1570508b133d1945c451acef6ad4d476d5764539c828a0a0348263a11d",
@@ -8502,11 +8574,11 @@
       "raw_offset": "0x4abef",
       "loaded_address": "0x255ef",
       "public_entry": "0x255ef",
-      "binary_offset": 24098,
+      "binary_offset": 24011,
       "le_pointers": 2
     },
     {
-      "symbol": "board_actor_retained_67",
+      "symbol": "board_actor_retained_73",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "1af60539db62f74275e27b0a76e5d48d61f69952f084343542032446b560426a",
@@ -8514,11 +8586,11 @@
       "raw_offset": "0x4ac62",
       "loaded_address": "0x25662",
       "public_entry": "0x25662",
-      "binary_offset": 24119,
+      "binary_offset": 24032,
       "le_pointers": 16
     },
     {
-      "symbol": "board_actor_retained_68",
+      "symbol": "board_actor_retained_74",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "2fa7b1f6724b2b6134c66381485d05a7b92f365f79ee24abb2212a36b5bcb17c",
@@ -8526,11 +8598,11 @@
       "raw_offset": "0x4adaa",
       "loaded_address": "0x257aa",
       "public_entry": "0x257aa",
-      "binary_offset": 24374,
+      "binary_offset": 24287,
       "le_pointers": 1
     },
     {
-      "symbol": "board_actor_retained_69",
+      "symbol": "board_actor_retained_75",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "b1a0eb414e77575d7b90b8deac5db60cfad6412e90215a84a43ea0e9542b1a4c",
@@ -8538,11 +8610,11 @@
       "raw_offset": "0x4adcc",
       "loaded_address": "0x257cc",
       "public_entry": "0x257cc",
-      "binary_offset": 24385,
+      "binary_offset": 24298,
       "le_pointers": 12
     },
     {
-      "symbol": "board_actor_retained_70",
+      "symbol": "board_actor_retained_76",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "ccd5a3a6fb3ecc88b665cb321ae37b768ef1c8868315291477564f705a4e59d0",
@@ -8550,11 +8622,11 @@
       "raw_offset": "0x4aea7",
       "loaded_address": "0x258a7",
       "public_entry": "0x258a7",
-      "binary_offset": 24587,
+      "binary_offset": 24500,
       "le_pointers": 2
     },
     {
-      "symbol": "board_actor_retained_71",
+      "symbol": "board_actor_retained_77",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "1d47445fbb4ddaac9718b11fb1e6e17bd149d066c382cec560f11fbd5410d671",
@@ -8562,11 +8634,11 @@
       "raw_offset": "0x4aee6",
       "loaded_address": "0x258e6",
       "public_entry": "0x258e6",
-      "binary_offset": 24607,
+      "binary_offset": 24520,
       "le_pointers": 1
     },
     {
-      "symbol": "board_actor_retained_72",
+      "symbol": "board_actor_retained_78",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "ba99029e9cd80e35defdf9ae6b65efc958e4fb8d3ddd7e142675790d29889b41",
@@ -8574,11 +8646,11 @@
       "raw_offset": "0x4af07",
       "loaded_address": "0x25907",
       "public_entry": "0x25907",
-      "binary_offset": 24617,
+      "binary_offset": 24530,
       "le_pointers": 1
     },
     {
-      "symbol": "board_actor_retained_73",
+      "symbol": "board_actor_retained_79",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "2df69304a009e0fac5d381b0be52bd88b94bcdaa5ce8f542d38f50a4c0ea4119",
@@ -8586,11 +8658,11 @@
       "raw_offset": "0x4af33",
       "loaded_address": "0x25933",
       "public_entry": "0x25933",
-      "binary_offset": 24628,
+      "binary_offset": 24541,
       "le_pointers": 10
     },
     {
-      "symbol": "board_actor_retained_74",
+      "symbol": "board_actor_retained_80",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "3e8a98a1b9bcae37cd53cbe158a11f601518adcd405dd84d9ef1e409d34d5db9",
@@ -8598,11 +8670,11 @@
       "raw_offset": "0x4afed",
       "loaded_address": "0x259ed",
       "public_entry": "0x259ed",
-      "binary_offset": 24802,
+      "binary_offset": 24715,
       "le_pointers": 26
     },
     {
-      "symbol": "board_actor_retained_75",
+      "symbol": "board_actor_retained_81",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "630d1b78187b4e30b536ff14811681bd3eede5ae57bd4522eea81774c25679e1",
@@ -8610,11 +8682,11 @@
       "raw_offset": "0x4b1a7",
       "loaded_address": "0x25ba7",
       "public_entry": "0x25ba7",
-      "binary_offset": 25201,
+      "binary_offset": 25114,
       "le_pointers": 1
     },
     {
-      "symbol": "board_actor_retained_76",
+      "symbol": "board_actor_retained_82",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "7f49f4a4c29bebde0607caeabbbb468ad14ec2bba6549268d24570293e4b964d",
@@ -8622,11 +8694,11 @@
       "raw_offset": "0x4b1bb",
       "loaded_address": "0x25bbb",
       "public_entry": "0x25bbb",
-      "binary_offset": 25211,
+      "binary_offset": 25124,
       "le_pointers": 2
     },
     {
-      "symbol": "board_actor_retained_77",
+      "symbol": "board_actor_retained_83",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "ab72577f4d08d76bb225ebf2ec589af47482814cd923079936de5f10480d8b2c",
@@ -8634,11 +8706,11 @@
       "raw_offset": "0x4b1f4",
       "loaded_address": "0x25bf4",
       "public_entry": "0x25bf4",
-      "binary_offset": 25235,
+      "binary_offset": 25148,
       "le_pointers": 7
     },
     {
-      "symbol": "board_actor_retained_78",
+      "symbol": "board_actor_retained_84",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "b28c81c18ed4a5a2cefb3f5b9eafb817240c0a1e5e992a2d42340dd42b863f59",
@@ -8646,11 +8718,11 @@
       "raw_offset": "0x4b286",
       "loaded_address": "0x25c86",
       "public_entry": "0x25c86",
-      "binary_offset": 25368,
+      "binary_offset": 25281,
       "le_pointers": 3
     },
     {
-      "symbol": "board_actor_retained_79",
+      "symbol": "board_actor_retained_85",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "408caa295a5b710931417e486cecf29f04610a31b50105fe90da70cdab3d7ea0",
@@ -8658,11 +8730,11 @@
       "raw_offset": "0x4b2c1",
       "loaded_address": "0x25cc1",
       "public_entry": "0x25cc1",
-      "binary_offset": 25410,
+      "binary_offset": 25323,
       "le_pointers": 2
     },
     {
-      "symbol": "board_actor_retained_80",
+      "symbol": "board_actor_retained_86",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "008a36477d3d5c52ae8e31c5aef8e1c7108507e107551e8858054228c4dc5779",
@@ -8670,11 +8742,11 @@
       "raw_offset": "0x4b302",
       "loaded_address": "0x25d02",
       "public_entry": "0x25d02",
-      "binary_offset": 25435,
+      "binary_offset": 25348,
       "le_pointers": 17
     },
     {
-      "symbol": "board_actor_retained_81",
+      "symbol": "board_actor_retained_87",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "fb3ded0d3756003ac009e88f53cdca0c4c9bf7fe57796f1a76021e00f6a7c895",
@@ -8682,11 +8754,11 @@
       "raw_offset": "0x4b412",
       "loaded_address": "0x25e12",
       "public_entry": "0x25e12",
-      "binary_offset": 25695,
+      "binary_offset": 25608,
       "le_pointers": 3
     },
     {
-      "symbol": "board_actor_retained_82",
+      "symbol": "board_actor_retained_88",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "823289f462b4df106596ca4b927796727c3b165196df499eef120dcdb59f0b2a",
@@ -8694,11 +8766,11 @@
       "raw_offset": "0x4b4b6",
       "loaded_address": "0x25eb6",
       "public_entry": "0x25eb6",
-      "binary_offset": 25736,
+      "binary_offset": 25649,
       "le_pointers": 9
     },
     {
-      "symbol": "board_actor_retained_83",
+      "symbol": "board_actor_retained_89",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "e816c3e42fb2bf4312fb840b757af339a1d2881fcf2c89fdd2dce02da95f4cb0",
@@ -8706,11 +8778,11 @@
       "raw_offset": "0x4b560",
       "loaded_address": "0x25f60",
       "public_entry": "0x25f60",
-      "binary_offset": 25894,
+      "binary_offset": 25807,
       "le_pointers": 4
     },
     {
-      "symbol": "board_actor_retained_84",
+      "symbol": "board_actor_retained_90",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "715a37c56dc0688722cdfc6d8c3dedefb2c49da90101eacd4cd785bf7dad7edb",
@@ -8718,11 +8790,11 @@
       "raw_offset": "0x4b5be",
       "loaded_address": "0x25fbe",
       "public_entry": "0x25fbe",
-      "binary_offset": 25948,
+      "binary_offset": 25861,
       "le_pointers": 1
     },
     {
-      "symbol": "board_actor_retained_85",
+      "symbol": "board_actor_retained_91",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "7d64c7dc9b4084efad781b34ebc43f6e274597e64727272b4d119401f9ecf4f8",
@@ -8730,11 +8802,11 @@
       "raw_offset": "0x4b5e1",
       "loaded_address": "0x25fe1",
       "public_entry": "0x25fe1",
-      "binary_offset": 25960,
+      "binary_offset": 25873,
       "le_pointers": 1
     },
     {
-      "symbol": "board_actor_retained_86",
+      "symbol": "board_actor_retained_92",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "1db50e35c225ac4d8791faffefc3fe5a9e6b5647604eabd116da77479e437620",
@@ -8742,11 +8814,11 @@
       "raw_offset": "0x4b603",
       "loaded_address": "0x26003",
       "public_entry": "0x26003",
-      "binary_offset": 25971,
+      "binary_offset": 25884,
       "le_pointers": 8
     },
     {
-      "symbol": "board_actor_retained_87",
+      "symbol": "board_actor_retained_93",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "4952677c56f998f00c8f5f2a4e9c0870e41c626f0fc130e4564421194223bd1d",
@@ -8754,11 +8826,11 @@
       "raw_offset": "0x4b6a0",
       "loaded_address": "0x260a0",
       "public_entry": "0x260a0",
-      "binary_offset": 26115,
+      "binary_offset": 26028,
       "le_pointers": 1
     },
     {
-      "symbol": "board_actor_retained_88",
+      "symbol": "board_actor_retained_94",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "973a33b65023aadd2b03d1d20879a43d170f824b29d0919602ea12a644274762",
@@ -8766,11 +8838,11 @@
       "raw_offset": "0x4b6d7",
       "loaded_address": "0x260d7",
       "public_entry": "0x260d7",
-      "binary_offset": 26129,
+      "binary_offset": 26042,
       "le_pointers": 2
     },
     {
-      "symbol": "board_actor_retained_89",
+      "symbol": "board_actor_retained_95",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "91a6f45c16665fc49ae260249f98222825c1da917768319f4e1c366c16c27049",
@@ -8778,11 +8850,11 @@
       "raw_offset": "0x4b716",
       "loaded_address": "0x26116",
       "public_entry": "0x26116",
-      "binary_offset": 26149,
+      "binary_offset": 26062,
       "le_pointers": 1
     },
     {
-      "symbol": "board_actor_retained_90",
+      "symbol": "board_actor_retained_96",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "49f19523a043ae6977f06699cceb8579be5f22f9741e30d33888cf50dc162787",
@@ -8790,11 +8862,11 @@
       "raw_offset": "0x4b764",
       "loaded_address": "0x26164",
       "public_entry": "0x26164",
-      "binary_offset": 26161,
+      "binary_offset": 26074,
       "le_pointers": 7
     },
     {
-      "symbol": "board_actor_retained_91",
+      "symbol": "board_actor_retained_97",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "45f08ddbd17547b364075ae48f570285c9e42d522690f8a984ab118f56d144e2",
@@ -8802,11 +8874,11 @@
       "raw_offset": "0x4b7ee",
       "loaded_address": "0x261ee",
       "public_entry": "0x261ee",
-      "binary_offset": 26287,
+      "binary_offset": 26200,
       "le_pointers": 1
     },
     {
-      "symbol": "board_actor_retained_92",
+      "symbol": "board_actor_retained_98",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "a136b8c549b6fd943b1ed5446d34b5a3f720b911d5b9103e609eb6f802ece38c",
@@ -8814,11 +8886,11 @@
       "raw_offset": "0x4b80a",
       "loaded_address": "0x2620a",
       "public_entry": "0x2620a",
-      "binary_offset": 26303,
+      "binary_offset": 26216,
       "le_pointers": 6
     },
     {
-      "symbol": "board_actor_retained_93",
+      "symbol": "board_actor_retained_99",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "9856d0745874a5a856746dd44939f1027b5816989aff8b4e4fec67bb4a273723",
@@ -8826,11 +8898,11 @@
       "raw_offset": "0x4b878",
       "loaded_address": "0x26278",
       "public_entry": "0x26278",
-      "binary_offset": 26403,
+      "binary_offset": 26316,
       "le_pointers": 18
     },
     {
-      "symbol": "board_actor_retained_94",
+      "symbol": "board_actor_retained_100",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "7dd3b594e99014e28fc0563f97bc9db82968b17f3de9ece676886a2954d36b63",
@@ -8838,11 +8910,11 @@
       "raw_offset": "0x4ba09",
       "loaded_address": "0x26409",
       "public_entry": "0x26409",
-      "binary_offset": 26683,
+      "binary_offset": 26596,
       "le_pointers": 6
     },
     {
-      "symbol": "board_actor_retained_95",
+      "symbol": "board_actor_retained_101",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "c0cb4beef7b94d6084db15ce2bfd9f624517254a5d156c3a7ef7ab92e2fdb53c",
@@ -8850,11 +8922,11 @@
       "raw_offset": "0x4ba89",
       "loaded_address": "0x26489",
       "public_entry": "0x26489",
-      "binary_offset": 26798,
+      "binary_offset": 26711,
       "le_pointers": 6
     },
     {
-      "symbol": "board_actor_retained_96",
+      "symbol": "board_actor_retained_102",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
       "sha256": "1f740c1d18c5e096d2ffb16c475ea04629eb4a6460496c80457545f07e5e200e",
@@ -8862,32 +8934,56 @@
       "raw_offset": "0x4bb22",
       "loaded_address": "0x26522",
       "public_entry": "0x26522",
-      "binary_offset": 26876,
+      "binary_offset": 26789,
       "le_pointers": 1
     },
     {
-      "symbol": "board_actor_retained_97",
+      "symbol": "board_actor_retained_103",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
-      "sha256": "a97ef2150d2f7881ad584c6b6e33caa0d077d18a204d75a5b453b31a40faca0e",
-      "bytes": 225,
+      "sha256": "f5742560f37fb20bacbe3e6d78281a5c22eebeee5259866155005e6230282286",
+      "bytes": 150,
       "raw_offset": "0x4bb39",
       "loaded_address": "0x26539",
       "public_entry": "0x26539",
-      "binary_offset": 26886,
-      "le_pointers": 15
+      "binary_offset": 26799,
+      "le_pointers": 9
     },
     {
-      "symbol": "board_actor_retained_98",
+      "symbol": "board_actor_retained_104",
       "source": "src/fate/board_actor_initialization.asm",
       "binary": "board_actor_initialization.bin",
-      "sha256": "ed204cc8f089e7f93db8d16ba75ee65b34981194fff35e628cb108d912c2ee62",
-      "bytes": 185,
+      "sha256": "6bbf196b6d3948490243bdafc7afc8535e2482ca6309354be2b785a6a1bc7203",
+      "bytes": 61,
+      "raw_offset": "0x4bbdd",
+      "loaded_address": "0x265dd",
+      "public_entry": "0x265dd",
+      "binary_offset": 26949,
+      "le_pointers": 5
+    },
+    {
+      "symbol": "board_actor_retained_105",
+      "source": "src/fate/board_actor_initialization.asm",
+      "binary": "board_actor_initialization.bin",
+      "sha256": "d7778ecb56c333938f4fb07c8623f80d67f818624cfc80490e976f3bdac73697",
+      "bytes": 126,
       "raw_offset": "0x4bc90",
       "loaded_address": "0x26690",
       "public_entry": "0x26690",
-      "binary_offset": 27111,
-      "le_pointers": 11
+      "binary_offset": 27010,
+      "le_pointers": 7
+    },
+    {
+      "symbol": "board_actor_retained_106",
+      "source": "src/fate/board_actor_initialization.asm",
+      "binary": "board_actor_initialization.bin",
+      "sha256": "e8c238702588abe5bf6c87e88d6da392f3129c688b71f4e06c6b6a78b34cf856",
+      "bytes": 45,
+      "raw_offset": "0x4bd1c",
+      "loaded_address": "0x2671c",
+      "public_entry": "0x2671c",
+      "binary_offset": 27136,
+      "le_pointers": 3
     }
   ]
 }

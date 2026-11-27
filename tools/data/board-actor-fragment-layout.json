@@ -1,0 +1,129 @@
+{
+  "context_file": "board-actor-value-layout.json",
+  "phases": [
+    {
+      "symbol": "board_actor_fragment_000_0_",
+      "public": "board_actor_value_context_",
+      "begin": 9005,
+      "end": 9008,
+      "address": 134555
+    },
+    {
+      "symbol": "board_actor_fragment_000_1_",
+      "public": "board_actor_value_context_",
+      "begin": 9015,
+      "end": 9026,
+      "address": 134558
+    },
+    {
+      "symbol": "board_actor_fragment_001_0_",
+      "public": "board_actor_value_context_",
+      "begin": 9256,
+      "end": 9259,
+      "address": 134886
+    },
+    {
+      "symbol": "board_actor_fragment_001_1_",
+      "public": "board_actor_value_context_",
+      "begin": 9266,
+      "end": 9277,
+      "address": 134889
+    }
+  ],
+  "operations": [
+    {
+      "slot": 104,
+      "operation": "actor_destinations.x",
+      "fields": [
+        "actor_destinations.x"
+      ],
+      "original_start": 134555,
+      "original_end": 134569,
+      "live_in_bitmasks": {
+        "eax": 65535
+      },
+      "live_in_values": {
+        "eax": 104
+      },
+      "native_suffix_live_in_bitmasks": {
+        "edx": 4294967295
+      },
+      "native_suffix_live_in_values": {
+        "edx": 104
+      },
+      "writes": [
+        [
+          8,
+          471164,
+          4,
+          0
+        ]
+      ],
+      "fragments": [
+        {
+          "begin": 9005,
+          "end": 9008,
+          "address": 134555
+        },
+        {
+          "begin": 9015,
+          "end": 9026,
+          "address": 134558
+        }
+      ],
+      "omitted_store": {
+        "begin": 9008,
+        "end": 9015,
+        "field": "actor_waypoints.first",
+        "slot": 104
+      }
+    },
+    {
+      "slot": 105,
+      "operation": "actor_destinations.x",
+      "fields": [
+        "actor_destinations.x"
+      ],
+      "original_start": 134886,
+      "original_end": 134900,
+      "live_in_bitmasks": {
+        "eax": 65535
+      },
+      "live_in_values": {
+        "eax": 105
+      },
+      "native_suffix_live_in_bitmasks": {
+        "edx": 4294967295
+      },
+      "native_suffix_live_in_values": {
+        "edx": 105
+      },
+      "writes": [
+        [
+          8,
+          471180,
+          4,
+          0
+        ]
+      ],
+      "fragments": [
+        {
+          "begin": 9256,
+          "end": 9259,
+          "address": 134886
+        },
+        {
+          "begin": 9266,
+          "end": 9277,
+          "address": 134889
+        }
+      ],
+      "omitted_store": {
+        "begin": 9259,
+        "end": 9266,
+        "field": "actor_waypoints.first",
+        "slot": 105
+      }
+    }
+  ]
+}

@@ -112,7 +112,7 @@ def bind_production(exe, build):
         fields = {}; natural, natural_data = v.bind_leaf_details(blob,phase['public'],values,address=0x50000,code_bindings=fields)
         assert not fields and len(natural_data) == len(data)
         slices.append((phase,loaded,natural))
-    for actor_layout in group.CONFIGURATION_LAYOUTS:
+    for actor_layout in group.PLACEMENT_LAYOUTS:
         indexed_blob = (build/(actor_layout['context']['object']+'.obj')).read_bytes()
         for phase in actor_layout['phases']:
             fields = {}; address = phase['address']; symbol = phase['symbol']

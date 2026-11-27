@@ -231,6 +231,23 @@ and all fixups are guarded, and the fixture checks its exact saved words,
 infer a whole-constructor match from the prefix. Source:
 `src/fate/board_actor_configuration.c`, `ACTOR_DISABLE_CONTEXT`.
 
+For a destination assignment whose `MOVSX EDX,AX` is hoisted past a waypoint
+store, qualify the complete typed assignment using both compiler fragments.
+The omitted store must read no EDX alias and change no register or flags;
+check its typed address/value and keep the original store order. Guard the
+entire compiler object, pin all fragment boundaries and DATA sites, exclude
+incoming branches, and replay both the natural and commuted contexts. Check
+the original site's live AX too: identical destination bytes occur for other
+actors, so byte equality and injected test inputs do not establish placement.
+Use separate fragment metadata; retain strict contiguous-operation partitions.
+The actor-104/105 X fixtures include duplicate-byte wrong-actor controls.
+
+Keep DOS compiler argument tails short by deriving related context macros
+from one selector, as in `ACTOR_CLOBBER_CONTEXT`. The three-selector probe
+produced `AC.OBJ` instead of the requested `ACTCLOB.OBJ` despite zero compiler
+errors; the production missing-object check rejected it. The single selector
+produces the intended object with the same CODE and parsed fixups as the probe.
+
 
 ### Byte-register identities and natural EBP constant allocation
 

@@ -1485,7 +1485,7 @@
     {
       "symbol": "board_actor_retained_4",
       "address": 134275,
-      "size": 980,
+      "size": 280,
       "binary_offset": 8900,
       "fixups": {
         "9": 1043638,
@@ -1505,60 +1505,88 @@
         "230": 1027014,
         "248": 1027016,
         "263": 1027018,
-        "276": 1018432,
-        "290": 993788,
-        "304": 993792,
-        "318": 993796,
-        "332": 993800,
-        "348": 1043638,
-        "357": 1043137,
-        "375": 1012420,
-        "396": 1012424,
-        "410": 1020436,
-        "419": 1041634,
-        "431": 1036026,
-        "442": 1044139,
-        "454": 1038030,
-        "465": 1042636,
-        "477": 1046143,
-        "503": 1027008,
-        "518": 1027010,
-        "541": 1027012,
-        "559": 1027014,
-        "577": 1027016,
-        "592": 1027018,
-        "607": 1018432,
-        "621": 993788,
-        "633": 993792,
-        "647": 993796,
-        "664": 993800,
-        "677": 1043638,
-        "689": 1043137,
-        "711": 1012420,
-        "725": 1012424,
-        "741": 1020436,
-        "755": 1041634,
-        "768": 1036026,
-        "782": 1044139,
-        "795": 1038030,
-        "806": 1042636,
-        "818": 1046143,
-        "833": 1027008,
-        "861": 1027010,
-        "884": 1027012,
-        "902": 1027014,
-        "917": 1027016,
-        "935": 1027018,
-        "948": 1018432,
-        "962": 993788,
-        "976": 993792
+        "276": 1018432
       }
     },
     {
       "symbol": "board_actor_retained_5",
+      "address": 134569,
+      "size": 14,
+      "binary_offset": 9180,
+      "fixups": {
+        "10": 993792
+      }
+    },
+    {
+      "symbol": "board_actor_retained_6",
+      "address": 134597,
+      "size": 289,
+      "binary_offset": 9194,
+      "fixups": {
+        "10": 993800,
+        "26": 1043638,
+        "35": 1043137,
+        "53": 1012420,
+        "74": 1012424,
+        "88": 1020436,
+        "97": 1041634,
+        "109": 1036026,
+        "120": 1044139,
+        "132": 1038030,
+        "143": 1042636,
+        "155": 1046143,
+        "181": 1027008,
+        "196": 1027010,
+        "219": 1027012,
+        "237": 1027014,
+        "255": 1027016,
+        "270": 1027018,
+        "285": 1018432
+      }
+    },
+    {
+      "symbol": "board_actor_retained_7",
+      "address": 134900,
+      "size": 26,
+      "binary_offset": 9483,
+      "fixups": {
+        "8": 993792,
+        "22": 993796
+      }
+    },
+    {
+      "symbol": "board_actor_retained_8",
+      "address": 134943,
+      "size": 312,
+      "binary_offset": 9509,
+      "fixups": {
+        "9": 1043638,
+        "21": 1043137,
+        "43": 1012420,
+        "57": 1012424,
+        "73": 1020436,
+        "87": 1041634,
+        "100": 1036026,
+        "114": 1044139,
+        "127": 1038030,
+        "138": 1042636,
+        "150": 1046143,
+        "165": 1027008,
+        "193": 1027010,
+        "216": 1027012,
+        "234": 1027014,
+        "249": 1027016,
+        "267": 1027018,
+        "280": 1018432,
+        "294": 993788,
+        "308": 993792
+      }
+    },
+    {
+      "symbol": "board_actor_retained_9",
       "address": 135284,
       "size": 1295,
-      "binary_offset": 9880,
+      "binary_offset": 9821,
       "fixups": {
         "7": 1043638,
         "16": 1043137,
@@ -1648,10 +1676,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_6",
+      "symbol": "board_actor_retained_10",
       "address": 136634,
       "size": 634,
-      "binary_offset": 11175,
+      "binary_offset": 11116,
       "fixups": {
         "7": 1043638,
         "16": 1043137,
@@ -1698,10 +1726,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_7",
+      "symbol": "board_actor_retained_11",
       "address": 137309,
-      "size": 1905,
-      "binary_offset": 11809,
+      "size": 269,
+      "binary_offset": 11750,
       "fixups": {
         "5": 1043638,
         "15": 1043137,
@@ -1720,133 +1748,147 @@
         "217": 1027014,
         "235": 1027016,
         "252": 1027018,
-        "265": 1018432,
-        "279": 993788,
-        "291": 993792,
-        "303": 993796,
-        "322": 993800,
-        "333": 1043638,
-        "345": 1043137,
-        "359": 1012420,
-        "380": 1012424,
-        "394": 1020436,
-        "403": 1041634,
-        "415": 1036026,
-        "426": 1044139,
-        "438": 1038030,
-        "451": 1042636,
-        "460": 1046143,
-        "486": 1027008,
-        "504": 1027010,
-        "522": 1027012,
-        "540": 1027014,
-        "558": 1027016,
-        "573": 1027018,
-        "586": 1018432,
-        "600": 993788,
-        "614": 993792,
-        "626": 993796,
-        "643": 993800,
-        "652": 1043638,
-        "662": 1043137,
-        "688": 1012420,
-        "702": 1012424,
-        "716": 1020436,
-        "725": 1041634,
-        "737": 1036026,
-        "748": 1044139,
-        "760": 1038030,
-        "773": 1042636,
-        "785": 1046143,
-        "808": 1027008,
-        "826": 1027010,
-        "844": 1027012,
-        "862": 1027014,
-        "880": 1027016,
-        "897": 1027018,
-        "910": 1018432,
-        "922": 993788,
-        "934": 993792,
-        "946": 993796,
-        "958": 993800,
-        "976": 1043638,
-        "988": 1043137,
-        "1010": 1012420,
-        "1024": 1012424,
-        "1040": 1020436,
-        "1056": 1041634,
-        "1069": 1036026,
-        "1083": 1044139,
-        "1096": 1038030,
-        "1107": 1042636,
-        "1119": 1046143,
-        "1134": 1027008,
-        "1162": 1027010,
-        "1180": 1027012,
-        "1198": 1027014,
-        "1216": 1027016,
-        "1233": 1027018,
-        "1246": 1018432,
-        "1258": 993788,
-        "1270": 993792,
-        "1286": 993796,
-        "1298": 993800,
-        "1316": 1043638,
-        "1326": 1043137,
-        "1344": 1012420,
-        "1365": 1012424,
-        "1381": 1020436,
-        "1390": 1041634,
-        "1402": 1036026,
-        "1413": 1044139,
-        "1425": 1038030,
-        "1436": 1042636,
-        "1446": 1046143,
-        "1473": 1027008,
-        "1491": 1027010,
-        "1509": 1027012,
-        "1527": 1027014,
-        "1545": 1027016,
-        "1560": 1027018,
-        "1571": 1018432,
-        "1585": 993788,
-        "1597": 993792,
-        "1609": 993796,
-        "1628": 993800,
-        "1639": 1043638,
-        "1651": 1043137,
-        "1673": 1012420,
-        "1687": 1012424,
-        "1703": 1020436,
-        "1712": 1041634,
-        "1724": 1036026,
-        "1742": 1044139,
-        "1755": 1038030,
-        "1766": 1042636,
-        "1778": 1046143,
-        "1801": 1027008,
-        "1819": 1027010,
-        "1837": 1027012,
-        "1855": 1027014,
-        "1873": 1027016,
-        "1888": 1027018,
-        "1899": 1018432
+        "265": 1018432
       }
     },
     {
-      "symbol": "board_actor_retained_8",
+      "symbol": "board_actor_retained_12",
+      "address": 137592,
+      "size": 307,
+      "binary_offset": 12019,
+      "fixups": {
+        "8": 993792,
+        "20": 993796,
+        "39": 993800,
+        "50": 1043638,
+        "62": 1043137,
+        "76": 1012420,
+        "97": 1012424,
+        "111": 1020436,
+        "120": 1041634,
+        "132": 1036026,
+        "143": 1044139,
+        "155": 1038030,
+        "168": 1042636,
+        "177": 1046143,
+        "203": 1027008,
+        "221": 1027010,
+        "239": 1027012,
+        "257": 1027014,
+        "275": 1027016,
+        "290": 1027018,
+        "303": 1018432
+      }
+    },
+    {
+      "symbol": "board_actor_retained_13",
+      "address": 137913,
+      "size": 1301,
+      "binary_offset": 12326,
+      "fixups": {
+        "10": 993792,
+        "22": 993796,
+        "39": 993800,
+        "48": 1043638,
+        "58": 1043137,
+        "84": 1012420,
+        "98": 1012424,
+        "112": 1020436,
+        "121": 1041634,
+        "133": 1036026,
+        "144": 1044139,
+        "156": 1038030,
+        "169": 1042636,
+        "181": 1046143,
+        "204": 1027008,
+        "222": 1027010,
+        "240": 1027012,
+        "258": 1027014,
+        "276": 1027016,
+        "293": 1027018,
+        "306": 1018432,
+        "318": 993788,
+        "330": 993792,
+        "342": 993796,
+        "354": 993800,
+        "372": 1043638,
+        "384": 1043137,
+        "406": 1012420,
+        "420": 1012424,
+        "436": 1020436,
+        "452": 1041634,
+        "465": 1036026,
+        "479": 1044139,
+        "492": 1038030,
+        "503": 1042636,
+        "515": 1046143,
+        "530": 1027008,
+        "558": 1027010,
+        "576": 1027012,
+        "594": 1027014,
+        "612": 1027016,
+        "629": 1027018,
+        "642": 1018432,
+        "654": 993788,
+        "666": 993792,
+        "682": 993796,
+        "694": 993800,
+        "712": 1043638,
+        "722": 1043137,
+        "740": 1012420,
+        "761": 1012424,
+        "777": 1020436,
+        "786": 1041634,
+        "798": 1036026,
+        "809": 1044139,
+        "821": 1038030,
+        "832": 1042636,
+        "842": 1046143,
+        "869": 1027008,
+        "887": 1027010,
+        "905": 1027012,
+        "923": 1027014,
+        "941": 1027016,
+        "956": 1027018,
+        "967": 1018432,
+        "981": 993788,
+        "993": 993792,
+        "1005": 993796,
+        "1024": 993800,
+        "1035": 1043638,
+        "1047": 1043137,
+        "1069": 1012420,
+        "1083": 1012424,
+        "1099": 1020436,
+        "1108": 1041634,
+        "1120": 1036026,
+        "1138": 1044139,
+        "1151": 1038030,
+        "1162": 1042636,
+        "1174": 1046143,
+        "1197": 1027008,
+        "1215": 1027010,
+        "1233": 1027012,
+        "1251": 1027014,
+        "1269": 1027016,
+        "1284": 1027018,
+        "1295": 1018432
+      }
+    },
+    {
+      "symbol": "board_actor_retained_14",
       "address": 139238,
       "size": 12,
-      "binary_offset": 13714,
+      "binary_offset": 13627,
       "fixups": {
         "8": 993796
       }
     },
     {
-      "symbol": "board_actor_retained_9",
+      "symbol": "board_actor_retained_15",
       "address": 139267,
       "size": 75,
-      "binary_offset": 13726,
+      "binary_offset": 13639,
       "fixups": {
         "5": 1043638,
         "15": 1043137,
@@ -1856,19 +1898,19 @@
       }
     },
     {
-      "symbol": "board_actor_retained_10",
+      "symbol": "board_actor_retained_16",
       "address": 139365,
       "size": 10,
-      "binary_offset": 13801,
+      "binary_offset": 13714,
       "fixups": {
         "5": 1044139
       }
     },
     {
-      "symbol": "board_actor_retained_11",
+      "symbol": "board_actor_retained_17",
       "address": 139408,
       "size": 113,
-      "binary_offset": 13811,
+      "binary_offset": 13724,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -1879,10 +1921,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_12",
+      "symbol": "board_actor_retained_18",
       "address": 139534,
       "size": 80,
-      "binary_offset": 13924,
+      "binary_offset": 13837,
       "fixups": {
         "10": 993788,
         "22": 993792,
@@ -1893,10 +1935,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_13",
+      "symbol": "board_actor_retained_19",
       "address": 139653,
       "size": 201,
-      "binary_offset": 14004,
+      "binary_offset": 13917,
       "fixups": {
         "8": 1020436,
         "22": 1041634,
@@ -1914,10 +1956,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_14",
+      "symbol": "board_actor_retained_20",
       "address": 139867,
       "size": 75,
-      "binary_offset": 14205,
+      "binary_offset": 14118,
       "fixups": {
         "10": 993788,
         "22": 993792,
@@ -1928,10 +1970,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_15",
+      "symbol": "board_actor_retained_21",
       "address": 140063,
       "size": 113,
-      "binary_offset": 14280,
+      "binary_offset": 14193,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -1942,29 +1984,29 @@
       }
     },
     {
-      "symbol": "board_actor_retained_16",
+      "symbol": "board_actor_retained_22",
       "address": 140189,
       "size": 14,
-      "binary_offset": 14393,
+      "binary_offset": 14306,
       "fixups": {
         "10": 993788
       }
     },
     {
-      "symbol": "board_actor_retained_17",
+      "symbol": "board_actor_retained_23",
       "address": 140244,
       "size": 25,
-      "binary_offset": 14407,
+      "binary_offset": 14320,
       "fixups": {
         "9": 1043638,
         "21": 1043137
       }
     },
     {
-      "symbol": "board_actor_retained_18",
+      "symbol": "board_actor_retained_24",
       "address": 140344,
       "size": 260,
-      "binary_offset": 14432,
+      "binary_offset": 14345,
       "fixups": {
         "12": 1044139,
         "25": 1038030,
@@ -1986,10 +2028,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_19",
+      "symbol": "board_actor_retained_25",
       "address": 140724,
       "size": 525,
-      "binary_offset": 14692,
+      "binary_offset": 14605,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2026,20 +2068,20 @@
       }
     },
     {
-      "symbol": "board_actor_retained_20",
+      "symbol": "board_actor_retained_26",
       "address": 141271,
       "size": 20,
-      "binary_offset": 15217,
+      "binary_offset": 15130,
       "fixups": {
         "5": 1043638,
         "15": 1043137
       }
     },
     {
-      "symbol": "board_actor_retained_21",
+      "symbol": "board_actor_retained_27",
       "address": 141412,
       "size": 128,
-      "binary_offset": 15237,
+      "binary_offset": 15150,
       "fixups": {
         "19": 1027008,
         "40": 1027010,
@@ -2051,10 +2093,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_22",
+      "symbol": "board_actor_retained_28",
       "address": 141552,
       "size": 78,
-      "binary_offset": 15365,
+      "binary_offset": 15278,
       "fixups": {
         "8": 993792,
         "24": 993796,
@@ -2064,10 +2106,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_23",
+      "symbol": "board_actor_retained_29",
       "address": 141737,
       "size": 186,
-      "binary_offset": 15443,
+      "binary_offset": 15356,
       "fixups": {
         "10": 1046143,
         "33": 1027008,
@@ -2083,10 +2125,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_24",
+      "symbol": "board_actor_retained_30",
       "address": 141940,
       "size": 62,
-      "binary_offset": 15629,
+      "binary_offset": 15542,
       "fixups": {
         "5": 1043638,
         "14": 1043137,
@@ -2095,10 +2137,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_25",
+      "symbol": "board_actor_retained_31",
       "address": 142080,
       "size": 224,
-      "binary_offset": 15691,
+      "binary_offset": 15604,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2116,10 +2158,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_26",
+      "symbol": "board_actor_retained_32",
       "address": 142366,
       "size": 298,
-      "binary_offset": 15915,
+      "binary_offset": 15828,
       "fixups": {
         "14": 1036026,
         "28": 1044139,
@@ -2143,10 +2185,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_27",
+      "symbol": "board_actor_retained_33",
       "address": 142784,
       "size": 607,
-      "binary_offset": 16213,
+      "binary_offset": 16126,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2188,10 +2230,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_28",
+      "symbol": "board_actor_retained_34",
       "address": 143512,
       "size": 623,
-      "binary_offset": 16820,
+      "binary_offset": 16733,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2234,10 +2276,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_29",
+      "symbol": "board_actor_retained_35",
       "address": 144213,
       "size": 218,
-      "binary_offset": 17443,
+      "binary_offset": 17356,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2255,10 +2297,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_30",
+      "symbol": "board_actor_retained_36",
       "address": 144506,
       "size": 257,
-      "binary_offset": 17661,
+      "binary_offset": 17574,
       "fixups": {
         "12": 1044139,
         "25": 1038030,
@@ -2280,10 +2322,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_31",
+      "symbol": "board_actor_retained_37",
       "address": 144883,
       "size": 571,
-      "binary_offset": 17918,
+      "binary_offset": 17831,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2323,10 +2365,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_32",
+      "symbol": "board_actor_retained_38",
       "address": 145575,
       "size": 218,
-      "binary_offset": 18489,
+      "binary_offset": 18402,
       "fixups": {
         "19": 1027008,
         "40": 1027010,
@@ -2344,10 +2386,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_33",
+      "symbol": "board_actor_retained_39",
       "address": 145900,
       "size": 270,
-      "binary_offset": 18707,
+      "binary_offset": 18620,
       "fixups": {
         "10": 1046143,
         "33": 1027008,
@@ -2368,10 +2410,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_34",
+      "symbol": "board_actor_retained_40",
       "address": 146248,
       "size": 224,
-      "binary_offset": 18977,
+      "binary_offset": 18890,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2389,10 +2431,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_35",
+      "symbol": "board_actor_retained_41",
       "address": 146534,
       "size": 213,
-      "binary_offset": 19201,
+      "binary_offset": 19114,
       "fixups": {
         "14": 1036026,
         "28": 1044139,
@@ -2410,10 +2452,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_36",
+      "symbol": "board_actor_retained_42",
       "address": 146759,
       "size": 73,
-      "binary_offset": 19414,
+      "binary_offset": 19327,
       "fixups": {
         "8": 993792,
         "24": 993796,
@@ -2423,10 +2465,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_37",
+      "symbol": "board_actor_retained_43",
       "address": 146952,
       "size": 489,
-      "binary_offset": 19487,
+      "binary_offset": 19400,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2460,38 +2502,38 @@
       }
     },
     {
-      "symbol": "board_actor_retained_38",
+      "symbol": "board_actor_retained_44",
       "address": 147478,
       "size": 12,
-      "binary_offset": 19976,
+      "binary_offset": 19889,
       "fixups": {
         "8": 993796
       }
     },
     {
-      "symbol": "board_actor_retained_39",
+      "symbol": "board_actor_retained_45",
       "address": 147507,
       "size": 21,
-      "binary_offset": 19988,
+      "binary_offset": 19901,
       "fixups": {
         "7": 1043638,
         "16": 1043137
       }
     },
     {
-      "symbol": "board_actor_retained_40",
+      "symbol": "board_actor_retained_46",
       "address": 147571,
       "size": 12,
-      "binary_offset": 20009,
+      "binary_offset": 19922,
       "fixups": {
         "8": 1020436
       }
     },
     {
-      "symbol": "board_actor_retained_41",
+      "symbol": "board_actor_retained_47",
       "address": 147649,
       "size": 118,
-      "binary_offset": 20021,
+      "binary_offset": 19934,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2502,19 +2544,19 @@
       }
     },
     {
-      "symbol": "board_actor_retained_42",
+      "symbol": "board_actor_retained_48",
       "address": 147780,
       "size": 14,
-      "binary_offset": 20139,
+      "binary_offset": 20052,
       "fixups": {
         "10": 993788
       }
     },
     {
-      "symbol": "board_actor_retained_43",
+      "symbol": "board_actor_retained_49",
       "address": 147818,
       "size": 42,
-      "binary_offset": 20153,
+      "binary_offset": 20066,
       "fixups": {
         "15": 993800,
         "26": 1043638,
@@ -2522,10 +2564,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_44",
+      "symbol": "board_actor_retained_50",
       "address": 147932,
       "size": 311,
-      "binary_offset": 20195,
+      "binary_offset": 20108,
       "fixups": {
         "12": 1044139,
         "25": 1038030,
@@ -2549,10 +2591,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_45",
+      "symbol": "board_actor_retained_51",
       "address": 148321,
       "size": 240,
-      "binary_offset": 20506,
+      "binary_offset": 20419,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2571,10 +2613,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_46",
+      "symbol": "board_actor_retained_52",
       "address": 148659,
       "size": 166,
-      "binary_offset": 20746,
+      "binary_offset": 20659,
       "fixups": {
         "9": 1042636,
         "21": 1046143,
@@ -2589,10 +2631,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_47",
+      "symbol": "board_actor_retained_53",
       "address": 148837,
       "size": 73,
-      "binary_offset": 20912,
+      "binary_offset": 20825,
       "fixups": {
         "8": 993792,
         "24": 993796,
@@ -2602,10 +2644,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_48",
+      "symbol": "board_actor_retained_54",
       "address": 149030,
       "size": 243,
-      "binary_offset": 20985,
+      "binary_offset": 20898,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2624,10 +2666,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_49",
+      "symbol": "board_actor_retained_55",
       "address": 149366,
       "size": 257,
-      "binary_offset": 21228,
+      "binary_offset": 21141,
       "fixups": {
         "9": 1042636,
         "21": 1046143,
@@ -2648,10 +2690,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_50",
+      "symbol": "board_actor_retained_56",
       "address": 149744,
       "size": 271,
-      "binary_offset": 21485,
+      "binary_offset": 21398,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2672,19 +2714,19 @@
       }
     },
     {
-      "symbol": "board_actor_retained_51",
+      "symbol": "board_actor_retained_57",
       "address": 150038,
       "size": 11,
-      "binary_offset": 21756,
+      "binary_offset": 21669,
       "fixups": {
         "7": 1044139
       }
     },
     {
-      "symbol": "board_actor_retained_52",
+      "symbol": "board_actor_retained_58",
       "address": 150072,
       "size": 224,
-      "binary_offset": 21767,
+      "binary_offset": 21680,
       "fixups": {
         "5": 1046143,
         "23": 1027008,
@@ -2703,19 +2745,19 @@
       }
     },
     {
-      "symbol": "board_actor_retained_53",
+      "symbol": "board_actor_retained_59",
       "address": 150372,
       "size": 11,
-      "binary_offset": 21991,
+      "binary_offset": 21904,
       "fixups": {
         "7": 1044139
       }
     },
     {
-      "symbol": "board_actor_retained_54",
+      "symbol": "board_actor_retained_60",
       "address": 150406,
       "size": 182,
-      "binary_offset": 22002,
+      "binary_offset": 21915,
       "fixups": {
         "8": 1046143,
         "31": 1027008,
@@ -2731,29 +2773,29 @@
       }
     },
     {
-      "symbol": "board_actor_retained_55",
+      "symbol": "board_actor_retained_61",
       "address": 150605,
       "size": 25,
-      "binary_offset": 22184,
+      "binary_offset": 22097,
       "fixups": {
         "9": 1043638,
         "21": 1043137
       }
     },
     {
-      "symbol": "board_actor_retained_56",
+      "symbol": "board_actor_retained_62",
       "address": 150670,
       "size": 12,
-      "binary_offset": 22209,
+      "binary_offset": 22122,
       "fixups": {
         "8": 1020436
       }
     },
     {
-      "symbol": "board_actor_retained_57",
+      "symbol": "board_actor_retained_63",
       "address": 150705,
       "size": 262,
-      "binary_offset": 22221,
+      "binary_offset": 22134,
       "fixups": {
         "12": 1044139,
         "25": 1038030,
@@ -2775,28 +2817,28 @@
       }
     },
     {
-      "symbol": "board_actor_retained_58",
+      "symbol": "board_actor_retained_64",
       "address": 151009,
       "size": 12,
-      "binary_offset": 22483,
+      "binary_offset": 22396,
       "fixups": {
         "8": 1020436
       }
     },
     {
-      "symbol": "board_actor_retained_59",
+      "symbol": "board_actor_retained_65",
       "address": 151044,
       "size": 11,
-      "binary_offset": 22495,
+      "binary_offset": 22408,
       "fixups": {
         "7": 1044139
       }
     },
     {
-      "symbol": "board_actor_retained_60",
+      "symbol": "board_actor_retained_66",
       "address": 151088,
       "size": 237,
-      "binary_offset": 22506,
+      "binary_offset": 22419,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2815,10 +2857,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_61",
+      "symbol": "board_actor_retained_67",
       "address": 151423,
       "size": 275,
-      "binary_offset": 22743,
+      "binary_offset": 22656,
       "fixups": {
         "9": 1042636,
         "21": 1046143,
@@ -2840,10 +2882,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_62",
+      "symbol": "board_actor_retained_68",
       "address": 151776,
       "size": 158,
-      "binary_offset": 23018,
+      "binary_offset": 22931,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2857,10 +2899,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_63",
+      "symbol": "board_actor_retained_69",
       "address": 151951,
       "size": 469,
-      "binary_offset": 23176,
+      "binary_offset": 23089,
       "fixups": {
         "8": 993796,
         "31": 993800,
@@ -2894,10 +2936,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_64",
+      "symbol": "board_actor_retained_70",
       "address": 152498,
       "size": 239,
-      "binary_offset": 23645,
+      "binary_offset": 23558,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -2916,10 +2958,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_65",
+      "symbol": "board_actor_retained_71",
       "address": 152789,
       "size": 214,
-      "binary_offset": 23884,
+      "binary_offset": 23797,
       "fixups": {
         "12": 1041634,
         "25": 1036026,
@@ -2937,20 +2979,20 @@
       }
     },
     {
-      "symbol": "board_actor_retained_66",
+      "symbol": "board_actor_retained_72",
       "address": 153071,
       "size": 21,
-      "binary_offset": 24098,
+      "binary_offset": 24011,
       "fixups": {
         "7": 1043638,
         "16": 1043137
       }
     },
     {
-      "symbol": "board_actor_retained_67",
+      "symbol": "board_actor_retained_73",
       "address": 153186,
       "size": 255,
-      "binary_offset": 24119,
+      "binary_offset": 24032,
       "fixups": {
         "7": 1042636,
         "19": 1046143,
@@ -2971,19 +3013,19 @@
       }
     },
     {
-      "symbol": "board_actor_retained_68",
+      "symbol": "board_actor_retained_74",
       "address": 153514,
       "size": 11,
-      "binary_offset": 24374,
+      "binary_offset": 24287,
       "fixups": {
         "7": 1044139
       }
     },
     {
-      "symbol": "board_actor_retained_69",
+      "symbol": "board_actor_retained_75",
       "address": 153548,
       "size": 202,
-      "binary_offset": 24385,
+      "binary_offset": 24298,
       "fixups": {
         "5": 1046143,
         "23": 1027008,
@@ -3000,38 +3042,38 @@
       }
     },
     {
-      "symbol": "board_actor_retained_70",
+      "symbol": "board_actor_retained_76",
       "address": 153767,
       "size": 20,
-      "binary_offset": 24587,
+      "binary_offset": 24500,
       "fixups": {
         "5": 1043638,
         "15": 1043137
       }
     },
     {
-      "symbol": "board_actor_retained_71",
+      "symbol": "board_actor_retained_77",
       "address": 153830,
       "size": 10,
-      "binary_offset": 24607,
+      "binary_offset": 24520,
       "fixups": {
         "6": 1020436
       }
     },
     {
-      "symbol": "board_actor_retained_72",
+      "symbol": "board_actor_retained_78",
       "address": 153863,
       "size": 11,
-      "binary_offset": 24617,
+      "binary_offset": 24530,
       "fixups": {
         "7": 1044139
       }
     },
     {
-      "symbol": "board_actor_retained_73",
+      "symbol": "board_actor_retained_79",
       "address": 153907,
       "size": 174,
-      "binary_offset": 24628,
+      "binary_offset": 24541,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -3046,10 +3088,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_74",
+      "symbol": "board_actor_retained_80",
       "address": 154093,
       "size": 399,
-      "binary_offset": 24802,
+      "binary_offset": 24715,
       "fixups": {
         "8": 993800,
         "30": 1043638,
@@ -3080,29 +3122,29 @@
       }
     },
     {
-      "symbol": "board_actor_retained_75",
+      "symbol": "board_actor_retained_81",
       "address": 154535,
       "size": 10,
-      "binary_offset": 25201,
+      "binary_offset": 25114,
       "fixups": {
         "6": 1020436
       }
     },
     {
-      "symbol": "board_actor_retained_76",
+      "symbol": "board_actor_retained_82",
       "address": 154555,
       "size": 24,
-      "binary_offset": 25211,
+      "binary_offset": 25124,
       "fixups": {
         "7": 1036026,
         "20": 1044139
       }
     },
     {
-      "symbol": "board_actor_retained_77",
+      "symbol": "board_actor_retained_83",
       "address": 154612,
       "size": 133,
-      "binary_offset": 25235,
+      "binary_offset": 25148,
       "fixups": {
         "22": 1027008,
         "42": 1027010,
@@ -3114,10 +3156,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_78",
+      "symbol": "board_actor_retained_84",
       "address": 154758,
       "size": 42,
-      "binary_offset": 25368,
+      "binary_offset": 25281,
       "fixups": {
         "10": 993788,
         "24": 993792,
@@ -3125,20 +3167,20 @@
       }
     },
     {
-      "symbol": "board_actor_retained_79",
+      "symbol": "board_actor_retained_85",
       "address": 154817,
       "size": 25,
-      "binary_offset": 25410,
+      "binary_offset": 25323,
       "fixups": {
         "9": 1043638,
         "21": 1043137
       }
     },
     {
-      "symbol": "board_actor_retained_80",
+      "symbol": "board_actor_retained_86",
       "address": 154882,
       "size": 260,
-      "binary_offset": 25435,
+      "binary_offset": 25348,
       "fixups": {
         "8": 1020436,
         "22": 1041634,
@@ -3160,10 +3202,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_81",
+      "symbol": "board_actor_retained_87",
       "address": 155154,
       "size": 41,
-      "binary_offset": 25695,
+      "binary_offset": 25608,
       "fixups": {
         "8": 993800,
         "26": 1043638,
@@ -3171,10 +3213,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_82",
+      "symbol": "board_actor_retained_88",
       "address": 155318,
       "size": 158,
-      "binary_offset": 25736,
+      "binary_offset": 25649,
       "fixups": {
         "22": 1027008,
         "42": 1027010,
@@ -3188,10 +3230,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_83",
+      "symbol": "board_actor_retained_89",
       "address": 155488,
       "size": 54,
-      "binary_offset": 25894,
+      "binary_offset": 25807,
       "fixups": {
         "8": 993796,
         "27": 993800,
@@ -3200,28 +3242,28 @@
       }
     },
     {
-      "symbol": "board_actor_retained_84",
+      "symbol": "board_actor_retained_90",
       "address": 155582,
       "size": 12,
-      "binary_offset": 25948,
+      "binary_offset": 25861,
       "fixups": {
         "8": 1020436
       }
     },
     {
-      "symbol": "board_actor_retained_85",
+      "symbol": "board_actor_retained_91",
       "address": 155617,
       "size": 11,
-      "binary_offset": 25960,
+      "binary_offset": 25873,
       "fixups": {
         "7": 1044139
       }
     },
     {
-      "symbol": "board_actor_retained_86",
+      "symbol": "board_actor_retained_92",
       "address": 155651,
       "size": 144,
-      "binary_offset": 25971,
+      "binary_offset": 25884,
       "fixups": {
         "5": 1046143,
         "23": 1027008,
@@ -3234,38 +3276,38 @@
       }
     },
     {
-      "symbol": "board_actor_retained_87",
+      "symbol": "board_actor_retained_93",
       "address": 155808,
       "size": 14,
-      "binary_offset": 26115,
+      "binary_offset": 26028,
       "fixups": {
         "10": 993788
       }
     },
     {
-      "symbol": "board_actor_retained_88",
+      "symbol": "board_actor_retained_94",
       "address": 155863,
       "size": 20,
-      "binary_offset": 26129,
+      "binary_offset": 26042,
       "fixups": {
         "5": 1043638,
         "15": 1043137
       }
     },
     {
-      "symbol": "board_actor_retained_89",
+      "symbol": "board_actor_retained_95",
       "address": 155926,
       "size": 12,
-      "binary_offset": 26149,
+      "binary_offset": 26062,
       "fixups": {
         "8": 1020436
       }
     },
     {
-      "symbol": "board_actor_retained_90",
+      "symbol": "board_actor_retained_96",
       "address": 156004,
       "size": 126,
-      "binary_offset": 26161,
+      "binary_offset": 26074,
       "fixups": {
         "22": 1027008,
         "37": 1027010,
@@ -3277,19 +3319,19 @@
       }
     },
     {
-      "symbol": "board_actor_retained_91",
+      "symbol": "board_actor_retained_97",
       "address": 156142,
       "size": 16,
-      "binary_offset": 26287,
+      "binary_offset": 26200,
       "fixups": {
         "8": 993792
       }
     },
     {
-      "symbol": "board_actor_retained_92",
+      "symbol": "board_actor_retained_98",
       "address": 156170,
       "size": 100,
-      "binary_offset": 26303,
+      "binary_offset": 26216,
       "fixups": {
         "8": 993800,
         "30": 1043638,
@@ -3300,10 +3342,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_93",
+      "symbol": "board_actor_retained_99",
       "address": 156280,
       "size": 280,
-      "binary_offset": 26403,
+      "binary_offset": 26316,
       "fixups": {
         "14": 1036026,
         "28": 1044139,
@@ -3326,10 +3368,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_94",
+      "symbol": "board_actor_retained_100",
       "address": 156681,
       "size": 115,
-      "binary_offset": 26683,
+      "binary_offset": 26596,
       "fixups": {
         "14": 1027008,
         "42": 1027010,
@@ -3340,10 +3382,10 @@
       }
     },
     {
-      "symbol": "board_actor_retained_95",
+      "symbol": "board_actor_retained_101",
       "address": 156809,
       "size": 78,
-      "binary_offset": 26798,
+      "binary_offset": 26711,
       "fixups": {
         "8": 993788,
         "20": 993792,
@@ -3354,19 +3396,19 @@
       }
     },
     {
-      "symbol": "board_actor_retained_96",
+      "symbol": "board_actor_retained_102",
       "address": 156962,
       "size": 10,
-      "binary_offset": 26876,
+      "binary_offset": 26789,
       "fixups": {
         "5": 1044139
       }
     },
     {
-      "symbol": "board_actor_retained_97",
+      "symbol": "board_actor_retained_103",
       "address": 156985,
-      "size": 225,
-      "binary_offset": 26886,
+      "size": 150,
+      "binary_offset": 26799,
       "fixups": {
         "9": 1042636,
         "21": 1046143,
@@ -3376,20 +3418,27 @@
         "98": 1027014,
         "116": 1027016,
         "133": 1027018,
-        "146": 1018432,
-        "160": 993788,
-        "172": 993792,
-        "184": 993796,
-        "201": 993800,
-        "210": 1043638,
-        "220": 1043137
+        "146": 1018432
       }
     },
     {
-      "symbol": "board_actor_retained_98",
+      "symbol": "board_actor_retained_104",
+      "address": 157149,
+      "size": 61,
+      "binary_offset": 26949,
+      "fixups": {
+        "8": 993792,
+        "20": 993796,
+        "37": 993800,
+        "46": 1043638,
+        "56": 1043137
+      }
+    },
+    {
+      "symbol": "board_actor_retained_105",
       "address": 157328,
-      "size": 185,
-      "binary_offset": 27111,
+      "size": 126,
+      "binary_offset": 27010,
       "fixups": {
         "22": 1027008,
         "40": 1027010,
@@ -3397,15 +3446,22 @@
         "76": 1027014,
         "94": 1027016,
         "109": 1027018,
-        "122": 1018432,
-        "136": 993788,
-        "150": 993792,
-        "162": 993796,
-        "174": 993800
+        "122": 1018432
+      }
+    },
+    {
+      "symbol": "board_actor_retained_106",
+      "address": 157468,
+      "size": 45,
+      "binary_offset": 27136,
+      "fixups": {
+        "10": 993792,
+        "22": 993796,
+        "34": 993800
       }
     }
   ],
-  "assembly_size": 27296,
+  "assembly_size": 27181,
   "structure": [
     [
       150,
@@ -3467,5 +3523,7 @@
   "indexed_context_file": "board-actor-indexed-layout.json",
   "destination_context_file": "board-actor-destination-layout.json",
   "value_context_file": "board-actor-value-layout.json",
-  "disable_context_file": "board-actor-disable-layout.json"
+  "disable_context_file": "board-actor-disable-layout.json",
+  "clobber_context_file": "board-actor-clobber-layout.json",
+  "fragment_context_file": "board-actor-fragment-layout.json"
 }

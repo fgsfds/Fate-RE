@@ -174,15 +174,22 @@ runs. Its 31,119-byte whole translation still differs in store order and is not
 a full byte-exact replacement. A third context carries actual ESI/EDI/EAX
 values and adds 27 assignments, 368 bytes and 27 DATA sites in 19 runs.
 Keep the previous context: the new one reproduces only 175 of its 250 bytes.
-Actor 104 X now clears/stores ESI, but its MOVSX EDX,AX is hoisted before the
-preceding waypoint write; the original complete assignment still differs.
-Next qualify those complete neighboring operations together and prove any
-independent address calculation can commute, without changing store order.
+The existing value context now supplies complete actor 104/105 X assignments
+as two checked fragments each: their MOVSX EDX,AX commutes past one waypoint
+store without register/flag dependencies or changed store order. These add
+28 bytes without another compile. Conservative ESI/EDI output clobbers in a
+31,425-byte context add six other assignments, 87 bytes and six DATA sites.
+Keep all earlier contexts: this one loses 210 of the prior 618 destination
+bytes. Actor 104 Y at `0x20da9` still schedules XOR EDI,EDI before SHL EDX,4;
+the original shifts first. Both write flags, so do not reuse the pure-MOVSX
+commutation argument. Next keep the EDI zero lifetime after the completed EDX
+offset capture, using truthful conservative clobbers at that boundary.
 Explicit EBP outputs fail with E1122; use natural allocation. Saved XYZ,
 destination, waypoint and tile-row strides are 12, 16, 4 and 18 bytes; untouched
 words remain unchanged. Evidence: `work/board-slot-lifetime-nov27/REPORT.md`,
 `selected-indexed-operations.json`, `work/destination-lifetime-nov27/REPORT.md`,
-and `work/destination-values-nov27/REPORT.md`.
+`work/destination-values-nov27/REPORT.md`, `work/destination-clobbers-nov27/`,
+and `work/destination-fragments-nov27/REPORT.md`.
 
 ### Video prompt-mode blocker
 

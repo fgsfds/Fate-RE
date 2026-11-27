@@ -1763,10 +1763,10 @@ OBJECT_NAMES['sound_frame_limit_'] = 'sndlimit'
 from verify_c_leaf import ENCOUNTER_SPAWN_LAYOUT
 OBJECT_NAMES.update({p['symbol']: p['object'] for p in ENCOUNTER_SPAWN_LAYOUT['phases']})
 
-from verify_c_leaf import WEAPON_ANIMATION_LAYOUT, BOARD_ACTOR_LAYOUT, BOARD_ACTOR_CONFIGURATION_LAYOUTS
+from verify_c_leaf import WEAPON_ANIMATION_LAYOUT, BOARD_ACTOR_LAYOUT, BOARD_ACTOR_CONFIGURATION_LAYOUTS, BOARD_ACTOR_PLACEMENT_LAYOUTS
 OBJECT_NAMES.update({p['symbol']: next(c['object'] for c in WEAPON_ANIMATION_LAYOUT['contexts'] if c['public'] == p['public']) for p in WEAPON_ANIMATION_LAYOUT['phases']})
 OBJECT_NAMES.update({p['symbol']: 'actorcfg' for p in BOARD_ACTOR_LAYOUT['phases']})
-for _actor_layout in BOARD_ACTOR_CONFIGURATION_LAYOUTS:
+for _actor_layout in BOARD_ACTOR_PLACEMENT_LAYOUTS:
     OBJECT_NAMES.update({p['symbol']: _actor_layout['context']['object'] for p in _actor_layout['phases']})
 
 if __name__ == '__main__':

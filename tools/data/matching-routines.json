@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1624,
-  "unique_code_bytes": 199776,
-  "le_pointers": 11029,
+  "routines": 1634,
+  "unique_code_bytes": 199891,
+  "le_pointers": 11037,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -1900,6 +1900,66 @@
       "le_pointers": 4
     },
     {
+      "symbol": "board_actor_fragment_000_0_",
+      "object": "actvalue.obj",
+      "object_sha256": "db6107997a2fcf89901b49b0a9658ed06d7ed2c30dc980df217f7680bc50e716",
+      "sha256": "1a3614393425c367c2ff94e183cbc881f58a47d11f42a8830664c6eee9683f0f",
+      "raw_offset": "0x4639b",
+      "loaded_address": "0x20d9b",
+      "bytes": 3,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "board_actor_fragment_000_1_",
+      "object": "actvalue.obj",
+      "object_sha256": "db6107997a2fcf89901b49b0a9658ed06d7ed2c30dc980df217f7680bc50e716",
+      "sha256": "2e0f8e8ed7c319b1f957a1aaf9d77ea364cefbcb616dc58c28630e6d389269c8",
+      "raw_offset": "0x4639e",
+      "loaded_address": "0x20d9e",
+      "bytes": 11,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "board_actor_clobber_000_",
+      "object": "actclob.obj",
+      "object_sha256": "db0608ccfbfaf864778944c3e33e3ccb6f69faca4ab70416eba357de4f03828f",
+      "sha256": "367134a6c255be56123d136f3d559f0143b327b706cc62242c0badb696b663bf",
+      "raw_offset": "0x463b7",
+      "loaded_address": "0x20db7",
+      "bytes": 14,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "board_actor_fragment_001_0_",
+      "object": "actvalue.obj",
+      "object_sha256": "db6107997a2fcf89901b49b0a9658ed06d7ed2c30dc980df217f7680bc50e716",
+      "sha256": "1a3614393425c367c2ff94e183cbc881f58a47d11f42a8830664c6eee9683f0f",
+      "raw_offset": "0x464e6",
+      "loaded_address": "0x20ee6",
+      "bytes": 3,
+      "le_pointers": 0
+    },
+    {
+      "symbol": "board_actor_fragment_001_1_",
+      "object": "actvalue.obj",
+      "object_sha256": "db6107997a2fcf89901b49b0a9658ed06d7ed2c30dc980df217f7680bc50e716",
+      "sha256": "34db6d5b2391647297ce40ce269756b7e40e1cb07f4388885aa6bdd344ed64b7",
+      "raw_offset": "0x464e9",
+      "loaded_address": "0x20ee9",
+      "bytes": 11,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "board_actor_clobber_001_",
+      "object": "actclob.obj",
+      "object_sha256": "db0608ccfbfaf864778944c3e33e3ccb6f69faca4ab70416eba357de4f03828f",
+      "sha256": "2d4528ec4a71991a2a3615c35b7a73cbb8cbbda8c3ee4f1fe85e5ca91a5383c2",
+      "raw_offset": "0x4650e",
+      "loaded_address": "0x20f0e",
+      "bytes": 17,
+      "le_pointers": 1
+    },
+    {
       "symbol": "board_actor_destination_001_",
       "object": "actdest.obj",
       "object_sha256": "2cf5287a05f2aefb12485c64d00b640af2103d6be547a2c86c64ad4afa80836c",
@@ -1937,6 +1997,26 @@
       "raw_offset": "0x46e4c",
       "loaded_address": "0x2184c",
       "bytes": 17,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "board_actor_clobber_002_",
+      "object": "actclob.obj",
+      "object_sha256": "db0608ccfbfaf864778944c3e33e3ccb6f69faca4ab70416eba357de4f03828f",
+      "sha256": "4d3d49cbc4c2efc32db01f8ec83afd9f685105b9a1b5870406f10b9f08d61826",
+      "raw_offset": "0x46f6a",
+      "loaded_address": "0x2196a",
+      "bytes": 14,
+      "le_pointers": 1
+    },
+    {
+      "symbol": "board_actor_clobber_003_",
+      "object": "actclob.obj",
+      "object_sha256": "db0608ccfbfaf864778944c3e33e3ccb6f69faca4ab70416eba357de4f03828f",
+      "sha256": "6626dece1c0bc62a409de3058c682b0590c996a08c815da6f916ed76edb4b575",
+      "raw_offset": "0x470ab",
+      "loaded_address": "0x21aab",
+      "bytes": 14,
       "le_pointers": 1
     },
     {
@@ -2870,6 +2950,16 @@
       "le_pointers": 1
     },
     {
+      "symbol": "board_actor_clobber_004_",
+      "object": "actclob.obj",
+      "object_sha256": "db0608ccfbfaf864778944c3e33e3ccb6f69faca4ab70416eba357de4f03828f",
+      "sha256": "4d3d49cbc4c2efc32db01f8ec83afd9f685105b9a1b5870406f10b9f08d61826",
+      "raw_offset": "0x4bbcf",
+      "loaded_address": "0x265cf",
+      "bytes": 14,
+      "le_pointers": 1
+    },
+    {
       "symbol": "board_actor_indexed_070_",
       "object": "actsetup.obj",
       "object_sha256": "b4b991aa2dc0c5748f373a036e1348e06da3cd56f5fa4888753c78f6b383070e",
@@ -2878,6 +2968,16 @@
       "loaded_address": "0x2661a",
       "bytes": 118,
       "le_pointers": 9
+    },
+    {
+      "symbol": "board_actor_clobber_005_",
+      "object": "actclob.obj",
+      "object_sha256": "db0608ccfbfaf864778944c3e33e3ccb6f69faca4ab70416eba357de4f03828f",
+      "sha256": "6626dece1c0bc62a409de3058c682b0590c996a08c815da6f916ed76edb4b575",
+      "raw_offset": "0x4bd0e",
+      "loaded_address": "0x2670e",
+      "bytes": 14,
+      "le_pointers": 1
     },
     {
       "symbol": "restore_board_actor_sprites_",
