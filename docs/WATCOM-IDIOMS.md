@@ -280,6 +280,20 @@ wrong terminal EBX, so DATA-only replay would miss that ABI error.
 
 ### State-machine tables and DATA views
 
+For unrolled startup records, an actual signed-short AX argument/result
+identity can keep the configured slot runtime-indexed instead of folding
+every address into a constant. Retain the real field types and whole-array
+bounds. Qualify complete scalar assignments or full coordinate pairs, including
+their address preparation and masked live inputs. Coalesce only when both the
+original and compiler intervals are adjacent. Guard the entire private code
+and every fixup, including the many excluded configuration stores.
+
+Operation fixtures should require canonical field tuples and exact partitions
+of each placed run. Otherwise dropping a Y write from metadata may escape a
+whole-routine replay that still contains the original instruction. Use exact
+complements of the same poisoned register seed before applying live masks, so
+each omitted input bit is challenged in one of the cases.
+
 A whole-array character view should start from `&array`, so byte arithmetic
 can cover all rows rather than only the first element. Separate mutable X/Y
 word views of the same verified DATA object can retain two indexed load

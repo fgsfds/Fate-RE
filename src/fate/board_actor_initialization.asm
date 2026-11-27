@@ -40,8 +40,13 @@ second_actor_mode equ 0x7f6be
     shl %1, byte 4
 %endmacro
 
-section .retained_0 align=1 vstart=0x1e91a
-initialize_board_actors:
+section .text align=1
+initialize_board_actors equ 0x1e91a
+; Fully guarded C operations own the omitted ranges.
+.disable_slot equ 0x1e926
+.check_slot equ 0x1e930
+
+section .retained_0 align=1 vstart=0x1e91a follows=.text
     push ebx
     push ecx
     push edx
@@ -51,13 +56,9 @@ initialize_board_actors:
     mov cl, 0xff
     xor eax, eax
     jmp short .check_slot
-
-.disable_slot:
     movsx edx, ax
     inc eax
     mov [edx + actor_enabled], cl
-
-.check_slot:
     movsx edx, ax
     cmp edx, strict dword 0x1f4
     jng short .disable_slot
@@ -67,7 +68,7 @@ initialize_board_actors:
     mov edi, 0x3e8
     xor ecx, ecx
     xor esi, esi
-; board_actor_activation_ is supplied by guarded C.
+
 section .retained_1 align=1 vstart=0x1e959 follows=.retained_0
     mov [0x772d4], ebx
     mov [actor_z_offset + 1*4], ecx
@@ -85,7 +86,7 @@ section .retained_1 align=1 vstart=0x1e959 follows=.retained_0
     mov [0x772d0], edx
     mov [actor_projectile_type + 1], bl
     mov [actor_mode + 1], cl
-; board_actor_destination_ is supplied by guarded C.
+
 section .retained_2 align=1 vstart=0x1e9c1 follows=.retained_1
     mov [actor_z_offset + 2*4], esi
     mov [actor_sequence_initial + 2], ah
@@ -1785,18 +1786,21 @@ section .retained_2 align=1 vstart=0x1e9c1 follows=.retained_1
     xor dl, dl
     mov bl, 0x3
     mov [0x7ef12], dl
-; board_actor_tiles_ is supplied by guarded C.
+
 section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     mov dh, 0x1
     mov [0x7f6e6], bl
     xor ebx, ebx
     mov [0x7e933], dh
     mov [0x7306c], ebx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], ebx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], ebx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov eax, 0x68
     mov [edx + actor_destination_parameter_two], ebx
     movsx edx, ax
@@ -1848,30 +1852,42 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], di
     movsx edx, ax
     xor ebx, ebx
     mov [nosplit edx*4 + actor_first_waypoint], bx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor esi, esi
     mov [edx + actor_destination_x], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor edi, edi
     mov [edx + actor_destination_y], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor ebp, ebp
     mov [edx + actor_destination_parameter_one], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor eax, eax
     mov [edx + actor_destination_parameter_two], eax
     mov eax, 0x69
@@ -1912,32 +1928,46 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + mode_one_tile], 0x966
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + mode_five_tile], 0x966
     movsx edx, ax
     xor ecx, ecx
     mov [nosplit edx*4 + actor_first_waypoint], cx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor edi, edi
     mov [edx + actor_destination_x], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor ebx, ebx
     mov [edx + actor_destination_parameter_one], ebx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov eax, 0x6a
     mov [edx + actor_destination_parameter_two], ebx
     movsx edx, ax
@@ -1978,7 +2008,9 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_mode], cl
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + actor_base_tile], 0x8f8
     movsx ebx, ax
     mov edx, ebx
@@ -1993,26 +2025,36 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_four_tile], si
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], cx
     movsx edx, ax
     xor esi, esi
     mov [nosplit edx*4 + actor_first_waypoint], si
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor ebx, ebx
     mov [edx + actor_destination_x], ebx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor ecx, ecx
     mov [edx + actor_destination_y], ecx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], ebx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov eax, 0x6b
     mov [edx + actor_destination_parameter_two], ebx
     movsx edx, ax
@@ -2060,26 +2102,37 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_three_tile], cx
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], si
     movsx edx, ax
     xor edi, edi
     mov [nosplit edx*4 + actor_first_waypoint], di
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor esi, esi
     mov [edx + actor_destination_x], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], esi
     movsx edx, ax
     xor bh, bh
@@ -2132,27 +2185,38 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_two_tile], si
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], di
     movsx edx, ax
     xor ebx, ebx
     mov [nosplit edx*4 + actor_first_waypoint], bx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor edi, edi
     mov [edx + actor_destination_x], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor ebp, ebp
     mov [edx + actor_destination_y], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor ecx, ecx
     mov [edx + actor_destination_parameter_one], edi
     movsx edx, ax
@@ -2198,30 +2262,43 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + mode_one_tile], 0x966
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov ebx, 0x966
     mov ecx, edi
     mov [nosplit edx*2 + mode_five_tile], bx
     movsx edx, ax
     xor ecx, edi
     mov [nosplit edx*4 + actor_first_waypoint], cx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_x], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], ebp
     movsx edx, ax
     mov bh, 0x2
@@ -2266,7 +2343,9 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_mode], cl
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + actor_base_tile], 0xa70
     movsx ebx, ax
     mov edx, ebx
@@ -2275,30 +2354,44 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_six_tile], cx
     movsx edx, ax
     mov word [nosplit edx*4 + actor_first_waypoint], 0x59
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor esi, esi
     mov [edx + actor_destination_x], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov eax, 0x6f
     mov [edx + actor_destination_parameter_two], esi
     movsx edx, ax
@@ -2337,10 +2430,14 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + mode_two_tile], 0x8f8
     movsx ebx, ax
     mov edx, ebx
@@ -2349,19 +2446,26 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], si
     movsx edx, ax
     mov word [nosplit edx*4 + actor_first_waypoint], 0x5f
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor edi, edi
     mov [edx + actor_destination_x], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], edi
     movsx edx, ax
     mov bh, 0x2
@@ -2410,33 +2514,49 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_six_tile], di
     movsx edx, ax
     mov word [nosplit edx*4 + actor_first_waypoint], 0x64
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor ebx, ebx
     mov [edx + actor_destination_x], ebx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], ebx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], ebx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov eax, 0x71
     mov [edx + actor_destination_parameter_two], ebx
     movsx edx, ax
@@ -2477,30 +2597,43 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov edi, ecx
     mov [nosplit edx*2 + mode_five_tile], cx
     movsx edx, ax
     xor edi, ecx
     mov [nosplit edx*4 + actor_first_waypoint], di
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor esi, esi
     mov [edx + actor_destination_x], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], esi
     movsx edx, ax
     mov bh, 0x4
@@ -2544,32 +2677,46 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], si
     movsx edx, ax
     xor ebx, ebx
     mov [nosplit edx*4 + actor_first_waypoint], bx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor edi, edi
     mov [edx + actor_destination_x], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor ebp, ebp
     mov [edx + actor_destination_y], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov eax, 0x73
     mov [edx + actor_destination_parameter_two], edi
     movsx edx, ax
@@ -2609,31 +2756,45 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov ecx, edi
     mov [nosplit edx*2 + mode_five_tile], di
     movsx edx, ax
     xor ecx, edi
     mov [nosplit edx*4 + actor_first_waypoint], cx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_x], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_two], ebp
     mov eax, 0x74
     mov bh, 0x4
@@ -2675,7 +2836,9 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_mode], cl
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + actor_base_tile], 0x9b8
     movsx ebx, ax
     mov edx, ebx
@@ -2684,28 +2847,40 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov esi, ecx
     mov [nosplit edx*2 + mode_five_tile], cx
     movsx edx, ax
     xor esi, ecx
     mov [nosplit edx*4 + actor_first_waypoint], si
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_x], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0xfffff400
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_two], 0xffffe200
     mov eax, 0x75
     movsx edx, ax
@@ -2744,27 +2919,40 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], cx
     movsx edx, ax
     mov word [nosplit edx*4 + actor_first_waypoint], 0x1d
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_x], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], esi
     movsx edx, ax
     mov bh, 0x4
@@ -2813,29 +3001,43 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], si
     movsx edx, ax
     mov word [nosplit edx*4 + actor_first_waypoint], 0x21
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_x], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov eax, 0x77
     mov [edx + actor_destination_parameter_two], ebp
     movsx edx, ax
@@ -2856,18 +3058,12 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     xor ecx, ecx
     mov [nosplit edx*4 + actor_z_offset], ecx
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x8
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
+
+section .retained_4 align=1 vstart=0x22065 follows=.retained_3
     movsx edx, ax
     mov byte [edx + actor_projectile_type], 0x1
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x4665
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x2
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x3
+
+section .retained_5 align=1 vstart=0x22090 follows=.retained_4
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -2875,28 +3071,41 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], di
+
+section .retained_6 align=1 vstart=0x2210e follows=.retained_5
     movsx edx, ax
-    mov word [nosplit edx*4 + actor_first_waypoint], 0x24
-    actor_destination_index edx
+    shl edx, byte 4
     xor esi, esi
     mov [edx + actor_destination_x], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], esi
     movsx edx, ax
     mov bh, 0x4
@@ -2909,15 +3118,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_board], cl
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_x], 0x1c80
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0x3600
+
+section .retained_7 align=1 vstart=0x22185 follows=.retained_6
     movsx edx, ax
     mov ch, 0x8
     mov [nosplit edx*4 + actor_z_offset], esi
@@ -2939,7 +3141,9 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_mode], cl
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + actor_base_tile], 0x9b8
     movsx ebx, ax
     mov edx, ebx
@@ -2948,59 +3152,47 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], cx
+
+section .retained_8 align=1 vstart=0x2225b follows=.retained_7
     movsx edx, ax
-    mov word [nosplit edx*4 + actor_first_waypoint], 0x27
-    actor_destination_index edx
+    shl edx, byte 4
     xor edi, edi
     mov [edx + actor_destination_x], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov eax, 0x79
     mov [edx + actor_destination_parameter_two], edi
     movsx edx, ax
     mov byte [edx + actor_enabled], 0x4
     movsx edx, ax
     mov byte [edx + actor_board], 0x6
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    mov esi, 0xffffef80
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], esi
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0x4d00
-    movsx edx, ax
-    xor ebp, ebp
-    mov [nosplit edx*4 + actor_z_offset], ebp
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x8
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x1
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x4665
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x2
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x3
+
+section .retained_9 align=1 vstart=0x2231f follows=.retained_8
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -3008,30 +3200,44 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_four_tile], cx
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], cx
+
+section .retained_10 align=1 vstart=0x2239d follows=.retained_9
     movsx edx, ax
-    mov word [nosplit edx*4 + actor_first_waypoint], 0x2b
-    actor_destination_index edx
+    shl edx, byte 4
     xor ebx, ebx
     mov [edx + actor_destination_x], ebx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], ebx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], ebx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov eax, 0x7a
     mov [edx + actor_destination_parameter_two], ebx
     mov bh, 0x4
@@ -3041,23 +3247,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_board], cl
-    mov edx, ebx
-    shl edx, byte 0x2
-    mov ebp, 0x2980
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], ebp
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0x6a00
-    movsx edx, ax
-    xor ecx, ecx
-    mov [nosplit edx*4 + actor_z_offset], ecx
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x8
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
+
+section .retained_11 align=1 vstart=0x22438 follows=.retained_10
     mov bl, 0x1
     movsx edx, ax
     mov ecx, 0x4665
@@ -3077,61 +3268,52 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_three_tile], si
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], si
     movsx edx, ax
     xor ebx, ebx
     mov [nosplit edx*4 + actor_first_waypoint], bx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_x], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0x6a00
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0x4280
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_two], 0x6880
     mov eax, 0x7b
     movsx edx, ax
     mov byte [edx + actor_enabled], 0x4
     movsx edx, ax
     mov byte [edx + actor_board], 0x6
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_x], 0x1900
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0x3b00
-    movsx edx, ax
-    xor esi, esi
-    mov [nosplit edx*4 + actor_z_offset], esi
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x8
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x1
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x965
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x2
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x4
+
+section .retained_12 align=1 vstart=0x225b4 follows=.retained_11
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -3139,29 +3321,42 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_two_tile], di
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], di
     movsx edx, ax
     xor ecx, ecx
     mov [nosplit edx*4 + actor_first_waypoint], cx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov edi, 0x1900
     mov [edx + actor_destination_x], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0x3b00
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov bh, 0x4
     mov [edx + actor_destination_parameter_one], edi
     movsx edx, ax
@@ -3208,33 +3403,48 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_mode], cl
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + actor_base_tile], 0x9b8
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov ecx, 0x9b8
     mov [nosplit edx*2 + mode_one_tile], cx
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov esi, ecx
     mov [nosplit edx*2 + mode_five_tile], cx
     movsx edx, ax
     xor esi, ecx
     mov [nosplit edx*4 + actor_first_waypoint], si
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_x], 0x2580
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0xffffcc00
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0xfffffc80
     movsx edx, ax
     mov edi, 0x1a80
@@ -3245,62 +3455,54 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     mov byte [edx + actor_enabled], 0x4
     movsx edx, ax
     mov byte [edx + actor_board], 0x6
+
+section .retained_13 align=1 vstart=0x22864 follows=.retained_12
     movsx ebx, ax
     mov edx, ebx
-    shl edx, byte 0x2
-    mov ebp, 0xfffff100
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], ebp
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0xfffff480
-    movsx edx, ax
-    xor ecx, ecx
-    mov [nosplit edx*4 + actor_z_offset], ecx
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x8
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x1
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x3665
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x2
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x5
-    movsx ebx, ax
-    actor_tile_index edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov ecx, 0x9b8
     mov [nosplit edx*2 + actor_base_tile], cx
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov edi, ecx
     mov [nosplit edx*2 + mode_five_tile], cx
     movsx edx, ax
     xor edi, ecx
     mov [nosplit edx*4 + actor_first_waypoint], di
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_x], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0xfffff480
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0x200
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_two], 0xfffffbac
     mov eax, 0x7e
     mov bh, 0x4
@@ -3310,28 +3512,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_board], cl
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_x], 0x2180
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0xffffdc80
-    movsx edx, ax
-    xor esi, esi
-    mov [nosplit edx*4 + actor_z_offset], esi
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x8
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x1
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x4665
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x2
+
+section .retained_14 align=1 vstart=0x229a9 follows=.retained_13
     mov cl, 0x4
     movsx edx, ax
     movsx ebx, ax
@@ -3342,31 +3524,45 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], si
     movsx edx, ax
     xor ebx, ebx
     mov [nosplit edx*4 + actor_first_waypoint], bx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_x], 0x2180
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov ebp, 0xffffdc80
     mov [edx + actor_destination_y], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0xf00
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov eax, 0x7f
     mov [edx + actor_destination_parameter_two], ebp
     movsx edx, ax
@@ -3384,21 +3580,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     shl edx, byte 0x2
     sub edx, ebx
     mov dword [nosplit edx*4 + saved_actor_y], 0x1880
-    movsx edx, ax
-    xor ebp, ebp
-    mov [nosplit edx*4 + actor_z_offset], ebp
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x8
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x1
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x4665
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x2
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x4
+
+section .retained_15 align=1 vstart=0x22b00 follows=.retained_14
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -3406,27 +3589,39 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov ecx, edi
     mov [nosplit edx*2 + mode_five_tile], di
     movsx edx, ax
     xor ecx, edi
     mov [nosplit edx*4 + actor_first_waypoint], cx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_x], 0xffffe600
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0x1880
     movsx edx, ax
     mov esi, 0xffffec00
@@ -3444,21 +3639,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_board], cl
-    mov edx, ebx
-    shl edx, byte 0x2
-    mov ebp, 0xc00
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], ebp
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0x480
-    movsx edx, ax
-    xor ecx, ecx
-    mov [nosplit edx*4 + actor_z_offset], ecx
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
+
+section .retained_16 align=1 vstart=0x22c1e follows=.retained_15
     mov esi, 0x3e8
     movsx edx, ax
     mov bl, 0x3
@@ -3475,7 +3657,9 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_mode], cl
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + actor_base_tile], 0xa02
     movsx ebx, ax
     mov edx, ebx
@@ -3484,62 +3668,53 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov edi, ecx
     mov [nosplit edx*2 + mode_six_tile], cx
     movsx edx, ax
     xor edi, ecx
     mov [nosplit edx*4 + actor_first_waypoint], di
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_x], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0x480
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0x1a00
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_two], 0x1680
     mov eax, 0x81
     movsx edx, ax
     mov byte [edx + actor_enabled], 0x5
     movsx edx, ax
     mov byte [edx + actor_board], 0x6
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_x], 0x1700
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0x380
-    movsx edx, ax
-    xor esi, esi
-    mov [nosplit edx*4 + actor_z_offset], esi
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x3
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x2e65
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x1
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x4
+
+section .retained_17 align=1 vstart=0x22dc0 follows=.retained_16
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -3547,34 +3722,50 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov ecx, esi
     mov [nosplit edx*2 + mode_six_tile], si
     movsx edx, ax
     xor ecx, esi
     mov [nosplit edx*4 + actor_first_waypoint], cx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_x], 0x1700
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0x380
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0x800
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_two], 0x1880
     mov eax, 0x82
     mov bh, 0x5
@@ -3617,7 +3808,9 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_mode], cl
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + actor_base_tile], 0xa02
     movsx ebx, ax
     mov edx, ebx
@@ -3626,29 +3819,42 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov edi, ecx
     mov [nosplit edx*2 + mode_six_tile], cx
     movsx edx, ax
     xor edi, ecx
     mov [nosplit edx*4 + actor_first_waypoint], di
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_x], 0xffffe000
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0x3a00
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0xffffd000
     movsx edx, ax
     mov edi, 0xffffff00
@@ -3659,32 +3865,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     mov byte [edx + actor_enabled], 0x5
     movsx edx, ax
     mov byte [edx + actor_board], 0x6
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    mov ebp, 0x1100
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], ebp
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0x4600
-    movsx edx, ax
-    xor ecx, ecx
-    mov [nosplit edx*4 + actor_z_offset], ecx
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x3
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x2e65
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x1
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x4
+
+section .retained_18 align=1 vstart=0x23098 follows=.retained_17
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -3692,34 +3874,50 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov ecx, esi
     mov [nosplit edx*2 + mode_six_tile], si
     movsx edx, ax
     xor ecx, esi
     mov [nosplit edx*4 + actor_first_waypoint], cx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_x], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0x4600
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0x2e00
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_two], 0x6c00
     mov eax, 0x92
     xor bh, bh
@@ -3761,7 +3959,9 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_mode], cl
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + actor_base_tile], 0x966
     movsx ebx, ax
     mov edx, ebx
@@ -3776,25 +3976,35 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], cx
     movsx edx, ax
     xor esi, esi
     mov [nosplit edx*4 + actor_first_waypoint], si
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_x], 0xffffe300
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov ebp, 0xcb00
     mov [edx + actor_destination_y], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0xfffff400
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov eax, 0x93
     mov [edx + actor_destination_parameter_two], ebp
     movsx edx, ax
@@ -3813,21 +4023,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     shl edx, byte 0x2
     sub edx, ebx
     mov [nosplit edx*4 + saved_actor_y], ebp
-    movsx edx, ax
-    xor ebp, ebp
-    mov [nosplit edx*4 + actor_z_offset], ebp
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x2
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x565
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x1
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x4
+
+section .retained_19 align=1 vstart=0x23355 follows=.retained_18
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -3835,7 +4032,9 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], cx
     mov edx, ebx
@@ -3844,23 +4043,32 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_four_tile], di
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], cx
     movsx edx, ax
     xor edi, edi
     mov [nosplit edx*4 + actor_first_waypoint], di
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_x], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov ecx, 0xcb00
     mov [edx + actor_destination_y], ecx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0xffffe300
     movsx edx, ax
     mov bh, 0x4
@@ -3873,23 +4081,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_board], cl
-    mov edx, ebx
-    shl edx, byte 0x2
-    mov ebp, 0x1480
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], ebp
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0xc200
-    movsx edx, ax
-    xor ecx, ecx
-    mov [nosplit edx*4 + actor_z_offset], ecx
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x8
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
+
+section .retained_20 align=1 vstart=0x2347a follows=.retained_19
     mov bl, 0x1
     movsx edx, ax
     mov ecx, 0x3665
@@ -3909,60 +4102,51 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_three_tile], si
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], si
     movsx edx, ax
     mov [nosplit edx*4 + actor_first_waypoint], di
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_x], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0xc200
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0x3100
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_two], 0xba00
     mov eax, 0x95
     movsx edx, ax
     mov [edx + actor_enabled], cl
     movsx edx, ax
     mov byte [edx + actor_board], 0x7
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_x], 0x2480
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0x9100
-    movsx edx, ax
-    xor esi, esi
-    mov [nosplit edx*4 + actor_z_offset], esi
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x8
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x1
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x4665
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x2
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x4
+
+section .retained_21 align=1 vstart=0x235f3 follows=.retained_20
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -3970,26 +4154,38 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_two_tile], di
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], di
     movsx edx, ax
     xor ecx, ecx
     mov [nosplit edx*4 + actor_first_waypoint], cx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_x], 0x2480
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0x9100
     movsx edx, ax
     mov ebx, 0x2680
@@ -4040,33 +4236,48 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_mode], cl
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + actor_base_tile], 0x9b8
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov ecx, 0x9b8
     mov [nosplit edx*2 + mode_one_tile], cx
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov esi, ecx
     mov [nosplit edx*2 + mode_five_tile], cx
     movsx edx, ax
     xor esi, ecx
     mov [nosplit edx*4 + actor_first_waypoint], si
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_x], 0x2780
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0xad80
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0x400
     movsx edx, ax
     mov edi, 0xa980
@@ -4077,62 +4288,54 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     mov byte [edx + actor_enabled], 0x4
     movsx edx, ax
     mov byte [edx + actor_board], 0x7
+
+section .retained_22 align=1 vstart=0x238a7 follows=.retained_21
     movsx ebx, ax
     mov edx, ebx
-    shl edx, byte 0x2
-    mov ebp, 0x3880
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], ebp
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0x9280
-    movsx edx, ax
-    xor ecx, ecx
-    mov [nosplit edx*4 + actor_z_offset], ecx
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x8
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x1
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x4665
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x2
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x4
-    movsx ebx, ax
-    actor_tile_index edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov ecx, 0x9b8
     mov [nosplit edx*2 + actor_base_tile], cx
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov edi, ecx
     mov [nosplit edx*2 + mode_five_tile], cx
     movsx edx, ax
     xor edi, ecx
     mov [nosplit edx*4 + actor_first_waypoint], di
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_x], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0x9280
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0x1300
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_two], 0x9780
     mov eax, 0x98
     mov bh, 0x4
@@ -4142,28 +4345,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_board], cl
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_x], 0xffffc300
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0xb900
-    movsx edx, ax
-    xor esi, esi
-    mov [nosplit edx*4 + actor_z_offset], esi
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x8
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x1
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x4665
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x2
+
+section .retained_23 align=1 vstart=0x239ec follows=.retained_22
     mov cl, 0x4
     movsx edx, ax
     movsx ebx, ax
@@ -4174,28 +4357,41 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], si
     movsx edx, ax
     xor ebx, ebx
     mov [nosplit edx*4 + actor_first_waypoint], bx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_x], 0xffffc300
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0xb900
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0xffffba00
     movsx edx, ax
     mov ecx, 0xc100
@@ -4217,21 +4413,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     shl edx, byte 0x2
     sub edx, ebx
     mov dword [nosplit edx*4 + saved_actor_y], 0xd580
-    movsx edx, ax
-    xor ebp, ebp
-    mov [nosplit edx*4 + actor_z_offset], ebp
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x8
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x1
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x4665
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x2
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x4
+
+section .retained_24 align=1 vstart=0x23b48 follows=.retained_23
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -4239,27 +4422,39 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov ecx, edi
     mov [nosplit edx*2 + mode_five_tile], di
     movsx edx, ax
     xor ecx, edi
     mov [nosplit edx*4 + actor_first_waypoint], cx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_x], 0xffff9e00
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0xd580
     movsx edx, ax
     mov esi, 0xffffb180
@@ -4277,21 +4472,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_board], cl
-    mov edx, ebx
-    shl edx, byte 0x2
-    mov ebp, 0xffff8d00
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], ebp
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0xdc80
-    movsx edx, ax
-    xor ecx, ecx
-    mov [nosplit edx*4 + actor_z_offset], ecx
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
+
+section .retained_25 align=1 vstart=0x23c66 follows=.retained_24
     mov esi, 0x3e8
     movsx edx, ax
     mov bl, 0x3
@@ -4308,7 +4490,9 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_mode], cl
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + actor_base_tile], 0xa02
     movsx ebx, ax
     mov edx, ebx
@@ -4317,62 +4501,53 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov edi, ecx
     mov [nosplit edx*2 + mode_six_tile], cx
     movsx edx, ax
     xor edi, ecx
     mov [nosplit edx*4 + actor_first_waypoint], di
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_x], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0xdc80
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0xffffa600
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_two], 0xd780
     mov eax, 0x9b
     movsx edx, ax
     mov byte [edx + actor_enabled], 0x5
     movsx edx, ax
     mov byte [edx + actor_board], 0x7
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_x], 0xffff9380
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0xdf00
-    movsx edx, ax
-    xor esi, esi
-    mov [nosplit edx*4 + actor_z_offset], esi
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x3
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x2e65
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x1
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x2
+
+section .retained_26 align=1 vstart=0x23e08 follows=.retained_25
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -4380,34 +4555,50 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov ecx, esi
     mov [nosplit edx*2 + mode_six_tile], si
     movsx edx, ax
     xor ecx, esi
     mov [nosplit edx*4 + actor_first_waypoint], cx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_x], 0xffff9380
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0xdf00
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0xffffa500
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_two], 0xd380
     mov eax, 0x9d
     xor bh, bh
@@ -4450,7 +4641,9 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_mode], cl
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + actor_base_tile], 0x966
     movsx ebx, ax
     mov edx, ebx
@@ -4465,23 +4658,33 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], cx
+
+section .retained_27 align=1 vstart=0x23ffe follows=.retained_26
     movsx edx, ax
-    mov word [nosplit edx*4 + actor_first_waypoint], 0x38
-    actor_destination_index edx
+    shl edx, byte 4
     mov [edx + actor_destination_x], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov eax, 0x9e
     mov [edx + actor_destination_parameter_two], ebp
     movsx edx, ax
@@ -4489,32 +4692,13 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     mov [edx + actor_enabled], ch
     movsx edx, ax
     mov byte [edx + actor_board], 0x7
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    mov ebp, 0xfffffc80
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], ebp
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0x6580
+
+section .retained_28 align=1 vstart=0x24073 follows=.retained_27
     movsx edx, ax
     xor ecx, ecx
     mov [nosplit edx*4 + actor_z_offset], ecx
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x2
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x565
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x1
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x3
+
+section .retained_29 align=1 vstart=0x240c1 follows=.retained_28
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -4522,7 +4706,9 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], cx
     mov edx, ebx
@@ -4531,22 +4717,31 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], cx
+
+section .retained_30 align=1 vstart=0x24144 follows=.retained_29
     movsx edx, ax
-    mov word [nosplit edx*4 + actor_first_waypoint], 0x3b
-    actor_destination_index edx
+    shl edx, byte 4
     xor esi, esi
     mov [edx + actor_destination_x], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], esi
     movsx edx, ax
     xor bh, bh
@@ -4559,21 +4754,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_board], cl
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_x], 0xffffde00
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0x8d80
-    movsx edx, ax
-    mov [nosplit edx*4 + actor_z_offset], esi
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
+
+section .retained_31 align=1 vstart=0x241dc follows=.retained_30
     mov bl, 0x2
     movsx edx, ax
     mov ecx, 0x1865
@@ -4593,10 +4775,14 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + mode_two_tile], 0x8f8
     movsx ebx, ax
     mov edx, ebx
@@ -4605,22 +4791,30 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], si
     movsx edx, ax
     xor ebx, ebx
     mov [nosplit edx*4 + actor_first_waypoint], bx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_x], 0xffffde00
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov ebp, 0x8d80
     mov [edx + actor_destination_y], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0x580
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov eax, 0xa0
     mov [edx + actor_destination_parameter_two], ebp
     movsx edx, ax
@@ -4638,21 +4832,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     shl edx, byte 0x2
     sub edx, ebx
     mov dword [nosplit edx*4 + saved_actor_y], 0x7200
-    movsx edx, ax
-    xor ebp, ebp
-    mov [nosplit edx*4 + actor_z_offset], ebp
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x3
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x2e65
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x1
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x4
+
+section .retained_32 align=1 vstart=0x24361 follows=.retained_31
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -4660,29 +4841,43 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_six_tile], di
     movsx edx, ax
     xor esi, esi
     mov [nosplit edx*4 + actor_first_waypoint], si
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_x], 0xffffea80
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0x7200
     movsx edx, ax
     mov esi, 0xffffeb00
@@ -4700,27 +4895,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_board], cl
-    mov edx, ebx
-    shl edx, byte 0x2
-    mov ebp, 0xfffffe80
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], ebp
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0x8400
-    movsx edx, ax
-    xor ecx, ecx
-    mov [nosplit edx*4 + actor_z_offset], ecx
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x3
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x2e65
+
+section .retained_33 align=1 vstart=0x244b3 follows=.retained_32
     mov bh, 0x1
     movsx edx, ax
     mov cl, 0x4
@@ -4734,64 +4910,57 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_four_tile], cx
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_six_tile], cx
     movsx edx, ax
     xor ebx, ebx
     mov [nosplit edx*4 + actor_first_waypoint], bx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_x], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0x8400
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0xffffda80
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_two], 0xa500
     mov eax, 0xa2
     movsx edx, ax
     mov byte [edx + actor_enabled], 0x5
     movsx edx, ax
     mov byte [edx + actor_board], 0x7
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_x], 0x3480
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0xb100
-    movsx edx, ax
-    xor esi, esi
-    mov [nosplit edx*4 + actor_z_offset], esi
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x3
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x2e65
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x1
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x4
+
+section .retained_34 align=1 vstart=0x24626 follows=.retained_33
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -4799,31 +4968,45 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_two_tile], di
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov esi, edi
     mov [nosplit edx*2 + mode_six_tile], di
     movsx edx, ax
     xor esi, edi
     mov [nosplit edx*4 + actor_first_waypoint], si
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov edi, 0x3480
     mov [edx + actor_destination_x], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0xb100
     movsx edx, ax
     mov ebx, 0x2780
@@ -4841,26 +5024,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_board], cl
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], edi
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0xa300
-    movsx edx, ax
-    xor ebp, ebp
-    mov [nosplit edx*4 + actor_z_offset], ebp
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x3
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x2e65
+
+section .retained_35 align=1 vstart=0x24776 follows=.retained_34
     mov bh, 0x1
     movsx edx, ax
     mov cl, 0x4
@@ -4868,35 +5033,52 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_mode], cl
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov ecx, 0xa02
     mov [nosplit edx*2 + actor_base_tile], cx
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_six_tile], cx
     movsx edx, ax
     xor ebx, ebx
     mov [nosplit edx*4 + actor_first_waypoint], bx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_x], 0x3480
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0xa300
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0x2780
     movsx edx, ax
     mov edi, 0xad00
@@ -4908,32 +5090,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     mov [edx + actor_enabled], ch
     movsx edx, ax
     mov byte [edx + actor_board], 0x7
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    mov ebp, 0xffffff80
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], ebp
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0xaf00
-    movsx edx, ax
-    xor ecx, ecx
-    mov [nosplit edx*4 + actor_z_offset], ecx
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x2
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x565
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x1
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x4
+
+section .retained_36 align=1 vstart=0x248f0 follows=.retained_35
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -4941,7 +5099,9 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], di
     mov edx, ebx
@@ -4950,24 +5110,34 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], di
     movsx edx, ax
     xor ecx, ecx
     mov [nosplit edx*4 + actor_first_waypoint], cx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_x], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0xaf00
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_two], 0xa480
     mov eax, 0xa5
     xor bh, bh
@@ -4991,21 +5161,19 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     xor esi, ebp
     mov [nosplit edx*4 + actor_z_offset], esi
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
+
+section .retained_37 align=1 vstart=0x24a16 follows=.retained_36
     movsx edx, ax
     mov bl, 0x2
     mov [edx + actor_projectile_type], bl
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x565
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x1
+
+section .retained_38 align=1 vstart=0x24a38 follows=.retained_37
     movsx edx, ax
     mov [edx + actor_mode], bl
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + actor_base_tile], 0x966
     movsx ebx, ax
     mov edx, ebx
@@ -5020,24 +5188,33 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], cx
     movsx edx, ax
     xor esi, esi
     mov [nosplit edx*4 + actor_first_waypoint], si
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor edi, edi
     mov [edx + actor_destination_x], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor ebp, ebp
     mov [edx + actor_destination_y], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor ebx, ebx
     mov [edx + actor_destination_parameter_one], ebx
     movsx edx, ax
@@ -5050,30 +5227,13 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     mov [edx + actor_enabled], ch
     movsx edx, ax
     mov byte [edx + actor_board], 0x7
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    mov esi, 0xffffff00
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], esi
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0xc680
-    movsx edx, ax
-    mov [nosplit edx*4 + actor_z_offset], ebp
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
+
+section .retained_39 align=1 vstart=0x24b64 follows=.retained_38
     movsx edx, ax
     mov cl, 0x2
     mov [edx + actor_projectile_type], cl
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x565
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x1
+
+section .retained_40 align=1 vstart=0x24b86 follows=.retained_39
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_mode], cl
@@ -5083,7 +5243,9 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], cx
     mov edx, ebx
@@ -5092,27 +5254,37 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], cx
     movsx edx, ax
     xor edi, edi
     mov [nosplit edx*4 + actor_first_waypoint], di
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor ebx, ebx
     mov [edx + actor_destination_x], ebx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor ecx, ecx
     mov [edx + actor_destination_y], ecx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor esi, esi
     mov [edx + actor_destination_parameter_one], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov eax, 0xd1
     mov [edx + actor_destination_parameter_two], ebx
     movsx edx, ax
@@ -5122,23 +5294,13 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_board], cl
-    mov edx, ebx
-    shl edx, byte 0x2
-    mov ebp, 0xffffe300
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], ebp
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0xcb00
+
+section .retained_41 align=1 vstart=0x24c8e follows=.retained_40
     movsx edx, ax
     xor ecx, ecx
     mov [nosplit edx*4 + actor_z_offset], ecx
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
+
+section .retained_42 align=1 vstart=0x24cb1 follows=.retained_41
     mov bl, 0x2
     movsx edx, ax
     mov ecx, 0x565
@@ -5158,10 +5320,14 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + mode_two_tile], 0x8f8
     movsx ebx, ax
     mov edx, ebx
@@ -5170,53 +5336,47 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], si
     movsx edx, ax
     mov [nosplit edx*4 + actor_first_waypoint], di
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_x], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov edi, 0xcb00
     mov [edx + actor_destination_y], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0xfffff400
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov eax, 0xd2
     mov [edx + actor_destination_parameter_two], edi
     movsx edx, ax
     mov byte [edx + actor_enabled], 0x2
     movsx edx, ax
     mov byte [edx + actor_board], 0xa
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_x], 0xfffff880
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0xad0e
+
+section .retained_43 align=1 vstart=0x24de1 follows=.retained_42
     movsx edx, ax
     xor esi, esi
     mov [nosplit edx*4 + actor_z_offset], esi
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
+
+section .retained_44 align=1 vstart=0x24e04 follows=.retained_43
     movsx edx, ax
     xor cl, cl
     mov [edx + actor_projectile_type], cl
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x1a65
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x1
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x4
+
+section .retained_45 align=1 vstart=0x24e30 follows=.retained_44
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -5224,35 +5384,51 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov esi, edi
     mov [nosplit edx*2 + mode_six_tile], di
     movsx edx, ax
     xor esi, edi
     mov [nosplit edx*4 + actor_first_waypoint], si
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_x], 0xfffff880
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov ebp, 0xac00
     mov [edx + actor_destination_y], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0xffffcd00
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_two], ebp
     mov eax, 0xd3
     mov bh, 0x4
@@ -5262,27 +5438,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_board], cl
-    mov edx, ebx
-    shl edx, byte 0x2
-    mov esi, 0xffffbf80
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], esi
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0xb000
-    movsx edx, ax
-    xor ebp, ebp
-    mov [nosplit edx*4 + actor_z_offset], ebp
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x8
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x1
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x4665
+
+section .retained_46 align=1 vstart=0x24f7f follows=.retained_45
     mov bh, 0x2
     movsx edx, ax
     mov cl, 0x4
@@ -5296,29 +5453,42 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov edi, ecx
     mov [nosplit edx*2 + mode_five_tile], cx
     movsx edx, ax
     xor edi, ecx
     mov [nosplit edx*4 + actor_first_waypoint], di
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_x], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0xb000
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], esi
     movsx edx, ax
     mov edi, 0x9d00
@@ -5340,21 +5510,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     shl edx, byte 0x2
     sub edx, ebx
     mov dword [nosplit edx*4 + saved_actor_y], 0x8d00
-    movsx edx, ax
-    xor ecx, ecx
-    mov [nosplit edx*4 + actor_z_offset], ecx
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x3
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x2e65
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x1
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x4
+
+section .retained_47 align=1 vstart=0x250e0 follows=.retained_46
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -5362,33 +5519,48 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov ecx, esi
     mov [nosplit edx*2 + mode_six_tile], si
     movsx edx, ax
     xor ecx, esi
     mov [nosplit edx*4 + actor_first_waypoint], cx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_x], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov edi, 0x8d00
     mov [edx + actor_destination_y], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_one], 0xfffffb00
     movsx edx, ax
     xor bh, bh
@@ -5433,7 +5605,9 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_mode], cl
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + actor_base_tile], 0x966
     movsx ebx, ax
     mov edx, ebx
@@ -5448,26 +5622,37 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_six_tile], cx
     movsx edx, ax
     xor edi, edi
     mov [nosplit edx*4 + actor_first_waypoint], di
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov edi, 0xffff9680
     mov [edx + actor_destination_x], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0x1f80
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], edi
     movsx edx, ax
     mov ecx, 0xffffea00
@@ -5491,21 +5676,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     sub edx, ebx
     mov edi, 0xffffe800
     mov [nosplit edx*4 + saved_actor_y], edi
-    movsx edx, ax
-    xor ebp, ebp
-    mov [nosplit edx*4 + actor_z_offset], ebp
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x2
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x565
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x1
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x4
+
+section .retained_48 align=1 vstart=0x253b2 follows=.retained_47
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -5513,10 +5685,14 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + mode_two_tile], 0x8f8
     movsx ebx, ax
     mov edx, ebx
@@ -5525,23 +5701,32 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_four_tile], cx
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_six_tile], si
     movsx edx, ax
     xor ecx, ecx
     mov [nosplit edx*4 + actor_first_waypoint], cx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov ebx, 0xffffa080
     mov [edx + actor_destination_x], ebx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov edi, 0x2100
     mov [edx + actor_destination_parameter_one], ebx
     movsx edx, ax
@@ -5555,19 +5740,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_board], cl
-    mov edx, ebx
-    shl edx, byte 0x2
-    mov ebp, 0xffff9c00
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], ebp
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0x2200
-    movsx edx, ax
-    xor ecx, ecx
-    mov [nosplit edx*4 + actor_z_offset], ecx
+
+section .retained_49 align=1 vstart=0x254d5 follows=.retained_48
     mov ch, 0x10
     movsx edx, ax
     mov esi, 0x3e8
@@ -5587,7 +5761,9 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_mode], cl
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + actor_base_tile], 0x966
     movsx ebx, ax
     mov edx, ebx
@@ -5596,31 +5772,45 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov esi, 0x8f8
     mov [nosplit edx*2 + mode_two_tile], si
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_six_tile], cx
+
+section .retained_50 align=1 vstart=0x255b8 follows=.retained_49
     movsx edx, ax
-    mov word [nosplit edx*4 + actor_first_waypoint], 0x69
-    actor_destination_index edx
+    shl edx, byte 4
     xor esi, esi
     mov [edx + actor_destination_x], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov eax, 0xb4
     mov [edx + actor_destination_parameter_two], esi
     movsx edx, ax
@@ -5628,40 +5818,28 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     mov [edx + actor_enabled], ch
     movsx edx, ax
     mov byte [edx + actor_board], 0x18
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], ebp
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0x1000
-    movsx edx, ax
-    mov [nosplit edx*4 + actor_z_offset], esi
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x2
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x565
+
+section .retained_51 align=1 vstart=0x25662 follows=.retained_50
     movsx edx, ax
     mov ch, 0x1
     mov [edx + actor_profile], ch
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_mode], ch
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov esi, 0x966
     mov [nosplit edx*2 + actor_base_tile], si
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + mode_two_tile], 0x8f8
     movsx ebx, ax
     mov edx, ebx
@@ -5670,27 +5848,37 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_six_tile], si
     movsx edx, ax
     xor ecx, ecx
     mov [nosplit edx*4 + actor_first_waypoint], cx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor edi, edi
     mov [edx + actor_destination_x], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor ebp, ebp
     mov [edx + actor_destination_y], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor ebx, ebx
     mov [edx + actor_destination_parameter_one], ebx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov eax, 0xb5
     mov [edx + actor_destination_parameter_two], ebx
     movsx edx, ax
@@ -5700,33 +5888,19 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_board], cl
-    mov edx, ebx
-    shl edx, byte 0x2
-    mov esi, 0xffff9c00
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], esi
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0xfffff700
-    movsx edx, ax
-    mov [nosplit edx*4 + actor_z_offset], ebp
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
+
+section .retained_52 align=1 vstart=0x257aa follows=.retained_51
     movsx edx, ax
     mov bl, 0x2
     mov [edx + actor_projectile_type], bl
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x565
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x1
+
+section .retained_53 align=1 vstart=0x257cc follows=.retained_52
     movsx edx, ax
     mov [edx + actor_mode], bl
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + actor_base_tile], 0x966
     movsx ebx, ax
     mov edx, ebx
@@ -5741,62 +5915,59 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_six_tile], cx
     movsx edx, ax
     xor edi, edi
     mov [nosplit edx*4 + actor_first_waypoint], di
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor ebx, ebx
     mov [edx + actor_destination_x], ebx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor ecx, ecx
     mov [edx + actor_destination_y], ecx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor esi, esi
     mov [edx + actor_destination_parameter_one], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov eax, 0xb6
     mov [edx + actor_destination_parameter_two], ebx
     movsx edx, ax
     mov byte [edx + actor_enabled], 0x2
     movsx edx, ax
     mov byte [edx + actor_board], 0x18
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    mov ebp, 0xffffb080
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], ebp
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0xb80
+
+section .retained_54 align=1 vstart=0x258e6 follows=.retained_53
     movsx edx, ax
     mov [nosplit edx*4 + actor_z_offset], esi
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
+
+section .retained_55 align=1 vstart=0x25907 follows=.retained_54
     movsx edx, ax
     xor cl, cl
     mov [edx + actor_projectile_type], cl
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x1a65
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x1
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x4
+
+section .retained_56 align=1 vstart=0x25933 follows=.retained_55
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -5804,34 +5975,50 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov ecx, esi
     mov [nosplit edx*2 + mode_six_tile], di
     movsx edx, ax
     xor ecx, esi
     mov [nosplit edx*4 + actor_first_waypoint], cx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_x], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0xb80
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_two], 0xfffff980
     mov eax, 0xb7
     mov bh, 0x2
@@ -5873,7 +6060,9 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_mode], cl
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + actor_base_tile], 0xa70
     movsx ebx, ax
     mov edx, ebx
@@ -5888,61 +6077,60 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_six_tile], cx
     movsx edx, ax
     mov [nosplit edx*4 + actor_first_waypoint], cx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor edi, edi
     mov [edx + actor_destination_x], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor ebp, ebp
     mov [edx + actor_destination_y], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor ebx, ebx
     mov [edx + actor_destination_parameter_one], ebx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_two], ebx
     mov eax, 0xb8
     movsx edx, ax
     mov byte [edx + actor_enabled], 0x2
     movsx edx, ax
     mov byte [edx + actor_board], 0x18
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    mov esi, 0xffffcc00
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], esi
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0xfffffe00
+
+section .retained_57 align=1 vstart=0x25ba7 follows=.retained_56
     movsx edx, ax
     mov [nosplit edx*4 + actor_z_offset], ebp
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
+
+section .retained_58 align=1 vstart=0x25bbb follows=.retained_57
     movsx edx, ax
     mov word [nosplit edx*2 + actor_health], 0x3e8
     movsx edx, ax
     xor cl, cl
     mov [edx + actor_projectile_type], cl
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x1a65
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x1
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x3
+
+section .retained_59 align=1 vstart=0x25bf4 follows=.retained_58
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -5956,32 +6144,46 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_six_tile], di
+
+section .retained_60 align=1 vstart=0x25c86 follows=.retained_59
     movsx edx, ax
-    mov word [nosplit edx*4 + actor_first_waypoint], 0x6c
-    actor_destination_index edx
+    shl edx, byte 4
     xor ebx, ebx
     mov [edx + actor_destination_x], ebx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor ecx, ecx
     mov [edx + actor_destination_y], ecx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor esi, esi
     mov [edx + actor_destination_parameter_one], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov eax, 0xb9
     mov [edx + actor_destination_parameter_two], ebx
     mov bh, 0x5
@@ -5991,16 +6193,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_board], cl
-    mov edx, ebx
-    shl edx, byte 0x2
-    mov ebp, 0xfffffd80
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], ebp
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0x1830
+
+section .retained_61 align=1 vstart=0x25d02 follows=.retained_60
     movsx edx, ax
     mov ch, 0x10
     mov [nosplit edx*4 + actor_z_offset], esi
@@ -6022,7 +6216,9 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_mode], cl
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + actor_base_tile], 0xa02
     movsx ebx, ax
     mov edx, ebx
@@ -6037,59 +6233,46 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_six_tile], cx
     movsx edx, ax
     mov [nosplit edx*4 + actor_first_waypoint], cx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_x], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0x1b00
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_two], 0xfffff400
     mov eax, 0xba
     movsx edx, ax
     mov byte [edx + actor_enabled], 0x5
     movsx edx, ax
     mov byte [edx + actor_board], 0x18
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_x], 0x380
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov ecx, 0x4700
-    mov esi, ebp
-    mov [nosplit edx*4 + saved_actor_y], ecx
-    movsx edx, ax
-    xor esi, ebp
-    mov [nosplit edx*4 + actor_z_offset], esi
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x3
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x2e65
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x1
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x2
+
+section .retained_62 align=1 vstart=0x25eb6 follows=.retained_61
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -6103,28 +6286,41 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], di
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_six_tile], di
     movsx edx, ax
     mov [nosplit edx*4 + actor_first_waypoint], di
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor edi, edi
     mov [edx + actor_destination_x], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], edi
     movsx edx, ax
     mov bh, 0x5
@@ -6137,34 +6333,24 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_board], cl
-    mov edx, ebx
-    shl edx, byte 0x2
-    mov esi, 0xffffe980
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], esi
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0x6a00
+
+section .retained_63 align=1 vstart=0x25fbe follows=.retained_62
     movsx edx, ax
     xor ebp, ebp
     mov [nosplit edx*4 + actor_z_offset], ebp
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x10
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
+
+section .retained_64 align=1 vstart=0x25fe1 follows=.retained_63
     movsx edx, ax
     mov bl, 0x3
     mov [edx + actor_projectile_type], bl
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x2e65
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x1
+
+section .retained_65 align=1 vstart=0x26003 follows=.retained_64
     movsx edx, ax
     mov [edx + actor_mode], bl
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + actor_base_tile], 0xa02
     movsx ebx, ax
     mov edx, ebx
@@ -6179,59 +6365,52 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_three_tile], si
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_five_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_six_tile], cx
+
+section .retained_66 align=1 vstart=0x260a0 follows=.retained_65
     movsx edx, ax
-    mov word [nosplit edx*4 + actor_first_waypoint], 0x6f
-    actor_destination_index edx
+    shl edx, byte 4
     xor ebx, ebx
     mov [edx + actor_destination_x], ebx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], ebx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], ebx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov eax, 0xbc
     mov [edx + actor_destination_parameter_two], ebx
     movsx edx, ax
     mov byte [edx + actor_enabled], 0x4
     movsx edx, ax
     mov byte [edx + actor_board], 0x18
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    mov ebp, 0x3100
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], ebp
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0x900
+
+section .retained_67 align=1 vstart=0x26116 follows=.retained_66
     movsx edx, ax
     xor esi, esi
     mov [nosplit edx*4 + actor_z_offset], esi
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x8
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x1
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x3665
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x2
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x5
+
+section .retained_68 align=1 vstart=0x26164 follows=.retained_67
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -6239,30 +6418,44 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_one_tile], si
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], si
     movsx edx, ax
     xor ebx, ebx
     mov [nosplit edx*4 + actor_first_waypoint], bx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_x], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0x900
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_parameter_two], 0xffffe500
     mov eax, 0xbd
     mov bh, 0x4
@@ -6286,8 +6479,8 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     xor esi, ebp
     mov [nosplit edx*4 + actor_z_offset], esi
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x8
+
+section .retained_69 align=1 vstart=0x26278 follows=.retained_68
     mov ecx, 0x3e8
     movsx edx, ax
     mov bl, 0x1
@@ -6304,34 +6497,49 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_mode], cl
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov edi, 0x9b8
     mov [nosplit edx*2 + actor_base_tile], di
     movsx ebx, ax
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], di
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov ecx, edi
     mov [nosplit edx*2 + mode_five_tile], di
     movsx edx, ax
     xor ecx, edi
     mov [nosplit edx*4 + actor_first_waypoint], cx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov edi, 0x4980
     mov [edx + actor_destination_x], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov dword [edx + actor_destination_y], 0xc00
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], edi
     movsx edx, ax
     mov ecx, 0xfffffb00
@@ -6342,34 +6550,12 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     mov byte [edx + actor_enabled], 0x4
     movsx edx, ax
     mov byte [edx + actor_board], 0x18
+
+section .retained_70 align=1 vstart=0x26409 follows=.retained_69
     movsx ebx, ax
     mov edx, ebx
-    shl edx, byte 0x2
-    mov esi, 0x6980
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], esi
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0xffffe780
-    movsx edx, ax
-    xor ebp, ebp
-    mov [nosplit edx*4 + actor_z_offset], ebp
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x8
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x1
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x3665
-    movsx edx, ax
-    mov byte [edx + actor_profile], 0x2
-    movsx edx, ax
-    mov byte [edx + actor_mode], 0x3
-    movsx ebx, ax
-    actor_tile_index edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov word [nosplit edx*2 + actor_base_tile], 0x9b8
     movsx ebx, ax
     mov edx, ebx
@@ -6378,24 +6564,35 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], cx
+
+section .retained_71 align=1 vstart=0x26489 follows=.retained_70
     movsx edx, ax
-    mov word [nosplit edx*4 + actor_first_waypoint], 0x72
-    actor_destination_index edx
+    shl edx, byte 4
     mov [edx + actor_destination_x], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], ebp
     movsx edx, ax
     mov bh, 0x4
@@ -6408,27 +6605,12 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     movsx edx, ax
     movsx ebx, ax
     mov [edx + actor_board], cl
-    mov edx, ebx
-    shl edx, byte 0x2
-    mov ebp, 0x6780
-    sub edx, ebx
-    movsx ebx, ax
-    mov [nosplit edx*4 + saved_actor_x], ebp
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0x3500
-    movsx edx, ax
-    xor ecx, ecx
-    mov [nosplit edx*4 + actor_z_offset], ecx
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x8
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
+
+section .retained_72 align=1 vstart=0x26522 follows=.retained_71
     movsx edx, ax
     mov byte [edx + actor_projectile_type], 0x1
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x3665
+
+section .retained_73 align=1 vstart=0x26539 follows=.retained_72
     mov bh, 0x2
     movsx edx, ax
     mov cl, 0x1
@@ -6442,63 +6624,54 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], cx
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov edi, ecx
     mov [nosplit edx*2 + mode_five_tile], cx
     movsx edx, ax
     xor edi, ecx
     mov [nosplit edx*4 + actor_first_waypoint], di
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor esi, esi
     mov [edx + actor_destination_x], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_y], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], esi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov eax, 0xc0
     mov [edx + actor_destination_parameter_two], esi
     movsx edx, ax
     mov byte [edx + actor_enabled], 0x4
     movsx edx, ax
     mov byte [edx + actor_board], 0x18
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_x], 0x6080
-    movsx ebx, ax
-    mov edx, ebx
-    shl edx, byte 0x2
-    sub edx, ebx
-    mov dword [nosplit edx*4 + saved_actor_y], 0x3a80
-    movsx edx, ax
-    mov [nosplit edx*4 + actor_z_offset], esi
-    movsx edx, ax
-    mov byte [edx + actor_sequence_initial], 0x8
-    movsx edx, ax
-    mov word [nosplit edx*2 + actor_health], 0x3e8
-    movsx edx, ax
-    mov byte [edx + actor_projectile_type], 0x1
-    movsx edx, ax
-    mov word [nosplit edx*2 + saved_actor_lotag], 0x3665
-    movsx edx, ax
-    mov bl, 0x2
-    mov [edx + actor_profile], bl
-    movsx edx, ax
-    mov [edx + actor_mode], bl
+
+section .retained_74 align=1 vstart=0x26690 follows=.retained_73
     movsx ebx, ax
     mov edx, ebx
     shl edx, byte 0x3
@@ -6506,32 +6679,46 @@ section .retained_3 align=1 vstart=0x20c44 follows=.retained_2
     add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + actor_base_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_one_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_two_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_three_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     movsx ebx, ax
     mov [nosplit edx*2 + mode_four_tile], si
-    actor_tile_index edx, ebx
+    mov edx, ebx
+    shl edx, byte 3
+    add edx, ebx
     mov [nosplit edx*2 + mode_five_tile], si
     movsx edx, ax
     xor ebx, ebx
     mov [nosplit edx*4 + actor_first_waypoint], bx
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor edi, edi
     mov [edx + actor_destination_x], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     xor ebp, ebp
     mov [edx + actor_destination_y], ebp
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_one], edi
-    actor_destination_index edx
+    movsx edx, ax
+    shl edx, byte 4
     mov [edx + actor_destination_parameter_two], edi
     pop ebp
     pop edi

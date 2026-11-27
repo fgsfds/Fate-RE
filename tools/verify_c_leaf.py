@@ -3925,7 +3925,7 @@ def bind_leaf_details(blob, symbol, values, *, address=None, functions=None,
     public_name = leaf_public_name(symbol)
     from bind_board_actor import PUBLICS as board_actor_publics, verify_context as verify_board_actor_context
     if public_name in board_actor_publics:
-        verify_board_actor_context(blob)
+        verify_board_actor_context(blob, public_name)
     if public_name == 'setgamemode_dispatch_context_':
         from bind_setgamemode_dispatch import bind_section
         return bind_section(blob, symbol, address=address, code_bindings=code_bindings)
@@ -5205,7 +5205,7 @@ for _phase in WEAPON_ANIMATION_LAYOUT['phases']:
     LEAVES[_phase['symbol']] = (_phase['address']+0x25600, _phase['end']-_phase['begin'])
     LEAF_CODE_SLICES[_phase['symbol']] = (_phase['public'], _phase['begin'], _phase['end'], _weapon_context['size'])
 
-from bind_board_actor import LAYOUT as BOARD_ACTOR_LAYOUT
+from bind_board_actor import LAYOUT as BOARD_ACTOR_LAYOUT, INDEXED_LAYOUT as BOARD_ACTOR_INDEXED_LAYOUT
 for _name, _offset in BOARD_ACTOR_LAYOUT['DATA'].items():
     if _name in DATA_OFFSETS and DATA_OFFSETS[_name] != _offset:
         raise ValueError('Conflicting board actor DATA binding: '+_name)
@@ -5217,6 +5217,20 @@ for _phase in BOARD_ACTOR_LAYOUT['phases']:
     LEAF_CONTEXT_SHA256[_public] = _phase['context_sha256']
     LEAF_CONTEXT_RECORDS[_public] = BOARD_ACTOR_LAYOUT['records']
     LEAF_CONTEXT_FIXUPS[_public] = {int(k): tuple(v) for k,v in _phase['fixups'].items()}
+
+_indexed_context = BOARD_ACTOR_INDEXED_LAYOUT['context']
+_indexed_public = _indexed_context['public']
+for _name, _offset in BOARD_ACTOR_INDEXED_LAYOUT['DATA'].items():
+    if _name in DATA_OFFSETS and DATA_OFFSETS[_name] != _offset:
+        raise ValueError('Conflicting indexed actor DATA binding: '+_name)
+    DATA_OFFSETS[_name] = _offset
+LEAF_CONTEXT_SHA256[_indexed_public] = _indexed_context['sha256']
+LEAF_CONTEXT_LITERALS[_indexed_public] = (0, hashlib.sha256(b'').hexdigest(), {})
+LEAF_CONTEXT_RECORDS[_indexed_public] = _indexed_context['records']
+LEAF_CONTEXT_FIXUPS[_indexed_public] = {int(k): tuple(v) for k,v in _indexed_context['fixups'].items()}
+for _phase in BOARD_ACTOR_INDEXED_LAYOUT['phases']:
+    LEAVES[_phase['symbol']] = (_phase['address']+0x25600, _phase['end']-_phase['begin'])
+    LEAF_CODE_SLICES[_phase['symbol']] = (_indexed_public, _phase['begin'], _phase['end'], _indexed_context['size'])
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)

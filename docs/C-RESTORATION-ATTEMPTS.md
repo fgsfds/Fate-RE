@@ -160,18 +160,25 @@ DATA extent `0x28a300` and valid definition slots 0..7. Evidence:
 
 ### `initialize_board_actors`: initialization register lifetimes
 
-The full typed constant-write translation emits 21,580 bytes versus 32,303
-with Watcom 10.5 `/4r /s /or /bt=dos`. It reproduces the 501 disables and
-2,578 configuration writes for 115 actors across nine boards, but reorders
-stores. The first mismatch at `0x1e920` uses BL instead of CL for the disabled
-marker; the loop compares AX with 501 rather than promoted EDX with 500.
-Three compact typed operations now supply 85 exact bytes and 13 DATA sites;
-the larger translation is unlinked and earns no coverage. Next retain the
-signed slot in AX across indexed record stores instead of folding each slot
-into an absolute address, and preserve the CL marker lifetime. Saved XYZ,
-destination, waypoint and tile-row strides are 12, 16, 4 and 18 bytes; the last
-two tile words and the second waypoint word are untouched. Evidence:
-`work/board-actor-init-nov27/REPORT.md` and `boardgrp-evidence.json`.
+The full typed translation with truthful signed AX slot captures emits 30,235
+bytes versus 32,303 under Watcom 10.5 `/4r /s /or /bt=dos`. It retains all
+1,524 runtime-indexed stores instead of folding the slots to constants. In
+addition to the earlier compact 85 bytes, 281 complete typed operations supply
+4,271 exact bytes and 318 DATA sites in 71 runs. The full private routine still
+changes store order and raw EAX; it is not a whole-routine binary replacement.
+
+The first whole-context mismatch is `0x1e930`: the loop condition compares AX
+with 501 instead of promoting into EDX and comparing with 500. Three separate
+disable-loop probes kept the counter in BX and promoted through EAX, even with
+short/full counter captures or a direct increment. Do not repeat those forms;
+next investigate an honest output-clobber/conversion lifetime that prevents
+the EAX copy while retaining the counter. The first remaining indexed block
+at `0x20c5a` uses CWDE and a cached EAX destination address, while the original
+recomputes the EDX address for each field and stores from EBX. Next model the
+actual zero value in EBX and the per-field signed index lifetime. Saved XYZ,
+destination, waypoint and tile-row strides are 12, 16, 4 and 18 bytes; untouched
+words remain unchanged. Evidence: `work/board-slot-lifetime-nov27/REPORT.md`,
+`selected-indexed-operations.json`, and `work/actor-disable-loop-nov27/`.
 
 ### Video prompt-mode blocker
 
