@@ -1,4 +1,4 @@
-"""Exact deletion wrapper; rejected list bodies with independent list invariants."""
+"""Verify and exercise the linked sprite list routines against list invariants."""
 import argparse
 import hashlib
 import json
@@ -7,20 +7,21 @@ import random
 import struct
 from unicorn import Uc,UC_ARCH_X86,UC_MODE_32
 from unicorn.x86_const import *
-from capstone import Cs,CS_ARCH_X86,CS_MODE_32
 from compare_exe import TARGET_SHA256
+from check_start_hook import image
 from match_objects import read_object
 from research_startup import layout
 from verify_c_leaf import bind_leaf_details,verify_leaf_relocations,DATA_OFFSETS,FUNCTION_ADDRESSES
 from le_fixups import read_le_fixups
 from verify_sprite_insertion import DATA
 import check_spritechange as change
-import verify_assembly_suite as assembly
 
 UNITS=[('insertsprite_',0x508b8,21),('insertspritesect_',0x508cd,158),
        ('insertspritestat_',0x5096b,158),('deletesprite_',0x50a09,20),
        ('deletespritesect_',0x50a1d,211),('deletespritestat_',0x50af0,211)]
 FUNCTIONS={n:a for n,a,z in UNITS}
+EPILOGUE = FUNCTION_ADDRESSES['shared_graphics_epilogue_']
+DELETE_FUNCTIONS = {**FUNCTIONS, 'shared_graphics_epilogue_': EPILOGUE}
 PUBLICS=[(1,o,n) for o,n in zip((0,21,177,332,352,563),(n for n,a,z in UNITS))]
 
 
@@ -30,18 +31,12 @@ def verify(exe,blob,owner):
     assert publics==PUBLICS and initialized=={1:set(range(774))}
     assert len(segments[1]['data'])==774 and all(not s['data'] for s in segments[2:])
     rows=[];pointers=read_le_fixups(exe)['pointers']
-    for name,address,size in UNITS:
-        code,refs=bind_leaf_details(blob,name,DATA,address=address,functions=FUNCTIONS)
+    for name,address,size in UNITS[3:]:
+        code,refs=bind_leaf_details(blob,name,DATA,address=address,functions=DELETE_FUNCTIONS)
         original=exe[address+0x25600:address+0x25600+size]
-        exact=code==original
-        assert exact==(name in ('insertsprite_','deletesprite_'))
-        if exact:verify_leaf_relocations(code,refs,pointers,address)
-        jumps=[i.address for i in Cs(CS_ARCH_X86,CS_MODE_32).disasm(original,address)
-               if i.mnemonic=='jmp' and i.op_str=='0x4abbf']
-        if not exact:assert len(jumps)==2
-        rows.append(dict(symbol=name,original_address=hex(address),original_bytes=size,
-            generated_bytes=len(code),exact=exact,original_shared_tail_jumps=[hex(a) for a in jumps],
-            differing_offsets=[i for i,(a,b) in enumerate(zip(code,original)) if a!=b]))
+        assert code == original
+        verify_leaf_relocations(code,refs,pointers,address)
+        rows.append(dict(symbol=name,original_address=hex(address),bytes=size,le_targets=len(refs)))
     code,refs=bind_leaf_details(owner,'transmaskvline_',DATA_OFFSETS,address=0x4aa28,functions=FUNCTION_ADDRESSES)
     assert len(code)==413 and code==exe[0x70028:0x701c5]
     verify_leaf_relocations(code,refs,pointers,0x4aa28)
@@ -49,29 +44,66 @@ def verify(exe,blob,owner):
     return rows
 
 
-def relocated_list(name, directory):
-    _,_,filename,_,size,pointers=next(unit for unit in assembly.ROUTINES if unit[0]==name)
-    start,_=assembly.GROUP_SLICES[name]
-    code=bytearray((directory/filename).read_bytes()[start:start+size])
-    for site,target in pointers.items():
-        struct.pack_into('<I',code,site,target)
-    return bytes(code)
+def exercise_initialization(exe, blob, linked_image):
+    entry = 0x507e3
+    name = 'initspritelists_'
+    values = {name: address + 0x80000 for name, address in DATA.items()}
+    code, refs = bind_leaf_details(blob, name, DATA, address=entry, functions=FUNCTION_ADDRESSES)
+    raw = entry + 0x25600
+    assert len(code) == 213 and code == exe[raw:raw + 213]
+    verify_leaf_relocations(code, refs, read_le_fixups(exe)['pointers'], entry)
+    linked, _ = bind_leaf_details(blob, name, values, address=entry, functions=FUNCTION_ADDRESSES)
+
+    # Start with dirty memory and compare all affected bytes, including array
+    # bounds and every sprite field that the initializer must leave alone.
+    count, groups, stride = 4096, 1024, 44
+    low = min(values.values()) - 8
+    high = max(values['_sprite'] + count * stride,
+               values['_headspritesect'] + 2 * (groups + 1)) + 8
+    expected = bytearray(b'\xa5' * (high - low))
+    m = Uc(UC_ARCH_X86, UC_MODE_32)
+    m.mem_map(0, 0x400000)
+    m.mem_write(low, bytes(expected))
+    for suffix, field in (('sect', 24), ('stat', 26)):
+        def store(prefix, data):
+            offset = values['_' + prefix + suffix] - low
+            expected[offset:offset + len(data)] = data
+        store('headsprite', struct.pack('<1025h', *([-1] * groups + [0])))
+        store('prevsprite', struct.pack('<4096h', *range(-1, count - 1)))
+        store('nextsprite', struct.pack('<4096h', *range(1, count), -1))
+        offset = values['_sprite'] - low + field
+        for i in range(count):
+            struct.pack_into('<h', expected, offset + stride * i, groups)
+
+    m.mem_write(entry, linked)
+    m.mem_write(EPILOGUE, linked_image[EPILOGUE:EPILOGUE + 6])
+    stack, stop = 0x3f0000, 0x3ff000
+    m.reg_write(UC_X86_REG_ESP, stack)
+    m.mem_write(stack, struct.pack('<I', stop) + b'\xa5' * 16)
+    saved = (UC_X86_REG_EBX, UC_X86_REG_ECX, UC_X86_REG_EDX,
+             UC_X86_REG_ESI, UC_X86_REG_EDI, UC_X86_REG_EBP)
+    for reg in saved:
+        m.reg_write(reg, 0x12345678 + reg)
+    m.emu_start(entry, stop, count=150000)
+    assert m.reg_read(UC_X86_REG_EIP) == stop and m.reg_read(UC_X86_REG_ESP) == stack + 4
+    assert all(m.reg_read(reg) == 0x12345678 + reg for reg in saved)
+    assert m.mem_read(stack + 4, 16) == b'\xa5' * 16
+    assert m.mem_read(low, len(expected)) == expected
+    return dict(sprite_slots=count, sector_heads=groups + 1, status_heads=groups + 1,
+                le_targets=len(refs))
 
 
-def exercise(blob,changes,seed,exact_directory=None,tail=None):
+def exercise(blob,changes,seed,linked_image,*,use_compiled):
     m=Uc(UC_ARCH_X86,UC_MODE_32);m.mem_map(0,0x400000)
     values={n:a+0x80000 for n,a in DATA.items()}
-    functions=({n:0x10000+o for seg,o,n in PUBLICS}
-               if exact_directory is None else FUNCTIONS.copy())
-    for seg,offset,name in PUBLICS:
-        address=functions[name]
-        if exact_directory is not None and name not in ('insertsprite_', 'deletesprite_'):
-            code=relocated_list(name,exact_directory)
+    functions=FUNCTIONS.copy()
+    for name,address,size in UNITS:
+        if use_compiled and name.startswith('delete'):
+            code,_=bind_leaf_details(blob,name,values,address=address,functions=DELETE_FUNCTIONS)
         else:
-            code,_=bind_leaf_details(blob,name,values,address=address,functions=functions)
+            code=linked_image[address:address+size]
         m.mem_write(address,code)
-    if exact_directory is not None:
-        m.mem_write(0x4abbf,tail)
+    m.mem_write(EPILOGUE,linked_image[EPILOGUE:EPILOGUE+6])
     for i,(name,address,size) in enumerate(change.UNITS):
         functions[name]=0x20000+i*80
         code,_=bind_leaf_details(changes,name,values,address=functions[name],functions=functions)
@@ -152,28 +184,19 @@ def exercise(blob,changes,seed,exact_directory=None,tail=None):
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('executable',type=Path)
     p.add_argument('lists',type=Path);p.add_argument('changes',type=Path);p.add_argument('tail_owner',type=Path)
-    p.add_argument('--assembly-directory',type=Path);p.add_argument('--c-inventory',type=Path)
+    p.add_argument('--init-object',type=Path)
     p.add_argument('--output',type=Path,required=True);a=p.parse_args()
     exe=a.executable.read_bytes();blob=a.lists.read_bytes();changes=a.changes.read_bytes()
     rows=verify(exe,blob,a.tail_owner.read_bytes());change.verify(exe,changes)
-    count=sum(exercise(blob,changes,seed) for seed in (0,1,19961018,1024))
-    exact_operations=0
-    if (a.assembly_directory is None)!=(a.c_inventory is None):
-        p.error('Exact list integration requires both assembly directory and C inventory')
-    if a.assembly_directory is not None:
-        inventory=json.loads(a.c_inventory.read_text(encoding='utf-8'))
-        assembly.verify(exe,a.assembly_directory,inventory)
-        owner,_=bind_leaf_details(a.tail_owner.read_bytes(),'transmaskvline_',DATA_OFFSETS,
-                                  address=0x4aa28,functions=FUNCTION_ADDRESSES)
-        exact_operations=sum(exercise(blob,changes,seed,a.assembly_directory,owner[0x197:])
-                             for seed in (0,1,19961018,1024))
+    linked_image=image(exe)
+    seeds=(0,1,19961018,1024)
+    compiled=sum(exercise(blob,changes,seed,linked_image,use_compiled=True) for seed in seeds)
+    linked=sum(exercise(blob,changes,seed,linked_image,use_compiled=False) for seed in seeds)
     result=dict(target_sha256=TARGET_SHA256,object_sha256=hashlib.sha256(blob).hexdigest(),
-        rows=rows,generated_group_bytes=774,list_bodies_exact=False,whole_group_exact=False,
-        newly_matched_bytes=20,newly_matched_le_targets=0,duplicate_insert_wrapper_bytes=21,
-        source_candidate_operations=count,exact_assembly_operations=exact_operations,
-        external_stubs=False,tail_owner_verified=True,
-        resolved_branches_patched=False,final_linked_placement_verified=False)
+        rows=rows,compiled_deletion_operations=compiled,linked_operations=linked,
+        external_stubs=False,tail_owner_verified=True)
+    if a.init_object:
+        result['initialization'] = exercise_initialization(exe, a.init_object.read_bytes(), linked_image)
+        print(f"PASS: initializer wrote both free lists for {result['initialization']['sprite_slots']} sprite slots")
     a.output.write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8',newline='\n')
-    print(f'PASS: exact 20-byte deletion wrapper; four list bodies rejected; {count} candidate list operations')
-    if exact_operations:
-        print(f'PASS: four exact assembly list bodies; {exact_operations} list operations')
+    print(f'PASS: {compiled} operations with compiled deletion and {linked} with linked list routines')

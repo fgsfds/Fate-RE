@@ -2,49 +2,11 @@
 BITS 32
 ORG 0x6332b
 
-argument_workspace_size equ 0x14484
-argument_workspace_end equ 0x14488
-argv_pointer equ 0x289250
-argc_value equ 0x28924c
 init_table equ 0x199b4
 fini_table equ 0x199d8
 fini_table_end equ 0x199e4
-stackavail equ 0x67006
-common_init equ 0x67474
-game_main equ 0x1002c
-runtime_exit equ 0x60353
 
-__CMain:
-    push edx
-    push ebp
-    mov ebp, esp
-    mov edx, dword [argument_workspace_size]
-    add edx, 3
-    and dl, 0xfc
-    call stackavail
-    cmp edx, eax
-    jae short .insufficient_stack
-    mov eax, edx
-    sub esp, eax
-    mov eax, esp
-    jmp short .set_workspace_end
-
-.insufficient_stack:
-    xor eax, eax
-
-.set_workspace_end:
-    mov edx, dword [argument_workspace_size]
-    add eax, edx
-    mov dword [argument_workspace_end], eax
-    call common_init
-    mov edx, dword [argv_pointer]
-    mov eax, dword [argc_value]
-    call game_main
-    call runtime_exit
-    mov esp, ebp
-    pop ebp
-    pop edx
-    ret
+    times 79 db 0    ; __CMain is supplied by C.
 
 __InitRtns:
     push esi

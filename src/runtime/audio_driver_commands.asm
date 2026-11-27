@@ -31,34 +31,13 @@ driver_parameter_dx equ 0x16bfc
     ret
 %endmacro
 
-driver_command_5:
-    save_registers
-    mov eax, 5
-    lfs edi, [ebp + 0x10]
-    call far [ebp + 8]
-    restore_registers
+driver_command_5 equ 0x66641
+    times 35 db 0    ; driver_command_5 is supplied by C.
+driver_command_0 equ 0x66664
+    times 35 db 0    ; driver_command_0 is supplied by C.
 
-driver_command_0:
-    save_registers
-    mov eax, 0
-    lfs edi, [ebp + 0x10]
-    call far [ebp + 8]
-    restore_registers
-
-read_driver_parameters:
-    save_registers
-    mov eax, 1
-    lfs edi, [ebp + 0x10]
-    call far [ebp + 8]
-    mov word [driver_parameter_ax], ax
-    db 0x8a, 0xc5 ; MOV AL, CH, register-destination encoding.
-    cbw
-    mov word [driver_parameter_ch], ax
-    db 0x8a, 0xc1 ; MOV AL, CL, register-destination encoding.
-    cbw
-    mov word [driver_parameter_cl], ax
-    mov word [driver_parameter_dx], dx
-    restore_registers
+read_driver_parameters equ 0x66687
+    times 68 db 0    ; read_driver_parameters is supplied by C.
 
 read_driver_command_table:
     save_registers
@@ -95,61 +74,18 @@ read_driver_command_table:
     pop ds
     restore_registers
 
-driver_command_3:
-    save_registers
-    mov ebx, dword [ebp + 0x10]
-    mov eax, dword [ebp + 0x14]
-    db 0x8a, 0xe8 ; MOV CH, AL, register-destination encoding.
-    mov eax, dword [ebp + 0x18]
-    db 0x8a, 0xc8 ; MOV CL, AL, register-destination encoding.
-    mov eax, 3
-    lfs edi, [ebp + 0x1c]
-    call far [ebp + 8]
-    restore_registers
-
-driver_secondary_command_1:
-    save_registers
-    mov eax, 1
-    lfs edi, [ebp + 0x10]
-    call far [ebp + 8]
-    restore_registers
-
-driver_configure_secondary:
-    save_registers
-    lfs edi, [ebp + 0x10]
-    mov eax, 0
-    mov bx, word [ebp + 0x18]
-    mov cx, word [ebp + 0x1c]
-    mov dx, word [ebp + 0x20]
-    db 0x8a, 0xea ; MOV CH, DL, register-destination encoding.
-    mov si, word [ebp + 0x2c]
-    call far [ebp + 8]
-    restore_registers
-
-driver_secondary_command_4:
-    save_registers
-    lfs edi, [ebp + 0x10]
-    mov eax, 4
-    mov ecx, dword [ebp + 0x1c]
-    mov edi, dword [ebp + 0x18]
-    call far [ebp + 8]
-    restore_registers
-
-driver_secondary_command_2:
-    save_registers
-    lfs edi, [ebp + 0x10]
-    mov eax, 2
-    mov ebx, dword [ebp + 0x18]
-    call far [ebp + 8]
-    restore_registers
-
-driver_secondary_command_3:
-    save_registers
-    lfs edi, [ebp + 0x10]
-    mov eax, 3
-    mov bx, 8
-    call far [ebp + 8]
-    restore_registers
+driver_command_3 equ 0x66724
+    times 48 db 0    ; driver_command_3 is supplied by C.
+driver_secondary_command_1 equ 0x66754
+    times 35 db 0    ; driver_secondary_command_1 is supplied by C.
+driver_configure_secondary equ 0x66777
+    times 53 db 0    ; driver_configure_secondary is supplied by C.
+driver_secondary_command_4 equ 0x667ac
+    times 41 db 0    ; driver_secondary_command_4 is supplied by C.
+driver_secondary_command_2 equ 0x667d5
+    times 38 db 0    ; driver_secondary_command_2 is supplied by C.
+driver_secondary_command_3 equ 0x667fb
+    times 39 db 0    ; driver_secondary_command_3 is supplied by C.
 
 probe_windows_driver_value:
     save_registers
@@ -165,24 +101,8 @@ probe_windows_driver_value:
 .return:
     restore_registers
 
-windows_driver_interrupt:
-    save_registers
-    mov ax, 0x1600
-    int 0x2f
-    cmp al, 3
-    jne short .return
-    nop
-    nop
-    nop
-    nop
-    mov ah, 0x81
-    mov al, 0xb
-    mov ebx, dword [ebp + 8]
-    db 0x66, 0x33, 0xd2 ; XOR DX, DX, register-destination encoding.
-    int 0x4b
-    mov ax, 0
-.return:
-    restore_registers
+windows_driver_interrupt equ 0x6684c
+    times 53 db 0    ; windows_driver_interrupt is supplied by C.
 
 driver_records equ 0x16b60
 driver_records_selector equ 0x16b64
@@ -191,36 +111,11 @@ driver_callbacks_selector equ 0x16b6c
 copied_driver_record equ 0x16b10
 dpmi_memory_info equ 0x16b70
 
-windows_driver_interrupt_stop:
-    save_registers
-    mov ax, 0x1600
-    int 0x2f
-    cmp al, 3
-    jne short .return
-    nop
-    nop
-    nop
-    nop
-    mov ah, 0x81
-    mov al, 0xc
-    mov ebx, dword [ebp + 8]
-    db 0x66, 0x33, 0xd2 ; XOR DX, DX, register-destination encoding.
-    int 0x4b
-    mov ax, 0
-.return:
-    restore_registers
+windows_driver_interrupt_stop equ 0x66881
+    times 53 db 0    ; windows_driver_interrupt_stop is supplied by C.
 
-get_driver_tables:
-    save_registers
-    lfs edi, [ebp + 0x10]
-    mov eax, 4
-    call far [ebp + 8]
-    mov dword [driver_records], esi
-    mov dword [driver_callbacks], edi
-    mov ax, word [ebp + 0x14]
-    mov word [driver_records_selector], ax
-    mov word [driver_callbacks_selector], ax
-    restore_registers
+get_driver_tables equ 0x668b6
+    times 63 db 0    ; get_driver_tables is supplied by C.
 
 copy_driver_record:
     save_registers
@@ -252,36 +147,13 @@ copy_driver_record:
 .return:
     restore_registers
 
-set_driver_callback:
-    save_registers
-    les esi, [driver_callbacks]
-    mov eax, dword [ebp + 8]
-    db 0x8b, 0xd8 ; MOV EBX, EAX, register-destination encoding.
-    shl eax, 1
-    shl ebx, 2
-    db 0x03, 0xd8 ; ADD EBX, EAX, register-destination encoding.
-    mov eax, dword [ebp + 0xc]
-    mov [es:nosplit esi + ebx], eax
-    db 0x66, 0x26 ; Operand-size and ES prefixes in original order.
-    mov [nosplit esi + ebx + 4], ds
-    restore_registers
+set_driver_callback equ 0x6693f
+    times 54 db 0    ; set_driver_callback is supplied by C.
 
-query_dpmi_memory:
-    save_registers
-    mov ax, 0x500
-    int 0x31
-    push ds
-    pop es
-    mov edi, dpmi_memory_info
-    int 0x31
-    mov eax, dword [dpmi_memory_info]
-    restore_registers
-
-query_windows_version:
-    save_registers
-    mov ax, 0x1600
-    int 0x2f
-    restore_registers
+query_dpmi_memory equ 0x66975
+    times 43 db 0    ; query_dpmi_memory is supplied by C.
+query_windows_version equ 0x669a0
+    times 29 db 0    ; query_windows_version is supplied by C.
 
 allocate_dos_paragraphs:
     save_registers
@@ -307,17 +179,8 @@ allocate_dos_paragraphs:
 .return:
     restore_registers
 
-release_dos_selector:
-    mov ax, ds
-    mov gs, ax
-    mov fs, ax
-    mov es, ax
-    save_registers
-    mov ax, 0x101
-    mov dx, word [ebp + 8]
-    int 0x31
-    mov ax, 0
-    restore_registers
+release_dos_selector equ 0x669fe
+    times 46 db 0    ; release_dos_selector is supplied by C.
 
 real_mode_audio_registers equ 0x16ba0
 
@@ -415,5 +278,5 @@ get_audio_code_selector:
     mov ax, cs
     ret
 
-audio_helper_region_end:
-    ret
+audio_helper_region_end_c_slot:
+    db 0 ; Byte supplied by timer_vector_noop.c.

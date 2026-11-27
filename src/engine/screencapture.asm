@@ -38,111 +38,16 @@ screencapture_:
     sub esp, 0x18
     mov ebx, eax
     mov byte [esp + 0x14], dl
-    movsx edx, word [capture_sequence]
-    mov ecx, 0x3e8
-    mov eax, edx
-    sar edx, 0x1f
-    idiv ecx
-    mov edx, eax
-    mov ecx, 0xa
-    sar edx, 0x1f
-    idiv ecx
-    add edx, 0x30
-    mov byte [ebx + 4], dl
-    movsx edx, word [capture_sequence]
-    mov ecx, 0x64
-    mov eax, edx
-    sar edx, 0x1f
-    idiv ecx
-    mov edx, eax
-    mov ecx, 0xa
-    sar edx, 0x1f
-    idiv ecx
-    add edx, 0x30
-    mov byte [ebx + 5], dl
-    movsx edx, word [capture_sequence]
-    mov eax, edx
-    sar edx, 0x1f
-    idiv ecx
-    mov edx, eax
-    sar edx, 0x1f
-    idiv ecx
-    add edx, 0x30
-    mov byte [ebx + 6], dl
-    movsx edx, word [capture_sequence]
-    mov eax, edx
-    sar edx, 0x1f
-    idiv ecx
-    push 0x80
-    push 0x261
-    add edx, 0x30
-    push ebx
-    mov byte [ebx + 7], dl
-    call runtime_open
-    add esp, 0xc
+    ; The C filename and open path inherits EBX and the original frame.
+section .after_open align=1 vstart=0x4c402 follows=.text
     mov dword [esp + 8], eax
     cmp eax, -1
     je near .branch_51f
-    cmp dword [qsetmode], 0xc8
-    jne near .branch_143
-    mov al, byte [presentation_width]
-    dec al
-    mov byte [engine_140dd], al
-    mov eax, dword [presentation_width]
-    dec eax
-    sar eax, 8
-    and eax, 0xff
-    mov byte [engine_140de], al
-    mov al, byte [presentation_height]
-    dec al
-    mov byte [engine_140df], al
-    mov eax, dword [presentation_height]
-    dec eax
-    sar eax, 8
-    and eax, 0xff
-    mov byte [engine_140e0], al
-    mov al, byte [presentation_width]
-    mov byte [engine_140e1], al
-    mov eax, dword [presentation_width]
-    sar eax, 8
-    and eax, 0xff
-    mov byte [engine_140e2], al
-    mov al, byte [presentation_height]
-    mov byte [engine_140e3], al
-    mov eax, dword [presentation_height]
-    sar eax, 8
-    and eax, 0xff
-    mov byte [engine_140e4], al
-    mov al, byte [engine_140e1]
-    mov byte [engine_14117], al
-    mov al, byte [engine_140e2]
-    mov byte [engine_14118], al
+; C emits the mode check and both PCX geometry paths.
+section .header_join align=1 vstart=0x4c4a9 follows=.after_open
     jmp short .branch_1a7
 
-.branch_143:
-    mov byte [engine_140dd], 0x7f
-    mov al, byte [qsetmode]
-    dec al
-    mov byte [engine_140df], al
-    mov eax, dword [qsetmode]
-    dec eax
-    mov dl, 2
-    sar eax, 8
-    mov byte [engine_140de], dl
-    and eax, 0xff
-    mov dh, 0x80
-    mov byte [engine_140e0], al
-    mov al, byte [qsetmode]
-    mov byte [engine_140e1], dh
-    mov byte [engine_140e3], al
-    mov eax, dword [qsetmode]
-    mov byte [engine_140e2], dl
-    sar eax, 8
-    mov byte [engine_14117], dh
-    and eax, 0xff
-    mov byte [engine_14118], dl
-    mov byte [engine_140e4], al
-
+section .capture_body align=1 vstart=0x4c50f follows=.header_join
 .branch_1a7:
     mov ebx, 0x80
     mov edx, engine_140d5
@@ -419,19 +324,16 @@ screencapture_:
     xor ecx, ecx
     jmp short .branch_4e1
 
-.branch_495:
-    lea eax, [edi + 1]
-    cmp ecx, 0x30
+.branch_495 equ 0x4c7fd
+; C supplies the compare and both stores. Keep their original branches.
+section .palette_choose align=1 vstart=0x4c803 follows=.capture_body
     jge short .branch_4ae
-    mov dl, byte [ecx + engine_14155]
-    shl dl, 2
-    mov byte [edi + engine_1dda60], dl
+
+section .palette_join align=1 vstart=0x4c814 follows=.palette_choose
     jmp short .branch_4b6
+.branch_4ae equ 0x4c816
 
-.branch_4ae:
-    xor bl, bl
-    mov byte [edi + engine_1dda60], bl
-
+section .palette_flush align=1 vstart=0x4c81e follows=.palette_join
 .branch_4b6:
     mov edi, eax
     cmp edi, 0x1000
@@ -463,12 +365,8 @@ screencapture_:
 
 .branch_505:
     mov eax, dword [esp + 8]
-    call runtime_close
-    mov dx, word [capture_sequence]
-    inc edx
-    xor eax, eax
-    mov word [capture_sequence], dx
-
+; C closes the file, advances the sequence and returns success in EAX.
+section .capture_return align=1 vstart=0x4c887 follows=.palette_flush
 .branch_51f:
     add esp, 0x18
     jmp near ceiling_sprite_restore

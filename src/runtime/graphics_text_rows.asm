@@ -2,96 +2,18 @@
 BITS 32
 ORG 0x70e37
 
-initialize_graphics_once equ 0x6fd95
-initialize_text_pages equ 0x6fbfa
-reset_text_display equ 0x6f0bb
-set_video_mode equ 0x6ec8a
 
 graphics_error equ 0x16c66
-graphics_active equ 0x16c65
 bios_data_offset equ 0x16d01
 bios_data_selector equ 0x16cf7
 text_rows equ 0x289202
-text_window_left equ 0x289244
-text_window_top equ 0x289242
-text_cursor_row equ 0x2891f8
-text_cursor_column equ 0x2891fa
-text_page_offset equ 0x16c7a
-text_window_bottom equ 0x289240
-text_columns equ 0x289200
-text_window_right equ 0x28923e
-active_text_page equ 0x16c78
 adapter_class equ 0x28920c
 monitor_class equ 0x28920e
 video_mode equ 0x28920a
 cursor_visible equ 0x16c76
 
 set_text_rows:
-    push ebx
-    push ecx
-    push edx
-    push es
-    mov edx, eax
-    mov word [graphics_error], 0
-    call initialize_graphics_once
-    cmp byte [graphics_active], 0
-    je short .text_mode
-    movsx eax, dx
-    call configure_text_rows_in_graphics_mode
-    jmp short .check_error
-.text_mode:
-    movsx eax, dx
-    call configure_text_rows_in_text_mode
-.check_error:
-    cmp word [graphics_error], 0
-    je short .reset_window
-    xor eax, eax
-    pop es
-    pop edx
-    pop ecx
-    pop ebx
-    ret
-.reset_window:
-    mov eax, dword [bios_data_offset]
-    mov es, word [bios_data_selector]
-    add eax, 0x84
-    db 0x66, 0x26, 0x0f, 0xb6, 0; MOVZX AX, byte ES:[EAX], original prefix order.
-    inc eax
-    cmp ax, strict word 1
-    jne short .store_rows
-    mov eax, 0x19
-.store_rows:
-    mov word [text_rows], ax
-    cmp byte [graphics_active], 0
-    jne short .reset_display
-    call initialize_text_pages
-.reset_display:
-    call reset_text_display
-    mov word [text_window_left], 0
-    mov word [text_window_top], 0
-    mov word [text_cursor_row], 0
-    mov word [text_cursor_column], 0
-    mov ax, word [text_rows]
-    mov word [text_page_offset], 0
-    dec eax
-    xor ebx, ebx
-    mov word [text_window_bottom], ax
-    mov ax, word [text_columns]
-    xor ecx, ecx
-    dec eax
-    xor edx, edx
-    mov word [text_window_right], ax
-    mov eax, 0x500
-    mov word [active_text_page], 0
-    push bp
-    int 0x10
-    pop bp
-    mov ax, word [text_rows]
-    pop es
-    pop edx
-    pop ecx
-    pop ebx
-    ret
+    times 230 db 0 ; supplied by matching C
 
 configure_text_rows_in_text_mode:
     push ebx
@@ -343,94 +265,18 @@ configure_text_rows_in_graphics_mode:
 %endmacro
 
 set_standard_text_rows:
-    push ebx
-    push ecx
-    push edx
-    push es
-    reload_current_video_mode
-    mov ecx, 0x607
-    mov eax, [bios_data_offset]
-    mov es, [bios_data_selector]
-    add eax, strict dword 0x87
-    xor ebx, ebx
-    xor edx, edx
-    and byte [es:eax], 0xfe
-    mov eax, 0x100
-    video_bios
-    mov word [cursor_visible], 1
-    pop es
-    pop edx
-    pop ecx
-    pop ebx
-    ret
+    times 91 db 0 ; supplied by matching C
 
 configure_vga_text_font:
-    push ecx
-    push esi
-    push edi
-    mov esi, edx
-    mov edi, ebx
-    mov ebx, 0x30
-    xor ecx, ecx
-    xor edx, edx
-    video_bios
-    reload_current_video_mode
-    mov eax, 0x500
-    video_bios_without_arguments
-    mov eax, esi
-    video_bios_without_arguments
-    mov eax, 0x100
-    mov ecx, edi
-    xor ebx, ebx
-    xor edx, edx
-    video_bios
-    mov word [cursor_visible], 1
-    pop edi
-    pop esi
-    pop ecx
-    ret
+    times 116 db 0 ; supplied by matching C
 
 configure_ega_text_font:
-    push ecx
-    push esi
-    push edi
-    push es
-    push ebp
-    mov ebp, esp
-    push eax
-    mov edi, edx
-    mov esi, ebx
-    mov eax, 0x500
-    video_bios_without_arguments
-    reload_current_video_mode
-    mov eax, edi
-    video_bios_without_arguments
-    cmp word [ebp-4], 43
-    jne short .set_underline
-    mov eax, [bios_data_offset]
-    mov es, [bios_data_selector]
-    add eax, strict dword 0x87
-    or byte [es:eax], 1
-    jmp short .set_cursor
-.set_underline:
-    mov edx, 0x3d4
-    mov eax, 0x1414
-    out dx, ax
-.set_cursor:
-    mov eax, 0x100
-    mov ecx, esi
-    xor ebx, ebx
-    xor edx, edx
-    video_bios
-    mov word [cursor_visible], 1
+    ; The linker supplies this routine and its shared return paths from C.
+    times 143 db 0
 font_frame_return:
-    leave
-    pop es
-    pop edi
-    pop esi
-    pop ecx
+    times 5 db 0
 font_return:
-    ret
+    db 0
 
 configure_other_text_font:
     push ecx
@@ -488,10 +334,4 @@ configure_other_text_font:
     mov [es:eax], esi
     jmp near font_frame_return
 
-set_video_mode_and_text_rows:
-    cwde
-    call set_video_mode
-    test ax, ax
-    jz near font_return
-    movsx eax, dx
-    jmp near set_text_rows
+    times 23 db 0 ; supplied by matching C

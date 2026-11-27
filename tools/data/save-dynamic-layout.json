@@ -1,0 +1,891 @@
+{
+  "reference_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
+  "objects": [
+    {
+      "object": "svsect",
+      "source": "fate/save_sized_transfer",
+      "size": 78,
+      "contexts": [
+        {
+          "public": "save_read_sectors_",
+          "start": 0,
+          "size": 37,
+          "sha256": "7f7420467f28dc0f54a140acc39dcaa5c211f9f02e9544e408ebca7f91c9afd9",
+          "fixups": {
+            "3": [
+              "_numsectors",
+              false,
+              0
+            ],
+            "22": [
+              "_save_data_image",
+              false,
+              2605984
+            ],
+            "30": [
+              "fread_",
+              true,
+              0
+            ]
+          }
+        },
+        {
+          "public": "save_write_sectors_",
+          "start": 37,
+          "size": 41,
+          "sha256": "08e17af3570e76a8164c28f20a747cdee3bef9dee04b267b23002fca2983f0e8",
+          "fixups": {
+            "6": [
+              "_numsectors",
+              false,
+              0
+            ],
+            "25": [
+              "_save_data_image",
+              false,
+              2605984
+            ],
+            "33": [
+              "fwrite_",
+              true,
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "object": "svwall",
+      "source": "fate/save_sized_transfer",
+      "size": 64,
+      "contexts": [
+        {
+          "public": "save_read_walls_",
+          "start": 0,
+          "size": 34,
+          "sha256": "f75a699d9069f8645ddb53c783621a950fa6f997fc3a43de83d694331d1e4a06",
+          "fixups": {
+            "9": [
+              "_save_data_image",
+              false,
+              2298016
+            ],
+            "16": [
+              "_numwalls",
+              false,
+              0
+            ],
+            "26": [
+              "fread_",
+              true,
+              0
+            ]
+          }
+        },
+        {
+          "public": "save_write_walls_",
+          "start": 34,
+          "size": 30,
+          "sha256": "13a7255ac58395adc805900b6e8417c1c8e18894ff589b5ca1fb5ffffd085da1",
+          "fixups": {
+            "6": [
+              "_save_data_image",
+              false,
+              2298016
+            ],
+            "13": [
+              "_numwalls",
+              false,
+              0
+            ],
+            "23": [
+              "fwrite_",
+              true,
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "object": "svstep",
+      "source": "fate/save_restore_steps",
+      "size": 137,
+      "contexts": [
+        {
+          "public": "save_restore_read_loop_",
+          "start": 0,
+          "size": 59,
+          "sha256": "864a09952c97e35ea1dc3a37eea172a4e57c747df7100fae3e85351e05cc96e0",
+          "fixups": {
+            "11": [
+              "_save_restore_words",
+              false,
+              0
+            ],
+            "23": [
+              "fread_",
+              true,
+              0
+            ],
+            "30": [
+              "_save_data_image",
+              false,
+              2605984
+            ],
+            "37": [
+              "_save_restore_words",
+              false,
+              0
+            ],
+            "50": [
+              "_save_restore_words",
+              false,
+              4
+            ]
+          }
+        },
+        {
+          "public": "save_restore_offset_loop_",
+          "start": 59,
+          "size": 41,
+          "sha256": "451afbcc520cd5ef32260094131b15fdc2f28e4275fc68fbd165e0d08482e9a0",
+          "fixups": {
+            "8": [
+              "_save_data_image",
+              false,
+              2605984
+            ],
+            "19": [
+              "_save_restore_words",
+              false,
+              0
+            ],
+            "32": [
+              "_save_restore_words",
+              false,
+              4
+            ]
+          },
+          "branches": {
+            "compiler_size": 41,
+            "placed_size": 36,
+            "public_address": 201662,
+            "sites": {
+              "5": [
+                "eb",
+                36,
+                32
+              ],
+              "38": [
+                "7d",
+                7,
+                7
+              ]
+            }
+          }
+        },
+        {
+          "public": "save_restore_address_loop_",
+          "start": 100,
+          "size": 37,
+          "sha256": "6b69d6144ecd30bf710795aef4d2b8a1b12612bc4904ee83ca4b98a1c6121d96",
+          "fixups": {
+            "8": [
+              "_save_data_image",
+              false,
+              2605984
+            ],
+            "15": [
+              "_save_restore_words",
+              false,
+              0
+            ],
+            "28": [
+              "_save_restore_words",
+              false,
+              4
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "object": "svstat",
+      "source": "fate/save_status_completion",
+      "size": 36,
+      "contexts": [
+        {
+          "public": "save_status_completion_",
+          "start": 0,
+          "size": 36,
+          "sha256": "b3016d72477c68bdd9488fd763f671ac6289e900c7e584be4e0ea029e8a6af33",
+          "fixups": {
+            "1": [
+              "_save_status_length",
+              false,
+              0
+            ],
+            "15": [
+              "_save_status_clock",
+              false,
+              0
+            ],
+            "29": [
+              "_save_status_expiration",
+              false,
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "object": "svmsg",
+      "source": "fate/save_status_message",
+      "size": 47,
+      "contexts": [
+        {
+          "public": "save_copy_loaded_message_",
+          "start": 0,
+          "size": 27,
+          "sha256": "aa5478b562bdc5cfe8792c8854c315e3658e4623fb839e5cdd50c7c84c0dd5a6",
+          "fixups": {
+            "1": [
+              "_save_loaded_status",
+              false,
+              0
+            ],
+            "6": [
+              "_save_loaded_message",
+              false,
+              0
+            ],
+            "11": [
+              "_save_loaded_status",
+              false,
+              0
+            ],
+            "20": [
+              "strlen_",
+              true,
+              0
+            ]
+          }
+        },
+        {
+          "public": "save_copy_saved_message_",
+          "start": 27,
+          "size": 20,
+          "sha256": "d69736ceab8a108becd52b647454b6363a4d7d3baef57468a05467fc0fc18006",
+          "fixups": {
+            "1": [
+              "_save_saved_status",
+              false,
+              0
+            ],
+            "6": [
+              "_save_saved_message",
+              false,
+              0
+            ],
+            "11": [
+              "_save_saved_status",
+              false,
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "object": "svoread",
+      "source": "fate/save_slot_open",
+      "size": 235,
+      "contexts": [
+        {
+          "public": "save_open_read_slot_",
+          "start": 0,
+          "size": 235,
+          "sha256": "f65decd9de47aba91d527a974428c04d65fa40bd40893dec84ab6f7b7d6696a2",
+          "fixups": {
+            "10": [
+              "_load_slot_format",
+              false,
+              0
+            ],
+            "28": [
+              "_load_basename",
+              false,
+              0
+            ],
+            "33": [
+              "sprintf_",
+              true,
+              0
+            ],
+            "46": [
+              "strcat_",
+              true,
+              0
+            ],
+            "51": [
+              "_load_mode",
+              false,
+              0
+            ],
+            "58": [
+              "fopen_",
+              true,
+              0
+            ],
+            "93": [
+              "_player_count",
+              false,
+              0
+            ],
+            "98": [
+              "fread_",
+              true,
+              0
+            ],
+            "113": [
+              "_local_player",
+              false,
+              0
+            ],
+            "120": [
+              "fread_",
+              true,
+              0
+            ],
+            "135": [
+              "_first_player",
+              false,
+              0
+            ],
+            "142": [
+              "fread_",
+              true,
+              0
+            ],
+            "157": [
+              "_next_player",
+              false,
+              0
+            ],
+            "164": [
+              "fread_",
+              true,
+              0
+            ],
+            "171": [
+              "_first_player",
+              false,
+              0
+            ],
+            "181": [
+              "initialize_board_entry_",
+              true,
+              0
+            ],
+            "189": [
+              "_next_player",
+              false,
+              0
+            ],
+            "208": [
+              "_player_x",
+              false,
+              0
+            ],
+            "215": [
+              "fread_",
+              true,
+              0
+            ],
+            "222": [
+              "fclose_",
+              true,
+              0
+            ]
+          },
+          "branches": {
+            "compiler_size": 235,
+            "placed_size": 5432,
+            "public_address": 193643,
+            "sites": {
+              "68": [
+                "75",
+                80,
+                80
+              ],
+              "75": [
+                "e9",
+                226,
+                5423
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "object": "svowrite",
+      "source": "fate/save_slot_open",
+      "size": 228,
+      "contexts": [
+        {
+          "public": "save_open_write_slot_",
+          "start": 0,
+          "size": 228,
+          "sha256": "c6ceaca6f0604a665bc741d6533edc042ce04bfcaa0fa5c3f1249755f3b04e64",
+          "fixups": {
+            "10": [
+              "_save_slot_format",
+              false,
+              0
+            ],
+            "28": [
+              "_save_basename",
+              false,
+              0
+            ],
+            "33": [
+              "sprintf_",
+              true,
+              0
+            ],
+            "46": [
+              "strcat_",
+              true,
+              0
+            ],
+            "51": [
+              "_save_mode",
+              false,
+              0
+            ],
+            "58": [
+              "fopen_",
+              true,
+              0
+            ],
+            "93": [
+              "_player_count",
+              false,
+              0
+            ],
+            "98": [
+              "fwrite_",
+              true,
+              0
+            ],
+            "113": [
+              "_local_player",
+              false,
+              0
+            ],
+            "120": [
+              "fwrite_",
+              true,
+              0
+            ],
+            "135": [
+              "_first_player",
+              false,
+              0
+            ],
+            "142": [
+              "fwrite_",
+              true,
+              0
+            ],
+            "157": [
+              "_next_player",
+              false,
+              0
+            ],
+            "164": [
+              "fwrite_",
+              true,
+              0
+            ],
+            "179": [
+              "_player_x",
+              false,
+              0
+            ],
+            "186": [
+              "fwrite_",
+              true,
+              0
+            ],
+            "201": [
+              "_player_y",
+              false,
+              0
+            ],
+            "208": [
+              "fwrite_",
+              true,
+              0
+            ],
+            "215": [
+              "fclose_",
+              true,
+              0
+            ]
+          },
+          "branches": {
+            "compiler_size": 228,
+            "placed_size": 5409,
+            "public_address": 199075,
+            "sites": {
+              "68": [
+                "75",
+                80,
+                80
+              ],
+              "75": [
+                "e9",
+                219,
+                5400
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "object": "svfinish",
+      "source": "fate/save_finish_stream",
+      "size": 26,
+      "contexts": [
+        {
+          "public": "finish_read_save_stream_",
+          "start": 0,
+          "size": 17,
+          "sha256": "2b08efbb5aca95182f11f1a6946588ee7eba2f9b0fb58d236645a096eb1b8ecf",
+          "fixups": {
+            "3": [
+              "read_crusher_state_",
+              true,
+              0
+            ],
+            "10": [
+              "fclose_",
+              true,
+              0
+            ]
+          }
+        },
+        {
+          "public": "finish_write_save_stream_",
+          "start": 17,
+          "size": 9,
+          "sha256": "be7553501863647764a1c39f27e55116a902c842fa98dc518e6efed1541b4ae9",
+          "fixups": {
+            "3": [
+              "write_crusher_state_",
+              true,
+              0
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "phases": [
+    {
+      "phase": "save_read_sectors_phase_",
+      "public": "save_read_sectors_",
+      "object": "svsect",
+      "begin": 0,
+      "end": 34,
+      "address": 194324,
+      "routine": "read_game_data",
+      "le_sites": 2
+    },
+    {
+      "phase": "save_write_sectors_phase_",
+      "public": "save_write_sectors_",
+      "object": "svsect",
+      "begin": 3,
+      "end": 37,
+      "address": 199727,
+      "routine": "write_game_data",
+      "le_sites": 2
+    },
+    {
+      "phase": "save_read_walls_phase_",
+      "public": "save_read_walls_",
+      "object": "svwall",
+      "begin": 3,
+      "end": 30,
+      "address": 194380,
+      "routine": "read_game_data",
+      "le_sites": 2
+    },
+    {
+      "phase": "save_write_walls_phase_",
+      "public": "save_write_walls_",
+      "object": "svwall",
+      "begin": 0,
+      "end": 27,
+      "address": 199783,
+      "routine": "write_game_data",
+      "le_sites": 2
+    },
+    {
+      "phase": "save_restore_read_loop_phase_",
+      "public": "save_restore_read_loop_",
+      "object": "svstep",
+      "begin": 0,
+      "end": 58,
+      "address": 196259,
+      "routine": "read_game_data",
+      "le_sites": 4
+    },
+    {
+      "phase": "save_restore_offset_prefix_phase_",
+      "public": "save_restore_offset_loop_",
+      "object": "svstep",
+      "begin": 0,
+      "end": 12,
+      "address": 201662,
+      "routine": "write_game_data",
+      "le_sites": 1
+    },
+    {
+      "phase": "save_restore_offset_word_phase_",
+      "public": "save_restore_address_loop_",
+      "object": "svstep",
+      "begin": 12,
+      "end": 19,
+      "address": 201674,
+      "routine": "write_game_data",
+      "le_sites": 1
+    },
+    {
+      "phase": "save_restore_offset_suffix_phase_",
+      "public": "save_restore_offset_loop_",
+      "object": "svstep",
+      "begin": 23,
+      "end": 40,
+      "address": 201681,
+      "routine": "write_game_data",
+      "le_sites": 1
+    },
+    {
+      "phase": "save_restore_address_loop_phase_",
+      "public": "save_restore_address_loop_",
+      "object": "svstep",
+      "begin": 0,
+      "end": 36,
+      "address": 201720,
+      "routine": "write_game_data",
+      "le_sites": 3
+    },
+    {
+      "phase": "save_read_status_phase_",
+      "public": "save_status_completion_",
+      "object": "svstat",
+      "begin": 0,
+      "end": 35,
+      "address": 199031,
+      "routine": "read_game_data",
+      "le_sites": 3
+    },
+    {
+      "phase": "save_write_status_phase_",
+      "public": "save_status_completion_",
+      "object": "svstat",
+      "begin": 0,
+      "end": 35,
+      "address": 204440,
+      "routine": "write_game_data",
+      "le_sites": 3
+    },
+    {
+      "phase": "save_read_message_phase_",
+      "public": "save_copy_loaded_message_",
+      "object": "svmsg",
+      "begin": 0,
+      "end": 24,
+      "address": 199007,
+      "routine": "read_game_data",
+      "le_sites": 3
+    },
+    {
+      "phase": "save_saved_destination_message_phase_",
+      "public": "save_copy_saved_message_",
+      "object": "svmsg",
+      "begin": 0,
+      "end": 5,
+      "address": 204405,
+      "routine": "write_game_data",
+      "le_sites": 1
+    },
+    {
+      "phase": "save_saved_source_message_phase_",
+      "public": "save_copy_saved_message_",
+      "object": "svmsg",
+      "begin": 5,
+      "end": 10,
+      "address": 204417,
+      "routine": "write_game_data",
+      "le_sites": 1
+    },
+    {
+      "phase": "save_saved_copy_message_phase_",
+      "public": "save_copy_saved_message_",
+      "object": "svmsg",
+      "begin": 10,
+      "end": 18,
+      "address": 204427,
+      "routine": "write_game_data",
+      "le_sites": 1
+    },
+    {
+      "phase": "save_saved_length_message_phase_",
+      "public": "save_copy_loaded_message_",
+      "object": "svmsg",
+      "begin": 19,
+      "end": 24,
+      "address": 204435,
+      "routine": "write_game_data",
+      "le_sites": 0
+    },
+    {
+      "phase": "save_read_path_phase_",
+      "public": "save_open_read_slot_",
+      "object": "svoread",
+      "begin": 0,
+      "end": 80,
+      "address": 193643,
+      "routine": "read_game_data",
+      "le_sites": 3
+    },
+    {
+      "phase": "save_read_count_phase_",
+      "public": "save_open_read_slot_",
+      "object": "svoread",
+      "begin": 80,
+      "end": 102,
+      "address": 193723,
+      "routine": "read_game_data",
+      "le_sites": 1
+    },
+    {
+      "phase": "save_players_before_phase_",
+      "public": "save_open_read_slot_",
+      "object": "svoread",
+      "begin": 168,
+      "end": 197,
+      "address": 193811,
+      "routine": "read_game_data",
+      "le_sites": 2
+    },
+    {
+      "phase": "save_players_after_phase_",
+      "public": "save_open_read_slot_",
+      "object": "svoread",
+      "begin": 168,
+      "end": 197,
+      "address": 198978,
+      "routine": "read_game_data",
+      "le_sites": 2
+    },
+    {
+      "phase": "save_read_frame_return_phase_",
+      "public": "save_open_read_slot_",
+      "object": "svoread",
+      "begin": 226,
+      "end": 235,
+      "address": 199066,
+      "routine": "read_game_data",
+      "le_sites": 0
+    },
+    {
+      "phase": "save_write_path_phase_",
+      "public": "save_open_write_slot_",
+      "object": "svowrite",
+      "begin": 0,
+      "end": 80,
+      "address": 199075,
+      "routine": "write_game_data",
+      "le_sites": 3
+    },
+    {
+      "phase": "save_write_count_phase_",
+      "public": "save_open_write_slot_",
+      "object": "svowrite",
+      "begin": 80,
+      "end": 102,
+      "address": 199155,
+      "routine": "write_game_data",
+      "le_sites": 1
+    },
+    {
+      "phase": "save_write_frame_return_phase_",
+      "public": "save_open_write_slot_",
+      "object": "svowrite",
+      "begin": 219,
+      "end": 228,
+      "address": 204475,
+      "routine": "write_game_data",
+      "le_sites": 0
+    },
+    {
+      "phase": "save_finish_read_phase_",
+      "public": "finish_read_save_stream_",
+      "object": "svfinish",
+      "begin": 0,
+      "end": 14,
+      "address": 198964,
+      "routine": "read_game_data",
+      "le_sites": 0
+    },
+    {
+      "phase": "save_finish_write_arg_phase_",
+      "public": "finish_write_save_stream_",
+      "object": "svfinish",
+      "begin": 0,
+      "end": 2,
+      "address": 204403,
+      "routine": "write_game_data",
+      "le_sites": 0
+    },
+    {
+      "phase": "save_finish_write_call_phase_",
+      "public": "finish_write_save_stream_",
+      "object": "svfinish",
+      "begin": 2,
+      "end": 7,
+      "address": 204410,
+      "routine": "write_game_data",
+      "le_sites": 0
+    },
+    {
+      "phase": "save_finish_close_arg_phase_",
+      "public": "finish_read_save_stream_",
+      "object": "svfinish",
+      "begin": 7,
+      "end": 9,
+      "address": 204415,
+      "routine": "write_game_data",
+      "le_sites": 0
+    },
+    {
+      "phase": "save_finish_close_call_phase_",
+      "public": "finish_read_save_stream_",
+      "object": "svfinish",
+      "begin": 9,
+      "end": 14,
+      "address": 204422,
+      "routine": "write_game_data",
+      "le_sites": 0
+    }
+  ]
+}

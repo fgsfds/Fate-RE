@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 import subprocess
+import re
 from verify_assembly_suite import ROUTINES, NON_ROUTINE_UNITS
 
 
@@ -11,10 +12,34 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def build(nasm, destination):
+def source_dependencies(path, root, seen=None):
+    seen = {} if seen is None else seen
+    relative = path.relative_to(root).as_posix()
+    if relative in seen:
+        return seen
+    seen[relative] = digest(path)
+    for directive, operand in re.findall(
+            r'^\s*(%include|incbin)\s+([^\r\n;]+)', path.read_text(encoding='ascii'), re.M | re.I):
+        match = re.fullmatch(r'["\']([^"\']+)["\']\s*', operand)
+        if match is None:
+            raise ValueError('Cannot cache computed assembly dependency: '+str(path))
+        included = root / match[1]
+        if directive.lower() == '%include':
+            source_dependencies(included, root, seen)
+        else:
+            seen[included.relative_to(root).as_posix()] = digest(included)
+    return seen
+
+
+def build(nasm, destination, incremental=False):
     root = Path(__file__).resolve().parents[1]
     nasm = nasm.resolve(strict=True)
     destination.mkdir(parents=True, exist_ok=True)
+    report_path = destination/'assembly-build.json'
+    previous = json.loads(report_path.read_text(encoding='utf-8')) if incremental and report_path.exists() else {}
+    old_units = {row['binary']: row for row in previous.get('units', [])}
+    tool_hash = digest(nasm)
+    driver_hash = digest(Path(__file__))
     units = {}
     for _, source, binary, *_ in ROUTINES+NON_ROUTINE_UNITS:
         if binary in units and units[binary] != source:
@@ -96,7 +121,6 @@ def build(nasm, destination):
     units['weapon_animation_tables.bin'] = 'fate/weapon_animation_tables.asm'
     units['level_script_defaults.bin'] = 'fate/level_script_defaults.asm'
     units['navigation_puzzle_defaults.bin'] = 'fate/navigation_puzzle_defaults.asm'
-    units['sprite_navigation_data.bin'] = 'fate/sprite_navigation_data.asm'
     units['sprite_navigation_messages.bin'] = 'fate/sprite_navigation_messages.asm'
     units['sprite_path_messages.bin'] = 'fate/sprite_path_messages.asm'
     units['realcom.bin'] = 'network/realcom.asm'
@@ -135,19 +159,29 @@ def build(nasm, destination):
     units['graphics_bank_selectors.bin'] = 'runtime/graphics_bank_selectors.asm'
     version = subprocess.run([str(nasm), '-v'], check=True, capture_output=True,
                              text=True).stdout.strip()
-    rows = []
+    rows, reused = [], 0
     for binary, source in sorted(units.items()):
         path = root/'src'/source
         output = destination/binary
-        subprocess.run([str(nasm), '-f', 'bin', str(path), '-o', str(output)],
-                       cwd=root, check=True)
+        dependencies = source_dependencies(path, root)
+        old = old_units.get(binary, {})
+        if (incremental and previous.get('assembler_sha256') == tool_hash
+                and previous.get('driver_sha256') == driver_hash
+                and old.get('dependencies') == dependencies and output.is_file()
+                and old.get('binary_sha256') == digest(output)):
+            reused += 1
+        else:
+            subprocess.run([str(nasm), '-f', 'bin', str(path), '-o', str(output)],
+                           cwd=root, check=True)
         rows.append(dict(source='src/'+source, source_sha256=digest(path),
+                          dependencies=dependencies,
                          binary=binary, binary_sha256=digest(output),
                          bytes=output.stat().st_size))
-    result = dict(assembler_version=version, assembler_sha256=digest(nasm),
+    result = dict(assembler_version=version, assembler_sha256=tool_hash, driver_sha256=driver_hash,
                   format='bin', units=rows, exact_original_match_checked=False)
     (destination/'assembly-build.json').write_text(json.dumps(result, indent=2)+'\n',
                                                  encoding='utf-8', newline='\n')
+    print(f'Assembly: {len(rows)-reused} assembled, {reused} unchanged')
     return result
 
 
@@ -155,6 +189,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('nasm', type=Path)
     parser.add_argument('destination', type=Path)
+    parser.add_argument('--incremental', action='store_true')
     args = parser.parse_args()
-    result = build(args.nasm, args.destination)
+    result = build(args.nasm, args.destination, incremental=args.incremental)
     print(f"Built {len(result['units'])} NASM source units")

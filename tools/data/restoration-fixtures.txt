@@ -1,0 +1,183 @@
+# Script stem, argument templates, then | dependent object basenames.
+# Full validation runs every entry. Targeted validation uses the dependency list.
+check_start_hook {exe} --output {build}/start-hook.json | startgrp
+check_palette_fade_tables {exe} {build}/fadetab.obj | fadetab
+check_palette_fade_dispatch {exe} {build}/fadeloop.obj | fadeloop
+check_update_palette_fade {exe} {build}/fadeupd.obj | fadeupd
+check_audio_sample_controls {exe} | audctrl
+check_timer_callbacks {exe} | timercb
+check_slope_height {exe} {build}/slphgt.obj | slphgt
+check_projectile_hit {exe} {build}/prjhit.obj | prjhit
+check_update_projectiles {exe} {build}/projup.obj | projup
+check_apply_sprite_blast {exe} {build}/blast.obj | blast
+check_counted_player_effect {exe} {build}/peffspn.obj | peffspn
+check_actor_movement {exe} {build}/actmove.obj | actmove
+check_restore_board_actor_sprites {exe} {build}/boardact.obj | boardact
+check_update_sprite_view {exe} {build}/sprview.obj {asm}/sprite_view.bin | sprview
+check_initialize_board_entry {exe} {build}/boardent.obj {asm}/initialize_board_entry.bin | boardent
+check_format_engine {exe} | prtf fmtconv fmtspc fmtflags radix streamfm numfmt printput
+check_allocate_stream {exe} | alstream
+check_proximity_sprites {exe} {build}/proxupd.obj | proxupd
+check_cansee {exe} {build}/vizporta.obj | vizporta
+check_wallfront {exe} {build}/walfrnt.obj | walfrnt
+check_sector_portal {exe} {build}/sectport.obj | sectport
+check_bunchfront {exe} {build}/bfront.obj | bfront
+check_view_angle_table {exe} {build}/viewang.obj | viewang
+check_prepwall {exe} {build}/prepwall.obj | prepwall
+check_palette_search {exe} {build}/closestc.obj | closestc
+check_palette_lookup_init {exe} {build}/palinit.obj | palinit
+check_preparemirror {exe} {build}/prepmir.obj | prepmir
+check_complete_mirror {exe} {build}/cmpmir.obj | cmpmir
+check_transmaskwallscan {exe} {build}/transwal.obj | transwal
+check_load_art {exe} {build}/loadart.obj | loadart
+check_pushmove {exe} {build}/pushmove.obj | pushmove
+check_spawn_search {exe} | spsearch
+check_spawn_environment {exe} | spenv
+check_environment_copy {exe} {build}/envcopy.obj | envcopy
+check_spawn_process {exe} | spawnve
+check_sprite_sequence_state {exe} {build}/sprseq.obj | sprseq
+check_clearallviews {exe} {build}/clrviews.obj | clrviews
+check_clearview {exe} {build}/clrview.obj | clrview
+check_hline {exe} {build}/hline.obj | hline
+check_ceilscan_tail {exe} {build}/ceiltail.obj | ceiltail
+check_florscan_tail {exe} {build}/flortail.obj | flortail
+check_florscan_entry {exe} {build}/florentr.obj | florentr
+check_grouscan_entry {exe} {build}/grouentr.obj | grouentr
+check_grouscan_geometry {exe} {build}/grougeom.obj | grougeom
+check_ceilscan_entry {exe} {build}/ceilentr.obj | ceilentr
+check_owallmost {exe} {build}/owallmst.obj | owallmst
+check_keepaway {exe} {build}/keepaway.obj | keepaway
+check_wallmost_clip {exe} {build}/wallclip.obj | wallclip
+check_wallmost_setup {exe} {build}/wallset.obj | wallset
+check_wallmost_entry {exe} {build}/wallmost.obj | wallmost
+check_dos_search_status {exe} {build}/dossstat.obj | dossstat
+check_dos_dta_copy {exe} {build}/dosdta.obj | dosdta
+check_write_stream_descriptor {exe} {build}/dwrite.obj | dwrite
+check_initksqrt {exe} {asm} {build}/c.json {build}/transcol.obj | sqrtinit transcol
+check_copytilepiece_candidate {exe} {build}/tilecopy.obj | tilecopy
+check_crt_arguments {exe} | crtparse
+check_heap_release {exe} {build}/heapfree.obj | heapfree heapul
+check_heap_resize {exe} {build}/heaprsz.obj | heaprsz heapfree heapul
+check_heap_allocate {exe} {build}/heapall.obj | heapall heapfree heapul
+check_heap_growth {exe} {build}/heapgrow.obj | heapgrow heapall heapul
+check_set_binary {exe} {build}/dosbin.obj | dosbin
+check_dos_access {exe} {build}/dosacc.obj | dosacc
+check_timer_irq_mask {exe} {build}/timerirq.obj | timerirq
+check_program_pit {exe} {build}/timerirq.obj | timerirq
+check_audio_command_wrappers {exe} {build}/audiocmd.obj | audiocmd
+check_read_driver_parameters {exe} {build}/audiocmd.obj | audiocmd
+check_windows_driver_interrupt {exe} {build}/windi.obj | windi
+check_get_driver_tables {exe} {build}/gdt.obj | gdt
+check_query_driver_info {exe} {build}/qwin.obj | qwin
+check_set_driver_callback {exe} {build}/sdc.obj | sdc
+check_release_dos_selector {exe} {build}/rds.obj | rds
+check_configure_fpu {exe} {build}/fpu.obj | fpu
+check_mono_pixel_address {exe} {build}/vgapix.obj | vgapix
+check_float_integer_conversions {exe} | fltint u32float i32float flttrunc fltwiden
+check_spawn_fpu_callbacks {exe} | spnfpu
+check_mouse_binding {exe} | mouseact
+check_mouse_button_menu {exe} {build}/mousebtn.obj | mousebtn
+check_string_search {exe} | strfind rtstrchr
+check_board_5_script {exe} {build}/board5.obj | board5
+check_board_7_script {exe} {build}/board7.obj | board7
+check_level_script_dispatch {exe} {build}/brdsp.obj | brdsp
+check_sprite_route_dispatch {exe} {build}/routedsp.obj | routedsp
+check_route_sectors {exe} {build}/routesec.obj | routesec
+check_sector_panning {exe} {build}/sectpan.obj | sectpan
+check_update_level_effects {exe} {build}/crushupd.obj | crushupd
+check_crusher_sound {exe} {build}/crushsnd.obj | crushsnd
+check_edit_save_slot_name {exe} {build}/savename.obj | savename
+check_run_save_game_menu {exe} {build}/savmenu.obj | savmenu
+check_run_load_game_menu {exe} {build}/loadmenu.obj | loadmenu
+check_run_key_binding_menu {exe} {build}/keybind.obj | keybind
+check_run_menu_loop {exe} {build}/menuloop.obj {asm}/run_menu_loop.bin | menuloop
+check_save_build_map {exe} {build}/savemap.obj | savemap
+check_load_build_map {exe} {build}/loadmap.obj | loadmap
+check_teleport_terminals {exe} {build}/telterm.obj | telterm
+check_resolve_teleport_destination {exe} {build}/telepdst.obj | telepdst
+check_find_spawn_position {exe} {build}/spawnpos.obj | spawnpos
+check_run_recorded_session {exe} {build}/playrec.obj | playrec
+check_rotatesprite {exe} {build}/rotspr.obj | rotspr
+check_draw_screen_text {exe} {build}/scrntxt.obj | scrntxt
+check_menu_text {exe} {build}/menutext.obj | menutext
+check_draw_ega_text {exe} {build}/egatext.obj | egatext
+check_rotate_network_lead_player {exe} {build}/netlead.obj | netlead
+check_synchronize_network_players {exe} {build}/netrsync.obj | netrsync
+check_finalize_board_state {exe} {build}/boardfin.obj | boardfin
+check_clip_edge {exe} {build}/gfxclip.obj | gfxclip
+check_plain_palookup {exe} {build}/palookmk.obj | palookmk
+check_actor_common {exe} {build}/actcomm.obj | actcomm
+check_actor_dispatch {exe} {build}/actdisp.obj | actdisp
+check_menu_selection {exe} {build}/menusel.obj | menusel
+check_gameplay_frame {exe} {build}/procfram.obj | procfram
+check_gameplay_checksum {exe} {build}/gamesum.obj | gamesum
+
+check_status_panel --exe {exe} --build {build} | statpan statpent
+check_gameplay_update --exe {exe} --build {build} | gamup gamrow
+# Assembly-only caller baseline, checked with the related sample queue/control unit.
+check_play_sound --exe {exe} --build {build} --output {build}/play-sound-behavior.json | audctrl sndopts snddesc sndpos sndqueue sndarch sndcache sndscan sndframe sndlimit
+check_netsend --exe {exe} --object {build}/netsend.obj --output {build}/netsend-behavior.json | netsend
+check_sendpacket --exe {exe} --object {build}/sendpack.obj --output {build}/sendpacket-behavior.json | sendpack
+check_receivepacket --exe {exe} --production-object {build}/netinitc.obj --fragment-object {build}/recvlen.obj --output {build}/receivepacket-behavior.json | netinitc recvlen
+check_netctrl --exe {exe} --object {build}/netinitc.obj --output {build}/netctrl-behavior.json | netinitc
+check_serial_init --exe {exe} --build {build} --output {build}/serial-init-behavior.json | serialin
+check_game_receive_packets --exe {exe} --build {build} --output {build}/game-receive-behavior.json | recvpkt recvcrc recvpar recvhigh recvhead recvsend recvfrag
+check_main_menu --exe {exe} --build {build} --output {build}/main-menu-behavior.json | mainmenu menuprep
+check_sector_puzzle --exe {exe} --build {build} --output {build}/sector-puzzle-behavior.json | sectpuz puzact
+check_encounter_exit --exe {exe} --build {build} --output {build}/encounter-exit-behavior.json | encexit
+check_encounter_latch --exe {exe} --build {build} --output {build}/encounter-latch-behavior.json | enclatch
+check_encounter_frame --exe {exe} --build {build} --output {build}/encounter-frame-behavior.json | encexit encspawn
+check_encounter_spawn --exe {exe} --build {build} --output {build}/encounter-spawn.json | encspawn encclock encshift encbyte encoper encwidth
+check_capture_header --exe {exe} --output {build}/capture-header-behavior.json | pcxhdr capopen capclose pcxstep
+check_setgamemode_init --exe {exe} --object {build}/setdisp.obj --output {build}/setgamemode-init-behavior.json | setinit setdisp plook
+
+check_setgamemode_stereo --exe {exe} --object {build}/ststate.obj --output {build}/setgamemode-stereo-behavior.json | ststate setdisp
+
+check_setgamemode_dispatch --exe {exe} --object {build}/vmoddsp.obj --output {build}/setgamemode-dispatch-behavior.json | vmoddsp
+
+check_ripple_texture --exe {exe} --build {build} --output {build}/ripple-texture-behavior.json | ripsum ripctl ripbord rippart ripout riploop ripbook ripidx riptest ripflow
+
+check_ripple_radial_sample --exe {exe} --build {build} --output {build}/ripple-radial-sample.json | riprad ripinit ripbook
+
+check_ripple_radial_setup --exe {exe} --build {build} --output {build}/ripple-radial-setup.json | riprad ripinit ripbook
+
+check_ripple_packing --exe {exe} --build {build} --output {build}/ripple-packing.json | rippack
+
+check_ripple_vertical --exe {exe} --build {build} --output {build}/ripple-vertical.json | ripbord ripbook
+
+check_ripple_output --exe {exe} --build {build} --output {build}/ripple-output.json | ripout riploop ripidx riptest
+
+check_ripple_stack --exe {exe} --build {build} --output {build}/ripple-stack.json | ripidx riptest riploop
+
+check_ripple_control --exe {exe} --build {build} --output {build}/ripple-control.json | ripflow ripsum ripctl ripbord rippart riprad rippack ripout riploop ripbook ripidx riptest
+
+check_save_field_io --exe {exe} --build {build} --output {build}/save-field-io.json | svread svwrite svbytes
+
+check_save_dynamic_io --exe {exe} --build {build} --output {build}/save-dynamic-io.json | svsect svwall svstep
+
+check_save_restore_steps --exe {exe} --build {build} --output {build}/save-restore-steps.json | svstep
+
+check_save_status_completion --exe {exe} --build {build} --output {build}/save-status-completion.json | svstat
+
+check_save_status_message --exe {exe} --build {build} --output {build}/save-status-message.json | svmsg svfinish crushio stdwrap rtstrlen
+
+check_save_slot_open --exe {exe} --build {build} --output {build}/save-slot-open.json | svoread svowrite
+
+check_save_players_finish --exe {exe} --build {build} --output {build}/save-players-finish.json | svoread svfinish crushio
+check_encounter_actor --exe {exe} --build {build} --output {build}/encounter-actor.json | enclatch actreset
+check_weapon_animation --exe {exe} --build {build} --output {build}/weapon-animation.json | wanim wanstate wanxfer
+check_board_actor_groups --exe {exe} --build {build} --output {build}/board-actor-groups.json | actorcfg actsetup actdest actvalue actdisab actclob actoff acteax
+check_board_actor_indexed --exe {exe} --build {build} --output {build}/board-actor-indexed.json | actorcfg actsetup actdest actvalue actdisab actclob actoff acteax
+check_board_actor_destinations --exe {exe} --build {build} --output {build}/board-actor-destinations.json | actorcfg actsetup actdest actvalue actdisab actclob actoff acteax
+check_board_actor_values --exe {exe} --build {build} --output {build}/board-actor-values.json | actorcfg actsetup actdest actvalue actdisab actclob actoff acteax
+check_board_actor_disable --exe {exe} --build {build} --output {build}/board-actor-disable.json | actorcfg actsetup actdest actvalue actdisab actclob actoff acteax
+check_board_actor_clobbers --exe {exe} --build {build} --output {build}/board-actor-clobbers.json | actorcfg actsetup actdest actvalue actdisab actclob actoff acteax
+check_board_actor_fragments --exe {exe} --build {build} --output {build}/board-actor-fragments.json | actorcfg actsetup actdest actvalue actdisab actclob actoff acteax
+check_board_actor_offsets --exe {exe} --build {build} --output {build}/board-actor-offsets.json | actorcfg actsetup actdest actvalue actdisab actclob actoff acteax
+check_input_selection --exe {exe} --build {build} --asm {asm} --output {build}/input-selection.json | inpsel inpcurs inpacts inpfifo
+check_board_actor_eax --exe {exe} --build {build} --output {build}/board-actor-eax.json | actorcfg actsetup actdest actvalue actdisab actclob actoff acteax
+check_input_motion --exe {exe} --build {build} --asm {asm} --output {build}/input-motion.json | inpsel inpcurs inpacts inpfifo
+check_input_mouse --exe {exe} --build {build} --asm {asm} --output {build}/input-mouse.json | inpsel inpcurs inpacts inpfifo
+check_input_cursor --exe {exe} --build {build} --asm {asm} --output {build}/input-cursor.json | inpsel inpcurs inpacts inpfifo
+check_input_actions --exe {exe} --build {build} --asm {asm} --output {build}/input-actions.json | inpsel inpcurs inpacts inpfifo
+check_input_fifo --exe {exe} --build {build} --asm {asm} --output {build}/input-fifo.json | inpsel inpcurs inpacts inpfifo

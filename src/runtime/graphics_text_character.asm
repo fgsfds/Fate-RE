@@ -6,7 +6,6 @@ clear_graphics_region equ 0x6f4ac
 begin_graphics_device equ 0x70052
 end_graphics_device equ 0x7005b
 set_drawing_action equ 0x71950
-initialize_graphics_once equ 0x6fd95
 
 graphics_active equ 0x16c65
 text_attribute equ 0x16c71
@@ -20,7 +19,6 @@ color_text_offset equ 0x16d09
 font_8_rows equ 0x17ec4
 font_14_rows equ 0x18b5c
 pixel_address equ 0x2891ec
-pixel_width equ 0x2891fc
 pixel_height equ 0x2891fe
 text_columns equ 0x289200
 text_rows equ 0x289202
@@ -204,22 +202,4 @@ draw_text_character:
     pop ecx
     ret
 
-get_video_configuration:
-    push edx
-    push esi
-    push edi
-    push es
-    mov edx, eax
-    call initialize_graphics_once
-    push ds
-    pop es
-    mov edi, edx
-    mov esi, pixel_width
-    mov eax, edx
-    times 5 movsd
-    movsw
-    pop es
-    pop edi
-    pop esi
-    pop edx
-    ret
+    times 34 db 0 ; supplied by matching C

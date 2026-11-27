@@ -58,49 +58,8 @@ timer_irq:
     pop ds
     iretd
 
-program_pit:
-    push ebp
-    db 0x8b, 0xec ; MOV EBP, ESP uses the register-destination opcode.
-    push esi
-    push edi
-    push ebx
-    push ecx
-    push fs
-    push gs
-    push es
-    cmp dword [pit_programming_enabled], 0
-    je short .restore_registers
-    nop
-    nop
-    nop
-    nop
-    mov dx, 0x21
-    in al, dx
-    or al, 1
-    out dx, al
-    mov dx, 0x43
-    mov al, 0x36
-    out dx, al
-    mov dx, 0x40
-    mov eax, dword [ebp + 8]
-    out dx, al
-    db 0x8a, 0xc4 ; MOV AL, AH uses the register-destination opcode.
-    out dx, al
-    mov dx, 0x21
-    in al, dx
-    and al, 0xfe
-    out dx, al
-
-.restore_registers:
-    pop es
-    pop gs
-    pop fs
-    pop ecx
-    pop ebx
-    pop edi
-    pop esi
-    pop ebp
-    ret
+program_pit equ 0x64d6f
+    times 70 db 0    ; program_pit is supplied by C.
 
 install_timer_vector:
     push ebp
@@ -183,69 +142,10 @@ install_timer_vector:
     pop ebp
     ret
 
-mask_timer_irq:
-    push ebp
-    db 0x8b, 0xec ; MOV EBP, ESP uses the register-destination opcode.
-    push esi
-    push edi
-    push ebx
-    push ecx
-    push fs
-    push gs
-    push es
-    cmp dword [pit_programming_enabled], 0
-    je short .restore_registers
-    nop
-    nop
-    nop
-    nop
-    mov dx, 0x21
-    in al, dx
-    or al, 1
-    out dx, al
-
-.restore_registers:
-    pop es
-    pop gs
-    pop fs
-    pop ecx
-    pop ebx
-    pop edi
-    pop esi
-    pop ebp
-    ret
-
-unmask_timer_irq:
-    push ebp
-    db 0x8b, 0xec ; MOV EBP, ESP uses the register-destination opcode.
-    push esi
-    push edi
-    push ebx
-    push ecx
-    push fs
-    push gs
-    push es
-    cmp dword [pit_programming_enabled], 0
-    je short .restore_registers
-    nop
-    nop
-    nop
-    nop
-    mov dx, 0x21
-    in al, dx
-    and al, 0xfe
-    out dx, al
-
-.restore_registers:
-    pop es
-    pop gs
-    pop fs
-    pop ecx
-    pop ebx
-    pop edi
-    pop esi
-    pop ebp
-    ret
+mask_timer_irq equ 0x64e70
+    times 44 db 0    ; mask_timer_irq is supplied by C.
+unmask_timer_irq equ 0x64e9c
+    times 44 db 0    ; unmask_timer_irq is supplied by C.
 
 restore_timer_vector:
     push ebp
@@ -346,5 +246,5 @@ chain_original_timer:
 .return_without_chaining:
     ret
 
-timer_vector_noop:
-    ret
+timer_vector_noop_c_slot:
+    db 0 ; Byte supplied by timer_vector_noop.c.

@@ -24,3 +24,13 @@ getmousevalues(short *mousx, short *mousy, short *bstatus)
 	readmousexy(mousx,mousy);
 	readmousebstatus(bstatus);
 }
+
+extern unsigned long mouse_bios_reset(void);
+#pragma aux mouse_bios_reset = "mov ax, 0" "int 33h" value [eax] modify exact [eax];
+
+int initialize_mouse(void)
+{
+    unsigned result = mouse_bios_reset() & 0xffffu;
+    moustat = (unsigned char)result;
+    return (unsigned char)result;
+}

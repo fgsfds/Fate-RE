@@ -7,10 +7,7 @@ initial_stack_selector equ 0x16c50
 overflow_message equ 0x16c52
 fatal_runtime_error equ 0x6e69c
 
-stackavail_:
-    mov eax, esp
-    sub eax, [stack_bottom]
-    ret
+    times 9 db 0    ; stackavail is supplied by C.
 
 stack_helper_separator:
     db 0

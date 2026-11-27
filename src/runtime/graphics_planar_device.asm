@@ -2,103 +2,7 @@
 BITS 32
 ORG 0x72136
 
-detect_display_adapters equ 0x7139e
-adapter_mode_masks equ 0x1995c
-bios_data_offset equ 0x16d01
-bios_data_selector equ 0x16cf7
-preserve_display equ 0x199a4
-
-bios_mode_supported:
-    push ebx
-    push ecx
-    push edx
-    mov edx, eax
-    xor dh, ah
-    call detect_display_adapters
-    mov ecx, eax
-    cwde
-    and dl, 0x7f
-    sar eax, 8
-    xor ch, ch
-    mov ebx, eax
-    mov eax, ecx
-    movsx ecx, dx
-    mov edx, 1
-    cwde
-    shl edx, cl
-    test dword [eax*4 + adapter_mode_masks], edx
-    jne short .supported
-    movsx eax, bx
-    test dword [eax*4 + adapter_mode_masks], edx
-    je short .unsupported
-.supported:
-    mov eax, 1
-    pop edx
-    pop ecx
-    pop ebx
-    ret
-.unsupported:
-    xor eax, eax
-    pop edx
-    pop ecx
-    pop ebx
-    ret
-
-set_and_query_bios_mode:
-    push ebx
-    push ecx
-    push edx
-    push es
-    push fs
-    mov ebx, eax
-    cwde
-    call bios_mode_supported
-    test ax, ax
-    je short .query
-    mov eax, dword [bios_data_offset]
-    mov es, word [bios_data_selector]
-    add eax, 0x10
-    push es
-    pop fs
-    mov edx, eax
-    and byte es:[eax], 0xcf
-    cmp bx, 7
-    je short .monochrome
-    cmp bx, 0xf
-    jne short .color
-.monochrome:
-    or byte fs:[edx], 0x30
-    jmp short .preserve_display
-.color:
-    or byte es:[eax], 0x20
-.preserve_display:
-    cmp word [preserve_display], 0
-    je short .set
-    or bl, 0x80
-.set:
-    mov eax, ebx
-    xor ecx, ecx
-    xor edx, edx
-    xor ebx, ebx
-    push bp
-    int 0x10
-    pop bp
-.query:
-    mov eax, 0xf00
-    xor ebx, ebx
-    xor ecx, ecx
-    xor edx, edx
-    push bp
-    int 0x10
-    pop bp
-    and al, 0x7f
-    xor ah, ah
-    pop fs
-    pop es
-    pop edx
-    pop ecx
-    pop ebx
-    ret
+    times 193 db 0 ; BIOS mode support and setting are supplied by matching C
 
     db step_interleaved_up.fragment_end - step_interleaved_up
 step_interleaved_up:
@@ -123,29 +27,17 @@ step_interleaved_down:
 two_plane_color_map:
     db 0, 3, 12, 15
 
-    db step_up_80.fragment_end - step_up_80
-step_up_80:
-    sub edi, 0x50
-.fragment_end:
-    ret
+    db 3 ; Fragment length for the C-replaced planar callback below.
+    times 4 db 0 ; Reserved for step_up_80 in graphics_planar_steps.c.
 
-    db step_down_80.fragment_end - step_down_80
-step_down_80:
-    add edi, 0x50
-.fragment_end:
-    ret
+    db 3 ; Fragment length for the C-replaced planar callback below.
+    times 4 db 0 ; Reserved for step_down_80 in graphics_planar_steps.c.
 
-    db step_up_40.fragment_end - step_up_40
-step_up_40:
-    sub edi, 0x28
-.fragment_end:
-    ret
+    db 3 ; Fragment length for the C-replaced planar callback below.
+    times 4 db 0 ; Reserved for step_up_40 in graphics_planar_steps.c.
 
-    db step_down_40.fragment_end - step_down_40
-step_down_40:
-    add edi, 0x28
-.fragment_end:
-    ret
+    db 3 ; Fragment length for the C-replaced planar callback below.
+    times 4 db 0 ; Reserved for step_down_40 in graphics_planar_steps.c.
 
     db step_planar_right.fragment_end - step_planar_right
 step_planar_right:

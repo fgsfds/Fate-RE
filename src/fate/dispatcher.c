@@ -1,13 +1,13 @@
 /* Main dispatcher and its preceding helper share the original return epilogue. */
 extern long dispatch_mode, dispatch_active, dispatch_play;
-extern void dispatch_set(long), dispatch_prepare(void);
+extern void start_fade_out(long), dispatch_prepare(void);
 extern long dispatch_poll(void), dispatch_command(void);
 extern void game_loop(void);
 
 long dispatch_menu(void)
 {
     long state;
-    dispatch_set(255);
+    start_fade_out(255);
     for (state = 0; ; ) {
         switch (state) {
         case 0:

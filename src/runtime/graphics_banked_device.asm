@@ -167,15 +167,6 @@ select_crtc_35_bank:
 .done:
     ret
 
-; The line kernel copies the body and leaves out its RET.
-%macro STEP 2
-    db %1.fragment_end - %1
-%1:
-    %2 edi, 100
-.fragment_end:
-    ret
-%endmacro
-
 %macro BANKED_STEP 5
     db %1.fragment_end - %1
 %1:
@@ -190,8 +181,11 @@ select_crtc_35_bank:
     ret
 %endmacro
 
-STEP step_byte_up_100, sub
-STEP step_byte_down_100, add
+    db 3 ; Fragment length for the C-replaced banked callback.
+    times 4 db 0 ; Reserved for step_byte_up_100 in graphics_byte_steps.c.
+
+    db 3 ; Fragment length for the C-replaced banked callback.
+    times 4 db 0 ; Reserved for step_byte_down_100 in graphics_byte_steps.c.
 BANKED_STEP step_banked_up_128, sub, 128, dec, word
 BANKED_STEP step_banked_down_128, add, 128, inc, word
 BANKED_STEP step_banked_left, sub, 1, dec, byte

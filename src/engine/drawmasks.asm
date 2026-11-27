@@ -1,6 +1,6 @@
 ; Order and draw masked walls and sprites after the opaque room pass.
 BITS 32
-ORG 0x4cc8a
+ORG 0x4cdf1
 
 xdimen equ 0x140b5
 tsprite equ 0x2710a0
@@ -29,128 +29,8 @@ drawsprite equ 0x4d6ca
 drawmaskwall equ 0x4d193
 transmaskvline2_return equ 0x4b026
 
+; The linked C projection falls through with the original sort locals.
 drawmasks_:
-    push ebx
-    push ecx
-    push edx
-    push esi
-    push edi
-    push ebp
-    sub esp, 0x20
-    cmp dword [engine_14004], 0
-    jle short .branch_01d
-    mov eax, 2
-    mov edx, 0x3c4
-    out dx, al
-
-.branch_01d:
-    mov eax, dword [engine_287e84]
-    dec eax
-    mov dword [esp + 0x10], eax
-    jmp near .branch_147
-
-.branch_02c:
-    imul ecx, ebx, 0x2c
-    mov edi, dword [engine_286ad0]
-    mov eax, dword [ecx + tsprite]
-    sub eax, edi
-    mov ebp, dword [engine_286ad4]
-    mov dword [esp + 8], eax
-    mov eax, dword [ecx + engine_2710a4]
-    mov ebx, dword [engine_286ac8]
-    sub eax, ebp
-    mov edi, dword [engine_286af8]
-    mov dword [esp + 4], eax
-    mov esi, eax
-    mov eax, dword [esp + 8]
-    mov ebp, dword [esp + 0x10]
-    imul ebx
-    xchg esi, eax
-    mov ebx, edx
-    imul edi
-    add eax, esi
-    adc edx, ebx
-    shrd eax, edx, 6
-    shl ebp, 2
-    mov dword [esp + 0xc], eax
-    mov dword [esp], eax
-    cmp eax, 0x400
-    jle short .branch_0cb
-    mov esi, dword [esp + 8]
-    mov eax, dword [esp + 4]
-    mov edi, dword [engine_286af8]
-    mov ebx, dword [engine_286ac8]
-    neg esi
-    imul ebx
-    xchg esi, eax
-    mov ebx, edx
-    imul edi
-    add eax, esi
-    adc edx, ebx
-    shrd eax, edx, 6
-    mov ebx, dword [xdimen]
-    mov esi, dword [esp + 0xc]
-    shl ebx, 7
-    mov ecx, esi
-    add eax, esi
-    imul ebx
-    idiv ecx
-    mov dword [ebp + engine_19c6e0], eax
-    jmp short .branch_135
-
-.branch_0cb:
-    mov ax, word [ecx + engine_2710ac]
-    xor ah, ah
-    and al, 0x30
-    cwde
-    test eax, eax
-    jne short .branch_135
-    mov edx, dword [engine_287e84]
-    dec edx
-    mov eax, dword [esp + 0x10]
-    mov dword [engine_287e84], edx
-    cmp eax, edx
-    je short .branch_143
-    imul esi, edx, 0x2c
-    mov edi, tsprite
-    add edi, ecx
-    mov ecx, 0x2c
-    add esi, tsprite
-    test cl, 1
-    je short .branch_10b
-    movsb
-
-.branch_10b:
-    shr ecx, 2
-    jae short .branch_112
-    movsw
-
-.branch_112:
-    rep movsd
-    mov eax, dword [engine_287e84]
-    mov edx, dword [eax*4 + engine_19c6e0]
-    mov eax, dword [eax*4 + engine_19d6e0]
-    mov dword [ebp + engine_19c6e0], edx
-    mov dword [ebp + engine_19d6e0], eax
-    jmp short .branch_143
-
-.branch_135:
-    mov eax, dword [esp + 0x10]
-    mov edx, dword [esp]
-    mov dword [eax*4 + engine_19d6e0], edx
-
-.branch_143:
-    dec dword [esp + 0x10]
-
-.branch_147:
-    mov ebx, dword [esp + 0x10]
-    test ebx, ebx
-    jge near .branch_02c
-    mov eax, dword [engine_287e84]
-    mov ecx, engine_27c048
-    sar eax, 1
-    mov dword [esp + 0x14], ecx
-    mov dword [esp + 0x18], eax
     jmp near .branch_332
 
 .branch_16c:

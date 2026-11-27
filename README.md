@@ -3,6 +3,7 @@
 Byte-identical reconstruction of the October 18, 1996 DOS demo of Fate.
 
 - [Exact build and verification](docs/EXACT-BUILD.md)
+- [Fast reconstruction and validation workflow](docs/RESTORATION-WORKFLOW.md)
 - [Executable layout and dependency evidence](docs/RECONSTRUCTION.md)
 - [START.MAP movement and object behavior](docs/GAMEPLAY.md)
 - [START dispatcher and hook](docs/START-HOOK.md)

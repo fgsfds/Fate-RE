@@ -4,7 +4,41 @@ This is a target-specific reader, not a general DOS executable loader.
 """
 import hashlib
 import struct
+from bisect import bisect_left
+from collections.abc import Mapping
 from compare_exe import TARGET_SHA256
+
+
+class RelocationIndex(Mapping):
+    """Immutable mapping with logarithmic selection of a half-open address range."""
+    def __init__(self, pointers):
+        self._items = tuple(sorted(pointers.items()))
+        self._sites = tuple(site for site, _ in self._items)
+
+    def __len__(self):
+        return len(self._items)
+
+    def __iter__(self):
+        return iter(self._sites)
+
+    def __getitem__(self, site):
+        index = bisect_left(self._sites, site)
+        if index == len(self._sites) or self._sites[index] != site:
+            raise KeyError(site)
+        return self._items[index][1]
+
+    def items(self):
+        return self._items
+
+    def between(self, start, end):
+        return self._items[bisect_left(self._sites, start):bisect_left(self._sites, end)]
+
+
+def pointer_range(pointers, address, size):
+    items = (pointers.between(address, address + size) if isinstance(pointers, RelocationIndex)
+             else ((site, target) for site, target in pointers.items()
+                   if address <= site < address + size))
+    return {site - address: target for site, target in items}
 
 
 def read_le_fixups(blob):
@@ -51,4 +85,4 @@ def read_le_fixups(blob):
                 raise ValueError('Conflicting duplicate LE relocation')
             pointers[address] = value
             record_count += 1
-    return dict(record_count=record_count, pointers=pointers)
+    return dict(record_count=record_count, pointers=RelocationIndex(pointers))

@@ -92,224 +92,123 @@ getmousevalues equ 0x54424
 scale_mouse equ 0x3a96d
 setbrightness equ 0x59bee
 
-collect_input_:
+section .text align=1
+collect_input_ equ 0x2d51a
+; Guarded C supplies selection, keyboard motion and selected mouse operations.
+.loc_032 equ 0x2d54c
+.loc_04b equ 0x2d565
+.loc_06c equ 0x2d586
+.loc_09d equ 0x2d5b7
+.loc_0a7 equ 0x2d5c1
+.loc_0d8 equ 0x2d5f2
+.loc_109 equ 0x2d623
+.loc_139 equ 0x2d653
+.loc_16a equ 0x2d684
+.keyboard_motion equ 0x2d6b5
+.loc_1cd equ 0x2d6e7
+.loc_1d2 equ 0x2d6ec
+.loc_1f8 equ 0x2d712
+.strafe_modifier_motion equ 0x2d71c
+.loc_233 equ 0x2d74d
+.loc_238 equ 0x2d752
+.loc_26d equ 0x2d787
+.toggle_keys equ 0x2d78c
+.loc_295 equ 0x2d7af
+.poll_mouse equ 0x2d7d5
+.loc_306 equ 0x2d820
+.loc_318 equ 0x2d832
+.loc_31d equ 0x2d837
+.loc_33f equ 0x2d859
+.loc_344 equ 0x2d85e
+.loc_375 equ 0x2d88f
+.loc_37a equ 0x2d894
+.loc_3af equ 0x2d8c9
+.decay_motion equ 0x2d8ce
+.loc_3c6 equ 0x2d8e0
+.loc_3cb equ 0x2d8e5
+.loc_3de equ 0x2d8f8
+.loc_3e3 equ 0x2d8fd
+.loc_3f6 equ 0x2d910
+.loc_3fb equ 0x2d915
+.loc_40e equ 0x2d928
+.loc_413 equ 0x2d92d
+.loc_426 equ 0x2d940
+.loc_42b equ 0x2d945
+.loc_43e equ 0x2d958
+.loc_443 equ 0x2d95d
+.loc_452 equ 0x2d96c
+.loc_457 equ 0x2d971
+.loc_46d equ 0x2d987
+.loc_472 equ 0x2d98c
+.loc_486 equ 0x2d9a0
+.loc_48b equ 0x2d9a5
+.loc_49f equ 0x2d9b9
+.loc_4a6 equ 0x2d9c0
+.loc_4ab equ 0x2d9c5
+.loc_4bf equ 0x2d9d9
+.loc_4c4 equ 0x2d9de
+.loc_4d8 equ 0x2d9f2
+.loc_4df equ 0x2d9f9
+.loc_4e4 equ 0x2d9fe
+.cursor_or_map_motion equ 0x2da1b
+.loc_55a equ 0x2da74
+.loc_578 equ 0x2da92
+.loc_57d equ 0x2da97
+.loc_598 equ 0x2dab2
+.loc_5b6 equ 0x2dad0
+.loc_5bb equ 0x2dad5
+.map_motion equ 0x2db22
+.loc_65b equ 0x2db75
+.loc_679 equ 0x2db93
+.loc_67e equ 0x2db98
+.loc_6a1 equ 0x2dbbb
+.loc_6b7 equ 0x2dbd1
+.map_vertical_offset equ 0x2dbdd
+.loc_6ea equ 0x2dc04
+.loc_708 equ 0x2dc22
+.loc_70d equ 0x2dc27
+.gameplay_mouse_motion equ 0x2dc30
+.loc_736 equ 0x2dc50
+.loc_73c equ 0x2dc56
+.view_adjustment_key equ 0x2dc5d
+.loc_765 equ 0x2dc7f
+.blend_mouse_motion equ 0x2dc9f
+.loc_7ba equ 0x2dcd4
+.loc_82e equ 0x2dd48
+.loc_858 equ 0x2dd72
+.loc_871 equ 0x2dd8b
+.loc_891 equ 0x2ddab
+.loc_896 equ 0x2ddb0
+.mouse_strafe_motion equ 0x2ddb7
+.loc_8bf equ 0x2ddd9
+.loc_8df equ 0x2ddf9
+.loc_8e4 equ 0x2ddfe
+.pack_actions equ 0x2de0c
+.loc_937 equ 0x2de51
+.loc_abd equ 0x2dfd7
+.loc_b06 equ 0x2e020
+.release_button_latches equ 0x2e044
+.loc_b4e equ 0x2e068
+.save_mouse_buttons equ 0x2e08b
+.cycle_brightness equ 0x2e0b7
+.loc_bcd equ 0x2e0e7
+.check_fifo_mode equ 0x2e0f8
+.drain_key_fifo equ 0x2e101
+.done equ 0x2e12c
+
+section .retained_0 align=1 vstart=0x2d51a follows=.text
     push ebx
     push ecx
     push edx
     push esi
     push edi
     push ebp
-    cmp byte [input_mode], 0
-    jne near .keyboard_motion
+
+section .retained_1 align=1 vstart=0x2d52d follows=.retained_0
     xor eax, eax
     mov al, byte [key_toggle_mode]
-    cmp byte [eax + key_state], 0
-    je short .loc_032
-    xor dh, dh
-    mov byte [eax + key_state], dh
-    xor byte [toggled_mode], 1
 
-.loc_032:
-    cmp byte [selection_key_0], 0
-    jbe short .loc_04b
-    xor cl, cl
-    mov byte [selection_key_0], cl
-    xor edx, edx
-    mov dword [selection], edx
-
-.loc_04b:
-    cmp byte [selection_key_1], 0
-    jbe short .loc_06c
-    xor al, al
-    mov byte [selection_key_1], al
-    movsx eax, word [selection_1_enabled]
-    cmp eax, 1
-    jne short .loc_06c
-    mov dword [selection], eax
-
-.loc_06c:
-    cmp byte [selection_key_2], 0
-    jbe short .loc_0a7
-    xor dl, dl
-    mov byte [selection_key_2], dl
-    movsx eax, word [selection_2_enabled]
-    cmp eax, 1
-    jne short .loc_0a7
-    cmp word [selection_2_stock], 0
-    jg short .loc_09d
-    cmp word [selection_2_alternate_stock], 0
-    jle short .loc_0a7
-
-.loc_09d:
-    mov dword [selection], 2
-
-.loc_0a7:
-    cmp byte [selection_key_3], 0
-    jbe short .loc_0d8
-    xor bl, bl
-    mov byte [selection_key_3], bl
-    movsx eax, word [selection_3_enabled]
-    cmp eax, 1
-    jne short .loc_0d8
-    cmp word [selection_3_stock], 0
-    jle short .loc_0d8
-    mov dword [selection], 3
-
-.loc_0d8:
-    cmp byte [selection_key_4], 0
-    jbe short .loc_109
-    xor cl, cl
-    mov byte [selection_key_4], cl
-    movsx eax, word [selection_4_enabled]
-    cmp eax, 1
-    jne short .loc_109
-    cmp word [selection_4_stock], 0
-    jle short .loc_109
-    mov dword [selection], 4
-
-.loc_109:
-    cmp byte [selection_key_5], 0
-    jbe short .loc_139
-    xor al, al
-    mov byte [selection_key_5], al
-    movsx eax, word [selection_5_enabled]
-    cmp eax, 1
-    jne short .loc_139
-    cmp word [selection_5_stock], 0
-    jle short .loc_139
-    mov dword [selection], 5
-
-.loc_139:
-    cmp byte [selection_key_6], 0
-    jbe short .loc_16a
-    xor dl, dl
-    mov byte [selection_key_6], dl
-    movsx eax, word [selection_6_enabled]
-    cmp eax, 1
-    jne short .loc_16a
-    cmp word [selection_6_stock], 0
-    jle short .loc_16a
-    mov dword [selection], 6
-
-.loc_16a:
-    cmp byte [selection_key_7], 0
-    jbe short .keyboard_motion
-    xor bl, bl
-    mov byte [selection_key_7], bl
-    movsx eax, word [selection_7_enabled]
-    cmp eax, 1
-    jne short .keyboard_motion
-    cmp word [selection_7_stock], 0
-    jle short .keyboard_motion
-    mov dword [selection], 7
-
-; Apply keyboard acceleration and the strafe modifier.
-.keyboard_motion:
-    xor eax, eax
-    mov al, byte [key_strafe]
-    cmp byte [eax + key_state], 0
-    jne short .strafe_modifier_motion
-    xor eax, eax
-    mov al, byte [key_left]
-    cmp byte [eax + key_state], 0
-    jbe short .loc_1d2
-    mov eax, dword [keyboard_turn]
-    sub eax, 0x30
-    cmp eax, -0x80
-    jg short .loc_1cd
-    mov eax, 0xffffff80
-
-.loc_1cd:
-    mov dword [keyboard_turn], eax
-
-.loc_1d2:
-    xor eax, eax
-    mov al, byte [key_right]
-    cmp byte [eax + key_state], 0
-    jbe near .toggle_keys
-    mov eax, dword [keyboard_turn]
-    add eax, 0x30
-    cmp eax, 0x7f
-    jl short .loc_1f8
-    mov eax, 0x7f
-
-.loc_1f8:
-    mov dword [keyboard_turn], eax
-    jmp near .toggle_keys
-
-.strafe_modifier_motion:
-    xor eax, eax
-    mov al, byte [key_left]
-    cmp byte [eax + key_state], 0
-    jbe short .loc_238
-    mov ebx, dword [strafe_step]
-    mov eax, ebx
-    shl eax, 2
-    sub eax, ebx
-    mov ebx, dword [keyboard_strafe]
-    mov ecx, dword [strafe_limit]
-    add eax, ebx
-    cmp eax, ecx
-    jl short .loc_233
-    mov eax, ecx
-
-.loc_233:
-    mov dword [keyboard_strafe], eax
-
-.loc_238:
-    xor eax, eax
-    mov al, byte [key_right]
-    cmp byte [eax + key_state], 0
-    jbe short .toggle_keys
-    mov ebx, dword [strafe_step]
-    mov eax, ebx
-    shl eax, 2
-    sub eax, ebx
-    mov ebx, dword [keyboard_strafe]
-    sub ebx, eax
-    mov eax, ebx
-    mov ebx, dword [strafe_limit]
-    neg ebx
-    cmp eax, ebx
-    jg short .loc_26d
-    mov eax, ebx
-
-.loc_26d:
-    mov dword [keyboard_strafe], eax
-
-.toggle_keys:
-    xor eax, eax
-    mov al, byte [key_toggle_word]
-    xor ebx, ebx
-    mov bl, byte [eax + key_state]
-    cmp ebx, 1
-    jne short .loc_295
-    xor bl, bl
-    mov byte [eax + key_state], bl
-    not word [toggled_word]
-
-.loc_295:
-    xor eax, eax
-    mov al, byte [key_reset_view]
-    xor ebx, ebx
-    mov bl, byte [eax + key_state]
-    cmp ebx, 1
-    jne short .poll_mouse
-    xor bh, bh
-    mov byte [eax + key_state], bh
-    mov dword [view_adjustment], 0x64
-
-; Read and scale the mouse deltas before blending them with keyboard motion.
-.poll_mouse:
-    mov ebx, mouse_buttons
-    mov edx, mouse_dy
-    xor ecx, ecx
-    mov eax, mouse_dx
-    mov word [mouse_buttons], cx
-    call getmousevalues
-    mov edx, mouse_dy
-    mov eax, mouse_dx
-    call scale_mouse
+section .retained_2 align=1 vstart=0x2d801 follows=.retained_1
     xor eax, eax
     mov al, byte [key_forward]
     cmp byte [eax + key_state], 0
@@ -320,32 +219,14 @@ collect_input_:
     cwde
     test eax, eax
     je short .loc_31d
-
-.loc_306:
     mov eax, dword [keyboard_forward]
     add eax, 0xc
     cmp eax, 0x7f
     jl short .loc_318
     mov eax, 0x7f
-
-.loc_318:
     mov dword [keyboard_forward], eax
 
-.loc_31d:
-    xor eax, eax
-    mov al, byte [key_backward]
-    cmp byte [eax + key_state], 0
-    jbe short .loc_344
-    mov eax, dword [keyboard_forward]
-    sub eax, 0xc
-    cmp eax, -0x80
-    jg short .loc_33f
-    mov eax, 0xffffff80
-
-.loc_33f:
-    mov dword [keyboard_forward], eax
-
-.loc_344:
+section .retained_3 align=1 vstart=0x2d85e follows=.retained_2
     xor eax, eax
     mov al, byte [key_strafe_left]
     cmp byte [eax + key_state], 0
@@ -360,11 +241,7 @@ collect_input_:
     cmp eax, ebp
     jl short .loc_375
     mov eax, ebp
-
-.loc_375:
     mov dword [keyboard_strafe], eax
-
-.loc_37a:
     xor eax, eax
     mov al, byte [key_strafe_right]
     cmp byte [eax + key_state], 0
@@ -381,11 +258,7 @@ collect_input_:
     cmp eax, ebx
     jg short .loc_3af
     mov eax, ebx
-
-.loc_3af:
     mov dword [keyboard_strafe], eax
-
-.decay_motion:
     mov eax, dword [keyboard_turn]
     test eax, eax
     jge short .loc_3cb
@@ -393,11 +266,7 @@ collect_input_:
     test eax, eax
     jl short .loc_3c6
     xor eax, eax
-
-.loc_3c6:
     mov dword [keyboard_turn], eax
-
-.loc_3cb:
     mov edx, dword [keyboard_turn]
     test edx, edx
     jle short .loc_3e3
@@ -405,35 +274,9 @@ collect_input_:
     test eax, eax
     jg short .loc_3de
     xor eax, eax
-
-.loc_3de:
     mov dword [keyboard_turn], eax
 
-.loc_3e3:
-    mov ebx, dword [keyboard_strafe]
-    test ebx, ebx
-    jge short .loc_3fb
-    lea eax, [ebx + 6]
-    test eax, eax
-    jl short .loc_3f6
-    xor eax, eax
-
-.loc_3f6:
-    mov dword [keyboard_strafe], eax
-
-.loc_3fb:
-    mov ecx, dword [keyboard_strafe]
-    test ecx, ecx
-    jle short .loc_413
-    lea eax, [ecx - 6]
-    test eax, eax
-    jg short .loc_40e
-    xor eax, eax
-
-.loc_40e:
-    mov dword [keyboard_strafe], eax
-
-.loc_413:
+section .retained_4 align=1 vstart=0x2d92d follows=.retained_3
     mov esi, dword [keyboard_forward]
     test esi, esi
     jge short .loc_42b
@@ -441,11 +284,7 @@ collect_input_:
     test eax, eax
     jl short .loc_426
     xor eax, eax
-
-.loc_426:
     mov dword [keyboard_forward], eax
-
-.loc_42b:
     mov edi, dword [keyboard_forward]
     test edi, edi
     jle short .loc_443
@@ -453,21 +292,13 @@ collect_input_:
     test eax, eax
     jg short .loc_43e
     xor eax, eax
-
-.loc_43e:
     mov dword [keyboard_forward], eax
-
-.loc_443:
     mov ebp, dword [keyboard_forward]
     cmp ebp, -0x78
     jle short .loc_452
     mov eax, ebp
     jmp short .loc_457
-
-.loc_452:
     mov eax, 0xffffff88
-
-.loc_457:
     cmp eax, 0x77
     jge short .loc_46d
     mov eax, dword [keyboard_forward]
@@ -475,22 +306,14 @@ collect_input_:
     jg short .loc_472
     mov eax, 0xffffff88
     jmp short .loc_472
-
-.loc_46d:
     mov eax, 0x77
-
-.loc_472:
     mov edx, dword [keyboard_strafe]
     mov byte [input_forward], al
     cmp edx, -0x78
     jle short .loc_486
     mov eax, edx
     jmp short .loc_48b
-
-.loc_486:
     mov eax, 0xffffff88
-
-.loc_48b:
     cmp eax, 0x77
     jge short .loc_4a6
     mov ebx, dword [keyboard_strafe]
@@ -498,26 +321,16 @@ collect_input_:
     jle short .loc_49f
     mov eax, ebx
     jmp short .loc_4ab
-
-.loc_49f:
     mov eax, 0xffffff88
     jmp short .loc_4ab
-
-.loc_4a6:
     mov eax, 0x77
-
-.loc_4ab:
     mov ecx, dword [keyboard_turn]
     mov byte [input_strafe], al
     cmp ecx, -0x70
     jle short .loc_4bf
     mov eax, ecx
     jmp short .loc_4c4
-
-.loc_4bf:
     mov eax, 0xffffff90
-
-.loc_4c4:
     cmp eax, 0x6f
     jge short .loc_4df
     mov esi, dword [keyboard_turn]
@@ -525,15 +338,9 @@ collect_input_:
     jle short .loc_4d8
     mov eax, esi
     jmp short .loc_4e4
-
-.loc_4d8:
     mov eax, 0xffffff90
     jmp short .loc_4e4
-
-.loc_4df:
     mov eax, 0x6f
-
-.loc_4e4:
     mov bl, byte [cursor_mode]
     mov byte [input_turn], al
     test bl, bl
@@ -541,28 +348,10 @@ collect_input_:
     cmp word [map_mode], 0
     je near .gameplay_mouse_motion
 
-; Divert mouse motion to the cursor or map controls.
-.cursor_or_map_motion:
-    mov si, word [map_mode]
-    xor edx, edx
-    xor eax, eax
-    mov word [active_mouse_buttons], dx
-    test si, si
-    jne near .map_motion
-    mov bx, word [mouse_dx]
-    mov di, word [cursor_x]
-    mov cx, word [cursor_y]
-    add edi, ebx
-    mov bx, word [mouse_dy]
-    mov word [cursor_x], di
-    add ecx, ebx
-    movsx ebx, di
-    mov word [cursor_y], cx
+section .retained_5 align=1 vstart=0x2da67 follows=.retained_4
     cmp ebx, 0x13c
     jg short .loc_55a
     mov ebx, 0x13c
-
-.loc_55a:
     cmp ebx, 0x3dc
     jge short .loc_578
     movsx ebx, word [cursor_x]
@@ -570,18 +359,12 @@ collect_input_:
     jg short .loc_57d
     mov ebx, 0x13c
     jmp short .loc_57d
-
-.loc_578:
     mov ebx, 0x3dc
-
-.loc_57d:
     mov word [cursor_x], bx
     movsx ebx, word [cursor_y]
     cmp ebx, 0x16c
     jg short .loc_598
     mov ebx, 0x16c
-
-.loc_598:
     cmp ebx, 0x1b8
     jge short .loc_5b6
     movsx ebx, word [cursor_y]
@@ -589,18 +372,10 @@ collect_input_:
     jg short .loc_5bb
     mov ebx, 0x16c
     jmp short .loc_5bb
-
-.loc_5b6:
     mov ebx, 0x1b8
-
-.loc_5bb:
     mov word [cursor_y], bx
-    movsx ebx, word [cursor_x]
-    sar ebx, 2
-    mov word [map_x], bx
-    movsx ebx, word [cursor_y]
-    sar ebx, 2
-    mov word [map_scale_or_y], bx
+
+section .retained_6 align=1 vstart=0x2dafe follows=.retained_5
     mov bx, word [mouse_buttons]
     xor bh, bh
     and bl, 2
@@ -610,27 +385,17 @@ collect_input_:
     xor bh, bh
     mov byte [cursor_mode], bh
     jmp near .view_adjustment_key
-
-.map_motion:
     mov bx, word [mouse_buttons]
     xor bh, bh
     and bl, 2
     movsx ebx, bx
     test ebx, ebx
     jne near .map_vertical_offset
-    mov bx, word [mouse_dx]
-    mov cx, word [map_x]
-    mov si, word [map_scale_or_y]
-    sub ecx, ebx
-    sub si, word [mouse_dy]
-    mov word [map_x], cx
-    movsx ebx, si
-    mov word [map_scale_or_y], si
+
+section .retained_7 align=1 vstart=0x2db68 follows=.retained_6
     cmp ebx, 0x100
     jg short .loc_65b
     mov ebx, 0x100
-
-.loc_65b:
     cmp ebx, 0x800
     jge short .loc_679
     movsx ebx, word [map_scale_or_y]
@@ -638,11 +403,7 @@ collect_input_:
     jg short .loc_67e
     mov ebx, 0x100
     jmp short .loc_67e
-
-.loc_679:
     mov ebx, 0x800
-
-.loc_67e:
     mov word [map_scale_or_y], bx
     movsx ebx, bx
     mov ecx, ebx
@@ -654,8 +415,6 @@ collect_input_:
     cmp ecx, esi
     jg short .loc_6a1
     mov ecx, esi
-
-.loc_6a1:
     movsx ebx, bx
     cmp ecx, ebx
     jge short .loc_6b7
@@ -664,114 +423,34 @@ collect_input_:
     cmp ecx, ebx
     jle short .loc_6b7
     mov ebx, ecx
-
-.loc_6b7:
     mov word [map_x], bx
     jmp near .view_adjustment_key
 
-.map_vertical_offset:
-    mov bx, word [mouse_dy]
-    mov di, word [map_offset_y]
-    add edi, ebx
-    movsx ebx, di
-    mov word [map_offset_y], di
-    cmp ebx, 0xffffff00
-    jg short .loc_6ea
-    mov ebx, 0xffffff00
-
-.loc_6ea:
-    cmp ebx, 0x100
-    jge short .loc_708
-    movsx ebx, word [map_offset_y]
-    cmp ebx, 0xffffff00
-    jg short .loc_70d
-    mov ebx, 0xffffff00
-    jmp short .loc_70d
-
-.loc_708:
-    mov ebx, 0x100
-
-.loc_70d:
-    mov word [map_offset_y], bx
-    jmp short .view_adjustment_key
-
-.gameplay_mouse_motion:
+section .retained_8 align=1 vstart=0x2dc30 follows=.retained_7
     cmp word [mouse_motion_disabled], 0
     jne short .loc_736
     mov dx, word [mouse_dx]
     mov bx, word [mouse_buttons]
     mov ax, word [mouse_dy]
     jmp short .loc_73c
-
-.loc_736:
     xor edx, edx
     xor bh, bh
     xor eax, eax
-
-.loc_73c:
     mov word [active_mouse_buttons], bx
 
-.view_adjustment_key:
-    xor ebx, ebx
-    mov bl, byte [key_adjust_view]
-    mov bl, byte [ebx + key_state]
-    and ebx, 0xff
-    cmp ebx, 1
-    jne short .loc_765
-    mov byte [adjust_view_held], 1
-    jmp short .blend_mouse_motion
-
-.loc_765:
-    xor ebx, ebx
-    mov bl, byte [adjust_view_held]
-    cmp ebx, 1
-    jne short .blend_mouse_motion
-    xor cl, cl
-    mov edi, 0x64
-    mov byte [adjust_view_held], cl
-    mov dword [view_adjustment], edi
-
-; Maintain a four-sample horizontal history and update the outgoing motion.
-.blend_mouse_motion:
+section .retained_9 align=1 vstart=0x2dc9f follows=.retained_8
     xor ebx, ebx
     mov bl, byte [key_strafe]
     cmp byte [ebx + key_state], 0
     jne near .mouse_strafe_motion
-    mov di, word [mouse_history_index]
-    inc edi
-    movsx ebx, di
-    mov word [mouse_history_index], di
-    cmp ebx, 3
-    jle short .loc_7ba
-    xor ebx, ebx
-    mov word [mouse_history_index], bx
 
-.loc_7ba:
-    movsx ebx, word [mouse_history_index]
-    mov word [nosplit ebx*2 + mouse_history], dx
-    movsx ebx, word [mouse_history+2]
-    movsx ecx, word [mouse_history]
-    add ebx, ecx
-    movsx ecx, word [mouse_history+4]
-    add ecx, ebx
-    movsx ebx, word [mouse_history+6]
-    add ebx, ecx
-    sar ebx, 2
-    mov ch, byte [adjust_view_held]
-    mov word [smoothed_mouse_dx], bx
+section .retained_10 align=1 vstart=0x2dd15 follows=.retained_9
     test ch, ch
     je short .loc_858
     test ax, ax
     jle short .loc_82e
-    mov ebx, dword [view_adjustment]
-    add ebx, 4
-    mov dword [view_adjustment], ebx
-    cmp ebx, 0xc8
-    jle near .pack_actions
-    mov dword [view_adjustment], 0xc8
-    jmp near .pack_actions
 
-.loc_82e:
+section .retained_11 align=1 vstart=0x2dd48 follows=.retained_10
     jge near .pack_actions
     mov ebp, dword [view_adjustment]
     sub ebp, 4
@@ -781,8 +460,6 @@ collect_input_:
     xor edx, edx
     mov dword [view_adjustment], edx
     jmp near .pack_actions
-
-.loc_858:
     movsx ecx, ax
     movsx ebx, byte [input_forward]
     shl ecx, 3
@@ -790,8 +467,6 @@ collect_input_:
     cmp ebx, -0x80
     jg short .loc_871
     mov ebx, 0xffffff80
-
-.loc_871:
     cmp ebx, 0x7f
     jge short .loc_891
     cwde
@@ -803,15 +478,9 @@ collect_input_:
     jg short .loc_896
     mov eax, 0xffffff80
     jmp short .loc_896
-
-.loc_891:
     mov eax, 0x7f
-
-.loc_896:
     mov byte [input_forward], al
     jmp short .pack_actions
-
-.mouse_strafe_motion:
     movsx ebx, dx
     movsx eax, byte [input_turn]
     shl ebx, 3
@@ -821,8 +490,6 @@ collect_input_:
     cmp eax, -0x80
     jg short .loc_8bf
     mov eax, 0xffffff80
-
-.loc_8bf:
     cmp eax, 0x7f
     jge short .loc_8df
     movsx eax, dx
@@ -833,68 +500,15 @@ collect_input_:
     jg short .loc_8e4
     mov ebx, 0xffffff80
     jmp short .loc_8e4
-
-.loc_8df:
     mov ebx, 0x7f
-
-.loc_8e4:
     movsx eax, byte [input_strafe]
     add eax, ebx
     mov byte [input_strafe], al
 
-; Pack selection in the top three bits and combine the action flags.
-.pack_actions:
-    mov ax, word [selection]
-    shl eax, 0xd
-    mov word [input_actions], ax
-    cmp byte [input_mode], 0
-    jne short .loc_937
-    xor eax, eax
-    mov al, byte [key_action_12]
-    mov al, byte [eax + key_state]
-    and eax, 0xff
-    cmp eax, 1
-    sete al
+section .retained_12 align=1 vstart=0x2de3c follows=.retained_11
     xor ah, ah
-    mov cx, word [input_actions]
-    shl eax, 0xc
-    or ecx, eax
-    mov word [input_actions], cx
 
-.loc_937:
-    xor eax, eax
-    mov al, byte [key_action_0]
-    mov al, byte [eax + key_state]
-    mov si, word [input_actions]
-    xor ah, ah
-    or esi, eax
-    xor eax, eax
-    mov al, byte [key_action_1]
-    mov word [input_actions], si
-    mov al, byte [eax + key_state]
-    xor ah, ah
-    mov edi, esi
-    add eax, eax
-    or edi, eax
-    xor eax, eax
-    mov al, byte [key_action_4]
-    mov word [input_actions], di
-    mov al, byte [eax + key_state]
-    xor ah, ah
-    mov edx, edi
-    shl eax, 4
-    or edx, eax
-    xor eax, eax
-    mov al, byte [key_action_5]
-    mov word [input_actions], dx
-    mov al, byte [eax + key_state]
-    xor ah, ah
-    mov ebx, edx
-    shl eax, 5
-    or ebx, eax
-    xor eax, eax
-    mov al, byte [key_run]
-    mov word [input_actions], bx
+section .retained_13 align=1 vstart=0x2decd follows=.retained_12
     mov al, byte [eax + key_state]
     xor ah, ah
     mov ecx, ebx
@@ -916,28 +530,8 @@ collect_input_:
     mov edi, esi
     shl eax, 3
     or edi, eax
-    xor eax, eax
-    mov al, byte [key_action_10]
-    mov word [input_actions], di
-    mov al, byte [eax + key_state]
-    and eax, 0xff
-    cmp eax, 1
-    sete al
-    xor ah, ah
-    mov edx, edi
-    shl eax, 0xa
-    or edx, eax
-    xor eax, eax
-    mov al, byte [key_action_11]
-    mov word [input_actions], dx
-    mov al, byte [eax + key_state]
-    and eax, 0xff
-    cmp eax, 1
-    sete al
-    xor ah, ah
-    mov ebx, edx
-    shl eax, 0xb
-    or ebx, eax
+
+section .retained_14 align=1 vstart=0x2df66 follows=.retained_13
     mov ax, word [active_mouse_buttons]
     xor ah, ah
     and al, 1
@@ -963,19 +557,8 @@ collect_input_:
     mov si, word [button_latch_disabled]
     test si, si
     jne near .release_button_latches
-    movsx eax, word [prior_action_word]
-    sar eax, 0xd
-    test al, 7
-    je short .loc_abd
-    mov word [button_alternate], si
 
-.loc_abd:
-    cmp word [primary_button_latch], 0
-    jne near .save_mouse_buttons
-    cmp word [secondary_button_latch], 0
-    jne near .save_mouse_buttons
-    cmp word [button_alternate], 0
-    jne short .loc_b06
+section .retained_15 align=1 vstart=0x2dffd follows=.retained_14
     xor eax, eax
     mov al, byte [key_action_11]
     mov byte [eax + key_state], 1
@@ -983,8 +566,6 @@ collect_input_:
     mov word [primary_button_latch], dx
     mov word [button_alternate], dx
     jmp short .save_mouse_buttons
-
-.loc_b06:
     xor eax, eax
     mov al, byte [key_latched_secondary]
     mov byte [eax + key_state], 1
@@ -994,84 +575,8 @@ collect_input_:
     mov word [button_alternate], ax
     jmp short .save_mouse_buttons
 
-; Release synthesized key presses after the mouse button goes up.
-.release_button_latches:
-    movsx eax, word [primary_button_latch]
-    cmp eax, 1
-    jne short .loc_b4e
+section .retained_16 align=1 vstart=0x2e07c follows=.retained_15
     xor eax, eax
-    xor edi, edi
-    mov al, byte [key_action_11]
-    xor dl, dl
-    mov word [primary_button_latch], di
-    mov byte [eax + key_state], dl
 
-.loc_b4e:
-    movsx eax, word [secondary_button_latch]
-    cmp eax, 1
-    jne short .save_mouse_buttons
-    xor eax, eax
-    mov word [secondary_button_latch], ax
-    xor eax, eax
-    mov al, byte [key_latched_secondary]
-    xor dh, dh
-    mov byte [eax + key_state], dh
-
-.save_mouse_buttons:
-    mov ax, word [active_mouse_buttons]
-    mov word [saved_mouse_buttons], ax
-    mov ax, word [input_actions]
-    xor al, al
-    and ah, 8
-    cwde
-    test eax, eax
-    jle short .cycle_brightness
-    cmp dword [selection], 3
-    jne short .cycle_brightness
-    and byte [saved_mouse_buttons], 0xfe
-
-.cycle_brightness:
-    cmp byte [brightness_key], 0
-    jbe short .check_fifo_mode
-    xor al, al
-    mov byte [brightness_key], al
-    mov cx, word [brightness]
-    inc ecx
-    movsx eax, cx
-    mov word [brightness], cx
-    cmp eax, 8
-    jle short .loc_bcd
-    xor esi, esi
-    mov word [brightness], si
-
-.loc_bcd:
-    mov edx, brightness_palette
-    movsx eax, word [brightness]
-    call setbrightness
-
-.check_fifo_mode:
-    cmp byte [input_mode], 0
-    je short .done
-
-.drain_key_fifo:
-    mov al, byte [key_fifo_read]
-    cmp al, byte [key_fifo_write]
-    je short .done
-    xor eax, eax
-    mov al, byte [key_fifo_read]
-    xor eax, eax
-    mov al, byte [key_fifo_read]
-    mov al, byte [key_fifo_read]
-    add al, 2
-    and al, 0x3f
-    mov byte [key_fifo_read], al
-    jmp short .drain_key_fifo
-
-.done:
+section .retained_17 align=1 vstart=0x2e12c follows=.retained_16
     pop ebp
-    pop edi
-    pop esi
-    pop edx
-    pop ecx
-    pop ebx
-    ret

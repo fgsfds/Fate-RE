@@ -9,8 +9,6 @@ near_heap_clean equ 0x2891e5
 allocate_from_heap equ 0x64f9e
 expand_dgroup equ 0x65535
 request_more_heap equ 0x656f0
-fill_byte_pattern equ 0x62de0
-sopen equ 0x6138c
 
 malloc_:
     push ebx
@@ -124,34 +122,6 @@ malloc_:
     pop ebx
     ret
 
-memset_:
-    push eax
-    push ecx
-    mov dh, dl
-    shl edx, 8
-    mov dl, dh
-    shl edx, 8
-    mov dl, dh
-    mov ecx, ebx
-    call fill_byte_pattern
-    pop ecx
-    pop eax
-    ret
+    times 24 db 0    ; memset is supplied by C.
 
-open_:
-    push ebx
-    push edx
-    lea eax, [esp + 0x14]
-    add eax, 4
-    mov eax, dword [eax - 4]
-    push eax
-    push 0
-    mov edx, dword [esp + 0x18]
-    push edx
-    mov ebx, dword [esp + 0x18]
-    push ebx
-    call sopen
-    add esp, 0x10
-    pop edx
-    pop ebx
-    ret
+    times 36 db 0    ; open is supplied by C.

@@ -1,0 +1,677 @@
+{
+  "reference_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
+  "objects": [
+    {
+      "object": "statpent",
+      "source": "fate/status_panel_entry",
+      "size": 693,
+      "contexts": [
+        {
+          "public": "draw_status_panel_entry_",
+          "start": 0,
+          "size": 693,
+          "sha256": "7a321eb95dbfe61598da7bdeddea5f6ff1bc3480e8b1951030a18d37c12bbde8",
+          "fixups": {
+            "11": [
+              "_window_bottom",
+              false,
+              0
+            ],
+            "18": [
+              "_window_right",
+              false,
+              0
+            ],
+            "25": [
+              "_window_top",
+              false,
+              0
+            ],
+            "32": [
+              "_window_left",
+              false,
+              0
+            ],
+            "70": [
+              "_panel_top",
+              false,
+              0
+            ],
+            "80": [
+              "draw_tile_",
+              true,
+              0
+            ],
+            "86": [
+              "_window_bottom",
+              false,
+              0
+            ],
+            "93": [
+              "_window_right",
+              false,
+              0
+            ],
+            "100": [
+              "_window_top",
+              false,
+              0
+            ],
+            "107": [
+              "_window_left",
+              false,
+              0
+            ],
+            "128": [
+              "_panel_top",
+              false,
+              0
+            ],
+            "148": [
+              "draw_tile_",
+              true,
+              0
+            ],
+            "155": [
+              "_status_left_value",
+              false,
+              0
+            ],
+            "167": [
+              "_number_format",
+              false,
+              0
+            ],
+            "181": [
+              "format_string_",
+              true,
+              0
+            ],
+            "195": [
+              "_panel_top",
+              false,
+              0
+            ],
+            "210": [
+              "draw_number_text_",
+              true,
+              0
+            ],
+            "217": [
+              "_status_right_index",
+              false,
+              0
+            ],
+            "233": [
+              "_status_right_values",
+              false,
+              0
+            ],
+            "249": [
+              "_number_format",
+              false,
+              0
+            ],
+            "263": [
+              "format_string_",
+              true,
+              0
+            ],
+            "277": [
+              "_panel_top",
+              false,
+              0
+            ],
+            "292": [
+              "draw_number_text_",
+              true,
+              0
+            ],
+            "299": [
+              "_status_left_tenths",
+              false,
+              0
+            ],
+            "323": [
+              "_number_format",
+              false,
+              0
+            ],
+            "337": [
+              "format_string_",
+              true,
+              0
+            ],
+            "351": [
+              "_panel_top",
+              false,
+              0
+            ],
+            "366": [
+              "draw_number_text_",
+              true,
+              0
+            ],
+            "371": [
+              "_status_right_tenths",
+              false,
+              0
+            ],
+            "395": [
+              "_number_format",
+              false,
+              0
+            ],
+            "409": [
+              "format_string_",
+              true,
+              0
+            ],
+            "423": [
+              "_panel_top",
+              false,
+              0
+            ],
+            "438": [
+              "draw_number_text_",
+              true,
+              0
+            ],
+            "445": [
+              "_show_left_icon",
+              false,
+              0
+            ],
+            "454": [
+              "_window_bottom",
+              false,
+              0
+            ],
+            "461": [
+              "_window_right",
+              false,
+              0
+            ],
+            "467": [
+              "_window_top",
+              false,
+              0
+            ],
+            "474": [
+              "_window_left",
+              false,
+              0
+            ],
+            "495": [
+              "_panel_top",
+              false,
+              0
+            ],
+            "518": [
+              "draw_tile_",
+              true,
+              0
+            ],
+            "525": [
+              "_show_middle_icon",
+              false,
+              0
+            ],
+            "534": [
+              "_window_bottom",
+              false,
+              0
+            ],
+            "541": [
+              "_window_right",
+              false,
+              0
+            ],
+            "548": [
+              "_window_top",
+              false,
+              0
+            ],
+            "555": [
+              "_window_left",
+              false,
+              0
+            ],
+            "574": [
+              "_panel_top",
+              false,
+              0
+            ],
+            "599": [
+              "draw_tile_",
+              true,
+              0
+            ],
+            "606": [
+              "_show_right_icon",
+              false,
+              0
+            ],
+            "615": [
+              "_window_bottom",
+              false,
+              0
+            ],
+            "621": [
+              "_window_right",
+              false,
+              0
+            ],
+            "628": [
+              "_window_top",
+              false,
+              0
+            ],
+            "635": [
+              "_window_left",
+              false,
+              0
+            ],
+            "656": [
+              "_panel_top",
+              false,
+              0
+            ],
+            "679": [
+              "draw_tile_",
+              true,
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "object": "statpan",
+      "source": "fate/status_panel",
+      "size": 692,
+      "contexts": [
+        {
+          "public": "draw_status_panel_",
+          "start": 0,
+          "size": 692,
+          "sha256": "fddd72bb9e5107f465f68320d9382480fa3eb09bb53049dd960c066bbaeca5f1",
+          "fixups": {
+            "16": [
+              "_window_bottom",
+              false,
+              0
+            ],
+            "23": [
+              "_window_right",
+              false,
+              0
+            ],
+            "30": [
+              "_window_top",
+              false,
+              0
+            ],
+            "37": [
+              "_window_left",
+              false,
+              0
+            ],
+            "58": [
+              "_panel_top",
+              false,
+              0
+            ],
+            "80": [
+              "draw_tile_",
+              true,
+              0
+            ],
+            "86": [
+              "_window_bottom",
+              false,
+              0
+            ],
+            "92": [
+              "_window_right",
+              false,
+              0
+            ],
+            "99": [
+              "_window_top",
+              false,
+              0
+            ],
+            "106": [
+              "_window_left",
+              false,
+              0
+            ],
+            "129": [
+              "_panel_top",
+              false,
+              0
+            ],
+            "147": [
+              "draw_tile_",
+              true,
+              0
+            ],
+            "154": [
+              "_status_left_value",
+              false,
+              0
+            ],
+            "166": [
+              "_number_format",
+              false,
+              0
+            ],
+            "180": [
+              "format_string_",
+              true,
+              0
+            ],
+            "194": [
+              "_panel_top",
+              false,
+              0
+            ],
+            "209": [
+              "draw_number_text_",
+              true,
+              0
+            ],
+            "216": [
+              "_status_right_index",
+              false,
+              0
+            ],
+            "232": [
+              "_status_right_values",
+              false,
+              0
+            ],
+            "248": [
+              "_number_format",
+              false,
+              0
+            ],
+            "262": [
+              "format_string_",
+              true,
+              0
+            ],
+            "276": [
+              "_panel_top",
+              false,
+              0
+            ],
+            "291": [
+              "draw_number_text_",
+              true,
+              0
+            ],
+            "298": [
+              "_status_left_tenths",
+              false,
+              0
+            ],
+            "322": [
+              "_number_format",
+              false,
+              0
+            ],
+            "336": [
+              "format_string_",
+              true,
+              0
+            ],
+            "350": [
+              "_panel_top",
+              false,
+              0
+            ],
+            "365": [
+              "draw_number_text_",
+              true,
+              0
+            ],
+            "370": [
+              "_status_right_tenths",
+              false,
+              0
+            ],
+            "394": [
+              "_number_format",
+              false,
+              0
+            ],
+            "408": [
+              "format_string_",
+              true,
+              0
+            ],
+            "422": [
+              "_panel_top",
+              false,
+              0
+            ],
+            "437": [
+              "draw_number_text_",
+              true,
+              0
+            ],
+            "444": [
+              "_show_left_icon",
+              false,
+              0
+            ],
+            "453": [
+              "_window_bottom",
+              false,
+              0
+            ],
+            "460": [
+              "_window_right",
+              false,
+              0
+            ],
+            "467": [
+              "_window_top",
+              false,
+              0
+            ],
+            "474": [
+              "_window_left",
+              false,
+              0
+            ],
+            "493": [
+              "_panel_top",
+              false,
+              0
+            ],
+            "518": [
+              "draw_tile_",
+              true,
+              0
+            ],
+            "525": [
+              "_show_middle_icon",
+              false,
+              0
+            ],
+            "533": [
+              "_window_bottom",
+              false,
+              0
+            ],
+            "540": [
+              "_window_right",
+              false,
+              0
+            ],
+            "547": [
+              "_window_top",
+              false,
+              0
+            ],
+            "554": [
+              "_window_left",
+              false,
+              0
+            ],
+            "573": [
+              "_panel_top",
+              false,
+              0
+            ],
+            "598": [
+              "draw_tile_",
+              true,
+              0
+            ],
+            "605": [
+              "_show_right_icon",
+              false,
+              0
+            ],
+            "614": [
+              "_window_bottom",
+              false,
+              0
+            ],
+            "621": [
+              "_window_right",
+              false,
+              0
+            ],
+            "628": [
+              "_window_top",
+              false,
+              0
+            ],
+            "634": [
+              "_window_left",
+              false,
+              0
+            ],
+            "653": [
+              "_panel_top",
+              false,
+              0
+            ],
+            "678": [
+              "draw_tile_",
+              true,
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "object": "gamrow",
+      "source": "fate/gameplay_row",
+      "size": 19,
+      "contexts": [
+        {
+          "public": "gameplay_row_word_",
+          "start": 0,
+          "size": 19,
+          "sha256": "b7f7eb6d753c60eb37c5af11a2d8a1c59e8ed860e06cb9963846d1c9ca53a93e",
+          "fixups": {
+            "14": [
+              "_level_sector_ids",
+              false,
+              0
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "phases": [
+    {
+      "phase": "draw_status_panel_entry_setup_",
+      "public": "draw_status_panel_entry_",
+      "object": "statpent",
+      "begin": 0,
+      "end": 56,
+      "address": 67194,
+      "routine": "draw_status_panel",
+      "le_sites": 4
+    },
+    {
+      "phase": "draw_status_panel_entry_store_top_",
+      "public": "draw_status_panel_",
+      "object": "statpan",
+      "begin": 56,
+      "end": 62,
+      "address": 67250,
+      "routine": "draw_status_panel",
+      "le_sites": 1
+    },
+    {
+      "phase": "draw_status_panel_entry_scale_",
+      "public": "draw_status_panel_entry_",
+      "object": "statpent",
+      "begin": 56,
+      "end": 61,
+      "address": 67256,
+      "routine": "draw_status_panel",
+      "le_sites": 0
+    },
+    {
+      "phase": "draw_status_panel_entry_tile_",
+      "public": "draw_status_panel_entry_",
+      "object": "statpent",
+      "begin": 63,
+      "end": 68,
+      "address": 67261,
+      "routine": "draw_status_panel",
+      "le_sites": 0
+    },
+    {
+      "phase": "draw_status_panel_entry_y_",
+      "public": "draw_status_panel_entry_",
+      "object": "statpent",
+      "begin": 74,
+      "end": 79,
+      "address": 67266,
+      "routine": "draw_status_panel",
+      "le_sites": 0
+    },
+    {
+      "phase": "draw_status_panel_entry_angle_",
+      "public": "draw_status_panel_entry_",
+      "object": "statpent",
+      "begin": 61,
+      "end": 63,
+      "address": 67271,
+      "routine": "draw_status_panel",
+      "le_sites": 0
+    },
+    {
+      "phase": "draw_status_panel_entry_draw_",
+      "public": "draw_status_panel_entry_",
+      "object": "statpent",
+      "begin": 79,
+      "end": 84,
+      "address": 67273,
+      "routine": "draw_status_panel",
+      "le_sites": 0
+    },
+    {
+      "phase": "update_gameplay_row_setup_",
+      "public": "gameplay_row_word_",
+      "object": "gamrow",
+      "begin": 0,
+      "end": 18,
+      "address": 82777,
+      "routine": "update_gameplay",
+      "le_sites": 1
+    }
+  ]
+}

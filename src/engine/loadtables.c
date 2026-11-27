@@ -8,19 +8,28 @@ extern short sintable[], radarang[];
 extern char textfont[],smalltextfont[],britable[];
 extern void initksqrt(void);
 extern long kopen4load(char *,long),kread(long,void *,long),klseek(long,long,long),kclose(long);
+/* Register-only boundaries preserve the original reciprocal-loop allocation.
+ * The signed high word and low-word shift are generated from C below. */
+long reciprocal_denominator(long),reciprocal_numerator(long,long);
+long reciprocal_current_index(void);
+#pragma aux reciprocal_denominator = parm nomemory [ebx] value [ebx] modify exact [eax ebx];
+#pragma aux reciprocal_numerator = parm nomemory [eax][ecx] value [eax] modify exact [eax];
+#pragma aux reciprocal_current_index = value [ecx] modify exact [];
 #pragma aux divscale30 = \
- "mov edx, eax",\
- "sar edx, 2",\
- "shl eax, 30",\
  "idiv ebx",\
- parm nomemory [eax][ebx]\
+ parm nomemory [eax][edx][ebx]\
  modify exact [eax edx]
 loadtables()
 {
- long i,fil;
+ long i,fil,n,d;
  if(tablesloaded==0) {
   initksqrt();
-  for(i=0;i<2048;i++)reciptable[i]=divscale30(2048L,i+2048);
+  for(i=0;i<2048;) {
+   d=reciprocal_denominator(i+2048);
+   n=reciprocal_numerator(2048L,i+1);
+   i=reciprocal_current_index();
+   reciptable[i-1]=divscale30((unsigned long)n<<30,n>>2,d);
+  }
   if((fil=kopen4load(tables_filename,0))!=-1) {
    kread(fil,sintable,2048*2);
    klseek(fil,4096,1);

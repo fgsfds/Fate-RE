@@ -9,7 +9,7 @@ typedef struct {
 typedef struct { long x, y; char remainder[36]; } AudioSprite;
 typedef struct { long volume; char reserved[20]; long pan; char remainder[212]; } AudioChannel;
 #pragma pack(pop)
-extern char audio_enabled;
+extern unsigned char audio_enabled;
 extern long audio_tick, audio_last_tick, audio_listener_x, audio_listener_y, audio_driver;
 extern AudioSource *audio_sources[];
 extern AudioSprite sprite[];

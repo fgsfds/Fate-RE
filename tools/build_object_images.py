@@ -2,16 +2,16 @@
 import argparse
 import hashlib
 import json
+from functools import lru_cache
 from pathlib import Path
 
-from bind_crush_init_group import bind as bind_crush
-from bind_melee_group import bind as bind_melee
 from compare_exe import TARGET_SHA256
 from graphics_font_dependency import GRAPH_LIBRARY, load_fonts
 from match_objects import read_object
 from verify_c_leaf import CODE_OFFSETS, DATA_OFFSETS, FUNCTION_ADDRESSES, bind_leaf_details
 from verify_cache_unit import verify_unit_layout
 from verify_network_defaults import SCALARS, verify_object
+from restoration_registry import switch_groups
 
 
 CODE_RAW, CODE_SIZE = 0x35600, 414639
@@ -55,18 +55,27 @@ def checked_slice(payload, row, hash_field):
 
 
 def code_images(objects, binaries):
+    read_blob = lru_cache(maxsize=None)(lambda path: path.read_bytes())
     for row in read_inventory('matching-assembly'):
         yield int(row['raw_offset'], 16), checked_slice(
-            (binaries / row['binary']).read_bytes(), row, 'sha256')
-    groups = {'melee.obj': (bind_melee, 32), 'crushini.obj': (bind_crush, 60)}
+            read_blob(binaries / row['binary']), row, 'sha256')
+    groups = switch_groups()
+    bound_groups = {}
     for row in read_inventory('matching-routines'):
         address = int(row['raw_offset'], 16)
         name = row['object']
-        blob = (objects / name).read_bytes()
-        if name in groups:
-            binder, prefix = groups[name]
-            code = binder(blob)[0]
-            payload = code[prefix:] if 'symbol' in row else code[:prefix]
+        blob = read_blob(objects / name)
+        group = groups.get(name)
+        # One object may supply a generated table and separately placed leaves.
+        # Route only spans inside the registered contiguous group through it.
+        if (group is not None and group[1] + 0x25600 <= address
+                and address + row['bytes'] <= group[1] + 0x25600 + group[2]):
+            binder, base, *_ = group
+            if name not in bound_groups:
+                bound_groups[name] = binder(blob)[0]
+            code = bound_groups[name]
+            local = address - CODE_RAW - (base - 0x10000)
+            payload = code[local:local + row['bytes']]
         else:
             payload, _ = bind_leaf_details(blob, row['symbol'], DATA_OFFSETS,
                                            address=address - 0x25600, functions=FUNCTION_ADDRESSES,

@@ -2,41 +2,9 @@
 BITS 32
 ORG 0x67058
 
-memset_ equ 0x61350
-bit_masks equ 0x2024
 interrupt_vectors equ 0x67174 - 0x10000
 
-build_delimiter_map:
-    push ebx
-    push ecx
-    push esi
-    mov esi, eax
-    mov ecx, edx
-    mov ebx, 0x20
-    xor edx, edx
-    call memset_
-    jmp short .next_byte
-
-.set_bit:
-    xor eax, eax
-    mov al, dl
-    sar eax, 3
-    and dl, 7
-    and edx, 0xff
-    mov dl, byte [edx + bit_masks]
-    mov dh, byte [esi + eax]
-    or dh, dl
-    inc ecx
-    mov byte [esi + eax], dh
-
-.next_byte:
-    mov dl, byte [ecx]
-    test dl, dl
-    jne short .set_bit
-    pop esi
-    pop ecx
-    pop ebx
-    ret
+    times 62 db 0    ; build_delimiter_map is supplied by C.
 
 dispatch_interrupt_registers:
     push ebp
