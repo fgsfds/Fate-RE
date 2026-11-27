@@ -708,3 +708,10 @@ restored EBP boundary, saved registers and sentinel through the real RET.
 For volatile FIFO indices, identical results do not prove access order: count
 every repeated read, and keep malformed stable states as bounded cycles
 rather than normalizing their indices or claiming termination.
+
+For an interrupt-owned byte, a distinct volatile external alias can retain
+direct DATA-relative operands where a local volatile pointer induces indirect
+addressing. Bind the alias to the independently verified byte offset, explicitly
+sequence the condition samples, and preserve every repeated read. Requalify all
+previous slices: this FIFO change altered 17 earlier action bytes despite an
+unchanged source prefix, so its 52-byte phase uses a separate guarded context.

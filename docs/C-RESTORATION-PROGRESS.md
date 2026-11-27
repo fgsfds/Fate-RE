@@ -1,15 +1,15 @@
 # Exact C restoration progress
 
-The current saved attribution audit covers all 414,639 CODE bytes and includes 601 compiler units. Saved full validation passed 407 tests and 161 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
+The current saved attribution audit covers all 414,639 CODE bytes and includes 602 compiler units. Saved full validation passed 407 tests and 162 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 176,463 | 42.558% |
+| Compiler-generated instructions | 176,515 | 42.571% |
 | Inline assembly instructions in C objects | 24,311 | 5.863% |
-| Standalone assembly | 212,582 | 51.269% |
+| Standalone assembly | 212,530 | 51.257% |
 | Unattributed instructions and non-routine tables | 1,283 | 0.309% |
 
-The unattributed category contains 882 instruction bytes in 16 unknown routines and 401 non-routine table bytes. Tables are recorded as data, and the unknown instruction bytes remain uncredited. Combined remaining assembly, including inline assembly: 236,893 bytes (57.132%). C-object inventory covers 202,057 bytes (48.73%) and 1,718 C routine spans; the assembly inventory has 634 spans.
+The unattributed category contains 882 instruction bytes in 16 unknown routines and 401 non-routine table bytes. Tables are recorded as data, and the unknown instruction bytes remain uncredited. Combined remaining assembly, including inline assembly: 236,841 bytes (57.120%). C-object inventory covers 202,109 bytes (48.74%) and 1,719 C routine spans; the assembly inventory has 634 spans.
 
 The accepted executable is 741,347 bytes, SHA-256 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.
 
@@ -39,7 +39,9 @@ The offset context adds another 433 native bytes and 29 DATA sites in 29 complet
 
 A conservative EAX clobber on the actual fourth-field value adds the complete actor 104 parameter-two assignment: 14 native bytes and one DATA site. Its full 31,450-byte context and all 2,579 DATA fixups are pinned; earlier contexts remain because it reproduces only 782 of their 1,166 destination bytes. Two complementary-register operation cases and five whole replays pass, with eight context, two code and four metadata controls. The omitted-AX-bit control explicitly poisons the omitted bit opposite its required value, supporting even slot indices as well as odd ones.
 
-`collect_input_` now supplies 1,719 native C bytes, 179 DATA sites and three relative CODE calls in 58 phases. A third context adds 514 bytes and 52 DATA sites for action packing, latch releases, signed brightness and the shared return suffix; the previous 1,205 bytes remain in their original contexts. All 60 selected branches retain logical successors, opcodes and widths. The three complete private contexts (1,300, 2,395 and 3,195 bytes) guard all 123, 199 and 277 OMF fixups, including excluded calls, wrappers, stack operations and raw addends. Their two/two/three relative CODE calls are fully guarded; only the original three are placed, and none creates an LE pointer. The original frame and remaining cursor, packing, latch and FIFO code occupy 1,378 assembly bytes in 18 runs.
+`collect_input_` now supplies 1,771 native C bytes, 186 DATA sites and three relative CODE calls in 59 phases. The latest FIFO context adds 52 bytes and seven DATA sites, preserving all earlier 1,719 bytes in their original contexts. All 63 selected branches retain logical successors, opcodes and widths. Four complete private contexts (1,300, 2,395, 3,195 and 3,204 bytes) guard all 123, 199, 277 and 281 OMF fixups, including excluded calls, wrappers, stack operations and raw addends. Their two/two/three/three relative CODE calls are fully guarded; only the original three are placed, and none creates an LE pointer. The original frame and remaining cursor, packing and latch code occupy 1,326 assembly bytes in 18 runs.
+
+The FIFO context uses distinct volatile byte aliases bound to the actual read/write DATA locations. Its 52-byte phase retains all four read-cursor samples per nonempty iteration and the original write-cursor observation. Both exits reach the retained POP EBP before the incumbent C return; private local cleanup stays excluded. The full context changes 17 earlier action bytes, so it does not replace the existing action context. A dedicated guard fixture rejects 12 metadata, opcode, cleanup, return and typed-fixup mutations, including an altered addend with both digest checks disabled. Metadata controls cross-check the manifest; the production binder independently verifies every placed byte and LE site against the pinned image. The existing action fixture replays the newly installed FIFO in the full original/placed tail.
 
 The new action fixture passes 6,066 original/placed cases with two complementary register patterns. It verifies ordered writes, configurable-key aliases, signed brightness wrapping, all allowed brightness-call clobbers, phase-boundary GPRs and masked arithmetic flags, and the real six-save caller frame through the retained POP EBP and compiler-generated five-pop/RET suffix. Each seed has 4,051 terminating and 2,015 cyclic cases; stable malformed FIFO states are observed for 64 updates and a repeated 32-step cycle. Fifteen controls reject metadata gaps, wrong logical branches, changed normalization/sign extension/return registers, omitted volatile reads and private-context/CODE fixup mutations. Brightness hardware is stubbed; asynchronous FIFO producers and a whole private-function ABI substitution are not modeled.
 
@@ -105,7 +107,7 @@ The palette lookup clearing loop contributes 19 compiler-generated bytes and one
 
 The saved full validation and audit artifacts verify the pinned image:
 
-- Full validation and 161 fixtures: `work/reset-82ae95d/validation.json`.
+- Full validation and 162 fixtures: `work/reset-82ae95d/validation.json`.
 - Weapon animation state machine, private replay and controls: `work/reset-82ae95d/weapon-animation.json`.
 - Encounter spawn prefix and context controls: `work/reset-82ae95d/encounter-spawn.json`.
 - Encounter frame behavior: `work/encounter-frame-build/encounter-frame-behavior.json`.
@@ -122,9 +124,11 @@ The saved full validation and audit artifacts verify the pinned image:
 - Trial agent outcomes: `work/agent-role-trial/outcomes.json`.
 - Gameplay row and controller: `work/reset-82ae95d/gameplay-update-behavior.json`.
 - Status-panel placed and private contexts: `work/reset-82ae95d/status-panel-behavior.json`.
-- Attribution audit: `work/input-actions-nov27/audit.json`.
+- Attribution audit: `work/input-fifo-nov27/audit.json`.
 - Actor completed-offset models and replay: `work/reset-82ae95d/board-actor-offsets.json`.
 - Actor EAX-lifetime assignment: `work/reset-82ae95d/board-actor-eax.json`.
+- FIFO exact placement and context controls: `work/reset-82ae95d/input-fifo.json`.
+- FIFO production context and attribution: `work/input-fifo-nov27/production-evidence.json`.
 - Action/latch/brightness/FIFO model and return frame: `work/reset-82ae95d/input-actions.json`.
 - Parent return-suffix evidence: `work/input-actions-nov27/production-evidence.json`.
 - Cursor/map/blending model and volatile history order: `work/reset-82ae95d/input-cursor.json`.

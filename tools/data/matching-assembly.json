@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
   "routines": 634,
-  "unique_code_bytes": 212582,
-  "le_pointers": 11303,
+  "unique_code_bytes": 212530,
+  "le_pointers": 11296,
   "non_routine_code_spans": [
     {
       "symbol": "capture_after_open",
@@ -9349,13 +9349,13 @@
       "symbol": "input_selection_retained_17",
       "source": "src/fate/collect_input.asm",
       "binary": "collect_input.bin",
-      "sha256": "d772bf6f56d0547f41bc433849b5d9c11d177f688e8a6db25e425080136c5b16",
-      "bytes": 53,
-      "raw_offset": "0x536f8",
-      "loaded_address": "0x2e0f8",
-      "public_entry": "0x2e0f8",
+      "sha256": "cfae0d4248f7142f7b17f826cd7a519280e312577690e957830d23dcf35a3fff",
+      "bytes": 1,
+      "raw_offset": "0x5372c",
+      "loaded_address": "0x2e12c",
+      "public_entry": "0x2e12c",
       "binary_offset": 1325,
-      "le_pointers": 7
+      "le_pointers": 0
     }
   ]
 }

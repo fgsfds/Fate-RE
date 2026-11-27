@@ -13,8 +13,11 @@ CURSOR_CONTEXT_SHA256=CURSOR_LAYOUT['context']['sha256']
 ACTIONS_LAYOUT=json.loads((Path(__file__).parent/'data'/LAYOUT['actions_context_file']).read_text(encoding='utf-8'))
 ACTIONS_PUBLIC=ACTIONS_LAYOUT['context']['public']
 ACTIONS_CONTEXT_SHA256=ACTIONS_LAYOUT['context']['sha256']
-PLACEMENT_LAYOUTS=(LAYOUT,CURSOR_LAYOUT,ACTIONS_LAYOUT)
-PUBLICS=frozenset((PUBLIC,CURSOR_PUBLIC,ACTIONS_PUBLIC))
+FIFO_LAYOUT=json.loads((Path(__file__).parent/'data'/LAYOUT['fifo_context_file']).read_text(encoding='utf-8'))
+FIFO_PUBLIC=FIFO_LAYOUT['context']['public']
+FIFO_CONTEXT_SHA256=FIFO_LAYOUT['context']['sha256']
+PLACEMENT_LAYOUTS=(LAYOUT,CURSOR_LAYOUT,ACTIONS_LAYOUT,FIFO_LAYOUT)
+PUBLICS=frozenset((PUBLIC,CURSOR_PUBLIC,ACTIONS_PUBLIC,FIFO_PUBLIC))
 
 
 def verify_context(blob,public_name=None):
@@ -24,6 +27,7 @@ def verify_context(blob,public_name=None):
     if public_name==PUBLIC:ctx,digest=LAYOUT['context'],CONTEXT_SHA256
     elif public_name==CURSOR_PUBLIC:ctx,digest=CURSOR_LAYOUT['context'],CURSOR_CONTEXT_SHA256
     elif public_name==ACTIONS_PUBLIC:ctx,digest=ACTIONS_LAYOUT['context'],ACTIONS_CONTEXT_SHA256
+    elif public_name==FIFO_PUBLIC:ctx,digest=FIFO_LAYOUT['context'],FIFO_CONTEXT_SHA256
     else:raise ValueError('Unknown input compiler context')
     if [list(p) for p in publics]!=ctx['publics']:
         raise ValueError('Input selection public layout differs')

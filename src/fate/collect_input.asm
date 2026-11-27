@@ -591,19 +591,5 @@ section .retained_15 align=1 vstart=0x2dffd follows=.retained_14
 section .retained_16 align=1 vstart=0x2e07c follows=.retained_15
     xor eax, eax
 
-section .retained_17 align=1 vstart=0x2e0f8 follows=.retained_16
-    cmp byte [input_mode], 0
-    je short .done
-    mov al, byte [key_fifo_read]
-    cmp al, byte [key_fifo_write]
-    je short .done
-    xor eax, eax
-    mov al, byte [key_fifo_read]
-    xor eax, eax
-    mov al, byte [key_fifo_read]
-    mov al, byte [key_fifo_read]
-    add al, 2
-    and al, 0x3f
-    mov byte [key_fifo_read], al
-    jmp short .drain_key_fifo
+section .retained_17 align=1 vstart=0x2e12c follows=.retained_16
     pop ebp

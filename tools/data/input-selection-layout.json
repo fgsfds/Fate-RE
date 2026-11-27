@@ -3017,7 +3017,7 @@
   "original_size": 3097,
   "prefix_size": 699,
   "selected_bytes": 817,
-  "assembly_size": 1378,
+  "assembly_size": 1326,
   "phases": [
     {
       "public": "collect_input_mouse_",
@@ -3429,18 +3429,10 @@
     },
     {
       "symbol": "input_selection_retained_17",
-      "address": 188664,
-      "size": 53,
+      "address": 188716,
+      "size": 1,
       "binary_offset": 1325,
-      "fixups": {
-        "2": 539907,
-        "10": 1046651,
-        "16": 1046648,
-        "25": 1046651,
-        "32": 1046651,
-        "37": 1046651,
-        "46": 1046651
-      }
+      "fixups": {}
     }
   ],
   "instructions": [
@@ -4653,6 +4645,7 @@
     ]
   },
   "cursor_context_file": "input-cursor-layout.json",
-  "combined_selected_bytes": 1719,
-  "actions_context_file": "input-actions-layout.json"
+  "combined_selected_bytes": 1771,
+  "actions_context_file": "input-actions-layout.json",
+  "fifo_context_file": "input-fifo-layout.json"
 }

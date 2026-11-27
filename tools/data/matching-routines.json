@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1718,
-  "unique_code_bytes": 202057,
-  "le_pointers": 11246,
+  "routines": 1719,
+  "unique_code_bytes": 202109,
+  "le_pointers": 11253,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -4198,6 +4198,16 @@
       "loaded_address": "0x2e0ce",
       "bytes": 42,
       "le_pointers": 4
+    },
+    {
+      "symbol": "input_fifo_drain_0_",
+      "object": "inpfifo.obj",
+      "object_sha256": "46bb901112aa915fea3d006db400d4e91109884b201c91407153ca41111dc724",
+      "sha256": "4f4ef868175281353123c40ffd6970f9ab3d221ab15c25898f4838765502cdc8",
+      "raw_offset": "0x536f8",
+      "loaded_address": "0x2e0f8",
+      "bytes": 52,
+      "le_pointers": 7
     },
     {
       "symbol": "input_actions_return_",

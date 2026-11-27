@@ -230,9 +230,10 @@ Evidence: `work/input-mouse-nov27/NOTES.md`, its `scoped` artifacts, and
 A supplemental Watcom 10.5 `/4r /s /or /bt=dos` context adds 388 native
 bytes and 41 DATA sites across eight cursor/map/blending operations, with
 seven placed branches. Keep the earlier 817 bytes: the combined source
-changes allocation in the backward clamp at `0x2d850`. Three pinned contexts now supply 1,719 bytes; 1,378 remain assembly. The
+changes allocation in the backward clamp at `0x2d850`. Four pinned contexts now supply 1,771 bytes; 1,326 remain assembly. The
 third context adds action packing, latch releases, signed brightness and the
-shared return suffix; preserve the earlier allocations. The new 2,395-byte context has
+shared return suffix; a fourth adds the FIFO drain. Preserve earlier allocations.
+The 2,395-byte cursor context has
 eight bytes of private locals; selected production fragments never access ESP.
 Original DX/AX lifetimes replace excluded private spills and the history reload.
 
@@ -244,12 +245,14 @@ cursor mismatch is the `cursor_mode` load into CH instead of BL and the
 packed-turn store from DL instead of AL at `0x2d9fe`. Next test a coherent
 packed-turn/cursor predicate with actual AL/BL operands. For the remaining
 action tail, the bit-12 normalizer uses AND EAX,255 rather than XOR AH,AH;
-run/2/3 packing has different allocation, and FIFO byte-pointer accesses use
-indirect operands rather than the original DATA-relative fields. Preserve all
-three accepted contexts; next isolate one real operand lifetime. No fake register getter or EBP pragma.
+run/2/3 packing still has different allocation. Direct volatile FIFO aliases
+resolved the indirect-operand mismatch and added 52 exact bytes. This changes
+17 earlier action bytes, so keep that context separate. Preserve all four
+accepted contexts; next isolate one real operand lifetime. No fake register getter or EBP pragma.
 Evidence: `work/input-cursor-nov27/placement-evidence.json`,
 `integration-evidence.json`, `work/input-cursor-oracle-nov27/`, and
-`work/input-actions-nov27/production-evidence.json`.
+`work/input-actions-nov27/production-evidence.json` and
+`work/input-fifo-nov27/production-evidence.json`.
 
 ### Video prompt-mode blocker
 
