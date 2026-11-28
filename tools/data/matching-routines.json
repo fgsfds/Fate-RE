@@ -1,8 +1,8 @@
 {
   "target_sha256": "61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f",
-  "routines": 1719,
-  "unique_code_bytes": 202166,
-  "le_pointers": 11255,
+  "routines": 1721,
+  "unique_code_bytes": 202338,
+  "le_pointers": 11262,
   "non_routine_code_spans": [
     {
       "kind": "compiler-generated jump table",
@@ -3920,6 +3920,16 @@
       "le_pointers": 6
     },
     {
+      "symbol": "input_cursor_clamps_0_",
+      "object": "inpclamp.obj",
+      "object_sha256": "ad600c7177496fb02fcffba31c1b48b5cec5eb688cf40a811ac7b3c8bb63f26f",
+      "sha256": "6b85786963636db1b765af6978aa255791f0e4a468376532955b5ebcc524d5bc",
+      "raw_offset": "0x53067",
+      "loaded_address": "0x2da67",
+      "bytes": 117,
+      "le_pointers": 5
+    },
+    {
       "symbol": "input_cursor_projection_0_",
       "object": "inpcurs.obj",
       "object_sha256": "8d2d02d674dfe61cdd5b5759960b764b21a4f64f928daf67be27e650c632ef5a",
@@ -3978,6 +3988,16 @@
       "loaded_address": "0x2db61",
       "bytes": 7,
       "le_pointers": 1
+    },
+    {
+      "symbol": "input_map_scale_clamp_0_",
+      "object": "inpclamp.obj",
+      "object_sha256": "ad600c7177496fb02fcffba31c1b48b5cec5eb688cf40a811ac7b3c8bb63f26f",
+      "sha256": "a32c7febb0639769d5b9de3a0787bfbce909fc958c5acde07ce6679826a44290",
+      "raw_offset": "0x53168",
+      "loaded_address": "0x2db68",
+      "bytes": 55,
+      "le_pointers": 2
     },
     {
       "symbol": "input_map_vertical_0_",

@@ -721,3 +721,10 @@ even when its constants are staged in EBX. Passing the full long result through
 the EBX identity before truncating the store removed that join copy in the
 vertical map clamp. Constant constraints alone did not fix it. Requalify all
 prior slices; the X/Y/scale joins still need a distinct lifetime solution.
+
+A fixed EBX argument/result ABI can still save EAX and allocate a clamp join
+there. Separate operation locals fixed the X/Y joins; eliminating the final
+returned local by making the composed normalization service void fixed scale.
+Its private signed-SI preparation and RET remain guarded and unlinked. Verify
+the actual caller EBX/SI inputs and all preserved GPRs; do not infer this from
+the pragma alone or equate the helper with the original input collector.

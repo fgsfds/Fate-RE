@@ -3017,7 +3017,7 @@
   "original_size": 3097,
   "prefix_size": 699,
   "selected_bytes": 817,
-  "assembly_size": 1269,
+  "assembly_size": 1097,
   "phases": [
     {
       "public": "collect_input_mouse_",
@@ -3281,22 +3281,9 @@
     },
     {
       "symbol": "input_selection_retained_5",
-      "address": 186983,
-      "size": 117,
-      "binary_offset": 464,
-      "fixups": {
-        "24": 1069710,
-        "51": 1069710,
-        "58": 1069708,
-        "86": 1069708,
-        "113": 1069708
-      }
-    },
-    {
-      "symbol": "input_selection_retained_6",
       "address": 187134,
       "size": 59,
-      "binary_offset": 581,
+      "binary_offset": 464,
       "fixups": {
         "3": 1040098,
         "27": 539621,
@@ -3304,23 +3291,21 @@
       }
     },
     {
-      "symbol": "input_selection_retained_7",
-      "address": 187240,
-      "size": 117,
-      "binary_offset": 640,
+      "symbol": "input_selection_retained_6",
+      "address": 187295,
+      "size": 62,
+      "binary_offset": 523,
       "fixups": {
-        "24": 535538,
-        "51": 535538,
-        "71": 535536,
-        "93": 535536,
-        "108": 535536
+        "16": 535536,
+        "38": 535536,
+        "53": 535536
       }
     },
     {
-      "symbol": "input_selection_retained_8",
+      "symbol": "input_selection_retained_7",
       "address": 187440,
       "size": 45,
-      "binary_offset": 757,
+      "binary_offset": 585,
       "fixups": {
         "3": 535548,
         "13": 1040090,
@@ -3330,27 +3315,27 @@
       }
     },
     {
-      "symbol": "input_selection_retained_9",
+      "symbol": "input_selection_retained_8",
       "address": 187551,
       "size": 21,
-      "binary_offset": 802,
+      "binary_offset": 630,
       "fixups": {
         "4": 603714,
         "10": 948540
       }
     },
     {
-      "symbol": "input_selection_retained_10",
+      "symbol": "input_selection_retained_9",
       "address": 187669,
       "size": 9,
-      "binary_offset": 823,
+      "binary_offset": 651,
       "fixups": {}
     },
     {
-      "symbol": "input_selection_retained_11",
+      "symbol": "input_selection_retained_10",
       "address": 187720,
       "size": 196,
-      "binary_offset": 832,
+      "binary_offset": 660,
       "fixups": {
         "8": 929676,
         "17": 929676,
@@ -3366,17 +3351,17 @@
       }
     },
     {
-      "symbol": "input_selection_retained_12",
+      "symbol": "input_selection_retained_11",
       "address": 187964,
       "size": 2,
-      "binary_offset": 1028,
+      "binary_offset": 856,
       "fixups": {}
     },
     {
-      "symbol": "input_selection_retained_13",
+      "symbol": "input_selection_retained_12",
       "address": 188109,
       "size": 73,
-      "binary_offset": 1030,
+      "binary_offset": 858,
       "fixups": {
         "2": 948540,
         "18": 603719,
@@ -3388,10 +3373,10 @@
       }
     },
     {
-      "symbol": "input_selection_retained_14",
+      "symbol": "input_selection_retained_13",
       "address": 188262,
       "size": 92,
-      "binary_offset": 1103,
+      "binary_offset": 931,
       "fixups": {
         "2": 1069712,
         "13": 1040124,
@@ -3403,10 +3388,10 @@
       }
     },
     {
-      "symbol": "input_selection_retained_15",
+      "symbol": "input_selection_retained_14",
       "address": 188413,
       "size": 71,
-      "binary_offset": 1195,
+      "binary_offset": 1023,
       "fixups": {
         "3": 603715,
         "9": 948540,
@@ -3419,17 +3404,17 @@
       }
     },
     {
-      "symbol": "input_selection_retained_16",
+      "symbol": "input_selection_retained_15",
       "address": 188540,
       "size": 2,
-      "binary_offset": 1266,
+      "binary_offset": 1094,
       "fixups": {}
     },
     {
-      "symbol": "input_selection_retained_17",
+      "symbol": "input_selection_retained_16",
       "address": 188716,
       "size": 1,
-      "binary_offset": 1268,
+      "binary_offset": 1096,
       "fixups": {}
     }
   ],
@@ -4643,7 +4628,8 @@
     ]
   },
   "cursor_context_file": "input-cursor-layout.json",
-  "combined_selected_bytes": 1828,
+  "combined_selected_bytes": 2000,
   "actions_context_file": "input-actions-layout.json",
-  "fifo_context_file": "input-fifo-layout.json"
+  "fifo_context_file": "input-fifo-layout.json",
+  "clamp_context_file": "input-clamp-layout.json"
 }

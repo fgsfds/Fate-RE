@@ -1,0 +1,1206 @@
+{
+  "context": {
+    "object": "inpclamp",
+    "public": "input_clamp_view_state_",
+    "size": 176,
+    "sha256": "8e3adb5e211a9d1a0e22fc5352b7b7e8f8cc8d1b17c9605bff91b9c803b2e138",
+    "publics": [
+      [
+        1,
+        0,
+        "input_clamp_view_state_"
+      ]
+    ],
+    "segments": [
+      [
+        1,
+        "CODE",
+        176
+      ],
+      [
+        2,
+        "DATA",
+        0
+      ],
+      [
+        3,
+        "DATA",
+        0
+      ],
+      [
+        4,
+        "DATA",
+        0
+      ],
+      [
+        5,
+        "BSS",
+        0
+      ]
+    ],
+    "structure": [
+      [
+        150,
+        "0004434f444504444154410342535304464c4154064447524f5550055f54455854"
+      ],
+      [
+        153,
+        "29b0000000070201"
+      ],
+      [
+        150,
+        "05434f4e5354"
+      ],
+      [
+        153,
+        "a900000000080301"
+      ],
+      [
+        150,
+        "06434f4e535432"
+      ],
+      [
+        153,
+        "a900000000090301"
+      ],
+      [
+        150,
+        "055f44415441"
+      ],
+      [
+        153,
+        "a9000000000a0301"
+      ],
+      [
+        150,
+        "045f425353"
+      ],
+      [
+        153,
+        "a9000000000b0401"
+      ],
+      [
+        154,
+        "06ff02ff03ff04ff05"
+      ],
+      [
+        154,
+        "05"
+      ],
+      [
+        140,
+        "095f637572736f725f7800095f637572736f725f79000f5f6d61705f7363616c655f6f725f7900"
+      ],
+      [
+        145,
+        "020117696e7075745f636c616d705f766965775f73746174655f0000000000"
+      ]
+    ],
+    "records": {
+      "flat_groups": [
+        2
+      ],
+      "fixups": [
+        [
+          1,
+          24,
+          4,
+          9,
+          false,
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            1
+          ],
+          0,
+          "_cursor_x"
+        ],
+        [
+          1,
+          51,
+          4,
+          9,
+          false,
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            1
+          ],
+          0,
+          "_cursor_x"
+        ],
+        [
+          1,
+          58,
+          4,
+          9,
+          false,
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            2
+          ],
+          0,
+          "_cursor_y"
+        ],
+        [
+          1,
+          86,
+          4,
+          9,
+          false,
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            2
+          ],
+          0,
+          "_cursor_y"
+        ],
+        [
+          1,
+          113,
+          4,
+          9,
+          false,
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            2
+          ],
+          0,
+          "_cursor_y"
+        ],
+        [
+          1,
+          144,
+          4,
+          9,
+          false,
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          0,
+          "_map_scale_or_y"
+        ],
+        [
+          1,
+          171,
+          4,
+          9,
+          false,
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          0,
+          "_map_scale_or_y"
+        ]
+      ]
+    },
+    "addends": {
+      "24": 0,
+      "51": 0,
+      "58": 0,
+      "86": 0,
+      "113": 0,
+      "144": 0,
+      "171": 0
+    },
+    "fixups": {
+      "24": [
+        "_cursor_x",
+        false,
+        0
+      ],
+      "51": [
+        "_cursor_x",
+        false,
+        0
+      ],
+      "58": [
+        "_cursor_y",
+        false,
+        0
+      ],
+      "86": [
+        "_cursor_y",
+        false,
+        0
+      ],
+      "113": [
+        "_cursor_y",
+        false,
+        0
+      ],
+      "144": [
+        "_map_scale_or_y",
+        false,
+        0
+      ],
+      "171": [
+        "_map_scale_or_y",
+        false,
+        0
+      ]
+    }
+  },
+  "DATA": {
+    "_cursor_x": 545422,
+    "_cursor_y": 545420,
+    "_map_scale_or_y": 11250
+  },
+  "CODE": {},
+  "original_address": 185626,
+  "original_size": 3097,
+  "selected_bytes": 172,
+  "combined_selected_bytes": 2000,
+  "assembly_size": 1097,
+  "phases": [
+    {
+      "symbol": "input_cursor_clamps_0_",
+      "address": 186983,
+      "begin": 0,
+      "end": 117,
+      "public": "input_clamp_view_state_"
+    },
+    {
+      "symbol": "input_map_scale_clamp_0_",
+      "address": 187240,
+      "begin": 120,
+      "end": 175,
+      "public": "input_clamp_view_state_"
+    }
+  ],
+  "instructions": [
+    {
+      "original": 186983,
+      "private": 0,
+      "size": 6
+    },
+    {
+      "original": 186989,
+      "private": 6,
+      "size": 2
+    },
+    {
+      "original": 186991,
+      "private": 8,
+      "size": 5
+    },
+    {
+      "original": 186996,
+      "private": 13,
+      "size": 6
+    },
+    {
+      "original": 187002,
+      "private": 19,
+      "size": 2
+    },
+    {
+      "original": 187004,
+      "private": 21,
+      "size": 7
+    },
+    {
+      "original": 187011,
+      "private": 28,
+      "size": 6
+    },
+    {
+      "original": 187017,
+      "private": 34,
+      "size": 2
+    },
+    {
+      "original": 187019,
+      "private": 36,
+      "size": 5
+    },
+    {
+      "original": 187024,
+      "private": 41,
+      "size": 2
+    },
+    {
+      "original": 187026,
+      "private": 43,
+      "size": 5
+    },
+    {
+      "original": 187031,
+      "private": 48,
+      "size": 7
+    },
+    {
+      "original": 187038,
+      "private": 55,
+      "size": 7
+    },
+    {
+      "original": 187045,
+      "private": 62,
+      "size": 6
+    },
+    {
+      "original": 187051,
+      "private": 68,
+      "size": 2
+    },
+    {
+      "original": 187053,
+      "private": 70,
+      "size": 5
+    },
+    {
+      "original": 187058,
+      "private": 75,
+      "size": 6
+    },
+    {
+      "original": 187064,
+      "private": 81,
+      "size": 2
+    },
+    {
+      "original": 187066,
+      "private": 83,
+      "size": 7
+    },
+    {
+      "original": 187073,
+      "private": 90,
+      "size": 6
+    },
+    {
+      "original": 187079,
+      "private": 96,
+      "size": 2
+    },
+    {
+      "original": 187081,
+      "private": 98,
+      "size": 5
+    },
+    {
+      "original": 187086,
+      "private": 103,
+      "size": 2
+    },
+    {
+      "original": 187088,
+      "private": 105,
+      "size": 5
+    },
+    {
+      "original": 187093,
+      "private": 110,
+      "size": 7
+    },
+    {
+      "original": 187240,
+      "private": 120,
+      "size": 6
+    },
+    {
+      "original": 187246,
+      "private": 126,
+      "size": 2
+    },
+    {
+      "original": 187248,
+      "private": 128,
+      "size": 5
+    },
+    {
+      "original": 187253,
+      "private": 133,
+      "size": 6
+    },
+    {
+      "original": 187259,
+      "private": 139,
+      "size": 2
+    },
+    {
+      "original": 187261,
+      "private": 141,
+      "size": 7
+    },
+    {
+      "original": 187268,
+      "private": 148,
+      "size": 6
+    },
+    {
+      "original": 187274,
+      "private": 154,
+      "size": 2
+    },
+    {
+      "original": 187276,
+      "private": 156,
+      "size": 5
+    },
+    {
+      "original": 187281,
+      "private": 161,
+      "size": 2
+    },
+    {
+      "original": 187283,
+      "private": 163,
+      "size": 5
+    },
+    {
+      "original": 187288,
+      "private": 168,
+      "size": 7
+    }
+  ],
+  "branches": {
+    "6": [
+      "7f",
+      13,
+      1370
+    ],
+    "19": [
+      "7d",
+      43,
+      1400
+    ],
+    "34": [
+      "7f",
+      48,
+      1405
+    ],
+    "41": [
+      "eb",
+      48,
+      1405
+    ],
+    "68": [
+      "7f",
+      75,
+      1432
+    ],
+    "81": [
+      "7d",
+      105,
+      1462
+    ],
+    "96": [
+      "7f",
+      110,
+      1467
+    ],
+    "103": [
+      "eb",
+      110,
+      1467
+    ],
+    "126": [
+      "7f",
+      133,
+      1627
+    ],
+    "139": [
+      "7d",
+      163,
+      1657
+    ],
+    "154": [
+      "7f",
+      168,
+      1662
+    ],
+    "161": [
+      "eb",
+      168,
+      1662
+    ]
+  },
+  "retained": [
+    {
+      "symbol": "input_selection_retained_0",
+      "address": 185626,
+      "size": 6,
+      "binary_offset": 0,
+      "fixups": {}
+    },
+    {
+      "symbol": "input_selection_retained_1",
+      "address": 185645,
+      "size": 7,
+      "binary_offset": 6,
+      "fixups": {
+        "3": 603728
+      }
+    },
+    {
+      "symbol": "input_selection_retained_2",
+      "address": 186369,
+      "size": 54,
+      "binary_offset": 13,
+      "fixups": {
+        "3": 603709,
+        "9": 948540,
+        "18": 1069712,
+        "32": 1011944,
+        "50": 1011944
+      }
+    },
+    {
+      "symbol": "input_selection_retained_3",
+      "address": 186462,
+      "size": 159,
+      "binary_offset": 67,
+      "fixups": {
+        "3": 603722,
+        "9": 948540,
+        "18": 605091,
+        "29": 1011940,
+        "37": 605087,
+        "50": 1011940,
+        "57": 603723,
+        "63": 948540,
+        "72": 605091,
+        "85": 1011940,
+        "95": 605087,
+        "108": 1011940,
+        "113": 1011948,
+        "131": 1011948,
+        "137": 1011948,
+        "155": 1011948
+      }
+    },
+    {
+      "symbol": "input_selection_retained_4",
+      "address": 186669,
+      "size": 238,
+      "binary_offset": 226,
+      "fixups": {
+        "2": 1011944,
+        "20": 1011944,
+        "26": 1011944,
+        "44": 1011944,
+        "50": 1011944,
+        "74": 1011944,
+        "97": 1011940,
+        "102": 1040121,
+        "127": 1011940,
+        "154": 1011948,
+        "159": 1040122,
+        "184": 1011948,
+        "211": 539621,
+        "216": 1040123,
+        "227": 535546
+      }
+    },
+    {
+      "symbol": "input_selection_retained_5",
+      "address": 187134,
+      "size": 59,
+      "binary_offset": 464,
+      "fixups": {
+        "3": 1040098,
+        "27": 539621,
+        "39": 1040098
+      }
+    },
+    {
+      "symbol": "input_selection_retained_6",
+      "address": 187295,
+      "size": 62,
+      "binary_offset": 523,
+      "fixups": {
+        "16": 535536,
+        "38": 535536,
+        "53": 535536
+      }
+    },
+    {
+      "symbol": "input_selection_retained_7",
+      "address": 187440,
+      "size": 45,
+      "binary_offset": 585,
+      "fixups": {
+        "3": 535548,
+        "13": 1040090,
+        "20": 1040098,
+        "26": 1040092,
+        "41": 1069712
+      }
+    },
+    {
+      "symbol": "input_selection_retained_8",
+      "address": 187551,
+      "size": 21,
+      "binary_offset": 630,
+      "fixups": {
+        "4": 603714,
+        "10": 948540
+      }
+    },
+    {
+      "symbol": "input_selection_retained_9",
+      "address": 187669,
+      "size": 9,
+      "binary_offset": 651,
+      "fixups": {}
+    },
+    {
+      "symbol": "input_selection_retained_10",
+      "address": 187720,
+      "size": 196,
+      "binary_offset": 660,
+      "fixups": {
+        "8": 929676,
+        "17": 929676,
+        "33": 929676,
+        "48": 1040121,
+        "78": 1040121,
+        "105": 1040121,
+        "117": 1040123,
+        "131": 1040114,
+        "156": 1040123,
+        "185": 1040122,
+        "192": 1040122
+      }
+    },
+    {
+      "symbol": "input_selection_retained_11",
+      "address": 187964,
+      "size": 2,
+      "binary_offset": 856,
+      "fixups": {}
+    },
+    {
+      "symbol": "input_selection_retained_12",
+      "address": 188109,
+      "size": 73,
+      "binary_offset": 858,
+      "fixups": {
+        "2": 948540,
+        "18": 603719,
+        "25": 1040124,
+        "31": 948540,
+        "47": 603720,
+        "54": 1040124,
+        "60": 948540
+      }
+    },
+    {
+      "symbol": "input_selection_retained_13",
+      "address": 188262,
+      "size": 92,
+      "binary_offset": 931,
+      "fixups": {
+        "2": 1069712,
+        "13": 1040124,
+        "22": 539900,
+        "41": 1040124,
+        "52": 1069712,
+        "64": 1040124,
+        "79": 535542
+      }
+    },
+    {
+      "symbol": "input_selection_retained_14",
+      "address": 188413,
+      "size": 71,
+      "binary_offset": 1023,
+      "fixups": {
+        "3": 603715,
+        "9": 948540,
+        "22": 601143,
+        "29": 601147,
+        "38": 603727,
+        "44": 948540,
+        "59": 601145,
+        "65": 601147
+      }
+    },
+    {
+      "symbol": "input_selection_retained_15",
+      "address": 188540,
+      "size": 2,
+      "binary_offset": 1094,
+      "fixups": {}
+    },
+    {
+      "symbol": "input_selection_retained_16",
+      "address": 188716,
+      "size": 1,
+      "binary_offset": 1096,
+      "fixups": {}
+    }
+  ],
+  "supplement": true,
+  "operations": [
+    {
+      "operation": "cursor_x",
+      "original_span": [
+        186983,
+        187038
+      ],
+      "private_span": [
+        0,
+        55
+      ],
+      "exact": true,
+      "byte_count": 55,
+      "exact_bytes": "81fb3c0100007f05bb3c01000081fbdc0300007d160fbf1d8e52080081fb3c0100007f0cbb3c010000eb05bbdc03000066891d8e520800",
+      "bound_sha256": "b40d5401038300b7bc56110533244b742f6364e4b44d1e3f3385680c170c32f8",
+      "entry_contract": "EBX is the signed current X from DI, live across the preceding store of Y.",
+      "continuation": 187038,
+      "reference_LE": [
+        {
+          "site": 187007,
+          "offset": 1381,
+          "kind": "DATA",
+          "target": 1069710,
+          "form": "absolute"
+        },
+        {
+          "site": 187034,
+          "offset": 1408,
+          "kind": "DATA",
+          "target": 1069710,
+          "form": "absolute"
+        }
+      ],
+      "private_OMF": [
+        {
+          "segment": 1,
+          "offset": 24,
+          "width": 4,
+          "location": 9,
+          "relative": false,
+          "frame": [
+            1,
+            2
+          ],
+          "target": 1069710,
+          "displacement": 0,
+          "omf_target": [
+            2,
+            1
+          ],
+          "symbol": "_cursor_x",
+          "addend": 0,
+          "kind": "DATA",
+          "form": "absolute"
+        },
+        {
+          "segment": 1,
+          "offset": 51,
+          "width": 4,
+          "location": 9,
+          "relative": false,
+          "frame": [
+            1,
+            2
+          ],
+          "target": 1069710,
+          "displacement": 0,
+          "omf_target": [
+            2,
+            1
+          ],
+          "symbol": "_cursor_x",
+          "addend": 0,
+          "kind": "DATA",
+          "form": "absolute"
+        }
+      ],
+      "original_branches": [
+        {
+          "site": 186989,
+          "target": 186996,
+          "opcode": "jg",
+          "displacement_width": 1,
+          "fallthrough": 186991
+        },
+        {
+          "site": 187002,
+          "target": 187026,
+          "opcode": "jge",
+          "displacement_width": 1,
+          "fallthrough": 187004
+        },
+        {
+          "site": 187017,
+          "target": 187031,
+          "opcode": "jg",
+          "displacement_width": 1,
+          "fallthrough": 187019
+        },
+        {
+          "site": 187024,
+          "target": 187031,
+          "opcode": "jmp",
+          "displacement_width": 1,
+          "fallthrough": null
+        }
+      ],
+      "private_branches": [
+        {
+          "site": 6,
+          "target": 13,
+          "opcode": "jg",
+          "displacement_width": 1,
+          "fallthrough": 8
+        },
+        {
+          "site": 19,
+          "target": 43,
+          "opcode": "jge",
+          "displacement_width": 1,
+          "fallthrough": 21
+        },
+        {
+          "site": 34,
+          "target": 48,
+          "opcode": "jg",
+          "displacement_width": 1,
+          "fallthrough": 36
+        },
+        {
+          "site": 41,
+          "target": 48,
+          "opcode": "jmp",
+          "displacement_width": 1,
+          "fallthrough": null
+        }
+      ]
+    },
+    {
+      "operation": "cursor_y",
+      "original_span": [
+        187038,
+        187100
+      ],
+      "private_span": [
+        55,
+        117
+      ],
+      "exact": true,
+      "byte_count": 62,
+      "exact_bytes": "0fbf1d8c52080081fb6c0100007f05bb6c01000081fbb80100007d160fbf1d8c52080081fb6c0100007f0cbb6c010000eb05bbb801000066891d8c520800",
+      "bound_sha256": "37001728f0cb3426f1cd3f3cd925814b3e5cf900ede89d2ae0e84af1d3fdd149",
+      "entry_contract": "Y is loaded from its DATA word on entry. No incoming scratch register is used.",
+      "continuation": 187100,
+      "reference_LE": [
+        {
+          "site": 187041,
+          "offset": 1415,
+          "kind": "DATA",
+          "target": 1069708,
+          "form": "absolute"
+        },
+        {
+          "site": 187069,
+          "offset": 1443,
+          "kind": "DATA",
+          "target": 1069708,
+          "form": "absolute"
+        },
+        {
+          "site": 187096,
+          "offset": 1470,
+          "kind": "DATA",
+          "target": 1069708,
+          "form": "absolute"
+        }
+      ],
+      "private_OMF": [
+        {
+          "segment": 1,
+          "offset": 58,
+          "width": 4,
+          "location": 9,
+          "relative": false,
+          "frame": [
+            1,
+            2
+          ],
+          "target": 1069708,
+          "displacement": 0,
+          "omf_target": [
+            2,
+            2
+          ],
+          "symbol": "_cursor_y",
+          "addend": 0,
+          "kind": "DATA",
+          "form": "absolute"
+        },
+        {
+          "segment": 1,
+          "offset": 86,
+          "width": 4,
+          "location": 9,
+          "relative": false,
+          "frame": [
+            1,
+            2
+          ],
+          "target": 1069708,
+          "displacement": 0,
+          "omf_target": [
+            2,
+            2
+          ],
+          "symbol": "_cursor_y",
+          "addend": 0,
+          "kind": "DATA",
+          "form": "absolute"
+        },
+        {
+          "segment": 1,
+          "offset": 113,
+          "width": 4,
+          "location": 9,
+          "relative": false,
+          "frame": [
+            1,
+            2
+          ],
+          "target": 1069708,
+          "displacement": 0,
+          "omf_target": [
+            2,
+            2
+          ],
+          "symbol": "_cursor_y",
+          "addend": 0,
+          "kind": "DATA",
+          "form": "absolute"
+        }
+      ],
+      "original_branches": [
+        {
+          "site": 187051,
+          "target": 187058,
+          "opcode": "jg",
+          "displacement_width": 1,
+          "fallthrough": 187053
+        },
+        {
+          "site": 187064,
+          "target": 187088,
+          "opcode": "jge",
+          "displacement_width": 1,
+          "fallthrough": 187066
+        },
+        {
+          "site": 187079,
+          "target": 187093,
+          "opcode": "jg",
+          "displacement_width": 1,
+          "fallthrough": 187081
+        },
+        {
+          "site": 187086,
+          "target": 187093,
+          "opcode": "jmp",
+          "displacement_width": 1,
+          "fallthrough": null
+        }
+      ],
+      "private_branches": [
+        {
+          "site": 68,
+          "target": 75,
+          "opcode": "jg",
+          "displacement_width": 1,
+          "fallthrough": 70
+        },
+        {
+          "site": 81,
+          "target": 105,
+          "opcode": "jge",
+          "displacement_width": 1,
+          "fallthrough": 83
+        },
+        {
+          "site": 96,
+          "target": 110,
+          "opcode": "jg",
+          "displacement_width": 1,
+          "fallthrough": 98
+        },
+        {
+          "site": 103,
+          "target": 110,
+          "opcode": "jmp",
+          "displacement_width": 1,
+          "fallthrough": null
+        }
+      ]
+    },
+    {
+      "operation": "map_scale",
+      "original_span": [
+        187240,
+        187295
+      ],
+      "private_span": [
+        120,
+        175
+      ],
+      "exact": true,
+      "byte_count": 55,
+      "exact_bytes": "81fb000100007f05bb0001000081fb000800007d160fbf1df22b000081fb000100007f0cbb00010000eb05bb0008000066891df22b0000",
+      "bound_sha256": "a32c7febb0639769d5b9de3a0787bfbce909fc958c5acde07ce6679826a44290",
+      "entry_contract": "EBX is the sign extension of SI performed before the retained store of scale.",
+      "continuation": 187295,
+      "reference_LE": [
+        {
+          "site": 187264,
+          "offset": 1638,
+          "kind": "DATA",
+          "target": 535538,
+          "form": "absolute"
+        },
+        {
+          "site": 187291,
+          "offset": 1665,
+          "kind": "DATA",
+          "target": 535538,
+          "form": "absolute"
+        }
+      ],
+      "private_OMF": [
+        {
+          "segment": 1,
+          "offset": 144,
+          "width": 4,
+          "location": 9,
+          "relative": false,
+          "frame": [
+            1,
+            2
+          ],
+          "target": 535538,
+          "displacement": 0,
+          "omf_target": [
+            2,
+            3
+          ],
+          "symbol": "_map_scale_or_y",
+          "addend": 0,
+          "kind": "DATA",
+          "form": "absolute"
+        },
+        {
+          "segment": 1,
+          "offset": 171,
+          "width": 4,
+          "location": 9,
+          "relative": false,
+          "frame": [
+            1,
+            2
+          ],
+          "target": 535538,
+          "displacement": 0,
+          "omf_target": [
+            2,
+            3
+          ],
+          "symbol": "_map_scale_or_y",
+          "addend": 0,
+          "kind": "DATA",
+          "form": "absolute"
+        }
+      ],
+      "original_branches": [
+        {
+          "site": 187246,
+          "target": 187253,
+          "opcode": "jg",
+          "displacement_width": 1,
+          "fallthrough": 187248
+        },
+        {
+          "site": 187259,
+          "target": 187283,
+          "opcode": "jge",
+          "displacement_width": 1,
+          "fallthrough": 187261
+        },
+        {
+          "site": 187274,
+          "target": 187288,
+          "opcode": "jg",
+          "displacement_width": 1,
+          "fallthrough": 187276
+        },
+        {
+          "site": 187281,
+          "target": 187288,
+          "opcode": "jmp",
+          "displacement_width": 1,
+          "fallthrough": null
+        }
+      ],
+      "private_branches": [
+        {
+          "site": 126,
+          "target": 133,
+          "opcode": "jg",
+          "displacement_width": 1,
+          "fallthrough": 128
+        },
+        {
+          "site": 139,
+          "target": 163,
+          "opcode": "jge",
+          "displacement_width": 1,
+          "fallthrough": 141
+        },
+        {
+          "site": 154,
+          "target": 168,
+          "opcode": "jg",
+          "displacement_width": 1,
+          "fallthrough": 156
+        },
+        {
+          "site": 161,
+          "target": 168,
+          "opcode": "jmp",
+          "displacement_width": 1,
+          "fallthrough": null
+        }
+      ]
+    }
+  ]
+}

@@ -1,15 +1,15 @@
 # Exact C restoration progress
 
-The current saved attribution audit covers all 414,639 CODE bytes and includes 602 compiler units. Saved full validation passed 407 tests and 162 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
+The current saved attribution audit covers all 414,639 CODE bytes and includes 603 compiler units. Saved full validation passed 407 tests and 163 fixtures; the 741,347-byte executable is byte-identical to the pinned reference.
 
 | Checked attribution | Bytes | CODE |
 | --- | ---: | ---: |
-| Compiler-generated instructions | 176,572 | 42.585% |
+| Compiler-generated instructions | 176,744 | 42.626% |
 | Inline assembly instructions in C objects | 24,311 | 5.863% |
-| Standalone assembly | 212,473 | 51.243% |
+| Standalone assembly | 212,301 | 51.201% |
 | Unattributed instructions and non-routine tables | 1,283 | 0.309% |
 
-The unattributed category contains 882 instruction bytes in 16 unknown routines and 401 non-routine table bytes. Tables are recorded as data, and the unknown instruction bytes remain uncredited. Combined remaining assembly, including inline assembly: 236,784 bytes (57.106%). C-object inventory covers 202,166 bytes (48.76%) and 1,719 C routine spans; the assembly inventory has 634 spans.
+The unattributed category contains 882 instruction bytes in 16 unknown routines and 401 non-routine table bytes. Tables are recorded as data, and the unknown instruction bytes remain uncredited. Combined remaining assembly, including inline assembly: 236,612 bytes (57.065%). C-object inventory covers 202,338 bytes (48.80%) and 1,721 C routine spans; the assembly inventory has 633 spans.
 
 The accepted executable is 741,347 bytes, SHA-256 `61df230ffb83629764f8c2656f068c6fbcfa17d5180eafb660504b6069a0906f`.
 
@@ -39,9 +39,13 @@ The offset context adds another 433 native bytes and 29 DATA sites in 29 complet
 
 A conservative EAX clobber on the actual fourth-field value adds the complete actor 104 parameter-two assignment: 14 native bytes and one DATA site. Its full 31,450-byte context and all 2,579 DATA fixups are pinned; earlier contexts remain because it reproduces only 782 of their 1,166 destination bytes. Two complementary-register operation cases and five whole replays pass, with eight context, two code and four metadata controls. The omitted-AX-bit control explicitly poisons the omitted bit opposite its required value, supporting even slot indices as well as odd ones.
 
-`collect_input_` now supplies 1,828 native C bytes, 188 DATA sites and three relative CODE calls in 59 phases. Extending the vertical map-offset operation adds 57 bytes, two DATA sites and five branch sites; all previous 388 cursor bytes remain exact. The existing context grows to 2,412 bytes, with no new compiler unit or phase. All 68 selected branches retain logical successors, opcodes and widths. Four complete private contexts (1,300, 2,412, 3,195 and 3,204 bytes) guard all 123, 199, 277 and 281 OMF fixups, including excluded calls, wrappers, stack operations and raw addends. Their two/two/three/three relative CODE calls are fully guarded; only the original three are placed, and none creates an LE pointer. The original frame and remaining cursor, packing and latch code occupy 1,269 assembly bytes in 18 runs.
+`collect_input_` now supplies 2,000 native C bytes, 195 DATA sites and three relative CODE calls in 61 phases. A compact void clamp service adds 172 bytes for complete cursor X/Y and map-scale operations, with seven DATA sites and twelve branches; every earlier byte remains in its original context. All 80 selected branches retain logical successors, opcodes and widths. Five complete private contexts (1,300, 2,412, 3,195, 3,204 and 176 bytes) guard all 123, 199, 277, 281 and seven OMF fixups, including excluded calls, wrappers, stack operations and raw addends. Their two/two/three/three/zero relative CODE calls are fully guarded; only the original three are placed, and none creates an LE pointer. Remaining input assembly occupies 1,097 bytes in 17 runs.
 
-Full-width EBX identities at the clamp constants and final store retain the signed `[-256,256]` result in its original register. The first experiment constrained constants alone and left the join in EAX. The complete 83-byte vertical operation now includes its earlier 26-byte coordinate update and the new clamp/continuation, with a checked final jump to view adjustment. X, Y and scale still use EAX at their inner joins and remain assembly.
+The new helper uses an EBX argument and a signed-short scale argument via ESI, preserving every other GPR. Its EBX-only returned-value ABI still used EAX for joins; operation-scoped locals fixed X/Y, and removing the last returned local by making the helper void fixed scale. Its 172 selected bytes exclude the private three-byte SI sign extension and RET. The source documents coherent register/DATA samples and stable memory. It is a private normalization service, not a whole-input ABI substitute.
+
+The clamp guard/ABI fixture passes 287 independent private-service cases with two poisoning patterns and every branch outcome. It verifies the mathematical clamp stores, signed SI, all promised GPRs and return through a sentinel; thirteen controls reject incomplete phases, missing stores, wrong branches/bindings, hidden code, DATA target/form/frame/addend changes and private SI signedness/clobber errors. Void has no C return-value contract. The original/placed cursor replay separately covers the actual mode-dependent fragment `0x2d9fe..0x2de0c`, its added twelve branch sites, coherent X/Y/scale EBX inputs and preserved SI high bits.
+
+The earlier vertical-offset operation remains 83 bytes, including its 57-byte clamp/continuation extension. Its final jump to view adjustment stays checked.
 
 The FIFO context uses distinct volatile byte aliases bound to the actual read/write DATA locations. Its 52-byte phase retains all four read-cursor samples per nonempty iteration and the original write-cursor observation. Both exits reach the retained POP EBP before the incumbent C return; private local cleanup stays excluded. The full context changes 17 earlier action bytes, so it does not replace the existing action context. A dedicated guard fixture rejects 12 metadata, opcode, cleanup, return and typed-fixup mutations, including an altered addend with both digest checks disabled. Metadata controls cross-check the manifest; the production binder independently verifies every placed byte and LE site against the pinned image. The existing action fixture replays the newly installed FIFO in the full original/placed tail.
 
@@ -51,7 +55,7 @@ The supplemental history view covers the actual `0x28a300`-byte LE DATA object. 
 
 The existing selection, keyboard and post-poll fixtures still pass 1,096, 3,762 and 5,766 cases respectively. Their primary private context and 817 selected bytes are unchanged. The post-poll model uses two complementary register/clobber patterns and stubbed mouse BIOS/scaling calls; DATA/writes/calls agree in the private algorithm, but its raw registers remain diagnostic. Whole-input C or private-frame substitution is not claimed.
 
-The new cursor fixture passes 4,941 cases with two complementary register patterns against original and freshly bound production execution. Its mutable-byte model checks all ordered DATA writes, final modeled/written bytes, complete GPRs and masked arithmetic flags at fragment boundaries and protected stack. Live DX, AX/CH, EBX and SI/ECX contracts are checked explicitly, including full signed EBX at vertical-clamp entry. All twelve selected branch sites cover every conditional outcome. Negative history indices include aliases into active buttons, cursor words, smoothing state and the packed forward byte; incoming index -14798 changes that byte before the forward blend rereads it. Both positive-view exits are exercised. Sample reads must occur in order 1,0,2,3. A mutation with correctly moved relocation sites preserves every result, GPR and flag but is rejected solely for changing that volatile observation order. Twenty-one controls cover metadata/branch provenance, signed ring bounds, view increments, vertical lower/upper bounds and continuation, dependencies, excluded private stack/store/return instructions and DATA target/form/frame/addend changes. A same-opcode branch from another C condition is rejected by its logical successor map and independent private fragment bounds. Stable memory is assumed; no interrupts, live BIOS behavior or action-packing continuation is modeled here.
+The new cursor fixture passes 4,941 cases with two complementary register patterns against original and freshly bound production execution. Its mutable-byte model checks all ordered DATA writes, final modeled/written bytes, complete GPRs and masked arithmetic flags at fragment boundaries and protected stack. Live DX, AX/CH, EBX and SI/ECX contracts are checked explicitly, including full signed EBX at vertical-clamp entry. All 24 selected cursor and clamp branch sites cover every conditional outcome. Negative history indices include aliases into active buttons, cursor words, smoothing state and the packed forward byte; incoming index -14798 changes that byte before the forward blend rereads it. Both positive-view exits are exercised. Sample reads must occur in order 1,0,2,3. A mutation with correctly moved relocation sites preserves every result, GPR and flag but is rejected solely for changing that volatile observation order. Twenty-one controls cover metadata/branch provenance, signed ring bounds, view increments, vertical lower/upper bounds and continuation, dependencies, excluded private stack/store/return instructions and DATA target/form/frame/addend changes. A same-opcode branch from another C condition is rejected by its logical successor map and independent private fragment bounds. Stable memory is assumed; no interrupts, live BIOS behavior or action-packing continuation is modeled here.
 
 Fresh routine and fragment probes pass 40 and 14 exact spans respectively, with four input fixtures each. The focused workflow builds and freshness-checks fixture object prerequisites while preserving the requested verification/fixture scope. Input fixtures declare and use their assembly directory, so fresh builds do not depend on a hidden prior NASM output. Research-public probes still require one object. The existing CLI regression also checks prerequisite freshness, assembly opt-in and conservative reported scope.
 
@@ -109,7 +113,8 @@ The palette lookup clearing loop contributes 19 compiler-generated bytes and one
 
 The saved full validation and audit artifacts verify the pinned image:
 
-- Full validation and 162 fixtures: `work/reset-82ae95d/validation.json`.
+- Full validation and 163 fixtures: `work/input-clamp-abi-nov28/full-validation.json`.
+- Current source-only exact acceptance: `work/reset-82ae95d/validation.json`.
 - Weapon animation state machine, private replay and controls: `work/reset-82ae95d/weapon-animation.json`.
 - Encounter spawn prefix and context controls: `work/reset-82ae95d/encounter-spawn.json`.
 - Encounter frame behavior: `work/encounter-frame-build/encounter-frame-behavior.json`.
@@ -126,13 +131,15 @@ The saved full validation and audit artifacts verify the pinned image:
 - Trial agent outcomes: `work/agent-role-trial/outcomes.json`.
 - Gameplay row and controller: `work/reset-82ae95d/gameplay-update-behavior.json`.
 - Status-panel placed and private contexts: `work/reset-82ae95d/status-panel-behavior.json`.
-- Attribution audit: `work/input-clamps-nov27/audit.json`.
+- Attribution audit: `work/input-clamp-abi-nov28/audit.json`.
 - Actor completed-offset models and replay: `work/reset-82ae95d/board-actor-offsets.json`.
 - Actor EAX-lifetime assignment: `work/reset-82ae95d/board-actor-eax.json`.
 - FIFO exact placement and context controls: `work/reset-82ae95d/input-fifo.json`.
 - FIFO production context and attribution: `work/input-fifo-nov27/production-evidence.json`.
 - Action/latch/brightness/FIFO model and return frame: `work/reset-82ae95d/input-actions.json`.
 - Parent return-suffix evidence: `work/input-actions-nov27/production-evidence.json`.
+- X/Y/scale clamp guard and private service: `work/reset-82ae95d/input-clamps.json`.
+- Compact clamp production context and attribution: `work/input-clamp-abi-nov28/production-evidence.json`.
 - Vertical clamp production context and attribution: `work/input-clamps-nov27/production-evidence.json`.
 - Cursor/map/blending model and volatile history order: `work/reset-82ae95d/input-cursor.json`.
 - Fresh routine/fragment probes: `work/input-cursor-fresh-routine/targeted-validation.json` and `work/input-cursor-fresh-fragment/targeted-validation.json`.

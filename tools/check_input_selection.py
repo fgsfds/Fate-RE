@@ -289,13 +289,13 @@ def bind_production(exe,build,*,stop=699,asm=None):
             assert not fields and code==original[phase['address']-START:phase['address']-START+len(code)]
             v.verify_leaf_relocations(code,data,pointers,phase['address'],code_bindings=fields)
             install(phase['address'],code);C_sites+=len(data)
-    assembly=((asm or build/'asm')/'collect_input.bin').read_bytes();assert len(assembly)==1269
+    assembly=((asm or build/'asm')/'collect_input.bin').read_bytes();assert len(assembly)==1097
     for row in layout['retained']:
         code=assembly[row['binary_offset']:row['binary_offset']+row['size']]
         assert code==original[row['address']-START:row['address']-START+row['size']]
         assert {site-row['address']:target for site,target in pointers.between(row['address'],row['address']+row['size'])}=={int(k):value for k,value in row['fixups'].items()}
         install(row['address'],code)
-    assert len(covered)==SIZE and output==original and C_sites==188
+    assert len(covered)==SIZE and output==original and C_sites==195
     fields={};natural,data=v.bind_leaf_details(blob,group.PUBLIC,layout['DATA'],address=START,functions=functions(),code_bindings=fields)
     assert not fields and len(natural)==1300 and len(data)==121
     sites={site-START:target for site,target in pointers.between(START,START+stop)}

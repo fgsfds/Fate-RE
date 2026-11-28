@@ -229,8 +229,8 @@ Evidence: `work/input-mouse-nov27/NOTES.md`, its `scoped` artifacts, and
 
 A supplemental Watcom 10.5 `/4r /s /or /bt=dos` context now supplies 445
 native bytes and 43 DATA sites across eight cursor/map/blending operations,
-with twelve placed branches. Four pinned contexts supply 1,828 bytes; 1,269
-remain assembly. Keep the earlier selection, action and FIFO allocations.
+with twelve placed branches. The original four contexts supply 1,828 bytes; a fifth compact clamp context
+adds 172, leaving 1,097 assembly bytes. Keep the earlier selection, action and FIFO allocations.
 The 2,412-byte cursor context still has eight bytes of private locals;
 selected production fragments never access ESP. Original DX/AX lifetimes
 replace excluded private spills and the history reload.
@@ -240,20 +240,24 @@ covers the actual 0x28a300-byte DATA object, with index bias 0x42949; the
 reachable store interval is 0x75292..0x85299. Preserve volatile sample read
 order 1,0,2,3, including aliases into packed input bytes.
 
-Constraining inner clamp constants to full EBX alone left the result in EAX
-(v1, 2,418 bytes). Passing the final store input through the full-width EBX
-identity fixes the complete vertical-offset clamp and its continuation: 57
-new bytes, two DATA sites, all 388 prior cursor bytes preserved. X, Y and map
-scale still copy EBX to EAX at the inner join; the first X mismatch is private
-0x5a4. Next isolate the complete join/store lifetime rather than retrying
-constant spellings. The earlier cursor_mode CH-vs-BL and packed-turn DL-vs-AL
-mismatches, bit-12 normalizer, and run/2/3 allocation remain. No fake getter
-or illegal EBP pragma.
-Evidence: `work/input-clamps-nov27/first-mismatch-v1.json`,
-`work/input-clamps-nov27/v2/first-mismatch.json`, and
-`work/input-clamps-nov27/production-evidence.json`. Earlier operation packets
-remain under `work/input-cursor-nov27/`, `work/input-actions-nov27/` and
-`work/input-fifo-nov27/`.
+The three remaining X/Y/scale clamps are now supplied by a separate compact
+C service. A custom EBX argument/result ABI alone still saved EAX and used it
+for the joins (v1). Operation-scoped locals and the exact ternary/store idiom
+fixed X/Y (v2, 117 bytes). Making the normalization service void removed the
+last returned-local lifetime and fixed scale too (v3, 172 bytes). Preserve the
+older 445-byte cursor context and the other three contexts; the five together
+supply 2,000 of 3,097 input bytes, leaving 1,097 assembly bytes. The private SI
+sign extension and RET are guarded but unlinked; original live EBX supplies
+all placed clamp inputs. Do not treat the full service as collect_input.
+
+Remaining questions are the cursor_mode CH-vs-BL and packed-turn DL-vs-AL
+lifetimes, bit-12 normalizer, run/2/3 allocation, and mouse-button/word-to-byte
+predicates. The earlier full-context EBX store fix remains under
+`work/input-clamps-nov27/`. Do not repeat failed constant or return-ABI probes.
+Evidence: `work/input-clamp-abi-nov28/first-mismatch.json`,
+`work/input-clamp-abi-nov28/v2/first-mismatch.json`,
+`work/input-clamp-abi-nov28/v3/placement-evidence.json`, and
+`work/input-clamp-abi-nov28/production-evidence.json`.
 
 ### Video prompt-mode blocker
 

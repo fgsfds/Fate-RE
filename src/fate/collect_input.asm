@@ -348,34 +348,7 @@ section .retained_4 align=1 vstart=0x2d92d follows=.retained_3
     cmp word [map_mode], 0
     je near .gameplay_mouse_motion
 
-section .retained_5 align=1 vstart=0x2da67 follows=.retained_4
-    cmp ebx, 0x13c
-    jg short .loc_55a
-    mov ebx, 0x13c
-    cmp ebx, 0x3dc
-    jge short .loc_578
-    movsx ebx, word [cursor_x]
-    cmp ebx, 0x13c
-    jg short .loc_57d
-    mov ebx, 0x13c
-    jmp short .loc_57d
-    mov ebx, 0x3dc
-    mov word [cursor_x], bx
-    movsx ebx, word [cursor_y]
-    cmp ebx, 0x16c
-    jg short .loc_598
-    mov ebx, 0x16c
-    cmp ebx, 0x1b8
-    jge short .loc_5b6
-    movsx ebx, word [cursor_y]
-    cmp ebx, 0x16c
-    jg short .loc_5bb
-    mov ebx, 0x16c
-    jmp short .loc_5bb
-    mov ebx, 0x1b8
-    mov word [cursor_y], bx
-
-section .retained_6 align=1 vstart=0x2dafe follows=.retained_5
+section .retained_5 align=1 vstart=0x2dafe follows=.retained_4
     mov bx, word [mouse_buttons]
     xor bh, bh
     and bl, 2
@@ -392,19 +365,7 @@ section .retained_6 align=1 vstart=0x2dafe follows=.retained_5
     test ebx, ebx
     jne near .map_vertical_offset
 
-section .retained_7 align=1 vstart=0x2db68 follows=.retained_6
-    cmp ebx, 0x100
-    jg short .loc_65b
-    mov ebx, 0x100
-    cmp ebx, 0x800
-    jge short .loc_679
-    movsx ebx, word [map_scale_or_y]
-    cmp ebx, 0x100
-    jg short .loc_67e
-    mov ebx, 0x100
-    jmp short .loc_67e
-    mov ebx, 0x800
-    mov word [map_scale_or_y], bx
+section .retained_6 align=1 vstart=0x2db9f follows=.retained_5
     movsx ebx, bx
     mov ecx, ebx
     sar ecx, 3
@@ -426,7 +387,7 @@ section .retained_7 align=1 vstart=0x2db68 follows=.retained_6
     mov word [map_x], bx
     jmp near .view_adjustment_key
 
-section .retained_8 align=1 vstart=0x2dc30 follows=.retained_7
+section .retained_7 align=1 vstart=0x2dc30 follows=.retained_6
     cmp word [mouse_motion_disabled], 0
     jne short .loc_736
     mov dx, word [mouse_dx]
@@ -438,19 +399,19 @@ section .retained_8 align=1 vstart=0x2dc30 follows=.retained_7
     xor eax, eax
     mov word [active_mouse_buttons], bx
 
-section .retained_9 align=1 vstart=0x2dc9f follows=.retained_8
+section .retained_8 align=1 vstart=0x2dc9f follows=.retained_7
     xor ebx, ebx
     mov bl, byte [key_strafe]
     cmp byte [ebx + key_state], 0
     jne near .mouse_strafe_motion
 
-section .retained_10 align=1 vstart=0x2dd15 follows=.retained_9
+section .retained_9 align=1 vstart=0x2dd15 follows=.retained_8
     test ch, ch
     je short .loc_858
     test ax, ax
     jle short .loc_82e
 
-section .retained_11 align=1 vstart=0x2dd48 follows=.retained_10
+section .retained_10 align=1 vstart=0x2dd48 follows=.retained_9
     jge near .pack_actions
     mov ebp, dword [view_adjustment]
     sub ebp, 4
@@ -505,10 +466,10 @@ section .retained_11 align=1 vstart=0x2dd48 follows=.retained_10
     add eax, ebx
     mov byte [input_strafe], al
 
-section .retained_12 align=1 vstart=0x2de3c follows=.retained_11
+section .retained_11 align=1 vstart=0x2de3c follows=.retained_10
     xor ah, ah
 
-section .retained_13 align=1 vstart=0x2decd follows=.retained_12
+section .retained_12 align=1 vstart=0x2decd follows=.retained_11
     mov al, byte [eax + key_state]
     xor ah, ah
     mov ecx, ebx
@@ -531,7 +492,7 @@ section .retained_13 align=1 vstart=0x2decd follows=.retained_12
     shl eax, 3
     or edi, eax
 
-section .retained_14 align=1 vstart=0x2df66 follows=.retained_13
+section .retained_13 align=1 vstart=0x2df66 follows=.retained_12
     mov ax, word [active_mouse_buttons]
     xor ah, ah
     and al, 1
@@ -558,7 +519,7 @@ section .retained_14 align=1 vstart=0x2df66 follows=.retained_13
     test si, si
     jne near .release_button_latches
 
-section .retained_15 align=1 vstart=0x2dffd follows=.retained_14
+section .retained_14 align=1 vstart=0x2dffd follows=.retained_13
     xor eax, eax
     mov al, byte [key_action_11]
     mov byte [eax + key_state], 1
@@ -575,8 +536,8 @@ section .retained_15 align=1 vstart=0x2dffd follows=.retained_14
     mov word [button_alternate], ax
     jmp short .save_mouse_buttons
 
-section .retained_16 align=1 vstart=0x2e07c follows=.retained_15
+section .retained_15 align=1 vstart=0x2e07c follows=.retained_14
     xor eax, eax
 
-section .retained_17 align=1 vstart=0x2e12c follows=.retained_16
+section .retained_16 align=1 vstart=0x2e12c follows=.retained_15
     pop ebp

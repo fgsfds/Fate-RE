@@ -235,7 +235,7 @@ def main():
         assert private[0x818:0x81b]==bytes.fromhex('8b1424')
         return mapping
     mapping=validate(layout)
-    boundaries={BEGIN,END,BASE+0x6dd,*(p['address'] for p in layout['phases']),*(p['address']+p['end']-p['begin'] for p in layout['phases'])}
+    boundaries={BEGIN,END,BASE+0x6dd,BASE+0x54d,BASE+0x584,BASE+0x58b,BASE+0x5c2,BASE+0x64e,BASE+0x685,*(p['address'] for p in layout['phases']),*(p['address']+p['end']-p['begin'] for p in layout['phases'])}
     general=('eax','ebx','ecx','edx','esi','edi','ebp')
     reg={n:getattr(x,'UC_X86_REG_'+n.upper()) for n in (*general,'esp','eip','eflags')}
     class Replay:
@@ -258,6 +258,13 @@ def main():
             if pc==BASE+0x54d:
                 address,size,_=FIELDS['cursor_x'];assert cpu.reg_read(reg['ebx'])&0xffffffff==int.from_bytes(cpu.mem_read(DATA+address,size),'little',signed=True)&0xffffffff
                 self.contracts.add('cursor_EBX')
+            if pc==BASE+0x58b:
+                address,size,_=FIELDS['cursor_y'];assert cpu.reg_read(reg['ebx'])==int.from_bytes(cpu.mem_read(DATA+address,size),'little',signed=True)&0xffffffff,'Y clamp EBX input contract'
+                self.contracts.add('clamp_Y_EBX')
+            if pc==BASE+0x64e:
+                address,size,_=FIELDS['map_scale_or_y'];value=int.from_bytes(cpu.mem_read(DATA+address,size),'little',signed=True)
+                assert cpu.reg_read(reg['ebx'])==value&0xffffffff and signed(cpu.reg_read(reg['esi']),16)==value,'scale clamp EBX/SI input contract'
+                self.contracts.add('clamp_scale_EBX_SI')
             if pc==BASE+0x6dd:
                 address,size,_=FIELDS['map_offset_y'];assert cpu.reg_read(reg['ebx'])==int.from_bytes(cpu.mem_read(DATA+address,size),'little',signed=True)&0xffffffff,'vertical clamp EBX input contract'
                 self.contracts.add('vertical_EBX')
@@ -300,7 +307,8 @@ def main():
             self.previous=list(self.writes)
             return tuple(self.writes),tuple(self.history_reads),tuple(self.boundaries),self.snapshot()
     orig=Replay(relocated(original,sites));production=Replay(relocated(placed,sites));all_cases=list(cases())
-    outcomes={off:set() for off in mapping if branch(old[off]) is not None};contracts=set()
+    extra_clamps={off for off in old if 0x54d<=off<0x5c2 or 0x64e<=off<0x685}
+    outcomes={off:set() for off in mapping.keys()|extra_clamps if branch(old[off]) is not None};contracts=set()
     for poison in (0,0xffffffff):
         for case in all_cases:
             assert orig.run(case,poison)==production.run(case,poison),'cursor original/placed live state'
@@ -309,9 +317,9 @@ def main():
                 if here in outcomes:
                     taken=next_pc==branch(old[here]);assert taken or next_pc==here+old[here].size
                     outcomes[here].add(taken)
-    assert len(all_cases)==4941 and len(outcomes)==12
+    assert len(all_cases)==4941 and len(outcomes)==24
     assert all(values==({True} if old[off].mnemonic=='jmp' else {False,True}) for off,values in outcomes.items()),outcomes
-    assert contracts=={'history_DX','history_AX_CH','cursor_EBX','pan_SI_ECX','vertical_EBX'}
+    assert contracts=={'history_DX','history_AX_CH','cursor_EBX','pan_SI_ECX','vertical_EBX','clamp_Y_EBX','clamp_scale_EBX_SI'}
     assert any(c.state['mouse_history_index']==-14798 for c in all_cases),'packed-input history alias case'
 
     controls=[]
@@ -391,9 +399,9 @@ def main():
     digest=group.CURSOR_CONTEXT_SHA256;leaf=v.LEAF_CONTEXT_SHA256.pop(public);group.CURSOR_CONTEXT_SHA256=None
     try:reject('history_addend_without_digests',lambda:bind(mutate_public_byte(blob,public,history[0].offset)),'fixup addends')
     finally:group.CURSOR_CONTEXT_SHA256=digest;v.LEAF_CONTEXT_SHA256[public]=leaf
-    report=dict(status='PASS',new_native_bytes=445,incremental_native_bytes=57,new_DATA_sites=43,new_branches=12,operations=8,cases=len(all_cases),poison_seeds=2,
+    report=dict(status='PASS',new_native_bytes=445,incremental_native_bytes=57,additional_clamp_bytes=172,new_DATA_sites=43,new_branches=12,operations=8,cases=len(all_cases),poison_seeds=2,
                 live_contracts=sorted(contracts),branch_outcomes={hex(BASE+k):sorted(v) for k,v in outcomes.items()},controls=controls,
-                scope='Original and freshly bound production cursor/map/mouse blend agree with independent mutable-byte DATA model on all ordered writes, volatile history read order, final modeled/written bytes, GPR and masked arithmetic-flag fragment boundaries and protected stack. Covers signed history-index aliases, both positive-view exits and every vertical-clamp branch outcome; live EBX is checked before the clamp. Full DATA extent is checked from LE headers. Private compiler frame/full routine ABI is not substituted; no interrupts, BIOS calls or action-packing continuation modeled.')
+                scope='Original and freshly bound production cursor/map/mouse blend agree with independent mutable-byte DATA model on all ordered writes, volatile history read order, final modeled/written bytes, GPR and masked arithmetic-flag fragment boundaries and protected stack. Covers signed history-index aliases, both positive-view exits and every selected X/Y/scale/vertical clamp branch outcome; live EBX and scale SI are checked before the clamps. Full DATA extent is checked from LE headers. Private compiler frame/full routine ABI is not substituted; no interrupts, BIOS calls or action-packing continuation modeled.')
     args.output.write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report))
 
 if __name__=='__main__':main()
